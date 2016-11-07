@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
+    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <context:component-scan base-package="org.hisp.appstore"/>
+
+    <mvc:annotation-driven />
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="file:///opt/hisp/appstore/appstore.conf"/>
+    </bean>
+
+    <!-- Transaction -->
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- Persistence -->
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+                <!--
+                <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
+                -->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>org.hisp.appstore.api.App</value>
+                <!-- Add more Hibernate entity objects here! -->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="org.postgresql.Driver"/>
+        <property name="jdbcUrl" value="${connection.url}"/>
+        <property name="user" value="${connection.username}"/>
+        <property name="password" value="${connection.password}"/>
+    </bean>
+
+    <!-- Security -->
+
+    <security:global-method-security pre-post-annotations="enabled" />
+
+    <security:http>
+        <security:intercept-url pattern="/app/manager/**" access="ROLE_SEE_INSTANCE"/>
+        <security:form-login login-page="/app/login/" default-target-url="/app/manager"/>
+        <security:http-basic/>
+        <security:logout logout-url="/app/logout" logout-success-url="/app/login/"/>
+    </security:http>
+
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService"> <!-- This must be created! -->
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
+</beans>
