@@ -2,19 +2,17 @@ package org.hisp.appstore.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table( name = "useraccount" )
+@JacksonXmlRootElement( localName = "user" )
 public class User
     extends BaseIdentifiableObject
 {
@@ -66,6 +64,7 @@ public class User
         return new org.springframework.security.core.userdetails.User( username, password, grantedAuths );
     }
 
+    @JsonProperty
     public String getUsername()
     {
         return username;
@@ -82,12 +81,12 @@ public class User
         return password;
     }
 
-    @JsonProperty
     public void setPassword( String password )
     {
         this.password = password;
     }
 
+    @JsonProperty
     public String getEmail()
     {
         return email;
