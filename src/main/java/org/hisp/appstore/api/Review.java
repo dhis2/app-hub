@@ -16,6 +16,8 @@ public class Review
 
     private int rate;
 
+    private App app;
+
     public Review() {
     }
 
@@ -51,5 +53,16 @@ public class Review
     public void setRate( int rate )
     {
         this.rate = rate;
+    }
+
+    @JsonProperty
+    public App getApp()
+    {
+        return app;
+    }
+
+    public void setApp( App app )
+    {
+        this.app = app;
     }
 }

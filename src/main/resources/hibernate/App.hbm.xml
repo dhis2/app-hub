@@ -14,7 +14,7 @@
 
         <property name="created"/>
 
-        <property name="AppName" not-null="true"/>
+        <property name="appName" not-null="true"/>
 
         <property name="currentVersion" not-null="true"/>
 

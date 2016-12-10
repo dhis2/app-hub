@@ -19,7 +19,7 @@ public class Developer
 
     private String address;
 
-    private Set<String> emails;
+    private Set<String> emailAddresses;
 
     public Developer() {
     }
@@ -52,13 +52,13 @@ public class Developer
     }
 
     @JsonProperty
-    public Set<String> getEmails()
+    public Set<String> getEmailAddresses()
     {
-        return emails;
+        return emailAddresses;
     }
 
-    public void setEmails( Set<String> emails )
+    public void setEmailAddresses( Set<String> emails )
     {
-        this.emails = emails;
+        this.emailAddresses = emailAddresses;
     }
 }

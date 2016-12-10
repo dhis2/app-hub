@@ -21,6 +21,6 @@
         <many-to-one name="app" class="org.hisp.appstore.api.App"
                      column="appid" foreign-key="fk_reviewid_app" not-null="true" />
 
-        <many-to-one name="user" class="org.hisp.appstore.api.User" column="userid" foreign-key="fk_review_userid" />
+        <many-to-one name="user" lazy="false" class="org.hisp.appstore.api.User" column="userid" foreign-key="fk_review_userid" />
     </class>
 </hibernate-mapping>
