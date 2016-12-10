@@ -11,17 +11,10 @@ import java.util.Date;
 public class BaseIdentifiableObject
     implements IdentifiableObject
 {
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @JsonIgnore
     protected int id;
 
-    @Column(unique=true,nullable=false)
-    @JsonProperty(value="id")
     protected String uid;
 
-    @Column(nullable=false)
-    @JsonProperty
     protected Date created;
 
     public int getId()

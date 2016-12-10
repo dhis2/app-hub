@@ -2,9 +2,11 @@ package org.hisp.appstore.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import javax.xml.crypto.Data;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -14,15 +16,11 @@ import java.util.Set;
 public class App
     extends BaseIdentifiableObject
 {
-    private String name;
+    private String appName;
 
-    private String functionalityDescription;
-
-    private Set<String> features = Sets.newHashSet();
+    private String description;
 
     private Data updated;
-
-    private long installs;
 
     private String currentVersion;
 
@@ -34,39 +32,30 @@ public class App
 
     private AppType appType;
 
+    private List<AppVersion> versions = Lists.newArrayList();
+
     private Set<Review> reviews = Sets.newHashSet();
 
     @JsonProperty
-    public String getName()
+    public String getAppName()
     {
-        return name;
+        return appName;
     }
 
-    public void setName( String name )
+    public void setAppName( String name )
     {
-        this.name = name;
-    }
-
-    @JsonProperty
-    public String getFunctionalityDescription()
-    {
-        return functionalityDescription;
-    }
-
-    public void setFunctionalityDescription( String functionalityDescription )
-    {
-        this.functionalityDescription = functionalityDescription;
+        this.appName = appName;
     }
 
     @JsonProperty
-    public Set<String> getFeatures()
+    public String getDescription()
     {
-        return features;
+        return description;
     }
 
-    public void setFeatures( Set<String> features )
+    public void setDescription( String description )
     {
-        this.features = features;
+        this.description = description;
     }
 
     @JsonProperty
@@ -78,17 +67,6 @@ public class App
     public void setUpdated( Data updated )
     {
         this.updated = updated;
-    }
-
-    @JsonProperty
-    public long getInstalls()
-    {
-        return installs;
-    }
-
-    public void setInstalls( long installs )
-    {
-        this.installs = installs;
     }
 
     @JsonProperty
@@ -155,5 +133,16 @@ public class App
     public void setAppType( AppType type )
     {
         this.appType = type;
+    }
+
+    @JsonProperty
+    public List<AppVersion> getVersions()
+    {
+        return versions;
+    }
+
+    public void setVersions( List<AppVersion> version )
+    {
+        this.versions = versions;
     }
 }

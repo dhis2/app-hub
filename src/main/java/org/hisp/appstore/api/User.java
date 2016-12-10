@@ -20,6 +20,10 @@ public class User
     @JsonProperty
     private String username;
 
+    private String firstName;
+
+    private String lastName;
+
     @Column(nullable=false)
     private String password;
 
@@ -75,7 +79,6 @@ public class User
         this.username = username;
     }
 
-    @JsonIgnore
     public String getPassword()
     {
         return password;
@@ -95,6 +98,28 @@ public class User
     public void setEmail( String email )
     {
         this.email = email;
+    }
+
+    @JsonProperty
+    public String getFirstName()
+    {
+        return firstName;
+    }
+
+    public void setFirstName( String firstName )
+    {
+        this.firstName = firstName;
+    }
+
+    @JsonProperty
+    public String getLastName()
+    {
+        return lastName;
+    }
+
+    public void setLastName( String lastName )
+    {
+        this.lastName = lastName;
     }
 
     public Set<String> getAuths()

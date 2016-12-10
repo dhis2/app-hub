@@ -8,14 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Manager</title>
+    <title>Title</title>
 </head>
 <body>
-<h1>Manager Home Page</h1>
-
-<h2>Welcome ${username}</h2>
-
-<a href="/login">logout</a>
-
+<h1>Home page</h1>
+<a href="/manager">click here to get manager</a>
 </body>
 </html>

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:util="http://www.springframework.org/schema/util"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="
     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
-    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
-    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
-    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
-    http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd
-    http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -49,6 +41,9 @@
         <property name="mappingResources">
             <list>
                 <value>hibernate/User.hbm.xml</value>
+                <value>hibernate/App.hbm.xml</value>
+                <value>hibernate/AppVersion.hbm.xml</value>
+                <value>hibernate/Review.hbm.xml</value>
             </list>
         </property>
     </bean>
@@ -60,40 +55,6 @@
         <property name="password" value="${connection.password}"/>
     </bean>
 
-    <!-- Security -->
-
-    <security:global-method-security pre-post-annotations="enabled" />
-
-    <security:http>
-        <security:intercept-url pattern="/store/manager/**" access="ROLE_SEE_INSTANCE"/>
-        <security:intercept-url pattern="/store/api/**" access="ROLE_DEVELOPER"/>
-        <security:form-login login-page="/store/login/" default-target-url="/store/manager"/>
-        <security:http-basic/>
-        <security:logout logout-url="/store/logout" logout-success-url="/store/login/"/>
-    </security:http>
-
-    <security:authentication-manager>
-        <security:authentication-provider user-service-ref="userService">
-            <security:password-encoder ref="passwordEncoder"/>
-        </security:authentication-provider>
-    </security:authentication-manager>
-
-    <!-- for testing purpose
-
-    <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <security:user name="zubair" password="zubair" authorities="ROLE_DEVELOPER" />
-            </security:user-service>
-        </security:authentication-provider>
-    </security:authentication-manager>
-
-    -->
-
-    <bean id="userService" class="org.hisp.appstore.service.DefaultUserService" />
-
-    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-
     <!-- AppStore -->
 
     <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore"/>
@@ -102,8 +63,18 @@
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
     </bean>
 
+    <bean id="org.hisp.appstore.api.RenderService" class="org.hisp.appstore.service.DefaultRenderService"/>
+
+    <!-- User -->
+
+    <bean id="org.hisp.appstore.api.UserService" class="org.hisp.appstore.service.DefaultUserService" >
+        <property name="userStore" ref="org.hisp.appstore.api.UserStore" />
+    </bean>
+
     <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore" />
 
-    <bean id="org.hisp.appstore.api.RenderService" class="org.hisp.appstore.service.DefaultRenderService"/>
+    <!-- Controllers -->
+
+    <bean id="org.hisp.appstore.web.LoginController" class="org.hisp.appstore.web.LoginController" />
 
 </beans>

@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.hisp.appstore.api">
+    <class name="App" table="apptable">
+
+        <id name="id" column="appid">
+            <generator class="native"/>
+        </id>
+
+        <property name="uid"/>
+
+        <property name="created"/>
+
+        <property name="AppName" not-null="true"/>
+
+        <property name="currentVersion" not-null="true"/>
+
+        <property name="description"/>
+
+        <property name="requiredDhisVersion"/>
+
+        <component name="developer" class="org.hisp.appstore.api.Developer">
+
+            <property name="name"/>
+
+            <property name="address"/>
+
+            <property name="organisation"/>
+
+            <set name="emailAddresses" table="developer_emailAddresses" fetch="join">
+                <key column="developeremailaddressid"/>
+                <element type="text" column="email"/>
+            </set>
+
+        </component>
+
+        <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.User" column="ownerid" foreign-key="fk_app_ownerid" />
+
+        <property name="appType" length="50">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.hisp.appstore.api.AppType</param>
+                <param name="useNamed">true</param>
+                <param name="type">12</param>
+            </type>
+        </property>
+
+
+        <set name="versions">
+            <key column="appid" />
+            <one-to-many class="org.hisp.appstore.api.AppVersion"/>
+        </set>
+
+        <set name="reviews">
+            <key column="appid" />
+            <one-to-many class="org.hisp.appstore.api.Review"/>
+        </set>
+    </class>
+</hibernate-mapping>

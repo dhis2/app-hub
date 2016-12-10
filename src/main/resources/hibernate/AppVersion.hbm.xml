@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="org.hisp.appstore.api">
+    <class name="AppVersion" table="appversiontable">
+
+        <id name="id" column="appversionid">
+            <generator class="native" />
+        </id>
+
+        <property name="uid" />
+
+        <property name="created" />
+
+        <property name="maxDhisVersion" />
+
+        <property name="minDhisVersion" />
+
+        <property name="demoUrl" />
+
+        <property name="downloadUrl" />
+
+        <property name="version" />
+
+        <many-to-one name="app" class="org.hisp.appstore.api.App"
+                     column="appid" foreign-key="fk_appversionid_app" not-null="true" />
+
+    </class>
+</hibernate-mapping>

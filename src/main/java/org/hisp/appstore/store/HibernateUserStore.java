@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by zubair on 06.12.16.
  */
 @Transactional
-public class HibernateUserStore extends HibernateGenericDao<User> implements UserStore
+public class HibernateUserStore
+        extends HibernateGenericDao<User> implements UserStore
 {
     @Override
     protected Class<User> getClazz()

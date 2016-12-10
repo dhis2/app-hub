@@ -7,7 +7,7 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:/META-INF/beans.xml</param-value>
+        <param-value>classpath*:/META-INF/beans.xml,classpath*:/META-INF/security.xml</param-value>
     </context-param>
 
     <filter>
@@ -46,11 +46,7 @@
 
     <servlet-mapping>
         <servlet-name>webapiServlet</servlet-name>
-        <url-pattern>/store/</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>webapiServlet</servlet-name>
-        <url-pattern>/store/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>

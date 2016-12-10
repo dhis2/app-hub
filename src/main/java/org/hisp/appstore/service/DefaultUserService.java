@@ -18,8 +18,12 @@ public class DefaultUserService implements
     // Dependencies
     // -------------------------------------------------------------------------
 
-    @Autowired
     private UserStore userStore;
+
+    public void setUserStore( UserStore userStore )
+    {
+        this.userStore = userStore;
+    }
 
     // -------------------------------------------------------------------------
     // Implementation methods
@@ -55,5 +59,11 @@ public class DefaultUserService implements
     public void updateUser( User user )
     {
         userStore.update( user );
+    }
+
+    @Override
+    public User getUser( int id )
+    {
+        return userStore.get( id );
     }
 }

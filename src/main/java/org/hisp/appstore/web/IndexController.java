@@ -12,15 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class IndexController
 {
-    @RequestMapping( value = "/login" , method = RequestMethod.GET)
-    public String loginIndexPage( Model model )
+    @RequestMapping( value = "/*", method = RequestMethod.GET )
+    public String loginPage( Model model )
     {
-        return "login";
-    }
-
-    @RequestMapping( value = "/logout" , method = RequestMethod.GET)
-    public String logoutPage( Model model )
-    {
-        return "login";
+        return "home";
     }
 }
