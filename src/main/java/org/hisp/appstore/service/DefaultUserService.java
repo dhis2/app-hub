@@ -31,10 +31,10 @@ public class DefaultUserService implements
     // -------------------------------------------------------------------------
 
     @Override
-    public UserDetails loadUserByUsername( String s ) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername( String userName ) throws UsernameNotFoundException
     {
 
-        User user = userStore.getUserByUsername( s ) ;
+        User user = userStore.getUserByUsername( userName ) ;
 
         if ( user == null )
         {

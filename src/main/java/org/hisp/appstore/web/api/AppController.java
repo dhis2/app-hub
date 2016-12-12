@@ -38,14 +38,13 @@ public class AppController
     // Implementation methods
     // -------------------------------------------------------------------------
 
-    @PreAuthorize( "hasRole('ROLE_DEVELOPER')" )
+    @PreAuthorize( "hasRole('ROLE_USER')" )
     @RequestMapping ( value = "/apps", method = RequestMethod.GET, produces = "application/json" )
     public void getApp ( HttpServletResponse response, HttpServletRequest request ) throws IOException
     {
-        renderService.toJson( response.getOutputStream(), userService.getUser( 2 ) );
     }
 
-    @PreAuthorize( "hasRole('ROLE_DEVELOPER')" )
+    @PreAuthorize( "hasRole('ROLE_USER')" )
     @RequestMapping ( value = "/*", method = RequestMethod.GET, produces = "application/json" )
     public void home ( HttpServletResponse response, HttpServletRequest request ) throws IOException
     {

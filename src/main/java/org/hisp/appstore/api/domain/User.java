@@ -35,6 +35,10 @@ public class User
     {
     }
 
+    public User(User user)
+    {
+    }
+
     public void mergeWith( User other )
     {
         // Do not merge user name and password
