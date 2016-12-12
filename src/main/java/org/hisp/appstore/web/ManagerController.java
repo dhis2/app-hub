@@ -1,6 +1,6 @@
 package org.hisp.appstore.web;
 
-import org.hisp.appstore.api.User;
+import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.session.CurrentUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +17,6 @@ public class ManagerController
     @RequestMapping( method = RequestMethod.GET )
     public String loginIndexPage( Model model, @CurrentUser User currentUser )
     {
-        System.out.println(" Rendered manager page ");
-
         model.addAttribute( "username", currentUser.getUsername() );
 
         return "manager";

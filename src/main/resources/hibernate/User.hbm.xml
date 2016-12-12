@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="User" table="usertable">
+    <class name="org.hisp.appstore.api.domain.User" table="usertable">
 
         <id name="id" column="userid">
             <generator class="native" />
@@ -15,6 +15,10 @@
         <property name="created" />
 
         <property name="username" />
+
+        <property name="firstName" />
+
+        <property name="lastName" />
 
         <property name="password" />
 

@@ -1,4 +1,4 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import javax.xml.crypto.Data;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import java.util.Set;
 @JacksonXmlRootElement( localName = "app" )
 public class App
     extends BaseIdentifiableObject
+        implements Serializable
 {
     private String appName;
 

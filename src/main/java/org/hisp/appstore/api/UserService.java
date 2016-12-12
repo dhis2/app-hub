@@ -1,5 +1,7 @@
 package org.hisp.appstore.api;
 
+import org.hisp.appstore.api.domain.User;
+
 /**
  * Created by zubair on 02.12.16.
  */

@@ -13,7 +13,8 @@ import java.io.OutputStream;
 /**
  * Created by zubair on 01.12.16.
  */
-public class DefaultRenderService implements RenderService
+public class DefaultRenderService
+        implements RenderService
 {
     private static Log log = LogFactory.getLog( DefaultRenderService.class );
 

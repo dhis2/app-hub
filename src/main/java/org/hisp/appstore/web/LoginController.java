@@ -1,6 +1,6 @@
 package org.hisp.appstore.web;
 
-import org.hisp.appstore.api.User;
+import org.hibernate.SessionFactory;
 import org.hisp.appstore.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +16,9 @@ public class LoginController
 {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     @RequestMapping( value = "/login", method = RequestMethod.GET )
     public String loginPage( Model model )

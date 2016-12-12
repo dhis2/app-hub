@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.AppStoreService;
 import org.hisp.appstore.api.RenderService;
+import org.hisp.appstore.api.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,9 @@ public class AppController
     private AppStoreService appStoreService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private RenderService renderService;
 
     // -------------------------------------------------------------------------
@@ -37,6 +41,13 @@ public class AppController
     @PreAuthorize( "hasRole('ROLE_DEVELOPER')" )
     @RequestMapping ( value = "/apps", method = RequestMethod.GET, produces = "application/json" )
     public void getApp ( HttpServletResponse response, HttpServletRequest request ) throws IOException
+    {
+        renderService.toJson( response.getOutputStream(), userService.getUser( 2 ) );
+    }
+
+    @PreAuthorize( "hasRole('ROLE_DEVELOPER')" )
+    @RequestMapping ( value = "/*", method = RequestMethod.GET, produces = "application/json" )
+    public void home ( HttpServletResponse response, HttpServletRequest request ) throws IOException
     {
         renderService.toJson( response.getOutputStream(), "Test!!" );
     }

@@ -1,16 +1,17 @@
 package org.hisp.appstore.service;
 
-import org.hisp.appstore.api.User;
+import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.UserStore;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by zubair on 02.12.16.
  */
+@Transactional
 public class DefaultUserService implements
         UserService, UserDetailsService
 {

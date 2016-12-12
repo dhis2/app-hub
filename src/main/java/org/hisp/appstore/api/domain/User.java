@@ -1,38 +1,34 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.google.common.base.MoreObjects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @JacksonXmlRootElement( localName = "user" )
 public class User
     extends BaseIdentifiableObject
+        implements Serializable
 {
-    @Column(nullable=false, unique=true)
-    @JsonProperty
     private String username;
 
     private String firstName;
 
     private String lastName;
 
-    @Column(nullable=false)
     private String password;
 
-    @Column(nullable=false)
-    @JsonProperty
     private String email;
 
-    @ElementCollection
-    @JsonProperty
     private Set<String> auths = new HashSet<>();
 
     public User()
@@ -130,5 +126,17 @@ public class User
     public void setAuths( Set<String> auths )
     {
         this.auths = auths;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper( this )
+                .add( "uid", uid )
+                .add( "username", this.username )
+                .add( "firstname", this.firstName )
+                .add( "lastname", this.lastName )
+                .add( "email", this.email )
+                .toString();
     }
 }

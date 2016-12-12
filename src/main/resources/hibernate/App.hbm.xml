@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="App" table="apptable">
+    <class name="org.hisp.appstore.api.domain.App" table="apptable">
 
         <id name="id" column="appid">
             <generator class="native"/>
@@ -22,7 +22,7 @@
 
         <property name="requiredDhisVersion"/>
 
-        <component name="developer" class="org.hisp.appstore.api.Developer">
+        <component name="developer" class="org.hisp.appstore.api.domain.Developer">
 
             <property name="name"/>
 
@@ -37,11 +37,11 @@
 
         </component>
 
-        <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.User" column="ownerid" foreign-key="fk_app_ownerid" />
+        <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.domain.User" column="ownerid" foreign-key="fk_app_ownerid" />
 
         <property name="appType" length="50">
             <type name="org.hibernate.type.EnumType">
-                <param name="enumClass">org.hisp.appstore.api.AppType</param>
+                <param name="enumClass">org.hisp.appstore.api.domain.AppType</param>
                 <param name="useNamed">true</param>
                 <param name="type">12</param>
             </type>
@@ -50,12 +50,12 @@
 
         <set name="versions">
             <key column="appid" />
-            <one-to-many class="org.hisp.appstore.api.AppVersion"/>
+            <one-to-many class="org.hisp.appstore.api.domain.AppVersion"/>
         </set>
 
         <set name="reviews">
             <key column="appid" />
-            <one-to-many class="org.hisp.appstore.api.Review"/>
+            <one-to-many class="org.hisp.appstore.api.domain.Review"/>
         </set>
     </class>
 </hibernate-mapping>

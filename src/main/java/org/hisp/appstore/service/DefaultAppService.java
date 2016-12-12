@@ -2,14 +2,16 @@ package org.hisp.appstore.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.appstore.api.App;
+import org.hisp.appstore.api.domain.App;
 import org.hisp.appstore.api.AppStore;
 import org.hisp.appstore.api.AppStoreService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class DefaultAppService implements AppStoreService
+@Transactional
+public class DefaultAppService
+        implements AppStoreService
 {
     private static final Log log = LogFactory.getLog( DefaultAppService.class );
 

@@ -8,16 +8,33 @@ import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.GenericDao;
 import org.hisp.appstore.api.IdentifiableObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 
 public abstract class HibernateGenericDao<T extends IdentifiableObject>
     implements GenericDao<T>
 {
-    @Autowired
     protected SessionFactory sessionFactory;
 
-    protected abstract Class<T> getClazz();
+    @Required
+    public void setSessionFactory ( SessionFactory sessionFactory )
+    {
+        this.sessionFactory = sessionFactory;
+    }
+
+    protected Class<T> clazz;
+
+    @Required
+    public void setClazz( Class<T> clazz )
+    {
+        this.clazz = clazz;
+    }
+
+    public Class<T> getClazz()
+    {
+        return clazz;
+    }
 
     // -------------------------------------------------------------------------
     // Convenience methods

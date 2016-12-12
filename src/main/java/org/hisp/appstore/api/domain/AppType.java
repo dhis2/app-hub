@@ -1,4 +1,4 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.domain;
 
 /**
  * Created by zubair on 06.12.16.

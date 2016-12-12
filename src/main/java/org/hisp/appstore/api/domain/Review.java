@@ -1,4 +1,4 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

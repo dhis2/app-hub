@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="AppVersion" table="appversiontable">
+    <class name="org.hisp.appstore.api.domain.AppVersion" table="appversiontable">
 
         <id name="id" column="appversionid">
             <generator class="native" />
@@ -24,7 +24,7 @@
 
         <property name="version" />
 
-        <many-to-one name="app" class="org.hisp.appstore.api.App"
+        <many-to-one name="app" class="org.hisp.appstore.api.domain.App"
                      column="appid" foreign-key="fk_appversionid_app" not-null="true" />
 
     </class>

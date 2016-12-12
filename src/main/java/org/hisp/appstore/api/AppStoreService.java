@@ -1,5 +1,7 @@
 package org.hisp.appstore.api;
 
+import org.hisp.appstore.api.domain.App;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,7 @@ import java.util.List;
  */
 public interface AppStoreService
 {
-    App getApp( int id );
+    App getApp(int id );
 
     App getApp( String uid );
 

@@ -57,7 +57,10 @@
 
     <!-- AppStore -->
 
-    <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore"/>
+    <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore">
+        <property name="clazz" value="org.hisp.appstore.api.domain.App" />
+        <property name="sessionFactory" ref="sessionFactory" />
+            </bean>
 
     <bean id="org.hisp.appstore.api.AppStoreService" class="org.hisp.appstore.service.DefaultAppService">
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
@@ -68,13 +71,12 @@
     <!-- User -->
 
     <bean id="org.hisp.appstore.api.UserService" class="org.hisp.appstore.service.DefaultUserService" >
-        <property name="userStore" ref="org.hisp.appstore.api.UserStore" />
+        <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
     </bean>
 
-    <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore" />
-
-    <!-- Controllers -->
-
-    <bean id="org.hisp.appstore.web.LoginController" class="org.hisp.appstore.web.LoginController" />
+    <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
+        <property name="clazz" value="org.hisp.appstore.api.domain.User" />
+        <property name="sessionFactory" ref="sessionFactory" />
+            </bean>
 
 </beans>

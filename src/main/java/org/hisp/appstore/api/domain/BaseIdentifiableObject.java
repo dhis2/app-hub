@@ -1,13 +1,14 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.hisp.appstore.api.IdentifiableObject;
 import org.hisp.appstore.util.CodeUtils;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@MappedSuperclass
+@JacksonXmlRootElement( localName = "baseIdentifiableObject" )
 public class BaseIdentifiableObject
     implements IdentifiableObject
 {
@@ -17,6 +18,7 @@ public class BaseIdentifiableObject
 
     protected Date created;
 
+    @JsonProperty
     public int getId()
     {
         return id;
@@ -27,6 +29,7 @@ public class BaseIdentifiableObject
         this.id = id;
     }
 
+    @JsonProperty
     public String getUid()
     {
         return uid;
@@ -37,6 +40,7 @@ public class BaseIdentifiableObject
         this.uid = uid;
     }
 
+    @JsonProperty
     public Date getCreated()
     {
         return created;
