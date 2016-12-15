@@ -77,6 +77,17 @@
     <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
         <property name="clazz" value="org.hisp.appstore.api.domain.User" />
         <property name="sessionFactory" ref="sessionFactory" />
-            </bean>
+    </bean>
+
+    <!-- BaseIdentifiableObject -->
+
+    <bean id="org.hisp.appstore.api.BaseIdentifiableObjectManager" class="org.hisp.appstore.service.DefaultBaseIdentifiableObjectManager">
+        <property name="baseIdentifiableStores">
+            <list>
+                <ref bean="org.hisp.appstore.api.UserStore"/>
+                <ref bean="org.hisp.appstore.api.AppStore"/>
+            </list>
+        </property>
+    </bean>
 
 </beans>

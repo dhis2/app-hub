@@ -7,12 +7,13 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.GenericDao;
 import org.hisp.appstore.api.IdentifiableObject;
+import org.hisp.appstore.api.domain.BaseIdentifiableObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 import java.util.List;
 
-public abstract class HibernateGenericDao<T extends IdentifiableObject>
+public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
     implements GenericDao<T>
 {
     protected SessionFactory sessionFactory;

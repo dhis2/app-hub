@@ -13,6 +13,8 @@
 <body>
 <h1>Login</h1>
 
+<h2>${failedMessage}</h2>
+
 <form method="POST" action="/j_spring_security_check">
     <input type="text" name="j_username" value="" />
     <input  type="password" name="j_password" value="" />

@@ -54,8 +54,17 @@
         </set>
 
         <set name="reviews">
-            <key column="appid" />
+            <key column="reviewid" />
             <one-to-many class="org.hisp.appstore.api.domain.Review"/>
         </set>
+
+        <property name="status" length="50">
+            <type name="org.hibernate.type.EnumType">
+                <param name="enumClass">org.hisp.appstore.api.domain.AppStatus</param>
+                <param name="useNamed">true</param>
+                <param name="type">12</param>
+            </type>
+        </property>
+
     </class>
 </hibernate-mapping>

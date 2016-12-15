@@ -13,9 +13,10 @@
     <security:http>
         <security:intercept-url pattern="/home"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/login"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/**"  access="ROLE_USER"/>
+        <security:intercept-url pattern="/api/**"  access="ROLE_USER,ROLE_DEVELOPER"/>
         <security:intercept-url pattern="/manager/**"  access="ROLE_USER"/>
-        <security:form-login login-page="/login" username-parameter="j_username" password-parameter="j_password"/>
+        <security:form-login login-page="/login" username-parameter="j_username" password-parameter="j_password" authentication-failure-url="/login?failed=true"/>
+        <security:logout logout-url="/logout"  invalidate-session="true" />
         <security:http-basic/>
     </security:http>
 
@@ -23,17 +24,6 @@
         <security:authentication-provider user-service-ref="org.hisp.appstore.api.UserService">
         </security:authentication-provider>
     </security:authentication-manager>
-
-<!--
-    <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <security:user name="zubair" password="zubair" authorities="ROLE_DEVELOPER" />
-                <security:user name="naveed" password="naveed" authorities="ROLE_USER" />
-            </security:user-service>
-        </security:authentication-provider>
-    </security:authentication-manager>
--->
 
     <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 

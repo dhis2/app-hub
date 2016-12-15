@@ -1,6 +1,7 @@
 package org.hisp.appstore.api;
 
 import org.hisp.appstore.api.domain.App;
+import org.hisp.appstore.api.domain.AppStatus;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface AppStoreService
     void deleteApp( App app );
 
     int saveApp( App app );
+
+    void setAppApproval ( App app, AppStatus status);
 }

@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.domain.App;
 import org.hisp.appstore.api.AppStore;
 import org.hisp.appstore.api.AppStoreService;
+import org.hisp.appstore.api.domain.AppStatus;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class DefaultAppService
     {
         this.appStore = appStore;
 
-        log.info( " AppStore loaded!!! " );
+        log.info("AppStore loaded");
     }
 
     // -------------------------------------------------------------------------
@@ -66,5 +67,15 @@ public class DefaultAppService
     public int saveApp( App app )
     {
         return appStore.save( app );
+    }
+
+    @Override
+    public void setAppApproval ( App app, AppStatus status)
+    {
+        app.setStatus( status );
+
+        appStore.update( app );
+
+        log.info( "AppStatus changed for " + app.getAppName() );
     }
 }

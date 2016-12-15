@@ -38,6 +38,8 @@ public class App
 
     private Set<Review> reviews = Sets.newHashSet();
 
+    private AppStatus status = AppStatus.PENDING;
+
     @JsonProperty
     public String getAppName()
     {
@@ -146,5 +148,15 @@ public class App
     public void setVersions( List<AppVersion> version )
     {
         this.versions = versions;
+    }
+
+    public AppStatus getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus( AppStatus status )
+    {
+        this.status = status;
     }
 }

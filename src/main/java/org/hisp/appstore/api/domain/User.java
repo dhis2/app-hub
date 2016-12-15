@@ -35,8 +35,13 @@ public class User
     {
     }
 
-    public User(User user)
+    public User( User user )
     {
+        this.setAuths( user.getAuths() );
+        this.setEmail( user.getEmail() );
+        this.setFirstName( user.getFirstName() );
+        this.setLastName( user.getLastName() );
+        this.setPassword( user.getPassword() );
     }
 
     public void mergeWith( User other )
@@ -56,7 +61,7 @@ public class User
     }
 
     @JsonIgnore
-    public UserDetails getUserDetails()
+    public Set<GrantedAuthority> getUserDetails()
     {
         Set<GrantedAuthority> grantedAuths = new HashSet<GrantedAuthority>();
 
@@ -65,7 +70,7 @@ public class User
             grantedAuths.add( new SimpleGrantedAuthority( auth ) );
         }
 
-        return new org.springframework.security.core.userdetails.User( username, password, grantedAuths );
+        return grantedAuths;
     }
 
     @JsonProperty

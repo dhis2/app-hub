@@ -3,21 +3,20 @@ package org.hisp.appstore.web.api;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.AppStoreService;
-import org.hisp.appstore.api.RenderService;
-import org.hisp.appstore.api.UserService;
+import org.hisp.appstore.api.domain.App;
+import org.hisp.appstore.api.domain.AppStatus;
+import org.hisp.appstore.util.WebMessageException;
+import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping ( value = "/api" )
-public class AppController
+@RequestMapping ( value = "/api/apps" )
+public class AppController extends AbstractCrudController<App>
 {
     private static final Log log = LogFactory.getLog( AppController.class );
 
@@ -28,44 +27,23 @@ public class AppController
     @Autowired
     private AppStoreService appStoreService;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private RenderService renderService;
-
     // -------------------------------------------------------------------------
     // Implementation methods
     // -------------------------------------------------------------------------
 
-    @PreAuthorize( "hasRole('ROLE_USER')" )
-    @RequestMapping ( value = "/apps", method = RequestMethod.GET, produces = "application/json" )
-    public void getApp ( HttpServletResponse response, HttpServletRequest request ) throws IOException
+    @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
+    public void approveApp( @PathVariable( "uid" ) String appUid,
+                            @RequestParam( name = "status", required = true ) AppStatus status,
+                            HttpServletResponse response, HttpServletRequest request )
+                            throws IOException, WebMessageException
     {
-    }
+        App app = appStoreService.getApp( appUid );
 
-    @PreAuthorize( "hasRole('ROLE_USER')" )
-    @RequestMapping ( value = "/*", method = RequestMethod.GET, produces = "application/json" )
-    public void home ( HttpServletResponse response, HttpServletRequest request ) throws IOException
-    {
-        renderService.toJson( response.getOutputStream(), "Test!!" );
-    }
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( "App with id: " + appUid + " does not exist" ) );
+        }
 
-    @RequestMapping ( method = RequestMethod.DELETE, produces = "application/json" )
-    public void deleteApp ( HttpServletResponse response, HttpServletRequest request )
-    {
-
-    }
-
-    @RequestMapping ( method = RequestMethod.PUT, produces = "application/json" )
-    public void updateApp ( HttpServletResponse response, HttpServletRequest request )
-    {
-
-    }
-
-    @RequestMapping ( method = RequestMethod.POST, produces = "application/json" )
-    public void saveApp ( HttpServletResponse response, HttpServletRequest request )
-    {
-
+        appStoreService.setAppApproval( app, status );
     }
 }

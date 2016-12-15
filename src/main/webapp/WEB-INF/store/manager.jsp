@@ -15,7 +15,7 @@
 
 <h2>Welcome ${username}</h2>
 
-<a href="/login">logout</a>
+<a href="/logout">logout</a>
 
 </body>
 </html>

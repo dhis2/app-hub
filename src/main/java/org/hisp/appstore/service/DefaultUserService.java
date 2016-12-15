@@ -1,5 +1,8 @@
 package org.hisp.appstore.service;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hisp.appstore.api.CustomUserDetail;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.UserStore;
@@ -15,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class DefaultUserService implements
         UserService, UserDetailsService
 {
+    private static final Log log = LogFactory.getLog( DefaultUserService.class );
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -40,8 +45,8 @@ public class DefaultUserService implements
         {
             throw new UsernameNotFoundException( "User not found" );
         }
-
-        return user.getUserDetails();
+        
+        return new CustomUserDetail( user );
     }
 
     @Override
