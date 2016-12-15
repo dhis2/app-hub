@@ -80,6 +80,22 @@ public class DefaultRenderService
         send( response, request, webMessage );
     }
 
+    @Override
+    public void renderConflict ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException
+    {
+        WebMessage webMessage = WebMessageUtils.conflict( message );
+
+        send( response, request, webMessage );
+    }
+
+    @Override
+    public void renderNotFound ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException
+    {
+        WebMessage webMessage = WebMessageUtils.notFound( message );
+
+        send( response, request, webMessage );
+    }
+
     private void send ( HttpServletResponse response, HttpServletRequest request, WebMessage webMessage ) throws IOException
     {
         String type = request.getHeader( "Accept");

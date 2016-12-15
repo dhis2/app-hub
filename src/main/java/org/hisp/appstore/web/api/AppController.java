@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping ( value = "/api/apps" )
+@RequestMapping ( value = "/apps" )
 public class AppController extends AbstractCrudController<App>
 {
     private static final Log log = LogFactory.getLog( AppController.class );

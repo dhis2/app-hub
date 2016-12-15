@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * Created by zubair on 02.12.16.
  */
@@ -45,7 +47,7 @@ public class DefaultUserService implements
         {
             throw new UsernameNotFoundException( "User not found" );
         }
-        
+
         return new CustomUserDetail( user );
     }
 
@@ -71,5 +73,11 @@ public class DefaultUserService implements
     public User getUser( int id )
     {
         return userStore.get( id );
+    }
+
+    @Override
+    public List<User> getAll()
+    {
+        return userStore.getAll();
     }
 }

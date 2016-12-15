@@ -24,9 +24,9 @@
 
         <property name="email" />
 
-        <set name="auths" table="user_auths" fetch="join">
-            <key column="userauthid" />
-            <element type="text" column="auth" />
+        <set name="auths" table="user_auths" fetch="select" lazy="false">
+            <key column="userauthid"/>
+            <element type="text" column="auth"/>
         </set>
 
     </class>

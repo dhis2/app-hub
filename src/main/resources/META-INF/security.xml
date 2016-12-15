@@ -13,8 +13,9 @@
     <security:http>
         <security:intercept-url pattern="/home"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/login"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/**"  access="ROLE_USER,ROLE_DEVELOPER"/>
-        <security:intercept-url pattern="/manager/**"  access="ROLE_USER"/>
+        <security:intercept-url pattern="/api/users/**"  access="ROLE_ADMIN,ROLE_ALL"/>
+        <security:intercept-url pattern="/api/**"  access="ROLE_USER,ROLE_ALL"/>
+        <security:intercept-url pattern="/manager/**"  access="ROLE_USER,ROLE_ALL"/>
         <security:form-login login-page="/login" username-parameter="j_username" password-parameter="j_password" authentication-failure-url="/login?failed=true"/>
         <security:logout logout-url="/logout"  invalidate-session="true" />
         <security:http-basic/>

@@ -6,10 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.MoreObjects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -84,6 +81,7 @@ public class User
         this.username = username;
     }
 
+    @JsonIgnore
     public String getPassword()
     {
         return password;
@@ -127,6 +125,7 @@ public class User
         this.lastName = lastName;
     }
 
+    @JsonIgnore
     public Set<String> getAuths()
     {
         return auths;

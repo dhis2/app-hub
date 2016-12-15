@@ -27,6 +27,8 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
 {
     private static final Log log = LogFactory.getLog( AbstractCrudController.class );
 
+    private static final String NO_ENTITY_FOUND = "No entity found with id: ";
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -58,6 +60,11 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
             throws IOException
     {
         BaseIdentifiableObject entity = manager.getByUid( getEntityClass(), uid );
+
+        if ( entity == null )
+        {
+            renderService.renderNotFound( response, request, NO_ENTITY_FOUND + uid );
+        }
 
         renderService.toJson( response.getOutputStream(), entity );
     }
@@ -101,7 +108,7 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
 
         if ( entity == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "Entity with id: " + uid + " does not exist" ) );
+            throw new WebMessageException( WebMessageUtils.notFound( NO_ENTITY_FOUND + uid  ) );
         }
 
         manager.delete( entity );

@@ -24,4 +24,8 @@ public interface RenderService
     void renderCreated ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
 
     void renderAccepted ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
+
+    void renderConflict ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
+
+    void renderNotFound ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
 }
