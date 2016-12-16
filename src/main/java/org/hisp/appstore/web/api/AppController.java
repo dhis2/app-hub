@@ -8,6 +8,7 @@ import org.hisp.appstore.api.RenderService;
 import org.hisp.appstore.api.ReviewService;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.domain.*;
+import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -49,13 +50,12 @@ public class AppController extends AbstractCrudController<App>
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.GET )
     public void listReviews(  @PathVariable( "uid" ) String appUid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+            throws IOException, WebMessageException {
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
         {
-            renderService.renderNotFound( response, request, NOT_FOUND + appUid );
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
         Set<Review> reviews = app.getReviews();
@@ -70,15 +70,14 @@ public class AppController extends AbstractCrudController<App>
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
     public void addReview( @PathVariable( "uid" ) String appUid,
                           HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+                          throws IOException, WebMessageException {
         Review review = renderService.fromJson( request.getInputStream(), Review.class );
 
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
         {
-            renderService.renderNotFound( response, request, NOT_FOUND + appUid );
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
         appStoreService.addReviewToApp( app, review );
@@ -90,13 +89,12 @@ public class AppController extends AbstractCrudController<App>
     public void approveApp( @PathVariable( "uid" ) String appUid,
                             @RequestParam( name = "status", required = true ) AppStatus status,
                             HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+            throws IOException, WebMessageException {
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
         {
-            renderService.renderNotFound( response, request, NOT_FOUND + appUid );
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
         appStoreService.setAppApproval( app, status );
@@ -112,15 +110,14 @@ public class AppController extends AbstractCrudController<App>
     public void deleteReview( @PathVariable( "uid" ) String appUid,
                               @PathVariable( "ruid" ) String reviewuid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+                             throws IOException, WebMessageException {
         App app = appStoreService.getApp( appUid );
 
         Review review = reviewService.getReview( reviewuid );
 
         if ( app == null || review == null )
         {
-            renderService.renderNotFound( response, request, "No entity found for given ids" );
+            throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
         }
 
         appStoreService.removeReviewFromApp( app, review );

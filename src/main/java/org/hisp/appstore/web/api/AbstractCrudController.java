@@ -5,6 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.BaseIdentifiableObjectManager;
 import org.hisp.appstore.api.RenderService;
 import org.hisp.appstore.api.domain.BaseIdentifiableObject;
+import org.hisp.appstore.util.WebMessageException;
+import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,13 +56,12 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
 
     @RequestMapping ( value = "/{uid}", method = RequestMethod.GET )
     public void getEntity( @PathVariable( "uid" ) String uid, HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+            throws IOException, WebMessageException {
         BaseIdentifiableObject entity = manager.getByUid( getEntityClass(), uid );
 
         if ( entity == null )
         {
-            renderService.renderNotFound( response, request, NO_ENTITY_FOUND + uid );
+            throw new WebMessageException( WebMessageUtils.notFound( NO_ENTITY_FOUND + uid ) );
         }
 
         renderService.toJson( response.getOutputStream(), entity );
@@ -99,13 +100,12 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
     @RequestMapping ( value = "/{uid}", method = RequestMethod.DELETE )
     public void deleteEntity( @PathVariable( "uid" ) String uid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
+            throws IOException, WebMessageException {
         BaseIdentifiableObject entity = manager.getByUid( getEntityClass(), uid );
 
         if ( entity == null )
         {
-            renderService.renderNotFound( response, request, NO_ENTITY_FOUND + uid );
+            throw new WebMessageException( WebMessageUtils.notFound( NO_ENTITY_FOUND + uid ) );
         }
 
         manager.delete( entity );

@@ -14,7 +14,7 @@ import java.io.IOException;
  * Created by zubair on 16.12.16.
  */
 @ControllerAdvice
-public class CRUDControllerAdvice
+public class CrudControllerAdvice
 {
     @Autowired
     private RenderService renderService;

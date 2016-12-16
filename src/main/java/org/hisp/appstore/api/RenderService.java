@@ -17,10 +17,6 @@ public interface RenderService
 
     <T> T fromJson (InputStream inputStream, Class<T> klass ) throws IOException;
 
-    void toXml ( OutputStream outputStream, Object value ) throws IOException;
-
-    <T> T fromXml ( InputStream inputStream, Class<T> klass ) throws IOException;
-
     void renderOk (HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
 
     void renderCreated ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;

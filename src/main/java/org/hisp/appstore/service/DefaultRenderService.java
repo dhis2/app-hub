@@ -32,8 +32,6 @@ public class DefaultRenderService
 
     private static final ObjectMapper jsonMapper = new ObjectMapper();
 
-    private static final XmlMapper xmlMapper = new XmlMapper();
-
     @Override
     public void toJson( OutputStream outputStream, Object value ) throws IOException
     {
@@ -44,18 +42,6 @@ public class DefaultRenderService
     public <T> T fromJson( InputStream inputStream, Class<T> klass ) throws IOException
     {
         return jsonMapper.readValue( inputStream, klass );
-    }
-
-    @Override
-    public void toXml( OutputStream outputStream, Object value ) throws IOException
-    {
-        xmlMapper.writeValue( outputStream, value);
-    }
-
-    @Override
-    public <T> T fromXml( InputStream inputStream, Class<T> klass ) throws IOException
-    {
-        return xmlMapper.readValue( inputStream, klass );
     }
 
     @Override
@@ -101,39 +87,9 @@ public class DefaultRenderService
     @Override
     public void send ( HttpServletResponse response, HttpServletRequest request, WebMessage webMessage ) throws IOException
     {
-        String type = request.getHeader( "Accept");
-        type = !StringUtils.isEmpty( type ) ? type : request.getContentType();
-        type = !StringUtils.isEmpty( type ) ? type : MediaType.APPLICATION_JSON_VALUE;
-
         response.setStatus( webMessage.getHttpStatusCode() );
+        response.setContentType( MediaType.APPLICATION_JSON_VALUE );
 
-        if ( isCompatibleWith( type, MediaType.APPLICATION_JSON ) )
-        {
-            response.setContentType( type );
-            toJson( response.getOutputStream(), webMessage );
-        }
-        else if ( isCompatibleWith( type, MediaType.APPLICATION_XML ) )
-        {
-            response.setContentType( type );
-            toXml( response.getOutputStream(), webMessage );
-        }
-        else
-        {
-            response.setContentType( MediaType.APPLICATION_JSON_VALUE );
-            toJson( response.getOutputStream(), webMessage );
-        }
-    }
-
-    private boolean isCompatibleWith( String type, MediaType mediaType )
-    {
-        try
-        {
-            return !StringUtils.isEmpty( type ) && MediaType.parseMediaType( type ).isCompatibleWith( mediaType );
-        }
-        catch ( Exception ignored )
-        {
-        }
-
-        return false;
+        toJson( response.getOutputStream(), webMessage );
     }
 }
