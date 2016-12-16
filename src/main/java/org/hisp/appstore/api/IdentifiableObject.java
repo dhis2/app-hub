@@ -1,5 +1,7 @@
 package org.hisp.appstore.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 public interface IdentifiableObject
@@ -16,5 +18,7 @@ public interface IdentifiableObject
 
     void setCreated( Date created );
 
-    void setAutoFields();
+    Date getLastUpdated();
+
+    void setLastUpdated( Date updated );
 }

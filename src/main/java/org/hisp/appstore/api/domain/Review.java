@@ -1,12 +1,12 @@
 package org.hisp.appstore.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Created by zubair on 23.11.16.
  */
-@JacksonXmlRootElement(localName = "review")
 public class Review
         extends BaseIdentifiableObject
 {
@@ -18,7 +18,8 @@ public class Review
 
     private App app;
 
-    public Review() {
+    public Review()
+    {
     }
 
     public Review( User user, String reviewText )
@@ -55,7 +56,7 @@ public class Review
         this.rate = rate;
     }
 
-    @JsonProperty
+    @JsonIgnore
     public App getApp()
     {
         return app;

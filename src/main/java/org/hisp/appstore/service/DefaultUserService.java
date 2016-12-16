@@ -6,6 +6,8 @@ import org.hisp.appstore.api.CustomUserDetail;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.UserStore;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -73,6 +75,19 @@ public class DefaultUserService implements
     public User getUser( int id )
     {
         return userStore.get( id );
+    }
+
+    @Override
+    public User getCurrentUser()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ( authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == null )
+        {
+            return null;
+        }
+
+        return (User) authentication.getPrincipal();
     }
 
     @Override

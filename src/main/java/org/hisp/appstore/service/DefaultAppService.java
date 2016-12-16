@@ -2,10 +2,12 @@ package org.hisp.appstore.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hisp.appstore.api.*;
 import org.hisp.appstore.api.domain.App;
-import org.hisp.appstore.api.AppStore;
-import org.hisp.appstore.api.AppStoreService;
 import org.hisp.appstore.api.domain.AppStatus;
+import org.hisp.appstore.api.domain.Review;
+import org.hisp.appstore.api.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -19,6 +21,20 @@ public class DefaultAppService
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
+
+    private UserService userService;
+
+    public void setUserService( UserService userService )
+    {
+        this.userService = userService;
+    }
+
+    private ReviewStore reviewStore;
+
+    public void setReviewStore( ReviewStore reviewStore )
+    {
+        this.reviewStore = reviewStore;
+    }
 
     private AppStore appStore;
 
@@ -76,6 +92,32 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( "AppStatus changed for " + app.getAppName() );
+        log.info( "Status changed for " + app.getAppName() );
+    }
+
+    @Override
+    public void removeReviewFromApp(  App app, Review review )
+    {
+        app.getReviews().remove( review );
+
+        appStore.update( app );
+
+        log.info("Review removed from App");
+    }
+
+    @Override
+    public void addReviewToApp(  App app, Review review )
+    {
+        User user = userService.getUser( 3 );
+
+
+        review.setAutoFields();
+        review.setUser( user );
+
+        app.getReviews().add( review );
+
+        appStore.update( app );
+
+        log.info("Review added to App");
     }
 }

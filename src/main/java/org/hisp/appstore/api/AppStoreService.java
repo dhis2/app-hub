@@ -2,6 +2,7 @@ package org.hisp.appstore.api;
 
 import org.hisp.appstore.api.domain.App;
 import org.hisp.appstore.api.domain.AppStatus;
+import org.hisp.appstore.api.domain.Review;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface AppStoreService
     int saveApp( App app );
 
     void setAppApproval ( App app, AppStatus status);
+
+    void removeReviewFromApp( App app, Review review );
+
+    void addReviewToApp(  App app, Review review );
 }

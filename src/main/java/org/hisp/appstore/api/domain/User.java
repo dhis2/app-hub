@@ -11,7 +11,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@JacksonXmlRootElement( localName = "user" )
 public class User
     extends BaseIdentifiableObject
         implements Serializable

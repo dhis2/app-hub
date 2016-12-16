@@ -2,34 +2,37 @@ package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.google.common.collect.Sets;
 
 import java.util.Set;
 
 /**
  * Created by zubair on 01.12.16.
  */
-@JacksonXmlRootElement(localName = "developer")
 public class Developer
         extends BaseIdentifiableObject
 {
-    private String name;
+    private String developerName;
 
     private String organisation;
 
     private String address;
 
-    private Set<String> emailAddresses;
+    private Set<String> emailAddresses = Sets.newHashSet();
 
-    public Developer() {
+    public Developer()
+    {
     }
 
     @JsonProperty
-    public String getName() {
-        return name;
+    public String getDeveloperName()
+    {
+        return developerName;
     }
 
-    public void setName( String name ) {
-        this.name = name;
+    public void setDeveloperName( String developerName )
+    {
+        this.developerName = developerName;
     }
 
     @JsonProperty
@@ -46,7 +49,8 @@ public class Developer
         return address;
     }
 
-    public void setAddress( String address ) {
+    public void setAddress( String address )
+    {
         this.address = address;
     }
 
@@ -56,7 +60,7 @@ public class Developer
         return emailAddresses;
     }
 
-    public void setEmailAddresses( Set<String> emails )
+    public void setEmailAddresses( Set<String> emailAddresses )
     {
         this.emailAddresses = emailAddresses;
     }

@@ -14,13 +14,16 @@
 
         <property name="created" />
 
+        <property name="lastUpdated" />
+
         <property name="reviewText" />
 
         <property name="rate" />
 
-        <many-to-one name="app" class="org.hisp.appstore.api.domain.App"
-                     column="appid" foreign-key="fk_reviewid_app" not-null="true" />
-
         <many-to-one name="user" lazy="false" class="org.hisp.appstore.api.domain.User" column="userid" foreign-key="fk_review_userid" />
+
+        <many-to-one name="app" class="org.hisp.appstore.api.domain.App" column="appid"
+                     foreign-key="fk_appreview_appid" />
+
     </class>
 </hibernate-mapping>

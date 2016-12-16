@@ -18,4 +18,6 @@ public interface UserService
     User getUser( int id );
 
     List<User> getAll();
+
+    User getCurrentUser();
 }

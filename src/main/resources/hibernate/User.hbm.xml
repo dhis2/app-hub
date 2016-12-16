@@ -14,13 +14,15 @@
 
         <property name="created" />
 
-        <property name="username" />
+        <property name="lastUpdated" />
+
+        <property name="username" not-null="true"/>
 
         <property name="firstName" />
 
         <property name="lastName" />
 
-        <property name="password" />
+        <property name="password" not-null="true"/>
 
         <property name="email" />
 

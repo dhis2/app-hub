@@ -63,7 +63,9 @@
             </bean>
 
     <bean id="org.hisp.appstore.api.AppStoreService" class="org.hisp.appstore.service.DefaultAppService">
+        <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
+        <property name="userService" ref="org.hisp.appstore.api.UserService"/>
     </bean>
 
     <bean id="org.hisp.appstore.api.RenderService" class="org.hisp.appstore.service.DefaultRenderService"/>
@@ -79,6 +81,17 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
+    <!-- Review -->
+
+    <bean id="org.hisp.appstore.api.ReviewStore" class="org.hisp.appstore.store.HibernateReviewStore">
+        <property name="clazz" value="org.hisp.appstore.api.domain.Review" />
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="org.hisp.appstore.api.ReviewService" class="org.hisp.appstore.service.DefaultReviewService" >
+        <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
+    </bean>
+
     <!-- BaseIdentifiableObject -->
 
     <bean id="org.hisp.appstore.api.BaseIdentifiableObjectManager" class="org.hisp.appstore.service.DefaultBaseIdentifiableObjectManager">
@@ -86,6 +99,7 @@
             <list>
                 <ref bean="org.hisp.appstore.api.UserStore"/>
                 <ref bean="org.hisp.appstore.api.AppStore"/>
+                <ref bean="org.hisp.appstore.api.ReviewStore"/>
             </list>
         </property>
     </bean>

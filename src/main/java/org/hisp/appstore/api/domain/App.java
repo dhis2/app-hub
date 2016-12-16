@@ -1,6 +1,11 @@
 package org.hisp.appstore.api.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -13,7 +18,6 @@ import java.util.Set;
 /**
  * Created by lars on 07.11.16.
  */
-@JacksonXmlRootElement( localName = "app" )
 public class App
     extends BaseIdentifiableObject
         implements Serializable
@@ -21,10 +25,6 @@ public class App
     private String appName;
 
     private String description;
-
-    private Data updated;
-
-    private String currentVersion;
 
     private String requiredDhisVersion;
 
@@ -34,19 +34,23 @@ public class App
 
     private AppType appType;
 
-    private List<AppVersion> versions = Lists.newArrayList();
+    private Set<AppVersion> versions = Sets.newHashSet();
 
     private Set<Review> reviews = Sets.newHashSet();
 
     private AppStatus status = AppStatus.PENDING;
 
-    @JsonProperty
+    public App()
+    {
+    }
+
+    @JsonProperty ( value = "name" )
     public String getAppName()
     {
         return appName;
     }
 
-    public void setAppName( String name )
+    public void setAppName( String appName )
     {
         this.appName = appName;
     }
@@ -60,28 +64,6 @@ public class App
     public void setDescription( String description )
     {
         this.description = description;
-    }
-
-    @JsonProperty
-    public Data getUpdated()
-    {
-        return updated;
-    }
-
-    public void setUpdated( Data updated )
-    {
-        this.updated = updated;
-    }
-
-    @JsonProperty
-    public String getCurrentVersion()
-    {
-        return currentVersion;
-    }
-
-    public void setCurrentVersion( String currentVersion )
-    {
-        this.currentVersion = currentVersion;
     }
 
     @JsonProperty
@@ -140,16 +122,17 @@ public class App
     }
 
     @JsonProperty
-    public List<AppVersion> getVersions()
+    public Set<AppVersion> getVersions()
     {
         return versions;
     }
 
-    public void setVersions( List<AppVersion> version )
+    public void setVersions( Set<AppVersion> versions )
     {
         this.versions = versions;
     }
 
+    @JsonProperty
     public AppStatus getStatus()
     {
         return status;

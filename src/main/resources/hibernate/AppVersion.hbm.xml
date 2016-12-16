@@ -6,13 +6,15 @@
 <hibernate-mapping package="org.hisp.appstore.api">
     <class name="org.hisp.appstore.api.domain.AppVersion" table="appversiontable">
 
-        <id name="id" column="appversionid">
+        <id name="id" column="versionid">
             <generator class="native" />
         </id>
 
         <property name="uid" />
 
         <property name="created" />
+
+        <property name="lastUpdated" />
 
         <property name="maxDhisVersion" />
 
@@ -22,10 +24,10 @@
 
         <property name="downloadUrl" />
 
-        <property name="version" />
+        <property name="version" not-null="true"/>
 
-        <many-to-one name="app" class="org.hisp.appstore.api.domain.App"
-                     column="appid" foreign-key="fk_appversionid_app" not-null="true" />
+        <many-to-one name="app" class="org.hisp.appstore.api.domain.App" column="appid"
+                     foreign-key="fk_appversion_app" />
 
     </class>
 </hibernate-mapping>

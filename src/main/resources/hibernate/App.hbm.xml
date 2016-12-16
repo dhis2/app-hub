@@ -14,9 +14,9 @@
 
         <property name="created"/>
 
-        <property name="appName" not-null="true"/>
+        <property name="lastUpdated" />
 
-        <property name="currentVersion" not-null="true"/>
+        <property name="appName" not-null="true"/>
 
         <property name="description"/>
 
@@ -24,20 +24,20 @@
 
         <component name="developer" class="org.hisp.appstore.api.domain.Developer">
 
-            <property name="name"/>
+            <property name="developerName"/>
 
             <property name="address"/>
 
             <property name="organisation"/>
 
-            <set name="emailAddresses" table="developer_emailAddresses" fetch="join">
+            <set name="emailAddresses" table="developer_emailAddresses" fetch="select" lazy="false">
                 <key column="developeremailaddressid"/>
                 <element type="text" column="email"/>
             </set>
 
         </component>
 
-        <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.domain.User" column="ownerid" foreign-key="fk_app_ownerid" />
+        <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.domain.User" column="userid" foreign-key="fk_app_ownerid" />
 
         <property name="appType" length="50">
             <type name="org.hibernate.type.EnumType">
@@ -47,14 +47,13 @@
             </type>
         </property>
 
-
-        <set name="versions">
+        <set name="versions" cascade="all" lazy="false">
             <key column="appid" />
-            <one-to-many class="org.hisp.appstore.api.domain.AppVersion"/>
+            <one-to-many class="org.hisp.appstore.api.domain.AppVersion" />
         </set>
 
-        <set name="reviews">
-            <key column="reviewid" />
+        <set name="reviews" cascade="all" lazy="false">
+            <key column="appid" />
             <one-to-many class="org.hisp.appstore.api.domain.Review"/>
         </set>
 
