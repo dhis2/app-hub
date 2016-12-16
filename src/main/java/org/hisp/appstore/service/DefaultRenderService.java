@@ -77,7 +77,7 @@ public class DefaultRenderService
     @Override
     public void renderAccepted ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException
     {
-        WebMessage webMessage = WebMessageUtils.created( message );
+        WebMessage webMessage = WebMessageUtils.accepted( message );
 
         send( response, request, webMessage );
     }
@@ -98,7 +98,8 @@ public class DefaultRenderService
         send( response, request, webMessage );
     }
 
-    private void send ( HttpServletResponse response, HttpServletRequest request, WebMessage webMessage ) throws IOException
+    @Override
+    public void send ( HttpServletResponse response, HttpServletRequest request, WebMessage webMessage ) throws IOException
     {
         String type = request.getHeader( "Accept");
         type = !StringUtils.isEmpty( type ) ? type : request.getContentType();

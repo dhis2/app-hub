@@ -1,5 +1,7 @@
 package org.hisp.appstore.api;
 
+import org.hisp.appstore.api.support.WebMessage;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,4 +30,6 @@ public interface RenderService
     void renderConflict ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
 
     void renderNotFound ( HttpServletResponse response, HttpServletRequest request, String message ) throws IOException;
+
+    void send (HttpServletResponse response, HttpServletRequest request, WebMessage webMessage ) throws IOException;
 }

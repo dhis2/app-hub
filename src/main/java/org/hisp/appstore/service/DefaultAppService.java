@@ -108,9 +108,7 @@ public class DefaultAppService
     @Override
     public void addReviewToApp(  App app, Review review )
     {
-        User user = userService.getUser( 3 );
-
-
+        User user = userService.getCurrentUser();
         review.setAutoFields();
         review.setUser( user );
 

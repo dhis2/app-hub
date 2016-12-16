@@ -5,10 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.BaseIdentifiableObjectManager;
 import org.hisp.appstore.api.RenderService;
 import org.hisp.appstore.api.domain.BaseIdentifiableObject;
-import org.hisp.appstore.util.WebMessageException;
-import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,13 +99,13 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
     @RequestMapping ( value = "/{uid}", method = RequestMethod.DELETE )
     public void deleteEntity( @PathVariable( "uid" ) String uid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+            throws IOException
     {
         BaseIdentifiableObject entity = manager.getByUid( getEntityClass(), uid );
 
         if ( entity == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( NO_ENTITY_FOUND + uid  ) );
+            renderService.renderNotFound( response, request, NO_ENTITY_FOUND + uid );
         }
 
         manager.delete( entity );
