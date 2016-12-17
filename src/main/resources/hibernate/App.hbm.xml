@@ -39,7 +39,7 @@
 
         <many-to-one name="owner" lazy="false" class="org.hisp.appstore.api.domain.User" column="userid" foreign-key="fk_app_ownerid" />
 
-        <property name="appType" length="50">
+        <property name="appType" length="50" column="type">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">org.hisp.appstore.api.domain.AppType</param>
                 <param name="useNamed">true</param>
@@ -57,7 +57,7 @@
             <one-to-many class="org.hisp.appstore.api.domain.Review"/>
         </set>
 
-        <property name="status" length="50">
+        <property name="status" length="50" column="status">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">org.hisp.appstore.api.domain.AppStatus</param>
                 <param name="useNamed">true</param>

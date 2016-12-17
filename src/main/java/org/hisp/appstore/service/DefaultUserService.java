@@ -2,7 +2,7 @@ package org.hisp.appstore.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.appstore.api.CustomUserDetail;
+import org.hisp.appstore.api.support.CustomUserDetail;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.UserStore;

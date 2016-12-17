@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  */
 
 @Controller
-public class IndexController
+public class HomeController
 {
     @RequestMapping( value = "/*", method = RequestMethod.GET )
     public String loginPage( Model model )

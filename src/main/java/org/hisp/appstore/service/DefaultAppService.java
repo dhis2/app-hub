@@ -3,12 +3,10 @@ package org.hisp.appstore.service;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
-import org.hisp.appstore.api.domain.App;
-import org.hisp.appstore.api.domain.AppStatus;
-import org.hisp.appstore.api.domain.Review;
-import org.hisp.appstore.api.domain.User;
+import org.hisp.appstore.api.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -59,6 +57,12 @@ public class DefaultAppService
     public App getApp( String uid )
     {
         return appStore.get( uid );
+    }
+
+    @Override
+    public List<App> get( AppQueryParameters queryParameters )
+    {
+        return appStore.get( queryParameters );
     }
 
     @Override
@@ -117,5 +121,23 @@ public class DefaultAppService
         appStore.update( app );
 
         log.info("Review added to App");
+    }
+
+    @Override
+    public void upLoadApp( MultipartFile file )
+    {
+
+    }
+
+    @Override
+    public AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppStatus status, AppType type )
+    {
+        AppQueryParameters queryParameters = new AppQueryParameters();
+
+        queryParameters.setReqDhisVersion( requiredDhisVersion );
+        queryParameters.setStatus( status );
+        queryParameters.setType( type );
+
+        return queryParameters;
     }
 }

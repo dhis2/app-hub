@@ -1,4 +1,4 @@
-package org.hisp.appstore.api;
+package org.hisp.appstore.api.support;
 
 import org.hisp.appstore.api.domain.User;
 import org.springframework.security.core.GrantedAuthority;
