@@ -35,7 +35,8 @@ public class UserController extends AbstractCrudController<User>
     @Autowired
     private RenderService renderService;
 
-    @RequestMapping ( value = "/me", method = RequestMethod.GET )
+
+    @RequestMapping( value = "/me", method = RequestMethod.GET )
     public void getProfile( HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
@@ -44,7 +45,7 @@ public class UserController extends AbstractCrudController<User>
         renderService.toJson( response.getOutputStream(), user );
     }
 
-    @RequestMapping ( value = "/me", method = RequestMethod.PUT )
+    @RequestMapping( value = "/me", method = RequestMethod.PUT )
     public void updateProfile( HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
@@ -53,5 +54,16 @@ public class UserController extends AbstractCrudController<User>
         userService.updateUser( user );
 
         renderService.renderAccepted( response, request, "User updated");
+    }
+
+    @RequestMapping( value = "/register", method = RequestMethod.POST )
+    public void registerNewUser( HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        User user = renderService.fromJson( request.getInputStream(), User.class );
+
+        userService.addUser( user );
+
+        renderService.renderCreated( response, request, "User Created" );
     }
 }

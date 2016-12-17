@@ -76,6 +76,7 @@
 
     <bean id="org.hisp.appstore.api.UserService" class="org.hisp.appstore.service.DefaultUserService" >
         <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
+        <property name="passwordEncoder" ref="passwordEncoder"/>
     </bean>
 
     <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
