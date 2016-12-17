@@ -117,13 +117,26 @@ public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
             object.setAutoFields();
         }
 
+        injectObjects( object );
+
         return (Integer) sessionFactory.getCurrentSession().save( object );
     }
 
     @Override
     public void update( T object )
     {
+        if ( object != null )
+        {
+            object.setAutoFields();
+        }
+
         sessionFactory.getCurrentSession().update( object );
+    }
+
+    @Override
+    public T injectObjects( T object )
+    {
+        return null;
     }
 
     @Override

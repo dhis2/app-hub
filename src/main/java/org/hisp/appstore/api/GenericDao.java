@@ -47,6 +47,8 @@ public interface GenericDao<T>
      */
     T getByCode( String code );
 
+    T injectObjects( T object );
+
     /**
      * Retrieves a Collection of all objects.
      *

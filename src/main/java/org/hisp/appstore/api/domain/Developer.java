@@ -10,7 +10,6 @@ import java.util.Set;
  * Created by zubair on 01.12.16.
  */
 public class Developer
-        extends BaseIdentifiableObject
 {
     private String developerName;
 

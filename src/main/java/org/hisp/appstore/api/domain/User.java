@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.base.MoreObjects;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -31,15 +32,6 @@ public class User
     {
     }
 
-    public User( User user )
-    {
-        this.setAuths( user.getAuths() );
-        this.setEmail( user.getEmail() );
-        this.setFirstName( user.getFirstName() );
-        this.setLastName( user.getLastName() );
-        this.setPassword( user.getPassword() );
-    }
-
     public void mergeWith( User other )
     {
         // Do not merge user name and password
@@ -57,7 +49,7 @@ public class User
     }
 
     @JsonIgnore
-    public Set<GrantedAuthority> getUserDetails()
+    public UserDetails getUserDetails()
     {
         Set<GrantedAuthority> grantedAuths = new HashSet<GrantedAuthority>();
 
@@ -66,7 +58,7 @@ public class User
             grantedAuths.add( new SimpleGrantedAuthority( auth ) );
         }
 
-        return grantedAuths;
+        return new org.springframework.security.core.userdetails.User( username, password, grantedAuths );
     }
 
     @JsonProperty
@@ -86,6 +78,7 @@ public class User
         return password;
     }
 
+    @JsonProperty
     public void setPassword( String password )
     {
         this.password = password;
@@ -130,6 +123,7 @@ public class User
         return auths;
     }
 
+    @JsonProperty
     public void setAuths( Set<String> auths )
     {
         this.auths = auths;

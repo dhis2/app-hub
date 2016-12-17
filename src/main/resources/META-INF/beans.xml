@@ -58,6 +58,8 @@
     <!-- AppStore -->
 
     <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore">
+        <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
+        <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
         <property name="clazz" value="org.hisp.appstore.api.domain.App" />
         <property name="sessionFactory" ref="sessionFactory" />
             </bean>

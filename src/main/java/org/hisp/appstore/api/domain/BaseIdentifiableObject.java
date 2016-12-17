@@ -21,6 +21,8 @@ public class BaseIdentifiableObject
 
     protected Date lastUpdated;
 
+    @Override
+    @JsonIgnore
     public int getId()
     {
         return id;

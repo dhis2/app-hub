@@ -25,4 +25,10 @@ public class HibernateUserStore
     {
         return (User) getCriteria().add(Restrictions.eq( "username",userName )).uniqueResult();
     }
+
+    @Override
+    public User injectObjects( User object )
+    {
+        return null;
+    }
 }

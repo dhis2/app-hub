@@ -2,7 +2,6 @@ package org.hisp.appstore.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hisp.appstore.api.support.CustomUserDetail;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.UserStore;
@@ -50,7 +49,7 @@ public class DefaultUserService implements
             throw new UsernameNotFoundException( "User not found" );
         }
 
-        return new CustomUserDetail( user );
+        return user.getUserDetails();
     }
 
     @Override
@@ -87,12 +86,20 @@ public class DefaultUserService implements
             return null;
         }
 
-        return (User) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return getUserByUsername( userDetails.getUsername() );
     }
 
     @Override
     public List<User> getAll()
     {
         return userStore.getAll();
+    }
+
+    @Override
+    public User getUserByUsername( String userName )
+    {
+        return userStore.getUserByUsername( userName );
     }
 }

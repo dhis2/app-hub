@@ -69,7 +69,8 @@ public class AppController extends AbstractCrudController<App>
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.GET )
     public void listReviews(  @PathVariable( "uid" ) String appUid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException {
+            throws IOException, WebMessageException
+    {
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
@@ -89,7 +90,8 @@ public class AppController extends AbstractCrudController<App>
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
     public void addReview( @PathVariable( "uid" ) String appUid,
                           HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException {
+                          throws IOException, WebMessageException
+    {
         Review review = renderService.fromJson( request.getInputStream(), Review.class );
 
         App app = appStoreService.getApp( appUid );
@@ -109,7 +111,8 @@ public class AppController extends AbstractCrudController<App>
     public void approveApp( @PathVariable( "uid" ) String appUid,
                             @RequestParam( name = "status", required = true ) AppStatus status,
                             HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException {
+            throws IOException, WebMessageException
+    {
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )

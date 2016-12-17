@@ -1,7 +1,9 @@
 package org.hisp.appstore.web.mvc;
 
+import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.session.CurrentUser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,11 +20,14 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping ( value = "/manager" )
 public class ManagerController
 {
+    @Autowired
+    private UserService userService;
+
     @RequestMapping( method = RequestMethod.GET )
-    public String managerIndex( Model model, Authentication authentication )
+    public String managerIndex( Model model )
     {
 
-        User currentUser = (User) authentication.getPrincipal();
+        User currentUser = userService.getCurrentUser();
 
         model.addAttribute( "message", currentUser.getFirstName() );
 
