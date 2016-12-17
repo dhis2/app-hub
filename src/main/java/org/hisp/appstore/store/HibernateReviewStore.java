@@ -17,10 +17,4 @@ public class HibernateReviewStore
     {
         return Review.class;
     }
-
-    @Override
-    public Review injectObjects( Review object )
-    {
-        return null;
-    }
 }

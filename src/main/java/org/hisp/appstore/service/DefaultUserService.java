@@ -89,16 +89,7 @@ public class DefaultUserService implements
     @Override
     public User getCurrentUser()
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if ( authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == null )
-        {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        return getUserByUsername( userDetails.getUsername() );
+        return userStore.getCurrentUser();
     }
 
     @Override

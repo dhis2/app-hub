@@ -8,4 +8,6 @@ import org.hisp.appstore.api.domain.User;
 public interface UserStore extends GenericDao<User>
 {
     User getUserByUsername( String userName );
+
+    User getCurrentUser();
 }

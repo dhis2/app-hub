@@ -95,6 +95,17 @@
         <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
     </bean>
 
+    <!-- AppVerion -->
+
+    <bean id="org.hisp.appstore.api.AppVersionStore" class="org.hisp.appstore.store.HibernateAppVersionStore">
+        <property name="clazz" value="org.hisp.appstore.api.domain.AppVersion" />
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <bean id="org.hisp.appstore.api.AppVersionService" class="org.hisp.appstore.service.DefaultAppVersionService" >
+        <property name="appVersionStore" ref="org.hisp.appstore.api.AppVersionStore"/>
+    </bean>
+
     <!-- BaseIdentifiableObject -->
 
     <bean id="org.hisp.appstore.api.BaseIdentifiableObjectManager" class="org.hisp.appstore.service.DefaultBaseIdentifiableObjectManager">

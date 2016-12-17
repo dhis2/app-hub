@@ -130,6 +130,28 @@ public class DefaultAppService
     }
 
     @Override
+    public void addVersionToApp( App app, AppVersion version )
+    {
+        version.setAutoFields();
+
+        app.getVersions().add( version );
+
+        appStore.update( app );
+
+        log.info("New version added to App");
+    }
+
+    @Override
+    public void removeVersionFromApp( App app, AppVersion version )
+    {
+        app.getVersions().remove( version );
+
+        appStore.update( app );
+
+        log.info("Version removed from App");
+    }
+
+    @Override
     public AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppStatus status, AppType type )
     {
         AppQueryParameters queryParameters = new AppQueryParameters();

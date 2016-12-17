@@ -48,7 +48,7 @@ public class HibernateAppStore
     @Override
     public App injectObjects( App app )
     {
-        User user = userStore.get( app.getOwner().getUid() );
+        User user = userStore.getCurrentUser();
 
         Set<AppVersion> versions = app.getVersions();
 

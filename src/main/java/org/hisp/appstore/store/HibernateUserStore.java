@@ -5,6 +5,9 @@ import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserStore;
 import org.hisp.appstore.util.HibernateGenericDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -27,8 +30,17 @@ public class HibernateUserStore
     }
 
     @Override
-    public User injectObjects( User object )
+    public User getCurrentUser()
     {
-        return null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if ( authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == null )
+        {
+            return null;
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        return getUserByUsername( userDetails.getUsername() );
     }
 }

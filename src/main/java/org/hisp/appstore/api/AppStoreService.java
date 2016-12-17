@@ -1,10 +1,7 @@
 package org.hisp.appstore.api;
 
 import com.amazonaws.services.dynamodbv2.xspec.L;
-import org.hisp.appstore.api.domain.App;
-import org.hisp.appstore.api.domain.AppStatus;
-import org.hisp.appstore.api.domain.AppType;
-import org.hisp.appstore.api.domain.Review;
+import org.hisp.appstore.api.domain.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -28,11 +25,15 @@ public interface AppStoreService
 
     int saveApp( App app );
 
-    void setAppApproval ( App app, AppStatus status);
+    void setAppApproval( App app, AppStatus status);
 
     void removeReviewFromApp( App app, Review review );
 
-    void addReviewToApp(  App app, Review review );
+    void addReviewToApp( App app, Review review );
+
+    void addVersionToApp( App app, AppVersion version );
+
+    void removeVersionFromApp( App app, AppVersion version );
 
     void upLoadApp( MultipartFile file );
 

@@ -38,6 +38,9 @@ public class AppController extends AbstractCrudController<App>
     private UserService userService;
 
     @Autowired
+    private AppVersionService appVersionService;
+
+    @Autowired
     private ReviewService reviewService;
 
     @Autowired
@@ -106,6 +109,26 @@ public class AppController extends AbstractCrudController<App>
         renderService.renderCreated( response, request, "App review added" );
     }
 
+    @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
+    public void uploadVersion( @PathVariable( "uid" ) String appUid,
+                           HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        AppVersion version = renderService.fromJson( request.getInputStream(), AppVersion.class );
+
+        App app = appStoreService.getApp( appUid );
+
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
+
+        appStoreService.addVersionToApp( app, version );
+
+        renderService.renderCreated( response, request, "App version added" );
+    }
+
+
     @PreAuthorize( "hasRole('MANAGER')" )
     @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
     public void approveApp( @PathVariable( "uid" ) String appUid,
@@ -126,7 +149,7 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping( value = "/upload", method = RequestMethod.POST )
-    public void uploadFile(@PathVariable( "file" )MultipartFile file,
+    public void uploadApp(@PathVariable( "file" )MultipartFile file,
                            HttpServletResponse response, HttpServletRequest request )
     {
 
@@ -138,12 +161,12 @@ public class AppController extends AbstractCrudController<App>
 
     @RequestMapping ( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
     public void deleteReview( @PathVariable( "uid" ) String appUid,
-                              @PathVariable( "ruid" ) String reviewuid,
+                              @PathVariable( "ruid" ) String reviewUid,
                               HttpServletResponse response, HttpServletRequest request )
                              throws IOException, WebMessageException {
         App app = appStoreService.getApp( appUid );
 
-        Review review = reviewService.getReview( reviewuid );
+        Review review = reviewService.getReview( reviewUid );
 
         if ( app == null || review == null )
         {
@@ -153,5 +176,25 @@ public class AppController extends AbstractCrudController<App>
         appStoreService.removeReviewFromApp( app, review );
 
         renderService.renderOk( response, request, "Review Removed");
+    }
+
+    @RequestMapping ( value = "/{uid}/version/{ruid}", method = RequestMethod.DELETE )
+    public void removeVersion( @PathVariable( "uid" ) String appUid,
+                              @PathVariable( "vuid" ) String versionUid,
+                              HttpServletResponse response, HttpServletRequest request )
+                            throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        AppVersion version = appVersionService.get( versionUid );
+
+        if ( app == null || version == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
+        }
+
+        appStoreService.removeVersionFromApp( app, version );
+
+        renderService.renderOk( response, request, "Version Removed");
     }
 }

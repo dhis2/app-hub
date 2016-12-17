@@ -117,9 +117,9 @@ public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
             object.setAutoFields();
         }
 
-        injectObjects( object );
+        T injectedObject = injectObjects(object);
 
-        return (Integer) sessionFactory.getCurrentSession().save( object );
+        return (Integer) sessionFactory.getCurrentSession().save( injectedObject );
     }
 
     @Override
@@ -136,7 +136,7 @@ public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
     @Override
     public T injectObjects( T object )
     {
-        return null;
+        return object;
     }
 
     @Override
