@@ -62,6 +62,13 @@ public class UserController extends AbstractCrudController<User>
     {
         User user = renderService.fromJson( request.getInputStream(), User.class );
 
+        User duplicateUser = userService.getUserByUsername( user.getUsername() );
+
+        if ( duplicateUser != null )
+        {
+            throw new WebMessageException( WebMessageUtils.conflict( "User already exists" ) );
+        }
+
         userService.addUser( user );
 
         renderService.renderCreated( response, request, "User Created" );

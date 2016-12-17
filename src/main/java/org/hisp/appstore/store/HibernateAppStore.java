@@ -46,7 +46,7 @@ public class HibernateAppStore
     }
 
     @Override
-    public App injectObjects( App app )
+    public App preCreate( App app )
     {
         User user = userStore.getCurrentUser();
 

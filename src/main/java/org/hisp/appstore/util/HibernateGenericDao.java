@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.GenericDao;
 import org.hisp.appstore.api.IdentifiableObject;
 import org.hisp.appstore.api.domain.BaseIdentifiableObject;
+import org.hisp.appstore.api.support.WebMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
@@ -117,9 +118,9 @@ public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
             object.setAutoFields();
         }
 
-        T injectedObject = injectObjects(object);
+        T createdObject = preCreate( object );
 
-        return (Integer) sessionFactory.getCurrentSession().save( injectedObject );
+        return (Integer) sessionFactory.getCurrentSession().save( createdObject );
     }
 
     @Override
@@ -134,7 +135,7 @@ public abstract class HibernateGenericDao<T extends BaseIdentifiableObject>
     }
 
     @Override
-    public T injectObjects( T object )
+    public T preCreate( T object )
     {
         return object;
     }
