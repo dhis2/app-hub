@@ -50,21 +50,16 @@ public class AppController extends AbstractCrudController<App>
     // GET
     // -------------------------------------------------------------------------
 
-    @RequestMapping ( method = RequestMethod.GET, produces = { "application/json" } )
-    public void get( @RequestParam( value = "status", required = false ) AppStatus status,
-                                 @RequestParam( value = "type", required = false ) AppType type,
-                                 @RequestParam( value = "requiredDhisVersion", required = false ) String requiredDhisVersion,
+    @RequestMapping ( value = "/query", method = RequestMethod.GET, produces = { "application/json" } )
+    public void get( @RequestParam( required = false ) AppStatus status,
+                                 @RequestParam( required = false ) AppType type,
+                                 @RequestParam( required = false, defaultValue = "" ) String reqDhisVersion,
                         HttpServletResponse response, HttpServletRequest request )
-            throws WebMessageException, IOException
+                         throws WebMessageException, IOException
     {
-        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( requiredDhisVersion, status, type );
+        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( reqDhisVersion, status, type );
 
         List<App> apps = appStoreService.get( queryParameters );
-
-        if ( apps == null )
-        {
-            throw new WebMessageException( WebMessageUtils.notFound( "No app found with given criteria" ) );
-        }
 
         renderService.toJson( response.getOutputStream(), apps );
     }
@@ -72,7 +67,7 @@ public class AppController extends AbstractCrudController<App>
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.GET )
     public void listReviews(  @PathVariable( "uid" ) String appUid,
                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+                            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -91,7 +86,7 @@ public class AppController extends AbstractCrudController<App>
     // -------------------------------------------------------------------------
 
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
-    public void addReview( @PathVariable( "uid" ) String appUid,
+    public void addReviewToApp( @PathVariable( "uid" ) String appUid,
                           HttpServletResponse response, HttpServletRequest request )
                           throws IOException, WebMessageException
     {
@@ -110,7 +105,7 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
-    public void uploadVersion( @PathVariable( "uid" ) String appUid,
+    public void uploadVersionToApp( @PathVariable( "uid" ) String appUid,
                            HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
@@ -128,13 +123,11 @@ public class AppController extends AbstractCrudController<App>
         renderService.renderCreated( response, request, "App version added" );
     }
 
-
-    @PreAuthorize( "hasRole('MANAGER')" )
     @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
     public void approveApp( @PathVariable( "uid" ) String appUid,
                             @RequestParam( name = "status", required = true ) AppStatus status,
                             HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+                          throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -160,10 +153,11 @@ public class AppController extends AbstractCrudController<App>
     // -------------------------------------------------------------------------
 
     @RequestMapping ( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
-    public void deleteReview( @PathVariable( "uid" ) String appUid,
+    public void deleteReviewFromApp( @PathVariable( "uid" ) String appUid,
                               @PathVariable( "ruid" ) String reviewUid,
                               HttpServletResponse response, HttpServletRequest request )
-                             throws IOException, WebMessageException {
+                             throws IOException, WebMessageException
+    {
         App app = appStoreService.getApp( appUid );
 
         Review review = reviewService.getReview( reviewUid );
@@ -175,11 +169,11 @@ public class AppController extends AbstractCrudController<App>
 
         appStoreService.removeReviewFromApp( app, review );
 
-        renderService.renderOk( response, request, "Review Removed");
+        renderService.renderOk( response, request, "Review Removed" );
     }
 
     @RequestMapping ( value = "/{uid}/version/{ruid}", method = RequestMethod.DELETE )
-    public void removeVersion( @PathVariable( "uid" ) String appUid,
+    public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
                               @PathVariable( "vuid" ) String versionUid,
                               HttpServletResponse response, HttpServletRequest request )
                             throws IOException, WebMessageException
@@ -195,6 +189,6 @@ public class AppController extends AbstractCrudController<App>
 
         appStoreService.removeVersionFromApp( app, version );
 
-        renderService.renderOk( response, request, "Version Removed");
+        renderService.renderOk( response, request, "Version Removed" );
     }
 }

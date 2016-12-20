@@ -1,5 +1,6 @@
 package org.hisp.appstore.api;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hisp.appstore.api.domain.AppStatus;
 import org.hisp.appstore.api.domain.AppType;
 
@@ -8,7 +9,7 @@ import org.hisp.appstore.api.domain.AppType;
  */
 public class AppQueryParameters
 {
-    private String reqDhisVersion;
+    private java.lang.String reqDhisVersion = StringUtils.EMPTY;
 
     private AppType type;
 
@@ -16,6 +17,21 @@ public class AppQueryParameters
 
     public AppQueryParameters()
     {
+    }
+
+    public boolean hasType()
+    {
+        return type != null;
+    }
+
+    public boolean hasStatus()
+    {
+        return status != null;
+    }
+
+    public boolean hasReqDhisVersion()
+    {
+        return !StringUtils.EMPTY.equals( reqDhisVersion );
     }
 
     public String getReqDhisVersion()
