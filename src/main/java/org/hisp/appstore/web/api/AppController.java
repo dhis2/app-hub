@@ -8,6 +8,7 @@ import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,6 +46,9 @@ public class AppController extends AbstractCrudController<App>
 
     @Autowired
     private RenderService renderService;
+
+    @Autowired
+    private FileStorageService fileStorageService;
 
     // -------------------------------------------------------------------------
     // GET
@@ -142,10 +146,11 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping( value = "/upload", method = RequestMethod.POST )
-    public void uploadApp(@PathVariable( "file" )MultipartFile file,
+    public void uploadApp( @RequestParam( "file" ) MultipartFile file,
                            HttpServletResponse response, HttpServletRequest request )
+                        throws IOException
     {
-
+        fileStorageService.uploadFile( file );
     }
 
     // -------------------------------------------------------------------------

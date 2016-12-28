@@ -26,7 +26,11 @@
         <security:intercept-url pattern="/api/users/**" access="ROLE_ADMIN"/>
 
         <security:intercept-url pattern="/manager/**"  access="ROLE_USER,ROLE_ALL"/>
-        <security:form-login login-page="/login" username-parameter="j_username" password-parameter="j_password" authentication-failure-url="/login?failed=true"/>
+        <security:form-login login-page="/login"
+                             username-parameter="j_username"
+                             password-parameter="j_password"
+                             authentication-failure-url="/login?failed=true"
+                             default-target-url="/user" />
         <security:logout logout-url="/logout"  invalidate-session="true" />
         <security:http-basic/>
     </security:http>

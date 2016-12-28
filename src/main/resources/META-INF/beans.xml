@@ -55,6 +55,21 @@
         <property name="password" value="${connection.password}"/>
     </bean>
 
+    <!-- Amazon S3 -->
+
+    <bean id="awsCredentialProvider" class="com.amazonaws.auth.BasicAWSCredentials">
+        <constructor-arg name="accessKey" value="${access.id}"/>
+        <constructor-arg name="secretKey" value="${secret.key}"/>
+    </bean>
+
+    <bean id="amazonS3Client" class="com.amazonaws.services.s3.AmazonS3Client">
+        <constructor-arg name="awsCredentials" ref="awsCredentialProvider"/>
+    </bean>
+
+    <bean id="org.hisp.appstore.api.FileStorageService" class="org.hisp.appstore.service.AmazonS3FileStorageService">
+        <property name="amazonS3Client" ref="amazonS3Client"/>
+    </bean>
+
     <!-- AppStore -->
 
     <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore">
