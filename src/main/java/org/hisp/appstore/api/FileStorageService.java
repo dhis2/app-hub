@@ -1,5 +1,7 @@
 package org.hisp.appstore.api;
 
+import org.hisp.appstore.api.domain.AppType;
+import org.hisp.appstore.util.WebMessageException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -9,5 +11,5 @@ import java.io.IOException;
  */
 public interface FileStorageService
 {
-    void uploadFile( MultipartFile file );
+    void uploadFile(MultipartFile file, AppType type ) throws WebMessageException;
 }

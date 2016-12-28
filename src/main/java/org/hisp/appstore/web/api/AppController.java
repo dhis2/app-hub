@@ -146,11 +146,14 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping( value = "/upload", method = RequestMethod.POST )
-    public void uploadApp( @RequestParam( "file" ) MultipartFile file,
+    public void uploadApp( @RequestParam( name = "file" ) MultipartFile file,
+                           @RequestParam( name = "type", required = false ) AppType type,
                            HttpServletResponse response, HttpServletRequest request )
-                        throws IOException
+                        throws IOException, WebMessageException
     {
-        fileStorageService.uploadFile( file );
+        fileStorageService.uploadFile( file, type );
+
+        renderService.renderOk( response, request, "File uploaded successfully");
     }
 
     // -------------------------------------------------------------------------

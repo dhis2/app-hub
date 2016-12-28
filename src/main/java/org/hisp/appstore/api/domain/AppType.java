@@ -5,5 +5,5 @@ package org.hisp.appstore.api.domain;
  */
 public enum AppType
 {
-    WEBAPP, WIDGETAPP
+    APP_DASHBOARD, APP_STANDARD, APP_TRACKER_DASHBOARD
 }
