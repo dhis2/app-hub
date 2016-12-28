@@ -5,14 +5,12 @@ import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectResult;
-import com.amazonaws.services.s3.model.S3Object;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.FileStorageService;
 import org.hisp.appstore.api.domain.AppType;
-import org.hisp.appstore.util.CodeUtils;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,8 +55,6 @@ public class AmazonS3FileStorageService implements FileStorageService
     {
         String bucketAddress = BUCKET_NAME+ "/" + TYPE_FOLDER_MAPPER.get( ObjectUtils.defaultIfNull( type, DEFAULT_APPTYPE ));
 
-        String key = CodeUtils.generateCode( 10 );
-
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( Long.valueOf( file.getSize() ));
 
@@ -66,7 +62,7 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         try
         {
-            result = amazonS3Client.putObject( bucketAddress, key , file.getInputStream() , metadata );
+            result = amazonS3Client.putObject( bucketAddress, file.getOriginalFilename() , file.getInputStream() , metadata );
         }
         catch ( AmazonServiceException ase )
         {
