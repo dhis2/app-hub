@@ -34,7 +34,7 @@ public class DefaultBaseIdentifiableObjectManager
     {
         this.baseIdentifiableStores = baseIdentifiableStores;
 
-        log.info( this.baseIdentifiableStores.size() +" stores loaded !! " );
+        log.info( "Number of stores loaded : " + this.baseIdentifiableStores.size() );
     }
 
     private Map<Class<? extends BaseIdentifiableObject>, GenericDao<? extends BaseIdentifiableObject>> identifiableObjectStoreMap = Maps.newHashMap();

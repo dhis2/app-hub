@@ -13,10 +13,14 @@ import org.hisp.appstore.api.FileStorageService;
 import org.hisp.appstore.api.domain.AppType;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by zubair on 28.12.16.
@@ -28,6 +32,8 @@ public class AmazonS3FileStorageService implements FileStorageService
     private static final String BUCKET_NAME = "appstore.dhis2.org";
 
     private static final AppType DEFAULT_APPTYPE = AppType.APP_STANDARD;
+
+    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat( "MM-dd-yyyy-HH-mm-ss" );
 
     private static final ImmutableMap<AppType, String> TYPE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
             .put( AppType.APP_STANDARD, "apps-standard" )
@@ -62,17 +68,18 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         try
         {
-            result = amazonS3Client.putObject( bucketAddress, file.getOriginalFilename() , file.getInputStream() , metadata );
+            result = amazonS3Client.putObject( bucketAddress, generateKey( file.getOriginalFilename() + "-" ) ,
+                        file.getInputStream() , metadata );
         }
         catch ( AmazonServiceException ase )
         {
-            log.error( "Service Error " + ase.getErrorMessage() );
+            log.error( "Service Error " + ase );
 
             throw new WebMessageException( WebMessageUtils.conflict( ase.getErrorMessage() ) );
         }
         catch ( AmazonClientException ace )
         {
-            log.error( "Client Error " + ace.getMessage() );
+            log.error( "Client Error " + ace );
 
             throw new WebMessageException( WebMessageUtils.conflict( ace.getMessage() ) );
         }
@@ -83,6 +90,11 @@ public class AmazonS3FileStorageService implements FileStorageService
             throw new WebMessageException( WebMessageUtils.conflict( ioE.getMessage() ) );
         }
 
-        log.info( " File Uploaded!! " );
+        log.info( " File Uploaded " );
+    }
+
+    private String generateKey( String fileName )
+    {
+        return fileName + DATE_FORMATTER.format( new Date() );
     }
 }

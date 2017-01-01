@@ -129,6 +129,7 @@
                 <ref bean="org.hisp.appstore.api.UserStore"/>
                 <ref bean="org.hisp.appstore.api.AppStore"/>
                 <ref bean="org.hisp.appstore.api.ReviewStore"/>
+                <ref bean="org.hisp.appstore.api.AppVersionStore"/>
             </list>
         </property>
     </bean>
