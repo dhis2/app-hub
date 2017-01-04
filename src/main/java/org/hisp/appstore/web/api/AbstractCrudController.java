@@ -44,16 +44,6 @@ public abstract class AbstractCrudController<T extends BaseIdentifiableObject>
     // GET
     //--------------------------------------------------------------------------
 
-    @RequestMapping ( method = RequestMethod.GET )
-    public void getEntities( HttpServletResponse response, HttpServletRequest request )
-            throws IOException
-    {
-        List<T> entities = manager.getAll( getEntityClass() );
-
-        renderService.toJson( response.getOutputStream(), entities );
-    }
-
-
     @RequestMapping ( value = "/{uid}", method = RequestMethod.GET )
     public void getEntity( @PathVariable( "uid" ) String uid, HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException {

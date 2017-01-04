@@ -57,6 +57,10 @@
 
     <!-- Amazon S3 -->
 
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="${max.file.size}"/>
+    </bean>
+
     <bean id="awsCredentialProvider" class="com.amazonaws.auth.BasicAWSCredentials">
         <constructor-arg name="accessKey" value="${access.id}"/>
         <constructor-arg name="secretKey" value="${secret.key}"/>
@@ -83,6 +87,7 @@
         <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
         <property name="userService" ref="org.hisp.appstore.api.UserService"/>
+        <property name="fileStorageService" ref="org.hisp.appstore.api.FileStorageService"/>
     </bean>
 
     <bean id="org.hisp.appstore.api.RenderService" class="org.hisp.appstore.service.DefaultRenderService"/>

@@ -3,7 +3,9 @@ package org.hisp.appstore.service;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.google.common.collect.ImmutableMap;
 import org.apache.commons.lang3.ObjectUtils;
@@ -11,16 +13,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.FileStorageService;
 import org.hisp.appstore.api.domain.AppType;
+import org.hisp.appstore.api.domain.FileUploadStatus;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by zubair on 28.12.16.
@@ -30,10 +29,6 @@ public class AmazonS3FileStorageService implements FileStorageService
     private static final Log log = LogFactory.getLog( AmazonS3FileStorageService.class );
 
     private static final String BUCKET_NAME = "appstore.dhis2.org";
-
-    private static final AppType DEFAULT_APPTYPE = AppType.APP_STANDARD;
-
-    private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat( "MM-dd-yyyy-HH-mm-ss" );
 
     private static final ImmutableMap<AppType, String> TYPE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
             .put( AppType.APP_STANDARD, "apps-standard" )
@@ -57,19 +52,28 @@ public class AmazonS3FileStorageService implements FileStorageService
     // -------------------------------------------------------------------------
 
     @Override
-    public void uploadFile( MultipartFile file, AppType type ) throws WebMessageException
+    public FileUploadStatus uploadFile( MultipartFile file, AppType type ) throws WebMessageException
     {
-        String bucketAddress = BUCKET_NAME+ "/" + TYPE_FOLDER_MAPPER.get( ObjectUtils.defaultIfNull( type, DEFAULT_APPTYPE ));
+        String bucketName = getBucketName( type );
+
+        FileUploadStatus status = new FileUploadStatus();
+
+        String resouceKey = UUID.randomUUID().toString();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( Long.valueOf( file.getSize() ));
 
-        PutObjectResult result;
+        PutObjectRequest request;
 
         try
         {
-            result = amazonS3Client.putObject( bucketAddress, generateKey( file.getOriginalFilename() + "-" ) ,
-                        file.getInputStream() , metadata );
+            request = new PutObjectRequest( bucketName, resouceKey, file.getInputStream(), metadata );
+            request.setCannedAcl( CannedAccessControlList.PublicRead );
+
+            amazonS3Client.putObject( request );
+
+            status.setUploaded( true );
+            status.setDownloadUrl( amazonS3Client.getResourceUrl( bucketName, resouceKey ) );
         }
         catch ( AmazonServiceException ase )
         {
@@ -83,7 +87,7 @@ public class AmazonS3FileStorageService implements FileStorageService
 
             throw new WebMessageException( WebMessageUtils.conflict( ace.getMessage() ) );
         }
-        catch ( IOException ioE)
+        catch ( IOException ioE )
         {
             log.error( "IOException " + ioE );
 
@@ -91,10 +95,24 @@ public class AmazonS3FileStorageService implements FileStorageService
         }
 
         log.info( " File Uploaded " );
+
+        return status;
     }
 
-    private String generateKey( String fileName )
+    @Override
+    public void deleteFile( AppType type, String key )
     {
-        return fileName + DATE_FORMATTER.format( new Date() );
+        String bucketName = getBucketName( type );
+
+        amazonS3Client.deleteObject( bucketName, key );
+    }
+
+    // -------------------------------------------------------------------------
+    // Supportive methods
+    // -------------------------------------------------------------------------
+
+    private String getBucketName( AppType type )
+    {
+        return BUCKET_NAME+ "/" + TYPE_FOLDER_MAPPER.get( type );
     }
 }

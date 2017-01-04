@@ -2,8 +2,10 @@ package org.hisp.appstore.api;
 
 import com.amazonaws.services.dynamodbv2.xspec.L;
 import org.hisp.appstore.api.domain.*;
+import org.hisp.appstore.util.WebMessageException;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -19,6 +21,8 @@ public interface AppStoreService
 
     List<App> getAllApps( );
 
+    List<App> getAllAppsByStatus( AppStatus status );
+
     void updateApp( App app );
 
     void deleteApp( App app );
@@ -31,11 +35,13 @@ public interface AppStoreService
 
     void addReviewToApp( App app, Review review );
 
-    void addVersionToApp( App app, AppVersion version );
+    void addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException;
 
-    void removeVersionFromApp( App app, AppVersion version );
+    void removeVersionFromApp( App app, AppVersion version ) throws WebMessageException;
 
-    void upLoadApp( MultipartFile file );
+    void uploadApp(  App app, MultipartFile file ) throws WebMessageException, IOException;
 
-    AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppStatus status, AppType type );
+    void removeApp( App app );
+
+    AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppType type );
 }

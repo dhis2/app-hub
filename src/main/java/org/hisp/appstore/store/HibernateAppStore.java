@@ -2,6 +2,7 @@ package org.hisp.appstore.store;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.AppQueryParameters;
@@ -52,6 +53,12 @@ public class HibernateAppStore
     }
 
     @Override
+    public List<App> getAllAppsByStatus( AppStatus status )
+    {
+        return getCriteria().add( Restrictions.eq( "status", status ) ).list();
+    }
+
+    @Override
     public App preCreate( App app )
     {
         User user = userStore.getCurrentUser();
@@ -79,13 +86,6 @@ public class HibernateAppStore
             where = true;
         }
 
-        if ( queryParameters.hasStatus() )
-        {
-            hql += where ? " AND app.status = :status" : " WHERE app.status = :status";
-
-            where = true;
-        }
-
         if ( queryParameters.hasType() )
         {
             hql += where ? " AND app.appType = :type" : " WHERE app.appType = :type";
@@ -96,11 +96,6 @@ public class HibernateAppStore
         if ( queryParameters.hasReqDhisVersion() )
         {
             query.setString( "requireddhisversion", queryParameters.getReqDhisVersion() );
-        }
-
-        if ( queryParameters.hasStatus() )
-        {
-            query.setParameter( "status", queryParameters.getStatus() );
         }
 
         if ( queryParameters.hasType() )

@@ -5,11 +5,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
 import org.hisp.appstore.api.domain.*;
+import org.hisp.appstore.util.WebMessageException;
+import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 public class DefaultAppService
@@ -44,6 +48,13 @@ public class DefaultAppService
         log.info("AppStore loaded");
     }
 
+    private FileStorageService fileStorageService;
+
+    public void setFileStorageService ( FileStorageService fileStorageService )
+    {
+        this.fileStorageService = fileStorageService;
+    }
+
     // -------------------------------------------------------------------------
     // Implementation methods
     // -------------------------------------------------------------------------
@@ -70,6 +81,12 @@ public class DefaultAppService
     public List<App> getAllApps( )
     {
         return appStore.getAll();
+    }
+
+    @Override
+    public List<App> getAllAppsByStatus( AppStatus status )
+    {
+        return appStore.getAllAppsByStatus( status );
     }
 
     @Override
@@ -125,15 +142,31 @@ public class DefaultAppService
     }
 
     @Override
-    public void upLoadApp( MultipartFile file )
+    public void uploadApp( App app, MultipartFile file ) throws WebMessageException
     {
+        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
 
+        saveApp( populateAppData( app, status ) );
     }
 
     @Override
-    public void addVersionToApp( App app, AppVersion version )
+    public void removeApp( App app )
     {
+        app.getVersions().forEach(v -> fileStorageService.deleteFile(app.getAppType(), getKeyFromResourceUrl( v.getDownloadUrl() )));
+
+        appStore.delete( app );
+
+        log.info("App deleted");
+    }
+
+    @Override
+    public void addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException
+    {
+        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
+
         version.setAutoFields();
+
+        version.setDownloadUrl( status.getDownloadUrl() );
 
         app.getVersions().add( version );
 
@@ -143,24 +176,41 @@ public class DefaultAppService
     }
 
     @Override
-    public void removeVersionFromApp( App app, AppVersion version )
+    public void removeVersionFromApp( App app, AppVersion version ) throws WebMessageException
     {
+        fileStorageService.deleteFile( app.getAppType(), getKeyFromResourceUrl( version.getDownloadUrl() ));
+
         app.getVersions().remove( version );
 
         appStore.update( app );
 
-        log.info("Version removed from App");
+        log.info("Version :" + version.getVersion() + " has been removed from App");
     }
 
     @Override
-    public AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppStatus status, AppType type )
+    public AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppType type )
     {
         AppQueryParameters queryParameters = new AppQueryParameters();
 
         queryParameters.setReqDhisVersion( requiredDhisVersion );
-        queryParameters.setStatus( status );
         queryParameters.setType( type );
 
         return queryParameters;
+    }
+
+    // -------------------------------------------------------------------------
+    // Supportive methods
+    // -------------------------------------------------------------------------
+
+    private App populateAppData( App app, FileUploadStatus status )
+    {
+        app.getVersions().forEach( v -> v.setDownloadUrl( status.getDownloadUrl() ) );
+
+        return app;
+    }
+
+    private String getKeyFromResourceUrl( String resourceUrl )
+    {
+        return StringUtils.substringAfterLast( resourceUrl, "/").trim();
     }
 }

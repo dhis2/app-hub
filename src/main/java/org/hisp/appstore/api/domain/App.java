@@ -32,7 +32,7 @@ public class App
 
     private User owner;
 
-    private AppType appType;
+    private AppType appType = AppType.APP_STANDARD;
 
     private Set<AppVersion> versions = Sets.newHashSet();
 
@@ -44,7 +44,7 @@ public class App
     {
     }
 
-    @JsonProperty ( value = "name" )
+    @JsonProperty
     public String getAppName()
     {
         return appName;

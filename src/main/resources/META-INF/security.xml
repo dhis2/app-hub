@@ -13,11 +13,12 @@
     <security:http>
         <security:intercept-url pattern="/home"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/login"  access="IS_AUTHENTICATED_ANONYMOUSLY"/>
-        <security:intercept-url pattern="/api/apps/**"  method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <security:intercept-url pattern="/api/apps"  method="GET" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/users/register"  method="POST" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
 
-        <security:intercept-url pattern="/api/apps/**"  method="DELETE" access="ROLE_MANAGER"/>
+        <security:intercept-url pattern="/api/apps/all"  access="ROLE_MANAGER"/>
         <security:intercept-url pattern="/api/apps/**/approval/**"  access="ROLE_MANAGER"/>
+        <security:intercept-url pattern="/api/apps/**"  method="DELETE" access="ROLE_MANAGER"/>
         <security:intercept-url pattern="/api/apps/**"  access="ROLE_USER,ROLE_MANAGER"/>
 
         <security:intercept-url pattern="/api/users/me"  method="GET" access="ROLE_USER,ROLE_ADMIN,ROLE_MANAGER"/>

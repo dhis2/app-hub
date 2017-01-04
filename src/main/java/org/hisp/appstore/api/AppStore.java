@@ -13,4 +13,6 @@ public interface AppStore
     extends GenericDao<App>
 {
     List<App> get( AppQueryParameters queryParameters );
+
+    List<App> getAllAppsByStatus( AppStatus status );
 }

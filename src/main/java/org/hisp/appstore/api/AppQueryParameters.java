@@ -13,8 +13,6 @@ public class AppQueryParameters
 
     private AppType type;
 
-    private AppStatus status;
-
     public AppQueryParameters()
     {
     }
@@ -22,11 +20,6 @@ public class AppQueryParameters
     public boolean hasType()
     {
         return type != null;
-    }
-
-    public boolean hasStatus()
-    {
-        return status != null;
     }
 
     public boolean hasReqDhisVersion()
@@ -52,15 +45,5 @@ public class AppQueryParameters
     public void setType( AppType type )
     {
         this.type = type;
-    }
-
-    public AppStatus getStatus()
-    {
-        return status;
-    }
-
-    public void setStatus( AppStatus status )
-    {
-        this.status = status;
     }
 }

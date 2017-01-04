@@ -1,6 +1,6 @@
 package org.hisp.appstore.web.api;
 
-import com.sun.org.apache.regexp.internal.RE;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
@@ -8,14 +8,11 @@ import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
@@ -36,9 +33,6 @@ public class AppController extends AbstractCrudController<App>
     private AppStoreService appStoreService;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private AppVersionService appVersionService;
 
     @Autowired
@@ -47,21 +41,33 @@ public class AppController extends AbstractCrudController<App>
     @Autowired
     private RenderService renderService;
 
-    @Autowired
-    private FileStorageService fileStorageService;
-
     // -------------------------------------------------------------------------
     // GET
     // -------------------------------------------------------------------------
 
-    @RequestMapping ( value = "/query", method = RequestMethod.GET, produces = { "application/json" } )
-    public void get( @RequestParam( required = false ) AppStatus status,
-                                 @RequestParam( required = false ) AppType type,
-                                 @RequestParam( required = false, defaultValue = "" ) String reqDhisVersion,
-                        HttpServletResponse response, HttpServletRequest request )
-                         throws WebMessageException, IOException
+    @RequestMapping( method = RequestMethod.GET )
+    public void getApprovedApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( reqDhisVersion, status, type );
+        List<App> apps = appStoreService.getAllAppsByStatus( AppStatus.APPROVED );
+
+        renderService.toJson( response.getOutputStream(), apps );
+    }
+
+    @RequestMapping( value = "/all", method = RequestMethod.GET )
+    public void getAllApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
+    {
+        List<App> apps = appStoreService.getAllApps();
+
+        renderService.toJson( response.getOutputStream(), apps );
+    }
+
+    @RequestMapping ( value = "/query", method = RequestMethod.GET, produces = { "application/json" } )
+    public void get( @RequestParam( required = false ) AppType type,
+                     @RequestParam( required = false, defaultValue = "" ) String reqDhisVersion,
+                     HttpServletResponse response, HttpServletRequest request )
+                    throws WebMessageException, IOException
+    {
+        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( reqDhisVersion, type );
 
         List<App> apps = appStoreService.get( queryParameters );
 
@@ -91,8 +97,8 @@ public class AppController extends AbstractCrudController<App>
 
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
     public void addReviewToApp( @PathVariable( "uid" ) String appUid,
-                          HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException
+                                HttpServletResponse response, HttpServletRequest request )
+                            throws IOException, WebMessageException
     {
         Review review = renderService.fromJson( request.getInputStream(), Review.class );
 
@@ -109,12 +115,12 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
-    public void uploadVersionToApp( @PathVariable( "uid" ) String appUid,
-                           HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+    public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
+                                 @RequestPart( name = "version" ) AppVersion version,
+                                 @RequestPart( "uid" ) String appUid,
+                                 HttpServletResponse response, HttpServletRequest request )
+                                throws IOException, WebMessageException
     {
-        AppVersion version = renderService.fromJson( request.getInputStream(), AppVersion.class );
-
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
@@ -122,14 +128,14 @@ public class AppController extends AbstractCrudController<App>
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
-        appStoreService.addVersionToApp( app, version );
+        appStoreService.addVersionToApp( app, version, file );
 
         renderService.renderCreated( response, request, "App version added" );
     }
 
     @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
     public void approveApp( @PathVariable( "uid" ) String appUid,
-                            @RequestParam( name = "status", required = true ) AppStatus status,
+                            @RequestParam( name = "status" ) AppStatus status,
                             HttpServletResponse response, HttpServletRequest request )
                           throws IOException, WebMessageException
     {
@@ -146,14 +152,14 @@ public class AppController extends AbstractCrudController<App>
     }
 
     @RequestMapping( value = "/upload", method = RequestMethod.POST )
-    public void uploadApp( @RequestParam( name = "file" ) MultipartFile file,
-                           @RequestParam( name = "type", required = false ) AppType type,
+    public void uploadApp( @RequestPart( name = "file" ) MultipartFile file,
+                           @RequestPart( name = "app" ) App app,
                            HttpServletResponse response, HttpServletRequest request )
                         throws IOException, WebMessageException
     {
-        fileStorageService.uploadFile( file, type );
+        appStoreService.uploadApp( app, file );
 
-        renderService.renderOk( response, request, "File uploaded successfully");
+        renderService.toJson( response.getOutputStream(), "App Uploaded");
     }
 
     // -------------------------------------------------------------------------
@@ -162,9 +168,9 @@ public class AppController extends AbstractCrudController<App>
 
     @RequestMapping ( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
     public void deleteReviewFromApp( @PathVariable( "uid" ) String appUid,
-                              @PathVariable( "ruid" ) String reviewUid,
-                              HttpServletResponse response, HttpServletRequest request )
-                             throws IOException, WebMessageException
+                                     @PathVariable( "ruid" ) String reviewUid,
+                                     HttpServletResponse response, HttpServletRequest request )
+                                    throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -182,9 +188,9 @@ public class AppController extends AbstractCrudController<App>
 
     @RequestMapping ( value = "/{uid}/version/{ruid}", method = RequestMethod.DELETE )
     public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
-                              @PathVariable( "vuid" ) String versionUid,
-                              HttpServletResponse response, HttpServletRequest request )
-                            throws IOException, WebMessageException
+                                      @PathVariable( "vuid" ) String versionUid,
+                                      HttpServletResponse response, HttpServletRequest request )
+                                    throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
