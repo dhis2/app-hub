@@ -87,6 +87,12 @@ public class DefaultUserService implements
     }
 
     @Override
+    public User getUser( String uid )
+    {
+        return userStore.get( uid );
+    }
+
+    @Override
     public User getCurrentUser()
     {
         return userStore.getCurrentUser();

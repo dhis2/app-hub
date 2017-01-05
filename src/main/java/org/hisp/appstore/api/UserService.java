@@ -17,6 +17,8 @@ public interface UserService
 
     User getUser( int id );
 
+    User getUser( String uid );
+
     List<User> getAll();
 
     User getCurrentUser();

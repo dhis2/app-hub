@@ -43,5 +43,5 @@ public interface AppStoreService
 
     void removeApp( App app );
 
-    AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppType type );
+    AppQueryParameters getParameterFromUrl( AppType type, String reqDhisVersion );
 }

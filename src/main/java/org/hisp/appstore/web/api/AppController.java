@@ -8,18 +8,21 @@ import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ( value = "/apps" )
-public class AppController extends AbstractCrudController<App>
+public class AppController
 {
     private static final Log log = LogFactory.getLog( AppController.class );
 
@@ -41,18 +44,26 @@ public class AppController extends AbstractCrudController<App>
     @Autowired
     private RenderService renderService;
 
+    @Autowired
+    private UserService userService;
+
     // -------------------------------------------------------------------------
     // GET
     // -------------------------------------------------------------------------
 
     @RequestMapping( method = RequestMethod.GET )
-    public void getApprovedApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
+    public void getApprovedApps( @RequestParam( value = "type", required = false ) AppType type,
+                                 @RequestParam( value = "reqdhis", required = false, defaultValue = "" ) String reqDhisVersion,
+                                 HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        List<App> apps = appStoreService.getAllAppsByStatus( AppStatus.APPROVED );
+        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( type, reqDhisVersion );
+
+        List<App> apps = appStoreService.get( queryParameters );
 
         renderService.toJson( response.getOutputStream(), apps );
     }
 
+    @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping( value = "/all", method = RequestMethod.GET )
     public void getAllApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
@@ -61,19 +72,21 @@ public class AppController extends AbstractCrudController<App>
         renderService.toJson( response.getOutputStream(), apps );
     }
 
-    @RequestMapping ( value = "/query", method = RequestMethod.GET, produces = { "application/json" } )
-    public void get( @RequestParam( required = false ) AppType type,
-                     @RequestParam( required = false, defaultValue = "" ) String reqDhisVersion,
-                     HttpServletResponse response, HttpServletRequest request )
-                    throws WebMessageException, IOException
+    @RequestMapping( value = "/{uid}", method = RequestMethod.GET )
+    public void getApp( @PathVariable( value = "uid" ) String appUid,
+                        HttpServletRequest request, HttpServletResponse response ) throws IOException, WebMessageException
     {
-        AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( reqDhisVersion, type );
+        App app = appStoreService.getApp( appUid );
 
-        List<App> apps = appStoreService.get( queryParameters );
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
 
-        renderService.toJson( response.getOutputStream(), apps );
+        renderService.toJson( response.getOutputStream(), app );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.GET )
     public void listReviews(  @PathVariable( "uid" ) String appUid,
                               HttpServletResponse response, HttpServletRequest request )
@@ -95,6 +108,19 @@ public class AppController extends AbstractCrudController<App>
     // POST
     // -------------------------------------------------------------------------
 
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping( method = RequestMethod.POST )
+    public void uploadApp( @RequestPart( name = "file" ) MultipartFile file,
+                           @RequestPart( name = "app" ) App app,
+                           HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        appStoreService.uploadApp( app, file );
+
+        renderService.toJson( response.getOutputStream(), "App Uploaded");
+    }
+
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
     public void addReviewToApp( @PathVariable( "uid" ) String appUid,
                                 HttpServletResponse response, HttpServletRequest request )
@@ -114,6 +140,7 @@ public class AppController extends AbstractCrudController<App>
         renderService.renderCreated( response, request, "App review added" );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
     public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
                                  @RequestPart( name = "version" ) AppVersion version,
@@ -128,11 +155,14 @@ public class AppController extends AbstractCrudController<App>
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
+        decideAccess( app );
+
         appStoreService.addVersionToApp( app, version, file );
 
         renderService.renderCreated( response, request, "App version added" );
     }
 
+    @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
     public void approveApp( @PathVariable( "uid" ) String appUid,
                             @RequestParam( name = "status" ) AppStatus status,
@@ -151,21 +181,31 @@ public class AppController extends AbstractCrudController<App>
         renderService.renderOk( response, request, "Status changed for app: " + app.getAppName() );
     }
 
-    @RequestMapping( value = "/upload", method = RequestMethod.POST )
-    public void uploadApp( @RequestPart( name = "file" ) MultipartFile file,
-                           @RequestPart( name = "app" ) App app,
-                           HttpServletResponse response, HttpServletRequest request )
-                        throws IOException, WebMessageException
-    {
-        appStoreService.uploadApp( app, file );
-
-        renderService.toJson( response.getOutputStream(), "App Uploaded");
-    }
-
     // -------------------------------------------------------------------------
     // DELETE
     // -------------------------------------------------------------------------
 
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}", method = RequestMethod.DELETE )
+    public void deleteApp( @PathVariable( "uid" ) String appUid,
+                           HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
+
+        decideAccess( app );
+
+        appStoreService.removeApp( app );
+
+        renderService.renderOk( response, request, "App Removed" );
+    }
+
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
     public void deleteReviewFromApp( @PathVariable( "uid" ) String appUid,
                                      @PathVariable( "ruid" ) String reviewUid,
@@ -181,11 +221,14 @@ public class AppController extends AbstractCrudController<App>
             throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
         }
 
+        decideAccess( app );
+
         appStoreService.removeReviewFromApp( app, review );
 
         renderService.renderOk( response, request, "Review Removed" );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/version/{ruid}", method = RequestMethod.DELETE )
     public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
                                       @PathVariable( "vuid" ) String versionUid,
@@ -201,8 +244,20 @@ public class AppController extends AbstractCrudController<App>
             throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
         }
 
+        decideAccess( app );
+
         appStoreService.removeVersionFromApp( app, version );
 
         renderService.renderOk( response, request, "Version Removed" );
+    }
+
+    private void decideAccess( App app ) throws WebMessageException
+    {
+        User currentUser = userService.getCurrentUser();
+
+        if ( !currentUser.equals( app.getOwner() ) )
+        {
+            throw new WebMessageException( WebMessageUtils.denied( "Access denied" ) );
+        }
     }
 }

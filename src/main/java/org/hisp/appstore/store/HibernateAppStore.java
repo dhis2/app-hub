@@ -89,7 +89,11 @@ public class HibernateAppStore
         if ( queryParameters.hasType() )
         {
             hql += where ? " AND app.appType = :type" : " WHERE app.appType = :type";
+
+            where = true;
         }
+
+        hql += where ? " AND app.status = :status" : " WHERE app.status = :status";
 
         Query query = sessionFactory.getCurrentSession().createQuery( hql );
 
@@ -102,6 +106,8 @@ public class HibernateAppStore
         {
             query.setParameter( "type", queryParameters.getType() );
         }
+
+        query.setParameter( "status", AppStatus.APPROVED );
 
         return query;
     }

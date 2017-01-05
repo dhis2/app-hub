@@ -188,11 +188,11 @@ public class DefaultAppService
     }
 
     @Override
-    public AppQueryParameters getParameterFromUrl( String requiredDhisVersion, AppType type )
+    public AppQueryParameters getParameterFromUrl( AppType type, String reqDhisVersion )
     {
         AppQueryParameters queryParameters = new AppQueryParameters();
 
-        queryParameters.setReqDhisVersion( requiredDhisVersion );
+        queryParameters.setReqDhisVersion( reqDhisVersion );
         queryParameters.setType( type );
 
         return queryParameters;

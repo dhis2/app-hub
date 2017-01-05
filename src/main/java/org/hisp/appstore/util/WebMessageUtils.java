@@ -41,4 +41,9 @@ public class WebMessageUtils
     {
         return createWebMessage( message, HttpStatus.ACCEPTED );
     }
+
+    public static WebMessage denied ( String message )
+    {
+        return  createWebMessage( message, HttpStatus.UNAUTHORIZED );
+    }
 }

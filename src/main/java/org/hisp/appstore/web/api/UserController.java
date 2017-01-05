@@ -10,6 +10,7 @@ import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,15 +28,23 @@ import java.util.Set;
  */
 @Controller
 @RequestMapping ( value = "/users" )
-public class UserController extends AbstractCrudController<User>
+public class UserController
 {
+    // -------------------------------------------------------------------------
+    // Dependencies
+    // -------------------------------------------------------------------------
+
     @Autowired
     private UserService userService;
 
     @Autowired
     private RenderService renderService;
 
+    // -------------------------------------------------------------------------
+    // GET
+    // -------------------------------------------------------------------------
 
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping( value = "/me", method = RequestMethod.GET )
     public void getProfile( HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
@@ -45,6 +54,7 @@ public class UserController extends AbstractCrudController<User>
         renderService.toJson( response.getOutputStream(), user );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
     @RequestMapping( value = "/me", method = RequestMethod.PUT )
     public void updateProfile( HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
@@ -55,6 +65,10 @@ public class UserController extends AbstractCrudController<User>
 
         renderService.renderAccepted( response, request, "User updated");
     }
+
+    // -------------------------------------------------------------------------
+    // POST
+    // -------------------------------------------------------------------------
 
     @RequestMapping( value = "/register", method = RequestMethod.POST )
     public void registerNewUser( HttpServletResponse response, HttpServletRequest request )
@@ -72,5 +86,23 @@ public class UserController extends AbstractCrudController<User>
         userService.addUser( user );
 
         renderService.renderCreated( response, request, "User Created" );
+    }
+
+    @PreAuthorize( "hasRole(ROLE_ADMIN)" )
+    @RequestMapping( value = "/{uid}", method = RequestMethod.DELETE )
+    public void deleteProfile( @PathVariable String uuid,
+                               HttpServletResponse response, HttpServletRequest request )
+                             throws IOException, WebMessageException
+    {
+        User user = userService.getUser( uuid );
+
+        if ( user == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( "User not found with id: " + uuid ) );
+        }
+
+        userService.deleteUser( user );
+
+        renderService.renderOk( response, request, "User Deleted" );
     }
 }
