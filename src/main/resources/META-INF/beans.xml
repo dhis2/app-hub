@@ -99,6 +99,8 @@
         <property name="passwordEncoder" ref="passwordEncoder"/>
     </bean>
 
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+
     <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
         <property name="clazz" value="org.hisp.appstore.api.domain.User" />
         <property name="sessionFactory" ref="sessionFactory" />
@@ -124,19 +126,6 @@
 
     <bean id="org.hisp.appstore.api.AppVersionService" class="org.hisp.appstore.service.DefaultAppVersionService" >
         <property name="appVersionStore" ref="org.hisp.appstore.api.AppVersionStore"/>
-    </bean>
-
-    <!-- BaseIdentifiableObject -->
-
-    <bean id="org.hisp.appstore.api.BaseIdentifiableObjectManager" class="org.hisp.appstore.service.DefaultBaseIdentifiableObjectManager">
-        <property name="baseIdentifiableStores">
-            <list>
-                <ref bean="org.hisp.appstore.api.UserStore"/>
-                <ref bean="org.hisp.appstore.api.AppStore"/>
-                <ref bean="org.hisp.appstore.api.ReviewStore"/>
-                <ref bean="org.hisp.appstore.api.AppVersionStore"/>
-            </list>
-        </property>
     </bean>
 
 </beans>

@@ -58,7 +58,7 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         FileUploadStatus status = new FileUploadStatus();
 
-        String resouceKey = UUID.randomUUID().toString();
+        String resourceKey = UUID.randomUUID().toString();
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( Long.valueOf( file.getSize() ));
@@ -67,13 +67,13 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         try
         {
-            request = new PutObjectRequest( bucketName, resouceKey, file.getInputStream(), metadata );
+            request = new PutObjectRequest( bucketName, resourceKey, file.getInputStream(), metadata );
             request.setCannedAcl( CannedAccessControlList.PublicRead );
 
             amazonS3Client.putObject( request );
 
             status.setUploaded( true );
-            status.setDownloadUrl( amazonS3Client.getResourceUrl( bucketName, resouceKey ) );
+            status.setDownloadUrl( amazonS3Client.getResourceUrl( bucketName, resourceKey ) );
         }
         catch ( AmazonServiceException ase )
         {

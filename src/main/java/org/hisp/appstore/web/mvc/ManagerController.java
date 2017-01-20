@@ -1,5 +1,7 @@
 package org.hisp.appstore.web.mvc;
 
+import com.auth0.Auth0User;
+import com.auth0.SessionUtils;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.session.CurrentUser;
@@ -12,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
+import java.util.Map;
+
 
 /**
  * Created by zubair on 09.12.16.
@@ -23,13 +29,12 @@ public class ManagerController
     @Autowired
     private UserService userService;
 
-    @RequestMapping( method = RequestMethod.GET )
-    public String managerIndex( Model model )
+    @RequestMapping( method = RequestMethod.GET)
+    protected String home(final Map<String, Object> model, final HttpServletRequest req, final Principal principal)
     {
-
-        User currentUser = userService.getCurrentUser();
-
-        model.addAttribute( "message", currentUser.getFirstName() );
+        final String name = principal.getName();
+        final Auth0User user = SessionUtils.getAuth0User(req);
+        model.put("user", user);
 
         return "manager";
     }

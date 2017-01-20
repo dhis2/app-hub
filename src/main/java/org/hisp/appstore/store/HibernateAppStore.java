@@ -11,6 +11,7 @@ import org.hisp.appstore.api.UserStore;
 import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.api.AppStore;
 import org.hisp.appstore.util.HibernateGenericDao;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
