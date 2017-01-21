@@ -31,7 +31,7 @@ public class LoginController
     @Autowired
     private SessionFactory sessionFactory;
 
-    @RequestMapping(value="/login", method = RequestMethod.GET)
+    @RequestMapping( value="/login", method = RequestMethod.GET )
     protected String login( Map<String, Object> model, final HttpServletRequest request )
     {
         detectError(model);
@@ -44,7 +44,7 @@ public class LoginController
         return "login";
     }
 
-    private void detectError(final Map<String, Object> model)
+    private void detectError( final Map<String, Object> model )
     {
         if (model.get( "error") != null )
         {

@@ -30,10 +30,9 @@ public class ManagerController
     private UserService userService;
 
     @RequestMapping( method = RequestMethod.GET)
-    protected String home(final Map<String, Object> model, final HttpServletRequest req, final Principal principal)
+    protected String home( final Map<String, Object> model, final HttpServletRequest request, final Principal principal )
     {
-        final String name = principal.getName();
-        final Auth0User user = SessionUtils.getAuth0User(req);
+        final Auth0User user = SessionUtils.getAuth0User( request );
         model.put("user", user);
 
         return "manager";

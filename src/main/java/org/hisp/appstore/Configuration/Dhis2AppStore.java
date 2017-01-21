@@ -17,7 +17,8 @@ import org.springframework.context.annotation.PropertySources;
 @ImportResource("classpath:/META-INF/beans.xml")
 public class Dhis2AppStore
 {
-    public static void main(String[] args) {
+    public static void main( String[] args )
+    {
         SpringApplication.run( Dhis2AppStore.class, args );
     }
 }

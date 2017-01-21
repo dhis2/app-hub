@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ImportResource;
 /**
  * Created by zubair on 19.01.17.
  */
-
 public class WebApplicationBussinesLogicConfigurer
 {
 }
