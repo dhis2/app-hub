@@ -8,89 +8,81 @@
   <version>0.9.6</version>
   <name>App Store for DHIS 2</name>
   <packaging>war</packaging>
-  
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.3.RELEASE</version>
+    <relativePath/>
+  </parent>
+
   <dependencies>
-  
     <!-- Spring -->
-    
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-aop</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
+
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-tomcat</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.apache.tomcat.embed</groupId>
+    <artifactId>tomcat-embed-jasper</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+  </dependency>
+
+  <!-- third party -->
+
+  <dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+  </dependency>
+
+  <dependency>
+    <groupId>org.springframework.security</groupId>
+    <artifactId>spring-security-taglibs</artifactId>
+  </dependency>
+
+  <!-- auth0 dependencies -->
+
+  <dependency>
+    <groupId>com.auth0</groupId>
+    <artifactId>auth0-spring-security-mvc</artifactId>
+    <version>1.2.3</version>
+  </dependency>
+
+    <!-- Spring Core -->
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-tx</artifactId>
-      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-orm</artifactId>
-      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-oxm</artifactId>
-      <version>${spring.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
-      <version>1.6.8</version>
-    </dependency>
-    <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>aspectjweaver</artifactId>
-      <version>1.6.8</version>
-    </dependency>
-    <dependency>
-      <groupId>cglib</groupId>
-      <artifactId>cglib</artifactId>
-      <version>3.2.1</version>
-    </dependency>
-    
-    <!-- Spring Security -->
-    
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <version>${spring.security.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
-      <version>${spring.security.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <version>${spring.security.version}</version>
-    </dependency>
+
     
     <!-- Hibernate -->
     
@@ -104,23 +96,15 @@
 	  <artifactId>persistence-api</artifactId>
 	  <version>1.0.2</version>
     </dependency>
-    <!-- For Tomcat 8 -->
-    <!-- 
     <dependency>
-	  <groupId>org.hibernate.javax.persistence</groupId>
-	  <artifactId>hibernate-jpa-2.1-api</artifactId>
-	  <version>1.0.0.Final</version>
+      <groupId>org.hibernate.javax.persistence</groupId>
+      <artifactId>hibernate-jpa-2.1-api</artifactId>
+      <version>1.0.0.Final</version>
     </dependency>
-    -->
     <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
       <version>0.9.1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.21</version>
     </dependency>
         
     <!-- Database -->
@@ -143,9 +127,9 @@
       <artifactId>junit</artifactId>
       <version>4.12</version>
     </dependency>
-    
+
     <!-- JSON -->
-    
+
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -161,6 +145,9 @@
       <artifactId>jackson-dataformat-xml</artifactId>
       <version>${jackson.version}</version>
     </dependency>
+
+    <!-- AmazonS3 -->
+
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk</artifactId>
@@ -168,12 +155,7 @@
     </dependency>
 
     <!-- Commons -->
-    
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-    </dependency>
+
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-email</artifactId>
@@ -195,12 +177,6 @@
 	  <version>2.4</version>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.4</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.3.1</version>
@@ -210,44 +186,39 @@
 	  <artifactId>guava</artifactId>
 	  <version>19.0</version>
     </dependency>
-    
   </dependencies>
-  
+
   <build>
     <finalName>dhis-appstore</finalName>
     <plugins>
       <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
+        <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <source>1.8</source>
-          <target>1.8</target>
+          <useSystemClassLoader>false</useSystemClassLoader>
         </configuration>
       </plugin>
-
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <version>2.4</version>
-          <configuration>
-            <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
-          </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>9.3.8.v20160314</version>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.5.0</version>
+        <configuration>
+          <mainClass>org.hisp.appstore.Configuration.Dhis2AppStore</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>
   
   <properties>
-    <spring.version>4.2.5.RELEASE</spring.version>
-    <spring.security.version>3.2.9.RELEASE</spring.security.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <java.version>1.8</java.version>
+
     <hibernate.version>5.1.0.Final</hibernate.version>
     <jackson.version>2.7.3</jackson.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
   </properties>
 </project>
