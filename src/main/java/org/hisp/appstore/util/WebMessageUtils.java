@@ -46,4 +46,9 @@ public class WebMessageUtils
     {
         return  createWebMessage( message, HttpStatus.UNAUTHORIZED );
     }
+
+    public static WebMessage forbidden ( String message )
+    {
+        return  createWebMessage( message, HttpStatus.FORBIDDEN );
+    }
 }

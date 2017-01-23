@@ -87,22 +87,4 @@ public class UserController
 
         renderService.renderCreated( response, request, "User Created" );
     }
-
-    @PreAuthorize( "hasRole(ROLE_ADMIN)" )
-    @RequestMapping( value = "/{uid}", method = RequestMethod.DELETE )
-    public void deleteProfile( @PathVariable String uuid,
-                               HttpServletResponse response, HttpServletRequest request )
-                             throws IOException, WebMessageException
-    {
-        User user = userService.getUser( uuid );
-
-        if ( user == null )
-        {
-            throw new WebMessageException( WebMessageUtils.notFound( "User not found with id: " + uuid ) );
-        }
-
-        userService.deleteUser( user );
-
-        renderService.renderOk( response, request, "User Deleted" );
-    }
 }

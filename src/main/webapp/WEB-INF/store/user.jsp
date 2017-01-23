@@ -19,5 +19,6 @@
     <input type="submit" value="Upload" />
 
 </form>
+<a href="/logout">Logout</a>
 </body>
 </html>

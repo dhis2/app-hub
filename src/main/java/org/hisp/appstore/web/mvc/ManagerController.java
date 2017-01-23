@@ -6,6 +6,7 @@ import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.session.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,7 @@ public class ManagerController
     @Autowired
     private UserService userService;
 
+    @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping( method = RequestMethod.GET)
     protected String home( final Map<String, Object> model, final HttpServletRequest request, final Principal principal )
     {
