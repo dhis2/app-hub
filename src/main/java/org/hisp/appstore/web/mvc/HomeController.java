@@ -1,5 +1,10 @@
 package org.hisp.appstore.web.mvc;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.hisp.appstore.api.UserService;
+import org.hisp.appstore.api.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class HomeController
 {
+    private static final Log log = LogFactory.getLog( HomeController.class );
+
+    @Autowired
+    private UserService userService;
+
     @RequestMapping( value = "/*", method = RequestMethod.GET )
     public String loginPage( Model model )
     {
@@ -26,6 +36,12 @@ public class HomeController
     @RequestMapping( value = "/user", method = RequestMethod.GET )
     public String userPage( Model model )
     {
+        User user = userService.getCurrentUser();
+
+        model.addAttribute( "user",user );
+
+        log.info( "User is " + user );
+
         return "user";
     }
 }

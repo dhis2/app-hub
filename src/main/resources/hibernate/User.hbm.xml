@@ -22,8 +22,6 @@
 
         <property name="lastName" />
 
-        <property name="password" not-null="true"/>
-
         <property name="email" />
 
         <set name="auths" table="user_auths" fetch="select" lazy="false">

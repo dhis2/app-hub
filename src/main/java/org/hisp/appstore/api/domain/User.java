@@ -1,5 +1,6 @@
 package org.hisp.appstore.api.domain;
 
+import com.auth0.Auth0User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -21,8 +22,6 @@ public class User
     private String firstName;
 
     private String lastName;
-
-    private String password;
 
     private String email;
 
@@ -48,17 +47,21 @@ public class User
         }
     }
 
-    @JsonIgnore
-    public UserDetails getUserDetails()
+    public void mergeWith( Auth0User auth0User )
     {
-        Set<GrantedAuthority> grantedAuths = new HashSet<GrantedAuthority>();
-
-        for ( String auth : auths )
+        if ( auth0User != null )
         {
-            grantedAuths.add( new SimpleGrantedAuthority( auth ) );
-        }
+            this.email = auth0User.getEmail();
+            this.firstName = auth0User.getGivenName();
+            this.lastName = auth0User.getFamilyName();
+            this.username = auth0User.getName();
 
-        return new org.springframework.security.core.userdetails.User( username, password, grantedAuths );
+            if( auth0User.getRoles() != null && !auth0User.getRoles().isEmpty() )
+            {
+                this.auths.clear();
+                this.auths.addAll( auth0User.getRoles() );
+            }
+        }
     }
 
     @JsonProperty
@@ -70,18 +73,6 @@ public class User
     public void setUsername( String username )
     {
         this.username = username;
-    }
-
-    @JsonIgnore
-    public String getPassword()
-    {
-        return password;
-    }
-
-    @JsonProperty
-    public void setPassword( String password )
-    {
-        this.password = password;
     }
 
     @JsonProperty

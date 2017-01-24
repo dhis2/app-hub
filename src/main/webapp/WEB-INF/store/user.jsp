@@ -20,5 +20,7 @@
 
 </form>
 <a href="/logout">Logout</a>
+<h2>User is ${user.username}</h2>
+<h2>User is ${user.firstName}</h2>
 </body>
 </html>

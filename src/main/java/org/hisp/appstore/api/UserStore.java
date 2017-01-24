@@ -9,5 +9,7 @@ public interface UserStore extends GenericDao<User>
 {
     User getUserByUsername( String userName );
 
+    User getUserByEmail( String email );
+
     User getCurrentUser();
 }

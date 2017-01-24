@@ -34,7 +34,7 @@
                 <!--
                 <prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
                 -->
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
             </props>
         </property>
 
@@ -96,10 +96,7 @@
 
     <bean id="org.hisp.appstore.api.UserService" class="org.hisp.appstore.service.DefaultUserService" >
         <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
-        <property name="passwordEncoder" ref="passwordEncoder"/>
     </bean>
-
-    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
 
     <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
         <property name="clazz" value="org.hisp.appstore.api.domain.User" />

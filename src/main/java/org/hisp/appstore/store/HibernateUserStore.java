@@ -1,5 +1,7 @@
 package org.hisp.appstore.store;
 
+import com.auth0.Auth0User;
+import com.auth0.SessionUtils;
 import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.api.UserStore;
@@ -11,6 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * Created by zubair on 06.12.16.
@@ -39,17 +45,18 @@ public class HibernateUserStore
     }
 
     @Override
+    public User getUserByEmail( String email )
+    {
+        return (User) getCriteria().add(Restrictions.eq( "email",email )).uniqueResult();
+    }
+
+    @Override
     public User getCurrentUser()
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 
-        if ( authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == null )
-        {
-            return null;
-        }
+        Auth0User currentAuth0User = (Auth0User) SessionUtils.getAuth0User( request );
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-        return getUserByUsername( userDetails.getUsername() );
+        return getUserByEmail( currentAuth0User.getEmail() );
     }
 }

@@ -20,20 +20,13 @@ import java.util.List;
  */
 @Transactional
 public class DefaultUserService implements
-        UserService, UserDetailsService
+        UserService
 {
     private static final Log log = LogFactory.getLog( DefaultUserService.class );
 
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
-
-    private PasswordEncoder passwordEncoder;
-
-    public void setPasswordEncoder( PasswordEncoder passwordEncoder )
-    {
-        this.passwordEncoder = passwordEncoder;
-    }
 
     private UserStore userStore;
 
@@ -47,24 +40,8 @@ public class DefaultUserService implements
     // -------------------------------------------------------------------------
 
     @Override
-    public UserDetails loadUserByUsername( String userName ) throws UsernameNotFoundException
-    {
-
-        User user = userStore.getUserByUsername( userName ) ;
-
-        if ( user == null )
-        {
-            throw new UsernameNotFoundException( "User not found" );
-        }
-
-        return user.getUserDetails();
-    }
-
-    @Override
     public int addUser( User user )
     {
-        user.setPassword( passwordEncoder.encode( user.getPassword() ) );
-
         return userStore.save( user );
     }
 
@@ -108,5 +85,11 @@ public class DefaultUserService implements
     public User getUserByUsername( String userName )
     {
         return userStore.getUserByUsername( userName );
+    }
+
+    @Override
+    public User getUserByEmail( String email )
+    {
+        return userStore.getUserByEmail( email );
     }
 }
