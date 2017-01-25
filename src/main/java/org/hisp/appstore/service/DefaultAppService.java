@@ -147,7 +147,12 @@ public class DefaultAppService
     {
         FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
 
-        saveApp( populateAppData( app, status ) );
+        if ( status.isUploaded() )
+        {
+            saveApp( populateAppData( app, status ) );
+
+            log.info("App uploaded!");
+        }
     }
 
     @Override
@@ -206,6 +211,8 @@ public class DefaultAppService
     private App populateAppData( App app, FileUploadStatus status )
     {
         app.getVersions().forEach( v -> v.setDownloadUrl( status.getDownloadUrl() ) );
+
+        app.setOwner( userService.getCurrentUser() );
 
         return app;
     }

@@ -21,7 +21,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping ( value = "/apps" )
+@RequestMapping ( value = "/api/apps" )
 public class AppController
 {
     private static final Log log = LogFactory.getLog( AppController.class );
@@ -76,11 +76,18 @@ public class AppController
     public void getApp( @PathVariable( value = "uid" ) String appUid,
                         HttpServletRequest request, HttpServletResponse response ) throws IOException, WebMessageException
     {
+        Set<String> userAuths = userService.getCurrentUser().getAuths();
+
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
         {
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
+
+        if ( !AppStatus.APPROVED.equals( app.getStatus()) && !userAuths.contains( "ROLE_MANAGER" ))
+        {
+            throw new WebMessageException( WebMessageUtils.forbidden( "Access denied for App with id " + appUid ) );
         }
 
         renderService.toJson( response.getOutputStream(), app );

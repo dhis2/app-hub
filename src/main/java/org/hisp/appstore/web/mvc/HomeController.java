@@ -40,8 +40,6 @@ public class HomeController
 
         model.addAttribute( "user",user );
 
-        log.info( "User is " + user );
-
         return "user";
     }
 }
