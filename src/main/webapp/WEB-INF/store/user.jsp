@@ -12,9 +12,9 @@
 </head>
 <body>
 <h1>User Page</h1>
-<form name="fileUploadForm" action="/upload" method="post" enctype="multipart/form-data">
+<form name="fileUploadForm" action="/api/apps" method="post" enctype="multipart/form-data">
     <label>Select file</label>
-    <input type="file" name="uploadedFile" id="uploadedFile" />
+    <input type="file" name="file" id="file" />
 
     <input type="submit" value="Upload" />
 

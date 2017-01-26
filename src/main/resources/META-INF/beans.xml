@@ -8,7 +8,6 @@
     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
     http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
-
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf"/>
@@ -56,10 +55,6 @@
     </bean>
 
     <!-- Amazon S3 -->
-
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="maxUploadSize" value="${max.file.size}"/>
-    </bean>
 
     <bean id="awsCredentialProvider" class="com.amazonaws.auth.BasicAWSCredentials">
         <constructor-arg name="accessKey" value="${access.id}"/>

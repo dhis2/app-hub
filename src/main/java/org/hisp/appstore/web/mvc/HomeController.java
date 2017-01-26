@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.UserService;
 import org.hisp.appstore.api.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ public class HomeController
         return "home";
     }
 
+    @PreAuthorize( "hasRole('ROLE_USER')" )
     @RequestMapping( value = "/user", method = RequestMethod.GET )
     public String userPage( Model model )
     {
