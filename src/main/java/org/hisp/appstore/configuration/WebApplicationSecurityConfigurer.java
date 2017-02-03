@@ -1,14 +1,12 @@
-package org.hisp.appstore.Configuration;
+package org.hisp.appstore.configuration;
 
 import com.auth0.spring.security.mvc.Auth0Config;
 import org.hisp.appstore.util.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.access.AccessDeniedHandler;
 
 /**
  * Created by zubair on 19.01.17.

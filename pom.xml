@@ -203,7 +203,7 @@
         <artifactId>exec-maven-plugin</artifactId>
         <version>1.5.0</version>
         <configuration>
-          <mainClass>org.hisp.appstore.Configuration.Dhis2AppStore</mainClass>
+          <mainClass>org.hisp.appstore.configuration.Dhis2AppStore</mainClass>
         </configuration>
       </plugin>
     </plugins>
