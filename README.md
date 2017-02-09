@@ -9,15 +9,6 @@ DHIS 2 app store
 git clone https://github.com/dhis2/dhis2-appstore.git
 ```
 
-### Build the project using maven
-```bash
-mvn clean install
-```
-### Run the project
-```bash
-mvn spring-boot:run
-```
-
 ### Create config file
 Create config file called `appstore.conf` in `/opt/hisp/appstore` with the following config
 
@@ -53,12 +44,17 @@ auth0.signingAlgorithm: HS256
 auth0.authorityStrategy=ROLES
 ```
 
-### Create postgres database
+### Create postgres database (if you do not have one yet)
 ```sql
 CREATE DATABASE appstore_db OWNER dhis;
 ```
 
-### Run the app store
+### Run the project
 ```bash
-mvn spring-boot:run
+mvn clean install && mvn spring-boot:run
+```
+
+### Start the front-end development app-store
+```bash
+yarn start
 ```
