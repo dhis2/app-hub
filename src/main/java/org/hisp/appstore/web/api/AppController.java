@@ -238,7 +238,7 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/version/{ruid}", method = RequestMethod.DELETE )
+    @RequestMapping ( value = "/{uid}/version/{vuid}", method = RequestMethod.DELETE )
     public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
                                       @PathVariable( "vuid" ) String versionUid,
                                       HttpServletResponse response, HttpServletRequest request )

@@ -27,7 +27,7 @@ import java.util.Set;
  * Created by zubair on 13.12.16.
  */
 @Controller
-@RequestMapping ( value = "/users" )
+@RequestMapping ( value = "/api/users" )
 public class UserController
 {
     // -------------------------------------------------------------------------
@@ -52,39 +52,5 @@ public class UserController
         User user = userService.getCurrentUser();
 
         renderService.toJson( response.getOutputStream(), user );
-    }
-
-    @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping( value = "/me", method = RequestMethod.PUT )
-    public void updateProfile( HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
-    {
-        User user = renderService.fromJson( request.getInputStream(), User.class );
-
-        userService.updateUser( user );
-
-        renderService.renderAccepted( response, request, "User updated");
-    }
-
-    // -------------------------------------------------------------------------
-    // POST
-    // -------------------------------------------------------------------------
-
-    @RequestMapping( value = "/register", method = RequestMethod.POST )
-    public void registerNewUser( HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
-    {
-        User user = renderService.fromJson( request.getInputStream(), User.class );
-
-        User duplicateUser = userService.getUserByUsername( user.getUsername() );
-
-        if ( duplicateUser != null )
-        {
-            throw new WebMessageException( WebMessageUtils.conflict( "User already exists" ) );
-        }
-
-        userService.addUser( user );
-
-        renderService.renderCreated( response, request, "User Created" );
     }
 }
