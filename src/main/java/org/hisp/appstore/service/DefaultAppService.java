@@ -132,6 +132,7 @@ public class DefaultAppService
     public void addReviewToApp(  App app, Review review )
     {
         User user = userService.getCurrentUser();
+
         review.setAutoFields();
         review.setUser( user );
 

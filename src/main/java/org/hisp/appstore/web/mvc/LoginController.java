@@ -22,12 +22,6 @@ public class LoginController
     @Autowired
     private WebApplicationSecurityConfigurer securityConfigurer;
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private SessionFactory sessionFactory;
-
     @RequestMapping( value="/login", method = RequestMethod.GET )
     protected String login( Map<String, Object> model, final HttpServletRequest request )
     {
