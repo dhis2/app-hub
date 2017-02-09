@@ -13,6 +13,10 @@ git clone https://github.com/dhis2/dhis2-appstore.git
 ```bash
 mvn clean install
 ```
+### Run the project
+```bash
+mvn spring-boot:run
+```
 
 ### Create config file
 Create config file called `appstore.conf` in `/opt/hisp/appstore` with the following config
