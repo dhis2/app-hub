@@ -1,5 +1,6 @@
 package org.hisp.appstore.configuration;
 
+import com.auth0.spring.security.mvc.Auth0CORSFilter;
 import com.auth0.spring.security.mvc.Auth0Config;
 import org.hisp.appstore.util.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +25,16 @@ public class WebApplicationSecurityConfigurer extends Auth0Config
         return customAccessDeniedHandler;
     }
 
+    @Bean
     @Override
-    protected void authorizeRequests(final HttpSecurity http) throws Exception {
+    public Auth0CORSFilter simpleCORSFilter()
+    {
+        return new AppStoreCORSFilter();
+    }
+
+    @Override
+    protected void authorizeRequests(final HttpSecurity http) throws Exception
+    {
 
         http.authorizeRequests()
                 .antMatchers("/css/**", "/fonts/**", "/js/**", "/login").permitAll()
