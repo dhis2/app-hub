@@ -1,0 +1,13 @@
+{
+  "name": "appstore-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "BSD-3-Clause",
+  "scripts": {
+    "start": "webpack-dev-server --config app/webpack.config.js"
+  },
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
+  }
+}
