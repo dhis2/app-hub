@@ -198,7 +198,7 @@ public class AppController
     @RequestMapping ( value = "/{uid}", method = RequestMethod.DELETE )
     public void deleteApp( @PathVariable( "uid" ) String appUid,
                            HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+                          throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 

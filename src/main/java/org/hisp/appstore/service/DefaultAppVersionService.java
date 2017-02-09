@@ -3,10 +3,12 @@ package org.hisp.appstore.service;
 import org.hisp.appstore.api.AppVersionService;
 import org.hisp.appstore.api.AppVersionStore;
 import org.hisp.appstore.api.domain.AppVersion;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by zubair on 17.12.16.
  */
+@Transactional
 public class DefaultAppVersionService
         implements AppVersionService
 {
