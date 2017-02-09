@@ -153,7 +153,7 @@ public class AppController
     @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
     public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
                                  @RequestPart( name = "version" ) AppVersion version,
-                                 @RequestPart( "uid" ) String appUid,
+                                 @PathVariable( name = "uid" ) String appUid,
                                  HttpServletResponse response, HttpServletRequest request )
                                 throws IOException, WebMessageException
     {

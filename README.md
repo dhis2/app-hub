@@ -35,9 +35,6 @@ access.id=<AmazonS3 id>
 #AmazonS3 secret key
 secret.key=<AmazonS3 secret>
 
-#upload file size limit
-max.file.size=25000000
-
 auth0.domain: <auth0 domain>
 auth0.issuer: <auth0 certificate issuer>
 auth0.clientId=<auth0 client id>
