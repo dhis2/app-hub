@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import AppItem from './AppItem';
 import 'material-components-web/dist/material-components-web.css';
+import Grid from '../material/Grid/Grid';
 
 const card = (<div className="mdc-card">
     <section className="mdc-card__primary">
@@ -22,12 +23,11 @@ const card = (<div className="mdc-card">
 
 class AppView extends Component {
     render() {
-        const cards = new Array(5).fill(card);
-        console.log(cards)
+        const cards = new Array(4).fill(card);
         return (
-            <div className="mdc-layout-grid">
+            <Grid >
                 {cards.map(c => (<AppItem>{c}</AppItem>))}
-            </div>
+            </Grid>
         )
     }
 }

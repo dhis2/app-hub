@@ -1,13 +1,12 @@
 import React from 'react';
 import 'material-components-web/dist/material-components-web.css';
-
+import Col from '../material/Grid/Col';
 
 
 const AppItem = (props) => (
-        <div className="mdc-layout-grid__cell">
-            {props.children}
-        </div>
-    )
-
+            <Col span={4} align="top">
+                {props.children}
+            </Col>
+    );
 
 export default AppItem;
