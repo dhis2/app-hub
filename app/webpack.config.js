@@ -5,6 +5,16 @@ module.exports = {
         filename: 'app-store.js',
     },
 
+    module: {
+        loaders: [
+            {
+                test: /.jsx?/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+            },
+        ],
+    },
+
     devServer: {
         port: 9000,
         inline: true,
