@@ -1,5 +1,6 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+import createLogger from 'redux-logger';
 import { Observable } from 'rxjs';
 
 const initEpic = (action$) => action$
@@ -17,13 +18,17 @@ const initEpic = (action$) => action$
                 type: 'APPS_LIST_LOADED_ALL',
                 payload: apps,
             }))
-            .catch(apps => ({
+            .catch(error => ({
                 type: 'APPS_LIST_LOADING_ERROR',
                 payload: error.message,
             }));
     });
 
-const epicMiddleware = createEpicMiddleware(initEpic)
+const middlewares = [createEpicMiddleware(initEpic)];
+
+if(process.env.NODE_ENV === 'development') {
+    middlewares.push(createLogger())
+}
 
 function appsListReducer(state = {}, action) {
     switch (action.type) {
@@ -37,4 +42,4 @@ const reducer = combineReducers({
     appsList: appsListReducer,
 });
 
-export default createStore(reducer, applyMiddleware(epicMiddleware));
+export default createStore(reducer, applyMiddleware(...middlewares));
