@@ -1,6 +1,6 @@
 import React from 'react';
-
-import AppView from './appView/AppView';
+import 'material-components-web/build/material-components-web.css';
+import AppView from './appCards/AppCards';
 import Header from './header/Header';
 
 export default function AppStore() {

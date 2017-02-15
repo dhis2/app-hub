@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import 'material-components-web/dist/material-components-web.css';
 
 const propTypes = {
     children: PropTypes.node

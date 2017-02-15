@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import 'material-components-web/dist/material-components-web.css';
-
 const ScreenType = PropTypes.oneOf(['tablet', 'phone', 'desktop']);
 const AlignType = PropTypes.oneOf(['top', 'middle', 'bottom']);
 const modificatorKeys = ['order', 'align', 'span', 'spanScreen'];
