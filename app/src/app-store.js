@@ -12,8 +12,7 @@ import store from './store';
 //     .then(response => response.json())
 //     .then(response => console.log(response));
 
-store.subscribe(() => {
     render(<AppStore />, document.getElementById('appStore'));
-});
 
-store.dispatch({ type: 'INIT' });
+
+//store.dispatch({ type: 'INIT' });

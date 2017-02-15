@@ -3,7 +3,7 @@ import Col from '../material/Grid/Col';
 
 
 const AppItem = (props) => (
-            <Col span={4} align="top">
+            <Col align="top">
                 {props.children}
             </Col>
     );

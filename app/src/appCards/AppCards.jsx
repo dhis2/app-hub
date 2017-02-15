@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import AppItem from './AppItem';
+import { connect } from 'react-redux';
+import AppItem from './AppCardItem';
 import Grid from '../material/Grid/Grid';
 
 const card = (<div className="mdc-card">
@@ -25,10 +26,18 @@ class AppView extends Component {
         const cards = new Array(4).fill(card);
         return (
             <Grid >
-                {cards.map(c => (<AppItem>{c}</AppItem>))}
+                {cards.map((c,i) => (<AppItem key={i}>{c}</AppItem>))}
             </Grid>
         )
     }
 }
 
-export default AppView;
+const mapStateToProps = (state) => ({
+
+});
+
+const mapDispatchToProps = (dispatch) => ({
+
+})
+
+export default connect(null,null)(AppView);

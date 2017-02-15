@@ -151,7 +151,7 @@ public class AppController
 
     @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
-    public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
+    public void addVersfionToApp( @RequestPart( name = "file" ) MultipartFile file,
                                  @RequestPart( name = "version" ) AppVersion version,
                                  @PathVariable( name = "uid" ) String appUid,
                                  HttpServletResponse response, HttpServletRequest request )

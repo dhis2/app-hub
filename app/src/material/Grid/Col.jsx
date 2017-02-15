@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-const ScreenType = PropTypes.oneOf(['tablet', 'phone', 'desktop']);
+
 const AlignType = PropTypes.oneOf(['top', 'middle', 'bottom']);
-const modificatorKeys = ['order', 'align', 'span', 'spanScreen'];
-const className = 'mdc-layout-grid__cell';
+const screenTypes = [ 'phone', 'tablet', 'desktop']
+const modificatorKeys = ['order', 'align', 'span', ...screenTypes];
+const baseClassname = 'mdc-layout-grid__cell';
 
 const propTypes = {
     span: PropTypes.number,
-    spanScreen: PropTypes.shape({
-        screen: ScreenType,
-        value: PropTypes.number,
-    }),
+    tablet: PropTypes.number,
+    phone: PropTypes.number,
+    desktop: PropTypes.number,
     order: PropTypes.number,
     align: AlignType,
     children: PropTypes.node,
@@ -23,20 +23,20 @@ function getClassNames(props) {
         const key = modificatorKeys[i];
         const value = props[key];
         if (value) {
-            let mod = `${className}--${key}-${value}`;
-            if(key === 'spanScreen') {
-                mod = `${className}--span-${value}-${value.screen}`
+            let mod = `${baseClassname}--${key}-${value}`;
+            if (screenTypes.includes(key)) {
+                mod = `${baseClassname}--span-${value}-${key}`
             }
             modificators.push(mod);
         }
     }
 
-    return classNames(className, modificators);
+    return classNames(baseClassname, modificators);
 }
 
-const Col = (props) => (
+const Col = ({children, ...props}) => (
     <div className={getClassNames(props)}>
-        {props.children}
+        {children}
     </div>
 )
 
