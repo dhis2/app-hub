@@ -63,7 +63,8 @@ class AppView extends Component {
         }
 
 
-        const {id, appName, developer, description, appType, requiredDhisVersion, lastUpdated, versions} = app;
+        const {id, appName, developer, description, appType, requiredDhisVersion, lastUpdated} = app;
+        const versions = app.versions.sort((a,b) => a.lastUpdated - b.lastUpdated)
         return (
             <Grid >
                 <Col span={8} additionalClasses="paper">
@@ -92,7 +93,7 @@ class AppView extends Component {
                             {this.renderVersions(versions)}
                         </section>
                         <section className="mdc-card__actions">
-                            <a href={versions[0].downloadUrl}>
+                            <a href={versions[versions.length-1].downloadUrl}>
                                 <button className="mdc-button mdc-button--primary mdc-button--compact mdc-card__action">
                                     Download latest
                                 </button>

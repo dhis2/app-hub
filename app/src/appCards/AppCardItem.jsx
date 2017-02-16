@@ -7,7 +7,7 @@ const AppItem = (props) => {
     const { id, appName, developer, description, appType, requiredDhisVersion } = props.app;
     console.log(developer)
     return (
-        <Col span={6} align="middle">
+        <Col span={6} align="middle" additionalClasses="center">
             <div className="mdc-card">
                 <Link to={`/app/${id}`}>
                 <img className="mdc-card__media-item mdc-card__media-item--1dot5x" src="http://www.material-ui.com/images/material-ui-logo.svg"></img>
