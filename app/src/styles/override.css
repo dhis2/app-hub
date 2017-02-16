@@ -1,0 +1,18 @@
+
+.mdc-card {
+    justify-content: flex-start;
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+
+.paper {
+    height: 100%;
+    margin: 0 auto 0 auto;
+}
+
+.ver-list {
+    list-style: none;
+}

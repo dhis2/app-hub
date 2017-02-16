@@ -13,11 +13,12 @@ const propTypes = {
     desktop: PropTypes.number,
     order: PropTypes.number,
     align: AlignType,
+    additionalClasses: PropTypes.string,
     children: PropTypes.node,
 };
 
 function getClassNames(props) {
-    const modificators = [];
+    let modificators = [];
 
     for (let i = 0; i < modificatorKeys.length; ++i) {
         const key = modificatorKeys[i];
@@ -31,7 +32,7 @@ function getClassNames(props) {
         }
     }
 
-    return classNames(baseClassname, modificators);
+    return classNames(baseClassname, modificators, props.additionalClasses);
 }
 
 const Col = ({children, ...props}) => (

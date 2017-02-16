@@ -41,9 +41,10 @@ function appsListReducer(state = {}, action) {
                 error: action.payload
             }
         }
-        case 'APP_LIST_LOADING_ALL': {
+        case 'APPS_LIST_LOADED_ALL': {
             return {
                 ...state,
+                a: "a",
                 appList: action.payload
             }
         }
