@@ -1,8 +1,10 @@
 import React, {Component, Proptypes} from 'react';
 import {connect} from 'react-redux';
-import AppItem from './AppItem';
+import Toolbar from '../material/Toolbar/Toolbar';
+import ToolbarSection from '../material/Toolbar/ToolbarSection';
 import Grid from '../material/Grid/Grid';
 import Col from '../material/Grid/Col';
+import { Link } from 'react-router-dom';
 import { Redirect, Route } from 'react-router-dom';
 import AppCards from '../appCards/AppCards'
 const appTypes = {
@@ -34,7 +36,7 @@ class AppView extends Component {
                                 <ul>
                                     <li title={new Date(app.created).toLocaleString()}>
                                         Created: {new Date(app.created).toLocaleDateString()} </li>
-                                    <li>
+                                    <li title={new Date(app.lastUpdated).toLocaleString()}>
                                         Last updated: {new Date(app.lastUpdated).toLocaleDateString()}
                                     </li>
                                     <li>
@@ -65,8 +67,14 @@ class AppView extends Component {
         return (
             <Grid >
                 <Col span={8} additionalClasses="paper">
+                    <Toolbar additionalClasses="second-header">
+                        <ToolbarSection align="start">
+                            <Link to="/"> <i className="material-icons">arrow_back</i></Link>
+                        </ToolbarSection>
+                    </Toolbar>
                     <div className="mdc-card" style={{height: '100%', margin: "0 auto 0 auto "}}>
                         <section className="mdc-card__primary">
+
                             <h1 className="mdc-card__title mdc-card__title--large">{appName}</h1>
                             <h2 className="mdc-card__subtitle">Author: {developer.developerName}</h2>
                             <h2 className="mdc-card__subtitle">Type: {appTypes[appType]}</h2>

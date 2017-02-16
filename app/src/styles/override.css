@@ -1,6 +1,10 @@
 
+body {
+    background-color: #eeeeee;
+}
 .mdc-card {
     justify-content: flex-start;
+    background-color: #ffffff;
 }
 
 a {
@@ -15,4 +19,11 @@ a {
 
 .ver-list {
     list-style: none;
+}
+
+.second-header {
+    background-color: #ffffff;
+    color: rgba(0,0,0,0.870588);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+    margin: 5px 0 20px 0;
 }

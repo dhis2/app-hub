@@ -3,8 +3,9 @@ import classNames from 'classnames';
 
 
 const propTypes = {
+    fixed: PropTypes.bool,
+    additionalClasses: PropTypes.string,
     children: PropTypes.node,
-    fixed: PropTypes.bool
 };
 
 const baseClassname = 'mdc-toolbar';
@@ -21,8 +22,8 @@ function getClassNames(props) {
             modificators.push(mod);
         }
     }
-
-    return classNames(baseClassname, modificators);
+    console.log("CLASSES: " + props.additionalClasses);
+    return classNames(baseClassname, modificators, props.additionalClasses);
 }
 
 const Toolbar = ({children, ...props}) => (
