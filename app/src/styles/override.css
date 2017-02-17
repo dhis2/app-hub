@@ -17,6 +17,21 @@ html, body {
     background-color: #ffffff;
 }
 
+.card-text {
+    height: 80px;
+    overflow: scroll;
+}
+
+.drawer-below-header {
+    position:relative;
+    height: auto;
+    
+}
+
+.layout-content {
+    padding: 10px;
+}
+
 .full-height {
     height:100%;
     padding: 0;

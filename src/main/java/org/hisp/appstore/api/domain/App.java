@@ -60,7 +60,7 @@ public class App
     {
         return description;
     }
-
+ß
     public void setDescription( String description )
     {
         this.description = description;
