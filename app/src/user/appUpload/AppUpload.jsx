@@ -5,25 +5,27 @@ import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
 import Panel from 'react-toolbox/lib/layout/Panel';
 import Navigation from 'react-toolbox/lib/navigation/Navigation';
 import FontIcon from 'react-toolbox/lib/font_icon/FontIcon';
-import Card from 'react-toolbox/lib/card/Card';
+import { Card, CardText } from 'material-ui/Card';
+//import CardText from 'react-toolbox/lib/card/CardText';
+import CardTitle from 'react-toolbox/lib/card/CardTitle';
 import { Link } from 'react-router-dom';
 import LinkTool from 'react-toolbox/lib/link/Link';
 import Button from 'react-toolbox/lib/button/Button';
 import Input from 'react-toolbox/lib/input/Input';
 import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
-
+import Paper from 'material-ui/Paper';
 class UserView extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            appName: 'test',
-            description: 'test',
-            developerName: 'test',
-            developerEmail: 'test@test.no',
-            version: '1',
-            minVer: '1',
-            maxVer: '1',
+            appName: '',
+            description: '',
+            developerName: '',
+            developerEmail: '',
+            version: '',
+            minVer: '',
+            maxVer: '',
         }
         this.handleUpload = this.handleUpload.bind(this);
     }
@@ -67,10 +69,13 @@ class UserView extends Component {
     }
 
     render() {
-        const appTypes = [ {value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
+        const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
         return (
-            <section>
+            <div>
+                <h2>Upload App</h2>
+            <Card>
+                <CardText>
                 <Input type='text' required label='App name' name='appName' value={this.state.appName} onChange={this.handleChange.bind(this,'appName')} />
                 <Input type='text' name="description" multiline label='Description' value={this.state.description} onChange={this.handleChange.bind(this,'description')}/>
                 <Input type='text' name="developerName" label='Developer' value={this.state.developerName} onChange={this.handleChange.bind(this,'developerName')} />
@@ -81,7 +86,9 @@ class UserView extends Component {
                 <Input type='file' required onChange={this.handleChange.bind(this,'file')} ref={(file) => {this.file = file}}/>
                 <Dropdown label="App type" auto source={appTypes} value={appTypes[0].value} />
                 <Button accent raised icon="file_upload" name="app" onClick={this.handleUpload}>Upload</Button>
-            </section>
+                </CardText>
+            </Card>
+            </div>
         )
     }
 }

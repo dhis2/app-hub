@@ -6,11 +6,18 @@ import Layout from 'react-toolbox/lib/layout/Layout';
 import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
 import Panel from 'react-toolbox/lib/layout/Panel';
 import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import FontIcon from 'react-toolbox/lib/font_icon/FontIcon';
+import FontIcon from 'material-ui/FontIcon';
 import Card from 'react-toolbox/lib/card/Card';
-import { Link, Route } from 'react-router-dom';
+import {Link, Route} from 'react-router-dom';
 import LinkTool from 'react-toolbox/lib/link/Link';
+//import List from 'react-toolbox/lib/list/List';
+//import ListItem from 'react-toolbox/lib/list/ListItem';
+import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
+import AppList from './appList/AppList';
+import {withReactRouterLink} from '../utils/RRHOC';
+
+const RRListItem = withReactRouterLink(ListItem);
 
 class UserView extends Component {
     render() {
@@ -38,13 +45,15 @@ class UserView extends Component {
                     <nav className="mdc-permanent-drawer mdc-typography">
                         <nav id="icon-with-text-demo" className="mdc-list">
                             <a className="mdc-list-item mdc-permanent-drawer--selected" href="#">
-                                <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">account_box</i>User Details
+                                <i className="material-icons mdc-list-item__start-detail"
+                                   aria-hidden="true">account_box</i>User Details
                             </a>
                             <a className="mdc-list-item" href="#">
                                 <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">list</i>Apps
                             </a>
                             <a className="mdc-list-item" href="#">
-                                <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">file_upload</i>Upload
+                                <i className="material-icons mdc-list-item__start-detail"
+                                   aria-hidden="true">file_upload</i>Upload
                             </a>
                         </nav>
                     </nav>
@@ -55,21 +64,36 @@ class UserView extends Component {
 
             </Grid>
         )
-        console.log(this.props.match)
+        console.log(this.props)
+        const menu = (
+            <div>
+                <RRListItem to={this.props.match.url} primaryText="Apps"
+                            leftIcon={<FontIcon className="material-icons">list</FontIcon>}/>
+                <RRListItem to={this.props.match.url + "/upload"} primaryText="Upload"
+                            leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}
+                            className="customRouterList" activeClassName="customRouterListActive"/>
+            </div>
+        )
+        console.log(menu)
         return (
-            <Layout>
-                <NavDrawer className="drawer-below-header"pinned>
-                    <Navigation type="vertical">
-                        <Link to={this.props.match.url} label="Apps" icon="list">Apps</Link>
-                        <LinkTool label={<Link to={this.props.match.url} label="Apps" icon="list">Apps</Link>} icon="account_box"/>
-                        <Link to={this.props.match.url+"/upload"}><FontIcon value="file_upload"></FontIcon>Upload</Link>
-                    </Navigation>
-                </NavDrawer>
-                <Panel className="layout-content">
-                    <h1>User</h1>
+            <Grid>
+                <Col span={2}>
+                    <List style={{padding: 0}}>
+                        <Link to={this.props.match.url}>
+                            <ListItem primaryText="Apps" leftIcon={<FontIcon className="material-icons">list</FontIcon>}/>
+                        </Link>
+                        <Link to={`${this.props.match.url}/upload`}>
+                            <ListItem primaryText="Upload" leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
+                        </Link>
+
+                    </List>
+                </Col>
+                <Col span={8}>
+                    <Route exact path={`${this.props.match.url}`} component={AppList}>
+                    </Route>
                     <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
-                </Panel>
-            </Layout>
+                </Col>
+            </Grid>
         )
     }
 }
@@ -88,7 +112,8 @@ const old = (
             <div className="mdc-list-group">
                 <nav className="mdc-list">
                     <a className="mdc-list-item mdc-permanent-drawer--selected" href="#">
-                        <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">account_box</i>User Details
+                        <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">account_box</i>User
+                        Details
                     </a>
                     <a className="mdc-list-item" href="#">
                         <i className="material-icons mdc-list-item__start-detail" aria-hidden="true">list</i>Apps
@@ -104,7 +129,8 @@ const old = (
         <div additionalClasses="">
             <div className="left-margin">
                 <h1 className="mdc-typography--display1">Permanent Drawer</h1>
-                <p className="mdc-typography--body1">It sits to the left of this content.It sits to the left of this content.It sits to the left of this content.</p>
+                <p className="mdc-typography--body1">It sits to the left of this content.It sits to the left of this
+                    content.It sits to the left of this content.</p>
             </div>
         </div>
     </div>

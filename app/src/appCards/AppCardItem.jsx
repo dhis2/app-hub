@@ -9,13 +9,13 @@ const AppItem = (props) => {
     const { id, appName, developer, description, appType, requiredDhisVersion } = props.app;
 
     return (
-        <Col span={4} align="middle" additionalClasses="center">
         <Card>
-            <CardTitle title={<Link to={`/app/${id}`}>{appName}</Link>}
-            subtitle={developer.developerName ? developer.developerName : 'Unspecified'} />
-            <Link to={`/app/${id}`}>
+           <Link to={`/app/${id}`}>
             <CardMedia aspectRatio="wide" image="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>
             </Link>
+            <CardTitle title={<Link to={`/app/${id}`}>{appName}</Link>}
+                       subtitle={developer.developerName ? developer.developerName : 'Unspecified'} />
+
             <CardText>
                 <p className="card-text">{description}</p>
 
@@ -24,7 +24,6 @@ const AppItem = (props) => {
                 <Link to={`/app/${id}`}><Button accent label="More" /></Link>
             </CardActions>
         </Card>
-        </Col>
     );
 }
 

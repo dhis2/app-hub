@@ -3,13 +3,7 @@
 html, body {
     background-color: #eeeeee;
     height: 100%;
-}
-#appStore {
-    height:100%;
-}
-
-.app {
-    height: 100%;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
 }
 
 .mdc-card {
@@ -23,13 +17,14 @@ html, body {
 }
 
 .drawer-below-header {
-    position:relative;
+    position: absolute;
     height: auto;
     
 }
 
 .layout-content {
-    padding: 10px;
+    padding: 10px 10px 10px 30px;
+    max-width: 750px;
 }
 
 .full-height {
@@ -67,4 +62,11 @@ a {
     color: rgba(0,0,0,0.870588);
     box-shadow: 0 1px 0 rgba(0,0,0,0.05);
     margin: 5px 0 20px 0;
+}
+
+.customRouterList {
+    text-decoration: none;
+}
+.customRouterListActive {
+    background-color : rgb(238, 238, 238);
 }
