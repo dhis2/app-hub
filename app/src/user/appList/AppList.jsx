@@ -46,9 +46,6 @@ class AppList extends Component {
                     <ToolbarGroup>
                         <ToolbarTitle text="Apps"/>
                     </ToolbarGroup>
-                    <ToolbarGroup>
-                        <
-                    </ToolbarGroup>
 
                 </Toolbar>
                 <Card>
