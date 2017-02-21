@@ -67,6 +67,17 @@ public class AppController
         renderService.toJson( response.getOutputStream(), apps );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping( value = "/myapps", method = RequestMethod.GET )
+    public void getAllAppsByUser( HttpServletRequest request, HttpServletResponse response ) throws IOException
+    {
+        User owner = userService.getCurrentUser();
+
+        List<App> apps = appStoreService.getAllAppsByOwner( owner );
+
+        renderService.toJson( response.getOutputStream(), apps );
+    }
+
     @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping( value = "/all", method = RequestMethod.GET )
     public void getAllApps( HttpServletRequest request, HttpServletResponse response ) throws IOException

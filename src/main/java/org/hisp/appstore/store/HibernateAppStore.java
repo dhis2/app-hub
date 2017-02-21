@@ -74,7 +74,13 @@ public class HibernateAppStore
         return app;
     }
 
-    private Query getHqlQuery ( AppQueryParameters queryParameters )
+    @Override
+    public List<App> getAllAppsByOwner( User owner )
+    {
+        return  getCriteria().add( Restrictions.eq( "owner", owner )).list();
+    }
+
+    private Query getHqlQuery (AppQueryParameters queryParameters )
     {
         String hql = "SELECT DISTINCT app FROM " + APP_TABLE + " app ";
 

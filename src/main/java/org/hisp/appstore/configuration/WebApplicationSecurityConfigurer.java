@@ -61,7 +61,7 @@ public class WebApplicationSecurityConfigurer extends Auth0Config
     protected void authorizeRequests( final HttpSecurity http ) throws Exception
     {
         http.authorizeRequests()
-                .antMatchers( "/css/**", "/fonts/**", "/js/**", "/login" ).permitAll()
+                .antMatchers( "/css/**", "/fonts/**", "/js/**", "/login", "/home" ).permitAll()
                 .antMatchers( securedRoute ).authenticated()
                 .and()
                 .formLogin().loginPage( "/login" )

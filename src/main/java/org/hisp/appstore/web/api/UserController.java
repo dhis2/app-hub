@@ -53,4 +53,14 @@ public class UserController
 
         renderService.toJson( response.getOutputStream(), user );
     }
+
+    @PreAuthorize( "hasRole('ROLE_MANAGER')" )
+    @RequestMapping( method = RequestMethod.GET )
+    public void getUserProfiles( HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        List<User> users = userService.getAll();
+
+        renderService.toJson( response.getOutputStream(), users );
+    }
 }
