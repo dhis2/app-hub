@@ -4,7 +4,7 @@ import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-
+import {approveApp, appsAllLoad, appsApprovedLoad, userAppsLoad} from '../../../actions/actionCreators';
 
 class AppList extends Component {
     constructor(props) {
@@ -22,6 +22,17 @@ class AppList extends Component {
     }
 
     componentDidMount() {
+        const user = this.props.user;
+        if(user) {
+            user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
+        }
+    }
+    componentWillReceiveProps(nextProps) {
+        //Load when user is loaded and no applist has been loaded yet
+        if (nextProps.user && !nextProps.appList) {
+            nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
+
+        }
 
     }
 
@@ -33,15 +44,23 @@ class AppList extends Component {
         });
     }
 
+    handleApprove(app) {
+        console.log(app)
+        this.props.approveApp(app);
+    }
+
     render() {
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
-        const apps = this.props.appList.map((app, i) => (
-            <AppListItem app={app} key={i} />
-        ))
+
+
+        const apps = this.props.appList ? this.props.appList.sort((a, b) => a.appName - b.appName).map((app, i) => (
+                <AppListItem app={app} key={i} handleApprove={this.handleApprove.bind(this, app)}/>
+            )) : []
+
         return (
             <div>
-                <Toolbar style={{backgroundColor:'white', marginBottom:'10px'}}>
+                <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
                     <ToolbarGroup>
                         <ToolbarTitle text="Apps"/>
                     </ToolbarGroup>
@@ -60,9 +79,23 @@ class AppList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    appList: state.appsList.appList,
+    appList: state.user.appList,
+    user: state.user.userInfo
 });
 
-const mapDispatchToProps = (dispatch) => ({})
+const mapDispatchToProps = (dispatch) => ({
+    approveApp(app) {
+        dispatch(approveApp(app))
+    },
 
-export default connect(mapStateToProps, null)(AppList);
+    loadAllApps() {
+        dispatch(appsAllLoad())
+    },
+
+    loadMyApps() {
+        dispatch(userAppsLoad())
+    }
+
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppList);

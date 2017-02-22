@@ -1,9 +1,12 @@
-import React, {Component} from 'react';
+import React, {Component , PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {ListItem} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon';
 import Avatar from 'material-ui/Avatar';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
 
 const appStatus = {
     APPROVED: {
@@ -26,16 +29,30 @@ const AppListItem = (props, state) => {
     const approved = (<FontIcon className="material-icons">check</FontIcon>)
     const pending = (<FontIcon className="material-icons">priority_high</FontIcon>)
     const rejected = (<FontIcon className="material-icons">do_not_disturb_alt</FontIcon>)
-
+    const menu = (
+        <div>
+            {appStatus[status].elem}
+        <IconMenu iconButtonElement={<IconButton><FontIcon className="material-icons">more_vert</FontIcon></IconButton>}>
+            <MenuItem onTouchTap={props.handleApprove} primaryText="Approve" />
+            <MenuItem primaryText="Delete" />
+        </IconMenu>
+        </div>
+    )
     return (
         <Link to={`#/${id}`}>
             <ListItem primaryText={appName}
                       leftAvatar={<Avatar src="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>}
-                      secondaryText={appType} rightIcon={appStatus[status].elem}/>
+                      secondaryText={<p>{developer.developerName} <br /> {appType} </p>}
+                      secondaryTextLines={2}
+                      rightIconButton={menu}>
+            </ListItem>
         </Link>
 
     )
 }
 
-
+AppListItem.propTypes = {
+    app: PropTypes.object.isRequired,
+    handleApprove: PropTypes.func.isRequired
+}
 export default AppListItem;
