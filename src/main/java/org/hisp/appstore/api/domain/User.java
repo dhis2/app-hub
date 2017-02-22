@@ -26,7 +26,7 @@ public class User
     private String email;
 
     private Set<String> auths = new HashSet<>();
-
+    
     public User()
     {
     }
@@ -118,6 +118,12 @@ public class User
     public void setAuths( Set<String> auths )
     {
         this.auths = auths;
+    }
+
+    @JsonProperty( value = "manager" )
+    public boolean isManager()
+    {
+        return this.auths.contains( "ROLE_MANAGER" );
     }
 
     @Override
