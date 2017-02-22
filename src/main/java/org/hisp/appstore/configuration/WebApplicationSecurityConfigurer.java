@@ -46,11 +46,11 @@ public class WebApplicationSecurityConfigurer extends Auth0Config
             {
                 if ( request.getRequestURL().toString().contains( "/api" ))
                 {
-                    response.sendRedirect("/api/403");
+                    response.sendRedirect("/api/401");
                     return;
                 }
 
-                response.sendRedirect( "/403" );
+                response.sendRedirect( "/login" );
             }
         };
 

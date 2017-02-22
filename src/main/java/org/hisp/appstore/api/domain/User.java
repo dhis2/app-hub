@@ -26,7 +26,7 @@ public class User
     private String email;
 
     private Set<String> auths = new HashSet<>();
-    
+
     public User()
     {
     }
