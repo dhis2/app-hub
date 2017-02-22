@@ -6,9 +6,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.FileStorageService;
@@ -28,7 +26,9 @@ public class AmazonS3FileStorageService implements FileStorageService
 {
     private static final Log log = LogFactory.getLog( AmazonS3FileStorageService.class );
 
-    private static final String BUCKET_NAME = "appstore.dhis2.org";
+    private static final String BASE_BUCKET = "appstore.dhis2.org";
+
+    private static final String AMAZON_URL = "s3.amazonaws.com";
 
     private static final ImmutableMap<AppType, String> TYPE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
             .put( AppType.APP_STANDARD, "apps-standard" )
@@ -54,7 +54,7 @@ public class AmazonS3FileStorageService implements FileStorageService
     @Override
     public FileUploadStatus uploadFile( MultipartFile file, AppType type ) throws WebMessageException
     {
-        String bucketName = getBucketName( type );
+        String fullBucketName = getBucketName( type );
 
         FileUploadStatus status = new FileUploadStatus();
 
@@ -67,13 +67,13 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         try
         {
-            request = new PutObjectRequest( bucketName, resourceKey, file.getInputStream(), metadata );
+            request = new PutObjectRequest( fullBucketName, resourceKey, file.getInputStream(), metadata );
             request.setCannedAcl( CannedAccessControlList.PublicRead );
 
             amazonS3Client.putObject( request );
 
             status.setUploaded( true );
-            status.setDownloadUrl( amazonS3Client.getResourceUrl( bucketName, resourceKey ) );
+            status.setDownloadUrl( getDownloadUrl( type, resourceKey ) );
         }
         catch ( AmazonServiceException ase )
         {
@@ -94,7 +94,7 @@ public class AmazonS3FileStorageService implements FileStorageService
             throw new WebMessageException( WebMessageUtils.conflict( ioE.getMessage() ) );
         }
 
-        log.info( " File Uploaded " );
+        log.info( "File uploaded!" );
 
         return status;
     }
@@ -113,6 +113,11 @@ public class AmazonS3FileStorageService implements FileStorageService
 
     private String getBucketName( AppType type )
     {
-        return BUCKET_NAME+ "/" + TYPE_FOLDER_MAPPER.get( type );
+        return BASE_BUCKET+ "/" + TYPE_FOLDER_MAPPER.get( type );
+    }
+
+    private String getDownloadUrl( AppType type, String resourceKey )
+    {
+        return "https://" + BASE_BUCKET + "." + AMAZON_URL + "/" + TYPE_FOLDER_MAPPER.get( type ) + "/" + resourceKey;
     }
 }

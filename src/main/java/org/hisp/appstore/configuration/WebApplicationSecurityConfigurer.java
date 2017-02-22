@@ -54,11 +54,11 @@ public class WebApplicationSecurityConfigurer extends Auth0Config
             {
                 if ( request.getRequestURL().toString().contains( "/api" ))
                 {
-                    response.sendRedirect("/api/403");
+                    response.sendRedirect("/api/401");
                     return;
                 }
 
-                response.sendRedirect( "/403" );
+                response.sendRedirect( "/login" );
             }
         };
 
@@ -69,7 +69,7 @@ public class WebApplicationSecurityConfigurer extends Auth0Config
     protected void authorizeRequests( final HttpSecurity http ) throws Exception
     {
         http.authorizeRequests()
-                .antMatchers( "/css/**", "/fonts/**", "/js/**", "/login" ).permitAll()
+                .antMatchers( "/css/**", "/fonts/**", "/js/**", "/login", "/home" ).permitAll()
                 .antMatchers( securedRoute ).authenticated()
                 .and()
                 .formLogin().loginPage( "/login" )

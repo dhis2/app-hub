@@ -20,8 +20,6 @@
 
         <property name="description"/>
 
-        <property name="requiredDhisVersion"/>
-
         <component name="developer" class="org.hisp.appstore.api.domain.Developer">
 
             <property name="developerName"/>

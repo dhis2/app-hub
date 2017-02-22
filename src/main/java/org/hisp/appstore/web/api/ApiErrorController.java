@@ -24,4 +24,11 @@ public class ApiErrorController
     {
         throw new WebMessageException( WebMessageUtils.forbidden( "You do not have access to this resource" ));
     }
+
+    @RequestMapping( value = "/401", method = RequestMethod.GET )
+    public String loginRequired(HttpServletRequest request, HttpServletResponse response,
+                              Model model, Principal principal ) throws WebMessageException
+    {
+        throw new WebMessageException( WebMessageUtils.forbidden( "Anonymous user not allowed" ));
+    }
 }

@@ -30,6 +30,8 @@ public class AppController
 
     private static final String NOT_FOUND = "No App found with id: ";
 
+    private static final String ACCESS_DENIED = "Access denied for App with id ";
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -65,6 +67,17 @@ public class AppController
         renderService.toJson( response.getOutputStream(), apps );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping( value = "/myapps", method = RequestMethod.GET )
+    public void getAllAppsByUser( HttpServletRequest request, HttpServletResponse response ) throws IOException
+    {
+        User owner = userService.getCurrentUser();
+
+        List<App> apps = appStoreService.getAllAppsByOwner( owner );
+
+        renderService.toJson( response.getOutputStream(), apps );
+    }
+
     @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping( value = "/all", method = RequestMethod.GET )
     public void getAllApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
@@ -89,7 +102,7 @@ public class AppController
 
         if ( !AppStatus.APPROVED.equals( app.getStatus()) && !userAuths.contains( "ROLE_MANAGER" ))
         {
-            throw new WebMessageException( WebMessageUtils.forbidden( "Access denied for App with id " + appUid ) );
+            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + appUid ) );
         }
 
         renderService.toJson( response.getOutputStream(), app );
@@ -188,6 +201,28 @@ public class AppController
         appStoreService.setAppApproval( app, status );
 
         renderService.renderOk( response, request, "Status changed for app: " + app.getAppName() );
+    }
+    // -------------------------------------------------------------------------
+    // PUT
+    // -------------------------------------------------------------------------
+
+    @PreAuthorize( "hasRole('ROLE_USER')" )
+    @RequestMapping ( method = RequestMethod.PUT )
+    public void updateApp( HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        User currentUser = userService.getCurrentUser();
+
+        App app = renderService.fromJson( request.getInputStream(), App.class );
+
+        if ( !app.getOwner().equals( currentUser ) )
+        {
+            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + app.getUid() ) );
+        }
+
+        appStoreService.updateApp( app );
+
+        renderService.renderOk( response, request, "App updated" );
     }
 
     // -------------------------------------------------------------------------

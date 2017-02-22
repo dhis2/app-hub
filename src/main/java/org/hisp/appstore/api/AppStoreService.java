@@ -23,6 +23,8 @@ public interface AppStoreService
 
     List<App> getAllAppsByStatus( AppStatus status );
 
+    List<App> getAllAppsByOwner( User owner );
+
     void updateApp( App app );
 
     void deleteApp( App app );

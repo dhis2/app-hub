@@ -120,6 +120,12 @@ public class User
         this.auths = auths;
     }
 
+    @JsonProperty( value = "manager" )
+    public boolean isManager()
+    {
+        return this.auths.contains( "ROLE_MANAGER" );
+    }
+
     @Override
     public String toString()
     {

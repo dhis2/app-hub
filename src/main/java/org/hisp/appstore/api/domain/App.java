@@ -26,8 +26,6 @@ public class App
 
     private String description;
 
-    private String requiredDhisVersion;
-
     private Developer developer;
 
     private User owner;
@@ -64,17 +62,6 @@ public class App
     public void setDescription( String description )
     {
         this.description = description;
-    }
-
-    @JsonProperty
-    public String getRequiredDhisVersion()
-    {
-        return requiredDhisVersion;
-    }
-
-    public void setRequiredDhisVersion( String requiredDhisVersion )
-    {
-        this.requiredDhisVersion = requiredDhisVersion;
     }
 
     @JsonProperty

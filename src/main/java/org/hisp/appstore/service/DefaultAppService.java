@@ -91,6 +91,12 @@ public class DefaultAppService
     }
 
     @Override
+    public List<App> getAllAppsByOwner( User owner )
+    {
+        return appStore.getAllAppsByOwner( owner );
+    }
+
+    @Override
     public void updateApp( App app )
     {
         appStore.update( app );
