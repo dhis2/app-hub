@@ -54,7 +54,7 @@ class AppList extends Component {
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
 
 
-        const apps = this.props.appList ? this.props.appList.sort((a, b) => a.appName - b.appName).map((app, i) => (
+        const apps = this.props.appList ? this.props.appList.map((app, i) => (
                 <AppListItem app={app} key={i} handleApprove={this.handleApprove.bind(this, app)}/>
             )) : []
 
