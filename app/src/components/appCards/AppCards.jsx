@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import AppCardItem from './AppCardItem';
-import Grid from '../material/Grid/Grid';
-import Col from '../material/Grid/Col';
+import Grid from '../../material/Grid/Grid';
+import Col from '../../material/Grid/Col';
 
 
 class AppCards extends Component {

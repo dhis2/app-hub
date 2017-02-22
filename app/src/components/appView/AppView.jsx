@@ -1,9 +1,9 @@
 import React, {Component, Proptypes} from 'react';
 import {connect} from 'react-redux';
-import Toolbar from '../material/Toolbar/Toolbar';
-import ToolbarSection from '../material/Toolbar/ToolbarSection';
-import Grid from '../material/Grid/Grid';
-import Col from '../material/Grid/Col';
+import Toolbar from '../../material/Toolbar/Toolbar';
+import ToolbarSection from '../../material/Toolbar/ToolbarSection';
+import Grid from '../../material/Grid/Grid';
+import Col from '../../material/Grid/Col';
 import { Link } from 'react-router-dom';
 import { Redirect, Route } from 'react-router-dom';
 import AppCards from '../appCards/AppCards'

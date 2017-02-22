@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {ListItem} from 'material-ui/List';
-import {withReactRouterLink} from '../../utils/RRHOC';
 import FontIcon from 'material-ui/FontIcon';
-const RRListItem = withReactRouterLink(ListItem);
 import Avatar from 'material-ui/Avatar';
 
 const appStatus = {

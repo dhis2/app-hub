@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
-import {withReactRouterLink} from '../../utils/RRHOC';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 

@@ -1,23 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Grid from '../material/Grid/Grid';
-import Col from '../material/Grid/Col';
-import Layout from 'react-toolbox/lib/layout/Layout';
-import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
-import Panel from 'react-toolbox/lib/layout/Panel';
-import Navigation from 'react-toolbox/lib/navigation/Navigation';
+import Grid from '../../material/Grid/Grid';
+import Col from '../../material/Grid/Col';
 import FontIcon from 'material-ui/FontIcon';
-import Card from 'react-toolbox/lib/card/Card';
 import {Link, Route} from 'react-router-dom';
-import LinkTool from 'react-toolbox/lib/link/Link';
-//import List from 'react-toolbox/lib/list/List';
-//import ListItem from 'react-toolbox/lib/list/ListItem';
+
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
-import {withReactRouterLink} from '../utils/RRHOC';
-
-const RRListItem = withReactRouterLink(ListItem);
 
 class UserView extends Component {
     render() {
@@ -64,17 +54,7 @@ class UserView extends Component {
 
             </Grid>
         )
-        console.log(this.props)
-        const menu = (
-            <div>
-                <RRListItem to={this.props.match.url} primaryText="Apps"
-                            leftIcon={<FontIcon className="material-icons">list</FontIcon>}/>
-                <RRListItem to={this.props.match.url + "/upload"} primaryText="Upload"
-                            leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}
-                            className="customRouterList" activeClassName="customRouterListActive"/>
-            </div>
-        )
-        console.log(menu)
+       
         return (
             <Grid>
                 <Col span={2}>
