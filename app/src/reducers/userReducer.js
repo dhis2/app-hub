@@ -20,6 +20,16 @@ function userReducer(state = {appList: [], userInfo: {}}, action) {
                 appList
             }
         }
+        case actionTypes.APP_LOADED: {
+            const appId = action.payload.id;
+            return {
+                ...state,
+                appList: {
+                    ...state.appList,
+                    [appId]: action.payload,
+                }
+            }
+        }
         case actionTypes.USER_LOADED: {
             return {
                 ...state,

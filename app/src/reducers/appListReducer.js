@@ -8,7 +8,7 @@ function appsListReducer(state = {appList: []}, action) {
                 error: action.payload
             }
         }
-        case actionTypes.APPS_ALL_LOADED:
+
         case actionTypes.APPS_APPROVED_LOADED:
         {
             return {

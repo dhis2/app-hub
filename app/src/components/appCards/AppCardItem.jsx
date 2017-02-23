@@ -6,7 +6,7 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'material-ui/C
 import Button from 'react-toolbox/lib/button/Button';
 
 const AppItem = (props) => {
-    const { id, appName, developer, description, appType, requiredDhisVersion } = props.app;
+    const { id, name, developer, description, appType, requiredDhisVersion } = props.app;
 
     const mediaStyle = {
         backgroundImage: 'url("https://avatars1.githubusercontent.com/u/13482715?v=3&s=400")',
@@ -22,8 +22,8 @@ const AppItem = (props) => {
             <CardMedia style={mediaStyle}>
             </CardMedia>
             </Link>
-            <CardTitle title={<Link to={`/app/${id}`}>{appName}</Link>}
-                       subtitle={developer.developerName ? developer.developerName : 'Unspecified'} />
+            <CardTitle title={<Link to={`/app/${id}`}>{name}</Link>}
+                       subtitle={(<span>{developer.name ? developer.name : 'Unspecified'} <br /> {appType} </span>)}/>
             <CardActions>
                 <Link to={`/app/${id}`}><Button accent label="More" /></Link>
             </CardActions>

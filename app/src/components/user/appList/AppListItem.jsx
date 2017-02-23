@@ -7,7 +7,7 @@ import Avatar from 'material-ui/Avatar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
-
+import { withRouter } from 'react-router';
 const appStatus = {
     APPROVED: {
         alt: 'Approved',
@@ -33,7 +33,7 @@ const rightIconsStyle = {
 }
 
 const AppListItem = (props, state) => {
-    const {id, appName, developer, description, appType, status} = props.app;
+    const {id, name, developer, description, appType, status} = props.app;
     const approved = (<FontIcon className="material-icons">check</FontIcon>)
     const pending = (<FontIcon className="material-icons">priority_high</FontIcon>)
     const rejected = (<FontIcon className="material-icons">do_not_disturb_alt</FontIcon>)
@@ -49,21 +49,20 @@ const AppListItem = (props, state) => {
     )
 
     const listItemProps = {
-        primaryText: appName,
+        primaryText: name,
         leftAvatar: (<Avatar src="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>),
-        secondaryText: (<p>{developer.developerName} <br /> {appType} </p>),
+        secondaryText: (<p>{developer.name} <br /> {appType} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
+        onTouchTap: () => props.push(`${props.match.url}/${id}`)
     }
 
     return (
-        <Link to={`#/${id}`}>
             <ListItem {...listItemProps} >
                 <div style={rightIconsStyle}>
                     {appStatus[status].elem}
                 </div>
             </ListItem>
-        </Link>
 
     )
 }
@@ -74,4 +73,4 @@ AppListItem.propTypes = {
     handleReject: PropTypes.func,
     isManager: PropTypes.bool,
 }
-export default AppListItem;
+export default withRouter(AppListItem);

@@ -4,7 +4,7 @@ import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import FontIcon from 'material-ui/FontIcon';
 import {Link, Route} from 'react-router-dom';
-
+import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
@@ -21,6 +21,7 @@ class UserView extends Component {
                     <Route exact path={`${this.props.match.url}`} component={AppList}>
                     </Route>
                     <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
+                    <Route path={`${this.props.match.url}/:appId`} component={UserAppView}/>
                 </div>
             ) : null;
         return (

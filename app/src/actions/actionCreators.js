@@ -34,6 +34,10 @@ export const userLoaded = createActioncreator(actions.USER_LOADED);
 export const userAppsLoad = createActioncreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActioncreator(actions.USER_APPS_LOADED);
 
+export const appLoad = createActioncreator(actions.APP_LOAD);
+export const appLoaded = createActioncreator(actions.APP_LOADED);
+export const appError = createActioncreator(actions.APP_ERROR);
+
 function createActioncreator(type) {
     return (payload) => ({
         type,

@@ -32,11 +32,11 @@ class UserView extends Component {
 
     handleUpload() {
         const data = {
-                appName: this.state.appName,
+                name: this.state.appName,
                 description: this.state.description,
                 developer: {
-                    developerName: this.state.developerName,
-                    developerEmail: this.state.developerEmail
+                    name: this.state.developerName,
+                    email: this.state.developerEmail
                 },
                 versions: [{version: this.state.version,
                     minDhisVersion: this.state.minDhisVersion,

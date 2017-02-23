@@ -40,6 +40,25 @@ const loadAppsApproved = (action$) => action$
             }));
     })
 
+const loadApp = (action$) => action$
+    .ofType(actions.APP_LOAD)
+    .concatMap(action => {
+        const fetchOptions = {
+            // Includes the credentials for the requested origin (So an app store cookie if it exists)
+            credentials: 'include',
+        };
+
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId, fetchOptions)
+            .then(response => response.ok ? response : Promise.reject(response))
+            .then(response => response.json())
+            .then(app => actionCreators.appLoaded(app))
+            .catch(error => ({
+                type: actions.APP_ERROR,
+                payload: error,
+            }));
+    })
+
+
 const approveApp = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
@@ -95,4 +114,4 @@ const userApps = (action$) => action$
             }));
     })
 
-export default combineEpics(loadAppsAll, loadAppsApproved, approveApp, user, userApps)
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, user, userApps)

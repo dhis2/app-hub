@@ -5,7 +5,7 @@ import {Card, CardText} from 'material-ui/Card';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import {approveApp, appsAllLoad, setAppApproval, userAppsLoad} from '../../../actions/actionCreators';
-import { mapValues, sortBy } from 'lodash';
+import {mapValues, sortBy} from 'lodash';
 class AppList extends Component {
     constructor(props) {
         super(props);
@@ -23,14 +23,15 @@ class AppList extends Component {
 
     componentDidMount() {
         const user = this.props.user;
-        if(user) {
+        if (user) {
             user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
         }
     }
+
     componentWillReceiveProps(nextProps) {
         //Load when user is loaded and no applist has been loaded yet
         if (nextProps.user && !nextProps.appList) {
-            nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
+          //  nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
 
         }
 
@@ -44,9 +45,9 @@ class AppList extends Component {
         });
     }
 
-    handleApproval(app,type) {
+    handleApproval(app, type) {
         console.log(app)
-        switch(type) {
+        switch (type) {
             case 'APPROVE': {
                 this.props.approveApp({app, status: 'APPROVED'});
                 break;
@@ -65,16 +66,14 @@ class AppList extends Component {
     render() {
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
-
         const appList = this.props.appList;
-       /* const apps = appList ? Object.keys(appList).map((app, i) => (
-                <AppListItem app={appList[app]} key={i} handleApprove={this.handleApproval.bind(this, appList[app],'APPROVE')}
-                handleReject={this.handleApproval.bind(this, appList[app], 'REJECT')} />
-            )) : [] */
-       const apps = sortBy(appList, ['appName']).map((app, i) => (
-           <AppListItem app={app} key={i} isManager={this.props.user.manager} handleApprove={this.handleApproval.bind(this, app,'APPROVE')}
-                        handleReject={this.handleApproval.bind(this, app, 'REJECT')} />
-       ))
+
+        const apps = sortBy(appList, ['name']).map((app, i) => (
+            <AppListItem app={app} key={i} isManager={this.props.user.manager}
+                         match={this.props.match}
+                         handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
+                         handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
+        ))
 
         return (
             <div>
