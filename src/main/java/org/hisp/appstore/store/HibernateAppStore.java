@@ -82,32 +82,20 @@ public class HibernateAppStore
 
     private Query getHqlQuery (AppQueryParameters queryParameters )
     {
-        String hql = "SELECT DISTINCT app FROM " + APP_TABLE + " app ";
+        String hql = "SELECT DISTINCT ap FROM " + APP_TABLE + " ap ";
 
         boolean where = false;
 
-        if ( queryParameters.hasReqDhisVersion() )
-        {
-            hql += " WHERE app.requiredDhisVersion = :requireddhisversion ";
-
-            where = true;
-        }
-
         if ( queryParameters.hasType() )
         {
-            hql += where ? " AND app.appType = :type" : " WHERE app.appType = :type";
+            hql += where ? " AND ap.appType = :type" : " WHERE ap.appType = :type";
 
             where = true;
         }
 
-        hql += where ? " AND app.status = :status" : " WHERE app.status = :status";
+        hql += where ? " AND ap.status = :status" : " WHERE ap.status = :status";
 
         Query query = sessionFactory.getCurrentSession().createQuery( hql );
-
-        if ( queryParameters.hasReqDhisVersion() )
-        {
-            query.setString( "requireddhisversion", queryParameters.getReqDhisVersion() );
-        }
 
         if ( queryParameters.hasType() )
         {

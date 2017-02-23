@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="org.hisp.appstore.api.domain.App" table="apptable">
+    <class name="org.hisp.appstore.api.domain.App" table="app">
 
         <id name="id" column="appid">
             <generator class="native"/>

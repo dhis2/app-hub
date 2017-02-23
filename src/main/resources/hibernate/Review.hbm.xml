@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="org.hisp.appstore.api.domain.Review" table="reviewtable">
+    <class name="org.hisp.appstore.api.domain.Review" table="review">
 
         <id name="id" column="reviewid">
             <generator class="native" />
