@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 
-function appsListReducer(state = {}, action) {
+function appsListReducer(state = {appList: []}, action) {
     switch (action.type) {
         case actionTypes.APPS_ALL_ERROR: {
             return {

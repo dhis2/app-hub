@@ -4,8 +4,8 @@ import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import {approveApp, appsAllLoad, appsApprovedLoad, userAppsLoad} from '../../../actions/actionCreators';
-
+import {approveApp, appsAllLoad, setAppApproval, userAppsLoad} from '../../../actions/actionCreators';
+import { mapValues, sortBy } from 'lodash';
 class AppList extends Component {
     constructor(props) {
         super(props);
@@ -44,19 +44,37 @@ class AppList extends Component {
         });
     }
 
-    handleApprove(app) {
+    handleApproval(app,type) {
         console.log(app)
-        this.props.approveApp(app);
+        switch(type) {
+            case 'APPROVE': {
+                this.props.approveApp({app, status: 'APPROVED'});
+                break;
+            }
+
+            case 'REJECT': {
+                this.props.approveApp({app, status: 'NOT_APPROVED'})
+                break;
+            }
+
+
+        }
+
     }
 
     render() {
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
 
-
-        const apps = this.props.appList ? this.props.appList.map((app, i) => (
-                <AppListItem app={app} key={i} handleApprove={this.handleApprove.bind(this, app)}/>
-            )) : []
+        const appList = this.props.appList;
+       /* const apps = appList ? Object.keys(appList).map((app, i) => (
+                <AppListItem app={appList[app]} key={i} handleApprove={this.handleApproval.bind(this, appList[app],'APPROVE')}
+                handleReject={this.handleApproval.bind(this, appList[app], 'REJECT')} />
+            )) : [] */
+       const apps = sortBy(appList, ['appName']).map((app, i) => (
+           <AppListItem app={app} key={i} isManager={this.props.user.manager} handleApprove={this.handleApproval.bind(this, app,'APPROVE')}
+                        handleReject={this.handleApproval.bind(this, app, 'REJECT')} />
+       ))
 
         return (
             <div>
@@ -84,8 +102,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    approveApp(app) {
-        dispatch(approveApp(app))
+    approveApp(payload) {
+        dispatch(setAppApproval(payload))
     },
 
     loadAllApps() {

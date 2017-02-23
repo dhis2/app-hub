@@ -1,18 +1,13 @@
 import * as actions from '../constants/actionTypes';
 
-
 export function appsAllLoad() {
     return {
         type: actions.APPS_ALL_LOAD
     }
 }
 
-export function appsAllLoaded(payload) {
-    return {
-        type: actions.APPS_ALL_LOADED,
-        payload
-    }
-}
+export const appsAllLoaded = createActioncreator(actions.APPS_ALL_LOADED);
+
 
 export function appsApprovedLoad() {
     return {
@@ -20,20 +15,14 @@ export function appsApprovedLoad() {
     }
 }
 
-export function appsApprovedLoaded(payload) {
-    return {
-        type: actions.APPS_APPROVED_LOADED,
-        payload
-    }
-}
-
-export const approveApp = payload => ({
-    type: actions.APPROVE_APP,
+export const appsApprovedLoaded = createActioncreator(actions.APPS_APPROVED_LOADED);
+export const setAppApproval = payload => ({
+    type: actions.SET_APPROVAL_APP,
     payload
 })
 
-export const approveAppSuccess = payload => ({
-    type: actions.APPROVE_APP_SUCCESS,
+export const setAppApprovalSuccess = payload => ({
+    type: actions.SET_APPROVAL_APP_SUCCESS,
     payload
 })
 
@@ -41,16 +30,13 @@ export const userLoad = () =>({
     type: actions.USER_LOAD
 })
 
-export const userLoaded = (payload) => ({
-    type: actions.USER_LOADED,
-    payload
-})
+export const userLoaded = createActioncreator(actions.USER_LOADED);
+export const userAppsLoad = createActioncreator(actions.USER_APPS_LOAD);
+export const userAppsLoaded = createActioncreator(actions.USER_APPS_LOADED);
 
-export const userAppsLoad = () => ({
-    type: actions.USER_APPS_LOAD
-})
-
-export const userAppsLoaded = (payload) => ({
-    type: actions.USER_APPS_LOADED,
-    payload
-})
+function createActioncreator(type) {
+    return (payload) => ({
+        type,
+        payload
+    });
+}

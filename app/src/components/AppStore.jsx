@@ -15,6 +15,8 @@ import {Provider} from 'react-redux';
 import store from '../store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
+
+
 export default function AppStore() {
     return (
 
@@ -25,8 +27,13 @@ export default function AppStore() {
                     <ThemeProvider theme={themeRT}>
                     <div className="app">
                         <Header />
+
+
                         <Route exact path="/" component={AppCards}/>
                         <Route path='/app/:appId' component={AppView}/>
+
+
+
                         <Route path='/user/' component={UserView}/>
                         <main>
                             {/* Route provider */}

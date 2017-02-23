@@ -41,7 +41,7 @@ const loadAppsApproved = (action$) => action$
     })
 
 const approveApp = (action$) => action$
-    .ofType(actions.APPROVE_APP)
+    .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
         const fetchOptions = {
             // Includes the credentials for the requested origin (So an app store cookie if it exists)
@@ -49,12 +49,12 @@ const approveApp = (action$) => action$
             method: 'POST'
         };
 
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.id+'/approval?status=APPROVED', fetchOptions)
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.app.id+'/approval?status='+action.payload.status, fetchOptions)
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
-            .then(resp => actionCreators.approveAppSuccess({...action.payload, status: 'APPROVED'}))
+            .then(resp => actionCreators.setAppApprovalSuccess(action.payload))
             .catch(error => ({
-                type: actions.APPROVE_APP_ERROR,
+                type: actions.SET_APPROVAL_APP_ERROR,
                 payload: error,
             }));
     })

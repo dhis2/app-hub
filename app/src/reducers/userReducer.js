@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 
-function userReducer(state = {}, action) {
+function userReducer(state = {appList: [], userInfo: {}}, action) {
     switch (action.type) {
         case actionTypes.APPS_APPROVED_ERROR: {
             return {
@@ -11,9 +11,13 @@ function userReducer(state = {}, action) {
         case actionTypes.APPS_ALL_LOADED:
         case actionTypes.USER_APPS_LOADED:
         {
+            const appList = {}
+            action.payload.map((app, i) => {
+                appList[app.id] = app
+            })
             return {
                 ...state,
-                appList: action.payload
+                appList
             }
         }
         case actionTypes.USER_LOADED: {
@@ -22,14 +26,20 @@ function userReducer(state = {}, action) {
                 userInfo: action.payload,
             }
         }
-        case actionTypes.APPROVE_APP_SUCCESS: {
+        case actionTypes.SET_APPROVAL_APP_SUCCESS: {
+            const appId = action.payload.app.id;
+            const app = state.appList[appId];
             return {
                 ...state,
-                appList: [
+                appList: {
                     ...state.appList,
-                    action.payload
-                ]
+                    [appId]: {
+                        ...app,
+                        status: action.payload.status
+                    }
+                }
             }
+
         }
     }
     return state;
