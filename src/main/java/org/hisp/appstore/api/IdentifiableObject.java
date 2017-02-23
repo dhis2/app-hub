@@ -21,4 +21,6 @@ public interface IdentifiableObject
     Date getLastUpdated();
 
     void setLastUpdated( Date updated );
+
+    void mergeWith( IdentifiableObject other );
 }

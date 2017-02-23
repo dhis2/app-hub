@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="org.hisp.appstore.api.domain.App" table="apptable">
+    <class name="org.hisp.appstore.api.domain.App" table="app">
 
         <id name="id" column="appid">
             <generator class="native"/>
@@ -16,7 +16,7 @@
 
         <property name="lastUpdated" />
 
-        <property name="appName" not-null="true"/>
+        <property name="name" not-null="true"/>
 
         <property name="description"/>
 
@@ -28,10 +28,7 @@
 
             <property name="organisation"/>
 
-            <set name="emailAddresses" table="developer_emailAddresses" fetch="select" lazy="false">
-                <key column="developeremailaddressid"/>
-                <element type="text" column="email"/>
-            </set>
+            <property name="email" />
 
         </component>
 

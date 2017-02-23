@@ -121,7 +121,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( "Status changed for " + app.getAppName() );
+        log.info( "Status changed for " + app.getName() );
     }
 
     @Override

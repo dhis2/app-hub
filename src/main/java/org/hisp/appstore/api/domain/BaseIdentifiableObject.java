@@ -71,6 +71,12 @@ public class BaseIdentifiableObject
     }
 
     @Override
+    public void mergeWith( IdentifiableObject other )
+    {
+
+    }
+
+    @Override
     public int hashCode()
     {
         int result = getUid() != null ? getUid().hashCode() : 0;
