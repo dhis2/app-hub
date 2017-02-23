@@ -9,6 +9,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.hisp.appstore.api.IdentifiableObject;
 
 import javax.xml.crypto.Data;
 import java.io.Serializable;
@@ -128,5 +129,25 @@ public class App
     public void setStatus( AppStatus status )
     {
         this.status = status;
+    }
+
+    @Override
+    public void mergeWith( IdentifiableObject other )
+    {
+        App app;
+
+        if ( other.getClass().isInstance( this ))
+        {
+            app = (App) other;
+
+            name = app.getName() != null ? app.getName() : name;
+            description = app.getDescription() != null ? app.getDescription() : description;
+            developer = app.getDeveloper() != null ? app.getDeveloper() : developer;
+            owner = app.getOwner() != null ? app.getOwner() : owner;
+            appType = app.getAppType() != null ? app.getAppType() : appType;
+            versions = app.getVersions() != null && !app.getVersions().isEmpty() ? app.getVersions() : versions;
+            reviews = app.getReviews() != null && !app.getReviews().isEmpty() ? app.getReviews() : reviews;
+            status = app.getStatus() != null ? app.getStatus() : status;
+        }
     }
 }

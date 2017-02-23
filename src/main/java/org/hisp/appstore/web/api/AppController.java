@@ -1,6 +1,7 @@
 package org.hisp.appstore.web.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Files;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
@@ -137,6 +138,9 @@ public class AppController
                            HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
+        log.info( Files.getFileExtension( file.getOriginalFilename()) );
+
+
         appStoreService.uploadApp( app, file );
 
         renderService.toJson( response.getOutputStream(), "App Uploaded");
@@ -207,20 +211,30 @@ public class AppController
     // -------------------------------------------------------------------------
 
     @PreAuthorize( "hasRole('ROLE_USER')" )
-    @RequestMapping ( method = RequestMethod.PUT )
-    public void updateApp( HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+    @RequestMapping ( value = "/{uid}", method = RequestMethod.PUT )
+    public void updateApp( @PathVariable( "uid" ) String appUid,
+                           HttpServletResponse response, HttpServletRequest request )
+                          throws IOException, WebMessageException
     {
-        User currentUser = userService.getCurrentUser();
+        App persistedApp = appStoreService.getApp( appUid );
 
-        App app = renderService.fromJson( request.getInputStream(), App.class );
-
-        if ( !app.getOwner().equals( currentUser ) )
+        if ( persistedApp == null )
         {
-            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + app.getUid() ) );
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
-        appStoreService.updateApp( app );
+        User currentUser = userService.getCurrentUser();
+
+        if ( !persistedApp.getOwner().equals( currentUser ) )
+        {
+            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + persistedApp.getUid() ) );
+        }
+
+        App updatedApp = renderService.fromJson( request.getInputStream(), App.class );
+
+        persistedApp.mergeWith( updatedApp );
+
+        appStoreService.updateApp( persistedApp );
 
         renderService.renderOk( response, request, "App updated" );
     }

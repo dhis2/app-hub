@@ -13,17 +13,17 @@ public class Developer
 {
     private String developerName;
 
-    private String developerOrganisation;
+    private String organisation;
 
-    private String developerAddress;
+    private String address;
 
-    private String deverloperEmailAddress;
+    private String email;
 
     public Developer()
     {
     }
 
-    @JsonProperty
+    @JsonProperty( value = "name" )
     public String getDeveloperName()
     {
         return developerName;
@@ -34,36 +34,36 @@ public class Developer
         this.developerName = developerName;
     }
 
-    @JsonProperty
-    public String getDeveloperOrganisation()
+    @JsonProperty( value = "organisation" )
+    public String getOrganisation()
     {
-        return developerOrganisation;
+        return organisation;
     }
 
-    public void setDeveloperOrganisation( String developerOrganisation )
+    public void setOrganisation( String organisation )
     {
-        this.developerOrganisation = developerOrganisation;
+        this.organisation = organisation;
     }
 
-    @JsonProperty
-    public String getDeverloperEmailAddress()
+    @JsonProperty( value = "email" )
+    public String getEmail()
     {
-        return deverloperEmailAddress;
+        return email;
     }
 
-    public void setDeverloperEmailAddress( String deverloperEmailAddress )
+    public void setEmail( String email )
     {
-        this.deverloperEmailAddress = deverloperEmailAddress;
+        this.email = email;
     }
 
-    @JsonProperty
-    public String getDeveloperAddress()
+    @JsonProperty( value = "address" )
+    public String getAddress()
     {
-        return developerAddress;
+        return address;
     }
 
-    public void setDeveloperAddress( String developerAddress )
+    public void setAddress( String address )
     {
-        this.developerAddress = developerAddress;
+        this.address = address;
     }
 }

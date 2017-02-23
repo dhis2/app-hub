@@ -24,11 +24,11 @@
 
             <property name="developerName"/>
 
-            <property name="developerAddress"/>
+            <property name="address"/>
 
-            <property name="developerOrganisation"/>
+            <property name="organisation"/>
 
-            <property name="deverloperEmailAddress" />
+            <property name="email" />
 
         </component>
 
