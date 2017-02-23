@@ -299,7 +299,7 @@ public class AppController
     {
         User currentUser = userService.getCurrentUser();
 
-        if ( !currentUser.equals( app.getOwner() ) )
+        if ( !currentUser.equals( app.getOwner() ) && !currentUser.isManager() )
         {
             throw new WebMessageException( WebMessageUtils.denied( "Access denied" ) );
         }
