@@ -200,7 +200,7 @@ public class AppController
 
         appStoreService.setAppApproval( app, status );
 
-        renderService.renderOk( response, request, "Status changed for app: " + app.getAppName() );
+        renderService.renderOk( response, request, "Status changed for app: " + app.getName() );
     }
     // -------------------------------------------------------------------------
     // PUT

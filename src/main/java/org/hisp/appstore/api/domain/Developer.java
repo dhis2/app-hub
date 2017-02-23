@@ -13,11 +13,11 @@ public class Developer
 {
     private String developerName;
 
-    private String organisation;
+    private String developerOrganisation;
 
-    private String address;
+    private String developerAddress;
 
-    private Set<String> emailAddresses = Sets.newHashSet();
+    private String deverloperEmailAddress;
 
     public Developer()
     {
@@ -35,32 +35,35 @@ public class Developer
     }
 
     @JsonProperty
-    public String getOrganisation() {
-        return organisation;
+    public String getDeveloperOrganisation()
+    {
+        return developerOrganisation;
     }
 
-    public void setOrganisation( String organisation ) {
-        this.organisation = organisation;
+    public void setDeveloperOrganisation( String developerOrganisation )
+    {
+        this.developerOrganisation = developerOrganisation;
     }
 
     @JsonProperty
-    public String getAddress() {
-        return address;
+    public String getDeverloperEmailAddress()
+    {
+        return deverloperEmailAddress;
     }
 
-    public void setAddress( String address )
+    public void setDeverloperEmailAddress( String deverloperEmailAddress )
     {
-        this.address = address;
+        this.deverloperEmailAddress = deverloperEmailAddress;
     }
 
     @JsonProperty
-    public Set<String> getEmailAddresses()
+    public String getDeveloperAddress()
     {
-        return emailAddresses;
+        return developerAddress;
     }
 
-    public void setEmailAddresses( Set<String> emailAddresses )
+    public void setDeveloperAddress( String developerAddress )
     {
-        this.emailAddresses = emailAddresses;
+        this.developerAddress = developerAddress;
     }
 }

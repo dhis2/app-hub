@@ -22,7 +22,7 @@ public class App
     extends BaseIdentifiableObject
         implements Serializable
 {
-    private String appName;
+    private String name;
 
     private String description;
 
@@ -43,14 +43,14 @@ public class App
     }
 
     @JsonProperty
-    public String getAppName()
+    public String getName()
     {
-        return appName;
+        return name;
     }
 
-    public void setAppName( String appName )
+    public void setName( String name )
     {
-        this.appName = appName;
+        this.name = name;
     }
 
     @JsonProperty

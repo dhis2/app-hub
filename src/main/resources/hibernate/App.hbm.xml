@@ -16,7 +16,7 @@
 
         <property name="lastUpdated" />
 
-        <property name="appName" not-null="true"/>
+        <property name="name" not-null="true"/>
 
         <property name="description"/>
 
@@ -24,14 +24,11 @@
 
             <property name="developerName"/>
 
-            <property name="address"/>
+            <property name="developerAddress"/>
 
-            <property name="organisation"/>
+            <property name="developerOrganisation"/>
 
-            <set name="emailAddresses" table="developer_emailAddresses" fetch="select" lazy="false">
-                <key column="developeremailaddressid"/>
-                <element type="text" column="email"/>
-            </set>
+            <property name="deverloperEmailAddress" />
 
         </component>
 
