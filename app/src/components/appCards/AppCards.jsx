@@ -4,7 +4,7 @@ import AppCardItem from './AppCardItem';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import { appsAllLoad, appsApprovedLoad } from '../../actions/actionCreators';
-
+import { values } from 'lodash';
 class AppCards extends Component {
 
     componentDidMount() {
@@ -17,8 +17,8 @@ class AppCards extends Component {
         }
         return (
             <Grid>
-                {cards.map((app, i) => (
-                    <Col key={i} span={3} align="middle" additionalClasses="center">
+                {values(cards).map((app, i) => (
+                    <Col key={app.id} span={3} align="middle" additionalClasses="center">
                         <AppCardItem app={app}/>
                     </Col>))}
             </Grid>

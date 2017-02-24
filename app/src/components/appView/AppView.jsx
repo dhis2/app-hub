@@ -1,12 +1,13 @@
-import React, {Component, Proptypes} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import Toolbar from '../../material/Toolbar/Toolbar';
 import ToolbarSection from '../../material/Toolbar/ToolbarSection';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
-import { Link } from 'react-router-dom';
-import { Redirect, Route } from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
+import {appLoad} from '../../actions/actionCreators';
 import AppCards from '../appCards/AppCards'
 const appTypes = {
     APP_STANDARD: 'Standard',
@@ -20,6 +21,10 @@ class AppView extends Component {
         super(props);
 
         this.renderVersions = this.renderVersions.bind(this);
+    }
+
+    componentDidMount() {
+        this.props.loadApp({appId: this.props.match.params.appId});
     }
 
     renderVersions(versions) {
@@ -54,18 +59,14 @@ class AppView extends Component {
     }
 
     render() {
-        if (!this.props.appList || this.props.appList.length < 1) {
+        const app = this.props.app;
+        if (!this.props.app) {
             return null;
-        }
-        const app = this.props.appList.find(app => app.id == this.props.match.params.appId);
-
-        if(!app || app == 'undefined') {
-            return (<div>Error!</div>);
         }
 
 
         const {id, appName, developer, description, appType, requiredDhisVersion, lastUpdated} = app;
-        const versions = app.versions.sort((a,b) => a.lastUpdated - b.lastUpdated)
+        const versions = app.versions.sort((a, b) => a.lastUpdated - b.lastUpdated)
         return (
             <Grid >
                 <Col span={8} additionalClasses="paper">
@@ -94,7 +95,7 @@ class AppView extends Component {
                             <VersionList versionList={versions}/>
                         </section>
                         <section className="mdc-card__actions">
-                            <a href={versions[versions.length-1].downloadUrl}>
+                            <a href={versions[versions.length - 1].downloadUrl}>
                                 <button className="mdc-button mdc-button--primary mdc-button--compact mdc-card__action">
                                     Download latest
                                 </button>
@@ -107,12 +108,18 @@ class AppView extends Component {
     }
 }
 
-AppView.proptypes = {}
+AppView.propTypes = {
+    app: PropTypes.object
+}
 
-const mapStateToProps = (state) => ({
-    appList: state.appsList.appList,
+const mapStateToProps = (state, ownProps) => ({
+    app: state.appsList.appList[ownProps.match.params.appId],
 });
 
-const mapDispatchToProps = (dispatch) => ({})
+const mapDispatchToProps = (dispatch) => ({
+    loadApp(appId) {
+        dispatch(appLoad(appId))
+    }
+})
 
-export default connect(mapStateToProps, null)(AppView);
+export default connect(mapStateToProps, mapDispatchToProps)(AppView);

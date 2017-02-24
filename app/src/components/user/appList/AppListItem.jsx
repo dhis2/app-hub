@@ -8,7 +8,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import { withRouter } from 'react-router';
-
+import { appTypesToUI } from '../../../constants/apiConstants';
 
 const appStatusStyle = {
     fontSize: '16px',
@@ -58,7 +58,7 @@ const AppListItem = (props, state) => {
     const listItemProps = {
         primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
         leftAvatar: (<Avatar src="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>),
-        secondaryText: (<p>{developer.name} <br /> {appType} </p>),
+        secondaryText: (<p>{developer.name} <br /> {appTypesToUI[appType]} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
         onTouchTap: () => props.push(`${props.match.url}/app/${id}`)
