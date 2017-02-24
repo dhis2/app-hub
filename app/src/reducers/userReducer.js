@@ -51,6 +51,21 @@ function userReducer(state = {appList: []}, action) {
             }
 
         }
+        case actionTypes.APP_VERSION_ADD_SUCCESS: {
+            const appId = action.payload.appId;
+            const version = action.payload.version.id;
+            const app = state.appList[appId];
+            return {
+                ...state,
+                appList: {
+                    ...state.appList,
+                    [appId]: {
+                        ...app,
+                        status: action.payload.status
+                    }
+                }
+            }
+        }
     }
     return state;
 }

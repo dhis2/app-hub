@@ -30,7 +30,18 @@ export const userLoad = () =>({
     type: actions.USER_LOAD
 })
 
-export const appVersionAdd = createActioncreator(actions.APP_VERSION_ADD);
+export const appVersionAdd = (version,file,appId) => {
+    return {
+        type: actions.APP_VERSION_ADD,
+        payload: {
+            version,
+            file,
+            appId
+        }
+
+    }
+}
+export const appVersionAdded = createActioncreator(actions.APP_VERSION_ADD_SUCCESS);
 
 export const userLoaded = createActioncreator(actions.USER_LOADED);
 export const userAppsLoad = createActioncreator(actions.USER_APPS_LOAD);

@@ -53,16 +53,22 @@ export class NewAppVersionDialog extends Component {
     }
 
     handleCreate() {
-        const { namespaceValue, keyValue } = this.state;
+     /*   const { namespaceValue, keyValue } = this.state;
         const file = this.refs.file.input.files[0];
         if (namespaceValue && keyValue) {
             this.props.createNamespace(namespaceValue, keyValue);
         } else {
             this.setState({
-                : this.validate(keyValue),
+                minVersionError: this.validate(keyValue),
                 namespaceError: this.validate(namespaceValue),
             });
-        }
+        } */
+        console.log(this.props.app)
+        this.props.addVersion({
+            version: this.state.version,
+            minDhisVersion: this.state.minVer,
+            maxDhisVersion: this.state.maxVer,
+        },this.refs.file.input.files[0], this.props.app.id);
     }
 
     validate(value) {
@@ -77,7 +83,7 @@ export class NewAppVersionDialog extends Component {
         return (
             <DialogBase
                 title="New App Version"
-                approveAction={this.handleCreate}
+                approveAction={this.handleCreate.bind(this)}
                 cancelAction={this.props.closeDialog}
                 contentStyle={{ maxWidth: '500px' }}
             >
@@ -113,8 +119,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    addVersion(appVersion) {
-       appVersionAdd(appVersion)
+    addVersion(appVersion, file, id) {
+       dispatch(appVersionAdd(appVersion,file, id))
     },
 });
 

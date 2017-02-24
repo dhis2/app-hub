@@ -18,7 +18,7 @@ class UserAppView extends Component {
     }
 
     handleOpenDialog() {
-        this.props.openDialog(this.props.app);
+        this.props.openDialog({app: this.props.app});
     }
 
     render() {

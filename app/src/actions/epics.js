@@ -1,6 +1,9 @@
 import * as actions from '../constants/actionTypes';
 import * as actionCreators from './actionCreators';
+import * as uploadUtils from '../utils/uploadUtils';
+
 import { combineEpics } from 'redux-observable';
+
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -114,4 +117,20 @@ const userApps = (action$) => action$
             }));
     })
 
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, user, userApps)
+const newVersion = (action$) => action$
+    .ofType(actions.APP_VERSION_ADD)
+    .concatMap(action => {
+        const fetchOptions = uploadUtils.createUploadVersionOptions(action.payload);
+
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/version', fetchOptions)
+            .then(response => response.ok ? response : Promise.reject(response))
+            .then(response => response.json())
+            .then(() => actionCreators.appLoad({appId: action.payload.appId}))
+         //   .then(apps => actionCreators.appVersionAdded(apps))
+            .catch(error => ({
+                type: actions.USER_APPS_ERROR,
+                payload: error,
+            }));
+    });
+
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, user, userApps, newVersion)
