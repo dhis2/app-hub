@@ -21,7 +21,7 @@ class UserView extends Component {
                     <Route exact path={`${this.props.match.url}`} component={AppList}>
                     </Route>
                     <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
-                    <Route path={`${this.props.match.url}/:appId`} component={UserAppView}/>
+                    <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
                 </div>
             ) : null;
         return (

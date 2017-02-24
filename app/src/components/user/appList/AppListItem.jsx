@@ -54,7 +54,7 @@ const AppListItem = (props, state) => {
         secondaryText: (<p>{developer.name} <br /> {appType} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
-        onTouchTap: () => props.push(`${props.match.url}/${id}`)
+        onTouchTap: () => props.push(`${props.match.url}/app/${id}`)
     }
 
     return (

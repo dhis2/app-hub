@@ -6,6 +6,7 @@ import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import { Link } from 'react-router-dom';
 import { Redirect, Route } from 'react-router-dom';
+import VersionList from '../appVersion/VersionList';
 import AppCards from '../appCards/AppCards'
 const appTypes = {
     APP_STANDARD: 'Standard',
@@ -90,7 +91,7 @@ class AppView extends Component {
                         </section>
                         <section className="mdc-card__supporting-text">
                             <h2>Versions</h2>
-                            {this.renderVersions(versions)}
+                            <VersionList versionList={versions}/>
                         </section>
                         <section className="mdc-card__actions">
                             <a href={versions[versions.length-1].downloadUrl}>
