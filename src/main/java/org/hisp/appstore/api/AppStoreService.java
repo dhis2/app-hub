@@ -37,7 +37,7 @@ public interface AppStoreService
 
     void addReviewToApp( App app, Review review );
 
-    void addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException;
+    AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException;
 
     void removeVersionFromApp( App app, AppVersion version ) throws WebMessageException;
 

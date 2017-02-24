@@ -3,6 +3,7 @@ package org.hisp.appstore.api.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.hisp.appstore.api.IdentifiableObject;
 
 /**
  * Created by zubair on 08.12.16.
@@ -90,5 +91,22 @@ public class AppVersion
     public void setApp( App app )
     {
         this.app = app;
+    }
+
+    @Override
+    public void mergeWith( IdentifiableObject other )
+    {
+        AppVersion appVersion;
+
+        if ( other.getClass().isInstance( this ))
+        {
+            appVersion = (AppVersion) other;
+
+            version = appVersion.getVersion() != null ? appVersion.getVersion() : version;
+            minDhisVersion = appVersion.getMinDhisVersion() != null ? appVersion.getMinDhisVersion() : minDhisVersion;
+            maxDhisVersion = appVersion.getMaxDhisVersion() != null ? appVersion.getMaxDhisVersion() : maxDhisVersion;
+            downloadUrl = appVersion.getDownloadUrl() != null ? appVersion.getDownloadUrl() : downloadUrl;
+            demoUrl = appVersion.getDemoUrl() != null ? appVersion.getDemoUrl() : demoUrl;
+        }
     }
 }
