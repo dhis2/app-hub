@@ -30,6 +30,8 @@ export const userLoad = () =>({
     type: actions.USER_LOAD
 })
 
+export const appVersionAdd = createActioncreator(actions.APP_VERSION_ADD);
+
 export const userLoaded = createActioncreator(actions.USER_LOADED);
 export const userAppsLoad = createActioncreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActioncreator(actions.USER_APPS_LOADED);
@@ -43,4 +45,36 @@ function createActioncreator(type) {
         type,
         payload
     });
+}
+
+
+
+/**
+ * openDialog - Action creator helper method for creating dialogs
+ *
+ * @param  {string} dialogType  The type of dialog to open
+ * @param  {object} dialogprops The props passed to the dialog
+ * @return {object}             Dialog action
+ */
+export function openDialog(dialogType, dialogprops) {
+    return {
+        type: actions.OPEN_DIALOG,
+        payload: {
+            dialogprops: { ...dialogprops },
+            dialogType,
+        },
+
+    };
+}
+
+/**
+ * closeDialog - Action creator helper method for handling dialogs
+ *
+ * @param  {string} dialogType  The type of dialog to close
+ * @return {object}             Dialog action
+ */
+export function closeDialog() {
+    return {
+        type: actions.CLOSE_DIALOG,
+    };
 }

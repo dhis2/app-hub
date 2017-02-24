@@ -4,8 +4,10 @@ import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { appLoad } from '../../../actions/actionCreators';
+import { appLoad, openDialog } from '../../../actions/actionCreators';
+import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
+
 class UserAppView extends Component {
     constructor(props) {
         super(props);
@@ -13,6 +15,10 @@ class UserAppView extends Component {
 
     componentDidMount() {
         this.props.loadApp({appId: this.props.match.params.appId})
+    }
+
+    handleOpenDialog() {
+        this.props.openDialog(this.props.app);
     }
 
     render() {
@@ -47,7 +53,7 @@ class UserAppView extends Component {
 
                 </Card>
                 <Card style={{marginTop: '10px', position: 'relative'}}>
-                    <FloatingActionButton mini={true} style={FABStyle}>
+                    <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
                         <ContentAdd />
                     </FloatingActionButton>
                     <CardTitle title="Versions" />
@@ -65,12 +71,16 @@ UserAppView.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-   app: state.user.appList[ownProps.match.params.appId],
+   app: state.user.appList[ownProps.match.params.appId]
 })
 
 const mapDispatchToProps = (dispatch) =>  ({
     loadApp(appid) {
         dispatch(appLoad(appid));
+    },
+
+    openDialog(dialogProps) {
+        dispatch(openDialog(dialogType.NEW_VERSION, dialogProps))
     }
 })
 

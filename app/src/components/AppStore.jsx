@@ -11,6 +11,9 @@ import AppCards from './appCards/AppCards';
 import AppView from './appView/AppView';
 import UserView from './user/UserView';
 import Header from './header/Header';
+import DialogRoot from './dialog/DialogRoot';
+import ErrorDialog from './dialog/ErrorDialog';
+import * as dialogType from '../constants/dialogTypes';
 import {Provider} from 'react-redux';
 import store from '../store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -28,16 +31,11 @@ export default function AppStore() {
                     <div className="app">
                         <Header />
 
-
                         <Route exact path="/" component={AppCards}/>
                         <Route path='/app/:appId' component={AppView}/>
-
-
-
                         <Route path='/user/' component={UserView}/>
-                        <main>
-                            {/* Route provider */}
-                        </main>
+
+                        <DialogRoot />
 
                     </div>
                     </ThemeProvider>

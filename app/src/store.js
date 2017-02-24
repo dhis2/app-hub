@@ -6,28 +6,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/observable/of';
 import userReducer from './reducers/userReducer';
 import appListReducer from './reducers/appListReducer';
-const initEpic = (action$) => action$
-    .ofType('INIT')
-    .startWith({type: 'INIT'})
-    .mergeMap(action => {
-        const fetchOptions = {
-        // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-
-        return window.fetch('http://localhost:3099/api/apps/all', fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
-            .then(apps => ({
-                type: 'APPS_LIST_LOADED_ALL',
-                payload: apps,
-            }))
-            .catch(error => ({
-                type: 'APPS_LIST_LOADING_ERROR',
-                payload: error,
-            }));
-    })
-    //.merge(Observable.of({type: "INIT"}))
+import dialogReducer from './reducers/dialogReducer';
 
 const middlewares = [createEpicMiddleware(Epics)];
 
@@ -35,28 +14,11 @@ if(process.env.NODE_ENV === 'development') {
     middlewares.unshift(createLogger())
 }
 
-function appsListReducer(state = {}, action) {
-    switch (action.type) {
-        case 'APPS_ALL_ERROR': {
-            return {
-                ...state,
-                error: action.payload
-            }
-        }
-        case 'APPS_ALL_LOADED': {
-            return {
-                ...state,
-                appList: action.payload
-            }
-        }
-
-    }
-    return state;
-}
 
 const reducer = combineReducers({
     appsList: appListReducer,
-    user: userReducer
+    user: userReducer,
+    dialog: dialogReducer,
 });
 
 export default createStore(reducer, applyMiddleware(...middlewares));

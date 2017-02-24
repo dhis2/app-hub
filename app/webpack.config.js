@@ -29,7 +29,7 @@ module.exports = {
         port: 9000,
         inline: true,
         contentBase: './app',
-        historyApiFallback: true
+        historyApiFallback: true,
     },
 
     resolve: {

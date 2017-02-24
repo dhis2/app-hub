@@ -22,3 +22,9 @@ export const USER_ERROR = 'USER_ERROR';
 export const USER_APPS_LOAD = 'USER_APPS_LOAD';
 export const USER_APPS_LOADED = 'USER_APPS_LOADED';
 export const USER_APPS_ERROR = 'USER_APPS_ERROR';
+
+
+export const OPEN_DIALOG = 'OPEN_DIALOG';
+export const CLOSE_DIALOG = 'CLOSE_DIALOG';
+
+export const APP_VERSION_ADD = 'APP_VERSION_ADD';
