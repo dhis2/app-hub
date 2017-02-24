@@ -33,8 +33,9 @@ export function createUploadOptions(data) {
 /**
  *
  * @param data - An object containing the data to create optiosn for
- * data. versio
- * @returns {{credentials: string, method: string, body: *}}
+ * @param data.version - Object with the nested jsonpart of the request
+ * @param data.file - The file to upload
+ * @returns fetchOptions to be used in fetch
  */
 
 export function createUploadVersionOptions(data) {

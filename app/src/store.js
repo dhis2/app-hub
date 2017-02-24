@@ -7,7 +7,7 @@ import 'rxjs/add/observable/of';
 import userReducer from './reducers/userReducer';
 import appListReducer from './reducers/appListReducer';
 import dialogReducer from './reducers/dialogReducer';
-
+import snackbarReducer from './reducers/snackbarReducer';
 const middlewares = [createEpicMiddleware(Epics)];
 
 if(process.env.NODE_ENV === 'development') {
@@ -19,6 +19,7 @@ const reducer = combineReducers({
     appsList: appListReducer,
     user: userReducer,
     dialog: dialogReducer,
+    snackbar: snackbarReducer,
 });
 
 export default createStore(reducer, applyMiddleware(...middlewares));

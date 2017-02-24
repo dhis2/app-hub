@@ -8,18 +8,25 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import { withRouter } from 'react-router';
+
+
+const appStatusStyle = {
+    fontSize: '16px',
+    marginLeft: '10px',
+}
+
 const appStatus = {
     APPROVED: {
         alt: 'Approved',
-        elem: (<FontIcon title="Approved" className="material-icons">check</FontIcon>),
+        elem: (<FontIcon title="Approved" style={appStatusStyle} className="material-icons">check</FontIcon>),
     },
     PENDING: {
         alt: 'Pending',
-        elem: (<FontIcon title="Pending" className="material-icons">priority_high</FontIcon>),
+        elem: (<FontIcon title="Pending" style={appStatusStyle}  className="material-icons">priority_high</FontIcon>),
     },
     NOT_APPROVED: {
         alt: 'Rejected',
-        elem: (<FontIcon title="Rejected" className="material-icons">do_not_disturb_alt</FontIcon>),
+        elem: (<FontIcon title="Rejected" style={appStatusStyle} className="material-icons">do_not_disturb_alt</FontIcon>),
     },
 }
 
@@ -49,7 +56,7 @@ const AppListItem = (props, state) => {
     )
 
     const listItemProps = {
-        primaryText: name,
+        primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
         leftAvatar: (<Avatar src="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>),
         secondaryText: (<p>{developer.name} <br /> {appType} </p>),
         secondaryTextLines: 2,

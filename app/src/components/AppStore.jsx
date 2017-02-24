@@ -11,6 +11,7 @@ import AppCards from './appCards/AppCards';
 import AppView from './appView/AppView';
 import UserView from './user/UserView';
 import Header from './header/Header';
+import Snackbar from './utils/Snackbar';
 import DialogRoot from './dialog/DialogRoot';
 import ErrorDialog from './dialog/ErrorDialog';
 import * as dialogType from '../constants/dialogTypes';
@@ -37,6 +38,7 @@ export default function AppStore() {
 
                         <DialogRoot />
 
+                        <Snackbar />
                     </div>
                     </ThemeProvider>
                 </Router>
