@@ -4,8 +4,8 @@ import FontIcon from 'material-ui/FontIcon';
 
 const VersionList = (props) => {
 
-    const versions = props.versionList.map((version, i) => (
-        <TableRow key={i}>
+    const versions = props.versionList.sort((a,b) => b.created - a.created).map((version, i) => (
+        <TableRow key={version.id}>
             <TableRowColumn>
                 <a href={version.downloadUrl} title="Download">
                     <FontIcon className="material-icons">file_download</FontIcon>
