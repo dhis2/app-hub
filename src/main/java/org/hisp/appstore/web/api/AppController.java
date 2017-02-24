@@ -241,13 +241,8 @@ public class AppController
         {
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
-
-        User currentUser = userService.getCurrentUser();
-
-        if ( !persistedApp.getOwner().equals( currentUser ) )
-        {
-            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + persistedApp.getUid() ) );
-        }
+        
+        decideAccess( persistedApp );
 
         App updatedApp = renderService.fromJson( request.getInputStream(), App.class );
 
@@ -273,6 +268,8 @@ public class AppController
         {
             throw new WebMessageException( WebMessageUtils.notFound( "Either app or version does not exist" ) );
         }
+
+        decideAccess( app );
 
         AppVersion updatedVersion = renderService.fromJson( request.getInputStream(), AppVersion.class );
 
