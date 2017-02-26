@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import { closeDialog } from '../../actions/actionCreators';
 
-class DialogRoot extends Component {
+class DialogBase extends Component {
 
     static buildButton(action, text, primary = false) {
         return (<FlatButton
@@ -31,8 +31,8 @@ class DialogRoot extends Component {
             defaultCloseDialog();
         };
 
-        actions.push(DialogRoot.buildButton(cancelAction || defaultCloseDialog, cancelLabel || 'Cancel'));
-        if (approveAction) actions.push(DialogRoot.buildButton(finalAction, approveLabel || 'Done', true));
+        actions.push(DialogBase.buildButton(cancelAction || defaultCloseDialog, cancelLabel || 'Cancel'));
+        if (approveAction) actions.push(DialogBase.buildButton(finalAction, approveLabel || 'Done', true));
 
         return (<Dialog
             open
@@ -47,7 +47,7 @@ class DialogRoot extends Component {
     }
 }
 
-DialogRoot.propTypes = {
+DialogBase.propTypes = {
     title: PropTypes.string,
     cancelLabel: PropTypes.string,
     approveLabel: PropTypes.string,
@@ -66,4 +66,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
     null,
     mapDispatchToProps
-)(DialogRoot);
+)(DialogBase);

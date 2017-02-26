@@ -10,7 +10,7 @@ DialogComponents[dialogTypes.CONFIRM_DELETE_APP] = null;
 DialogComponents[dialogTypes.EDIT_APP] = null;
 
 
-class DialogRouter extends Component {
+class DialogRoot extends Component {
 
     constructor(props) {
         super(props);
@@ -29,7 +29,7 @@ class DialogRouter extends Component {
     }
 }
 
-DialogRouter.propTypes = {
+DialogRoot.propTypes = {
     dialogType: PropTypes.string,
 };
 
@@ -40,4 +40,4 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps
-)(DialogRouter);
+)(DialogRoot);
