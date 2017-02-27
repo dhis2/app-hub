@@ -55,13 +55,19 @@ function userReducer(state = {appList: []}, action) {
             const appId = action.payload.appId;
             const version = action.payload.version.id;
             const app = state.appList[appId];
+            const newVer = app.version.map((v,i) => {
+                if(v.id == version) {
+                    return action.payload.version
+                }
+            })
+
             return {
                 ...state,
                 appList: {
                     ...state.appList,
                     [appId]: {
                         ...app,
-                        status: action.payload.status
+                        version: newVer,
                     }
                 }
             }
