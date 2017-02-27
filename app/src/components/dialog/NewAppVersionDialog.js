@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux';
 import DialogBase from './DialogBase';
-import { appVersionAdd } from '../../actions/actionCreators';
+import { addAppVersion } from '../../actions/actionCreators';
 
 export class NewAppVersionDialog extends Component {
 
@@ -120,7 +120,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     addVersion(appVersion, file, id) {
-       dispatch(appVersionAdd(appVersion,file, id))
+       dispatch(addAppVersion(appVersion,file, id))
     },
 });
 

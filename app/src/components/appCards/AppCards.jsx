@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import AppCardItem from './AppCardItem';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
-import { appsAllLoad, appsApprovedLoad } from '../../actions/actionCreators';
+import { loadAllApps, loadApprovedApps } from '../../actions/actionCreators';
 import { values } from 'lodash';
 class AppCards extends Component {
 
@@ -32,7 +32,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     loadApps() {
-        dispatch(appsApprovedLoad())
+        dispatch(loadApprovedApps())
     }
 })
 

@@ -52,22 +52,20 @@ function userReducer(state = {appList: []}, action) {
 
         }
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
+            const version = action.payload.version;
             const appId = action.payload.appId;
-            const version = action.payload.version.id;
             const app = state.appList[appId];
-            const newVer = app.version.map((v,i) => {
-                if(v.id == version) {
-                    return action.payload.version
-                }
-            })
-
+            if(!app) {
+                return state;
+            }
+            const newVer = [...app.versions, version];
             return {
                 ...state,
                 appList: {
                     ...state.appList,
                     [appId]: {
                         ...app,
-                        version: newVer,
+                        versions: newVer,
                     }
                 }
             }

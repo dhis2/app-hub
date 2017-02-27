@@ -36,7 +36,7 @@ const loadAppsApproved = (action$) => action$
         return window.fetch('http://localhost:3099/api/apps', fetchOptions)
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
-            .then(apps => actionCreators.appsApprovedLoaded(apps))
+            .then(apps => actionCreators.loadedApprovedApps(apps))
             .catch(error => ({
                 type: actions.APPS_APPROVED_ERROR,
                 payload: error,
@@ -122,11 +122,11 @@ const newVersion = (action$) => action$
     .concatMap(action => {
         const fetchOptions = uploadUtils.createUploadVersionOptions(action.payload);
 
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/version', fetchOptions)
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/versions', fetchOptions)
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
-            .then(() => actionCreators.appLoad({appId: action.payload.appId}))
-         //   .then(apps => actionCreators.appVersionAdded(apps))
+           // .then(() => actionCreators.appLoad({appId: action.payload.appId}))
+            .then(version => actionCreators.addAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
                 type: actions.USER_APPS_ERROR,
                 payload: error,

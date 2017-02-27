@@ -4,7 +4,7 @@ import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import {approveApp, appsAllLoad, setAppApproval, userAppsLoad} from '../../../actions/actionCreators';
+import {approveApp, loadAllApps, setAppApproval, userAppsLoad} from '../../../actions/actionCreators';
 import {mapValues, sortBy} from 'lodash';
 class AppList extends Component {
     constructor(props) {
@@ -106,7 +106,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
 
     loadAllApps() {
-        dispatch(appsAllLoad())
+        dispatch(loadAllApps())
     },
 
     loadMyApps() {

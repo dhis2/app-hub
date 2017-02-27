@@ -9,7 +9,10 @@ const initialState = {
 const snackbar = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
-
+            return {
+                ...state,
+                message: 'New app version has been uploaded!'
+            }
         }
         case actionTypes.SET_APPROVAL_APP_SUCCESS: {
             return {

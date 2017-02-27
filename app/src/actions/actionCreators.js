@@ -1,21 +1,21 @@
 import * as actions from '../constants/actionTypes';
 
-export function appsAllLoad() {
+export function loadAllApps() {
     return {
         type: actions.APPS_ALL_LOAD
     }
 }
 
-export const appsAllLoaded = createActioncreator(actions.APPS_ALL_LOADED);
+export const appsAllLoaded = createActionCreator(actions.APPS_ALL_LOADED);
 
 
-export function appsApprovedLoad() {
+export function loadApprovedApps() {
     return {
         type: actions.APPS_APPROVED_LOAD
     }
 }
 
-export const appsApprovedLoaded = createActioncreator(actions.APPS_APPROVED_LOADED);
+export const loadedApprovedApps = createActionCreator(actions.APPS_APPROVED_LOADED);
 export const setAppApproval = payload => ({
     type: actions.SET_APPROVAL_APP,
     payload
@@ -30,7 +30,7 @@ export const userLoad = () =>({
     type: actions.USER_LOAD
 })
 
-export const appVersionAdd = (version,file,appId) => {
+export const addAppVersion = (version, file, appId) => {
     return {
         type: actions.APP_VERSION_ADD,
         payload: {
@@ -41,17 +41,23 @@ export const appVersionAdd = (version,file,appId) => {
 
     }
 }
-export const appVersionAdded = createActioncreator(actions.APP_VERSION_ADD_SUCCESS);
+export const addAppVersionSuccess = (version, appId) => {
 
-export const userLoaded = createActioncreator(actions.USER_LOADED);
-export const userAppsLoad = createActioncreator(actions.USER_APPS_LOAD);
-export const userAppsLoaded = createActioncreator(actions.USER_APPS_LOADED);
+    return createActionCreator(actions.APP_VERSION_ADD_SUCCESS)({
+        version,
+        appId
+    });
+}
 
-export const appLoad = createActioncreator(actions.APP_LOAD);
-export const appLoaded = createActioncreator(actions.APP_LOADED);
-export const appError = createActioncreator(actions.APP_ERROR);
+export const userLoaded = createActionCreator(actions.USER_LOADED);
+export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);
+export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
 
-function createActioncreator(type) {
+export const appLoad = createActionCreator(actions.APP_LOAD);
+export const appLoaded = createActionCreator(actions.APP_LOADED);
+export const appError = createActionCreator(actions.APP_ERROR);
+
+function createActionCreator(type) {
     return (payload) => ({
         type,
         payload
