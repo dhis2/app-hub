@@ -1,7 +1,5 @@
 package org.hisp.appstore.web.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Files;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
@@ -12,16 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping ( value = "/api/apps" )
@@ -31,9 +26,9 @@ public class AppController
 
     private static final String NOT_FOUND = "No App found with id: ";
 
-    private static final String ACCESS_DENIED = "Access denied for App with id ";
+    private static final String ENTITY_NOT_FOUND = "Entities not found with given ids";
 
-    private static final String FILE_EXTENTION = "zip";
+    private static final String ACCESS_DENIED = "Access denied for App with id ";
 
     // -------------------------------------------------------------------------
     // Dependencies
@@ -53,6 +48,9 @@ public class AppController
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ImageResourceService imageResourceService;
 
     // -------------------------------------------------------------------------
     // GET
@@ -151,16 +149,17 @@ public class AppController
     @PreAuthorize( "isAuthenticated()" )
     @RequestMapping( method = RequestMethod.POST )
     public void uploadApp( @RequestPart( name = "file" ) MultipartFile file,
+                           @RequestPart( name = "imageFile", required = false ) MultipartFile imageFile,
                            @RequestPart( name = "app" ) App app,
                            HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
-        if ( !FILE_EXTENTION.equals( Files.getFileExtension( file.getOriginalFilename() ) ) )
+        if ( file == null )
         {
-            throw new WebMessageException( WebMessageUtils.denied( "File extention must be zip" ) );
+            throw new WebMessageException( WebMessageUtils.denied( "File must be provided" ) );
         }
 
-        appStoreService.uploadApp( app, file );
+        appStoreService.uploadApp( app, file, imageFile );
 
         renderService.toJson( response.getOutputStream(), "App Uploaded");
     }
@@ -202,7 +201,7 @@ public class AppController
 
         decideAccess( app );
 
-        AppVersion addedVersion = appStoreService.addVersionToApp( app, version, file );
+        AppVersion addedVersion = appStoreService.addVersionToApp( app, version, file, ResourceType.ZIP );
 
         renderService.toJson( response.getOutputStream(), addedVersion );
     }
@@ -225,6 +224,34 @@ public class AppController
 
         renderService.renderOk( response, request, "Status changed for app: " + app.getName() );
     }
+
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/images", method = RequestMethod.POST )
+    public void uploadImages( @PathVariable( "uid" ) String appUid,
+                              @RequestPart( name = "file" ) MultipartFile file,
+                              @RequestPart( name = "image" ) ImageResource imageResource,
+                              HttpServletResponse response, HttpServletRequest request )
+                             throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
+
+        if( imageResource.isLogo() && app.hasLogo() )
+        {
+            throw new WebMessageException( WebMessageUtils.conflict( "Already has a logo" ) );
+        }
+
+        decideAccess( app );
+
+        appStoreService.addImagesToApp( app, imageResource, file, ResourceType.IMAGE );
+
+        renderService.renderCreated( response, request, String.format( "Image uploaded for app: ", app.getName() ) );
+    }
+
     // -------------------------------------------------------------------------
     // PUT
     // -------------------------------------------------------------------------
@@ -241,7 +268,7 @@ public class AppController
         {
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
-        
+
         decideAccess( persistedApp );
 
         App updatedApp = renderService.fromJson( request.getInputStream(), App.class );
@@ -266,7 +293,7 @@ public class AppController
 
         if ( app == null || persistedVersion == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "Either app or version does not exist" ) );
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
         }
 
         decideAccess( app );
@@ -278,6 +305,58 @@ public class AppController
         appVersionService.update( persistedVersion );
 
         renderService.renderOk( response, request, "Version with id " + vuid + " updated" );
+    }
+
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/images/{iuid}", method = RequestMethod.PUT )
+    public void updateImageResource(  @PathVariable( "uid" ) String appUid,
+                                @PathVariable( "iuid" ) String iuid,
+                                HttpServletResponse response, HttpServletRequest request )
+                                throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        ImageResource persistedImageResource = imageResourceService.get( iuid );
+
+        if ( app == null || persistedImageResource == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
+        }
+
+        decideAccess( app );
+
+        ImageResource updatedImageResource = renderService.fromJson( request.getInputStream(), ImageResource.class );
+
+        persistedImageResource.mergeWith( updatedImageResource );
+
+        imageResourceService.update( persistedImageResource );
+
+        renderService.renderOk( response, request, "Image with id " + iuid + " updated" );
+    }
+
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/images/{iuid}/logo", method = RequestMethod.PUT )
+    public void updateAppLogo(  @PathVariable( "uid" ) String appUid,
+                                @PathVariable( "iuid" ) String iuid,
+                                HttpServletResponse response, HttpServletRequest request )
+                               throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        ImageResource newLogo = imageResourceService.get( iuid );
+
+        if ( app == null || newLogo == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
+        }
+
+        decideAccess( app );
+
+        ImageResource previousLogo = app.getImages().stream().filter( image -> image.isLogo() == true ).findAny().get();
+
+        imageResourceService.setAsLogo( newLogo, previousLogo );
+
+        renderService.renderOk( response, request, String.format( "Image with id %s is set as application logo", iuid ) );
     }
 
     // -------------------------------------------------------------------------
@@ -317,7 +396,7 @@ public class AppController
 
         if ( app == null || review == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
         }
 
         decideAccess( app );
@@ -328,7 +407,7 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/version/{vuid}", method = RequestMethod.DELETE )
+    @RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.DELETE )
     public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
                                       @PathVariable( "vuid" ) String versionUid,
                                       HttpServletResponse response, HttpServletRequest request )
@@ -340,15 +419,42 @@ public class AppController
 
         if ( app == null || version == null )
         {
-            throw new WebMessageException( WebMessageUtils.notFound( "Entities not found with given ids" ) );
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
         }
 
         decideAccess( app );
 
-        appStoreService.removeVersionFromApp( app, version );
+        appStoreService.removeVersionFromApp( app, version, ResourceType.ZIP );
 
         renderService.renderOk( response, request, "Version Removed" );
     }
+
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/images/{vuid}", method = RequestMethod.DELETE )
+    public void removeImageFromAPp( @PathVariable( "uid" ) String appUid,
+                                      @PathVariable( "iuid" ) String iuid,
+                                      HttpServletResponse response, HttpServletRequest request )
+                                    throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        ImageResource imageResource = imageResourceService.get( iuid );
+
+        if ( app == null || imageResource == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
+        }
+
+        decideAccess( app );
+
+        appStoreService.removeImageFromApp( app, imageResource, ResourceType.IMAGE );
+
+        renderService.renderOk( response, request, "ImageResource Removed" );
+    }
+
+    // -------------------------------------------------------------------------
+    // Supportive methods
+    // -------------------------------------------------------------------------
 
     private void decideAccess( App app ) throws WebMessageException
     {

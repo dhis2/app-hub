@@ -37,6 +37,8 @@ public class App
 
     private Set<Review> reviews = Sets.newHashSet();
 
+    private Set<ImageResource> images = Sets.newHashSet();
+
     private AppStatus status = AppStatus.PENDING;
 
     public App()
@@ -131,6 +133,17 @@ public class App
         this.status = status;
     }
 
+    @JsonProperty
+    public Set<ImageResource> getImages()
+    {
+        return images;
+    }
+
+    public void setImages( Set<ImageResource> images )
+    {
+        this.images = images;
+    }
+
     @Override
     public void mergeWith( IdentifiableObject other )
     {
@@ -146,9 +159,19 @@ public class App
             owner = app.getOwner() != null ? app.getOwner() : owner;
             appType = app.getAppType() != null ? app.getAppType() : appType;
             status = app.getStatus() != null ? app.getStatus() : status;
-
-            versions = app.getVersions() != null && !app.getVersions().isEmpty() ? app.getVersions() : versions;
-            reviews = app.getReviews() != null && !app.getReviews().isEmpty() ? app.getReviews() : reviews;
         }
+    }
+
+    public boolean hasLogo()
+    {
+        for( ImageResource image: images )
+        {
+            if( image.isLogo() )
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

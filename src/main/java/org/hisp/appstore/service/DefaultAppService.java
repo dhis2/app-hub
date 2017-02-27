@@ -15,12 +15,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Transactional
 public class DefaultAppService
         implements AppStoreService
 {
     private static final Log log = LogFactory.getLog( DefaultAppService.class );
+
+    private static final String REMOVED = " %s has been removed from %s ";
+
+    private static final String ADDED = " %s has been added to %s ";
 
     // -------------------------------------------------------------------------
     // Dependencies
@@ -103,12 +108,6 @@ public class DefaultAppService
     }
 
     @Override
-    public void deleteApp( App app )
-    {
-        appStore.delete( app );
-    }
-
-    @Override
     public int saveApp( App app )
     {
         return appStore.save( app );
@@ -121,7 +120,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( "Status changed for " + app.getName() );
+        log.info( String.format( "Status changed for %1", app.getName() ) );
     }
 
     @Override
@@ -131,7 +130,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info("Review removed from App");
+        log.info( String.format( REMOVED, "Review " + review.getUid(), app.getName() ) );
     }
 
     @Override
@@ -146,60 +145,102 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info("Review added to App");
+        log.info( String.format( ADDED, "Review " + review.getUid(), app.getName() ) );
     }
 
     @Override
-    public void uploadApp( App app, MultipartFile file ) throws WebMessageException
+    public void uploadApp( App app, MultipartFile file, MultipartFile imageFile )
+                          throws WebMessageException, IOException
     {
-        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
+        FileUploadStatus fileStatus = fileStorageService.uploadFile( file, app.getAppType(), ResourceType.ZIP );
 
-        if ( status.isUploaded() )
+        FileUploadStatus imageFileStatus = fileStorageService.uploadFile( imageFile, app.getAppType(), ResourceType.IMAGE );
+
+        if ( fileStatus.isUploaded() )
         {
-            saveApp( populateAppData( app, status ) );
-
-            log.info("App uploaded!");
+            app = populateVersionData( app, fileStatus );
         }
+
+        if ( imageFileStatus.isUploaded() )
+        {
+            app = populateImageData( app, imageFileStatus );
+        }
+
+        saveApp( app );
+
+        log.info( "App uploaded!" );
     }
 
     @Override
     public void removeApp( App app )
     {
-        app.getVersions().forEach(v -> fileStorageService.deleteFile(app.getAppType(), getKeyFromResourceUrl( v.getDownloadUrl() )));
+        app.getVersions().forEach( version -> fileStorageService.deleteFile( app.getAppType(),
+                getKeyFromResourceUrl( version.getDownloadUrl() ), ResourceType.ZIP ));
+
+        app.getImages().forEach( image -> fileStorageService.deleteFile( app.getAppType(),
+                getKeyFromResourceUrl( image.getImageUrl() ), ResourceType.IMAGE ));
 
         appStore.delete( app );
 
-        log.info("App deleted");
+        log.info( String.format( "App with name %1 deleted", app.getName() ));
     }
 
     @Override
-    public AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException
+    public AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file, ResourceType resourceType )
+                                    throws WebMessageException, IOException
     {
-        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
+        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType(), resourceType );
 
         version.setAutoFields();
-
         version.setDownloadUrl( status.getDownloadUrl() );
 
         app.getVersions().add( version );
 
         appStore.update( app );
 
-        log.info("New version added to App");
+        log.info( String.format( ADDED, "Version " + version.getVersion(), app.getName() ) );
 
         return version;
     }
 
     @Override
-    public void removeVersionFromApp( App app, AppVersion version ) throws WebMessageException
+    public void addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType )
+                                throws WebMessageException, IOException
     {
-        fileStorageService.deleteFile( app.getAppType(), getKeyFromResourceUrl( version.getDownloadUrl() ));
+        FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType(), resourceType );
+
+        imageResource.setAutoFields();
+        imageResource.setImageUrl( status.getDownloadUrl() );
+
+        app.getImages().add( imageResource );
+
+        appStore.update( app );
+
+        log.info( String.format( ADDED, "Image " + imageResource.getUid(), app.getName() ) );
+    }
+
+    @Override
+    public void removeVersionFromApp( App app, AppVersion version, ResourceType resourceType ) throws WebMessageException
+    {
+        fileStorageService.deleteFile( app.getAppType(), getKeyFromResourceUrl( version.getDownloadUrl() ), resourceType );
 
         app.getVersions().remove( version );
 
         appStore.update( app );
 
-        log.info("Version :" + version.getVersion() + " has been removed from App");
+        log.info( String.format( "%1 has been removed from %2", "Version " +version.getVersion(), app.getName() ));
+    }
+
+    @Override
+    public void removeImageFromApp( App app, ImageResource imageResource, ResourceType resourceType )
+    {
+        fileStorageService.deleteFile( app.getAppType(), getKeyFromResourceUrl( imageResource.getImageUrl() ), resourceType );
+
+        app.getImages().remove( imageResource );
+
+        appStore.update( app );
+
+        log.info( String.format( REMOVED, "Image " + imageResource.getUid(), app.getName() ) );
     }
 
     @Override
@@ -217,11 +258,16 @@ public class DefaultAppService
     // Supportive methods
     // -------------------------------------------------------------------------
 
-    private App populateAppData( App app, FileUploadStatus status )
+    private App populateVersionData( App app, FileUploadStatus status )
     {
         app.getVersions().forEach( v -> v.setDownloadUrl( status.getDownloadUrl() ) );
 
-        app.setOwner( userService.getCurrentUser() );
+        return app;
+    }
+
+    private App populateImageData( App app, FileUploadStatus status )
+    {
+        app.getImages().forEach( image -> image.setImageUrl( status.getDownloadUrl() ) );
 
         return app;
     }

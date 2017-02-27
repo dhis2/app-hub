@@ -27,8 +27,6 @@ public interface AppStoreService
 
     void updateApp( App app );
 
-    void deleteApp( App app );
-
     int saveApp( App app );
 
     void setAppApproval( App app, AppStatus status);
@@ -37,11 +35,15 @@ public interface AppStoreService
 
     void addReviewToApp( App app, Review review );
 
-    AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException;
+    AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file, ResourceType resourceType ) throws WebMessageException, IOException;
 
-    void removeVersionFromApp( App app, AppVersion version ) throws WebMessageException;
+    void addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType ) throws WebMessageException, IOException;
 
-    void uploadApp(  App app, MultipartFile file ) throws WebMessageException, IOException;
+    void removeVersionFromApp( App app, AppVersion version, ResourceType resourceType ) throws WebMessageException;
+
+    void removeImageFromApp( App app, ImageResource imageResource, ResourceType resourceType );
+
+    void uploadApp(  App app, MultipartFile file, MultipartFile imageFile ) throws WebMessageException, IOException;
 
     void removeApp( App app );
 
