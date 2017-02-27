@@ -173,7 +173,7 @@ public class DefaultAppService
     }
 
     @Override
-    public void addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException
+    public AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file ) throws WebMessageException
     {
         FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType() );
 
@@ -186,6 +186,8 @@ public class DefaultAppService
         appStore.update( app );
 
         log.info("New version added to App");
+
+        return version;
     }
 
     @Override

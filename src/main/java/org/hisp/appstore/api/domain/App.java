@@ -145,9 +145,10 @@ public class App
             developer = app.getDeveloper() != null ? app.getDeveloper() : developer;
             owner = app.getOwner() != null ? app.getOwner() : owner;
             appType = app.getAppType() != null ? app.getAppType() : appType;
+            status = app.getStatus() != null ? app.getStatus() : status;
+
             versions = app.getVersions() != null && !app.getVersions().isEmpty() ? app.getVersions() : versions;
             reviews = app.getReviews() != null && !app.getReviews().isEmpty() ? app.getReviews() : reviews;
-            status = app.getStatus() != null ? app.getStatus() : status;
         }
     }
 }

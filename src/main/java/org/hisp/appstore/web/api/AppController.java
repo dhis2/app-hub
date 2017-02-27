@@ -33,6 +33,8 @@ public class AppController
 
     private static final String ACCESS_DENIED = "Access denied for App with id ";
 
+    private static final String FILE_EXTENTION = "zip";
+
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -101,10 +103,7 @@ public class AppController
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
-        if ( !AppStatus.APPROVED.equals( app.getStatus()) && !userAuths.contains( "ROLE_MANAGER" ))
-        {
-            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + appUid ) );
-        }
+        decideAccess( app );
 
         renderService.toJson( response.getOutputStream(), app );
     }
@@ -127,6 +126,24 @@ public class AppController
         renderService.toJson( response.getOutputStream(), reviews );
     }
 
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/versions", method = RequestMethod.GET )
+    public void listVersions(  @PathVariable( "uid" ) String appUid,
+                              HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        if ( app == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
+        }
+
+        Set<AppVersion> versions = app.getVersions();
+
+        renderService.toJson( response.getOutputStream(), versions );
+    }
+
     // -------------------------------------------------------------------------
     // POST
     // -------------------------------------------------------------------------
@@ -138,8 +155,10 @@ public class AppController
                            HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
-        log.info( Files.getFileExtension( file.getOriginalFilename()) );
-
+        if ( !FILE_EXTENTION.equals( Files.getFileExtension( file.getOriginalFilename() ) ) )
+        {
+            throw new WebMessageException( WebMessageUtils.denied( "File extention must be zip" ) );
+        }
 
         appStoreService.uploadApp( app, file );
 
@@ -167,8 +186,8 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/version", method = RequestMethod.POST )
-    public void addVersfionToApp( @RequestPart( name = "file" ) MultipartFile file,
+    @RequestMapping ( value = "/{uid}/versions", method = RequestMethod.POST )
+    public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
                                  @RequestPart( name = "version" ) AppVersion version,
                                  @PathVariable( name = "uid" ) String appUid,
                                  HttpServletResponse response, HttpServletRequest request )
@@ -183,9 +202,9 @@ public class AppController
 
         decideAccess( app );
 
-        appStoreService.addVersionToApp( app, version, file );
+        AppVersion addedVersion = appStoreService.addVersionToApp( app, version, file );
 
-        renderService.renderCreated( response, request, "App version added" );
+        renderService.toJson( response.getOutputStream(), addedVersion );
     }
 
     @PreAuthorize( "hasRole('ROLE_MANAGER')" )
@@ -222,13 +241,8 @@ public class AppController
         {
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
-
-        User currentUser = userService.getCurrentUser();
-
-        if ( !persistedApp.getOwner().equals( currentUser ) )
-        {
-            throw new WebMessageException( WebMessageUtils.forbidden( ACCESS_DENIED + persistedApp.getUid() ) );
-        }
+        
+        decideAccess( persistedApp );
 
         App updatedApp = renderService.fromJson( request.getInputStream(), App.class );
 
@@ -237,6 +251,33 @@ public class AppController
         appStoreService.updateApp( persistedApp );
 
         renderService.renderOk( response, request, "App updated" );
+    }
+
+    @PreAuthorize( "isAuthenticated()" )
+    @RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.PUT )
+    public void updateVersion(  @PathVariable( "uid" ) String appUid,
+                                @PathVariable( "vuid" ) String vuid,
+                               HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
+    {
+        App app = appStoreService.getApp( appUid );
+
+        AppVersion persistedVersion = appVersionService.get( vuid );
+
+        if ( app == null || persistedVersion == null )
+        {
+            throw new WebMessageException( WebMessageUtils.notFound( "Either app or version does not exist" ) );
+        }
+
+        decideAccess( app );
+
+        AppVersion updatedVersion = renderService.fromJson( request.getInputStream(), AppVersion.class );
+
+        persistedVersion.mergeWith( updatedVersion );
+
+        appVersionService.update( persistedVersion );
+
+        renderService.renderOk( response, request, "Version with id " + vuid + " updated" );
     }
 
     // -------------------------------------------------------------------------
