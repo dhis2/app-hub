@@ -6,7 +6,7 @@ const initialState = {
     ...emptySnackbar
 };
 
-const snackbar = (state = initialState, action) => {
+const snackbarReducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
             return {
@@ -30,4 +30,4 @@ const snackbar = (state = initialState, action) => {
     }
 };
 
-export default snackbar;
+export default snackbarReducer;

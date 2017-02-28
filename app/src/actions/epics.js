@@ -125,10 +125,9 @@ const newVersion = (action$) => action$
         return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/versions', fetchOptions)
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
-           // .then(() => actionCreators.appLoad({appId: action.payload.appId}))
             .then(version => actionCreators.addAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
-                type: actions.USER_APPS_ERROR,
+                type: actions.APP_VERSION_ADD_ERROR,
                 payload: error,
             }));
     });
