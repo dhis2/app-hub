@@ -52,6 +52,11 @@
             <one-to-many class="org.hisp.appstore.api.domain.Review"/>
         </set>
 
+        <set name="images" cascade="all" lazy="false">
+            <key column="appid" />
+            <one-to-many class="org.hisp.appstore.api.domain.ImageResource"/>
+        </set>
+
         <property name="status" length="50" column="status">
             <type name="org.hibernate.type.EnumType">
                 <param name="enumClass">org.hisp.appstore.api.domain.AppStatus</param>

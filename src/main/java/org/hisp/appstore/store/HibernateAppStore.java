@@ -65,11 +65,14 @@ public class HibernateAppStore
         User user = userStore.getCurrentUser();
 
         Set<AppVersion> versions = app.getVersions();
+        Set<ImageResource> images = app.getImages();
 
         versions.forEach( v -> v.setAutoFields() );
+        images.forEach( i -> i.setAutoFields() );
 
         app.setOwner( user );
         app.setVersions( versions );
+        app.setImages( images );
 
         return app;
     }

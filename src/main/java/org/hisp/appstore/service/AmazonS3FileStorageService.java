@@ -7,16 +7,22 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.io.Files;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.FileStorageService;
+import org.hisp.appstore.api.PutObjectRequestService;
 import org.hisp.appstore.api.domain.AppType;
 import org.hisp.appstore.api.domain.FileUploadStatus;
+import org.hisp.appstore.api.domain.ResourceType;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -25,16 +31,6 @@ import java.util.UUID;
 public class AmazonS3FileStorageService implements FileStorageService
 {
     private static final Log log = LogFactory.getLog( AmazonS3FileStorageService.class );
-
-    private static final String BASE_BUCKET = "appstore.dhis2.org";
-
-    private static final String AMAZON_URL = "s3.amazonaws.com";
-
-    private static final ImmutableMap<AppType, String> TYPE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
-            .put( AppType.APP_STANDARD, "apps-standard" )
-            .put( AppType.APP_DASHBOARD, "apps-dashboard" )
-            .put( AppType.APP_TRACKER_DASHBOARD, "apps-tracker-dashboard" )
-            .build();
 
     // -------------------------------------------------------------------------
     // Dependencies
@@ -47,33 +43,54 @@ public class AmazonS3FileStorageService implements FileStorageService
         this.amazonS3Client = amazonS3Client;
     }
 
+    private List<PutObjectRequestService> putObjectRequestCreators;
+
+    public void setPutObjectRequestCreators( List<PutObjectRequestService> putObjectRequestCreators )
+    {
+        this.putObjectRequestCreators = putObjectRequestCreators;
+    }
+
     // -------------------------------------------------------------------------
     // Implementation methods
     // -------------------------------------------------------------------------
 
     @Override
-    public FileUploadStatus uploadFile( MultipartFile file, AppType type ) throws WebMessageException
+    public FileUploadStatus uploadFile( MultipartFile file, AppType type, ResourceType resourceType )
+                                        throws WebMessageException, IOException
     {
-        String fullBucketName = getBucketName( type );
+        String resourceKey = UUID.randomUUID().toString();
+
+        String downloadUrl = StringUtils.EMPTY;
+
+        PutObjectRequest request = null;
 
         FileUploadStatus status = new FileUploadStatus();
 
-        String resourceKey = UUID.randomUUID().toString();
+        for( PutObjectRequestService putObjectRequestService : putObjectRequestCreators )
+        {
+            if ( putObjectRequestService.accepts( resourceType ))
+            {
+                if ( putObjectRequestService.isFormatSupported( file ) )
+                {
+                    request = putObjectRequestService.getPutObjectRequest( file, type, resourceKey );
 
-        ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength( Long.valueOf( file.getSize() ));
+                    downloadUrl = putObjectRequestService.getDownloadUrl( type, resourceKey );
+                }
+                else
+                {
+                    throw new WebMessageException( WebMessageUtils.conflict( String.format( "File format %s not supported",
+                            Files.getFileExtension( file.getOriginalFilename() ) ) ) );
+                }
 
-        PutObjectRequest request;
+            }
+        }
 
         try
         {
-            request = new PutObjectRequest( fullBucketName, resourceKey, file.getInputStream(), metadata );
-            request.setCannedAcl( CannedAccessControlList.PublicRead );
-
             amazonS3Client.putObject( request );
 
             status.setUploaded( true );
-            status.setDownloadUrl( getDownloadUrl( type, resourceKey ) );
+            status.setDownloadUrl( downloadUrl );
         }
         catch ( AmazonServiceException ase )
         {
@@ -87,37 +104,25 @@ public class AmazonS3FileStorageService implements FileStorageService
 
             throw new WebMessageException( WebMessageUtils.conflict( ace.getMessage() ) );
         }
-        catch ( IOException ioE )
-        {
-            log.error( "IOException " + ioE );
 
-            throw new WebMessageException( WebMessageUtils.conflict( ioE.getMessage() ) );
-        }
-
-        log.info( "File uploaded!" );
+        log.info( String.format( "%s file uploaded!", resourceType.toString() ) );
 
         return status;
     }
 
     @Override
-    public void deleteFile( AppType type, String key )
+    public void deleteFile( AppType type, String key, ResourceType resourceType )
     {
-        String bucketName = getBucketName( type );
+        String bucketName = StringUtils.EMPTY;
+
+        for( PutObjectRequestService putObjectRequestService : putObjectRequestCreators )
+        {
+            if ( putObjectRequestService.accepts( resourceType ))
+            {
+                bucketName = putObjectRequestService.getBucketName( type );
+            }
+        }
 
         amazonS3Client.deleteObject( bucketName, key );
-    }
-
-    // -------------------------------------------------------------------------
-    // Supportive methods
-    // -------------------------------------------------------------------------
-
-    private String getBucketName( AppType type )
-    {
-        return BASE_BUCKET+ "/" + TYPE_FOLDER_MAPPER.get( type );
-    }
-
-    private String getDownloadUrl( AppType type, String resourceKey )
-    {
-        return "https://" + BASE_BUCKET + "." + AMAZON_URL + "/" + TYPE_FOLDER_MAPPER.get( type ) + "/" + resourceKey;
     }
 }

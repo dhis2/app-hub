@@ -43,6 +43,7 @@
                 <value>hibernate/App.hbm.xml</value>
                 <value>hibernate/AppVersion.hbm.xml</value>
                 <value>hibernate/Review.hbm.xml</value>
+                <value>hibernate/ImageResource.hbm.xml</value>
             </list>
         </property>
     </bean>
@@ -65,8 +66,18 @@
         <constructor-arg name="awsCredentials" ref="awsCredentialProvider"/>
     </bean>
 
+    <bean id="zipFilePutObjectRequestService" class="org.hisp.appstore.service.ZipFilePutObjectRequestService" />
+
+    <bean id="imagePutObjectRequestService" class="org.hisp.appstore.service.ImagePutObjectRequestService" />
+
     <bean id="org.hisp.appstore.api.FileStorageService" class="org.hisp.appstore.service.AmazonS3FileStorageService">
         <property name="amazonS3Client" ref="amazonS3Client"/>
+        <property name="putObjectRequestCreators">
+            <list>
+                <ref bean="zipFilePutObjectRequestService" />
+                <ref bean="imagePutObjectRequestService" />
+            </list>
+        </property>
     </bean>
 
     <!-- AppStore -->
@@ -118,6 +129,17 @@
 
     <bean id="org.hisp.appstore.api.AppVersionService" class="org.hisp.appstore.service.DefaultAppVersionService" >
         <property name="appVersionStore" ref="org.hisp.appstore.api.AppVersionStore"/>
+    </bean>
+    
+    <!-- ImageResource -->
+    
+    <bean id="org.hisp.appstore.api.ImageResourceStore" class="org.hisp.appstore.store.HibernateImageResourceStore" >
+        <property name="sessionFactory" ref="sessionFactory"/>
+        <property name="clazz" value="org.hisp.appstore.api.domain.ImageResource" />
+    </bean>
+    
+    <bean id="org.hisp.appstore.api.ImageResourceService" class="org.hisp.appstore.service.DefaultImageResourceService">
+        <property name="imageResourceStore" ref="org.hisp.appstore.api.ImageResourceStore" />
     </bean>
 
 </beans>
