@@ -449,7 +449,7 @@ public class AppController
 
         appStoreService.removeImageFromApp( app, imageResource, ResourceType.IMAGE );
 
-        renderService.renderOk( response, request, "ImageResource Removed" );
+        renderService.renderOk( response, request, String.format( "Image with id %s has been removed", iuid ) );
     }
 
     // -------------------------------------------------------------------------
