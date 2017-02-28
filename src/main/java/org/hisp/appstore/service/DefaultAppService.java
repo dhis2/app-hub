@@ -228,7 +228,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( String.format( "%1 has been removed from %2", "Version " +version.getVersion(), app.getName() ));
+        log.info( String.format( REMOVED, "Version " +version.getVersion(), app.getName() ));
     }
 
     @Override
