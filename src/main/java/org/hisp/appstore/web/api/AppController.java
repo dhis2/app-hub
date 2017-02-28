@@ -28,8 +28,6 @@ public class AppController
 
     private static final String ENTITY_NOT_FOUND = "Entities not found with given ids";
 
-    private static final String ACCESS_DENIED = "Access denied for App with id ";
-
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
