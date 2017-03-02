@@ -39,6 +39,7 @@ const rightIconsStyle = {
     alignItems: 'center'
 }
 
+
 const AppListItem = (props, state) => {
     const {id, name, developer, description, appType, status} = props.app;
     const approved = (<FontIcon className="material-icons">check</FontIcon>)

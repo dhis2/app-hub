@@ -48,6 +48,14 @@ export const addAppVersionSuccess = (version, appId) => {
         appId
     });
 }
+
+export const editAppSuccess = (app) => {
+
+    return createActionCreator(actions.APP_EDIT)({
+        app
+    });
+}
+
 //TODO: add signature to these
 export const userLoaded = createActionCreator(actions.USER_LOADED);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);

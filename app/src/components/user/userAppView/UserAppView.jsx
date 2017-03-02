@@ -7,7 +7,10 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import { appLoad, openDialog } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
-
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import CustomForm from '../../../form/CustomForm';
+import CustomFormField from '../../../form/CustomFormField';
 class UserAppView extends Component {
     constructor(props) {
         super(props);
@@ -18,9 +21,12 @@ class UserAppView extends Component {
     }
 
     handleOpenDialog() {
-        this.props.openDialog({app: this.props.app});
+        this.props.openNewVersionDialog({app: this.props.app});
     }
 
+    handleOpenEditApp() {
+        this.props.openEditAppDialog({app: this.props.app});
+    }
     render() {
         console.log(this.props)
         const app = this.props.app;
@@ -34,6 +40,11 @@ class UserAppView extends Component {
             top: '-25px',
             position: 'absolute',
         };
+        const rightIconButtonStyle = {
+            position: 'absolute',
+            top: 0,
+            right: '4px'
+        }
         return (
             <div>
                 <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
@@ -45,7 +56,9 @@ class UserAppView extends Component {
                 <Card>
                     <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
                     subtitle={app.developer.name}>
-
+                        <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
+                            <FontIcon className="material-icons">edit</FontIcon>
+                        </IconButton>
                     </CardHeader>
                     <CardText>
                         {app.description}
@@ -59,6 +72,17 @@ class UserAppView extends Component {
                     <CardTitle title="Versions" />
                     <CardText>
                         <VersionList versionList={app.versions}/>
+                    </CardText>
+                </Card>
+                <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
+                    <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
+                        <ContentAdd />
+                    </FloatingActionButton>
+                    <CardTitle title="Images" actAsExpander={true}/>
+                    <CardText>
+                        <CustomForm >
+                            <CustomFormField name="Test" floatingLabelText="Testing" required validator={(val) => !!val} />
+                        </CustomForm>
                     </CardText>
                 </Card>
             </div>
@@ -79,8 +103,12 @@ const mapDispatchToProps = (dispatch) =>  ({
         dispatch(appLoad(appid));
     },
 
-    openDialog(dialogProps) {
+    openNewVersionDialog(dialogProps) {
         dispatch(openDialog(dialogType.NEW_VERSION, dialogProps))
+    },
+
+    openEditAppDialog(dialogProps) {
+        dispatch(openDialog(dialogType.EDIT_APP, dialogProps))
     }
 })
 
