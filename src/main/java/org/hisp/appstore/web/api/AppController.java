@@ -28,8 +28,6 @@ public class AppController
 
     private static final String ENTITY_NOT_FOUND = "Entities not found with given ids";
 
-    private static final String ACCESS_DENIED = "Access denied for App with id ";
-
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -242,14 +240,14 @@ public class AppController
 
         if( imageResource.isLogo() && app.hasLogo() )
         {
-            throw new WebMessageException( WebMessageUtils.conflict( "Already has a logo" ) );
+            throw new WebMessageException( WebMessageUtils.conflict( String.format( "%s already has a logo", app.getName() ) ) );
         }
 
         decideAccess( app );
 
         appStoreService.addImagesToApp( app, imageResource, file, ResourceType.IMAGE );
 
-        renderService.renderCreated( response, request, String.format( "Image uploaded for app: ", app.getName() ) );
+        renderService.renderCreated( response, request, String.format( "Image uploaded for app: %s", app.getName() ) );
     }
 
     // -------------------------------------------------------------------------
@@ -430,10 +428,10 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/images/{vuid}", method = RequestMethod.DELETE )
-    public void removeImageFromAPp( @PathVariable( "uid" ) String appUid,
-                                      @PathVariable( "iuid" ) String iuid,
-                                      HttpServletResponse response, HttpServletRequest request )
+    @RequestMapping ( value = "/{uid}/images/{iuid}", method = RequestMethod.DELETE )
+    public void removeImageFromApp( @PathVariable( "uid" ) String appUid,
+                                    @PathVariable( "iuid" ) String iuid,
+                                    HttpServletResponse response, HttpServletRequest request )
                                     throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
@@ -449,7 +447,7 @@ public class AppController
 
         appStoreService.removeImageFromApp( app, imageResource, ResourceType.IMAGE );
 
-        renderService.renderOk( response, request, "ImageResource Removed" );
+        renderService.renderOk( response, request, String.format( "Image with id %s has been removed", iuid ) );
     }
 
     // -------------------------------------------------------------------------

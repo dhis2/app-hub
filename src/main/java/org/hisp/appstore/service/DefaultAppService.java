@@ -120,7 +120,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( String.format( "Status changed for %1", app.getName() ) );
+        log.info( String.format( "Status changed for %s", app.getName() ) );
     }
 
     @Override
@@ -182,7 +182,7 @@ public class DefaultAppService
 
         appStore.delete( app );
 
-        log.info( String.format( "App with name %1 deleted", app.getName() ));
+        log.info( String.format( "App with name %s deleted", app.getName() ));
     }
 
     @Override
@@ -228,7 +228,7 @@ public class DefaultAppService
 
         appStore.update( app );
 
-        log.info( String.format( "%1 has been removed from %2", "Version " +version.getVersion(), app.getName() ));
+        log.info( String.format( REMOVED, "Version " +version.getVersion(), app.getName() ));
     }
 
     @Override

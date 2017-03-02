@@ -66,6 +66,13 @@ public class AmazonS3FileStorageService implements FileStorageService
 
         FileUploadStatus status = new FileUploadStatus();
 
+        if ( file == null )
+        {
+            status.setUploaded( false );
+
+            return status;
+        }
+
         for( PutObjectRequestService putObjectRequestService : putObjectRequestCreators )
         {
             if ( putObjectRequestService.accepts( resourceType ))
