@@ -25,12 +25,17 @@ export default class CustomFormField extends Component {
         const value = e.target.value;
         let valid = false;
         const validator = this.props.validator;
+        if(!validator && !this.props.required) {
+            valid = true;
+        }
+        if(this.props.required) {
+            valid = this.requiredValidator(value)
+        }
+
         if(validator) {
             valid = validator(value);
         }
-        if(valid && this.props.required) {
-            valid = this.requiredValidator(value);
-        }
+
         if(valid) {
             this.setState({
                 ...this.state,

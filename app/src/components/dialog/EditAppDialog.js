@@ -57,7 +57,7 @@ export class EditAppDialog extends Component {
                 contentStyle={{ maxWidth: '500px' }}
             >
                 <CustomForm>
-                    <CustomFormField name="AppName" defaultValue={app.name} floatingLabelText="App name" floatingLabelFixed />
+                    <CustomFormField name="AppName" defaultValue={app.name} autoFocus floatingLabelText="App name" floatingLabelFixed />
                 </CustomForm>
             </DialogBase>
         );
