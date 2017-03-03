@@ -21,6 +21,13 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
+        case actionTypes.APP_DELETE_SUCCESS: {
+            return {
+                ...state,
+                message: action.payload.app.name + ' has been deleted.',
+            }
+        }
+
         default:
         {
             return {

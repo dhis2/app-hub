@@ -35,3 +35,8 @@ export const APP_VERSION_ADD_ERROR = 'APP_VERSION_ADD_ERROR';
 export const APP_EDIT = 'APP_EDIT';
 export const APP_EDIT_SUCCESS = 'APP_EDIT_SUCCESS';
 export const APP_EDIT_ERROR = 'APP_EDIT_ERROR';
+
+
+export const APP_DELETE = 'APP_DELETE';
+export const APP_DELETE_SUCCESS = 'APP_DELETE_SUCCESS';
+export const APP_DELETE_ERROR = 'APP_DELETE_ERROR';

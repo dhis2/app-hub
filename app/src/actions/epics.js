@@ -81,6 +81,25 @@ const approveApp = (action$) => action$
             }));
     })
 
+const deleteApp = (action$) => action$
+    .ofType(actions.APP_DELETE)
+    .concatMap(action => {
+        const fetchOptions = {
+            // Includes the credentials for the requested origin (So an app store cookie if it exists)
+            credentials: 'include',
+            method: 'DELETE'
+        };
+
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.app.id,fetchOptions)
+            .then(response => response.ok ? response : Promise.reject(response))
+            .then(response => response.json())
+            .then(resp => actionCreators.deleteAppSuccess(action.payload.app))
+            .catch(error => ({
+                type: actions.APP_DELETE_ERROR,
+                payload: error,
+            }));
+    })
+
 const user = (action$) => action$
     .ofType(actions.USER_LOAD)
     .concatMap(action => {
@@ -132,4 +151,4 @@ const newVersion = (action$) => action$
             }));
     });
 
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, user, userApps, newVersion)
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion)

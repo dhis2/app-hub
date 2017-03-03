@@ -79,6 +79,7 @@ AppListItem.propTypes = {
     app: PropTypes.object.isRequired,
     handleApprove: PropTypes.func.isRequired,
     handleReject: PropTypes.func,
+    handleDelete: PropTypes.func,
     isManager: PropTypes.bool,
 }
 export default withRouter(AppListItem);

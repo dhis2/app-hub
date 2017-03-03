@@ -56,6 +56,19 @@ export const editAppSuccess = (app) => {
     });
 }
 
+export const deleteApp = (app) => {
+    return createActionCreator(actions.APP_DELETE)({
+        app
+    });
+}
+
+export const deleteAppSuccess = (app) => {
+
+    return createActionCreator(actions.APP_DELETE_SUCCESS)({
+        app
+    })
+}
+
 //TODO: add signature to these
 export const userLoaded = createActionCreator(actions.USER_LOADED);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);

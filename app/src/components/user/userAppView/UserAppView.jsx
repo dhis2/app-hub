@@ -11,6 +11,7 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import CustomForm from '../../../form/CustomForm';
 import CustomFormField from '../../../form/CustomFormField';
+import TextField from 'material-ui/TextField';
 class UserAppView extends Component {
     constructor(props) {
         super(props);
@@ -81,7 +82,8 @@ class UserAppView extends Component {
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText>
                         <CustomForm >
-                            <CustomFormField name="Test" floatingLabelText="Testing" required validator={(val) => !!val} />
+                            <CustomFormField name="Test" floatingLabelText="Testing" required validator={(val) => val.startsWith("a")} />
+                            <TextField name="A" onChange={true} />
                         </CustomForm>
                     </CardText>
                 </Card>

@@ -70,6 +70,16 @@ function userReducer(state = {appList: []}, action) {
                 }
             }
         }
+
+        case actionTypes.APP_DELETE_SUCCESS: {
+            const app = action.payload.app;
+            const list = {...state.appList};
+            delete list[action.payload.app.id];
+            return {
+                ...state,
+                appList: list,
+            }
+        }
     }
     return state;
 }

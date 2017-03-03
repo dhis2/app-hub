@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import * as dialogTypes from '../../constants/dialogTypes';
 import NewAppVersionDialog from './NewAppVersionDialog';
 import EditAppDialog from './EditAppDialog';
+import ConfirmDeleteAppDialog from './ConfirmDeleteAppDialog';
 
 const DialogComponents = {};
 DialogComponents[dialogTypes.NEW_VERSION] = NewAppVersionDialog;
-DialogComponents[dialogTypes.CONFIRM_DELETE_APP] = null;
+DialogComponents[dialogTypes.CONFIRM_DELETE_APP] = ConfirmDeleteAppDialog;
 DialogComponents[dialogTypes.EDIT_APP] = EditAppDialog;
 
 class DialogRoot extends Component {

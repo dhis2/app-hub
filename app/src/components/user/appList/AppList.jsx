@@ -4,7 +4,8 @@ import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
-import {approveApp, loadAllApps, setAppApproval, userAppsLoad} from '../../../actions/actionCreators';
+import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
+import * as dialogTypes from '../../../constants/dialogTypes';
 import {mapValues, sortBy} from 'lodash';
 class AppList extends Component {
     constructor(props) {
@@ -60,7 +61,10 @@ class AppList extends Component {
 
 
         }
+    }
 
+    openDeleteDialog(app) {
+        this.props.openDeleteDialog({app});
     }
 
     render() {
@@ -71,6 +75,7 @@ class AppList extends Component {
         const apps = sortBy(appList, ['name']).map((app, i) => (
             <AppListItem app={app} key={i} isManager={this.props.user.manager}
                          match={this.props.match}
+                         handleDelete={this.openDeleteDialog.bind(this, app)}
                          handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
                          handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
         ))
@@ -103,6 +108,10 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     approveApp(payload) {
         dispatch(setAppApproval(payload))
+    },
+
+    openDeleteDialog(app) {
+        dispatch(openDialog(dialogTypes.CONFIRM_DELETE_APP, app))
     },
 
     loadAllApps() {
