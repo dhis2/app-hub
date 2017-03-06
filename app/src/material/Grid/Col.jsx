@@ -35,8 +35,8 @@ function getClassNames(props) {
     return classNames(baseClassname, modificators, props.additionalClasses);
 }
 
-const Col = ({children, ...props}) => (
-    <div className={getClassNames(props)}>
+const Col = ({children, style, ...props}) => (
+    <div className={getClassNames(props)} style={style} >
         {children}
     </div>
 )

@@ -8,6 +8,7 @@ import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
+import LoginView from './login/LoginView';
 import {userLoad} from '../../actions/actionCreators';
 class UserView extends Component {
 
@@ -23,8 +24,12 @@ class UserView extends Component {
                     <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
                     <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
                 </div>
-            ) : null;
-        return (
+            ) : (<Route exact path={`${this.props.match.url}`} component={LoginView} />);
+            //return login-route if not logged in
+            if(!this.props.user) {
+                return contentRoutes;
+            }
+            return (
             <Grid>
                 <Col span={2}>
                     <List style={{padding: 0}}>

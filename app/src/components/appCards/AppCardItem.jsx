@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { appTypesToUI } from '../../constants/apiConstants';
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'material-ui/Card';
-import Button from 'react-toolbox/lib/button/Button';
+import Button from 'material-ui/FlatButton';
 
 const AppItem = (props) => {
     const { id, name, developer, description, appType, requiredDhisVersion } = props.app;
@@ -24,7 +24,7 @@ const AppItem = (props) => {
             <CardTitle title={<Link to={`/app/${id}`}>{name}</Link>}
                        subtitle={(<span>{developer.name ? developer.name : 'Unspecified'} <br /> {appTypesToUI[appType]} </span>)}/>
             <CardActions>
-                <Link to={`/app/${id}`}><Button accent label="More" /></Link>
+                <Link to={`/app/${id}`}><Button label="More" /></Link>
             </CardActions>
         </Card>
     );

@@ -3,7 +3,7 @@ import TextField from 'material-ui/TextField';
 import { connect } from 'react-redux';
 import DialogBase from './DialogBase';
 import { addAppVersion } from '../../actions/actionCreators';
-
+import UploadFileField from '../form/UploadFileField';
 export class NewAppVersionDialog extends Component {
 
     constructor(props) {
@@ -68,7 +68,13 @@ export class NewAppVersionDialog extends Component {
             version: this.state.version,
             minDhisVersion: this.state.minVer,
             maxDhisVersion: this.state.maxVer,
-        },this.refs.file.input.files[0], this.props.app.id);
+        },this.state.file, this.props.app.id);
+    }
+    handleUpload(file) {
+        this.setState({
+            ...this.state,
+            file: file
+        })
     }
 
     validate(value) {
@@ -87,22 +93,19 @@ export class NewAppVersionDialog extends Component {
                 cancelAction={this.props.closeDialog}
                 contentStyle={{ maxWidth: '500px' }}
             >
-                <TextField ref="version" hintText="Version" autoFocus style={fieldStyle}
+                <TextField ref="version" hintText="Version" floatingLabelText="Version" autoFocus style={fieldStyle}
                     errorText={this.state.versionError}
                     onChange={this.handleInput.bind(this, 'version')}
                 />
-                <TextField ref="minVer" hintText="Min DHIS version" style={fieldStyle}
+                <TextField ref="minVer" hintText="Min DHIS version" floatingLabelText="Min DHIS version" style={fieldStyle}
                            errorText={this.state.minVersionError}
                            onChange={this.handleInput.bind(this, 'minVer')}
                 />
-                <TextField ref="maxVer" hintText="Max DHIS version" style={fieldStyle}
+                <TextField ref="maxVer" hintText="Max DHIS version" floatingLabelText="Min DHIS version"  style={fieldStyle}
                            errorText={this.state.maxVersionError}
                            onChange={this.handleInput.bind(this, 'maxVer')}
                 />
-                <TextField id="fileinput" ref="file" hintText="" style={fieldStyle}
-                           type="file"
-                    errorText={this.state.fileError}
-                />
+                <UploadFileField handleUpload={this.handleUpload.bind(this)}/>
             </DialogBase>
         );
     }

@@ -5,11 +5,15 @@ const propTypes = {
     additionalClasses: PropTypes.string
 };
 
-const Grid = (props) => (
-    <div className={classNames('mdc-layout-grid', props.additionalClasses)}>
+const Grid = ({style, ...props}) => (
+    <div className={classNames('mdc-layout-grid', props.additionalClasses)} style={style}>
         {props.children}
     </div>
 )
+
+Grid.defaultProps = {
+    style: null
+}
 
 Grid.propTypes = propTypes;
 

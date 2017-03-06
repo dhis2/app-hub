@@ -1,11 +1,8 @@
 import React from 'react';
 import {BrowserRouter as Router, Route} from 'react-router-dom';
-import themeRT from '../styles/react-toolbox/theme';
-import ThemeProvider from 'react-toolbox/lib/ThemeProvider';
 import 'material-components-web/build/material-components-web.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../styles/theme';
-import '../styles/react-toolbox/theme.css';
 import '../styles/override.css';
 import AppCards from './appCards/AppCards';
 import AppView from './appView/AppView';
@@ -28,7 +25,6 @@ export default function AppStore() {
                 <MuiThemeProvider muiTheme={theme}>
                 <Router>
 
-                    <ThemeProvider theme={themeRT}>
                     <div className="app">
                         <Header />
 
@@ -40,7 +36,6 @@ export default function AppStore() {
 
                         <Snackbar />
                     </div>
-                    </ThemeProvider>
                 </Router>
                 </MuiThemeProvider>
             </Provider>

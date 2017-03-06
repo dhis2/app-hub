@@ -52,7 +52,7 @@ export function createUploadVersionOptions(data) {
     const file = new Blob([dataFile], {type: 'multipart/form-data'})
     const app = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
 
-    form.append('file', file, file.name)
+    form.append('file', file, dataFile.name)
     form.append('version', app);
 
     const fetchOptions = {

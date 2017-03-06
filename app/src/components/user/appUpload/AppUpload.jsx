@@ -1,19 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import Layout from 'react-toolbox/lib/layout/Layout';
-import NavDrawer from 'react-toolbox/lib/layout/NavDrawer';
-import Panel from 'react-toolbox/lib/layout/Panel';
-import Navigation from 'react-toolbox/lib/navigation/Navigation';
-import FontIcon from 'react-toolbox/lib/font_icon/FontIcon';
 import { Card, CardText } from 'material-ui/Card';
 //import CardText from 'react-toolbox/lib/card/CardText';
-import CardTitle from 'react-toolbox/lib/card/CardTitle';
-import { Link } from 'react-router-dom';
-import LinkTool from 'react-toolbox/lib/link/Link';
-import Button from 'react-toolbox/lib/button/Button';
-import Input from 'react-toolbox/lib/input/Input';
-import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
-import Paper from 'material-ui/Paper';
+import Button from 'material-ui/FlatButton';
+//import Input from 'react-toolbox/lib/input/Input';
+//import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
+
 class UserView extends Component {
     constructor(props) {
         super(props);
