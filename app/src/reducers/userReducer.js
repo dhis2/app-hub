@@ -71,6 +71,29 @@ function userReducer(state = {appList: []}, action) {
             }
         }
 
+        case actionTypes.APP_VERSION_DELETE_SUCCESS: {
+            const version = action.payload.version;
+            const appId = action.payload.appId;
+            const app = state.appList[appId];
+            if(!app) {
+                return state;
+            }
+            console.log(version)
+            console.log(app.versions)
+            const newVer = app.versions.filter( v => v.id !== version.id);
+            console.log(newVer)
+            return {
+                ...state,
+                appList: {
+                    ...state.appList,
+                    [appId]: {
+                        ...app,
+                        versions: newVer,
+                    }
+                }
+            }
+        }
+
         case actionTypes.APP_DELETE_SUCCESS: {
             const app = action.payload.app;
             const list = {...state.appList};

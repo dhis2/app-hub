@@ -151,4 +151,22 @@ const newVersion = (action$) => action$
             }));
     });
 
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion)
+const deleteVersion = (action$) => action$
+    .ofType(actions.APP_VERSION_DELETE)
+    .concatMap(action => {
+        const version = action.payload.version;
+        const fetchOptions = {
+            credentials: 'include',
+            method: 'DELETE'
+        }
+        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/versions/'+version.id, fetchOptions)
+            .then(response => response.ok ? response : Promise.reject(response))
+            .then(response => response.json())
+            .then(response => actionCreators.deleteAppVersionSuccess(version, action.payload.appId))
+            .catch(error => ({
+                type: actions.APP_DELETE_ERROR,
+                payload: error,
+            }));
+    })
+
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion, deleteVersion)

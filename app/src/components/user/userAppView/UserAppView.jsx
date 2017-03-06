@@ -4,7 +4,7 @@ import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { appLoad, openDialog } from '../../../actions/actionCreators';
+import { appLoad, openDialog, deleteAppVersion } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
@@ -28,6 +28,10 @@ class UserAppView extends Component {
 
     handleOpenEditApp() {
         this.props.openEditAppDialog({app: this.props.app});
+    }
+
+    handleDeleteAppVersion(version) {
+        this.props.deleteVersion(version, this.props.app.id);
     }
     render() {
         console.log(this.props)
@@ -73,7 +77,7 @@ class UserAppView extends Component {
                     </FloatingActionButton>
                     <CardTitle title="Versions" />
                     <CardText>
-                        <VersionList versionList={app.versions}/>
+                        <VersionList editable versionList={app.versions} app={app} handleDelete={this.handleDeleteAppVersion.bind(this)}/>
                     </CardText>
                 </Card>
                 <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
@@ -102,6 +106,10 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) =>  ({
     loadApp(appid) {
         dispatch(appLoad(appid));
+    },
+
+    deleteVersion(version,appId) {
+        dispatch(deleteAppVersion(version, appId))
     },
 
     openNewVersionDialog(dialogProps) {
