@@ -78,10 +78,7 @@ function userReducer(state = {appList: []}, action) {
             if(!app) {
                 return state;
             }
-            console.log(version)
-            console.log(app.versions)
             const newVer = app.versions.filter( v => v.id !== version.id);
-            console.log(newVer)
             return {
                 ...state,
                 appList: {

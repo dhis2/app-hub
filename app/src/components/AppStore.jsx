@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
 import 'material-components-web/build/material-components-web.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../styles/theme';
@@ -15,14 +15,25 @@ import * as dialogType from '../constants/dialogTypes';
 import {Provider} from 'react-redux';
 import store from '../store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import * as apiConstants from '../constants/apiConstants';
+import LoginView from './user/login/LoginView';
+import AuthService from '../utils/AuthService';
 injectTapEventPlugin();
 
+
+const auth = new AuthService();
+
+const PrivateRoute = ({component, ...rest}) => (
+    <Route {...rest} render={props => (
+        auth.isLoggedIn() ?
+            React.createElement(component, props) : <Redirect to="/login"/>)}/>
+)
 
 export default function AppStore() {
     return (
 
-            <Provider store={ store }>
-                <MuiThemeProvider muiTheme={theme}>
+        <Provider store={ store }>
+            <MuiThemeProvider muiTheme={theme}>
                 <Router>
 
                     <div className="app">
@@ -30,15 +41,16 @@ export default function AppStore() {
 
                         <Route exact path="/" component={AppCards}/>
                         <Route path='/app/:appId' component={AppView}/>
-                        <Route path='/user/' component={UserView}/>
+                        <Route path="/login" component={LoginView}/>
+                        <PrivateRoute path='/user/' component={UserView}/>
 
                         <DialogRoot />
 
                         <Snackbar />
                     </div>
                 </Router>
-                </MuiThemeProvider>
-            </Provider>
+            </MuiThemeProvider>
+        </Provider>
 
     );
 }

@@ -27,3 +27,6 @@ export const appSchema = {
 
 }
 
+
+export const AUTH0ClientId = '';
+export const AUTH0Domain = '';

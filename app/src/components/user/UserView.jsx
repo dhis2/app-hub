@@ -3,13 +3,16 @@ import {connect} from 'react-redux';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import FontIcon from 'material-ui/FontIcon';
-import {Link, Route} from 'react-router-dom';
+import {Link, Route, Redirect} from 'react-router-dom';
 import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
 import LoginView from './login/LoginView';
 import {userLoad} from '../../actions/actionCreators';
+import AuthService from '../../utils/AuthService';
+import * as apiConstants from '../../constants/apiConstants';
+const auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
 class UserView extends Component {
 
     componentDidMount() {
@@ -17,17 +20,17 @@ class UserView extends Component {
     }
 
     render() {
-        const contentRoutes = this.props.user ? (
+        const contentRoutes = (
                 <div>
                     <Route exact path={`${this.props.match.url}`} component={AppList}>
                     </Route>
                     <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
                     <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
                 </div>
-            ) : (<Route exact path={`${this.props.match.url}`} component={LoginView} />);
-            //return login-route if not logged in
-            if(!this.props.user) {
-                return contentRoutes;
+            );
+
+            if(!this.props.user) { //TODO: Should return loading here after we handle auth in route
+                return (<Redirect to='/login' />)
             }
             return (
             <Grid>

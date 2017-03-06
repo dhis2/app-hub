@@ -151,6 +151,7 @@ const newVersion = (action$) => action$
             }));
     });
 
+
 const deleteVersion = (action$) => action$
     .ofType(actions.APP_VERSION_DELETE)
     .concatMap(action => {
