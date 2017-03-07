@@ -17,16 +17,16 @@ import store from '../store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import * as apiConstants from '../constants/apiConstants';
 import LoginView from './user/login/LoginView';
-import AuthService from '../utils/AuthService';
+import { getAuth } from '../utils/AuthService';
 injectTapEventPlugin();
 
 
-const auth = new AuthService();
+const auth = getAuth();
 
 const PrivateRoute = ({component, ...rest}) => (
     <Route {...rest} render={props => (
         auth.isLoggedIn() ?
-            React.createElement(component, props) : <Redirect to="/login"/>)}/>
+            React.createElement(component, props) : null)}/>// <Redirect to="/login"/>)}/>
 )
 
 export default function AppStore() {
@@ -41,7 +41,8 @@ export default function AppStore() {
 
                         <Route exact path="/" component={AppCards}/>
                         <Route path='/app/:appId' component={AppView}/>
-                        <Route path="/login" component={LoginView}/>
+                        <Route path="/login" render={(props) => (
+                            <LoginView auth={auth} {...props} />)} />
                         <PrivateRoute path='/user/' component={UserView}/>
 
                         <DialogRoot />
@@ -53,4 +54,4 @@ export default function AppStore() {
         </Provider>
 
     );
-}
+    }

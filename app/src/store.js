@@ -8,6 +8,7 @@ import userReducer from './reducers/userReducer';
 import appListReducer from './reducers/appListReducer';
 import dialogReducer from './reducers/dialogReducer';
 import snackbarReducer from './reducers/snackbarReducer';
+import { reducer as formReducer } from 'redux-form';
 const middlewares = [createEpicMiddleware(Epics)];
 
 if(process.env.NODE_ENV === 'development') {
@@ -20,6 +21,7 @@ const reducer = combineReducers({
     user: userReducer,
     dialog: dialogReducer,
     snackbar: snackbarReducer,
+    form: formReducer,
 });
 
 export default createStore(reducer, applyMiddleware(...middlewares));

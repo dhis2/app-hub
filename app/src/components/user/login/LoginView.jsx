@@ -11,7 +11,8 @@ class LoginView extends Component {
     }
 
     handleLogin() {
-        window.location="http://localhost:3099/login"
+       // window.location="http://localhost:3099/login"
+        this.props.auth.login();
     }
 
     render() {
@@ -31,6 +32,10 @@ class LoginView extends Component {
             </Grid>
         )
     }
+}
+
+LoginView.propTypes = {
+    auth: PropTypes.object.isRequired,
 }
 
 export default LoginView;

@@ -28,5 +28,5 @@ export const appSchema = {
 }
 
 
-export const AUTH0ClientId = '';
-export const AUTH0Domain = '';
+export const AUTH0ClientId = 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81';
+export const AUTH0Domain = 'dhis2.eu.auth0.com';

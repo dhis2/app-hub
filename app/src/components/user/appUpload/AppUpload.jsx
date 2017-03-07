@@ -1,42 +1,45 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Card, CardText } from 'material-ui/Card';
-//import CardText from 'react-toolbox/lib/card/CardText';
+import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
-//import Input from 'react-toolbox/lib/input/Input';
-//import Dropdown from 'react-toolbox/lib/dropdown/Dropdown';
+import TextField from 'material-ui/TextField';
+import UploadFileField from '../../form/UploadFileField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import { Field, reduxForm } from 'redux-form';
+import UploadAppForm from '../../form/UploadAppForm';
+
 
 class UserView extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            appName: '',
-            description: '',
-            developerName: '',
-            developerEmail: '',
-            version: '',
-            minVer: '',
-            maxVer: '',
-        }
-        this.handleUpload = this.handleUpload.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleUpload() {
+    handleSubmit(values) {
+        console.log(values)
+        return;
         const data = {
-                name: this.state.appName,
-                description: this.state.description,
-                developer: {
-                    name: this.state.developerName,
-                    email: this.state.developerEmail
-                },
-                versions: [{version: this.state.version,
-                    minDhisVersion: this.state.minDhisVersion,
-                    maxDhisVersion: this.state.maxDhisVersion
-                }]
-            }
-        const fileInput = this.file.refs.wrappedInstance.inputNode.files[0];
-
+            name: values.appName,
+            description: values.description,
+            developer: {
+                name: values.developerName,
+                email: values.developerEmail,
+                address: values.developerAddress,
+                organisation: values.developerOrg,
+            },
+            versions: [{
+                version: values.version,
+                minDhisVersion: values.minVer,
+                maxDhisVersion: values.maxVer
+            }],
+            images: [{
+                caption: '',
+                description: '',
+            }]
+        }
+        const fileInput = values.file;
         let form = new FormData();
         const file = new Blob([fileInput], {type: 'multipart/form-data'})
         const app = new Blob([JSON.stringify(data)], {type: 'application/json'})
@@ -52,43 +55,51 @@ class UserView extends Component {
         fetch('http://localhost:3099/api/apps', fetchOptions)
     }
 
-    handleChange(name, value) {
-        console.log(value)
+    handleChange(name, e) {
+        const value = e.target.value;
         this.setState({
             ...this.state,
             [name]: value,
         });
     }
 
+    handleUpload(file) {
+
+    }
+
+    handleSelectChange(e, index, value) {
+        this.setState({
+            ...this.state,
+            appType: value
+        })
+    }
+
     render() {
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
+        const menuItems = appTypes.map((type, i) => (
+            <MenuItem key={type.value} value={type.value} primaryText={type.label}/>
+        ));
+        const sel = (<SelectField onChange={this.handleSelectChange.bind(this)}>
+            {menuItems}
+        </SelectField>)
         return (
             <div>
                 <h2>Upload App</h2>
-            <Card>
-                <CardText>
-                <Input type='text' required label='App name' name='appName' value={this.state.appName} onChange={this.handleChange.bind(this,'appName')} />
-                <Input type='text' name="description" multiline label='Description' value={this.state.description} onChange={this.handleChange.bind(this,'description')}/>
-                <Input type='text' name="developerName" label='Developer' value={this.state.developerName} onChange={this.handleChange.bind(this,'developerName')} />
-                <Input type='email' label='Developer Email' value={this.state.developerEmail} onChange={this.handleChange.bind(this,'developerEmail')} />
-                <Input type='text' label='Version' value={this.state.version} onChange={this.handleChange.bind(this,'version')} />
-                <Input type='text' label='Min DHIS version' value={this.state.minVer} onChange={this.handleChange.bind(this,'minVer')} />
-                <Input type='text' label='Max DHIS version' value={this.state.maxVer} onChange={this.handleChange.bind(this,'maxVer')} />
-                <Input type='file' required onChange={this.handleChange.bind(this,'file')} ref={(file) => {this.file = file}}/>
-                <Dropdown label="App type" auto source={appTypes} value={appTypes[0].value} />
-                <Button accent raised icon="file_upload" name="app" onClick={this.handleUpload}>Upload</Button>
-                </CardText>
-            </Card>
+                <Card>
+                    <CardText>
+                        <UploadAppForm submitted={this.handleSubmit.bind(this)} />
+                    </CardText>
+                </Card>
             </div>
         )
     }
 }
-
 const mapStateToProps = (state) => ({
-    appList: state.appsList.appList,
-});
+        appList: state.appsList.appList,
+    });
 
 const mapDispatchToProps = (dispatch) => ({})
 
-export default connect(mapStateToProps, null)(UserView);
+export default connect(mapStateToProps, null)(
+    UserView);

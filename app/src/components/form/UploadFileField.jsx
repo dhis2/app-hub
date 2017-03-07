@@ -17,7 +17,7 @@ class UploadFileField extends Component {
         super(props);
 
         this.state = {
-            fileName: ''
+            fileName: props.defaultText || ''
         }
         this.uploadAction = this.uploadAction.bind(this);
         this.handleUpload = this.handleUpload.bind(this);

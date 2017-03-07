@@ -3,7 +3,7 @@ import * as actionCreators from './actionCreators';
 import * as uploadUtils from '../utils/uploadUtils';
 
 import { combineEpics } from 'redux-observable';
-
+import { getAuth } from '../utils/AuthService';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -13,8 +13,12 @@ const loadAppsAll = (action$) => action$
             // Includes the credentials for the requested origin (So an app store cookie if it exists)
             credentials: 'include',
         };
+        const headers = {};
+         if (getAuth().isLoggedIn()) {
+         headers['Authorization'] = 'Bearer ' + getAuth().getToken()
+         }
 
-        return window.fetch('http://localhost:3099/api/apps/all', fetchOptions)
+        return window.fetch('http://localhost:3099/api/apps/all', {headers, ...fetchOptions})
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
             .then(apps => actionCreators.appsAllLoaded(apps))
@@ -107,8 +111,13 @@ const user = (action$) => action$
             // Includes the credentials for the requested origin (So an app store cookie if it exists)
             credentials: 'include',
         };
+        const headers = {};
+        if (getAuth().isLoggedIn()) {
+          //  headers['Authorization'] = 'Bearer ' + getAuth().getToken()
+        }
 
-        return window.fetch('http://localhost:3099/api/users/me', fetchOptions)
+
+        return window.fetch('http://localhost:3099/api/users/me', { headers, ...fetchOptions})
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
             .then(apps => actionCreators.userLoaded(apps))

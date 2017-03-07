@@ -1,19 +1,9 @@
 import Auth0Lock from 'auth0-lock'
-import { browserHistory } from 'react-router'
+import {  } from 'react-router'
 import { isTokenExpired } from './jwtHelper';
+import * as apiConstants from '../constants/apiConstants';
+import { BrowserRouter } from 'react-router-dom';
 
-export default class AuthService {
-    constructor(id, domain) {
-
-    }
-
-    isLoggedIn() {
-        return true
-    }
-
-}
-
-/*
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
@@ -31,9 +21,11 @@ export default class AuthService {
 
     _doAuthentication(authResult) {
         // Saves the user token
+        console.log(authResult)
         this.setToken(authResult.idToken)
+        this.setAccessToken(authResult.accessToken)
         // navigate to the home route
-        browserHistory.replace('/user')
+      //  BrowserHistory.replace('/user')
     }
 
     login() {
@@ -41,9 +33,10 @@ export default class AuthService {
         this.lock.show()
     }
 
-    loggedIn() {
+    isLoggedIn() {
         // Checks if there is a saved token and it's still valid
         const token = this.getToken();
+        console.log(token)
         return !!token && !isTokenExpired(token);
     }
 
@@ -52,13 +45,29 @@ export default class AuthService {
         localStorage.setItem('id_token', idToken)
     }
 
+    setAccessToken(accessToken) {
+        localStorage.setItem('access_token', accessToken);
+    }
+
     getToken() {
         // Retrieves the user token from local storage
-        return localStorage.getItem('id_token')
+        return localStorage.getItem('id_token');
+    }
+
+    getAccessToken() {
+        return localStorage.getItem(('access_token'));
     }
 
     logout() {
         // Clear user token and profile data from local storage
         localStorage.removeItem('id_token');
     }
-} */
+}
+let auth;
+export function getAuth() {
+    if (auth)
+       return auth;
+
+    auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
+    return auth;
+}
