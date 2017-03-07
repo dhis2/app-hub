@@ -1,26 +1,21 @@
 
-/*
-export function createUploadOptions(data) {
-    const data = {
-        name: this.state.appName,
-        description: this.state.description,
-        developer: {
-            name: this.state.developerName,
-            email: this.state.developerEmail
-        },
-        versions: [{version: this.state.version,
-            minDhisVersion: this.state.minDhisVersion,
-            maxDhisVersion: this.state.maxDhisVersion
-        }]
-    }
-    const fileInput = this.file.refs.wrappedInstance.inputNode.files[0];
 
+export function createUploadOptions(data) {
+
+    console.log(data);
+
+
+
+    const fileInput = data.file;
+    const imageInput = data.image;
     let form = new FormData();
     const file = new Blob([fileInput], {type: 'multipart/form-data'})
-    const app = new Blob([JSON.stringify(data)], {type: 'application/json'})
+    const image = new Blob([fileInput], {type: 'multipart/form-data'})
+    const app = new Blob([JSON.stringify(data.data)], {type: 'application/json'})
 
     form.append('file', file, fileInput.name)
     form.append('app', app);
+    form.append('imageFile', image, imageInput.name);
 
     const fetchOptions = {
         credentials: 'include',
@@ -28,7 +23,7 @@ export function createUploadOptions(data) {
         body: form
     };
     return fetchOptions;
-} */
+}
 
 /**
  *

@@ -21,6 +21,7 @@
     "auth0-lock": "^10.12.2",
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
+    "history": "^4.5.1",
     "jwt-decode": "^2.1.0",
     "lodash": "^4.17.4",
     "material-components-web": "^0.4.0",

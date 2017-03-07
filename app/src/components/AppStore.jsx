@@ -1,5 +1,6 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Redirect} from 'react-router-dom';
+import {Router, Route, Redirect} from 'react-router-dom';
+import { history } from '../utils/history';
 import 'material-components-web/build/material-components-web.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../styles/theme';
@@ -20,7 +21,6 @@ import LoginView from './user/login/LoginView';
 import { getAuth } from '../utils/AuthService';
 injectTapEventPlugin();
 
-
 const auth = getAuth();
 
 const PrivateRoute = ({component, ...rest}) => (
@@ -34,7 +34,7 @@ export default function AppStore() {
 
         <Provider store={ store }>
             <MuiThemeProvider muiTheme={theme}>
-                <Router>
+                <Router history={history}>
 
                     <div className="app">
                         <Header />

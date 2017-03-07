@@ -4,6 +4,7 @@ import * as uploadUtils from '../utils/uploadUtils';
 
 import { combineEpics } from 'redux-observable';
 import { getAuth } from '../utils/AuthService';
+import { history } from '../utils/history';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -54,7 +55,7 @@ const loadApp = (action$) => action$
             // Includes the credentials for the requested origin (So an app store cookie if it exists)
             credentials: 'include',
         };
-
+        
         return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId, fetchOptions)
             .then(response => response.ok ? response : Promise.reject(response))
             .then(response => response.json())
