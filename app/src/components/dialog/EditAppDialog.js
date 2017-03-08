@@ -1,46 +1,31 @@
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
 import TextField from 'material-ui/TextField';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import DialogBase from './DialogBase';
-import { addAppVersion } from '../../actions/actionCreators';
+import {editApp} from '../../actions/actionCreators';
 import CustomForm from '../../form/CustomForm';
 import CustomFormField from '../../form/CustomFormField';
+import EditAppForm from '../form/EditAppForm';
 
 export class EditAppDialog extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            version: '',
-            minVersion: '',
-            maxVersion: '',
-            file: '',
-            versionError: '',
-            minVersionError: '',
-            maxVersionError: '',
-            fileError: '',
-        };
-        this.validate = this.validate.bind(this);
-        this.handleCreate = this.handleCreate.bind(this);
     }
 
-
-    handleInput(name, e) {
-        const value = e.target.value;
-        console.log(this.refs)
-        this.setState({
-            ...this.state,
-            [name]: value,
-        })
+    submitForm() { //submit form manually as dialog actions work as submit button
+        const res = this.form.submit();
+        if(this.form.valid) {
+            return Promise.resolve(res);
+        } else {
+            return Promise.reject(res)
+        }
     }
 
-    handleCreate() {
+    handleCreate(values) {
+        this.props.editApp(this.props.app, values.data);
 
-    }
-
-    validate(value) {
-        return value ? '' : 'Invalid Input. Field required';
     }
 
     render() {
@@ -52,13 +37,22 @@ export class EditAppDialog extends Component {
         return (
             <DialogBase
                 title="Edit App"
-                approveAction={this.handleCreate.bind(this)}
+                approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
-                contentStyle={{ maxWidth: '500px' }}
+                contentStyle={{maxWidth: '500px'}}
+                bodyStyle={{overflowY:'scroll'}}
             >
-                <CustomForm>
-                    <CustomFormField name="AppName" defaultValue={app.name} autoFocus floatingLabelText="App name" floatingLabelFixed />
-                </CustomForm>
+                <EditAppForm initialValues={{
+                    appName: app.name,
+                    description: app.description,
+                    appType: app.appType,
+                    developerName: app.developer.name,
+                    developerEmail: app.developer.email,
+                    developerAddress: app.developer.address,
+                    developerOrg: app.developer.organisation,
+                }} ref={(ref) => {this.form = ref; }}
+                submitted={this.handleCreate.bind(this)}/>
+
             </DialogBase>
         );
     }
@@ -75,8 +69,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    addVersion(appVersion, file, id) {
-       dispatch(addAppVersion(appVersion,file, id))
+    editApp(app, data) {
+        dispatch(editApp(app, data))
     },
 });
 

@@ -43,7 +43,7 @@ const loadApp = (action$) => action$
 const approveApp = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
-        const {app: { id }, status} = action.payload;
+        const {app: {id}, status} = action.payload;
         return api.setAppApproval(id, status)
             .then(resp => actionCreators.setAppApprovalSuccess(action.payload))
             .catch(error => ({
@@ -107,6 +107,17 @@ const newApp = (action$) => action$
             }))
     });
 
+const editApp = (action$) => action$
+    .ofType(actions.APP_EDIT)
+    .concatMap(action => {
+        const { app, data } = action.payload;
+        return api.updateApp(app.id, data)
+            .then(resp => actionCreators.editAppSuccess(app, data))
+            .catch(error => ({
+                type: actions.APP_EDIT_ERROR,
+                payload: error
+            }))
+    });
 
 const deleteVersion = (action$) => action$
     .ofType(actions.APP_VERSION_DELETE)
@@ -120,4 +131,6 @@ const deleteVersion = (action$) => action$
             }));
     })
 
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion, newApp, deleteVersion)
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
+    user, userApps, newVersion,
+    newApp, deleteVersion, editApp)

@@ -48,7 +48,12 @@ export const addApp = (app, file, image) => {
         image
     })
 }
-
+export const editApp = (app, data) => (
+    createActionCreator(actions.APP_EDIT)({
+        app,
+        data
+    })
+)
 export const addAppSuccess = (app) => (
     createActionCreator(actions.APP_ADD_SUCCESS)({
         app
@@ -76,10 +81,11 @@ export const addAppVersionSuccess = (version, appId) => {
     });
 }
 
-export const editAppSuccess = (app) => {
+export const editAppSuccess = (app, data) => {
 
-    return createActionCreator(actions.APP_EDIT)({
-        app
+    return createActionCreator(actions.APP_EDIT_SUCCESS)({
+        app,
+        data
     });
 }
 

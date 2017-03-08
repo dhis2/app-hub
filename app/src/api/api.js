@@ -16,6 +16,10 @@ const deleteOpts = {
     method: 'DELETE'
 }
 
+const updateOpts = {
+    method: 'PUT',
+}
+
 export function getAllApps() {
     return fromApi('apps/all', true);
 }
@@ -56,6 +60,13 @@ export function deleteApp(appId) {
     return fromApi('apps/'+appId, true, deleteOpts);
 }
 
+export function updateApp(appId, payload) {
+    return fromApi('apps/'+appId, true, {
+        ...baseOptions,
+        method: 'PUT',
+        body: JSON.stringify(payload)
+    });
+}
 
 function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
@@ -131,4 +142,14 @@ export function createUploadVersionOptions(data) {
     return fetchOptions;
 }
 
+function createUpdateAppOptions(data) {
+    let form = new FormData();
+    const file = new Blob([JSON.stringify(data)], {type: 'application/json'})
+    form.append('')
 
+    const fetchOptions = {
+        ... baseOptions,
+        method: 'PUT',
+        body: form
+    }
+}

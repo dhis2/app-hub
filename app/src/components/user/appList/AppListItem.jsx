@@ -66,11 +66,7 @@ const AppListItem = (props, state) => {
     }
 
     return (
-            <ListItem {...listItemProps} >
-                <div style={rightIconsStyle}>
-                    {appStatus[status].elem}
-                </div>
-            </ListItem>
+            <ListItem {...listItemProps} />
 
     )
 }

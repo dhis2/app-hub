@@ -1,8 +1,8 @@
-import React, { PropTypes, Component } from 'react';
-import { connect } from 'react-redux';
+import React, {PropTypes, Component} from 'react';
+import {connect} from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
-import { closeDialog } from '../../actions/actionCreators';
+import {closeDialog} from '../../actions/actionCreators';
 
 class DialogBase extends Component {
 
@@ -15,21 +15,23 @@ class DialogBase extends Component {
     }
 
     render() {
-        const { title,
-                cancelAction,
-                cancelLabel,
-                approveAction,
-                approveLabel,
-                contentStyle,
-                defaultCloseDialog } = this.props;
+        const {
+            title,
+            cancelAction,
+            cancelLabel,
+            approveAction,
+            approveLabel,
+            contentStyle,
+            bodyStyle,
+            defaultCloseDialog
+        } = this.props;
 
         const actions = [];
 
-        // TODO: Clean this up
         const finalAction = () => {
-            approveAction();
-            defaultCloseDialog();
-        };
+            Promise.resolve(approveAction()).then(() => defaultCloseDialog()).catch()
+
+    };
 
         actions.push(DialogBase.buildButton(cancelAction || defaultCloseDialog, cancelLabel || 'Cancel'));
         if (approveAction) actions.push(DialogBase.buildButton(finalAction, approveLabel || 'Done', true));
@@ -40,6 +42,7 @@ class DialogBase extends Component {
             actions={actions}
             modal={false}
             contentStyle={contentStyle || {}}
+            bodyStyle={bodyStyle || {}}
             onRequestClose={defaultCloseDialog}
         >
             {this.props.children}
@@ -55,6 +58,7 @@ DialogBase.propTypes = {
     approveAction: PropTypes.func,
     defaultCloseDialog: PropTypes.func,
     contentStyle: PropTypes.object,
+    bodyStyle: PropTypes.object,
 };
 
 const mapDispatchToProps = dispatch => ({

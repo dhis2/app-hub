@@ -100,6 +100,20 @@ function userReducer(state = {appList: []}, action) {
                 appList: list,
             }
         }
+        case actionTypes.APP_EDIT_SUCCESS: {
+            const { app, data } = action.payload;
+            console.log(action.payload)
+            return {
+                ...state,
+                appList: {
+                    ...state.appList,
+                    [app.id]: {
+                        ...app,
+                        ...data
+                    }
+                }
+            }
+        }
     }
     return state;
 }
