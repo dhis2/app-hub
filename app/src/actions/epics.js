@@ -100,7 +100,10 @@ const newApp = (action$) => action$
     .ofType(actions.APP_ADD)
     .concatMap(action => {
         return api.createApp(action.payload)
-            .then(app => actionCreators.addAppSuccess(app))
+            .then(app => {
+                history.push("/user");
+                return actionCreators.addAppSuccess(app)
+            })
             .catch(error => ({
                 type: actions.APP_ADD_ERROR,
                 payload: error

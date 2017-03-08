@@ -20,6 +20,13 @@ const snackbarReducer = (state = initialState, action) => {
                 message: 'Status for ' + action.payload.app.name + ' was updated to ' + appStatusToUI[action.payload.status],
             }
         }
+        case actionTypes.APP_ADD_SUCCESS: {
+            return {
+                ...state,
+                message: 'Your app has been successfully uploaded! Note that you need to wait for' +
+                'approval before it\'s visible to the public.'
+            }
+        }
 
         case actionTypes.APP_DELETE_SUCCESS: {
             return {
