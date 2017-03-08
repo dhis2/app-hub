@@ -12,7 +12,10 @@ import { reducer as formReducer } from 'redux-form';
 const middlewares = [createEpicMiddleware(Epics)];
 
 if(process.env.NODE_ENV === 'development') {
-    middlewares.unshift(createLogger())
+    middlewares.unshift(createLogger({
+        collapsed: (getState, action) => action.type.startsWith('@@redux-form')
+
+    }))
 }
 
 

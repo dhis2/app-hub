@@ -3,11 +3,10 @@ import * as actionCreators from './actionCreators';
 import {combineEpics} from 'redux-observable';
 import {getAuth} from '../utils/AuthService';
 import {history} from '../utils/history'
-
 import * as api from '../api/api';
+
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
-    // .startWith({type: 'INIT'})
     .concatMap(action => {
         return api.getAllApps()
             .then(apps => actionCreators.appsAllLoaded(apps))
@@ -44,6 +43,7 @@ const loadApp = (action$) => action$
 const approveApp = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
+        const {app: { id }, status} = action.payload;
         return api.setAppApproval(id, status)
             .then(resp => actionCreators.setAppApprovalSuccess(action.payload))
             .catch(error => ({

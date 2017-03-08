@@ -1,7 +1,7 @@
 import * as actionTypes from '../constants/actionTypes';
-import { appStatusToUI } from '../constants/apiConstants';
+import {appStatusToUI} from '../constants/apiConstants';
 
-const emptySnackbar = { message: '', duration: 4000,  };
+const emptySnackbar = {message: '', duration: 4000,};
 const initialState = {
     ...emptySnackbar
 };
@@ -29,11 +29,17 @@ const snackbarReducer = (state = initialState, action) => {
         }
 
         default:
-        {
-            return {
-                ...state,
-            };
-        }
+            if (action.type.endsWith('_ERROR')) {
+                console.log(action.payload)
+                return {
+                    ...state,
+                    message: 'An error occurred.'
+                }
+            } else {
+                return {
+                    ...state,
+                };
+            }
     }
 };
 

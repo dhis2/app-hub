@@ -34,15 +34,19 @@ const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
     />
 )
 
-const renderSelectField = ({input, label, meta: {touched, error}, children}) => (
-    <SelectField
-        floatingLabelText={label}
-        errorText={touched && error}
-        value={1}
-        {...input}
-        onChange={(event, index, value) => input.onChange(value)}
-        children={children}/>
-)
+const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
+    console.log(input)
+    return (
+        <SelectField
+            floatingLabelText={label}
+            errorText={touched && error}
+            {...input}
+            onFocus={() => {}} //prevent reset of value when tabbing + enter
+            onBlur={() => {}}
+            onChange={(event, index, value) => input.onChange(value)}
+            children={children}/>
+    )
+}
 
 const renderUploadField = ({input, label, meta: {touched, error}, children, ...props}) => (
     <UploadFileField handleUpload={(file) => input.onChange(file)} {...props} />
@@ -71,7 +75,7 @@ const UploadForm = (props) => {
                 description: values.imageDescription,
             }]
         }
-        if(!values.image) { //should not send this if image is not provided
+        if (!values.image) { //should not send this if image is not provided
             data.images = []
         }
         props.submitted({data, file: values.file, image: values.image});
@@ -83,16 +87,16 @@ const UploadForm = (props) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Field name="appName" component={renderTextField} fullWidth label="App Name"/> <br />
+            <Field name="appName" component={renderTextField} autoFocus fullWidth label="App Name"/> <br />
             <Field name="description" component={renderTextField} fullWidth multiLine rows={3} label="App Description"/>
             <br />
             <Field name="appType" component={renderSelectField} fullWidth label="App Type">
                 {menuItems}
             </Field> <br />
             <Field name="file" component={renderUploadField} defaultText="Upload app" id="file"/>
-            <Field name="version" component={renderTextField} fullWidth label="Version" />
-            <Field name="minVer" component={renderTextField} label="Minimum DHIS version" />
-            <Field name="maxVer" component={renderTextField} label="Maximum DHIS version" />
+            <Field name="version" component={renderTextField} fullWidth label="Version"/>
+            <Field name="minVer" component={renderTextField} label="Minimum DHIS version"/>
+            <Field name="maxVer" component={renderTextField} label="Maximum DHIS version"/>
 
             <h2>Developer</h2>
             <Field name="developerName" component={renderTextField} label="Developer Name"/>
@@ -101,7 +105,7 @@ const UploadForm = (props) => {
             <Field name="developerOrg" component={renderTextField} label="Organisation"/>
 
             <h2>Image</h2>
-            <Field name="image" component={renderUploadField} defaultText="Upload image" id="imageFile" />
+            <Field name="image" component={renderUploadField} defaultText="Upload image" id="imageFile"/>
             <Field name="imageCaption" component={renderTextField} label="Image caption"/>
             <Field name="imageDescription" component={renderTextField} label="Image description"/>
             <Button icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
