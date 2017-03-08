@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
@@ -71,6 +70,9 @@ const UploadForm = (props) => {
                 caption: values.imageCaption,
                 description: values.imageDescription,
             }]
+        }
+        if(!values.image) { //should not send this if image is not provided
+            data.images = []
         }
         props.submitted({data, file: values.file, image: values.image});
     }

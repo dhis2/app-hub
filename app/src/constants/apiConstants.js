@@ -1,5 +1,5 @@
 
-export const API_BASE_URL = 'localhost:3099/api/'
+export const API_BASE_URL = 'http://localhost:3099/api/'
 
 export const appTypesToUI = {
     APP_STANDARD: 'Standard',

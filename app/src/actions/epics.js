@@ -1,27 +1,15 @@
 import * as actions from '../constants/actionTypes';
 import * as actionCreators from './actionCreators';
-import * as uploadUtils from '../utils/uploadUtils';
+import {combineEpics} from 'redux-observable';
+import {getAuth} from '../utils/AuthService';
+import {history} from '../utils/history'
 
-import { combineEpics } from 'redux-observable';
-import { getAuth } from '../utils/AuthService';
-import { history } from '../utils/history';
-
+import * as api from '../api/api';
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
     // .startWith({type: 'INIT'})
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-        const headers = {};
-         if (getAuth().isLoggedIn()) {
-         headers['Authorization'] = 'Bearer ' + getAuth().getToken()
-         }
-
-        return window.fetch('http://localhost:3099/api/apps/all', {headers, ...fetchOptions})
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.getAllApps()
             .then(apps => actionCreators.appsAllLoaded(apps))
             .catch(error => ({
                 type: actions.APPS_ALL_ERROR,
@@ -33,14 +21,7 @@ const loadAppsAll = (action$) => action$
 const loadAppsApproved = (action$) => action$
     .ofType(actions.APPS_APPROVED_LOAD)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-
-        return window.fetch('http://localhost:3099/api/apps', fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.getApprovedApps()
             .then(apps => actionCreators.loadedApprovedApps(apps))
             .catch(error => ({
                 type: actions.APPS_APPROVED_ERROR,
@@ -51,14 +32,7 @@ const loadAppsApproved = (action$) => action$
 const loadApp = (action$) => action$
     .ofType(actions.APP_LOAD)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-        
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId, fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.getApp(action.payload.appId)
             .then(app => actionCreators.appLoaded(app))
             .catch(error => ({
                 type: actions.APP_ERROR,
@@ -70,15 +44,7 @@ const loadApp = (action$) => action$
 const approveApp = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-            method: 'POST'
-        };
-
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.app.id+'/approval?status='+action.payload.status, fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.setAppApproval(id, status)
             .then(resp => actionCreators.setAppApprovalSuccess(action.payload))
             .catch(error => ({
                 type: actions.SET_APPROVAL_APP_ERROR,
@@ -89,15 +55,7 @@ const approveApp = (action$) => action$
 const deleteApp = (action$) => action$
     .ofType(actions.APP_DELETE)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-            method: 'DELETE'
-        };
-
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.app.id,fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.deleteApp(action.payload.app.id)
             .then(resp => actionCreators.deleteAppSuccess(action.payload.app))
             .catch(error => ({
                 type: actions.APP_DELETE_ERROR,
@@ -108,19 +66,7 @@ const deleteApp = (action$) => action$
 const user = (action$) => action$
     .ofType(actions.USER_LOAD)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-        const headers = {};
-        if (getAuth().isLoggedIn()) {
-          //  headers['Authorization'] = 'Bearer ' + getAuth().getToken()
-        }
-
-
-        return window.fetch('http://localhost:3099/api/users/me', { headers, ...fetchOptions})
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.getUser()
             .then(apps => actionCreators.userLoaded(apps))
             .catch(error => ({
                 type: actions.APPS_APPROVED_ERROR,
@@ -131,14 +77,7 @@ const user = (action$) => action$
 const userApps = (action$) => action$
     .ofType(actions.USER_APPS_LOAD)
     .concatMap(action => {
-        const fetchOptions = {
-            // Includes the credentials for the requested origin (So an app store cookie if it exists)
-            credentials: 'include',
-        };
-
-        return window.fetch('http://localhost:3099/api/apps/myapps', fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.getUserApps()
             .then(apps => actionCreators.userAppsLoaded(apps))
             .catch(error => ({
                 type: actions.USER_APPS_ERROR,
@@ -149,11 +88,7 @@ const userApps = (action$) => action$
 const newVersion = (action$) => action$
     .ofType(actions.APP_VERSION_ADD)
     .concatMap(action => {
-        const fetchOptions = uploadUtils.createUploadVersionOptions(action.payload);
-
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/versions', fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        return api.createNewVersion(action.payload.appId, action.payload)
             .then(version => actionCreators.addAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
                 type: actions.APP_VERSION_ADD_ERROR,
@@ -161,18 +96,23 @@ const newVersion = (action$) => action$
             }));
     });
 
+const newApp = (action$) => action$
+    .ofType(actions.APP_ADD)
+    .concatMap(action => {
+        return api.createApp(action.payload)
+            .then(app => actionCreators.addAppSuccess(app))
+            .catch(error => ({
+                type: actions.APP_ADD_ERROR,
+                payload: error
+            }))
+    });
+
 
 const deleteVersion = (action$) => action$
     .ofType(actions.APP_VERSION_DELETE)
     .concatMap(action => {
-        const version = action.payload.version;
-        const fetchOptions = {
-            credentials: 'include',
-            method: 'DELETE'
-        }
-        return window.fetch('http://localhost:3099/api/apps/'+action.payload.appId+'/versions/'+version.id, fetchOptions)
-            .then(response => response.ok ? response : Promise.reject(response))
-            .then(response => response.json())
+        const {appId, version} = action.payload;
+        return api.deleteVersion(appId, version.id)
             .then(response => actionCreators.deleteAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
                 type: actions.APP_DELETE_ERROR,
@@ -180,4 +120,4 @@ const deleteVersion = (action$) => action$
             }));
     })
 
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion, deleteVersion)
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp, user, userApps, newVersion, newApp, deleteVersion)

@@ -10,6 +10,10 @@ export const APP_LOAD = 'APP_LOAD';
 export const APP_LOADED = 'APP_LOADED';
 export const APP_ERROR = 'APP_ERROR';
 
+export const APP_ADD = 'APP_ADD';
+export const APP_ADD_SUCCESS = 'APP_ADD_SUCCESS';
+export const APP_ADD_ERROR = 'APP_ADD_ERROR';
+
 export const SET_APPROVAL_APP = 'SET_APPROVAL_APP';
 export const SET_APPROVAL_APP_SUCCESS = 'SET_APPROVAL_APP_SUCCESS';
 export const SET_APPROVAL_APP_ERROR = 'SET_APPROVAL_APP_ERROR';

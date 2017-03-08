@@ -41,6 +41,19 @@ export const addAppVersion = (version, file, appId) => {
 
     }
 }
+export const addApp = (app, file, image) => {
+    return createActionCreator(actions.APP_ADD)({
+        app,
+        file,
+        image
+    })
+}
+
+export const addAppSuccess = (app) => (
+    createActionCreator(actions.APP_ADD_SUCCESS)({
+        app
+    })
+)
 
 export const deleteAppVersion = (version, appId) => {
     return createActionCreator(actions.APP_VERSION_DELETE)({
