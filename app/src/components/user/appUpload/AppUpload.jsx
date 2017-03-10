@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
 import UploadAppForm from '../../form/UploadAppForm';
+import SubHeader from '../../header/SubHeader';
 import {addApp} from '../../../actions/actionCreators';
 
 class UserView extends Component {
@@ -12,7 +13,6 @@ class UserView extends Component {
     }
 
     handleSubmit(data) {
-        console.log(data)
         this.props.addApp(data.data, data.file, data.image);
 
     }
@@ -21,7 +21,7 @@ class UserView extends Component {
     render() {
         return (
             <div>
-                <h2>Upload App</h2>
+                <SubHeader title="Upload app" backLink="/user"/>
                 <Card>
                     <CardText>
                         <UploadAppForm submitted={this.handleSubmit.bind(this)}/>

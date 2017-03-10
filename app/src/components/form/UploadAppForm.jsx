@@ -35,7 +35,6 @@ const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
 )
 
 const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
-    console.log(input)
     return (
         <SelectField
             floatingLabelText={label}
@@ -85,30 +84,34 @@ const UploadForm = (props) => {
         <MenuItem key={type.value} value={type.value} primaryText={type.label}/>
     ));
 
+    const fieldStyle = {
+        display: 'block',
+    }
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Field name="appName" component={renderTextField} autoFocus fullWidth label="App Name"/> <br />
-            <Field name="description" component={renderTextField} fullWidth multiLine rows={3} label="App Description"/>
+            <Field name="appName" style={fieldStyle} component={renderTextField} autoFocus fullWidth label="App Name"/>
+            <Field name="description" style={fieldStyle} component={renderTextField} fullWidth multiLine rows={3} label="App Description"/>
             <br />
-            <Field name="appType" component={renderSelectField} fullWidth label="App Type">
+            <Field name="appType" style={fieldStyle} component={renderSelectField} fullWidth label="App Type">
                 {menuItems}
-            </Field> <br />
-            <Field name="file" component={renderUploadField} defaultText="Upload app" id="file"/>
-            <Field name="version" component={renderTextField} fullWidth label="Version"/>
-            <Field name="minVer" component={renderTextField} label="Minimum DHIS version"/>
-            <Field name="maxVer" component={renderTextField} label="Maximum DHIS version"/>
-
+            </Field>
+            <h2>Version</h2>
+            <Field name="version" style={fieldStyle} component={renderTextField} label="Version"/>
+            <Field style={{display:'block'}}name="minVer" component={renderTextField} label="Minimum DHIS version"/>
+            <Field name="maxVer" style={fieldStyle} component={renderTextField} label="Maximum DHIS version"/>
+            <Field name="file" component={renderUploadField} hintText="Upload app" id="file"/>
             <h2>Developer</h2>
-            <Field name="developerName" component={renderTextField} label="Developer Name"/>
-            <Field name="developerEmail" component={renderTextField} label="Developer Email"/>
-            <Field name="developerAddress" component={renderTextField} label="Developer Address"/>
-            <Field name="developerOrg" component={renderTextField} label="Organisation"/>
+            <Field name="developerName" style={fieldStyle} component={renderTextField} label="Developer Name"/>
+            <Field name="developerEmail" style={fieldStyle} component={renderTextField} label="Developer Email"/>
+            <Field name="developerAddress" style={fieldStyle} component={renderTextField} label="Developer Address"/>
+            <Field name="developerOrg" style={fieldStyle} component={renderTextField} label="Organisation"/>
 
             <h2>Image</h2>
-            <Field name="image" component={renderUploadField} defaultText="Upload image" id="imageFile"/>
-            <Field name="imageCaption" component={renderTextField} label="Image caption"/>
-            <Field name="imageDescription" component={renderTextField} label="Image description"/>
-            <Button icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
+            <Field name="image" component={renderUploadField} hintText="Upload image" id="imageFile"/>
+            <Field name="imageCaption" style={fieldStyle} component={renderTextField} label="Image caption"/>
+            <Field name="imageDescription" style={fieldStyle} component={renderTextField} label="Image description"/>
+
+            <Button style={{...fieldStyle, marginTop: '20px'}} icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
                     label="Upload"/>
         </form>

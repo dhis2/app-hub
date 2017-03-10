@@ -9,9 +9,8 @@ import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import CustomForm from '../../../form/CustomForm';
-import CustomFormField from '../../../form/CustomFormField';
-import TextField from 'material-ui/TextField';
+import Textfield from 'material-ui/TextField';
+import Subheader from '../../header/SubHeader';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 class UserAppView extends Component {
     constructor(props) {
@@ -53,12 +52,8 @@ class UserAppView extends Component {
         }
         return (
             <div>
-                <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
-                    <ToolbarGroup>
-                        <ToolbarTitle text="App Overview"/>
-                    </ToolbarGroup>
-
-                </Toolbar>
+                <Subheader title="App overview" backLink="/user">
+                </Subheader>
                 <Card>
                     <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
                     subtitle={app.developer.name}>

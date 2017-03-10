@@ -12,6 +12,7 @@ import LoginView from './login/LoginView';
 import {userLoad} from '../../actions/actionCreators';
 import AuthService from '../../utils/AuthService';
 import * as apiConstants from '../../constants/apiConstants';
+import SubHeader from '../header/SubHeader';
 const auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
 class UserView extends Component {
 

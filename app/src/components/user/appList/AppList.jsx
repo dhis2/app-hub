@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {List} from 'material-ui/List';
 import {Card, CardText} from 'material-ui/Card';
+import TextField from 'material-ui/TextField';
 import AppListItem from './AppListItem';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
+import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
 import {mapValues, sortBy} from 'lodash';
@@ -12,14 +14,9 @@ class AppList extends Component {
         super(props);
 
         this.state = {
-            appName: '',
-            description: '',
-            developerName: '',
-            developerEmail: '',
-            version: '',
-            minVer: '',
-            maxVer: '',
+            appFilter: '',
         }
+        this.filterApp = this.filterApp.bind(this);
     }
 
     componentDidMount() {
@@ -32,19 +29,12 @@ class AppList extends Component {
     componentWillReceiveProps(nextProps) {
         //Load when user is loaded and no applist has been loaded yet
         if (nextProps.user && !nextProps.appList) {
-          //  nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
+            //  nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
 
         }
 
     }
 
-    handleChange(name, value) {
-        console.log(value)
-        this.setState({
-            ...this.state,
-            [name]: value,
-        });
-    }
 
     handleApproval(app, type) {
         console.log(app)
@@ -53,13 +43,10 @@ class AppList extends Component {
                 this.props.approveApp({app, status: 'APPROVED'});
                 break;
             }
-
             case 'REJECT': {
                 this.props.approveApp({app, status: 'NOT_APPROVED'})
                 break;
             }
-
-
         }
     }
 
@@ -67,27 +54,56 @@ class AppList extends Component {
         this.props.openDeleteDialog({app});
     }
 
+    filterApp(app) {
+        const valsToFilter = ['name', 'appType', 'organisation'];
+        let match = false;
+        for (let i = 0; i < valsToFilter.length; i++) {
+            const val = valsToFilter[i];
+            const prop = app[val];
+            if (prop) {
+                if (prop.toLowerCase().includes(this.state.appFilter)) {
+                    match = true;
+                    break;
+                }
+            }
+            const devProp = app.developer[val];
+            if(app.developer && devProp) {
+                if(devProp.toLowerCase().includes(this.state.appFilter)) {
+                    match = true;
+                    break;
+                }
+            }
+        }
+        return match;
+    }
+
+    handleSearchChange(e) {
+        this.setState({
+            ...this.state,
+            appFilter: e.target.value.toLowerCase()
+        })
+    }
+
     render() {
+        const {user: {manager}, match, appList} = this.props;
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
             {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
-        const appList = this.props.appList;
 
-        const apps = sortBy(appList, ['name']).map((app, i) => (
-            <AppListItem app={app} key={i} isManager={this.props.user.manager}
+        const apps = sortBy(appList, ['name']).filter(app => this.filterApp(app)).map((app, i) => (
+            <AppListItem app={app} key={app.id} isManager={manager}
                          match={this.props.match}
                          handleDelete={this.openDeleteDialog.bind(this, app)}
                          handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
                          handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
         ))
-
+        const title = manager ? "All apps" : "Your apps";
         return (
             <div>
-                <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
-                    <ToolbarGroup>
-                        <ToolbarTitle text="Apps"/>
-                    </ToolbarGroup>
-
-                </Toolbar>
+                <SubHeader title={title}>
+                    <TextField style={{maxWidth: '120px'}} hintText="Search"
+                               onChange={this.handleSearchChange.bind(this)}
+                               value={this.state.appFilter}></TextField>
+                </SubHeader>
                 <Card>
                     <CardText>
                         <List>
