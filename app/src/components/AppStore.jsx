@@ -38,7 +38,6 @@ export default function AppStore() {
 
                     <div className="app">
                         <Header />
-
                         <Route exact path="/" component={AppCards}/>
                         <Route path='/app/:appId' component={AppView}/>
                         <Route path="/login" render={(props) => (

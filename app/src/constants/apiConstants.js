@@ -27,6 +27,7 @@ export const appSchema = {
 
 }
 
+export const DHISVersions = ['2.26', '2.25', '2.24', '2.23', '2.22', '2.21'];
 
 export const AUTH0ClientId = 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81';
 export const AUTH0Domain = 'dhis2.eu.auth0.com';

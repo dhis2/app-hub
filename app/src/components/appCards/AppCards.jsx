@@ -5,6 +5,8 @@ import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import { loadAllApps, loadApprovedApps } from '../../actions/actionCreators';
 import { values } from 'lodash';
+import SubHeader from '../header/SubHeader';
+
 class AppCards extends Component {
 
     componentDidMount() {
@@ -17,6 +19,9 @@ class AppCards extends Component {
         }
         return (
             <Grid>
+                <Col span={12} style={{}}>
+                <SubHeader/>
+                </Col>
                 {values(cards).map((app, i) => (
                     <Col key={app.id} span={3} align="middle" additionalClasses="center">
                         <AppCardItem app={app}/>

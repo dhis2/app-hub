@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/RaisedButton';
+import AutoComplete from 'material-ui/AutoComplete';
+import { DHISVersions } from '../../constants/apiConstants';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import UploadFileField from '../form/UploadFileField';
@@ -34,6 +36,15 @@ const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
     />
 )
 
+const renderAutoCompleteField = ({input, label, meta: {touched, error}, ...props}) => (
+    <AutoComplete hintText={label}
+               floatingLabelText={label}
+               errorText={touched && error}
+               {...input}
+               {...props}
+    />
+)
+
 const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
     return (
         <SelectField
@@ -58,6 +69,7 @@ const UploadForm = (props) => {
         const data = {
             name: values.appName,
             description: values.description,
+            appType: values.appType,
             developer: {
                 name: values.developerName,
                 email: values.developerEmail,
@@ -96,9 +108,9 @@ const UploadForm = (props) => {
                 {menuItems}
             </Field>
             <h2>Version</h2>
-            <Field name="version" style={fieldStyle} component={renderTextField} label="Version"/>
-            <Field style={{display:'block'}}name="minVer" component={renderTextField} label="Minimum DHIS version"/>
-            <Field name="maxVer" style={fieldStyle} component={renderTextField} label="Maximum DHIS version"/>
+            <Field name="version" style={fieldStyle} component={renderTextField} label="Version" />
+            <Field style={{display:'block'}}name="minVer" component={renderAutoCompleteField} label="Minimum DHIS version" dataSource={DHISVersions}/>
+            <Field name="maxVer" style={fieldStyle} component={renderAutoCompleteField} label="Maximum DHIS version" dataSource={DHISVersions}/>
             <Field name="file" component={renderUploadField} hintText="Upload app" id="file"/>
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={renderTextField} label="Developer Name"/>
