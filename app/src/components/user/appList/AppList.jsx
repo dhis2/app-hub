@@ -70,9 +70,9 @@ class AppList extends Component {
     render() {
         const {user: {manager}, match, appList, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
-        
+
         const apps = sortBy(appList, ['name'])
-            .filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
+            .filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.appTypeFilter))
             .map((app, i) => (
             <AppListItem app={app} key={app.id} isManager={manager}
                          match={this.props.match}
