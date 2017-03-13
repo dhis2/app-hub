@@ -3,9 +3,11 @@ import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {Field, reduxForm, change} from 'redux-form';
-
+import {renderTextField} from '../form/ReduxFormUtils';
 
 export const filterApp = (app, filter) => {
+    console.log(filter)
+    if (!filter) return true;
     const valsToFilter = ['name', 'appType', 'organisation'];
     let match = false;
     for (let i = 0; i < valsToFilter.length; i++) {
@@ -43,45 +45,46 @@ export const filterAppType = (app, filters) => {
 }
 
 
-export class TextFilter extends Component {
+class Textfilter extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            filter: props.value || '',
-        }
     }
 
-    handleFilterChange(e) {
-        const filter = e.target.value;
-        this.setState({
-            ...this.state,
-            filter,
-        })
-
-        this.props.onFilterChange(filter);
-    }
 
     render() {
         const {style, hintText, ... props} = this.props;
 
-        return (<TextField style={style} hintText={hintText}
-                           onChange={this.handleFilterChange.bind(this)}
-                           value={this.state.filter}></TextField>)
+        return (<Field name={this.props.form} style={style} hintText={hintText}
+                       component={renderTextField}
+        ></Field>)
     }
 
 }
 
-TextFilter.propTypes = {
-    onFilterChange: PropTypes.func.isRequired,
+Textfilter.propTypes = {
     style: PropTypes.object,
     hintText: PropTypes.string,
-    value: PropTypes.any
+    form: PropTypes.string,
 }
+
+Textfilter.defaultProps = {
+    form: 'searchFilter',
+    initialValues: {'searchFilter': ''},
+}
+
+export const TextFilter = reduxForm({
+    ...Textfilter.defaultProps,
+    destroyOnUnmount: false
+})(Textfilter)
 
 const renderToggle = ({input, changedCB, label, meta: {touched, error}, ...props}) => (
     <Toggle
         label={label}
-        onToggle={(e, toggled) => {input.onChange(toggled); changedCB ?  changedCB(toggled) : () => {}}}
+        onToggle={(e, toggled) => {
+            input.onChange(toggled);
+            changedCB ? changedCB(toggled) : () => {
+                }
+        }}
         toggled={input.value ? true : false}
         {...input}
         {...props}
@@ -104,28 +107,31 @@ class Selectfilter extends Component {
     toggleAll(toggled) {
         //props.form holds the name of the form, where the values exists
         Object.keys(this.props.filterState[this.props.form].values).map((key, i) => {
-            this.props.changeField(this.props.form, key, toggled)
+            this.props.change(key, toggled)
         })
     }
 
     render() {
-        const {style, elementStyle, filters, onFilterChange, ... props} = this.props;
+        const {style, elementStyle, labelStyle, filters, onFilterChange, ... props} = this.props;
         const toggles = filters.map(filter => (
                 <Field key={filter.value}
                        name={filter.value}
                        component={renderToggle}
                        label={filter.label}
-                       elementStyle={elementStyle}/>
+                       style={elementStyle}
+                       labelStyle={labelStyle}/>
             )
         )
         return <div style={style}>
             {toggles}
             {this.props.renderAllToggle ? <Field
-                   name="all"
-                   component={renderToggle}
-                   label={"All"}
-                   changedCB={this.toggleAll.bind(this)}
-                   elementStyle={elementStyle}/> : null}
+                    name="all"
+                    component={renderToggle}
+                    label={"All"}
+                    changedCB={this.toggleAll.bind(this)}
+                    labelStyle={labelStyle}
+                    style={elementStyle}/> : null}
+
         </div>
     }
 
@@ -133,6 +139,7 @@ class Selectfilter extends Component {
 Selectfilter.propTypes = {
     style: PropTypes.object,
     elementStyle: PropTypes.object,
+    labelStyle: PropTypes.object,
     value: PropTypes.string,
     filters: PropTypes.arrayOf(PropTypes.shape({
         //Label to show next to the toggle
@@ -160,7 +167,7 @@ const mapStateToProps = (state, ownProps) => {
     ownProps.filters.map((elem, i) => {
         return init[elem.value] = elem.toggled;
     })
-    if(ownProps.renderAllToggle) {
+    if (ownProps.renderAllToggle) { //default toggle all
         init['all'] = true
     }
     return {

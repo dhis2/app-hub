@@ -20,8 +20,6 @@ class AppList extends Component {
         super(props);
 
         this.state = {
-            appFilter: '',
-            appTypeFilter : [],
             open: false,
         }
     }
@@ -69,19 +67,13 @@ class AppList extends Component {
         this.props.openDeleteDialog({app});
     }
 
-    handleSearchChange(filterVal) {
-        console.log(filterVal)
-        this.setState({
-            ...this.state,
-            appFilter: filterVal.toLowerCase()
-        })
-    }
     render() {
-        const {user: {manager}, match, appList} = this.props;
-        const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
-            {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
-
-        const apps = sortBy(appList, ['name']).filter(app => filterApp(app, this.state.appFilter) && filterAppType(app, this.props.filters)).map((app, i) => (
+        const {user: {manager}, match, appList, appSearchFilter} = this.props;
+        const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
+        
+        const apps = sortBy(appList, ['name'])
+            .filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
+            .map((app, i) => (
             <AppListItem app={app} key={app.id} isManager={manager}
                          match={this.props.match}
                          handleDelete={this.openDeleteDialog.bind(this, app)}
@@ -92,8 +84,7 @@ class AppList extends Component {
         return (
             <div>
                 <SubHeader title={title}>
-                    <TextFilter style={{maxWidth: '120px'}} hintText="Search"
-                                onFilterChange={this.handleSearchChange.bind(this)}/>
+                    <TextFilter style={{maxWidth: '120px'}} hintText="Search"/>
                     <IconButton onClick={this.handleOpenFilters.bind(this)}><FontIcon className="material-icons">filter_list</FontIcon> </IconButton>
                     <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'200px'}}
                     onRequestClose={(r) => this.setState({open:false})}>
@@ -123,7 +114,8 @@ class AppList extends Component {
     const mapStateToProps = (state) => ({
         appList: state.user.appList,
         user: state.user.userInfo,
-        filters: state.form.appTypeFilter,
+        appTypeFilter: state.form.appTypeFilter,
+        appSearchFilter: state.form.searchFilter,
     });
 
     const mapDispatchToProps = (dispatch) => ({
