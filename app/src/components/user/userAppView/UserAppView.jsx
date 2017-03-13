@@ -11,6 +11,8 @@ import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
 import Textfield from 'material-ui/TextField';
 import Subheader from '../../header/SubHeader';
+import Theme from '../../../styles/theme';
+import { appTypesToUI } from '../../../constants/apiConstants';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 class UserAppView extends Component {
     constructor(props) {
@@ -32,6 +34,21 @@ class UserAppView extends Component {
     handleDeleteAppVersion(version) {
         this.props.deleteVersion(version, this.props.app.id);
     }
+
+    renderStatusAlert() {
+        const cardHeaderRightStyle = {
+            display: 'inline-flex',
+            alignItems: 'center',
+            fontSize: '14px',
+            color: Theme.card.subtitleColor,
+        }
+        const statusAlertPending = "This app is pending approval."
+        const statusAlertRejected = "This app has been rejected."
+
+        return (<div style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: '16px'}} className="material-icons">priority_high</FontIcon>
+            {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
+        </div>)
+    }
     render() {
         console.log(this.props)
         const app = this.props.app;
@@ -50,17 +67,25 @@ class UserAppView extends Component {
             top: 0,
             right: '4px'
         }
+
+
+        const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
+            Author: {app.developer.name} <br />
+            Organisation: {app.developer.organisation} </div>)
         return (
             <div>
                 <Subheader title="App overview" backLink="/user">
                 </Subheader>
                 <Card>
                     <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
-                    subtitle={app.developer.name}>
+                    subtitle={subtitle}>
+                        {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
-                            <FontIcon className="material-icons">edit</FontIcon>
+                            <i className="material-icons">edit</i>
                         </IconButton>
+
                     </CardHeader>
+
                     <CardText>
                         {app.description}
                     </CardText>

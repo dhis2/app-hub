@@ -8,6 +8,8 @@ import Popover from 'material-ui/Popover';
 import {TextFilter, filterApp, SelectFilter, filterAppType} from '../../utils/Filters';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Button from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
@@ -74,14 +76,6 @@ class AppList extends Component {
             appFilter: filterVal.toLowerCase()
         })
     }
-
-    handleSelectFilterChange(filters) {
-        console.log(filters);
-        this.setState({
-            ...this.state,
-            appTypeFilter: filters
-        })
-    }
     render() {
         const {user: {manager}, match, appList} = this.props;
         const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
@@ -100,15 +94,17 @@ class AppList extends Component {
                 <SubHeader title={title}>
                     <TextFilter style={{maxWidth: '120px'}} hintText="Search"
                                 onFilterChange={this.handleSearchChange.bind(this)}/>
-                    <Button label="App type filter" onClick={this.handleOpenFilters.bind(this)}/>
-                    <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'150px'}}
+                    <IconButton onClick={this.handleOpenFilters.bind(this)}><FontIcon className="material-icons">filter_list</FontIcon> </IconButton>
+                    <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'200px'}}
                     onRequestClose={(r) => this.setState({open:false})}>
                         <div style={{padding:'10px'}}>
                         <SelectFilter
-                            style={{padding:'5px'}}
+                            renderAllToggle
+                            form="appTypeFilter"
                             filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
-                                {label: 'Dashboard', toggled: true, value:'APP_DASHBOARD'}]}
-                            onFilterChange={this.handleSelectFilterChange.bind(this)} />
+                                {label: 'Dashboard', toggled: true, value:'APP_DASHBOARD'},
+                                {label: 'Tracker Dashboard', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
+                           />
                         </div>
                     </Popover>
                 </SubHeader>
@@ -127,7 +123,7 @@ class AppList extends Component {
     const mapStateToProps = (state) => ({
         appList: state.user.appList,
         user: state.user.userInfo,
-        filters: state.form.filters,
+        filters: state.form.appTypeFilter,
     });
 
     const mapDispatchToProps = (dispatch) => ({

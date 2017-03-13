@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, change} from 'redux-form';
 
 
 export const filterApp = (app, filter) => {
@@ -29,11 +29,9 @@ export const filterApp = (app, filter) => {
 }
 
 export const filterAppType = (app, filters) => {
-    console.log(filters)
     if (!filters) return true;
     const filterVal = filters.values;
     for (let key in filterVal) {
-        console.log(key)
         if (filterVal.hasOwnProperty(key)) {
             if (key == app.appType && filterVal[key] === true) {
                 return true
@@ -42,9 +40,6 @@ export const filterAppType = (app, filters) => {
 
     }
     return filterVal.length < 1 ? true : false
-    //  const ret = filters.reduce((match, filter) => app.appType && app.appType === filter, true);
-    //  console.log(ret)
-    //  return filters.reduce((match, filter) => app.appType && app.appType === filter, false)
 }
 
 
@@ -83,61 +78,99 @@ TextFilter.propTypes = {
     value: PropTypes.any
 }
 
-const renderToggle = ({input, label, meta: {touched, error}, ...props}) => (
+const renderToggle = ({input, changedCB, label, meta: {touched, error}, ...props}) => (
     <Toggle
         label={label}
-        onToggle={(e, toggled) => input.onChange(toggled)}
+        onToggle={(e, toggled) => {input.onChange(toggled); changedCB ?  changedCB(toggled) : () => {}}}
         toggled={input.value ? true : false}
         {...input}
         {...props}
     />
 )
 
+/**
+ * A redx-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
+ *     Where mountedReduxForm is the value where redux-form is connected at app-start.
+ *     And props.form is a prop to this component (default: filters).
+ *     All values can be retrieved from redux with filterName: value.
+ *     So a filter with name "APP_STANDARD" can be retrieved from the state with:
+ *     state.form.filter.values['APP_STANDARD'].
+ */
 class Selectfilter extends Component {
     constructor(props) {
         super(props);
     }
 
+    toggleAll(toggled) {
+        //props.form holds the name of the form, where the values exists
+        Object.keys(this.props.filterState[this.props.form].values).map((key, i) => {
+            this.props.changeField(this.props.form, key, toggled)
+        })
+    }
+
     render() {
-        const {style, filters, onFilterChange, ... props} = this.props;
+        const {style, elementStyle, filters, onFilterChange, ... props} = this.props;
         const toggles = filters.map(filter => (
                 <Field key={filter.value}
                        name={filter.value}
                        component={renderToggle}
                        label={filter.label}
-                       elementStyle={style}/>
+                       elementStyle={elementStyle}/>
             )
         )
-        return <div>
+        return <div style={style}>
             {toggles}
+            {this.props.renderAllToggle ? <Field
+                   name="all"
+                   component={renderToggle}
+                   label={"All"}
+                   changedCB={this.toggleAll.bind(this)}
+                   elementStyle={elementStyle}/> : null}
         </div>
     }
 
 }
 Selectfilter.propTypes = {
-    onFilterChange: PropTypes.func.isRequired,
     style: PropTypes.object,
-    value: PropTypes.value,
+    elementStyle: PropTypes.object,
+    value: PropTypes.string,
     filters: PropTypes.arrayOf(PropTypes.shape({
+        //Label to show next to the toggle
         label: PropTypes.string.isRequired,
-        toggled: PropTypes.bool,
-        value: PropTypes.string,
+        //default toggled?
+        toggled: PropTypes.bool.isRequired,
+        //The name of the filter-field. State will be fieldValue: toggled
+        value: PropTypes.string.isRequired,
     })),
+    //Renders a component which toggles all buttons in this group.
+    renderAllToggle: PropTypes.bool,
+}
+Selectfilter.defaultProps = {
+    form: 'filters',
 }
 //handle default with connect
 export const SelectedFilterForm = reduxForm({
-    form: 'filters',
+    ...Selectfilter.defaultProps,
     destroyOnUnmount: false
 })(Selectfilter)
 
 //Convert filter props to initialValues to reduxForm
-const mapStateToProps = ((state, ownProps) => {
+const mapStateToProps = (state, ownProps) => {
     const init = {}
     ownProps.filters.map((elem, i) => {
         return init[elem.value] = elem.toggled;
     })
+    if(ownProps.renderAllToggle) {
+        init['all'] = true
+    }
     return {
-        initialValues: init
+        initialValues: init,
+        filterState: state.form
+    }
+}
+const mapDispatchToProps = (dispatch) => ({
+    changeField(form, field, value) {
+        dispatch(change(form, field, value))
     }
 })
-export const SelectFilter = connect(mapStateToProps)(SelectedFilterForm);
+export const SelectFilter = connect(mapStateToProps, mapDispatchToProps)(SelectedFilterForm);

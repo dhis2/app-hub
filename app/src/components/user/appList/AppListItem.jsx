@@ -7,8 +7,8 @@ import Avatar from 'material-ui/Avatar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
-import { withRouter } from 'react-router';
-import { appTypesToUI } from '../../../constants/apiConstants';
+import {withRouter} from 'react-router';
+import {appTypesToUI} from '../../../constants/apiConstants';
 
 const appStatusStyle = {
     fontSize: '16px',
@@ -22,11 +22,12 @@ const appStatus = {
     },
     PENDING: {
         alt: 'Pending',
-        elem: (<FontIcon title="Pending" style={appStatusStyle}  className="material-icons">priority_high</FontIcon>),
+        elem: (<FontIcon title="Pending" style={appStatusStyle} className="material-icons">priority_high</FontIcon>),
     },
     NOT_APPROVED: {
         alt: 'Rejected',
-        elem: (<FontIcon title="Rejected" style={appStatusStyle} className="material-icons">do_not_disturb_alt</FontIcon>),
+        elem: (
+            <FontIcon title="Rejected" style={appStatusStyle} className="material-icons">do_not_disturb_alt</FontIcon>),
     },
 }
 
@@ -42,17 +43,27 @@ const rightIconsStyle = {
 
 const AppListItem = (props, state) => {
     const {id, name, developer, description, appType, status} = props.app;
-    const approved = (<FontIcon className="material-icons">check</FontIcon>)
-    const pending = (<FontIcon className="material-icons">priority_high</FontIcon>)
-    const rejected = (<FontIcon className="material-icons">do_not_disturb_alt</FontIcon>)
+    let menuItems = null;
+
+    if(props.isManager){
+        const approveItem = (<MenuItem onTouchTap={props.handleApprove} key="approve" primaryText="Approve"/>)
+        const rejectItem =  (<MenuItem onTouchTap={props.handleReject} key="reject" primaryText="Reject"/>)
+        const pendingItems = [approveItem, rejectItem]
+        if(status === 'PENDING') {
+            menuItems = pendingItems
+        } else if(status === 'APPROVED') {
+            menuItems = rejectItem;
+        } else {
+            menuItems = approveItem;
+        }
+    }
+
     const menu = (
         <IconMenu
             style={{top: rightIconsStyle['top']}}
             iconButtonElement={<IconButton><FontIcon className="material-icons">more_vert</FontIcon></IconButton>}>
-            {status === 'APPROVED' ? <MenuItem onTouchTap={props.handleReject} primaryText="Reject"/> :
-                <MenuItem onTouchTap={props.handleApprove} primaryText="Approve"/>}
-            {props.isManager &&
-            <MenuItem onTouchTap={props.handleDelete} primaryText="Delete"/> }
+            {menuItems}
+            <MenuItem onTouchTap={props.handleDelete} primaryText="Delete"/>
         </IconMenu>
     )
 
@@ -66,7 +77,7 @@ const AppListItem = (props, state) => {
     }
 
     return (
-            <ListItem {...listItemProps} />
+        <ListItem {...listItemProps} />
 
     )
 }
