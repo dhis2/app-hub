@@ -21,9 +21,9 @@ export const renderTextFieldWithClearButton = ({input, label, meta: {touched, er
                        errorText={touched && error}
                        {...input}
                        {...props} />
-            <IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
+            {input.value ?<IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
                 <FontIcon className="material-icons">clear</FontIcon>
-            </IconButton>
+            </IconButton> : null}
         </div>
     )
 }

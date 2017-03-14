@@ -15,6 +15,7 @@ const propTypes = {
     align: AlignType,
     additionalClasses: PropTypes.string,
     children: PropTypes.node,
+    center: PropTypes.bool,
 };
 
 function getClassNames(props) {
@@ -36,7 +37,7 @@ function getClassNames(props) {
 }
 
 const Col = ({children, style, ...props}) => (
-    <div className={getClassNames(props)} style={style} >
+    <div className={getClassNames(props)} style={props.center ? {margin: '0 auto 0 auto', ...style} : style} >
         {children}
     </div>
 )

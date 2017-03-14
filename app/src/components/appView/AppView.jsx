@@ -1,5 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import { Card, CardText, CardTitle, CardHeader, CardMedia } from 'material-ui/Card';
+import ImageViewer from './ImageViewer';
+import Subheader from '../header/SubHeader';
 import Toolbar from '../../material/Toolbar/Toolbar';
 import ToolbarSection from '../../material/Toolbar/ToolbarSection';
 import Grid from '../../material/Grid/Grid';
@@ -8,6 +11,7 @@ import {Link} from 'react-router-dom';
 import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
 import {appLoad} from '../../actions/actionCreators';
+import { appTypesToUI } from '../../constants/apiConstants';
 import AppCards from '../appCards/AppCards'
 const appTypes = {
     APP_STANDARD: 'Standard',
@@ -67,41 +71,34 @@ class AppView extends Component {
 
         const {id, appName, developer, description, appType, requiredDhisVersion, lastUpdated} = app;
         const versions = app.versions.sort((a, b) => a.lastUpdated - b.lastUpdated)
-        return (
-            <Grid >
-                <Col span={8} additionalClasses="paper">
-                    <Toolbar additionalClasses="second-header">
-                        <ToolbarSection align="start">
-                            <Link to="/"> <i className="material-icons">arrow_back</i></Link>
-                        </ToolbarSection>
-                    </Toolbar>
-                    <div className="mdc-card" style={{height: '100%', margin: "0 auto 0 auto "}}>
-                        <section className="mdc-card__primary">
+        const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
+            Author: {app.developer.name} <br />
+            Organisation: {app.developer.organisation} </div>)
 
-                            <h1 className="mdc-card__title mdc-card__title--large">{appName}</h1>
-                            <h2 className="mdc-card__subtitle">Author: {developer.developerName}</h2>
-                            <h2 className="mdc-card__subtitle">Type: {appTypes[appType]}</h2>
-                            <h2 className="mdc-card__subtitle">Last
-                                updated: {new Date(lastUpdated).toLocaleDateString()}</h2>
-                            <div>
-                                {}
-                            </div>
-                        </section>
-                        <section className="mdc-card__supporting-text">
-                            {description}
-                        </section>
-                        <section className="mdc-card__supporting-text">
-                            <h2>Versions</h2>
-                            <VersionList versionList={versions}/>
-                        </section>
-                        <section className="mdc-card__actions">
-                            <a href={versions[versions.length - 1].downloadUrl}>
-                                <button className="mdc-button mdc-button--primary mdc-button--compact mdc-card__action">
-                                    Download latest
-                                </button>
-                            </a>
-                        </section>
-                    </div>
+
+        return(
+            <Grid>
+                <Col span={8} center>
+                <Subheader title="App overview" backLink="/" />
+                <Card>
+                    <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
+                                subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
+                    </CardHeader>
+                    <CardText>
+                        <ImageViewer/>
+                    </CardText>
+                    <CardText>
+                        {app.description}
+                    </CardText>
+
+                </Card>
+
+                <Card style={{marginTop: '10px', position: 'relative'}}>
+                    <CardTitle title="Versions" />
+                    <CardText>
+                        <VersionList versionList={app.versions} app={app}/>
+                    </CardText>
+                </Card>
                 </Col>
             </Grid>
         )

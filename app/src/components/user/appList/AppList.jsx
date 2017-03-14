@@ -84,7 +84,7 @@ class AppList extends Component {
         return (
             <div>
                 <SubHeader title={title}>
-                    <TextFilter style={{maxWidth: '120px'}} hintText="Search"/>
+                    <TextFilter hintText="Search"/>
                     <IconButton onClick={this.handleOpenFilters.bind(this)}><FontIcon className="material-icons">filter_list</FontIcon> </IconButton>
                     <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'200px'}}
                     onRequestClose={(r) => this.setState({open:false})}>

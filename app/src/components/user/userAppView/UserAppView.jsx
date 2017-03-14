@@ -78,7 +78,7 @@ class UserAppView extends Component {
                 </Subheader>
                 <Card>
                     <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
-                    subtitle={subtitle}>
+                    subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                         {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
                             <i className="material-icons">edit</i>

@@ -5,31 +5,40 @@ import Toggle from 'material-ui/Toggle';
 import {Field, reduxForm, change} from 'redux-form';
 import {renderTextField, renderTextFieldWithClearButton} from '../form/ReduxFormUtils';
 
+/**
+ * Filters an app according to properties defined in valsToFilter.
+ * @param app to filter
+ * @param filter a string to check if any of the properties in app contains this.
+ * @returns {boolean} true if any of the properties matches the filter.
+ */
 export const filterApp = (app, filter) => {
-    console.log(filter)
     if (!filter) return true;
     const valsToFilter = ['name', 'appType', 'organisation'];
-    let match = false;
     for (let i = 0; i < valsToFilter.length; i++) {
         const val = valsToFilter[i];
         const prop = app[val];
         if (prop) {
             if (prop.toLowerCase().includes(filter)) {
-                match = true;
-                break;
+                return true;
             }
         }
         const devProp = app.developer[val];
-        if (app.developer && devProp) {
+        if (devProp) {
             if (devProp.toLowerCase().includes(filter)) {
-                match = true;
-                break;
+                return true;
             }
         }
     }
-    return match;
+    return false;
 }
 
+/**
+ *
+ * @param app to filter.
+ * @param filters an redux-form object containing filters to check for app.
+ * Should be of form {filters: values}. Values should be of form {appType: bool}.
+ * @returns {boolean} true if app has an apptype in filter, otherwise false.
+ */
 export const filterAppType = (app, filters) => {
     if (!filters) return true;
     const filterVal = filters.values;
@@ -94,7 +103,7 @@ const renderToggle = ({input, changedCB, label, meta: {touched, error}, ...props
 )
 
 /**
- * A redx-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
+ * A redux-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
  *     Where mountedReduxForm is the value where redux-form is connected at app-start.
  *     And props.form is a prop to this component (default: filters).
  *     All values can be retrieved from redux with filterName: value.
