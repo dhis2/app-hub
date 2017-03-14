@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
@@ -19,6 +19,8 @@ class UserView extends Component {
     componentDidMount() {
         this.props.loadUser();
     }
+
+
 
     render() {
         const contentRoutes = (
@@ -45,7 +47,7 @@ class UserView extends Component {
                             <ListItem primaryText="Upload"
                                       leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
                         </Link>
-
+                        <ListItem primaryText="Logout" onClick={() => auth.logout()} />
                     </List>
                 </Col>
                 <Col span={8}>
@@ -54,6 +56,10 @@ class UserView extends Component {
             </Grid>
         )
     }
+}
+
+UserView.PropTypes = {
+    auth: PropTypes.object,
 }
 
 const mapStateToProps = (state) => ({

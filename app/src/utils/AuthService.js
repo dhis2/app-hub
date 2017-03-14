@@ -3,7 +3,7 @@ import {  } from 'react-router'
 import { isTokenExpired } from './jwtHelper';
 import * as apiConstants from '../constants/apiConstants';
 import { BrowserRouter } from 'react-router-dom';
-
+import History from './history';
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
@@ -24,8 +24,6 @@ export default class AuthService {
         console.log(authResult)
         this.setToken(authResult.idToken)
         this.setAccessToken(authResult.accessToken)
-        // navigate to the home route
-      //  BrowserHistory.replace('/user')
     }
 
     login() {
@@ -61,6 +59,7 @@ export default class AuthService {
     logout() {
         // Clear user token and profile data from local storage
         localStorage.removeItem('id_token');
+        History.push("/")
     }
 }
 let auth;

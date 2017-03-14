@@ -24,9 +24,17 @@ injectTapEventPlugin();
 const auth = getAuth();
 
 const PrivateRoute = ({component, ...rest}) => (
-    <Route {...rest} render={props => (
-        auth.isLoggedIn() ?
-            React.createElement(component, props) : null)}/>// <Redirect to="/login"/>)}/>
+    <Route {...rest} render={props => {
+        //tokenId is set async, check for hash and show loading
+        if(!auth.isLoggedIn() && props.location.hash) {
+            return <div>Loading</div>;
+        }
+        else if(auth.isLoggedIn()) {
+            return React.createElement(component, {auth, ...props})
+        } else {
+            return (<Redirect to="/login"/>)
+        }
+    }}/>
 )
 
 export default function AppStore() {
