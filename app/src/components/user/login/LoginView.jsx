@@ -10,6 +10,10 @@ class LoginView extends Component {
         this.handleLogin = this.handleLogin.bind(this);
     }
 
+    componentDidMount() {
+        this.props.auth.login();
+    }
+
     handleLogin() {
        // window.location="http://localhost:3099/login"
         this.props.auth.login();
@@ -19,7 +23,7 @@ class LoginView extends Component {
         const colStyle = {
             margin: '20px auto 0 auto'
         }
-        return (
+        return null;  /*(
             <Grid>
                 <Col style={colStyle} span={4} >
                     <Card style={colStyle}>
@@ -30,7 +34,7 @@ class LoginView extends Component {
                     </Card>
                 </Col>
             </Grid>
-        )
+        )*/
     }
 }
 
