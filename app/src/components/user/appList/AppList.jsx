@@ -68,6 +68,9 @@ class AppList extends Component {
     }
 
     render() {
+        if(!this.props.user) {
+            return null;
+        }
         const {user: {manager}, match, appList, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
 

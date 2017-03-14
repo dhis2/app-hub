@@ -32,9 +32,6 @@ class UserView extends Component {
                 </div>
             );
 
-            if(!this.props.user) { //TODO: Should return loading here after we handle auth in route
-              return null;//  return (<Redirect to='/login' />)
-            }
             return (
             <Grid>
                 <Col span={2}>
