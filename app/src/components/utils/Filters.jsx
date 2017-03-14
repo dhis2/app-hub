@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {Field, reduxForm, change} from 'redux-form';
-import {renderTextField} from '../form/ReduxFormUtils';
+import {renderTextField, renderTextFieldWithClearButton} from '../form/ReduxFormUtils';
 
 export const filterApp = (app, filter) => {
     console.log(filter)
@@ -52,10 +52,10 @@ class Textfilter extends Component {
 
 
     render() {
-        const {style, hintText, ... props} = this.props;
+        const {style, hintText, clearButton, ... props} = this.props;
 
         return (<Field name={this.props.form} style={style} hintText={hintText}
-                       component={renderTextField}
+                       component={clearButton ? renderTextFieldWithClearButton : renderTextField}
         ></Field>)
     }
 
@@ -65,10 +65,12 @@ Textfilter.propTypes = {
     style: PropTypes.object,
     hintText: PropTypes.string,
     form: PropTypes.string,
+    clearButton: PropTypes.bool,
 }
 
 Textfilter.defaultProps = {
     form: 'searchFilter',
+    clearButton: true,
     initialValues: {'searchFilter': ''},
 }
 

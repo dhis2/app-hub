@@ -35,6 +35,14 @@ class UploadFileField extends Component {
         this.props.handleUpload(file);
     }
 
+    handleResetFile() {
+        this.setState({
+            ...this.state,
+            fileName: '',
+        })
+        this.props.handleUpload('');
+    }
+
     render() {
         const {renderAdd, renderRemove, uploadIconPosition, ...props} = this.props;
         const groupStyle = {
@@ -53,17 +61,21 @@ class UploadFileField extends Component {
         const uploadButton = (<FAB mini onClick={this.uploadAction}><FontIcon
             className="material-icons">file_upload</FontIcon></FAB>)
         return (
-            <div>
-                <div style={groupStyle}>
-                    {uploadIconPosition === 'left' ? uploadButton : null}
-                    <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText} value={this.state.fileName}
+            <div style={groupStyle}>
+                {uploadIconPosition === 'left' ? uploadButton : null}
+                <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
+                    <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText}
+                               value={this.state.fileName}
                                onClick={this.uploadAction}/>
-                    <input type="file" style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
-                           onChange={this.handleUpload}/>
-                    {uploadIconPosition === 'right' ? uploadButton : null}
-                    {renderRemove ? removeButton : null}
-                    {renderAdd ? addButton : null}
+                    <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
+                        <FontIcon className="material-icons">clear</FontIcon>
+                    </IconButton>
                 </div>
+                <input type="file" style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
+                       onChange={this.handleUpload}/>
+                {uploadIconPosition === 'right' ? uploadButton : null}
+                {renderRemove ? removeButton : null}
+                {renderAdd ? addButton : null}
             </div>
         )
     }

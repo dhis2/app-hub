@@ -1,4 +1,6 @@
 import TextField from 'material-ui/TextField';
+import IconButton from 'material-ui/IconButton';
+import FontIcon from 'material-ui/FontIcon';
 import React from 'react';
 
 export const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
@@ -9,6 +11,22 @@ export const renderTextField = ({input, label, meta: {touched, error}, ...props}
                {...props}
     />
 )
+
+export const renderTextFieldWithClearButton = ({input, label, meta: {touched, error}, ...props}) => {
+
+    return (
+        <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
+            <TextField hintText={label}
+                       floatingLabelText={label}
+                       errorText={touched && error}
+                       {...input}
+                       {...props} />
+            <IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
+                <FontIcon className="material-icons">clear</FontIcon>
+            </IconButton>
+        </div>
+    )
+}
 
 export const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
     return (

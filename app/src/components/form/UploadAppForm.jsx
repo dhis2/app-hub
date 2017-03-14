@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
-import { DHISVersions } from '../../constants/apiConstants';
+import {DHISVersions} from '../../constants/apiConstants';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import UploadFileField from '../form/UploadFileField';
@@ -38,10 +38,10 @@ const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
 
 const renderAutoCompleteField = ({input, label, meta: {touched, error}, ...props}) => (
     <AutoComplete hintText={label}
-               floatingLabelText={label}
-               errorText={touched && error}
-               {...input}
-               {...props}
+                  floatingLabelText={label}
+                  errorText={touched && error}
+                  {...input}
+                  {...props}
     />
 )
 
@@ -51,8 +51,10 @@ const renderSelectField = ({input, label, meta: {touched, error}, children}) => 
             floatingLabelText={label}
             errorText={touched && error}
             {...input}
-            onFocus={() => {}} //prevent reset of value when tabbing + enter
-            onBlur={() => {}}
+            onFocus={() => {
+            }} //prevent reset of value when tabbing + enter
+            onBlur={() => {
+            }}
             onChange={(event, index, value) => input.onChange(value)}
             children={children}/>
     )
@@ -102,15 +104,18 @@ const UploadForm = (props) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Field name="appName" style={fieldStyle} component={renderTextField} autoFocus fullWidth label="App Name"/>
-            <Field name="description" style={fieldStyle} component={renderTextField} fullWidth multiLine rows={3} label="App Description"/>
+            <Field name="description" style={fieldStyle} component={renderTextField} fullWidth multiLine rows={3}
+                   label="App Description"/>
             <br />
             <Field name="appType" style={fieldStyle} component={renderSelectField} fullWidth label="App Type">
                 {menuItems}
             </Field>
             <h2>Version</h2>
-            <Field name="version" style={fieldStyle} component={renderTextField} label="Version" />
-            <Field style={{display:'block'}}name="minVer" component={renderAutoCompleteField} label="Minimum DHIS version" dataSource={DHISVersions}/>
-            <Field name="maxVer" style={fieldStyle} component={renderAutoCompleteField} label="Maximum DHIS version" dataSource={DHISVersions}/>
+            <Field name="version" style={fieldStyle} component={renderTextField} label="Version"/>
+            <Field style={{display: 'block'}} name="minVer" component={renderAutoCompleteField}
+                   label="Minimum DHIS version" dataSource={DHISVersions}/>
+            <Field name="maxVer" style={fieldStyle} component={renderAutoCompleteField} label="Maximum DHIS version"
+                   dataSource={DHISVersions}/>
             <Field name="file" component={renderUploadField} hintText="Upload app" id="file"/>
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={renderTextField} label="Developer Name"/>
@@ -123,7 +128,8 @@ const UploadForm = (props) => {
             <Field name="imageCaption" style={fieldStyle} component={renderTextField} label="Image caption"/>
             <Field name="imageDescription" style={fieldStyle} component={renderTextField} label="Image description"/>
 
-            <Button style={{...fieldStyle, marginTop: '20px'}} icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
+            <Button style={{...fieldStyle, marginTop: '20px'}}
+                    icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
                     label="Upload"/>
         </form>
