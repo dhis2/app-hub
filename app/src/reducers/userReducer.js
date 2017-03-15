@@ -1,7 +1,23 @@
 import * as actionTypes from '../constants/actionTypes';
+import { combineReducers } from 'redux';
+const initialState = {
+        loaded: false,
+        loading: true,
+        error: false,
+}
 
-function userReducer(state = {appList: []}, action) {
-    switch (action.type) {
+const loadedState = {
+    loaded: true,
+    loading: false,
+    error: false,
+}
+const errorState = {
+    loaded: true,
+    loading: false,
+    error: true,
+}
+function appListReducer(state = {...initialState, byId: {}}, action) {
+    switch(action.type) {
         case actionTypes.APPS_APPROVED_ERROR: {
             return {
                 ...state,
@@ -11,29 +27,25 @@ function userReducer(state = {appList: []}, action) {
         case actionTypes.APPS_ALL_LOADED:
         case actionTypes.USER_APPS_LOADED:
         {
-            const appList = {}
+            const byId = {}
             action.payload.map((app, i) => {
-                appList[app.id] = app
+                byId[app.id] = app
             })
             return {
                 ...state,
-                appList
+                ...loadedState,
+                byId
             }
         }
         case actionTypes.APP_LOADED: {
             const appId = action.payload.id;
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                ...loadedState,
+                byId: {
+                    ...state.byId,
                     [appId]: action.payload,
                 }
-            }
-        }
-        case actionTypes.USER_LOADED: {
-            return {
-                ...state,
-                userInfo: action.payload,
             }
         }
         case actionTypes.SET_APPROVAL_APP_SUCCESS: {
@@ -41,8 +53,8 @@ function userReducer(state = {appList: []}, action) {
             const app = state.appList[appId];
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                byId: {
+                    ...state.byId,
                     [appId]: {
                         ...app,
                         status: action.payload.status
@@ -54,15 +66,15 @@ function userReducer(state = {appList: []}, action) {
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
             const version = action.payload.version;
             const appId = action.payload.appId;
-            const app = state.appList[appId];
+            const app = state.byId[appId];
             if(!app) {
                 return state;
             }
             const newVer = [...app.versions, version];
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                byId: {
+                    ...state.byId,
                     [appId]: {
                         ...app,
                         versions: newVer,
@@ -74,15 +86,15 @@ function userReducer(state = {appList: []}, action) {
         case actionTypes.APP_VERSION_DELETE_SUCCESS: {
             const version = action.payload.version;
             const appId = action.payload.appId;
-            const app = state.appList[appId];
+            const app = state.byId[appId];
             if(!app) {
                 return state;
             }
             const newVer = app.versions.filter( v => v.id !== version.id);
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                byId: {
+                    ...state.byId,
                     [appId]: {
                         ...app,
                         versions: newVer,
@@ -93,20 +105,19 @@ function userReducer(state = {appList: []}, action) {
 
         case actionTypes.APP_DELETE_SUCCESS: {
             const app = action.payload.app;
-            const list = {...state.appList};
+            const list = {...state.byId};
             delete list[action.payload.app.id];
             return {
                 ...state,
-                appList: list,
+                byId: list,
             }
         }
         case actionTypes.APP_EDIT_SUCCESS: {
             const { app, data } = action.payload;
-            console.log(action.payload)
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                byId: {
+                    ...state.byId,
                     [app.id]: {
                         ...app,
                         ...data
@@ -118,4 +129,20 @@ function userReducer(state = {appList: []}, action) {
     return state;
 }
 
-export default userReducer;
+function userInfoReducer(state = {...initialState}, action) {
+    switch(action.type) {
+        case actionTypes.USER_LOADED: {
+            return {
+                ...state,
+                ...loadedState,
+                info: action.payload,
+            }
+        }
+    }
+    return state;
+}
+
+export default combineReducers({
+    appList: appListReducer,
+    userInfo: userInfoReducer,
+});

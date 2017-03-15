@@ -14,7 +14,7 @@ import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
 import {mapValues, sortBy} from 'lodash';
-
+import { Spinner } from '../../utils/Loader';
 class AppList extends Component {
     constructor(props) {
         super(props);
@@ -68,10 +68,8 @@ class AppList extends Component {
     }
 
     render() {
-        if(!this.props.user) {
-            return null;
-        }
-        const {user: {manager}, match, appList, appSearchFilter} = this.props;
+        const { loading, loaded, error, byId : appList} = this.props.appList;
+        const {user: {manager}, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
 
         const apps = sortBy(appList, ['name'])
@@ -105,7 +103,7 @@ class AppList extends Component {
                 <Card>
                     <CardText>
                         <List>
-                            {apps}
+                            {loading ? <Spinner size="medium" /> : apps}
                         </List>
                     </CardText>
                 </Card>
@@ -116,7 +114,7 @@ class AppList extends Component {
 
     const mapStateToProps = (state) => ({
         appList: state.user.appList,
-        user: state.user.userInfo,
+        user: state.user.userInfo.info,
         appTypeFilter: state.form.appTypeFilter,
         appSearchFilter: state.form.searchFilter,
     });

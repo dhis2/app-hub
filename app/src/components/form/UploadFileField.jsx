@@ -67,9 +67,9 @@ class UploadFileField extends Component {
                     <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText}
                                value={this.state.fileName}
                                onClick={this.uploadAction}/>
-                    <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
+                    {this.state.fileName ? <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
                         <FontIcon className="material-icons">clear</FontIcon>
-                    </IconButton>
+                    </IconButton> : null}
                 </div>
                 <input type="file" style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
                        onChange={this.handleUpload}/>

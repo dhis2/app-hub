@@ -120,7 +120,7 @@ UserAppView.propTypes = {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-   app: state.user.appList[ownProps.match.params.appId]
+   app: state.user.appList.byId[ownProps.match.params.appId]
 })
 
 const mapDispatchToProps = (dispatch) =>  ({

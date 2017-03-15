@@ -22,7 +22,6 @@ function getClassNames(props) {
             modificators.push(mod);
         }
     }
-    console.log("CLASSES: " + props.additionalClasses);
     return classNames(baseClassname, modificators, props.additionalClasses);
 }
 
