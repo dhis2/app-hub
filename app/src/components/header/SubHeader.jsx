@@ -8,7 +8,7 @@ const SubHeader = (props) => {
 
     return (
         <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
-            <ToolbarGroup>
+            {props.title || props.backLink ? <ToolbarGroup>
                 {props.backLink ? <Link to={props.backLink}>
                         <IconButton>
                             <FontIcon className="material-icons">arrow_back</FontIcon>
@@ -17,7 +17,7 @@ const SubHeader = (props) => {
                     </Link> : null}
                 {props.backLink ? <ToolbarSeparator style={{marginRight: '24px'}}/> : null}
                 <ToolbarTitle text={props.title}/>
-            </ToolbarGroup>
+            </ToolbarGroup> : null}
             {props.children}
         </Toolbar>)
 }

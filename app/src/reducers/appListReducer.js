@@ -1,6 +1,24 @@
 import * as actionTypes from '../constants/actionTypes';
 
-function appsListReducer(state = {appList: []}, action) {
+const initialState = {
+    loaded: false,
+    loading: true,
+    error: false,
+    byId: {},
+}
+
+const loadedState = {
+    loaded: true,
+    loading: false,
+    error: false,
+}
+const errorState = {
+    loaded: true,
+    loading: false,
+    error: true,
+}
+
+function appsListReducer(state = {...initialState}, action) {
     switch (action.type) {
         case actionTypes.APPS_ALL_ERROR: {
             return {
@@ -11,21 +29,22 @@ function appsListReducer(state = {appList: []}, action) {
 
         case actionTypes.APPS_APPROVED_LOADED:
         {
-            const appList = {}
+            const byId = {}
             action.payload.map((app, i) => {
-                appList[app.id] = app
+                byId[app.id] = app
             })
             return {
                 ...state,
-                appList
+                ...loadedState,
+                byId
             }
         }
         case actionTypes.APP_LOADED: {
             const appId = action.payload.id;
             return {
                 ...state,
-                appList: {
-                    ...state.appList,
+                byId: {
+                    ...state.byId,
                     [appId]: action.payload,
                 }
             }

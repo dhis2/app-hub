@@ -20,9 +20,18 @@ export default class AuthService {
     }
 
     _doAuthentication(authResult) {
+        const token = this.getToken();
         // Saves the user token
         console.log(authResult)
         this.setToken(authResult.idToken)
+        this.lock.getProfile(authResult.idToken, (error, profile) => {
+            if (error) {
+                console.log('Error loading the Profile', error)
+            } else {
+                console.log(profile)
+              //  this.setProfile(profile)
+            }
+        })
         this.setAccessToken(authResult.accessToken)
     }
 
@@ -32,9 +41,9 @@ export default class AuthService {
     }
 
     isLoggedIn() {
-        // Checks if there is a saved token and it's still valid
+        // Checks if there is a saved token and i
         const token = this.getToken();
-        console.log(token)
+      //  console.log(token)
         return !!token && !isTokenExpired(token);
     }
 

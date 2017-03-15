@@ -50,7 +50,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
         }
         case actionTypes.SET_APPROVAL_APP_SUCCESS: {
             const appId = action.payload.app.id;
-            const app = state.appList[appId];
+            const app = state.byId[appId];
             return {
                 ...state,
                 byId: {

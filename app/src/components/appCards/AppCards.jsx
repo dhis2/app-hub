@@ -8,6 +8,7 @@ import {TextFilter, filterApp, SelectFilter, filterAppType} from '../utils/Filte
 import { ToolbarGroup} from 'material-ui/Toolbar';
 import {values, sortBy} from 'lodash';
 import SubHeader from '../header/SubHeader';
+import { Spinner } from '../utils/Loader';
 
 class AppCards extends Component {
 
@@ -26,10 +27,7 @@ class AppCards extends Component {
             display: 'inline-flex',
             margin: '10px',
         }
-        const cards = this.props.appList;
-        if (!this.props.appList) {
-            return null;
-        }
+        const {loading, byId : cards } = this.props.appList;
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) &&  filterAppType(app, this.props.filters))
             .map((app, i) => (
@@ -41,7 +39,7 @@ class AppCards extends Component {
             <Grid>
                 <Col span={12} style={{}}>
                     <SubHeader>
-                        <ToolbarGroup firstChild>
+                        <ToolbarGroup>
                             <TextFilter hintText="Search"/>
                         </ToolbarGroup>
                         <ToolbarGroup>
@@ -58,14 +56,14 @@ class AppCards extends Component {
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
-                {apps}
+                {loading ? <Spinner size="large"/> : apps }
             </Grid>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    appList: state.appsList.appList,
+    appList: state.appsList,
     filters: state.form.appTypeFilter,
     appSearchFilter: state.form.searchFilter,
 });

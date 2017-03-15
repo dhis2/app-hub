@@ -19,6 +19,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import * as apiConstants from '../constants/apiConstants';
 import LoginView from './user/login/LoginView';
 import { getAuth } from '../utils/AuthService';
+import { Spinner } from './utils/Loader';
 injectTapEventPlugin();
 
 const auth = getAuth();
@@ -27,7 +28,7 @@ const PrivateRoute = ({component, ...rest}) => (
     <Route {...rest} render={props => {
         //tokenId is set async, check for hash and show loading
         if(!auth.isLoggedIn() && props.location.hash) {
-            return <div>Loading</div>;
+            return <Spinner size="large" />;
         }
         else if(auth.isLoggedIn()) {
             return React.createElement(component, {auth, ...props})

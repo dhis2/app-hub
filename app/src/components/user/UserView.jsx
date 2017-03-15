@@ -50,7 +50,9 @@ class UserView extends Component {
                             <ListItem primaryText="Upload"
                                       leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
                         </Link>
-                        <ListItem primaryText="Logout" onClick={() => auth.logout()}/>
+                        <ListItem primaryText="Logout"
+                                  leftIcon={<FontIcon className="material-icons">exit_to_app</FontIcon>}
+                                  onClick={() => auth.logout()}/>
                     </List>
                 </Col>
                 <Col span={8}>

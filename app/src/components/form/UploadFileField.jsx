@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import IconButton from 'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
-import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FAB from 'material-ui/FloatingActionButton';
 

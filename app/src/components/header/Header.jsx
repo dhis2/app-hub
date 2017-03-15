@@ -13,10 +13,9 @@ const renderProfileButton = (isLoggedIn) => {
     const button = (<IconButton onClick={() => !isLoggedIn ? getAuth().login() : {}}>
         <FontIcon color="white" className="material-icons">account_circle</FontIcon>
     </IconButton>)
-
-    return (isLoggedIn ? (<Link to="/user">
+    return (isLoggedIn ? <Link to="/user">
             {button}
-        </Link>) : {button})
+        </Link> : button);
 
 }
 

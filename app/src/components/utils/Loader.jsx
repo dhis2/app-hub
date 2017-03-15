@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import '../../styles/utils/loaders.scss';
 
-const SizeType = PropTypes.oneOf('small', 'medium', 'large');
+const SizeType = PropTypes.oneOf(['small', 'medium', 'large']);
 export class Spinner extends Component {
 
     constructor(props) {
