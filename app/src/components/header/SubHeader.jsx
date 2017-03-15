@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom';
 const SubHeader = (props) => {
 
     return (
-        <Toolbar style={{backgroundColor: 'white', marginBottom: '10px'}}>
+        <Toolbar style={{backgroundColor: 'white', marginBottom: '10px', flexWrap: 'wrap', minHeight: '56px', height: 'auto'}}>
             {props.title || props.backLink ? <ToolbarGroup>
                 {props.backLink ? <Link to={props.backLink}>
                         <IconButton>

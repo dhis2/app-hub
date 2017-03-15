@@ -51,7 +51,7 @@ class AppCards extends Component {
                             labelStyle={{width: '100%'}}
                             filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
                                 {label: 'Dashboard', toggled: true, value:'APP_DASHBOARD'},
-                                {label: 'Tracker Dashboard', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
+                                {label: 'Tracker', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
                         />
                         </ToolbarGroup>
                     </SubHeader>

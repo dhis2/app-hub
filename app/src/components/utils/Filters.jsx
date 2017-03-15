@@ -11,8 +11,9 @@ import {renderTextField, renderTextFieldWithClearButton} from '../form/ReduxForm
  * @param filter a string to check if any of the properties in app contains this.
  * @returns {boolean} true if any of the properties matches the filter.
  */
-export const filterApp = (app, filter) => {
-    if (!filter) return true;
+export const filterApp = (app, filterVal) => {
+    if (!filterVal) return true;
+    const filter = filterVal.toLowerCase();
     const valsToFilter = ['name', 'appType', 'organisation'];
     for (let i = 0; i < valsToFilter.length; i++) {
         const val = valsToFilter[i];
