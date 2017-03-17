@@ -17,7 +17,6 @@ const style = {
         fontSize: '56px',
     },
     retryButtonStyle: {
-        width: '100%'
     },
     errorTextStyle: {
         color: 'rgb(117, 117, 117)',

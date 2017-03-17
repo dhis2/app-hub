@@ -24,42 +24,10 @@ class AppView extends Component {
     constructor(props) {
         super(props);
 
-        this.renderVersions = this.renderVersions.bind(this);
     }
 
     componentDidMount() {
         this.props.loadApp({appId: this.props.match.params.appId});
-    }
-
-    renderVersions(versions) {
-        return (
-            <div>
-                {
-                    versions.map((app, i) => (
-                        <div key={i}>
-                            <ul className="ver-list">
-                                <li>
-                                    <a href={app.downloadUrl}> <i className="material-icons">file_download</i></a>
-                                    Version: {app.version}
-
-                                </li>
-                                <ul>
-                                    <li title={new Date(app.created).toLocaleString()}>
-                                        Created: {new Date(app.created).toLocaleDateString()} </li>
-                                    <li title={new Date(app.lastUpdated).toLocaleString()}>
-                                        Last updated: {new Date(app.lastUpdated).toLocaleDateString()}
-                                    </li>
-                                    <li>
-                                        Min DHIS version: {app.minDhisVersion ? app.minDhisVersion : 'Unspecified'}</li>
-                                    <li>
-                                        Max DHIS version: {app.maxDhisVersion ? app.maxDhisVersion : 'Unspecified'}</li>
-                                </ul>
-                            </ul>
-                        </div>
-                    ))
-                }
-            </div>
-        )
     }
 
     render() {

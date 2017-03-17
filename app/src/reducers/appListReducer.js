@@ -25,7 +25,6 @@ function appsListReducer(state = {...initialState}, action) {
             return {
                 ...state,
                 ...errorState,
-                error: action.payload
             }
         }
 
