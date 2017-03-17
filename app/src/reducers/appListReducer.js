@@ -13,16 +13,18 @@ const loadedState = {
     error: false,
 }
 const errorState = {
-    loaded: true,
+    loaded: false,
     loading: false,
     error: true,
 }
 
 function appsListReducer(state = {...initialState}, action) {
     switch (action.type) {
+        case actionTypes.APPS_APPROVED_ERROR:
         case actionTypes.APPS_ALL_ERROR: {
             return {
                 ...state,
+                ...errorState,
                 error: action.payload
             }
         }

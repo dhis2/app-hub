@@ -12,7 +12,7 @@ const loadedState = {
     error: false,
 }
 const errorState = {
-    loaded: true,
+    loaded: false,
     loading: false,
     error: true,
 }
@@ -125,6 +125,17 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+        default: {
+            if (action.type.endsWith('_ERROR')) {
+                console.log(action.payload)
+                return {
+                    ...state,
+                    ...errorState,
+                }
+            } else {
+                return state;
+            }
+        }
     }
     return state;
 }
@@ -136,6 +147,17 @@ function userInfoReducer(state = {...initialState}, action) {
                 ...state,
                 ...loadedState,
                 info: action.payload,
+            }
+        }
+        default: {
+            if (action.type.endsWith('_ERROR')) {
+                console.log(action.payload)
+                return {
+                    ...state,
+                    ...errorState,
+                }
+            } else {
+                return state;
             }
         }
     }

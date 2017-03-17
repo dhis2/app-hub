@@ -8,12 +8,20 @@ import {TextFilter, filterApp, SelectFilter, filterAppType} from '../utils/Filte
 import { ToolbarGroup} from 'material-ui/Toolbar';
 import {values, sortBy} from 'lodash';
 import SubHeader from '../header/SubHeader';
-import { Spinner } from '../utils/Loader';
-
+import ErrorOrLoading from '../utils/ErrorOrLoading';
 class AppCards extends Component {
 
     componentDidMount() {
         this.props.loadApps();
+    }
+
+
+    renderErrorOrLoading(loading, error) {
+        if(loading) {
+            return (<Spinner size="large" />)
+        } else if(error) {
+            return (<Error retry={this.props.loadApps}size="large" />)
+        }
     }
 
     render() {
@@ -27,7 +35,7 @@ class AppCards extends Component {
             display: 'inline-flex',
             margin: '10px',
         }
-        const {loading, byId : cards } = this.props.appList;
+        const {loading, error, byId : cards } = this.props.appList;
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) &&  filterAppType(app, this.props.filters))
             .map((app, i) => (
@@ -56,7 +64,8 @@ class AppCards extends Component {
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
-                {loading ? <Spinner size="large"/> : apps }
+                {loading || error ? <ErrorOrLoading loading={loading} error={error}/> : null}
+                { apps }
             </Grid>
         )
     }

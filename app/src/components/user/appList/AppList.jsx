@@ -14,7 +14,7 @@ import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
 import {mapValues, sortBy} from 'lodash';
-import { Spinner } from '../../utils/Loader';
+import ErrorOrLoading from '../../utils/ErrorOrLoading';
 class AppList extends Component {
     constructor(props) {
         super(props);
@@ -69,6 +69,7 @@ class AppList extends Component {
 
     render() {
         const { loading, loaded, error, byId : appList} = this.props.appList;
+        const loadOrErr = loading || error;
         const {user: {manager}, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
 
@@ -102,8 +103,9 @@ class AppList extends Component {
                 </SubHeader>
                 <Card>
                     <CardText>
+                        {loadOrErr ? <ErrorOrLoading loading={loading} error={error}/> : null}
                         <List>
-                            {loading ? <Spinner size="medium" /> : apps}
+                            {apps}
                         </List>
                     </CardText>
                 </Card>

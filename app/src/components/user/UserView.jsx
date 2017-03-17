@@ -13,8 +13,7 @@ import {userLoad} from '../../actions/actionCreators';
 import AuthService from '../../utils/AuthService';
 import * as apiConstants from '../../constants/apiConstants';
 import SubHeader from '../header/SubHeader';
-import {Spinner} from '../utils/Loader';
-const auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
+import ErrorOrLoading from '../utils/ErrorOrLoading';
 class UserView extends Component {
 
     componentDidMount() {
@@ -22,13 +21,11 @@ class UserView extends Component {
     }
 
 
-    renderLoading() {
-        return (<Spinner size="large"/>);
-    }
 
     render() {
-        const {info, loading, loaded, error} = this.props.user;
-
+      //  const {info, loading, loaded, error} = this.props.user;
+        const { userInfo } = this.props.user;
+        const loadOrErr = userInfo.loading || userInfo.error;
         const contentRoutes = (
             <div>
                 <Route exact path={`${this.props.match.url}`} component={AppList}>
@@ -37,7 +34,6 @@ class UserView extends Component {
                 <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
             </div>
         );
-
         return (
             <Grid>
                 <Col span={2}>
@@ -52,11 +48,11 @@ class UserView extends Component {
                         </Link>
                         <ListItem primaryText="Logout"
                                   leftIcon={<FontIcon className="material-icons">exit_to_app</FontIcon>}
-                                  onClick={() => auth.logout()}/>
+                                  onClick={() => this.props.auth.logout()}/>
                     </List>
                 </Col>
                 <Col span={8}>
-                    {loading ? this.renderLoading() : contentRoutes}
+                    {loadOrErr ? <ErrorOrLoading {...userInfo} retry={this.props.loadUser}/> : contentRoutes}
                 </Col>
             </Grid>
         )
@@ -68,7 +64,7 @@ UserView.PropTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user.userInfo
+    user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

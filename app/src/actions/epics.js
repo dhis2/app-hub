@@ -69,7 +69,7 @@ const user = (action$) => action$
         return api.getUser()
             .then(apps => actionCreators.userLoaded(apps))
             .catch(error => ({
-                type: actions.APPS_APPROVED_ERROR,
+                type: actions.USER_ERROR,
                 payload: error,
             }));
     })
