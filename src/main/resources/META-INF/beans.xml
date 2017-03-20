@@ -10,7 +10,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf"/>
+    <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf.api"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="file:///opt/hisp/appstore/appstore.conf"/>
@@ -39,10 +39,9 @@
 
         <property name="mappingResources">
             <list>
-                <value>hibernate/User.hbm.xml</value>
+                <value>hibernate/Review.hbm.xml</value>
                 <value>hibernate/App.hbm.xml</value>
                 <value>hibernate/AppVersion.hbm.xml</value>
-                <value>hibernate/Review.hbm.xml</value>
                 <value>hibernate/ImageResource.hbm.xml</value>
             </list>
         </property>
@@ -84,30 +83,21 @@
 
     <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore">
         <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
-        <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
         <property name="clazz" value="org.hisp.appstore.api.domain.App" />
+        <property name="currentUserService" ref="org.hisp.appstore.service.DefaultCurrentUserService" />
         <property name="sessionFactory" ref="sessionFactory" />
             </bean>
 
     <bean id="org.hisp.appstore.api.AppStoreService" class="org.hisp.appstore.service.DefaultAppService">
         <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
-        <property name="userService" ref="org.hisp.appstore.api.UserService"/>
+        <property name="currentUserService" ref="org.hisp.appstore.service.DefaultCurrentUserService"/>
         <property name="fileStorageService" ref="org.hisp.appstore.api.FileStorageService"/>
     </bean>
 
     <bean id="org.hisp.appstore.api.RenderService" class="org.hisp.appstore.service.DefaultRenderService"/>
 
-    <!-- User -->
-
-    <bean id="org.hisp.appstore.api.UserService" class="org.hisp.appstore.service.DefaultUserService" >
-        <property name="userStore" ref="org.hisp.appstore.api.UserStore"/>
-    </bean>
-
-    <bean id="org.hisp.appstore.api.UserStore" class="org.hisp.appstore.store.HibernateUserStore">
-        <property name="clazz" value="org.hisp.appstore.api.domain.User" />
-        <property name="sessionFactory" ref="sessionFactory" />
-    </bean>
+    <bean id="org.hisp.appstore.service.DefaultCurrentUserService" class="org.hisp.appstore.service.DefaultCurrentUserService" />
 
     <!-- Review -->
 

@@ -10,7 +10,7 @@ import org.springframework.context.annotation.PropertySource;
  * Created by zubair on 19.01.17.
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.hisp.appstore", "com.auth0.spring.security.mvc"})
+@ComponentScan(basePackages = {"org.hisp.appstore", "com.auth0.spring.security.api"})
 @PropertySource("classpath:application.properties")
 @ImportResource("classpath:/META-INF/beans.xml")
 public class Dhis2AppStore

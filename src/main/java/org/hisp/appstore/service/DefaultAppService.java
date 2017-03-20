@@ -31,18 +31,18 @@ public class DefaultAppService
     // Dependencies
     // -------------------------------------------------------------------------
 
-    private UserService userService;
-
-    public void setUserService( UserService userService )
-    {
-        this.userService = userService;
-    }
-
     private ReviewStore reviewStore;
 
     public void setReviewStore( ReviewStore reviewStore )
     {
         this.reviewStore = reviewStore;
+    }
+
+    private CurrentUserService currentUserService;
+
+    public void setCurrentUserService( CurrentUserService currentUserService )
+    {
+        this.currentUserService = currentUserService;
     }
 
     private AppStore appStore;
@@ -96,7 +96,7 @@ public class DefaultAppService
     }
 
     @Override
-    public List<App> getAllAppsByOwner( User owner )
+    public List<App> getAllAppsByOwner( String owner )
     {
         return appStore.getAllAppsByOwner( owner );
     }
@@ -136,10 +136,10 @@ public class DefaultAppService
     @Override
     public void addReviewToApp(  App app, Review review )
     {
-        User user = userService.getCurrentUser();
+        String userId = currentUserService.getCurrentUserId();
 
         review.setAutoFields();
-        review.setUser( user );
+        review.setUserId( currentUserService.getCurrentUserId() );
 
         app.getReviews().add( review );
 
@@ -211,6 +211,11 @@ public class DefaultAppService
 
         imageResource.setAutoFields();
         imageResource.setImageUrl( status.getDownloadUrl() );
+
+        if ( imageResource.isLogo() )
+        {
+            app.getImages().stream().forEach( item -> item.setLogo( false ) );
+        }
 
         app.getImages().add( imageResource );
 

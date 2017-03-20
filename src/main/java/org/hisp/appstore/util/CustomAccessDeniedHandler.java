@@ -23,12 +23,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler
     public void handle(HttpServletRequest request, HttpServletResponse response,
                        AccessDeniedException e) throws IOException, ServletException
     {
-        if ( request.getRequestURL().toString().contains( "/api" ))
-        {
-            response.sendRedirect("/api/403");
-            return;
-        }
-
-        response.sendRedirect( "/403" );
+        response.sendRedirect("/api/403");
     }
 }

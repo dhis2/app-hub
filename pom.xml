@@ -69,11 +69,11 @@
 
   <!-- auth0 dependencies -->
 
-  <dependency>
-    <groupId>com.auth0</groupId>
-    <artifactId>auth0-spring-security-mvc</artifactId>
-    <version>1.2.3</version>
-  </dependency>
+    <dependency>
+      <groupId>com.auth0</groupId>
+      <artifactId>auth0-spring-security-api</artifactId>
+      <version>0.3.2</version>
+    </dependency>
 
     <!-- Spring Core -->
 

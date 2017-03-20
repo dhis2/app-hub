@@ -1,11 +1,8 @@
 package org.hisp.appstore.store;
 
-import org.hisp.appstore.api.AppStore;
+import org.hisp.appstore.api.CurrentUserService;
 import org.hisp.appstore.api.ReviewStore;
-import org.hisp.appstore.api.UserStore;
-import org.hisp.appstore.api.domain.App;
 import org.hisp.appstore.api.domain.Review;
-import org.hisp.appstore.api.domain.User;
 import org.hisp.appstore.util.HibernateGenericDao;
 
 /**
@@ -14,11 +11,11 @@ import org.hisp.appstore.util.HibernateGenericDao;
 public class HibernateReviewStore
         extends HibernateGenericDao<Review> implements ReviewStore
 {
-    private UserStore userStore;
+    private CurrentUserService currentUserService;
 
-    public void setUserStore( UserStore userStore )
+    public void setCurrentUserService( CurrentUserService currentUserService )
     {
-        this.userStore = userStore;
+        this.currentUserService = currentUserService;
     }
 
     @Override
@@ -30,10 +27,8 @@ public class HibernateReviewStore
     @Override
     public Review preCreate( Review object )
     {
-        User user = userStore.getCurrentUser();
-
         object.setAutoFields();
-        object.setUser( user );
+        object.setUserId( currentUserService.getCurrentUserId() );
 
         return object;
     }

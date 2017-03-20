@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="org.hisp.appstore.api">
-    <class name="org.hisp.appstore.api.domain.Review" table="review">
+    <class name="org.hisp.appstore.api.domain.Review" table="appreview">
 
         <id name="id" column="reviewid">
             <generator class="native" />
@@ -20,10 +20,7 @@
 
         <property name="rate" />
 
-        <many-to-one name="user" lazy="false" class="org.hisp.appstore.api.domain.User" column="userid" foreign-key="fk_review_userid" />
-
-        <many-to-one name="app" class="org.hisp.appstore.api.domain.App" column="appid"
-                     foreign-key="fk_appreview_appid" />
+        <property name="userId" />
 
     </class>
 </hibernate-mapping>
