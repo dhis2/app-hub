@@ -6,7 +6,6 @@ export const ErrorOrLoading = (props) => {
     if (!props.error && !props.loading) {
         return null
     }
-    console.log(props.error)
     const error = <Error retry={props.retry} message={props.errorMessage}/>;
     const loading = <Spinner size="large"/>;
     return (props.error ? error : loading)

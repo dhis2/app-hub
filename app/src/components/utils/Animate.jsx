@@ -3,7 +3,7 @@ import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import '../../styles/utils/animations.scss';
 
 export const FadeAnimation = ({props, component, children, ...rest}) => {
-    console.log(children)
+
     return (
         <ReactCSSTransitionGroup
             component={component}

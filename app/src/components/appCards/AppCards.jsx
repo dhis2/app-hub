@@ -49,7 +49,6 @@ class AppCards extends Component {
                         </ToolbarGroup>
                         <ToolbarGroup>
                             <SelectFilter
-                                renderAllToggle
                                 form="appTypeFilter"
                                 style={filtersStyle}
                                 elementStyle={filterElemStyle}
