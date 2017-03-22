@@ -10,7 +10,7 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
-    <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf.api"/>
+    <util:properties id="config" location="file:///opt/hisp/appstore/appstore.conf"/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="file:///opt/hisp/appstore/appstore.conf"/>
