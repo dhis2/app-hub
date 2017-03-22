@@ -2,8 +2,6 @@ package org.hisp.appstore.api;
 
 import org.hisp.appstore.api.domain.App;
 import org.hisp.appstore.api.domain.AppStatus;
-import org.hisp.appstore.api.domain.AppType;
-import org.hisp.appstore.api.domain.User;
 
 import java.util.List;
 
@@ -17,5 +15,5 @@ public interface AppStore
 
     List<App> getAllAppsByStatus( AppStatus status );
 
-    List<App> getAllAppsByOwner( User owner );
+    List<App> getAllAppsByOwner( String owner );
 }

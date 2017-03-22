@@ -1,4 +1,4 @@
-package org.hisp.appstore.configuration;
+/*package org.hisp.appstore.configuration;
 
 import com.auth0.spring.security.mvc.Auth0CORSFilter;
 import org.springframework.stereotype.Component;
@@ -27,4 +27,4 @@ public class AppStoreCORSFilter extends Auth0CORSFilter
 
         chain.doFilter( req, response );
     }
-}
+} */

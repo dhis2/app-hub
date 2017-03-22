@@ -103,7 +103,16 @@ export const deleteAppSuccess = (app) => {
 }
 
 //TODO: add signature to these
-export const userLoaded = createActionCreator(actions.USER_LOADED);
+export const userLoaded = (profile) => {
+    const info = {
+        ...profile,
+        manager: profile.roles.includes('ROLE_MANAGER'),
+    }
+    return createActionCreator(actions.USER_LOADED)({
+        ...info
+    });
+}
+export const userError = createActionCreator(actions.USER_ERROR);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
 

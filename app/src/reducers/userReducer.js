@@ -150,7 +150,7 @@ function userInfoReducer(state = {...initialState}, action) {
             }
         }
         default: {
-            if (action.type.endsWith('_ERROR')) {
+            if (action.type.endsWith('USER_ERROR')) {
                 console.log(action.payload)
                 return {
                     ...state,

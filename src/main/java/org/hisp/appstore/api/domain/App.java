@@ -29,7 +29,7 @@ public class App
 
     private Developer developer;
 
-    private User owner;
+    private String owner;
 
     private AppType appType = AppType.APP_STANDARD;
 
@@ -79,12 +79,12 @@ public class App
     }
 
     @JsonProperty
-    public User getOwner()
+    public String getOwner()
     {
         return owner;
     }
 
-    public void setOwner( User owner )
+    public void setOwner( String owner )
     {
         this.owner = owner;
     }
@@ -160,18 +160,5 @@ public class App
             appType = app.getAppType() != null ? app.getAppType() : appType;
             status = app.getStatus() != null ? app.getStatus() : status;
         }
-    }
-
-    public boolean hasLogo()
-    {
-        for( ImageResource image: images )
-        {
-            if( image.isLogo() )
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

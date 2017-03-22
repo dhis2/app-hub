@@ -5,11 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
-import org.hisp.appstore.api.AppQueryParameters;
-import org.hisp.appstore.api.ReviewStore;
-import org.hisp.appstore.api.UserStore;
+import org.hisp.appstore.api.*;
 import org.hisp.appstore.api.domain.*;
-import org.hisp.appstore.api.AppStore;
 import org.hisp.appstore.util.HibernateGenericDao;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,11 +29,11 @@ public class HibernateAppStore
         this.reviewStore = reviewStore;
     }
 
-    private UserStore userStore;
+    private CurrentUserService currentUserService;
 
-    public void setUserStore( UserStore userStore )
+    public void setCurrentUserService( CurrentUserService currentUserService )
     {
-        this.userStore = userStore;
+        this.currentUserService = currentUserService;
     }
 
     @Override
@@ -62,15 +59,13 @@ public class HibernateAppStore
     @Override
     public App preCreate( App app )
     {
-        User user = userStore.getCurrentUser();
-
         Set<AppVersion> versions = app.getVersions();
         Set<ImageResource> images = app.getImages();
 
         versions.forEach( v -> v.setAutoFields() );
         images.forEach( i -> i.setAutoFields() );
 
-        app.setOwner( user );
+        app.setOwner( currentUserService.getCurrentUserId() );
         app.setVersions( versions );
         app.setImages( images );
 
@@ -78,7 +73,7 @@ public class HibernateAppStore
     }
 
     @Override
-    public List<App> getAllAppsByOwner( User owner )
+    public List<App> getAllAppsByOwner( String owner )
     {
         return  getCriteria().add( Restrictions.eq( "owner", owner )).list();
     }

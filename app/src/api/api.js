@@ -5,7 +5,7 @@ import { getAuth } from '../utils/AuthService';
 const baseURL = apiConstants.API_BASE_URL;
 
 const baseOptions = {
-    credentials: 'include',
+ //   credentials: 'include',
     method: 'GET'
 }
 const postOpts = {

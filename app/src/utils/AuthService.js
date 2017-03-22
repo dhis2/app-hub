@@ -1,5 +1,6 @@
 import Auth0Lock from 'auth0-lock'
-import {  } from 'react-router'
+import Store  from '../store';
+import * as actionCreators from '../actions/actionCreators';
 import { isTokenExpired } from './jwtHelper';
 import * as apiConstants from '../constants/apiConstants';
 import { BrowserRouter } from 'react-router-dom';
@@ -27,9 +28,11 @@ export default class AuthService {
         this.lock.getProfile(authResult.idToken, (error, profile) => {
             if (error) {
                 console.log('Error loading the Profile', error)
+                Store.dispatch(actionCreators.userError())
             } else {
                 console.log(profile)
-              //  this.setProfile(profile)
+                this.setProfile(profile)
+                Store.dispatch(actionCreators.userLoaded(profile));
             }
         })
         this.setAccessToken(authResult.accessToken)
@@ -45,6 +48,22 @@ export default class AuthService {
         const token = this.getToken();
       //  console.log(token)
         return !!token && !isTokenExpired(token);
+    }
+
+    isManager() {
+        const profile = this.getProfile();
+        if(profile) {
+            return profile.roles.includes('ROLE_MANAGER');
+        }
+        return null;
+    }
+
+    setProfile(profile) {
+        localStorage.setItem('profile', profile);
+    }
+
+    getProfile() {
+        return localStorage.getItem('profile');
     }
 
     setToken(idToken) {

@@ -45,7 +45,7 @@ public class AppController
     private RenderService renderService;
 
     @Autowired
-    private UserService userService;
+    private CurrentUserService currentUserService;
 
     @Autowired
     private ImageResourceService imageResourceService;
@@ -70,9 +70,7 @@ public class AppController
     @RequestMapping( value = "/myapps", method = RequestMethod.GET )
     public void getAllAppsByUser( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
-        User owner = userService.getCurrentUser();
-
-        List<App> apps = appStoreService.getAllAppsByOwner( owner );
+        List<App> apps = appStoreService.getAllAppsByOwner( currentUserService.getCurrentUserId() );
 
         renderService.toJson( response.getOutputStream(), apps );
     }
@@ -90,8 +88,6 @@ public class AppController
     public void getApp( @PathVariable( value = "uid" ) String appUid,
                         HttpServletRequest request, HttpServletResponse response ) throws IOException, WebMessageException
     {
-        Set<String> userAuths = userService.getCurrentUser().getAuths();
-
         App app = appStoreService.getApp( appUid );
 
         if ( app == null )
@@ -236,11 +232,6 @@ public class AppController
         if ( app == null )
         {
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
-        }
-
-        if( imageResource.isLogo() && app.hasLogo() )
-        {
-            throw new WebMessageException( WebMessageUtils.conflict( String.format( "%s already has a logo", app.getName() ) ) );
         }
 
         decideAccess( app );
@@ -456,9 +447,7 @@ public class AppController
 
     private void decideAccess( App app ) throws WebMessageException
     {
-        User currentUser = userService.getCurrentUser();
-
-        if ( !currentUser.equals( app.getOwner() ) && !currentUser.isManager() )
+        if ( !currentUserService.getCurrentUserId().equals( app.getOwner() ) && !currentUserService.isManager() )
         {
             throw new WebMessageException( WebMessageUtils.denied( "Access denied" ) );
         }

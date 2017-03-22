@@ -10,31 +10,29 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 public class Review
         extends BaseIdentifiableObject
 {
-    private User user;
+    private String userId;
 
     private String reviewText;
 
     private int rate;
 
-    private App app;
-
     public Review()
     {
     }
 
-    public Review( User user, String reviewText )
+    public Review( String userId, String reviewText )
     {
-        this.user = user;
+        this.userId = userId;
         this.reviewText = reviewText;
     }
 
     @JsonProperty
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser( User user ) {
-        this.user = user;
+    public void setUserId( String userId ) {
+        this.userId = userId;
     }
 
     @JsonProperty
@@ -54,16 +52,5 @@ public class Review
     public void setRate( int rate )
     {
         this.rate = rate;
-    }
-
-    @JsonIgnore
-    public App getApp()
-    {
-        return app;
-    }
-
-    public void setApp( App app )
-    {
-        this.app = app;
     }
 }
