@@ -5,7 +5,6 @@ import { getAuth } from '../utils/AuthService';
 const baseURL = apiConstants.API_BASE_URL;
 
 const baseOptions = {
- //   credentials: 'include',
     method: 'GET'
 }
 const postOpts = {
@@ -29,7 +28,7 @@ export function getApprovedApps() {
 }
 
 export function getApp(appId) {
-    return fromApi('apps/'+appId);
+    return fromApi('apps/'+appId, true);
 }
 
 export function getUser() {
@@ -51,7 +50,9 @@ export function createApp(payload) {
 export function createNewVersion(appId, payload) {
     return fromApi('apps/'+appId+'/versions', true, createUploadVersionOptions(payload));
 }
-
+export function createNewImage(appid, payload) {
+    return fromApi('apps/'+appId+'/images', true, createUploadVersionOptions(payload));
+}
 export function deleteVersion(appId, versionId) {
     return fromApi('apps/'+appId+'/versions/'+versionId, true, deleteOpts);
 }
@@ -71,7 +72,7 @@ export function updateApp(appId, payload) {
 function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
     const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};
-    console.log(opts)
+
     return fetch(baseURL+url,opts)
         .then(response => response.ok ? response : Promise.reject(response))
         .then(response => response.json())
@@ -93,17 +94,16 @@ export function createAppUploadOptions(data) {
     let form = new FormData();
     const file = new Blob([fileInput], {type: 'multipart/form-data'})
     const image = new Blob([imageInput], {type: 'multipart/form-data'})
-    const app = new Blob([JSON.stringify(data.app)], {type: 'application/json'})
+    const jsonPart = new Blob([JSON.stringify(data.app)], {type: 'application/json'})
 
     form.append('file', file, fileInput.name)
-    form.append('app', app);
+    form.append('app', jsonPart);
     if(imageInput) {
         form.append('imageFile', image, imageInput.name);
     }
 
 
     const fetchOptions = {
-        credentials: 'include',
         method: 'POST',
         body: form
     };
@@ -130,27 +130,40 @@ export function createUploadVersionOptions(data) {
     const dataFile = data.file;
     let form = new FormData();
     const file = new Blob([dataFile], {type: 'multipart/form-data'})
-    const app = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+    const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
 
     form.append('file', file, dataFile.name)
-    form.append('version', app);
+    form.append('version', jsonPart);
 
     const fetchOptions = {
-        credentials: 'include',
         method: 'POST',
         body: form
     };
     return fetchOptions;
 }
 
-function createUpdateAppOptions(data) {
+export function createUploadImageOptions(data) {
+    //validateAddVersion(data)
+    const image = data.image;
+    const jsonData = {
+        caption: image.caption,
+        description: image.description || null,
+        logo: image.logo || false,
+
+    }
+    const dataFile = data.file;
     let form = new FormData();
-    const file = new Blob([JSON.stringify(data)], {type: 'application/json'})
-    form.append('')
+    const file = new Blob([dataFile], {type: 'multipart/form-data'})
+    const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+
+    form.append('file', file, dataFile.name)
+    form.append('image', jsonPart);
 
     const fetchOptions = {
-        ... baseOptions,
-        method: 'PUT',
+        method: 'POST',
         body: form
-    }
+    };
+    return fetchOptions;
 }
+
+

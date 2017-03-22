@@ -41,6 +41,9 @@ function appsListReducer(state = {...initialState}, action) {
             }
         }
         case actionTypes.APP_LOADED: {
+            if(action.payload.status !== 'APPROVED') {
+                return state;
+            }
             const appId = action.payload.id;
             return {
                 ...state,

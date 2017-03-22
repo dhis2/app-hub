@@ -1,6 +1,4 @@
 import Auth0Lock from 'auth0-lock'
-import Store  from '../store';
-import * as actionCreators from '../actions/actionCreators';
 import { isTokenExpired } from './jwtHelper';
 import * as apiConstants from '../constants/apiConstants';
 import { BrowserRouter } from 'react-router-dom';
@@ -11,7 +9,11 @@ export default class AuthService {
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: 'http://localhost:9000/user',
-                responseType: 'token'
+                responseType: 'token',
+                params: {
+                    scope: 'openid roles user_id',
+                },
+
             }
         })
         // Add callback for lock `authenticated` event
@@ -21,21 +23,8 @@ export default class AuthService {
     }
 
     _doAuthentication(authResult) {
-        const token = this.getToken();
         // Saves the user token
-        console.log(authResult)
         this.setToken(authResult.idToken)
-        this.lock.getProfile(authResult.idToken, (error, profile) => {
-            if (error) {
-                console.log('Error loading the Profile', error)
-                Store.dispatch(actionCreators.userError())
-            } else {
-                console.log(profile)
-                this.setProfile(profile)
-                Store.dispatch(actionCreators.userLoaded(profile));
-            }
-        })
-        this.setAccessToken(authResult.accessToken)
     }
 
     login() {
@@ -46,7 +35,6 @@ export default class AuthService {
     isLoggedIn() {
         // Checks if there is a saved token and it's still valid
         const token = this.getToken();
-      //  console.log(token)
         return !!token && !isTokenExpired(token);
     }
 

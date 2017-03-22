@@ -50,7 +50,6 @@ class UserAppView extends Component {
         </div>)
     }
     render() {
-        console.log(this.props)
         const app = this.props.app;
         if(!app) {
             return null;

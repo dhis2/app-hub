@@ -66,12 +66,17 @@ const deleteApp = (action$) => action$
 const user = (action$) => action$
     .ofType(actions.USER_LOAD)
     .concatMap(action => {
-        return api.getUser()
-            .then(apps => actionCreators.userLoaded(apps))
-            .catch(error => ({
-                type: actions.USER_ERROR,
-                payload: error,
-            }));
+        const auth = getAuth();
+        return new Promise((resolve, reject) => {
+            auth.lock.getProfile(auth.getToken(), (error, profile) => {
+                if (error) {
+                    reject(actionCreators.userError());
+                } else {
+                    auth.setProfile(profile)
+                    resolve(actionCreators.userLoaded(profile));
+                }
+            });
+        })
     })
 
 const userApps = (action$) => action$

@@ -17,10 +17,8 @@ import ErrorOrLoading from '../utils/ErrorOrLoading';
 class UserView extends Component {
 
     componentDidMount() {
-      //  this.props.loadUser();
+        this.props.loadUser();
     }
-
-
 
     render() {
       //  const {info, loading, loaded, error} = this.props.user;
