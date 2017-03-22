@@ -5,7 +5,7 @@ import {Card, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField';
 import AppListItem from './AppListItem';
 import Popover from 'material-ui/Popover';
-import {TextFilter, filterApp, SelectFilter, filterAppType} from '../../utils/Filters';
+import {TextFilter, filterApp, SelectFilter, filterAppType, filterAppStatus} from '../../utils/Filters';
 import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui/Toolbar';
 import Button from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
@@ -67,14 +67,27 @@ class AppList extends Component {
         this.props.openDeleteDialog({app});
     }
 
+    renderStatusFilters() {
+       return (<div> <h4>App status</h4>
+        <SelectFilter
+        renderAllToggle
+        form="appStatusFilter"
+        filters={[{label: 'Approved', toggled: true, value: 'APPROVED'},
+        {label: 'Pending', toggled: true, value:'PENDING'},
+        {label: 'Not Approved', toggled: true, value:'NOT_APPROVED'}]}
+        /> </div>)
+    }
+
     render() {
         const { loading, loaded, error, byId : appList} = this.props.appList;
         const loadOrErr = loading || error;
-        const {user: {manager}, match, appSearchFilter} = this.props;
+        let {user: {manager}, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
-
+        manager = true;
         const apps = sortBy(appList, ['name'])
-            .filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.appTypeFilter))
+            .filter(app => filterApp(app, searchFilter)
+            && filterAppType(app, this.props.appTypeFilter)
+            && (manager ? filterAppStatus(app, this.props.appStatusFilter) : true))
             .map((app, i) => (
             <AppListItem app={app} key={app.id} isManager={manager}
                          match={this.props.match}
@@ -91,13 +104,15 @@ class AppList extends Component {
                     <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'200px'}}
                     onRequestClose={(r) => this.setState({open:false})}>
                         <div style={{padding:'10px'}}>
+                            <h4>App type</h4>
                         <SelectFilter
                             renderAllToggle
                             form="appTypeFilter"
                             filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
                                 {label: 'Dashboard', toggled: true, value:'APP_DASHBOARD'},
-                                {label: 'Tracker Dashboard', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
+                                {label: 'Tracker', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
                            />
+                            {manager ? this.renderStatusFilters() : null}
                         </div>
                     </Popover>
                 </SubHeader>
@@ -118,6 +133,7 @@ class AppList extends Component {
         appList: state.user.appList,
         user: state.user.userInfo.info,
         appTypeFilter: state.form.appTypeFilter,
+        appStatusFilter: state.form.appStatusFilter,
         appSearchFilter: state.form.searchFilter,
     });
 

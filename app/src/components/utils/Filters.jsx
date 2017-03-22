@@ -37,7 +37,7 @@ export const filterApp = (app, filterVal) => {
  *
  * @param app to filter.
  * @param filters an redux-form object containing filters to check for app.
- * Should be of form {filters: values}. Values should be of form {appType: bool}.
+ * Should be of shape {filters: values}. Values should be of shape {appType: bool}.
  * @returns {boolean} true if app has an apptype in filter, otherwise false.
  */
 export const filterAppType = (app, filters) => {
@@ -46,6 +46,20 @@ export const filterAppType = (app, filters) => {
     for (let key in filterVal) {
         if (filterVal.hasOwnProperty(key)) {
             if (key == app.appType && filterVal[key] === true) {
+                return true
+            }
+        }
+
+    }
+    return filterVal.length < 1 ? true : false
+}
+
+export const filterAppStatus = (app, filters) => {
+    if (!filters) return true;
+    const filterVal = filters.values;
+    for (let key in filterVal) {
+        if (filterVal.hasOwnProperty(key)) {
+            if (key == app.status && filterVal[key] === true) {
                 return true
             }
         }

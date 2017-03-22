@@ -49,7 +49,7 @@ class UserView extends Component {
                                   onClick={() => this.props.auth.logout()}/>
                     </List>
                 </Col>
-                <Col span={8}>
+                <Col span={8} style={{maxWidth: '900px'}}>
                     {loadOrErr ? <ErrorOrLoading {...userInfo} retry={this.props.loadUser}/> : contentRoutes}
                 </Col>
             </Grid>

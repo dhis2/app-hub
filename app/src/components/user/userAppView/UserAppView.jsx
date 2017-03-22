@@ -67,11 +67,10 @@ class UserAppView extends Component {
             right: '4px'
         }
 
-        console.log(app.images[0]);
-
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} </div>)
+
         return (
             <div>
                 <Subheader title="App overview" backLink="/user">
