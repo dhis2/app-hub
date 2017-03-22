@@ -95,6 +95,11 @@ public class AppController
             throw new WebMessageException( WebMessageUtils.notFound( NOT_FOUND + appUid ) );
         }
 
+        if ( !AppStatus.APPROVED.equals( app.getStatus() ) )
+        {
+            throw new WebMessageException( WebMessageUtils.denied( "Access denied" ) );
+        }
+
         decideAccess( app );
 
         renderService.toJson( response.getOutputStream(), app );

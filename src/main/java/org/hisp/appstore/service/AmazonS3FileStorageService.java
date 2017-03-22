@@ -58,7 +58,7 @@ public class AmazonS3FileStorageService implements FileStorageService
     public FileUploadStatus uploadFile( MultipartFile file, AppType type, ResourceType resourceType )
                                         throws WebMessageException, IOException
     {
-        String resourceKey = UUID.randomUUID().toString();
+        String resourceKey = UUID.randomUUID().toString() + "." + resourceType.toString().toLowerCase();
 
         String downloadUrl = StringUtils.EMPTY;
 
@@ -88,7 +88,6 @@ public class AmazonS3FileStorageService implements FileStorageService
                     throw new WebMessageException( WebMessageUtils.conflict( String.format( "File format %s not supported",
                             Files.getFileExtension( file.getOriginalFilename() ) ) ) );
                 }
-
             }
         }
 
