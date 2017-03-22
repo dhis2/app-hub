@@ -49,7 +49,9 @@ const renderSelectField = ({input, label, meta: {touched, error}, children}) => 
 
 const EditForm = (props) => {
     const {handleSubmit, pristine, submitting} = props;
-
+    //this is called when the form is submitted, translating
+    //fields to an object the api understands.
+    //we then call props.submitted, so this data can be passed to parent component
     const onSub = (values) => {
         const data = {
             name: values.appName,
@@ -64,7 +66,6 @@ const EditForm = (props) => {
         }
 
         return props.submitted({data});
-       // return Promise.resolve(data);
     }
 
     const menuItems = appTypes.map((type, i) => (
@@ -91,4 +92,4 @@ const EditForm = (props) => {
 }
 EditForm.propTypes = {
 }
-export default reduxForm({form: 'editAppForm', validate, initialValues: {appType: appTypes[0].value}})(EditForm);
+export default reduxForm({form: 'editAppForm', validate})(EditForm);

@@ -64,6 +64,7 @@ class UploadFileField extends Component {
                 {uploadIconPosition === 'left' ? uploadButton : null}
                 <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
                     <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText}
+                               errorText={props.errorText}
                                value={this.state.fileName}
                                onClick={this.uploadAction}/>
                     {this.state.fileName ? <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>

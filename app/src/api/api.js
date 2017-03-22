@@ -92,14 +92,12 @@ export function createAppUploadOptions(data) {
     const fileInput = data.file;
     const imageInput = data.image;
     let form = new FormData();
-    const file = new Blob([fileInput], {type: 'multipart/form-data'})
-    const image = new Blob([imageInput], {type: 'multipart/form-data'})
     const jsonPart = new Blob([JSON.stringify(data.app)], {type: 'application/json'})
 
-    form.append('file', file, fileInput.name)
+    form.append('file', fileInput, fileInput.name)
     form.append('app', jsonPart);
     if(imageInput) {
-        form.append('imageFile', image, imageInput.name);
+        form.append('imageFile', imageInput, imageInput.name);
     }
 
 
@@ -129,10 +127,9 @@ export function createUploadVersionOptions(data) {
     }
     const dataFile = data.file;
     let form = new FormData();
-    const file = new Blob([dataFile], {type: 'multipart/form-data'})
     const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
 
-    form.append('file', file, dataFile.name)
+    form.append('file', dataFile, dataFile.name)
     form.append('version', jsonPart);
 
     const fetchOptions = {
@@ -153,10 +150,9 @@ export function createUploadImageOptions(data) {
     }
     const dataFile = data.file;
     let form = new FormData();
-    const file = new Blob([dataFile], {type: 'multipart/form-data'})
     const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
 
-    form.append('file', file, dataFile.name)
+    form.append('file', dataFile, dataFile.name)
     form.append('image', jsonPart);
 
     const fetchOptions = {

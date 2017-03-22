@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
 import {Field, reduxForm, change} from 'redux-form';
-import {renderTextField, renderTextFieldWithClearButton} from '../form/ReduxFormUtils';
+import {renderTextField, renderTextFieldWithClearButton, renderToggle} from '../form/ReduxFormUtils';
 
 /**
  * Filters an app according to properties defined in valsToFilter.
@@ -89,19 +89,6 @@ export const TextFilter = reduxForm({
     destroyOnUnmount: false
 })(Textfilter)
 
-const renderToggle = ({input, changedCB, label, meta: {touched, error}, ...props}) => (
-    <Toggle
-        label={label}
-        onToggle={(e, toggled) => {
-            input.onChange(toggled);
-            changedCB ? changedCB(toggled) : () => {
-                }
-        }}
-        toggled={input.value ? true : false}
-        {...input}
-        {...props}
-    />
-)
 
 /**
  * A redux-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
@@ -140,7 +127,7 @@ class Selectfilter extends Component {
                     name="all"
                     component={renderToggle}
                     label={"All"}
-                    changedCB={this.toggleAll.bind(this)}
+                    onToggle={this.toggleAll.bind(this)}
                     labelStyle={labelStyle}
                     style={elementStyle}/> : null}
 
@@ -149,8 +136,11 @@ class Selectfilter extends Component {
 
 }
 Selectfilter.propTypes = {
+    //style of the root element
     style: PropTypes.object,
+    //style of the filter input elements
     elementStyle: PropTypes.object,
+    //style of the label of the input elements
     labelStyle: PropTypes.object,
     value: PropTypes.string,
     filters: PropTypes.arrayOf(PropTypes.shape({

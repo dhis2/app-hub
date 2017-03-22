@@ -67,6 +67,7 @@ class UserAppView extends Component {
             right: '4px'
         }
 
+        console.log(app.images[0]);
 
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
@@ -106,7 +107,6 @@ class UserAppView extends Component {
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText>
                         <MultipleUploadFileFields/>
-
                     </CardText>
                 </Card>
             </div>

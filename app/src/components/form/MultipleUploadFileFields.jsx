@@ -27,7 +27,6 @@ class MultipleUploadFileFields extends Component {
     }
 
     handleRemoveField(index) {
-        console.log("field to be removed " + index)
         this.setState({
             ...this.state,
             fields: this.state.fields.filter((id) => id !== index)
@@ -45,7 +44,6 @@ class MultipleUploadFileFields extends Component {
     }
 
     render() {
-        console.log(this.state.fields)
         const fields = this.state.fields.map((id, i) => {
             return (<UploadFileField
                 renderAdd={(this.props.multiLastOnly && i == this.state.fields.length - 1) || !this.props.multiLastOnly}

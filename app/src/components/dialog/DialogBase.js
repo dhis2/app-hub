@@ -29,7 +29,7 @@ class DialogBase extends Component {
         const actions = [];
 
         const finalAction = () => {
-            Promise.resolve(approveAction()).then(() => defaultCloseDialog()).catch()
+            Promise.resolve(approveAction()).then(() => defaultCloseDialog()).catch(() => {})
 
     };
 

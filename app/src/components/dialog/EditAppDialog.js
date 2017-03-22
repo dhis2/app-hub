@@ -3,8 +3,6 @@ import TextField from 'material-ui/TextField';
 import {connect} from 'react-redux';
 import DialogBase from './DialogBase';
 import {editApp} from '../../actions/actionCreators';
-import CustomForm from '../../form/CustomForm';
-import CustomFormField from '../../form/CustomFormField';
 import EditAppForm from '../form/EditAppForm';
 
 export class EditAppDialog extends Component {
@@ -38,7 +36,6 @@ export class EditAppDialog extends Component {
             <DialogBase
                 title="Edit App"
                 approveAction={this.submitForm.bind(this)}
-                cancelAction={this.props.closeDialog}
                 contentStyle={{maxWidth: '500px'}}
                 bodyStyle={{overflowY:'scroll'}}
             >
