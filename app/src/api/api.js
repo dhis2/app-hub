@@ -68,7 +68,13 @@ export function updateApp(appId, payload) {
         body: JSON.stringify(payload)
     });
 }
-
+export function updateImage(appId, imageId, payload) {
+    return fromApi('apps/'+appId+"/images/"+imageId, true,{
+        ...baseOptions,
+        ...updateOpts,
+        body: JSON.stringify(payload)
+    })
+}
 function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
     const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};

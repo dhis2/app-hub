@@ -54,6 +54,14 @@ export const editApp = (app, data) => (
         data
     })
 )
+
+export const editImage = (appId, imageId, data) => (
+    createActionCreator(actions.APP_IMAGE_EDIT)({
+        appId,
+        imageId,
+        data
+    })
+)
 export const addAppSuccess = (app) => (
     createActionCreator(actions.APP_ADD_SUCCESS)({
         app

@@ -53,7 +53,7 @@ class AppView extends Component {
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                     </CardHeader>
                     <CardText>
-                        <ImageViewer/>
+                        <ImageViewer images={app.images}/>
                     </CardText>
                     <CardText>
                         {app.description}

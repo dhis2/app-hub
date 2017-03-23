@@ -52,16 +52,13 @@ class ImageViewer extends Component {
     }
 
     render() {
+        console.log(this.props.images)
 
+        const {images }  = this.props;
 
-        const mediaItems = [{cap: 'Test', description: 'Test thing', url:'https://avatars1.githubusercontent.com/u/13482715?v=3&s=400'}]
-        for(let i = 1;i < 5;i++) {
-            mediaItems[i] = mediaItems[i-1];
-
-        }
         const isExpanded = (image) => image == this.state.expandedImage
 
-        const tiles = mediaItems.map((tile, i) => (
+        const tiles = images.map((tile, i) => (
 
             <GridTile key={i} style={isExpanded(i) ? styles.expandedImageStyle : styles.imageStyle} title={isExpanded(i) ? tile.description : ''} rows={isExpanded(i) ? 2  : 1} cols={isExpanded(i)? 2  : 1}>
                 <ReactCSSTransitionGroup
@@ -70,7 +67,7 @@ class ImageViewer extends Component {
                     transitionAppearTimeout={500}
                     transitionEnterTimeout={500}
                     transitionLeaveTimeout={300} >
-                <img src={tile.url} onClick={this.handleExpandImage.bind(this, i)} />
+                <img src={tile.imageUrl} onClick={this.handleExpandImage.bind(this, i)} />
                 </ReactCSSTransitionGroup>
             </GridTile>
 
@@ -87,7 +84,7 @@ class ImageViewer extends Component {
 
 ImageViewer.PropTypes = {
     images: PropTypes.arrayOf(PropTypes.shape({
-        url: PropTypes.string,
+        imageUrl: PropTypes.string,
         description: PropTypes.string,
         caption: PropTypes.string,
     }))

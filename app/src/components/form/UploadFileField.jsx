@@ -36,7 +36,6 @@ class UploadFileField extends Component {
     }
 
     handleResetFile() {
-        console.log("reste")
         this.setState({
             ...this.state,
             fileName: '',

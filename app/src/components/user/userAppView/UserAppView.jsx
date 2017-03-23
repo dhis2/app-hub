@@ -15,6 +15,7 @@ import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
 import { appTypesToUI } from '../../../constants/apiConstants';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
+import ImageViewer from '../../appView/ImageViewer';
 class UserAppView extends Component {
     constructor(props) {
         super(props);
@@ -127,6 +128,7 @@ class UserAppView extends Component {
                         <ContentAdd />
                     </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
+                    <ImageViewer images={app.images} />
                     <CardText>
                         <MultipleUploadFileFields ref={ref => this.form = ref} submitted={this.handleUploadImages.bind(this)} />
                         <Button primary onClick={this.submitUploadImages.bind(this)} icon={<FontIcon className="material-icons">file_upload</FontIcon>} />
