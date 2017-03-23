@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon';
 import UploadFileField from '../form/UploadFileField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import * as formUtils from './ReduxFormUtils';
 import {Field, reduxForm, Form} from 'redux-form';
 
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
@@ -23,28 +24,6 @@ const validate = values => {
         errors.email = 'Invalid email address'
     }
     return errors
-}
-
-const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
-    <TextField hintText={label}
-               floatingLabelText={label}
-               errorText={touched && error}
-               {...input}
-               {...props}
-    />
-)
-
-const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
-    return (
-        <SelectField
-            floatingLabelText={label}
-            errorText={touched && error}
-            {...input}
-            onFocus={() => {}} //prevent reset of value when tabbing + enter
-            onBlur={() => {}}
-            onChange={(event, index, value) => input.onChange(value)}
-            children={children}/>
-    )
 }
 
 const EditForm = (props) => {
@@ -74,17 +53,17 @@ const EditForm = (props) => {
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <Field name="appName" component={renderTextField} autoFocus fullWidth label="App Name"/> <br />
-            <Field name="description" component={renderTextField} fullWidth multiLine rows={3} label="App Description"/>
+            <Field name="appName" component={formUtils.renderTextField} autoFocus fullWidth label="App Name"/> <br />
+            <Field name="description" component={formUtils.renderTextField} fullWidth multiLine rows={3} label="App Description"/>
             <br />
-            <Field name="appType" component={renderSelectField} fullWidth label="App Type">
+            <Field name="appType" component={formUtils.renderSelectField} fullWidth label="App Type">
                 {menuItems}
             </Field> <br />
             <h2>Developer</h2>
-            <Field name="developerName" component={renderTextField} label="Developer Name"/>
-            <Field name="developerEmail" component={renderTextField} label="Developer Email"/>
-            <Field name="developerAddress" component={renderTextField} label="Developer Address"/>
-            <Field name="developerOrg" component={renderTextField} label="Organisation"/>
+            <Field name="developerName" component={formUtils.renderTextField} label="Developer Name"/>
+            <Field name="developerEmail" component={formUtils.renderTextField} label="Developer Email"/>
+            <Field name="developerAddress" component={formUtils.renderTextField} label="Developer Address"/>
+            <Field name="developerOrg" component={formUtils.renderTextField} label="Organisation"/>
 
         </Form>
 

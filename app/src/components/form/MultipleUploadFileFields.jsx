@@ -1,9 +1,6 @@
 import React, {PropTypes, Component} from 'react'
-import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FAB from 'material-ui/FloatingActionButton';
+import {Field, Form, reduxForm} from 'redux-form';
+import * as formUtils from './ReduxFormUtils';
 import UploadFileField from './UploadFileField';
 
 class MultipleUploadFileFields extends Component {
@@ -43,21 +40,33 @@ class MultipleUploadFileFields extends Component {
         )
     }
 
+    onSubmit(values) {
+        //transform object to array
+        const arr = Object.keys(values).map((key, ind) => {
+            return values[key];
+        })
+
+        return this.props.submitted(arr);
+    }
+
     render() {
+        const {handleSubmit, pristine, submitting} = this.props;
         const fields = this.state.fields.map((id, i) => {
-            return (<UploadFileField
+            return (<Field
+                name={"upload"+id}
+                component={formUtils.renderUploadField}
                 renderAdd={(this.props.multiLastOnly && i == this.state.fields.length - 1) || !this.props.multiLastOnly}
                 handleAddField={this.handleAddField}
                 renderRemove={this.state.fields.length > 1}
                 handleRemoveField={this.handleRemoveField.bind(this, id)}
                 key={id}
-                id={''+id}
-                handleUpload={this.handleUpload}/>)
+                id={'' + id}
+            />)
         })
         return (
-            <div>
+            <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 {fields}
-            </div>
+            </Form>
         )
     }
 
@@ -65,11 +74,13 @@ class MultipleUploadFileFields extends Component {
 
 MultipleUploadFileFields.propTypes = {
     multiLastOnly: PropTypes.bool,
-    upload: PropTypes.func,
+    submitted: PropTypes.func.isRequired,
+    //override default name of redux-form
+    form: PropTypes.string,
 }
 
 MultipleUploadFileFields.defaultProps = {
     multiLastOnly: true,
 
 }
-export default MultipleUploadFileFields;
+export default reduxForm({form: 'multipleUploadForm'})(MultipleUploadFileFields);

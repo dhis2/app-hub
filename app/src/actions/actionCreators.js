@@ -60,6 +60,32 @@ export const addAppSuccess = (app) => (
     })
 )
 
+/**
+ *
+ * @param appId for image to belong to
+ * @param image of shape:
+ * image: {
+ *      image: {
+ *          caption,
+ *          description
+ *          logo
+ *          }
+ *      file: imageFile
+ * }
+ */
+export const addImageToApp = (appId, image) => (
+    createActionCreator(actions.APP_IMAGE_ADD)({
+        appId,
+        image
+    })
+)
+
+export const addImageToAppSuccess = (appId, image) => (
+    createActionCreator(actions.APP_IMAGE_ADD_SUCCESS)({
+        appId,
+        image
+    })
+)
 export const deleteAppVersion = (version, appId) => {
     return createActionCreator(actions.APP_VERSION_DELETE)({
         version,

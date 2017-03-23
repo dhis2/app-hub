@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card';
 import { Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { appLoad, openDialog, deleteAppVersion } from '../../../actions/actionCreators';
+import { appLoad, addImageToApp, openDialog, deleteAppVersion } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
@@ -49,6 +50,28 @@ class UserAppView extends Component {
             {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
         </div>)
     }
+
+    submitUploadImages() {
+
+        this.form.submit();
+    }
+
+    handleUploadImages(images) {
+
+        for(let i = 0;i< images.length;i++) {
+            const image = {
+                image: {
+                    caption: '',
+                    descripton: '',
+                    logo: false,
+                },
+                file: images[i]
+            }
+
+            this.props.addImageToApp(this.props.app.id, image);
+        }
+    }
+
     render() {
         const app = this.props.app;
         if(!app) {
@@ -105,7 +128,8 @@ class UserAppView extends Component {
                     </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText>
-                        <MultipleUploadFileFields/>
+                        <MultipleUploadFileFields ref={ref => this.form = ref} submitted={this.handleUploadImages.bind(this)} />
+                        <Button primary onClick={this.submitUploadImages.bind(this)} icon={<FontIcon className="material-icons">file_upload</FontIcon>} />
                     </CardText>
                 </Card>
             </div>
@@ -124,6 +148,10 @@ const mapStateToProps = (state, ownProps) => ({
 const mapDispatchToProps = (dispatch) =>  ({
     loadApp(appid) {
         dispatch(appLoad(appid));
+    },
+
+    addImageToApp(appid, image) {
+        dispatch(addImageToApp(appid, image));
     },
 
     deleteVersion(version,appId) {

@@ -50,8 +50,8 @@ export function createApp(payload) {
 export function createNewVersion(appId, payload) {
     return fromApi('apps/'+appId+'/versions', true, createUploadVersionOptions(payload));
 }
-export function createNewImage(appid, payload) {
-    return fromApi('apps/'+appId+'/images', true, createUploadVersionOptions(payload));
+export function createNewImage(appId, payload) {
+    return fromApi('apps/'+appId+'/images', true, createUploadImageOptions(payload));
 }
 export function deleteVersion(appId, versionId) {
     return fromApi('apps/'+appId+'/versions/'+versionId, true, deleteOpts);
@@ -140,10 +140,9 @@ export function createUploadVersionOptions(data) {
 }
 
 export function createUploadImageOptions(data) {
-    //validateAddVersion(data)
     const image = data.image;
     const jsonData = {
-        caption: image.caption,
+        caption: image.caption || null,
         description: image.description || null,
         logo: image.logo || false,
 

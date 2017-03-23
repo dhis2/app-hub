@@ -18,6 +18,7 @@ class UploadFileField extends Component {
         }
         this.uploadAction = this.uploadAction.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
+        this.handleResetFile = this.handleResetFile.bind(this);
     }
 
     uploadAction(e) {
@@ -35,6 +36,7 @@ class UploadFileField extends Component {
     }
 
     handleResetFile() {
+        console.log("reste")
         this.setState({
             ...this.state,
             fileName: '',
@@ -53,7 +55,7 @@ class UploadFileField extends Component {
             marginRight: uploadIconPosition === 'right' ? '10px' : 0,
         }
         const removeButton = (<IconButton iconClassName="material-icons"
-                                          onClick={this.props.handleRemoveField}>remove</IconButton>)
+                                          onClick={() => {this.handleResetFile(); this.props.handleRemoveField()}}>remove</IconButton>)
         const addButton = (<IconButton iconClassName="material-icons"
                                        onClick={this.props.handleAddField}>add</IconButton>)
 
