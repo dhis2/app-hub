@@ -97,10 +97,8 @@ public class AppController
 
         if ( !AppStatus.APPROVED.equals( app.getStatus() ) )
         {
-            throw new WebMessageException( WebMessageUtils.denied( "Access denied" ) );
+            decideAccess( app );
         }
-
-        decideAccess( app );
 
         renderService.toJson( response.getOutputStream(), app );
     }
