@@ -13,6 +13,7 @@ import VersionList from '../appVersion/VersionList';
 import {appLoad} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../constants/apiConstants';
 import Avatar from 'material-ui/Avatar';
+import AppLogo from './AppLogo';
 import FontIcon from 'material-ui/FontIcon';
 
 
@@ -41,16 +42,13 @@ class AppView extends Component {
             Organisation: {app.developer.organisation} </div>)
 
         let logo = images.filter(elem => elem.logo)[0];
-        const avatarProps = {
-            src: logo ? logo.imageUrl : null,
-            icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
-        }
+
         return(
             <Grid>
                 <Col span={8} center>
                 <Subheader title="App overview" backLink="/" />
                 <Card>
-                    <CardHeader title={app.name} avatar={<Avatar {...avatarProps} />}
+                    <CardHeader title={app.name} avatar={<AppLogo logo={logo} />}
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                     </CardHeader>
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>

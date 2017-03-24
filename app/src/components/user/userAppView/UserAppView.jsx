@@ -9,6 +9,7 @@ import { appLoad, addImageToApp, openDialog, deleteAppVersion } from '../../../a
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
+import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
 import Avatar from 'material-ui/Avatar';
 import Textfield from 'material-ui/TextField';
@@ -96,17 +97,13 @@ class UserAppView extends Component {
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} </div>)
         let logo = app.images.filter(elem => elem.logo)[0];
-        const avatarProps = {
-            src: logo ? logo.imageUrl : null,
-            icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
-        }
 
         return (
             <div>
                 <Subheader title="App overview" backLink="/user">
                 </Subheader>
                 <Card>
-                    <CardHeader title={app.name} avatar={<Avatar {...avatarProps} />}
+                    <CardHeader title={app.name} avatar={<LogoAvatar logo={logo}/>}
                     subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                         {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>

@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {ListItem} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon';
+import AppLogo from '../../appView/AppLogo'
 import Avatar from 'material-ui/Avatar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -69,12 +70,12 @@ const AppListItem = (props, state) => {
     let logo = images.filter(elem => elem.logo)[0];
     const avatarProps = {
         src: logo ? logo.imageUrl : null,
-        icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
+        icon: !logo ? props.defaultLogo: null
     }
 
     const listItemProps = {
         primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
-        leftAvatar: (<Avatar {...avatarProps} />),
+        leftAvatar: (<AppLogo logo={logo} inList/>),
         secondaryText: (<p>{developer.name} <br /> {appTypesToUI[appType]} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
