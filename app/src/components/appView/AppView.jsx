@@ -12,12 +12,9 @@ import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
 import {appLoad} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../constants/apiConstants';
-import AppCards from '../appCards/AppCards'
-const appTypes = {
-    APP_STANDARD: 'Standard',
-    APP_DASHBOARD: 'Dashboard',
-    APP_TRACKER_DASHBOARD: 'Tracker Dashboard'
-}
+import Avatar from 'material-ui/Avatar';
+import FontIcon from 'material-ui/FontIcon';
+
 
 class AppView extends Component {
 
@@ -37,19 +34,23 @@ class AppView extends Component {
         }
 
 
-        const {id, appName, developer, description, appType, requiredDhisVersion, lastUpdated} = app;
+        const {id, appName, developer, description, images, appType, requiredDhisVersion, lastUpdated} = app;
         const versions = app.versions.sort((a, b) => a.lastUpdated - b.lastUpdated)
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} </div>)
 
-
+        let logo = images.filter(elem => elem.logo)[0];
+        const avatarProps = {
+            src: logo ? logo.imageUrl : null,
+            icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
+        }
         return(
             <Grid>
                 <Col span={8} center>
                 <Subheader title="App overview" backLink="/" />
-                <Cardgit d
-                    <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
+                <Card>
+                    <CardHeader title={app.name} avatar={<Avatar {...avatarProps} />}
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                     </CardHeader>
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>

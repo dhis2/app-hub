@@ -115,7 +115,7 @@ class UserAppView extends Component {
 
                     </CardHeader>
 
-                    <CardText>
+                    <CardText>a
                         {app.description}
                     </CardText>
 
