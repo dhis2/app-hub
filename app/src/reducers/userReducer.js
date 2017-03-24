@@ -125,6 +125,58 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+        case actionTypes.APP_IMAGE_ADD_SUCCESS: {
+            const { appId, imageId, image } = action.payload;
+            const app = state.byId[appId];
+            const list = app.images.concat(image);
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [appId]: {
+                        ...app,
+                        images: list,
+                    }
+                }
+            }
+        }
+        case actionTypes.APP_IMAGE_EDIT_SUCCESS: {
+            const { appId, imageId, data } = action.payload;
+            const app = state.byId[appId];
+            const list = app.images.map((elem, ind) => {
+                if(elem.id == imageId) {
+                    return {
+                        ...elem,
+                        ...data,
+                    }
+                } else return elem;
+            });
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [appId]: {
+                        ...app,
+                        images: list,
+                    }
+                }
+            }
+        }
+        case actionTypes.APP_IMAGE_DELETE_SUCCESS: {
+            const { appId, imageId } = action.payload;
+            const app = state.byId[appId];
+            const list = app.images.filter((elem, ind) => elem.id !== imageId);
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [appId]: {
+                        ...app,
+                        images: list,
+                    }
+                }
+            }
+        }
         default: {
             if (action.type.endsWith('_ERROR')) {
                 console.log(action.payload)

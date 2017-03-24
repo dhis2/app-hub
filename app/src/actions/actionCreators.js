@@ -62,6 +62,28 @@ export const editImage = (appId, imageId, data) => (
         data
     })
 )
+
+export const editImageSuccess = (appId, imageId, data) => (
+    createActionCreator(actions.APP_IMAGE_EDIT_SUCCESS)({
+        appId,
+        imageId,
+        data,
+    })
+)
+
+export const editImageLogo = (appId, imageId) => (
+    createActionCreator(actions.APP_IMAGE_EDIT)({
+        appId,
+        imageId
+    })
+)
+
+export const editImageLogoSuccess = (appId, imageId) => (
+    createActionCreator(actions.APP_EDIT_SUCCESS)({
+        appId,
+        imageId
+    })
+)
 export const addAppSuccess = (app) => (
     createActionCreator(actions.APP_ADD_SUCCESS)({
         app
@@ -94,6 +116,21 @@ export const addImageToAppSuccess = (appId, image) => (
         image
     })
 )
+
+export const deleteImageFromApp = (appId, imageId) => (
+    createActionCreator(actions.APP_IMAGE_DELETE)({
+        appId,
+        imageId
+    })
+)
+
+export const deleteImageFromAppSuccess = (appId, imageId) => {
+    return createActionCreator(actions.APP_IMAGE_DELETE_SUCCESS)({
+        appId,
+        imageId
+    })
+}
+
 export const deleteAppVersion = (version, appId) => {
     return createActionCreator(actions.APP_VERSION_DELETE)({
         version,

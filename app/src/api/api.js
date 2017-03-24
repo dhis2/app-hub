@@ -61,6 +61,10 @@ export function deleteApp(appId) {
     return fromApi('apps/'+appId, true, deleteOpts);
 }
 
+export function deleteImage(appId, imageId) {
+    return fromApi('apps/'+appId+"/images/"+imageId, true, deleteOpts);
+}
+
 export function updateApp(appId, payload) {
     return fromApi('apps/'+appId, true, {
         ...baseOptions,
@@ -68,6 +72,11 @@ export function updateApp(appId, payload) {
         body: JSON.stringify(payload)
     });
 }
+
+export function updateImageLogo(appId, imageId) {
+    return fromApi('apps/'+appId+"/images/"+imageId+"/logo", true, updateOpts);
+}
+
 export function updateImage(appId, imageId, payload) {
     return fromApi('apps/'+appId+"/images/"+imageId, true,{
         ...baseOptions,

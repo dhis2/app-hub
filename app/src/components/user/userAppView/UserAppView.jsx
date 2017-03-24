@@ -128,7 +128,7 @@ class UserAppView extends Component {
                         <ContentAdd />
                     </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
-                    <ImageViewer images={app.images} />
+                    <ImageViewer images={app.images} appId ={app.id} editable/>
                     <CardText>
                         <MultipleUploadFileFields ref={ref => this.form = ref} submitted={this.handleUploadImages.bind(this)} />
                         <Button primary onClick={this.submitUploadImages.bind(this)} icon={<FontIcon className="material-icons">file_upload</FontIcon>} />

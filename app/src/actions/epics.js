@@ -150,8 +150,40 @@ const addImage = (action$) => action$
                 payload: error,
             }));
     })
-
+const deleteImage = (action$) => action$
+    .ofType(actions.APP_IMAGE_DELETE)
+    .concatMap(action => {
+        const {appId, imageId} = action.payload;
+        return api.deleteImage(appId, imageId)
+            .then(response => actionCreators.deleteImageFromAppSuccess(appId, imageId))
+            .catch(error => ({
+                type: actions.APP_IMAGE_DELETE_ERROR,
+                payload: error,
+            }));
+    })
+const editImage = (action$) => action$
+    .ofType(actions.APP_IMAGE_EDIT)
+    .concatMap(action => {
+        const {appId, imageId, data} = action.payload;
+        return api.updateImage(appId, imageId, data)
+            .then(response => actionCreators.editImageSuccess(appId, imageId, data))
+            .catch(error => ({
+                type: actions.APP_IMAGE_EDIT_ERROR,
+                payload: error,
+            }));
+    })
+const editImageLogo = (action$) => action$
+    .ofType(actions.APP_IMAGE_SET_LOGO)
+    .concatMap(action => {
+        const {appId, imageId, data} = action.payload;
+        return api.updateImageLogo(appId, imageId)
+            .then(response => actionCreators.editImageLogoSuccess(appId, imageId))
+            .catch(error => ({
+                type: actions.APP_IMAGE_SET_LOGO_ERROR,
+                payload: error,
+            }));
+    })
 export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
     user, userApps, newVersion,
     newApp, deleteVersion, editApp,
-    addImage)
+    addImage, editImage, editImageLogo, deleteImage)

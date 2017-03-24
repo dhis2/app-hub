@@ -18,7 +18,7 @@
     "webpack-dev-server": "^2.3.0"
   },
   "dependencies": {
-    "auth0-lock": "^10.12.2",
+    "auth0-lock": "^10.13.0",
     "classnames": "^2.2.5",
     "css-loader": "^0.26.1",
     "history": "^4.5.1",
@@ -30,10 +30,10 @@
     "node-sass": "^4.5.0",
     "react": "15",
     "react-dom": "15",
-    "react-flexbox-grid": "^0.10.2",
     "react-redux": "5",
     "react-router": "next",
     "react-router-dom": "next",
+    "react-slick": "^0.14.7",
     "react-tap-event-plugin": "^2.0.1",
     "recompose": "0.21",
     "redux": "3",

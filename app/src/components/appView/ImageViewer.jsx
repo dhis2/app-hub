@@ -1,8 +1,13 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
-import { GridList, GridTile } from 'material-ui/GridList';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
-
+import {deleteImageFromApp, openDialog, editImageLogo} from '../../actions/actionCreators';
+import * as DialogTypes from '../../constants/dialogTypes';
+import {GridList, GridTile} from 'material-ui/GridList';
+import Slider from 'react-slick';
+import FontIcon from 'material-ui/FontIcon';
+import IconButton from 'material-ui/IconButton';
+import {FadeAnimation} from '../utils/Animate';
+import Theme from '../../styles/theme';
 const styles = {
     root: {
         display: 'flex',
@@ -11,73 +16,199 @@ const styles = {
         justifyContent: 'space-around',
     },
     gridList: {
-        display: 'flex',
-        flexWrap: 'nowrap',
-        overflowX: 'auto',
+        maxHeight: '400px'
     },
     titleStyle: {
         color: 'rgb(0, 188, 212)',
     },
     imageStyle: {
-        width: '100%',
-        WebkitTransition: 'width 500ms ease-in'
+        height: '400px',
+        //     WebkitTransition: 'width 500ms ease-in'
     },
     expandedImageStyle: {
-        width: '100%',
-        transition: 'all 200ms ease-in'
+        //   width: '100%',
+        //   transition: 'all 200ms ease-in'
+    },
+    actionIconStyle: {
+        color: 'white',
     }
 };
+
+
+const ImageElement = (props) => {
+    const imageElementStyle = {
+        root: {
+            height: '100%',
+            overflow: 'hidden',
+            position: 'relative',
+            display: 'block',
+
+        },
+        titleBar: {
+            position: 'absolute',
+            display: 'flex',
+            height: props.subtitle ? 68 : 48,
+            alignItems: 'center',
+            background: 'rgba(0,0,0,0.4)',
+            bottom: 0,
+            left: 0,
+            right: 0,
+        },
+        titleWrap: {
+            flexGrow: 1,
+            overflow: 'hidden',
+            color: 'white',
+            margin: 10,
+        },
+        title: {
+            fontSize: '16px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+
+        },
+        subTitle: {
+            fontSize: '12px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+        },
+        actions: {}
+    }
+    return (
+        <div style={{...imageElementStyle.root, ...props.style}}>
+            {props.renderTitleBar ?
+                <FadeAnimation>
+                    <div style={imageElementStyle.titleBar}>
+                        <div style={imageElementStyle.titleWrap}>
+                            <div style={imageElementStyle.title}>
+                                {props.title}
+                            </div>
+                            <div style={imageElementStyle.subTitle}>
+                                {props.subtitle}
+                            </div>
+                        </div>
+                        <div style={imageElementStyle.actions}>
+                            {props.actions}
+                        </div>
+                    </div>
+                </FadeAnimation> : null}
+            {props.children}
+        </div>
+    )
+}
+
+ImageElement.propTypes = {
+    title: PropTypes.string,
+    subtitle: PropTypes.string,
+    actions: PropTypes.element,
+    renderTitleBar: PropTypes.bool,
+    style: PropTypes.object,
+
+}
+ImageElement.defaultProps = {
+    renderTitleBar: true
+}
+
 
 class ImageViewer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            expandedImage : null
+            expandedImage: null,
+            current: 0,
         }
-        this.renderExpandedImage = this.renderExpandedImage.bind(this)
+        this.renderExpandedImage = this.renderExpandedImage.bind(this);
+        this.renderActions = this.renderActions.bind(this);
+        this.handleDeleteImage = this.handleDeleteImage.bind(this);
+        this.handleEditImage = this.handleEditImage.bind(this);
+        this.handleSetLogoImage = this.handleSetLogoImage.bind(this);
     }
 
 
     handleExpandImage(image) {
-        const ret = image !== this.state.expandedImage ? image : -1
+        // const ret = image !== this.state.expandedImage ? image : -1
+        this.slider.slickGoTo(image)
+
+    }
+
+    handleChangeIndex(index) {
         this.setState({
-            expandedImage: ret
+            ...this.state,
+            current: index,
         })
     }
 
     renderExpandedImage() {
-        if(!this.state.expandedImage)
+        if (!this.state.expandedImage)
             return null
-        return (<img style={styles.expandedImageStyle} src={this.state.expandedImage.url} />)
+        return (<img style={styles.expandedImageStyle} src={this.state.expandedImage.url}/>)
+    }
+
+    handleDeleteImage(imageId) {
+        this.props.deleteImage(this.props.appId, imageId);
+    }
+
+    handleSetLogoImage(imageId) {
+
+    }
+
+    handleEditImage(image) {
+        this.props.openEditImageDialog(this.props.appId, image)
+    }
+
+    renderActions(image, index) {
+        const setLogoIcon = image.logo ? "star" : "star_border";
+        return (<div>
+            <IconButton tooltip="Set as logo" tooltipPosition="top-center"
+                        iconStyle={styles.actionIconStyle}
+                        iconClassName="material-icons">{setLogoIcon}
+                        onClick{() => this.handleSetLogoImage(image.id)}</IconButton>
+            <IconButton tooltip="Delete" tooltipPosition="top-center"
+                        iconStyle={styles.actionIconStyle}
+                        iconClassName="material-icons"
+                        onClick={() => this.handleDeleteImage(image.id)}>
+                delete</IconButton>
+            <IconButton iconClassName="material-icons" tooltipPosition="top-center"
+                        onClick={() => this.handleEditImage(image)}
+                        iconStyle={styles.actionIconStyle} tooltip="Edit">mode_edit</IconButton>
+
+        </div>)
     }
 
     render() {
-        console.log(this.props.images)
+        const sliderProps = {
+            accessibility: true,
+            dots: true,
+            centerMode: true,
+            slidesToShow: 1,
+            //  draggable: true,
+            swipeToSlide: true,
 
-        const {images }  = this.props;
+        }
+        const {images, editable }  = this.props;
+        const {current} = this.state;
 
-        const isExpanded = (image) => image == this.state.expandedImage
-
-        const tiles = images.map((tile, i) => (
-
-            <GridTile key={i} style={isExpanded(i) ? styles.expandedImageStyle : styles.imageStyle} title={isExpanded(i) ? tile.description : ''} rows={isExpanded(i) ? 2  : 1} cols={isExpanded(i)? 2  : 1}>
-                <ReactCSSTransitionGroup
-                    transitionName="example"
-                    transitionAppear={true}
-                    transitionAppearTimeout={500}
-                    transitionEnterTimeout={500}
-                    transitionLeaveTimeout={300} >
-                <img src={tile.imageUrl} onClick={this.handleExpandImage.bind(this, i)} />
-                </ReactCSSTransitionGroup>
-            </GridTile>
-
-        ))
+        const tiles = images.map((tile, i) => {
+                return (
+                    <div key={i}>
+                        <ImageElement key={i} style={styles.tileStyle}
+                                      renderTitleBar={i == current}
+                                      title={tile.caption}
+                                      subtitle={tile.description}
+                                      actions={editable ? this.renderActions(tile, i): null}
+                        >
+                            <img style={styles.imageStyle} src={tile.imageUrl}
+                                 onClick={this.handleExpandImage.bind(this, i)}/>
+                        </ImageElement>
+                    </div>)
+            }
+        )
 
         return (
-            <GridList key="list" style={styles.gridList} cols={2}>
+            <Slider afterChange={this.handleChangeIndex.bind(this)} {...sliderProps} ref={ref => this.slider = ref}
+                    style={styles.gridList} cols={2}>
                 {tiles}
-            </GridList>
-           )
+            </Slider>
+        )
     }
 }
 
@@ -87,8 +218,22 @@ ImageViewer.PropTypes = {
         imageUrl: PropTypes.string,
         description: PropTypes.string,
         caption: PropTypes.string,
-    }))
+    })),
+    appId: PropTypes.string,
+    editable: PropTypes.bool,
 
 }
 
-export default ImageViewer;
+const mapDispatchToProps = (dispatch) => ({
+    deleteImage(appId, imageId) {
+        dispatch(deleteImageFromApp(appId, imageId));
+    },
+    openEditImageDialog(appId, image) {
+        dispatch(openDialog(DialogTypes.EDIT_IMAGE, {appId, image}));
+    },
+    setLogo(appId, imageId) {
+        dispatch(editImageLogo(appId, imageId));
+    }
+})
+
+export default connect(null, mapDispatchToProps)(ImageViewer);
