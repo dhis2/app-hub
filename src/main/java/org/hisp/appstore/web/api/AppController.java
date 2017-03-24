@@ -100,8 +100,6 @@ public class AppController
             decideAccess( app );
         }
 
-
-
         renderService.toJson( response.getOutputStream(), app );
     }
 
@@ -275,7 +273,7 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-@RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.PUT )
+    @RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.PUT )
     public void updateVersion(  @PathVariable( "uid" ) String appUid,
                                 @PathVariable( "vuid" ) String vuid,
                                HttpServletResponse response, HttpServletRequest request )
