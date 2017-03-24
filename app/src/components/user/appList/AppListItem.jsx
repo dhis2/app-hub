@@ -4,7 +4,6 @@ import {Link} from 'react-router-dom';
 import {ListItem} from 'material-ui/List';
 import FontIcon from 'material-ui/FontIcon';
 import AppLogo from '../../appView/AppLogo'
-import Avatar from 'material-ui/Avatar';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
@@ -68,10 +67,6 @@ const AppListItem = (props, state) => {
         </IconMenu>
     )
     let logo = images.filter(elem => elem.logo)[0];
-    const avatarProps = {
-        src: logo ? logo.imageUrl : null,
-        icon: !logo ? props.defaultLogo: null
-    }
 
     const listItemProps = {
         primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),

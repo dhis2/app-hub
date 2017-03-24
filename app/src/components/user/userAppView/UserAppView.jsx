@@ -11,8 +11,6 @@ import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
 import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
-import Avatar from 'material-ui/Avatar';
-import Textfield from 'material-ui/TextField';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
 import { appTypesToUI } from '../../../constants/apiConstants';
@@ -112,7 +110,7 @@ class UserAppView extends Component {
 
                     </CardHeader>
 
-                    <CardText>a
+                    <CardText>
                         {app.description}
                     </CardText>
 

@@ -195,9 +195,9 @@ class ImageViewer extends Component {
             swipeToSlide: true,
 
         }
-        const emptyDiv = (<div style={{paddingLeft: '20px'}}>
-            {showEmptyMessage ?  "No images for this app." : null}
-        </div>)
+        const emptyDiv = (showEmptyMessage ? <div style={{paddingLeft: '20px'}}>
+            No images for this app.
+        </div> : null)
 
 
         const tiles = images.map((tile, i) => {

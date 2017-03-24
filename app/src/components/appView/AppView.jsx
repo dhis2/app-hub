@@ -3,8 +3,6 @@ import {connect} from 'react-redux';
 import { Card, CardText, CardTitle, CardHeader, CardMedia } from 'material-ui/Card';
 import ImageViewer from './ImageViewer';
 import Subheader from '../header/SubHeader';
-import Toolbar from '../../material/Toolbar/Toolbar';
-import ToolbarSection from '../../material/Toolbar/ToolbarSection';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import {Link} from 'react-router-dom';
@@ -12,9 +10,7 @@ import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
 import {appLoad} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../constants/apiConstants';
-import Avatar from 'material-ui/Avatar';
 import AppLogo from './AppLogo';
-import FontIcon from 'material-ui/FontIcon';
 
 
 class AppView extends Component {
