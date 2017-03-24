@@ -10,6 +10,7 @@ import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
+import Avatar from 'material-ui/Avatar';
 import Textfield from 'material-ui/TextField';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
@@ -94,13 +95,18 @@ class UserAppView extends Component {
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} </div>)
+        let logo = app.images.filter(elem => elem.logo)[0];
+        const avatarProps = {
+            src: logo ? logo.imageUrl : null,
+            icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
+        }
 
         return (
             <div>
                 <Subheader title="App overview" backLink="/user">
                 </Subheader>
                 <Card>
-                    <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
+                    <CardHeader title={app.name} avatar={<Avatar {...avatarProps} />}
                     subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                         {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
@@ -128,8 +134,11 @@ class UserAppView extends Component {
                         <ContentAdd />
                     </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
-                    <ImageViewer images={app.images} appId ={app.id} editable/>
+                    <CardText style={{paddingLeft: 0, paddingRight: 0}}>
+                        <ImageViewer images={app.images} appId ={app.id} editable/>
+                    </CardText>
                     <CardText>
+                        <h2>Upload images</h2>
                         <MultipleUploadFileFields ref={ref => this.form = ref} submitted={this.handleUploadImages.bind(this)} />
                         <Button primary onClick={this.submitUploadImages.bind(this)} icon={<FontIcon className="material-icons">file_upload</FontIcon>} />
                     </CardText>

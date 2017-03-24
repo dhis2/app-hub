@@ -42,7 +42,7 @@ const rightIconsStyle = {
 
 
 const AppListItem = (props, state) => {
-    const {id, name, developer, description, appType, status} = props.app;
+    const {id, name, developer, description, appType, status, images} = props.app;
     let menuItems = null;
 
     if(props.isManager){
@@ -66,10 +66,15 @@ const AppListItem = (props, state) => {
             <MenuItem onTouchTap={props.handleDelete} primaryText="Delete"/>
         </IconMenu>
     )
+    let logo = images.filter(elem => elem.logo)[0];
+    const avatarProps = {
+        src: logo ? logo.imageUrl : null,
+        icon: !logo ? <FontIcon className="material-icons">wallpaper</FontIcon>: null
+    }
 
     const listItemProps = {
         primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
-        leftAvatar: (<Avatar src="https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"/>),
+        leftAvatar: (<Avatar {...avatarProps} />),
         secondaryText: (<p>{developer.name} <br /> {appTypesToUI[appType]} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,

@@ -344,7 +344,7 @@ public class AppController
 
         decideAccess( app );
 
-        ImageResource previousLogo = app.getImages().stream().filter( image -> image.isLogo() == true ).findAny().get();
+        ImageResource previousLogo = app.getImages().stream().filter( image -> image.isLogo() == true ).findAny().orElse(null);
 
         imageResourceService.setAsLogo( newLogo, previousLogo );
 

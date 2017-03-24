@@ -148,7 +148,7 @@ class ImageViewer extends Component {
     }
 
     handleSetLogoImage(imageId) {
-
+        this.props.setLogo(this.props.appId, imageId);
     }
 
     handleEditImage(image) {
@@ -160,21 +160,32 @@ class ImageViewer extends Component {
         return (<div>
             <IconButton tooltip="Set as logo" tooltipPosition="top-center"
                         iconStyle={styles.actionIconStyle}
-                        iconClassName="material-icons">{setLogoIcon}
-                        onClick{() => this.handleSetLogoImage(image.id)}</IconButton>
+                        iconClassName="material-icons"
+                        onClick={() => this.handleSetLogoImage(image.id)}>
+                {setLogoIcon}</IconButton>
             <IconButton tooltip="Delete" tooltipPosition="top-center"
                         iconStyle={styles.actionIconStyle}
                         iconClassName="material-icons"
                         onClick={() => this.handleDeleteImage(image.id)}>
                 delete</IconButton>
-            <IconButton iconClassName="material-icons" tooltipPosition="top-center"
-                        onClick={() => this.handleEditImage(image)}
-                        iconStyle={styles.actionIconStyle} tooltip="Edit">mode_edit</IconButton>
+            <IconButton tooltip="Edit" tooltipPosition="top-center"
+                        iconStyle={styles.actionIconStyle}
+                        iconClassName="material-icons"
+                        onClick={() => this.handleEditImage(image)}>
+                mode_edit</IconButton>
 
         </div>)
     }
 
+    renderEmpty() {
+        <div>
+            No images for this app.
+        </div>
+    }
+
     render() {
+        const {images, editable, showEmptyMessage }  = this.props;
+        const {current} = this.state;
         const sliderProps = {
             accessibility: true,
             dots: true,
@@ -184,14 +195,16 @@ class ImageViewer extends Component {
             swipeToSlide: true,
 
         }
-        const {images, editable }  = this.props;
-        const {current} = this.state;
+        const emptyDiv = (<div style={{paddingLeft: '20px'}}>
+            {showEmptyMessage ?  "No images for this app." : null}
+        </div>)
+
 
         const tiles = images.map((tile, i) => {
                 return (
                     <div key={i}>
                         <ImageElement key={i} style={styles.tileStyle}
-                                      renderTitleBar={i == current}
+                                      renderTitleBar={i == current && (editable || !!tile.caption || !!tile.description) }
                                       title={tile.caption}
                                       subtitle={tile.description}
                                       actions={editable ? this.renderActions(tile, i): null}
@@ -204,10 +217,10 @@ class ImageViewer extends Component {
         )
 
         return (
-            <Slider afterChange={this.handleChangeIndex.bind(this)} {...sliderProps} ref={ref => this.slider = ref}
+            images.length > 0 ? <Slider afterChange={this.handleChangeIndex.bind(this)} {...sliderProps} ref={ref => this.slider = ref}
                     style={styles.gridList} cols={2}>
                 {tiles}
-            </Slider>
+            </Slider> : emptyDiv
         )
     }
 }
@@ -221,9 +234,13 @@ ImageViewer.PropTypes = {
     })),
     appId: PropTypes.string,
     editable: PropTypes.bool,
+    showEmptyMessage: PropTypes.bool
 
 }
 
+ImageViewer.defaultProps = {
+    showEmptyMessage: true,
+}
 const mapDispatchToProps = (dispatch) => ({
     deleteImage(appId, imageId) {
         dispatch(deleteImageFromApp(appId, imageId));

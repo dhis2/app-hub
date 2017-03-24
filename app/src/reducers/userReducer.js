@@ -162,6 +162,33 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+        case actionTypes.APP_IMAGE_SET_LOGO_SUCCESS: {
+            const { appId, imageId } = action.payload;
+            const app = state.byId[appId];
+            const list = app.images.map((elem, ind) => {
+                if(elem.id == imageId) {
+                    return {
+                        ...elem,
+                        logo: true,
+                    }
+                } else if(elem.logo) { //clear prev logo
+                    return {
+                        ...elem,
+                        logo: false,
+                    }
+                } else return elem;
+            });
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [appId]: {
+                        ...app,
+                        images: list,
+                    }
+                }
+            }
+        }
         case actionTypes.APP_IMAGE_DELETE_SUCCESS: {
             const { appId, imageId } = action.payload;
             const app = state.byId[appId];

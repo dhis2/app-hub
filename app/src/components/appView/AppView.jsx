@@ -48,12 +48,12 @@ class AppView extends Component {
             <Grid>
                 <Col span={8} center>
                 <Subheader title="App overview" backLink="/" />
-                <Card>
+                <Cardgit d
                     <CardHeader title={app.name} avatar={"https://avatars1.githubusercontent.com/u/13482715?v=3&s=400"}
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                     </CardHeader>
-                    <CardText>
-                        <ImageViewer images={app.images}/>
+                    <CardText style={{paddingLeft: 0, paddingRight: 0}}>
+                        <ImageViewer images={app.images} showEmptyMessage={false}/>
                     </CardText>
                     <CardText>
                         {app.description}

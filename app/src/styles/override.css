@@ -107,3 +107,7 @@ a {
     opacity: 1;
     transition: opacity .5s ease-in;
 }
+
+.slick-next:before, .slick-prev:before {
+    color: rgba(0,0,0,0.4)
+}
