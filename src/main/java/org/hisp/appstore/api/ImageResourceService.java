@@ -14,6 +14,4 @@ public interface ImageResourceService
     void update( ImageResource imageResource );
 
     void delete( ImageResource imageResource );
-
-    void setAsLogo( ImageResource newLogo, ImageResource previousLogo );
 }
