@@ -73,10 +73,6 @@ export function updateApp(appId, payload) {
     });
 }
 
-export function updateImageLogo(appId, imageId) {
-    return fromApi('apps/'+appId+"/images/"+imageId+"/logo", true, updateOpts);
-}
-
 export function updateImage(appId, imageId, payload) {
     return fromApi('apps/'+appId+"/images/"+imageId, true,{
         ...baseOptions,

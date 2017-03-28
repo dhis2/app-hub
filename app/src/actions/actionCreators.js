@@ -71,19 +71,17 @@ export const editImageSuccess = (appId, imageId, data) => (
     })
 )
 
-export const editImageLogo = (appId, imageId) => (
-    createActionCreator(actions.APP_IMAGE_SET_LOGO)({
+export const editImageLogo = (appId, imageId, logo) => (
+    createActionCreator(actions.APP_IMAGE_EDIT)({
         appId,
-        imageId
+        imageId,
+        data: {
+            logo,
+        },
     })
 )
 
-export const editImageLogoSuccess = (appId, imageId) => (
-    createActionCreator(actions.APP_IMAGE_SET_LOGO_SUCCESS)({
-        appId,
-        imageId
-    })
-)
+
 export const addAppSuccess = (app) => (
     createActionCreator(actions.APP_ADD_SUCCESS)({
         app
@@ -97,7 +95,7 @@ export const addAppSuccess = (app) => (
  * image: {
  *      image: {
  *          caption,
- *          description
+ *          description,
  *          logo
  *          }
  *      file: imageFile

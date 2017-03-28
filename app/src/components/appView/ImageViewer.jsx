@@ -245,7 +245,7 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(openDialog(DialogTypes.EDIT_IMAGE, {appId, image}));
     },
     setLogo(appId, imageId) {
-        dispatch(editImageLogo(appId, imageId));
+        dispatch(editImageLogo(appId, imageId, true));
     }
 })
 

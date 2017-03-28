@@ -144,7 +144,7 @@ const addImage = (action$) => action$
     .concatMap(action => {
         const {appId, image} = action.payload;
         return api.createNewImage(appId, image)
-            .then(response => actionCreators.addImageToAppSuccess(appId, image))
+            .then(response => actionCreators.addImageToAppSuccess(appId, response))
             .catch(error => ({
                 type: actions.APP_IMAGE_ADD_ERROR,
                 payload: error,
@@ -172,18 +172,8 @@ const editImage = (action$) => action$
                 payload: error,
             }));
     })
-const editImageLogo = (action$) => action$
-    .ofType(actions.APP_IMAGE_SET_LOGO)
-    .concatMap(action => {
-        const {appId, imageId, data} = action.payload;
-        return api.updateImageLogo(appId, imageId)
-            .then(response => actionCreators.editImageLogoSuccess(appId, imageId))
-            .catch(error => ({
-                type: actions.APP_IMAGE_SET_LOGO_ERROR,
-                payload: error,
-            }));
-    })
+
 export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
     user, userApps, newVersion,
     newApp, deleteVersion, editApp,
-    addImage, editImage, editImageLogo, deleteImage)
+    addImage, editImage, deleteImage)

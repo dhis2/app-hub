@@ -149,31 +149,10 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                         ...elem,
                         ...data,
                     }
-                } else return elem;
-            });
-            return {
-                ...state,
-                byId: {
-                    ...state.byId,
-                    [appId]: {
-                        ...app,
-                        images: list,
-                    }
-                }
-            }
-        }
-        case actionTypes.APP_IMAGE_SET_LOGO_SUCCESS: {
-            const { appId, imageId } = action.payload;
-            const app = state.byId[appId];
-            const list = app.images.map((elem, ind) => {
-                if(elem.id == imageId) {
+                } else if(elem.logo && data.logo) { //clear prev logo
                     return {
                         ...elem,
-                        logo: true,
-                    }
-                } else if(elem.logo) { //clear prev logo
-                    return {
-                        ...elem,
+                        ...data,
                         logo: false,
                     }
                 } else return elem;
@@ -189,6 +168,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+
         case actionTypes.APP_IMAGE_DELETE_SUCCESS: {
             const { appId, imageId } = action.payload;
             const app = state.byId[appId];
