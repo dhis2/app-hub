@@ -82,7 +82,7 @@ public class ImageResource extends BaseIdentifiableObject
     {
         ImageResource imageResource;
 
-        if ( other.getClass().isInstance( this ))
+        if ( other.getClass().isInstance( this ) )
         {
             imageResource = (ImageResource) other;
 

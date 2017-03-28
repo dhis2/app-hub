@@ -38,21 +38,6 @@ public class DefaultImageResourceService implements ImageResourceService
     }
 
     @Override
-    public void setAsLogo( ImageResource newLogo, ImageResource previousLogo )
-    {
-        if( previousLogo!= null )
-        {
-            previousLogo.setLogo( false );
-
-            update( previousLogo );
-        }
-
-        newLogo.setLogo( true );
-
-        update( newLogo );
-    }
-
-    @Override
     public void delete( ImageResource imageResource )
     {
         imageResourceStore.delete( imageResource );

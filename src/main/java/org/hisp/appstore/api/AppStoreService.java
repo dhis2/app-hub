@@ -35,9 +35,11 @@ public interface AppStoreService
 
     void addReviewToApp( App app, Review review );
 
+    void setAppLogo( App app, ImageResource imageResource );
+
     AppVersion addVersionToApp( App app, AppVersion version, MultipartFile file, ResourceType resourceType ) throws WebMessageException, IOException;
 
-    void addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType ) throws WebMessageException, IOException;
+    ImageResource addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType ) throws WebMessageException, IOException;
 
     void removeVersionFromApp( App app, AppVersion version, ResourceType resourceType ) throws WebMessageException;
 

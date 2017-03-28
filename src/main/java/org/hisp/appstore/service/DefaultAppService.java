@@ -158,12 +158,16 @@ public class DefaultAppService
 
         if ( fileStatus.isUploaded() )
         {
-            app = populateVersionData( app, fileStatus );
+            app.getVersions().forEach( v -> v.setDownloadUrl( fileStatus.getDownloadUrl() ) );
         }
 
         if ( imageFileStatus.isUploaded() )
         {
-            app = populateImageData( app, imageFileStatus );
+            for ( ImageResource imageResource : app.getImages() )
+            {
+                imageResource.setImageUrl( imageFileStatus.getDownloadUrl() );
+                imageResource.setLogo( true );
+            }
         }
 
         saveApp( app );
@@ -204,7 +208,7 @@ public class DefaultAppService
     }
 
     @Override
-    public void addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType )
+    public ImageResource addImagesToApp( App app, ImageResource imageResource, MultipartFile file, ResourceType resourceType )
                                 throws WebMessageException, IOException
     {
         FileUploadStatus status = fileStorageService.uploadFile( file, app.getAppType(), resourceType );
@@ -212,7 +216,11 @@ public class DefaultAppService
         imageResource.setAutoFields();
         imageResource.setImageUrl( status.getDownloadUrl() );
 
-        if ( imageResource.isLogo() )
+        if ( app.getImages().isEmpty() )
+        {
+            imageResource.setLogo( true );
+        }
+        else if ( imageResource.isLogo() )
         {
             app.getImages().stream().forEach( item -> item.setLogo( false ) );
         }
@@ -222,6 +230,8 @@ public class DefaultAppService
         appStore.update( app );
 
         log.info( String.format( ADDED, "Image " + imageResource.getUid(), app.getName() ) );
+
+        return imageResource;
     }
 
     @Override
@@ -259,23 +269,22 @@ public class DefaultAppService
         return queryParameters;
     }
 
+    @Override
+    public void setAppLogo( App app, ImageResource imageResource )
+    {
+        if ( imageResource.isLogo() )
+        {
+            app.getImages().forEach( item -> item.setLogo( false ) );
+
+            app.getImages().add( imageResource );
+
+            updateApp( app );
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Supportive methods
     // -------------------------------------------------------------------------
-
-    private App populateVersionData( App app, FileUploadStatus status )
-    {
-        app.getVersions().forEach( v -> v.setDownloadUrl( status.getDownloadUrl() ) );
-
-        return app;
-    }
-
-    private App populateImageData( App app, FileUploadStatus status )
-    {
-        app.getImages().forEach( image -> image.setImageUrl( status.getDownloadUrl() ) );
-
-        return app;
-    }
 
     private String getKeyFromResourceUrl( String resourceUrl )
     {

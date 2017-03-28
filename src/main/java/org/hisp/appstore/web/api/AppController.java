@@ -149,7 +149,7 @@ public class AppController
                            @RequestPart( name = "imageFile", required = false ) MultipartFile imageFile,
                            @RequestPart( name = "app" ) App app,
                            HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+                          throws IOException, WebMessageException
     {
         if ( file == null )
         {
@@ -239,9 +239,11 @@ public class AppController
 
         decideAccess( app );
 
-        appStoreService.addImagesToApp( app, imageResource, file, ResourceType.IMAGE );
+        ImageResource addedImage = appStoreService.addImagesToApp( app, imageResource, file, ResourceType.IMAGE );
 
-        renderService.renderCreated( response, request, String.format( "Image uploaded for app: %s", app.getName() ) );
+        log.info( String.format( "Image uploaded for app: %s", app.getName() ) );
+
+        renderService.toJson( response.getOutputStream(), addedImage );
     }
 
     // -------------------------------------------------------------------------
@@ -302,9 +304,9 @@ public class AppController
     @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/images/{iuid}", method = RequestMethod.PUT )
     public void updateImageResource(  @PathVariable( "uid" ) String appUid,
-                                @PathVariable( "iuid" ) String iuid,
-                                HttpServletResponse response, HttpServletRequest request )
-                                throws IOException, WebMessageException
+                                      @PathVariable( "iuid" ) String iuid,
+                                      HttpServletResponse response, HttpServletRequest request )
+                                    throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -321,34 +323,17 @@ public class AppController
 
         persistedImageResource.mergeWith( updatedImageResource );
 
+        if ( updatedImageResource.isLogo() )
+        {
+            persistedImageResource.setLogo( true );
+            app.getImages().forEach( item -> item.setLogo( false ) );
+
+            appStoreService.updateApp( app );
+        }
+
         imageResourceService.update( persistedImageResource );
 
         renderService.renderOk( response, request, "Image with id " + iuid + " updated" );
-    }
-
-    @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/images/{iuid}/logo", method = RequestMethod.PUT )
-    public void updateAppLogo(  @PathVariable( "uid" ) String appUid,
-                                @PathVariable( "iuid" ) String iuid,
-                                HttpServletResponse response, HttpServletRequest request )
-                               throws IOException, WebMessageException
-    {
-        App app = appStoreService.getApp( appUid );
-
-        ImageResource newLogo = imageResourceService.get( iuid );
-
-        if ( app == null || newLogo == null )
-        {
-            throw new WebMessageException( WebMessageUtils.notFound( ENTITY_NOT_FOUND ) );
-        }
-
-        decideAccess( app );
-
-        ImageResource previousLogo = app.getImages().stream().filter( image -> image.isLogo() == true ).findAny().orElse(null);
-
-        imageResourceService.setAsLogo( newLogo, previousLogo );
-
-        renderService.renderOk( response, request, String.format( "Image with id %s is set as application logo", iuid ) );
     }
 
     // -------------------------------------------------------------------------
