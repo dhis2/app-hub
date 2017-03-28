@@ -26,13 +26,20 @@ class UploadFileField extends Component {
     }
 
     handleUpload(e) {
-        const file = e.target.files[0];
+        const files = e.target.files;
+        if(files.length < 1) {
+            return;
+        }
+        const fileArray = Object.keys(files).map((key, i) => (files[key]));
+        const fileNames = fileArray.reduce((acc, elem, currInd) => {
+            const seperator = currInd !== fileArray.length -1 ?  ', ' : '';
+            return acc + elem.name + seperator}
+            , '');
         this.setState({
             ...this.state,
-            fileName: file.name
+            fileName: fileNames
         })
-        console.log(file)
-        this.props.handleUpload(file);
+        this.props.handleUpload(fileArray);
     }
 
     handleResetFile() {
@@ -72,7 +79,7 @@ class UploadFileField extends Component {
                         <FontIcon className="material-icons">clear</FontIcon>
                     </IconButton> : null}
                 </div>
-                <input type="file" style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
+                <input type="file"  multiple={this.props.multiple} style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
                        onChange={this.handleUpload}/>
                 {uploadIconPosition === 'right' ? uploadButton : null}
                 {renderRemove ? removeButton : null}
@@ -91,12 +98,14 @@ UploadFileField.propTypes = {
     hintText: PropTypes.string,
     id: PropTypes.string,
     uploadIconPosition: uploadIconPosition,
+    multiple: PropTypes.bool,
 }
 
 UploadFileField.defaultProps = {
     renderAdd: false,
     renderRemove: false,
-    uploadIconPosition: 'right'
+    uploadIconPosition: 'right',
+    multiple: false,
 }
 
 export default UploadFileField;

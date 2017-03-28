@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card';
-import { Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
+import React, {Component, PropTypes} from 'react';
+import {connect} from 'react-redux';
+import {Card, CardText, CardTitle, CardHeader} from 'material-ui/Card';
+import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import { appLoad, addImageToApp, openDialog, deleteAppVersion } from '../../../actions/actionCreators';
+import {appLoad, addImageToApp, openDialog, deleteAppVersion} from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
@@ -13,7 +13,7 @@ import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
-import { appTypesToUI } from '../../../constants/apiConstants';
+import {appTypesToUI} from '../../../constants/apiConstants';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
 class UserAppView extends Component {
@@ -47,7 +47,8 @@ class UserAppView extends Component {
         const statusAlertPending = "This app is pending approval."
         const statusAlertRejected = "This app has been rejected."
 
-        return (<div style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: '16px'}} className="material-icons">priority_high</FontIcon>
+        return (<div style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: '16px'}}
+                                                            className="material-icons">priority_high</FontIcon>
             {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
         </div>)
     }
@@ -57,25 +58,25 @@ class UserAppView extends Component {
         this.form.submit();
     }
 
-    handleUploadImages(images) {
-
-        for(let i = 0;i< images.length;i++) {
-            const image = {
-                image: {
-                    caption: '',
-                    descripton: '',
-                    logo: false,
-                },
-                file: images[i]
-            }
-
-            this.props.addImageToApp(this.props.app.id, image);
+    handleUploadImages(fields) {
+        for (let i = 0; i < fields.length; i++) {
+            fields[i].map((image, i) => {
+                const imageObj = {
+                    image: {
+                        caption: '',
+                        description: '',
+                        logo: false,
+                    },
+                    file: image
+                }
+                this.props.addImageToApp(this.props.app.id, imageObj);
+            })
         }
     }
 
     render() {
         const app = this.props.app;
-        if(!app) {
+        if (!app) {
             return null;
         }
         const FABStyle = {
@@ -102,7 +103,7 @@ class UserAppView extends Component {
                 </Subheader>
                 <Card>
                     <CardHeader title={app.name} avatar={<LogoAvatar logo={logo}/>}
-                    subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
+                                subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                         {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
                             <i className="material-icons">edit</i>
@@ -119,9 +120,10 @@ class UserAppView extends Component {
                     <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
                         <ContentAdd />
                     </FloatingActionButton>
-                    <CardTitle title="Versions" />
+                    <CardTitle title="Versions"/>
                     <CardText>
-                        <VersionList editable versionList={app.versions} app={app} handleDelete={this.handleDeleteAppVersion.bind(this)}/>
+                        <VersionList editable versionList={app.versions} app={app}
+                                     handleDelete={this.handleDeleteAppVersion.bind(this)}/>
                     </CardText>
                 </Card>
                 <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
@@ -130,12 +132,14 @@ class UserAppView extends Component {
                     </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>
-                        <ImageViewer images={app.images} appId ={app.id} editable/>
+                        <ImageViewer images={app.images} appId={app.id} editable/>
                     </CardText>
                     <CardText>
                         <h2>Upload images</h2>
-                        <MultipleUploadFileFields ref={ref => this.form = ref} submitted={this.handleUploadImages.bind(this)} />
-                        <Button primary onClick={this.submitUploadImages.bind(this)} icon={<FontIcon className="material-icons">file_upload</FontIcon>} />
+                        <MultipleUploadFileFields ref={ref => this.form = ref}
+                                                  submitted={this.handleUploadImages.bind(this)}/>
+                        <Button primary onClick={this.submitUploadImages.bind(this)}
+                                icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
                     </CardText>
                 </Card>
             </div>
@@ -143,15 +147,13 @@ class UserAppView extends Component {
     }
 }
 
-UserAppView.propTypes = {
-
-}
+UserAppView.propTypes = {}
 
 const mapStateToProps = (state, ownProps) => ({
-   app: state.user.appList.byId[ownProps.match.params.appId]
+    app: state.user.appList.byId[ownProps.match.params.appId]
 })
 
-const mapDispatchToProps = (dispatch) =>  ({
+const mapDispatchToProps = (dispatch) => ({
     loadApp(appid) {
         dispatch(appLoad(appid));
     },
@@ -160,7 +162,7 @@ const mapDispatchToProps = (dispatch) =>  ({
         dispatch(addImageToApp(appid, image));
     },
 
-    deleteVersion(version,appId) {
+    deleteVersion(version, appId) {
         dispatch(deleteAppVersion(version, appId))
     },
 

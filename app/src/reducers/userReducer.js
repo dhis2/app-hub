@@ -152,7 +152,6 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 } else if(elem.logo && data.logo) { //clear prev logo
                     return {
                         ...elem,
-                        ...data,
                         logo: false,
                     }
                 } else return elem;

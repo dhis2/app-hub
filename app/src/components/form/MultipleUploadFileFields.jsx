@@ -41,7 +41,7 @@ class MultipleUploadFileFields extends Component {
     }
 
     onSubmit(values) {
-        //transform object to array
+        //transform object of fields to array
         const arr = Object.keys(values).map((key, ind) => {
             return values[key];
         })
@@ -58,6 +58,7 @@ class MultipleUploadFileFields extends Component {
                 renderAdd={(this.props.multiLastOnly && i == this.state.fields.length - 1) || !this.props.multiLastOnly}
                 handleAddField={this.handleAddField}
                 renderRemove={this.state.fields.length > 1}
+                multiple
                 handleRemoveField={this.handleRemoveField.bind(this, id)}
                 key={id}
                 id={'' + id}

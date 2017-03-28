@@ -189,6 +189,7 @@ class ImageViewer extends Component {
             centerPadding: '60px',
             //  draggable: true,
             swipeToSlide: true,
+            infinite: false,
 
         }
         const emptyDiv = (showEmptyMessage ? <div style={{paddingLeft: '20px'}}>

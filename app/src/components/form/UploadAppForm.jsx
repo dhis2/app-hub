@@ -52,10 +52,13 @@ const UploadForm = (props) => {
                 description: values.imageDescription,
             }]
         }
-        if (!values.image) { //should not send this if image is not provided
+        const imageFile = values.image[0];
+        const appFile = values.file[0];
+        if (!imageFile) { //should not send this if image is not provided
             data.images = []
         }
-        props.submitted({data, file: values.file, image: values.image});
+
+        props.submitted({data, file: appFile, image: imageFile});
     }
 
     const menuItems = appTypes.map((type, i) => (
