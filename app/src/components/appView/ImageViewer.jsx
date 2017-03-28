@@ -22,7 +22,7 @@ const styles = {
         color: 'rgb(0, 188, 212)',
     },
     imageStyle: {
-        height: '400px',
+        height: '100%',
         //     WebkitTransition: 'width 500ms ease-in'
     },
     expandedImageStyle: {
@@ -177,20 +177,16 @@ class ImageViewer extends Component {
         </div>)
     }
 
-    renderEmpty() {
-        <div>
-            No images for this app.
-        </div>
-    }
-
     render() {
         const {images, editable, showEmptyMessage }  = this.props;
         const {current} = this.state;
         const sliderProps = {
+            className: 'slide-center',
             accessibility: true,
             dots: true,
             centerMode: true,
             slidesToShow: 1,
+            centerPadding: '60px',
             //  draggable: true,
             swipeToSlide: true,
 

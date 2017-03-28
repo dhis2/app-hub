@@ -27,19 +27,6 @@ const validate = values => {
     return errors
 }
 
-const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
-    <TextField hintText={label}
-               floatingLabelText={label}
-               errorText={touched && error}
-               {...input}
-               {...props}
-    />
-)
-
-
-const renderUploadField = ({input, label, meta: {touched, error}, children, ...props}) => (
-    <UploadFileField handleUpload={(file) => input.onChange(file)} {...props} />
-)
 
 const UploadForm = (props) => {
     const {handleSubmit, submitted, pristine, submitting} = props;

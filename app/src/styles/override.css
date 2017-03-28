@@ -111,3 +111,21 @@ a {
 .slick-next:before, .slick-prev:before {
     color: rgba(0,0,0,0.4)
 }
+
+.slick-list {
+    height: 420px;
+}
+.slick-active.slick-slide {
+    opacity: 1;
+    transform: scale(1.08);
+    z-index: 10;
+
+}
+
+.slick-slide {
+    margin-top: 10px;
+    opacity: 0.8;
+    transition: all .3s ease-in;
+    position: relative;
+    height: 400px;
+}
