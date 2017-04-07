@@ -65,18 +65,8 @@ public class WebApplicationSecurityConfigurer extends Auth0SecurityConfig
     @Override
     protected void authorizeRequests( final HttpSecurity http ) throws Exception
     {
-/*        http.authorizeRequests()
-                .antMatchers( "/css*//**", "/fonts*//**", "/js*//**", "/login", "/home" ).permitAll()
-                .antMatchers( securedRoute ).authenticated()
-                .and()
-                .formLogin().loginPage( "/login" )
-                .and()
-                .exceptionHandling().authenticationEntryPoint( getAuthenticationEntryPoint() )
-                .accessDeniedHandler( getAccessDeniedHandler());*/
-
-
         http.authorizeRequests()
-                .antMatchers( "/api/apps/ping", "/api/apps/pong", "/api/apps" ).permitAll()
+                .antMatchers( "/api/apps" ).permitAll()
                 .anyRequest().authenticated();
     }
 
