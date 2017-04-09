@@ -2,12 +2,9 @@ package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.hisp.appstore.api.IdentifiableObject;
 import org.hisp.appstore.util.CodeUtils;
 
-import javax.persistence.*;
 import java.util.Date;
 
 public class BaseIdentifiableObject

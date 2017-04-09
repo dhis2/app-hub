@@ -1,14 +1,12 @@
 package org.hisp.appstore.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 /**
  * Created by zubair on 23.11.16.
  */
 public class Review
-        extends BaseIdentifiableObject
+    extends BaseIdentifiableObject
 {
     private String userId;
 
@@ -27,25 +25,30 @@ public class Review
     }
 
     @JsonProperty
-    public String getUserId() {
+    public String getUserId()
+    {
         return userId;
     }
 
-    public void setUserId( String userId ) {
+    public void setUserId( String userId )
+    {
         this.userId = userId;
     }
 
     @JsonProperty
-    public String getReviewText() {
+    public String getReviewText()
+    {
         return reviewText;
     }
 
-    public void setReviewText( String reviewText ) {
+    public void setReviewText( String reviewText )
+    {
         this.reviewText = reviewText;
     }
 
     @JsonProperty
-    public int getRate() {
+    public int getRate()
+    {
         return rate;
     }
 

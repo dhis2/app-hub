@@ -6,20 +6,15 @@ import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.*;
 import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.util.WebMessageException;
-import org.hisp.appstore.util.WebMessageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Transactional
 public class DefaultAppService
-        implements AppStoreService
+    implements AppStoreService
 {
     private static final Log log = LogFactory.getLog( DefaultAppService.class );
 
@@ -30,13 +25,6 @@ public class DefaultAppService
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
-
-    private ReviewStore reviewStore;
-
-    public void setReviewStore( ReviewStore reviewStore )
-    {
-        this.reviewStore = reviewStore;
-    }
 
     private CurrentUserService currentUserService;
 
@@ -136,8 +124,6 @@ public class DefaultAppService
     @Override
     public void addReviewToApp(  App app, Review review )
     {
-        String userId = currentUserService.getCurrentUserId();
-
         review.setAutoFields();
         review.setUserId( currentUserService.getCurrentUserId() );
 

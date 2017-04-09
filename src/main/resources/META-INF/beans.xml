@@ -82,14 +82,12 @@
     <!-- AppStore -->
 
     <bean id="org.hisp.appstore.api.AppStore" class="org.hisp.appstore.store.HibernateAppStore">
-        <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
         <property name="clazz" value="org.hisp.appstore.api.domain.App" />
         <property name="currentUserService" ref="org.hisp.appstore.service.DefaultCurrentUserService" />
         <property name="sessionFactory" ref="sessionFactory" />
             </bean>
 
     <bean id="org.hisp.appstore.api.AppStoreService" class="org.hisp.appstore.service.DefaultAppService">
-        <property name="reviewStore" ref="org.hisp.appstore.api.ReviewStore"/>
         <property name="appStore" ref="org.hisp.appstore.api.AppStore"/>
         <property name="currentUserService" ref="org.hisp.appstore.service.DefaultCurrentUserService"/>
         <property name="fileStorageService" ref="org.hisp.appstore.api.FileStorageService"/>

@@ -1,10 +1,6 @@
 package org.hisp.appstore.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.servlet.ServletException;
@@ -17,12 +13,10 @@ import java.io.IOException;
  */
 public class CustomAccessDeniedHandler implements AccessDeniedHandler
 {
-    private static final Log log = LogFactory.getLog( CustomAccessDeniedHandler.class );
-
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException e) throws IOException, ServletException
+    public void handle( HttpServletRequest request, HttpServletResponse response,
+        AccessDeniedException ex ) throws IOException, ServletException
     {
-        response.sendRedirect("/api/403");
+        response.sendRedirect( "/api/403" );
     }
 }

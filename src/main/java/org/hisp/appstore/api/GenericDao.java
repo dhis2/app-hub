@@ -1,7 +1,5 @@
 package org.hisp.appstore.api;
 
-import org.hisp.appstore.util.WebMessageException;
-
 import java.util.List;
 
 public interface GenericDao<T>
@@ -49,6 +47,12 @@ public interface GenericDao<T>
      */
     T getByCode( String code );
 
+    /**
+     * Hook before creating an object.
+     * 
+     * @param object the object instance.
+     * @return the object.
+     */
     T preCreate( T object );
 
     /**

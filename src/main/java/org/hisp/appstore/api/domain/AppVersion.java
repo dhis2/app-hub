@@ -2,14 +2,13 @@ package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import org.hisp.appstore.api.IdentifiableObject;
 
 /**
  * Created by zubair on 08.12.16.
  */
 public class AppVersion
-        extends BaseIdentifiableObject
+    extends BaseIdentifiableObject
 {
     private String version;
 

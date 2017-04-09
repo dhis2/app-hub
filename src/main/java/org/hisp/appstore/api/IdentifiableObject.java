@@ -1,7 +1,5 @@
 package org.hisp.appstore.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 
 public interface IdentifiableObject

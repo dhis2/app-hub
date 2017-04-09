@@ -1,27 +1,18 @@
 package org.hisp.appstore.api.domain;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
+import java.io.Serializable;
+import java.util.Set;
+
 import org.hisp.appstore.api.IdentifiableObject;
 
-import javax.xml.crypto.Data;
-import java.io.Serializable;
-import java.util.List;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.collect.Sets;
 
 /**
  * Created by lars on 07.11.16.
  */
 public class App
-    extends BaseIdentifiableObject
-        implements Serializable
+    extends BaseIdentifiableObject implements Serializable
 {
     private String name;
 

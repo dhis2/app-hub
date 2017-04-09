@@ -1,22 +1,16 @@
 package org.hisp.appstore.configuration;
 
 import com.auth0.spring.security.api.Auth0SecurityConfig;
-import org.hisp.appstore.service.DefaultCurrentUserService;
 import org.hisp.appstore.util.CustomAccessDeniedHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -68,9 +62,5 @@ public class WebApplicationSecurityConfigurer extends Auth0SecurityConfig
         http.authorizeRequests()
                 .antMatchers( "/api/apps" ).permitAll()
                 .anyRequest().authenticated();
-    }
-
-    String getAuthorityStrategy() {
-        return super.authorityStrategy;
     }
 }

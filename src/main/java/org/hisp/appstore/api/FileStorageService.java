@@ -14,7 +14,7 @@ import java.io.IOException;
 public interface FileStorageService
 {
     FileUploadStatus uploadFile(MultipartFile file, AppType type, ResourceType resourceType )
-            throws WebMessageException, IOException;
+        throws WebMessageException, IOException;
 
     void deleteFile( AppType type, String key, ResourceType resourceType );
 }
