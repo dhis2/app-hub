@@ -8,6 +8,16 @@ import FAB from 'material-ui/FloatingActionButton';
 const uploadIconPosition = PropTypes.oneOf(['right', 'left']);
 
 
+/**
+ * A Controlled field for uploading files.
+ * Supports multiple files in one input field.
+ * Note that the file themselves are not recorded in state,
+ * only the fileName to be shown in the input field.
+ *
+ * You can get the files in the Callback-function props handleUpload(files),
+ * once a file has been selected.
+ *
+ */
 class UploadFileField extends Component {
 
     constructor(props) {
@@ -21,10 +31,25 @@ class UploadFileField extends Component {
         this.handleResetFile = this.handleResetFile.bind(this);
     }
 
+    /**
+     * Used handle upload-action on a hidden input-field
+     * which is used hold the files. We use a regular textfield
+     * to show the selected files.
+     */
     uploadAction(e) {
         this.fileInput.click(e);
     }
 
+    /**
+     * Updates the state with the fileName in the controlled inputs,
+     * and calls the props handleUpload()
+     * with the array of Files in the input field.
+     *
+     * Called when a file is selected through the input-field.
+     * Supports multiple files in one field, so we return
+     * the values (File) in an array.
+     * @param e {input field}
+     */
     handleUpload(e) {
         const files = e.target.files;
         if(files.length < 1) {

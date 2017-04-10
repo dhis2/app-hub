@@ -91,7 +91,8 @@ const UploadForm = (props) => {
             <Field name="developerOrg" style={fieldStyle} component={formUtils.renderTextField} label="Organisation"/>
 
             <h2>Image</h2>
-            <Field name="image" component={formUtils.renderUploadField} hintText="Upload image" id="imageFile"/>
+            <p>You can upload additional images once your app has been uploaded.</p>
+            <Field name="image" component={formUtils.renderUploadField} hintText="Upload logo" id="imageFile"/>
             <Field name="imageCaption" style={fieldStyle} component={formUtils.renderTextField} label="Image caption"/>
             <Field name="imageDescription" style={fieldStyle} component={formUtils.renderTextField} label="Image description"/>
 

@@ -22,12 +22,10 @@ const styles = {
         color: 'rgb(0, 188, 212)',
     },
     imageStyle: {
-        height: '100%',
-        //     WebkitTransition: 'width 500ms ease-in'
+        maxHeight: '100%',
+        maxWidth: '100%',
     },
     expandedImageStyle: {
-        //   width: '100%',
-        //   transition: 'all 200ms ease-in'
     },
     actionIconStyle: {
         color: 'white',
@@ -40,8 +38,9 @@ const ImageElement = (props) => {
         root: {
             height: '100%',
             overflow: 'hidden',
-            position: 'relative',
-            display: 'block',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
 
         },
         titleBar: {

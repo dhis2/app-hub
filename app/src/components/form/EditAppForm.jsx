@@ -59,7 +59,7 @@ const EditForm = (props) => {
             <Field name="appType" component={formUtils.renderSelectField} fullWidth label="App Type">
                 {menuItems}
             </Field> <br />
-            <h2>Developer</h2>
+            <h3>Developer</h3>
             <Field name="developerName" component={formUtils.renderTextField} label="Developer Name"/>
             <Field name="developerEmail" component={formUtils.renderTextField} label="Developer Email"/>
             <Field name="developerAddress" component={formUtils.renderTextField} label="Developer Address"/>
@@ -70,5 +70,9 @@ const EditForm = (props) => {
     )
 }
 EditForm.propTypes = {
+    //Callback for the values when the form has been submitted.
+    submitted: PropTypes.func,
+    //Submits the form, given by Redux-form "Form"-component.
+    submit: PropTypes.func
 }
 export default reduxForm({form: 'editAppForm', validate})(EditForm);
