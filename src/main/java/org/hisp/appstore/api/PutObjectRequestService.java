@@ -2,7 +2,6 @@ package org.hisp.appstore.api;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.google.common.collect.Sets;
 import org.hisp.appstore.api.domain.AppType;
 import org.hisp.appstore.api.domain.ResourceType;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,16 +17,15 @@ import java.util.stream.Stream;
 public abstract class PutObjectRequestService
 {
     protected static final String BASE_BUCKET = "appstore.dhis2.org";
-
     protected static final String AMAZON_URL = "s3.amazonaws.com";
 
-    protected static final Set<String> FILE_EXTENTION = Stream.of( ResourceType.values() ).map( ResourceType::getKey ).collect( Collectors.toSet() );
+    protected static final Set<String> FILE_EXTENTION = Stream.of( ResourceType.values() )
+        .map( ResourceType::getKey ).collect( Collectors.toSet() );
 
     protected ObjectMetadata getMetaData( MultipartFile file )
     {
         ObjectMetadata metadata = new ObjectMetadata();
-        metadata.setContentLength( Long.valueOf( file.getSize() ));
-
+        metadata.setContentLength( Long.valueOf( file.getSize() ) );
         return metadata;
     }
 

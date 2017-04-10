@@ -3,7 +3,6 @@ package org.hisp.appstore.service;
 import org.hisp.appstore.api.ImageResourceService;
 import org.hisp.appstore.api.ImageResourceStore;
 import org.hisp.appstore.api.domain.ImageResource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

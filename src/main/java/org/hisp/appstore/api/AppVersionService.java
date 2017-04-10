@@ -1,7 +1,6 @@
 package org.hisp.appstore.api;
 
 import org.hisp.appstore.api.domain.AppVersion;
-import org.hisp.appstore.util.HibernateGenericDao;
 
 /**
  * Created by zubair on 17.12.16.

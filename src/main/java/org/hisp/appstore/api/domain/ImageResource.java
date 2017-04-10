@@ -1,7 +1,6 @@
 package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
 import org.hisp.appstore.api.IdentifiableObject;
@@ -96,9 +95,9 @@ public class ImageResource extends BaseIdentifiableObject
     public String toString()
     {
         return MoreObjects.toStringHelper( this )
-                .add( "uid", uid )
-                .add( "caption", this.caption )
-                .add( "imageUrl", this.imageUrl )
-                .toString();
+            .add( "uid", uid )
+            .add( "caption", this.caption )
+            .add( "imageUrl", this.imageUrl )
+            .toString();
     }
 }

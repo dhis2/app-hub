@@ -6,5 +6,7 @@
 hs_err_pid*
 target
 .idea
+.classpath
+.project
+.settings
 
-node_modules

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Auth0Client
 {
-
     private final String clientid;
 
     private final String domain;
@@ -43,5 +42,15 @@ public class Auth0Client
         UserProfile profile = request.execute();
 
         return profile;
+    }
+
+    public String getClientid()
+    {
+        return clientid;
+    }
+
+    public String getDomain()
+    {
+        return domain;
     }
 }

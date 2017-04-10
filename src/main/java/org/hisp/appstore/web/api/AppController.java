@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -56,8 +55,8 @@ public class AppController
 
     @RequestMapping( method = RequestMethod.GET )
     public void getApprovedApps( @RequestParam( value = "type", required = false ) AppType type,
-                                 @RequestParam( value = "reqdhis", required = false, defaultValue = "" ) String reqDhisVersion,
-                                 HttpServletRequest request, HttpServletResponse response ) throws IOException
+         @RequestParam( value = "reqdhis", required = false, defaultValue = "" ) String reqDhisVersion,
+         HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
         AppQueryParameters queryParameters = appStoreService.getParameterFromUrl( type, reqDhisVersion );
 
@@ -85,8 +84,9 @@ public class AppController
     }
 
     @RequestMapping( value = "/{uid}", method = RequestMethod.GET )
-    public void getApp( @PathVariable( value = "uid" ) String appUid,
-                        HttpServletRequest request, HttpServletResponse response ) throws IOException, WebMessageException
+    public void getApp( @PathVariable( value = "uid" ) String appUid, 
+        HttpServletRequest request, HttpServletResponse response )
+        throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -106,8 +106,8 @@ public class AppController
     @PreAuthorize( "isAuthenticated()" )
     @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.GET )
     public void listReviews(  @PathVariable( "uid" ) String appUid,
-                              HttpServletResponse response, HttpServletRequest request )
-                            throws IOException, WebMessageException
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -122,9 +122,9 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/versions", method = RequestMethod.GET )
+    @RequestMapping( value = "/{uid}/versions", method = RequestMethod.GET )
     public void listVersions(  @PathVariable( "uid" ) String appUid,
-                              HttpServletResponse response, HttpServletRequest request )
+        HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
@@ -146,10 +146,9 @@ public class AppController
     @PreAuthorize( "isAuthenticated()" )
     @RequestMapping( method = RequestMethod.POST )
     public void uploadApp( @RequestPart( name = "file" ) MultipartFile file,
-                           @RequestPart( name = "imageFile", required = false ) MultipartFile imageFile,
-                           @RequestPart( name = "app" ) App app,
-                           HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException
+        @RequestPart( name = "imageFile", required = false ) MultipartFile imageFile,
+        @RequestPart( name = "app" ) App app, HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         if ( file == null )
         {
@@ -162,10 +161,10 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/reviews", method = RequestMethod.POST )
+    @RequestMapping( value = "/{uid}/reviews", method = RequestMethod.POST )
     public void addReviewToApp( @PathVariable( "uid" ) String appUid,
-                                HttpServletResponse response, HttpServletRequest request )
-                            throws IOException, WebMessageException
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         Review review = renderService.fromJson( request.getInputStream(), Review.class );
 
@@ -182,12 +181,12 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/versions", method = RequestMethod.POST )
+    @RequestMapping( value = "/{uid}/versions", method = RequestMethod.POST )
     public void addVersionToApp( @RequestPart( name = "file" ) MultipartFile file,
-                                 @RequestPart( name = "version" ) AppVersion version,
-                                 @PathVariable( name = "uid" ) String appUid,
-                                 HttpServletResponse response, HttpServletRequest request )
-                                throws IOException, WebMessageException
+        @RequestPart( name = "version" ) AppVersion version,
+        @PathVariable( name = "uid" ) String appUid,
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -204,11 +203,11 @@ public class AppController
     }
 
     @PreAuthorize( "hasRole('ROLE_MANAGER')" )
-    @RequestMapping ( value = "/{uid}/approval", method = RequestMethod.POST )
+    @RequestMapping( value = "/{uid}/approval", method = RequestMethod.POST )
     public void approveApp( @PathVariable( "uid" ) String appUid,
-                            @RequestParam( name = "status" ) AppStatus status,
-                            HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException
+        @RequestParam( name = "status" ) AppStatus status,
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -223,12 +222,12 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/images", method = RequestMethod.POST )
+    @RequestMapping( value = "/{uid}/images", method = RequestMethod.POST )
     public void uploadImages( @PathVariable( "uid" ) String appUid,
-                              @RequestPart( name = "file" ) MultipartFile file,
-                              @RequestPart( name = "image" ) ImageResource imageResource,
-                              HttpServletResponse response, HttpServletRequest request )
-                             throws IOException, WebMessageException
+        @RequestPart( name = "file" ) MultipartFile file,
+        @RequestPart( name = "image" ) ImageResource imageResource,
+        HttpServletResponse response, HttpServletRequest request )
+              throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -251,10 +250,10 @@ public class AppController
     // -------------------------------------------------------------------------
 
     @PreAuthorize( "hasRole('ROLE_USER')" )
-    @RequestMapping ( value = "/{uid}", method = RequestMethod.PUT )
+    @RequestMapping( value = "/{uid}", method = RequestMethod.PUT )
     public void updateApp( @PathVariable( "uid" ) String appUid,
-                           HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App persistedApp = appStoreService.getApp( appUid );
 
@@ -275,11 +274,11 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.PUT )
-    public void updateVersion(  @PathVariable( "uid" ) String appUid,
-                                @PathVariable( "vuid" ) String vuid,
-                               HttpServletResponse response, HttpServletRequest request )
-            throws IOException, WebMessageException
+    @RequestMapping( value = "/{uid}/versions/{vuid}", method = RequestMethod.PUT )
+    public void updateVersion( @PathVariable( "uid" ) String appUid, 
+        @PathVariable( "vuid" ) String vuid,
+        HttpServletResponse response, HttpServletRequest request )
+        throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -302,11 +301,11 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/images/{iuid}", method = RequestMethod.PUT )
-    public void updateImageResource(  @PathVariable( "uid" ) String appUid,
-                                      @PathVariable( "iuid" ) String iuid,
-                                      HttpServletResponse response, HttpServletRequest request )
-                                    throws IOException, WebMessageException
+    @RequestMapping( value = "/{uid}/images/{iuid}", method = RequestMethod.PUT )
+    public void updateImageResource( @PathVariable( "uid" ) String appUid,
+        @PathVariable( "iuid" ) String iuid,
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -341,10 +340,10 @@ public class AppController
     // -------------------------------------------------------------------------
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}", method = RequestMethod.DELETE )
+    @RequestMapping( value = "/{uid}", method = RequestMethod.DELETE )
     public void deleteApp( @PathVariable( "uid" ) String appUid,
-                           HttpServletResponse response, HttpServletRequest request )
-                          throws IOException, WebMessageException
+        HttpServletResponse response, HttpServletRequest request )
+            throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -361,11 +360,11 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
-    public void deleteReviewFromApp( @PathVariable( "uid" ) String appUid,
-                                     @PathVariable( "ruid" ) String reviewUid,
-                                     HttpServletResponse response, HttpServletRequest request )
-                                    throws IOException, WebMessageException
+    @RequestMapping( value = "/{uid}/reviews/{ruid}", method = RequestMethod.DELETE )
+    public void deleteReviewFromApp( @PathVariable( "uid" ) String appUid, 
+        @PathVariable( "ruid" ) String reviewUid,
+        HttpServletResponse response, HttpServletRequest request )
+        throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -384,11 +383,11 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/versions/{vuid}", method = RequestMethod.DELETE )
-    public void removeVersionFromApp( @PathVariable( "uid" ) String appUid,
-                                      @PathVariable( "vuid" ) String versionUid,
-                                      HttpServletResponse response, HttpServletRequest request )
-                                    throws IOException, WebMessageException
+    @RequestMapping( value = "/{uid}/versions/{vuid}", method = RequestMethod.DELETE )
+    public void removeVersionFromApp( @PathVariable( "uid" ) String appUid, 
+        @PathVariable( "vuid" ) String versionUid,
+        HttpServletResponse response, HttpServletRequest request )
+        throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 
@@ -407,11 +406,11 @@ public class AppController
     }
 
     @PreAuthorize( "isAuthenticated()" )
-    @RequestMapping ( value = "/{uid}/images/{iuid}", method = RequestMethod.DELETE )
-    public void removeImageFromApp( @PathVariable( "uid" ) String appUid,
-                                    @PathVariable( "iuid" ) String iuid,
-                                    HttpServletResponse response, HttpServletRequest request )
-                                    throws IOException, WebMessageException
+    @RequestMapping( value = "/{uid}/images/{iuid}", method = RequestMethod.DELETE )
+    public void removeImageFromApp( @PathVariable( "uid" ) String appUid, 
+        @PathVariable( "iuid" ) String iuid,
+        HttpServletResponse response, HttpServletRequest request )
+        throws IOException, WebMessageException
     {
         App app = appStoreService.getApp( appUid );
 

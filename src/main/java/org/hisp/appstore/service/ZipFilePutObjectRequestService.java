@@ -10,7 +10,6 @@ import org.hisp.appstore.api.domain.ResourceType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by zubair on 25.02.17.
@@ -19,10 +18,10 @@ public class ZipFilePutObjectRequestService
         extends PutObjectRequestService
 {
     private static final ImmutableMap<AppType, String> APP_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
-            .put( AppType.APP_STANDARD, "apps-standard" )
-            .put( AppType.APP_DASHBOARD, "apps-dashboard" )
-            .put( AppType.APP_TRACKER_DASHBOARD, "apps-tracker-dashboard" )
-            .build();
+        .put( AppType.APP_STANDARD, "apps-standard" )
+        .put( AppType.APP_DASHBOARD, "apps-dashboard" )
+        .put( AppType.APP_TRACKER_DASHBOARD, "apps-tracker-dashboard" )
+        .build();
 
     // -------------------------------------------------------------------------
     // Implementation methods
@@ -36,7 +35,7 @@ public class ZipFilePutObjectRequestService
 
     @Override
     public PutObjectRequest getPutObjectRequest( MultipartFile file, AppType appType, String resourceKey )
-                                                throws IOException
+        throws IOException
     {
         PutObjectRequest request;
 

@@ -1,8 +1,6 @@
 package org.hisp.appstore.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.RenderService;
 import org.hisp.appstore.api.support.WebMessage;
 import org.hisp.appstore.util.WebMessageUtils;
@@ -18,10 +16,8 @@ import java.io.OutputStream;
  * Created by zubair on 01.12.16.
  */
 public class DefaultRenderService
-        implements RenderService
+    implements RenderService
 {
-    private static Log log = LogFactory.getLog( DefaultRenderService.class );
-
     private static final ObjectMapper jsonMapper = new ObjectMapper();
 
     @Override
