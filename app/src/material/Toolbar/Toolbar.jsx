@@ -22,11 +22,11 @@ function getClassNames(props) {
             modificators.push(mod);
         }
     }
-    return classNames(baseClassname, modificators, props.additionalClasses);
+    return classNames(baseClassname, modificators, props.className);
 }
 
-const Toolbar = ({children, ...props}) => (
-    <div className={getClassNames(props)}>
+const Toolbar = ({children, style, ...props}) => (
+    <div className={getClassNames(props)} style={style}>
         {children}
     </div>
 )

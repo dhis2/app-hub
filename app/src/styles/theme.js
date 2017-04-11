@@ -8,10 +8,10 @@ import {
 
 export default getMuiTheme({
     palette: {
-        primary1Color: blue700,
+        primary1Color: 'rgb(39, 102, 150)',
         primary2Color: blue900,
         primary3Color: grey200,
-        accent1Color: pinkA200,
+        accent1Color: blue700,
         accent2Color: grey100,
         accent3Color: grey500,
         textColor: darkBlack,

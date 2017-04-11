@@ -68,18 +68,18 @@ class AppList extends Component {
     }
 
     renderStatusFilters() {
-       return (<div> <h4>App status</h4>
-        <SelectFilter
-        renderAllToggle
-        form="appStatusFilter"
-        filters={[{label: 'Approved', toggled: true, value: 'APPROVED'},
-        {label: 'Pending', toggled: true, value:'PENDING'},
-        {label: 'Not Approved', toggled: true, value:'NOT_APPROVED'}]}
-        /> </div>)
+        return (<div><h4>App status</h4>
+            <SelectFilter
+                renderAllToggle
+                form="appStatusFilter"
+                filters={[{label: 'Approved', toggled: true, value: 'APPROVED'},
+                    {label: 'Pending', toggled: true, value: 'PENDING'},
+                    {label: 'Not Approved', toggled: true, value: 'NOT_APPROVED'}]}
+            /></div>)
     }
 
     render() {
-        const { loading, loaded, error, byId : appList} = this.props.appList;
+        const {loading, loaded, error, byId : appList} = this.props.appList;
         const loadOrErr = loading || error;
         let {user: {manager}, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
@@ -89,29 +89,30 @@ class AppList extends Component {
             && filterAppType(app, this.props.appTypeFilter)
             && (manager ? filterAppStatus(app, this.props.appStatusFilter) : true))
             .map((app, i) => (
-            <AppListItem app={app} key={app.id} isManager={manager}
-                         match={this.props.match}
-                         handleDelete={this.openDeleteDialog.bind(this, app)}
-                         handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
-                         handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
-        ))
+                <AppListItem app={app} key={app.id} isManager={manager}
+                             match={this.props.match}
+                             handleDelete={this.openDeleteDialog.bind(this, app)}
+                             handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
+                             handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
+            ))
         const title = manager ? "All apps" : "Your apps";
         return (
             <div>
                 <SubHeader title={title}>
                     <TextFilter hintText="Search"/>
-                    <IconButton onClick={this.handleOpenFilters.bind(this)}><FontIcon className="material-icons">filter_list</FontIcon> </IconButton>
-                    <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{ width:'200px'}}
-                    onRequestClose={(r) => this.setState({open:false})}>
-                        <div style={{padding:'10px'}}>
+                    <IconButton onClick={this.handleOpenFilters.bind(this)}><FontIcon className="material-icons">filter_list</FontIcon>
+                    </IconButton>
+                    <Popover open={this.state.open} anchorEl={this.state.anchorEl} style={{width: '200px'}}
+                             onRequestClose={(r) => this.setState({open: false})}>
+                        <div style={{padding: '10px'}}>
                             <h4>App type</h4>
-                        <SelectFilter
-                            renderAllToggle
-                            form="appTypeFilter"
-                            filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
-                                {label: 'Dashboard', toggled: true, value:'APP_DASHBOARD'},
-                                {label: 'Tracker', toggled: true, value:'APP_TRACKER_DASHBOARD'}]}
-                           />
+                            <SelectFilter
+                                renderAllToggle
+                                form="appTypeFilter"
+                                filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
+                                    {label: 'Dashboard', toggled: true, value: 'APP_DASHBOARD'},
+                                    {label: 'Tracker', toggled: true, value: 'APP_TRACKER_DASHBOARD'}]}
+                            />
                             {manager ? this.renderStatusFilters() : null}
                         </div>
                     </Popover>
@@ -125,35 +126,35 @@ class AppList extends Component {
                     </CardText>
                 </Card>
             </div>
-    )
+        )
     }
-    }
+}
 
-    const mapStateToProps = (state) => ({
-        appList: state.user.appList,
-        user: state.user.userInfo.info,
-        appTypeFilter: state.form.appTypeFilter,
-        appStatusFilter: state.form.appStatusFilter,
-        appSearchFilter: state.form.searchFilter,
-    });
+const mapStateToProps = (state) => ({
+    appList: state.user.appList,
+    user: state.user.userInfo.info,
+    appTypeFilter: state.form.appTypeFilter,
+    appStatusFilter: state.form.appStatusFilter,
+    appSearchFilter: state.form.searchFilter,
+});
 
-    const mapDispatchToProps = (dispatch) => ({
-        approveApp(payload) {
+const mapDispatchToProps = (dispatch) => ({
+    approveApp(payload) {
         dispatch(setAppApproval(payload))
     },
 
-        openDeleteDialog(app) {
+    openDeleteDialog(app) {
         dispatch(openDialog(dialogTypes.CONFIRM_DELETE_APP, app))
     },
 
-        loadAllApps() {
+    loadAllApps() {
         dispatch(loadAllApps())
     },
 
-        loadMyApps() {
+    loadMyApps() {
         dispatch(userAppsLoad())
     }
 
-    })
+})
 
-    export default connect(mapStateToProps, mapDispatchToProps)(AppList);
+export default connect(mapStateToProps, mapDispatchToProps)(AppList);

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { appTypesToUI } from '../../constants/apiConstants';
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
+import Theme from '../../styles/theme';
+
 const AppItem = (props) => {
     const { id, name, developer, description, appType, images, requiredDhisVersion } = props.app;
     let logo = images.filter(elem => elem.logo)[0];
@@ -19,7 +21,7 @@ const AppItem = (props) => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: logo ? 'cover' : 'contain',
-        backgroundColor: '#3f51b5',
+        backgroundColor: Theme.palette.primary1Color,
         height: '190px'
     }
 
