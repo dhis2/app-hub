@@ -185,8 +185,15 @@ export const userError = createActionCreator(actions.USER_ERROR);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
 
-export const appLoad = createActionCreator(actions.APP_LOAD);
-export const appLoaded = createActionCreator(actions.APP_LOADED);
+export const loadUserApp = (appId) => {
+    return createActionCreator(actions.APP_LOAD)({
+        ...appId,
+        useAuth: true
+    });
+}
+
+export const loadApp = createActionCreator(actions.APP_LOAD);
+export const loadAppSuccess = createActionCreator(actions.APP_LOADED);
 export const appError = createActionCreator(actions.APP_ERROR);
 
 function createActionCreator(type) {

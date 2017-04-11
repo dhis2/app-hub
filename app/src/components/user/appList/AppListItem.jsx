@@ -74,7 +74,7 @@ const AppListItem = (props, state) => {
         secondaryText: (<p>{developer.name} <br /> {appTypesToUI[appType]} </p>),
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
-        onTouchTap: () => props.push(`${props.match.url}/app/${id}`)
+        onTouchTap: () => props.history.push(`${props.match.url}/app/${id}`)
     }
 
     return (

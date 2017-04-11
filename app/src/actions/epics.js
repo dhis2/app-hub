@@ -31,8 +31,9 @@ const loadAppsApproved = (action$) => action$
 const loadApp = (action$) => action$
     .ofType(actions.APP_LOAD)
     .concatMap(action => {
-        return api.getApp(action.payload.appId)
-            .then(app => actionCreators.appLoaded(app))
+        const { appId, useAuth } = action.payload;
+        return api.getApp(appId, useAuth)
+            .then(app => actionCreators.loadAppSuccess(app))
             .catch(error => ({
                 type: actions.APP_ERROR,
                 payload: error,

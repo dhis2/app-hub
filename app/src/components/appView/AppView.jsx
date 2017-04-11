@@ -8,7 +8,7 @@ import Col from '../../material/Grid/Col';
 import {Link} from 'react-router-dom';
 import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
-import {appLoad} from '../../actions/actionCreators';
+import {loadApp} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../constants/apiConstants';
 import AppLogo from './AppLogo';
 
@@ -78,7 +78,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     loadApp(appId) {
-        dispatch(appLoad(appId))
+        dispatch(loadApp(appId))
     }
 })
 
