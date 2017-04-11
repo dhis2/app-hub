@@ -27,8 +27,8 @@ export function getApprovedApps() {
     return fromApi('apps')
 }
 
-export function getApp(appId) {
-    return fromApi('apps/'+appId, true);
+export function getApp(appId, auth) {
+    return fromApi('apps/'+appId, auth || false);
 }
 
 export function getUser() {
@@ -81,6 +81,7 @@ export function updateImage(appId, imageId, payload) {
     })
 }
 function fromApi(url, auth = false, extraOpts) {
+    console.log(auth)
     const headers = getAuthHeaders();
     const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};
 

@@ -5,7 +5,7 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {appLoad, addImageToApp, openDialog, deleteAppVersion} from '../../../actions/actionCreators';
+import {loadUserApp, addImageToApp, openDialog, deleteAppVersion} from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionList from '../../appVersion/VersionList';
 import FontIcon from 'material-ui/FontIcon';
@@ -155,7 +155,7 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     loadApp(appid) {
-        dispatch(appLoad(appid));
+        dispatch(loadUserApp(appid));
     },
 
     addImageToApp(appid, image) {
