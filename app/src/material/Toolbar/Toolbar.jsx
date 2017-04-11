@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-
 const propTypes = {
     fixed: PropTypes.bool,
     additionalClasses: PropTypes.string,
