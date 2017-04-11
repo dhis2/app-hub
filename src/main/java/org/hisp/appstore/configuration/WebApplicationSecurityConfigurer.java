@@ -1,3 +1,4 @@
+
 package org.hisp.appstore.configuration;
 
 import com.auth0.spring.security.api.Auth0SecurityConfig;
