@@ -47,11 +47,17 @@ CREATE DATABASE appstore_db OWNER dhis;
 ```
 
 ### Run the project
+
+#### Start the Web API backend
+
 ```bash
 mvn clean install && mvn spring-boot:run
 ```
+Will be available at *localhost:3098/api/apps*
 
-### Start the front-end development app-store
+### Start the front-end UI app
+
 ```bash
 yarn start
 ```
+Will be available at *localhost:9000*
