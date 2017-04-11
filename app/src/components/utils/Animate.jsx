@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import '../../styles/utils/animations.scss';
 
-export const FadeAnimation = ({component, children, style}) => {
+export const FadeAnimation = ({component, children, ...rest}) => {
 
     return (
         <ReactCSSTransitionGroup
@@ -13,9 +13,7 @@ export const FadeAnimation = ({component, children, style}) => {
             transitionAppearTimeout={300}
             transitionEnterTimeout={300}
             transitionLeaveTimeout={200}
-            //cannot pass props to component, as it will be destroyed
-            //when unmounted. Style here instead.
-            style={style}
+            {...rest}
             >
 
             {children}

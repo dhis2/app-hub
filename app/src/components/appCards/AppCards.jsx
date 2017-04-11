@@ -71,7 +71,7 @@ class AppCards extends Component {
                 </Col>
                 {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                 <Col span={12}>
-                    <FadeAnimation component={Grid} id="Grid" style={styles.grid}>
+                    <FadeAnimation component={Grid} style={styles.grid}>
                         { apps }
                     </FadeAnimation>
                 </Col>
