@@ -1,11 +1,8 @@
 package org.hisp.appstore.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hisp.appstore.api.ReviewService;
 import org.hisp.appstore.api.ReviewStore;
 import org.hisp.appstore.api.domain.Review;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -17,8 +14,6 @@ import java.util.List;
 public class DefaultReviewService
         implements ReviewService
 {
-    private static final Log log = LogFactory.getLog( DefaultReviewService.class );
-
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------

@@ -1,14 +1,10 @@
 package org.hisp.appstore.store;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.hisp.appstore.api.*;
 import org.hisp.appstore.api.domain.*;
 import org.hisp.appstore.util.HibernateGenericDao;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,18 +12,9 @@ import java.util.Set;
 
 @Transactional
 public class HibernateAppStore
-        extends HibernateGenericDao<App> implements  AppStore
+    extends HibernateGenericDao<App> implements  AppStore
 {
-    private static final Log log = LogFactory.getLog( HibernateAppStore.class );
-
     private static final String APP_TABLE = "App";
-
-    private ReviewStore reviewStore;
-
-    public void setReviewStore( ReviewStore reviewStore )
-    {
-        this.reviewStore = reviewStore;
-    }
 
     private CurrentUserService currentUserService;
 
@@ -43,6 +30,7 @@ public class HibernateAppStore
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<App> get( AppQueryParameters queryParameters )
     {
         Query query = getHqlQuery( queryParameters );
@@ -51,6 +39,7 @@ public class HibernateAppStore
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<App> getAllAppsByStatus( AppStatus status )
     {
         return getCriteria().add( Restrictions.eq( "status", status ) ).list();
@@ -73,6 +62,7 @@ public class HibernateAppStore
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<App> getAllAppsByOwner( String owner )
     {
         return  getCriteria().add( Restrictions.eq( "owner", owner )).list();

@@ -3,10 +3,7 @@ package org.hisp.appstore.service;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -18,7 +15,6 @@ import org.hisp.appstore.api.domain.FileUploadStatus;
 import org.hisp.appstore.api.domain.ResourceType;
 import org.hisp.appstore.util.WebMessageException;
 import org.hisp.appstore.util.WebMessageUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -56,7 +52,7 @@ public class AmazonS3FileStorageService implements FileStorageService
 
     @Override
     public FileUploadStatus uploadFile( MultipartFile file, AppType type, ResourceType resourceType )
-                                        throws WebMessageException, IOException
+        throws WebMessageException, IOException
     {
         String resourceKey = UUID.randomUUID().toString() + "." + resourceType.getKey();
 
@@ -73,7 +69,7 @@ public class AmazonS3FileStorageService implements FileStorageService
             return status;
         }
 
-        for( PutObjectRequestService putObjectRequestService : putObjectRequestCreators )
+        for ( PutObjectRequestService putObjectRequestService : putObjectRequestCreators )
         {
             if ( putObjectRequestService.accepts( resourceType ))
             {

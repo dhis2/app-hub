@@ -1,7 +1,6 @@
 package org.hisp.appstore.api;
 
 import org.apache.commons.lang3.StringUtils;
-import org.hisp.appstore.api.domain.AppStatus;
 import org.hisp.appstore.api.domain.AppType;
 
 /**

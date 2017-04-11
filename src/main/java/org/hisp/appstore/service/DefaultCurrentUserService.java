@@ -9,22 +9,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 
 /**
  * Created by zubair on 20.03.17.
  */
 @Transactional
 public class DefaultCurrentUserService
-        implements CurrentUserService
+    implements CurrentUserService
 {
     private static final String ROLE_MANAGER = "ROLE_MANAGER";
+    
     // -------------------------------------------------------------------------
     // Dependencies
     // -------------------------------------------------------------------------
@@ -75,8 +73,8 @@ public class DefaultCurrentUserService
     private Set<String> getCurrentUserAuthorities()
     {
         Set<String> authorities = getAuth0UserDetails().getAuthorities()
-                .stream().map( GrantedAuthority::getAuthority )
-                .collect( Collectors.toSet() );
+            .stream().map( GrantedAuthority::getAuthority )
+            .collect( Collectors.toSet() );
 
         return authorities;
     }

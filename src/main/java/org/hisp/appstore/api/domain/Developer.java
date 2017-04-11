@@ -1,10 +1,6 @@
 package org.hisp.appstore.api.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.google.common.collect.Sets;
-
-import java.util.Set;
 
 /**
  * Created by zubair on 01.12.16.

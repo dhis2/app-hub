@@ -1,7 +1,6 @@
 package org.hisp.appstore.service;
 
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
@@ -19,10 +18,10 @@ public class ImagePutObjectRequestService
         extends PutObjectRequestService
 {
     private static final ImmutableMap<AppType, String> IMAGE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
-            .put( AppType.APP_STANDARD, "images-standard" )
-            .put( AppType.APP_DASHBOARD, "images-dashboard" )
-            .put( AppType.APP_TRACKER_DASHBOARD, "images-tracker-dashboard" )
-            .build();
+        .put( AppType.APP_STANDARD, "images-standard" )
+        .put( AppType.APP_DASHBOARD, "images-dashboard" )
+        .put( AppType.APP_TRACKER_DASHBOARD, "images-tracker-dashboard" )
+        .build();
 
     // -------------------------------------------------------------------------
     // Implementation methods
@@ -36,7 +35,7 @@ public class ImagePutObjectRequestService
 
     @Override
     public PutObjectRequest getPutObjectRequest( MultipartFile file, AppType appType, String resourceKey )
-            throws IOException
+        throws IOException
     {
         PutObjectRequest request;
 
