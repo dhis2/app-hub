@@ -1,5 +1,4 @@
 package org.hisp.appstore.configuration;
-
 import com.auth0.spring.security.api.Auth0SecurityConfig;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +21,30 @@ public class WebApplicationSecurityConfigurer extends Auth0SecurityConfig
     public Auth0Client auth0Client()
     {
         return new Auth0Client( clientId, issuer );
+    }
+
+    @Bean
+    public CustomAccessDeniedHandler getAccessDeniedHandler()
+    {
+        CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
+
+        return customAccessDeniedHandler;
+    }
+    
+    @Bean
+    public AuthenticationEntryPoint getAuthenticationEntryPoint()
+    {
+        AuthenticationEntryPoint authenticationEntryPoint = new AuthenticationEntryPoint()
+        {
+            @Override
+            public void commence( HttpServletRequest request, HttpServletResponse response,
+                                  AuthenticationException e ) throws IOException, ServletException
+            {
+                response.sendRedirect("/api/401");
+            }
+        };
+
+        return authenticationEntryPoint;
     }
 
     @Override

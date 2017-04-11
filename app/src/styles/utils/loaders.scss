@@ -1,0 +1,73 @@
+@mixin spinner($size) {
+	.spinner {
+		position: relative;
+		margin: 0 auto 0 auto;
+		left: 1px;
+		top: 1px;
+		width: $size;
+		height: $size;
+		animation: spin 1s infinite linear;
+	}
+}
+
+@mixin maskedCircle($size, $border, $borderRadius) {
+	.maskedCircle {
+		width: $size;
+		height: $size;
+		border: $border solid black;
+		border-radius: $borderRadius;
+	}
+}
+
+@mixin mask($size) {
+	.mask {
+		width: $size;
+		height: $size;
+		overflow: hidden;
+	}
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+.loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading-small {
+	position: relative;
+	margin: 0 auto 0 auto;
+	width: 28px;
+	height: 28px;
+  	margin-left: -55px;
+
+	@include maskedCircle(20px, 3px, 12px);
+	@include mask(12px);
+	@include spinner(26px);
+}
+
+.loading-medium {
+	position: relative;
+	margin: 0 auto 0 auto;
+	width: 56px;
+	height: 56px;
+
+	@include maskedCircle(40px, 3px, 24px);
+	@include mask(24px);
+	@include spinner(52px);
+}
+
+.loading-large {
+	position: relative;
+	margin: 0 auto 0 auto;
+	width: 112px;
+	height: 112px;
+
+	@include maskedCircle(80px, 6px, 48px);
+	@include mask(48px);
+	@include spinner(104px);
+}
