@@ -1,9 +1,11 @@
 const webpack = require('webpack');
+const path = require('path');
+const packageJSON = require('../package.json');
 
 module.exports = {
     entry: './app/src/app-store.js',
     output: {
-        path: '/src/resources/static',
+        path: path.join(__dirname,'..','target', 'classes', 'META-INF', 'resources', 'webjars', packageJSON.name, packageJSON.version),
         filename: 'app-store.js',
     },
 
@@ -35,7 +37,7 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.jsx']
     },
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
 
     plugins: [
         new webpack.DefinePlugin({
