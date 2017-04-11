@@ -53,11 +53,11 @@ CREATE DATABASE appstore_db OWNER dhis;
 ```bash
 mvn clean install && mvn spring-boot:run
 ```
-Will be available at *localhost:3098/api/apps*
+Will be available at `localhost:3098/api/apps`.
 
 ### Start the front-end UI app
 
 ```bash
 yarn start
 ```
-Will be available at *localhost:9000*
+Will be available at `localhost:9000`.
