@@ -2,11 +2,12 @@ import React, {PropTypes} from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import '../../styles/utils/animations.scss';
 
-export const FadeAnimation = ({props, component, children, ...rest}) => {
+export const FadeAnimation = ({component, children, ...rest}) => {
+    const CompWithProps = (props) => React.createElement(component, {...props,...rest});
 
     return (
         <ReactCSSTransitionGroup
-            component={component}
+            component={component ? CompWithProps : undefined}
             transitionName="fade"
             transitionAppear={true}
             transitionLeave={false}
@@ -19,7 +20,3 @@ export const FadeAnimation = ({props, component, children, ...rest}) => {
         </ReactCSSTransitionGroup>
     )
 }
-/*  <FadeAnimation component={Col} key={app.id}
- align="middle" additionalClasses="center"> */
-
-/* </FadeAnimation> */

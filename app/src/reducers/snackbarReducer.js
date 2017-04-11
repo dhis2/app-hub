@@ -3,7 +3,7 @@ import {appStatusToUI} from '../constants/apiConstants';
 
 const emptySnackbar = {message: '', duration: 4000,};
 const initialState = {
-    ...emptySnackbar
+    ...emptySnackbar,
 };
 
 const snackbarReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const snackbarReducer = (state = initialState, action) => {
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
             return {
                 ...state,
-                message: 'New app version has been uploaded!'
+                message: 'New app version has been uploaded'
             }
         }
         case actionTypes.SET_APPROVAL_APP_SUCCESS: {
@@ -23,24 +23,27 @@ const snackbarReducer = (state = initialState, action) => {
         case actionTypes.APP_ADD_SUCCESS: {
             return {
                 ...state,
-                message: 'Your app has been successfully uploaded! Note that you need to wait for' +
-                'approval before it\'s visible to the public.'
+                message: 'App has been uploaded'
             }
         }
 
         case actionTypes.APP_DELETE_SUCCESS: {
             return {
                 ...state,
-                message: action.payload.app.name + ' has been deleted.',
+                message: action.payload.app.name + ' has been deleted',
             }
         }
-
+        case actionTypes.SNACKBAR_EMPTY: {
+            return {
+                ...emptySnackbar,
+            }
+        }
         default:
             if (action.type.endsWith('_ERROR')) {
                 console.log(action.payload)
                 return {
                     ...state,
-                    message: 'An error occurred.'
+                    message: 'An error occurred'
                 }
             } else {
                 return {

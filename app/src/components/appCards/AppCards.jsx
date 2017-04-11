@@ -21,6 +21,9 @@ class AppCards extends Component {
 
     render() {
         const styles = {
+            grid: {
+                justifyContent: 'center'
+            },
             filters: {
                 display: 'flex',
                 alignItems: 'center',
@@ -42,10 +45,11 @@ class AppCards extends Component {
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
             .map((app, i) => (
-                <Col key={app.id} span={3} align="middle" style={styles.appItem} additionalClasses="center">
+                <Col key={app.id} span={3} align="middle" style={styles.appItem}>
                     <AppCardItem key={app.id} app={app}/>
                 </Col>
             ))
+
 
         return (
             <Grid>
@@ -69,7 +73,7 @@ class AppCards extends Component {
                 </Col>
                 {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                 <Col span={12}>
-                    <FadeAnimation component={Grid}>
+                    <FadeAnimation component={Grid} style={styles.grid}>
                         { apps }
                     </FadeAnimation>
                 </Col>
