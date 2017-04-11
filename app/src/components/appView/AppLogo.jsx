@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react';
 import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
-
+import Theme from '../../styles/theme';
 
 const style = {
     base: {
-        backgroundColor: '#3f51b5',
+        backgroundColor: Theme.palette.primary1Color,
         marginRight: '16px',
     },
     list: {

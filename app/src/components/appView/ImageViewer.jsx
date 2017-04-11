@@ -23,7 +23,6 @@ const styles = {
     },
     imageStyle: {
         maxHeight: '100%',
-        maxWidth: '100%',
     },
     expandedImageStyle: {
     },

@@ -8,6 +8,7 @@ import IconButton from'material-ui/IconButton';
 import FontIcon from 'material-ui/FontIcon';
 import {getAuth} from '../../utils/AuthService';
 import {Link} from 'react-router-dom';
+import Theme from '../../styles/theme';
 
 const renderProfileButton = (isLoggedIn) => {
     const button = (<IconButton onClick={() => !isLoggedIn ? getAuth().login() : {}}>
@@ -20,7 +21,7 @@ const renderProfileButton = (isLoggedIn) => {
 }
 
 const Header = (props) =>
-    (<Toolbar>
+    (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarTitle><Link to="/">DHIS2</Link></ToolbarTitle>
         <ToolbarTitle align="center">
             <Link to="/">AppStore</Link>
