@@ -81,10 +81,8 @@ export function updateImage(appId, imageId, payload) {
     })
 }
 function fromApi(url, auth = false, extraOpts) {
-    console.log(auth)
     const headers = getAuthHeaders();
     const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};
-
     return fetch(baseURL+url,opts)
         .then(response => response.ok ? response : Promise.reject(response))
         .then(response => response.json())
