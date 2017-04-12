@@ -13,7 +13,7 @@ import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
-import {appTypesToUI} from '../../../constants/apiConstants';
+import {appTypesToUI} from '../../../../config';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
 class UserAppView extends Component {

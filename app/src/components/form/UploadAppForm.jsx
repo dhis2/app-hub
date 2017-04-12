@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
-import {DHISVersions} from '../../constants/apiConstants';
+import {DHISVersions} from '../../../config';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
 import UploadFileField from '../form/UploadFileField';
@@ -10,6 +10,8 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
+
+
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
     {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
 

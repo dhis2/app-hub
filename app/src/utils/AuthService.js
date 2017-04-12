@@ -1,14 +1,15 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
-import * as apiConstants from '../constants/apiConstants';
+import * as apiConstants from '../../config';
 import { BrowserRouter } from 'react-router-dom';
 import History from './history';
+import * as constants from '../../config';
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:9000/user',
+                redirectUrl: constants.AUTH_REDIRECT_URL,
                 responseType: 'token',
                 params: {
                     scope: 'openid roles user_id',

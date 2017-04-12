@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { appTypesToUI } from '../../constants/apiConstants';
+import { appTypesToUI } from '../../../config';
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'material-ui/Card';
 import Button from 'material-ui/FlatButton';
 import Theme from '../../styles/theme';

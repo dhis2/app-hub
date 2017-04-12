@@ -260,7 +260,7 @@
             <phase>generate-resources</phase>
 
             <configuration>
-              <arguments>--config ./app/webpack.config.js</arguments>
+              <arguments>-p --config ./app/webpack.config.js --env.BUILD_NAME='${project.build.finalName}'</arguments>
             </configuration>
           </execution>
 

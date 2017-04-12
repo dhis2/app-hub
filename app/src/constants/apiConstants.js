@@ -1,5 +1,7 @@
 
-export const API_BASE_URL = 'http://localhost:3098/api/'
+export const API_BASE_URL = 'http://localhost:8080/dhis-appstore/api/';
+export const AUTH_REDIRECT_URL = 'http://localhost:8080/user';
+export const BASE_APP_NAME = 'dhis-appstore';
 
 export const appTypesToUI = {
     APP_STANDARD: 'Standard',

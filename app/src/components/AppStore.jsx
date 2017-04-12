@@ -16,7 +16,6 @@ import * as dialogType from '../constants/dialogTypes';
 import {Provider} from 'react-redux';
 import store from '../store';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import * as apiConstants from '../constants/apiConstants';
 import LoginView from './user/login/LoginView';
 import { getAuth } from '../utils/AuthService';
 import { Spinner } from './utils/Loader';
@@ -51,7 +50,7 @@ export default function AppStore() {
                         <Route path='/app/:appId' component={AppView}/>
                         <Route path="/login" render={(props) => (
                             <LoginView auth={auth} {...props} />)} />
-                        <PrivateRoute path='/user/' component={UserView}/>
+                        <PrivateRoute path='/user' component={UserView}/>
 
                         <DialogRoot />
 

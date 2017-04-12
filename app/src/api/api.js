@@ -1,4 +1,4 @@
-import * as apiConstants from '../constants/apiConstants';
+import * as apiConstants from '../../config';
 import { getAuth } from '../utils/AuthService';
 
 

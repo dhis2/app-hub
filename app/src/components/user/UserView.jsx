@@ -11,7 +11,6 @@ import AppList from './appList/AppList';
 import LoginView from './login/LoginView';
 import {userLoad} from '../../actions/actionCreators';
 import AuthService from '../../utils/AuthService';
-import * as apiConstants from '../../constants/apiConstants';
 import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
 class UserView extends Component {
