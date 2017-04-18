@@ -191,7 +191,7 @@
   </dependencies>
 
   <build>
-    <finalName>dhis-appstore</finalName>
+    <finalName>appstore</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
