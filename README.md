@@ -48,20 +48,20 @@ This is located in `app/config.js`.
 For production (using tomcat) use the prod object, else the dev object.
 
 ##### BASE_APP_NAME
-This is the basename of where the app is located, used by routes. If it's hosted at `http://localhost:8080/dhis-appstore` this should be `/dhis-appstore`.
+This is the basename of where the app is located, used by routes. If it's hosted at `http://localhost:8080/appstore` this should be `/appstore`.
 ```
-BASE_APP_NAME: '/dhis-appstore'
+BASE_APP_NAME: '/appstore'
 ```
 ##### API_BASE_URL
 The endpoint of the backend API to be used. 
 ```
-API_BASE_URL: 'http://localhost:8080/dhis-appstore/api/',
+API_BASE_URL: 'http://localhost:8080/appstore/api/',
 ```
 
 ##### API_REDIRECT_URL
 The URL to be used when auth0 has successfully logged in a user, and is redirected back to the page. Note that this URL needs to be whitelisted on the auth0 side aswell.
 ```
- API_REDIRECT_URL: 'http://localhost:8080/dhis-appstore/user/'
+ API_REDIRECT_URL: 'http://localhost:8080/appstore/user/'
 ```
 ### Create postgres database (if you do not have one yet)
 ```sql
@@ -77,9 +77,9 @@ mvn clean install
 This will create a .war which can be deployed using tomcat.
 The API and frontend will be hosted on the same instance. 
 
-Web API available at `localhost:8080/dhis-appstore/api`.
+Web API available at `localhost:8080/appstore/api`.
 
-Frontend at `localhost:8080/dhis-appstore/`.
+Frontend at `localhost:8080/appstore/`.
 
 #### Start the Web API backend independently
 

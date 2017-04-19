@@ -11,16 +11,16 @@ const prod = {
 
     /* Basename for routes.
     If this app is hosted at http://hostname/app this should be '/app' */
-    BASE_APP_NAME: '/dhis-appstore',
+    BASE_APP_NAME: '/appstore',
 
     /* Base URL for the API.
        Should be absolute path to the api endpoint.
        Note the trailing '/' */
-    API_BASE_URL: 'http://localhost:8080/dhis-appstore/api/',
+    API_BASE_URL: 'http://localhost:8080/appstore/api/',
 
     /* Redirect URL to use by auth0, note that you need to allow this url
        on the auth0 side as well. */
-    API_REDIRECT_URL: 'http://localhost:8080/dhis-appstore/user',
+    API_REDIRECT_URL: 'http://localhost:8080/appstore/user',
 
 }
 

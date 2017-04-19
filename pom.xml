@@ -194,7 +194,7 @@
 
 
   <build>
-    <finalName>dhis-appstore</finalName>
+    <finalName>appstore</finalName>
     <plugins>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -260,7 +260,7 @@
             <phase>generate-resources</phase>
 
             <configuration>
-              <arguments>-p --config ./app/webpack.config.js --env.BUILD_NAME='${project.build.finalName}'</arguments>
+              <arguments>-p --config ./app/webpack.config.js</arguments>
             </configuration>
           </execution>
 

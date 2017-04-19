@@ -8,7 +8,6 @@ const isDevBuild = process.argv.indexOf('-p') === -1;
 const tomcat = {
     entry: {
         app:'./app/src/app-store.js',
-        config: './app/src/constants/apiConstants.js'
     },
     output: {
      //   path: path.join(__dirname,'..','target', 'dhis-appstore','WEB-INF','classes','app'),

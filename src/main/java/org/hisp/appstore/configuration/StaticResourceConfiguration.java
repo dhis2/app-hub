@@ -12,40 +12,43 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 
-/**
- * Created by birkbj on 12/04/2017.
- */
+
 @Configuration
-@ComponentScan
-public class StaticResourceConfiguration {
+public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
 
-    @Bean
-    public WebMvcConfigurerAdapter forwardToIndex() {
-        return new WebMvcConfigurerAdapter() {
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry) {
-                // forward requests to /admin and /user to their index.html
-                registry.addViewController("/").setViewName(
-                        "forward:/app/index.html");
-            }
-        /*    @Override
-            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                registry.addResourceHandler("/app/**").addResourceLocations("/app/**");
-            } */
-        };
-    }
-/*
-    private static final Log log = LogFactory.getLog( StaticResourceConfiguration.class );
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        log.info("Adding view controller");
-        registry.addViewController("/app").setViewName("forward:/app/index.html");
-    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("/app/**");
+        if (!registry.hasMappingForPattern("/app/**")) {
+            registry.addResourceHandler("/app/**").addResourceLocations("classpath:/META-INF/resources/app/");
+        }
+        if (!registry.hasMappingForPattern("/**")) {
+            registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/app/");
+        }
+    } /*
+    @Bean
+    public WebMvcConfigurerAdapter forwardToIndex() {
+        return new WebMvcConfigurerAdapter() {
+
+
+            private final String[] CLASSPATH_RESOURCE_LOCATIONS = { "classpath:/public/" };
+
+          /*  @Override
+            public void addViewControllers(ViewControllerRegistry registry) {
+                registry.addViewController("/").setViewName(
+                        "forward:/app/index.html");
+            }
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                super.addResourceHandlers(registry);
+                if (!registry.hasMappingForPattern("/app/**")) {
+                    registry.addResourceHandler("/app/**").addResourceLocations("classpath:/META-INF/resources/app/");
+                }
+                if (!registry.hasMappingForPattern("/**")) {
+                    registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/app/");
+                }
+            }
+        };
     } */
 
 }
