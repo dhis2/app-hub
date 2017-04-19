@@ -22,7 +22,8 @@ class AppCards extends Component {
     render() {
         const styles = {
             grid: {
-                justifyContent: 'center'
+               // justifyContent: 'center',
+              //  display: 'flex',
             },
             filters: {
                 display: 'flex',
@@ -36,7 +37,6 @@ class AppCards extends Component {
             },
             appItem: {
                 maxWidth: '300px',
-                minWidth: '250px',
             }
         }
         const {loading, error, byId : cards} = this.props.appList;
@@ -69,8 +69,9 @@ class AppCards extends Component {
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
-                {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
+
                 <Col span={12}>
+                    {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                     <FadeAnimation component={Grid} style={styles.grid}>
                         { apps }
                     </FadeAnimation>

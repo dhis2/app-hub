@@ -22,9 +22,9 @@ const renderProfileButton = (isLoggedIn) => {
 
 const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
-        <ToolbarTitle><Link to="">DHIS2</Link></ToolbarTitle>
+        <ToolbarTitle><Link to="/">DHIS2</Link></ToolbarTitle>
         <ToolbarTitle align="center">
-            <Link to="">AppStore</Link>
+            <Link to="/">AppStore</Link>
         </ToolbarTitle>
         <ToolbarSection align="end">
             {renderProfileButton(getAuth().isLoggedIn())}

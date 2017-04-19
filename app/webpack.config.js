@@ -11,10 +11,14 @@ const tomcat = {
         config: './app/src/constants/apiConstants.js'
     },
     output: {
-        path: path.join(__dirname,'..','target', 'dhis-appstore','WEB-INF','classes','app'),
+     //   path: path.join(__dirname,'..','target', 'dhis-appstore','WEB-INF','classes','app'),
+      //  path: path.join(__dirname,'..', 'src', 'webapp', 'WEB-INF', 'app'),
+      //  path: path.join(__dirname,'..','target', 'classes','public', 'app'),
+       // path: path.join(__dirname,'..','target', 'classes','public', 'app'),
+        path: path.join(__dirname, '..', 'target', 'classes', 'META-INF', 'resources', 'app'),
         filename: '[name].js',
         //this is where the files are served from
-        publicPath: '/dhis-appstore/app/',
+    //    publicPath: '/dhis-appstore/app/',
     },
 
     module: {

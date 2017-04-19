@@ -41,7 +41,7 @@ class AppView extends Component {
 
         return(
             <Grid>
-                <Col span={8} center>
+                <Col span={8} style={{maxWidth:'900px'}} center>
                 <Subheader title="App overview" backLink="/" />
                 <Card>
                     <CardHeader title={app.name} avatar={<AppLogo logo={logo} />}
