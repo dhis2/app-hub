@@ -58,6 +58,13 @@ class UserAppView extends Component {
         this.form.submit();
     }
 
+    //this should listen for redux success
+    onSubmitSuccess() {
+        console.log("asf")
+        console.log(this.form)
+        this.form.onSubmitSuccess()
+    }
+
     handleUploadImages(fields) {
         for (let i = 0; i < fields.length; i++) {
             fields[i].map((image, i) => {
@@ -136,7 +143,7 @@ class UserAppView extends Component {
                     </CardText>
                     <CardText>
                         <h2>Upload images</h2>
-                        <MultipleUploadFileFields ref={ref => this.form = ref}
+                        <MultipleUploadFileFields onSubmitSuccess={this.onSubmitSuccess.bind(this)} ref={ref => this.form = ref}
                                                   submitted={this.handleUploadImages.bind(this)}/>
                         <Button primary onClick={this.submitUploadImages.bind(this)}
                                 icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>

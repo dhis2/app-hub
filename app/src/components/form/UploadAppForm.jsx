@@ -31,7 +31,7 @@ const validate = values => {
 
 
 const UploadForm = (props) => {
-    const {handleSubmit, submitted, pristine, submitting} = props;
+    const {handleSubmit, submitted, pristine, reset, submitting} = props;
 
     const onSubmit = (values) => {
         const data = {
@@ -54,9 +54,9 @@ const UploadForm = (props) => {
                 description: values.imageDescription,
             }]
         }
-        const imageFile = values.image[0];
+        const imageFile = values.image ? values.image[0] : null;
         const appFile = values.file[0];
-        if (!imageFile) { //should not send this if image is not provided
+        if (!imageFile) { //should be empty if image is not provided
             data.images = []
         }
 
@@ -102,6 +102,7 @@ const UploadForm = (props) => {
                     icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
                     label="Upload"/>
+            <Button onClick={reset} label="Reset" />
         </form>
 
     )

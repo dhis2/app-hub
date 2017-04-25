@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @Controller
+@RequestMapping(value= "/app")
 public class FrontendController {
     private static final Log log = LogFactory.getLog( FrontendController.class );
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "/**")
     public String getIndex() {
         log.warn("Frontendcontroller");
 

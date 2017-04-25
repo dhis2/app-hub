@@ -357,9 +357,9 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-auth0-js@8.4.0:
-  version "8.4.0"
-  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-8.4.0.tgz#e01cb7af6c616d180c635adc97d2b3b8b367bf24"
+auth0-js@8.5.0:
+  version "8.5.0"
+  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-8.5.0.tgz#ad4bbfb9cbe36331e10107ac4654ccc2d3f87853"
   dependencies:
     base64-js "^1.2.0"
     idtoken-verifier "^1.0.1"
@@ -367,11 +367,11 @@ auth0-js@8.4.0:
     url-join "^1.1.0"
     winchan "^0.2.0"
 
-auth0-lock@^10.13.0:
-  version "10.13.0"
-  resolved "https://registry.yarnpkg.com/auth0-lock/-/auth0-lock-10.13.0.tgz#7ece8569635876bd94dbb87fb41be01017eda6be"
+auth0-lock@^10.14.0:
+  version "10.14.0"
+  resolved "https://registry.yarnpkg.com/auth0-lock/-/auth0-lock-10.14.0.tgz#e6bd9173de3f90771c20c500a324e05f6c454c1b"
   dependencies:
-    auth0-js "8.4.0"
+    auth0-js "8.5.0"
     blueimp-md5 "2.3.1"
     fbjs "^0.3.1"
     idtoken-verifier "^1.0.1"

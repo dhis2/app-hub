@@ -8,17 +8,13 @@ class MultipleUploadFileFields extends Component {
         super(props);
 
         this.handleAddField = this.handleAddField.bind(this);
-        this.handleUpload = this.handleUpload.bind(this);
-        this.state = {
+        this.onSubmitSuccess = this.onSubmitSuccess.bind(this);
+        this.initstate = {
             fields: [0],
             count: 1,
-        }
-
-    }
-
-    handleUpload(file) {
-        if (this.props.upload) {
-            this.props.upload(file);
+        };
+        this.state = {
+            ...this.initstate,
         }
 
     }
@@ -47,6 +43,13 @@ class MultipleUploadFileFields extends Component {
         })
 
         return this.props.submitted(arr);
+    }
+
+    onSubmitSuccess() {
+        this.props.reset();
+        this.setState({
+            ...this.initstate,
+        })
     }
 
     render() {

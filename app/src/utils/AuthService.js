@@ -4,9 +4,11 @@ import * as apiConstants from '../../config';
 import { BrowserRouter } from 'react-router-dom';
 import History from './history';
 import * as constants from '../../config';
+import store from '../store';
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
+        this.parsed = false;
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: constants.AUTH_REDIRECT_URL,
@@ -17,6 +19,7 @@ export default class AuthService {
 
             }
         })
+        this.lock.on('hash_parsed', () => {console.log("parsed"); this.parsed = true});
         // Add callback for lock `authenticated` event
         this.lock.on('authenticated', this._doAuthentication.bind(this))
         // binds login functions to keep this context
@@ -27,6 +30,11 @@ export default class AuthService {
         // Saves the user token
         console.log(authResult)
         this.setToken(authResult.idToken)
+        store.dispatch({type: "USER_AUTHENTICATED"})
+    }
+
+    isHashParsed() {
+        return this.parsed;
     }
 
     login() {

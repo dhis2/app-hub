@@ -11,7 +11,10 @@ class LoginView extends Component {
     }
 
     componentDidMount() {
-        this.props.auth.login();
+        if(!this.props.auth.isLoggedIn()) {
+            this.props.auth.login();
+        }
+
     }
 
     handleLogin() {
@@ -20,6 +23,7 @@ class LoginView extends Component {
     }
 
     render() {
+        console.log(this.props.auth.isLoggedIn())
         const colStyle = {
             margin: '20px auto 0 auto'
         }

@@ -143,6 +143,7 @@ class Selectfilter extends Component {
                     label={"All"}
                     onToggle={this.toggleAll.bind(this)}
                     labelStyle={labelStyle}
+                    value={true}
                     style={elementStyle}/> : null}
 
         </div>
