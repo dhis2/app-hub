@@ -19,7 +19,7 @@ export default class AuthService {
 
             }
         })
-        this.lock.on('hash_parsed', () => {console.log("parsed"); this.parsed = true});
+        this.lock.on('hash_parsed', () => this.parsed = true);
         // Add callback for lock `authenticated` event
         this.lock.on('authenticated', this._doAuthentication.bind(this))
         // binds login functions to keep this context
@@ -28,7 +28,6 @@ export default class AuthService {
 
     _doAuthentication(authResult) {
         // Saves the user token
-        console.log(authResult)
         this.setToken(authResult.idToken)
         store.dispatch({type: "USER_AUTHENTICATED"})
     }

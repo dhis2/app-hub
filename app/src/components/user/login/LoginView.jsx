@@ -22,7 +22,6 @@ class LoginView extends Component {
     }
 
     render() {
-        console.log(this.props.auth.isLoggedIn())
         const colStyle = {
             margin: '20px auto 0 auto'
         }

@@ -31,7 +31,7 @@ class UserView extends Component {
                 <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
             </div>
         );
-        console.log("render")
+
         return (
             <Grid>
                 <Col span={2}>

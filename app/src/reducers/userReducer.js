@@ -185,7 +185,6 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
         }
         default: {
             if (action.type.endsWith('_ERROR')) {
-                console.log(action.payload)
                 return {
                     ...state,
                     ...errorState,
@@ -215,7 +214,6 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
         }
         default: {
             if (action.type.endsWith('USER_ERROR')) {
-                console.log(action.payload)
                 return {
                     ...state,
                     ...errorState,

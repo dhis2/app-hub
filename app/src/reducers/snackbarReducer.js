@@ -40,7 +40,6 @@ const snackbarReducer = (state = initialState, action) => {
         }
         default:
             if (action.type.endsWith('_ERROR')) {
-                console.log(action.payload)
                 return {
                     ...state,
                     message: 'An error occurred'
