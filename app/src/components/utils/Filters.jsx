@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import {Field, reduxForm, change} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import {renderTextField, renderTextFieldWithClearButton, renderToggle} from '../form/ReduxFormUtils';
 
 /**
@@ -95,12 +95,12 @@ Textfilter.propTypes = {
 Textfilter.defaultProps = {
     form: 'searchFilter',
     clearButton: true,
+    destroyOnUnmount: false,
     initialValues: {'searchFilter': ''},
 }
 
 export const TextFilter = reduxForm({
     ...Textfilter.defaultProps,
-    destroyOnUnmount: false
 })(Textfilter)
 
 
@@ -151,6 +151,8 @@ class Selectfilter extends Component {
 
 }
 Selectfilter.propTypes = {
+    //The redux-form to use for mounting the values of the filter.
+    form: PropTypes.string.isRequired,
     //style of the root element
     style: PropTypes.object,
     //style of the filter input elements
@@ -171,11 +173,11 @@ Selectfilter.propTypes = {
 }
 Selectfilter.defaultProps = {
     form: 'filters',
+    destroyOnUnmount: false
 }
 //handle default with connect
 export const SelectedFilterForm = reduxForm({
     ...Selectfilter.defaultProps,
-    destroyOnUnmount: false
 })(Selectfilter)
 
 //Convert filter props to initialValues to reduxForm
@@ -192,9 +194,4 @@ const mapStateToProps = (state, ownProps) => {
         filterState: state.form
     }
 }
-const mapDispatchToProps = (dispatch) => ({
-    changeField(form, field, value) {
-        dispatch(change(form, field, value))
-    }
-})
-export const SelectFilter = connect(mapStateToProps, mapDispatchToProps)(SelectedFilterForm);
+export const SelectFilter = connect(mapStateToProps, null)(SelectedFilterForm);

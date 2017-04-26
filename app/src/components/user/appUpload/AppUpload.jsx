@@ -17,7 +17,6 @@ class UserView extends Component {
 
     }
 
-    //husk null check
     render() {
         return (
             <div>

@@ -18,7 +18,6 @@ class LoginView extends Component {
     }
 
     handleLogin() {
-       // window.location="http://localhost:3099/login"
         this.props.auth.login();
     }
 
@@ -27,18 +26,7 @@ class LoginView extends Component {
         const colStyle = {
             margin: '20px auto 0 auto'
         }
-        return null;  /*(
-            <Grid>
-                <Col style={colStyle} span={4} >
-                    <Card style={colStyle}>
-                        <CardTitle title="Login"/>
-                        <RaisedButton primary={true}
-                                      onClick={this.handleLogin}
-                                      fullWidth label="Login"/>
-                    </Card>
-                </Col>
-            </Grid>
-        )*/
+        return null;
     }
 }
 

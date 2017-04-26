@@ -102,7 +102,6 @@ const UploadForm = (props) => {
                     icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
                     label="Upload"/>
-            <Button onClick={reset} label="Reset" />
         </form>
 
     )

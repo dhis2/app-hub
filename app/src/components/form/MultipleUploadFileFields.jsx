@@ -8,7 +8,6 @@ class MultipleUploadFileFields extends Component {
         super(props);
 
         this.handleAddField = this.handleAddField.bind(this);
-        this.onSubmitSuccess = this.onSubmitSuccess.bind(this);
         this.initstate = {
             fields: [0],
             count: 1,
@@ -41,15 +40,7 @@ class MultipleUploadFileFields extends Component {
         const arr = Object.keys(values).map((key, ind) => {
             return values[key];
         })
-
         return this.props.submitted(arr);
-    }
-
-    onSubmitSuccess() {
-        this.props.reset();
-        this.setState({
-            ...this.initstate,
-        })
     }
 
     render() {
@@ -64,7 +55,7 @@ class MultipleUploadFileFields extends Component {
                 multiple
                 handleRemoveField={this.handleRemoveField.bind(this, id)}
                 key={id}
-                id={'' + id}
+                id={''+id}
             />)
         })
         return (
@@ -77,6 +68,7 @@ class MultipleUploadFileFields extends Component {
 }
 
 MultipleUploadFileFields.propTypes = {
+    //Only render "+" button if its the last field to render.
     multiLastOnly: PropTypes.bool,
     submitted: PropTypes.func.isRequired,
     //override default name of redux-form
