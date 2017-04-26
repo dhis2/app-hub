@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Router, Route, Redirect} from 'react-router-dom';
 import {history} from '../utils/history';
-import 'material-components-web/build/material-components-web.css';
+import 'material-components-web/dist/material-components-web.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import theme from '../styles/theme';
 import '../styles/override.css';

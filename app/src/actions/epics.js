@@ -4,6 +4,7 @@ import {combineEpics} from 'redux-observable';
 import {getAuth} from '../utils/AuthService';
 import {history} from '../utils/history'
 import * as api from '../api/api';
+import { Observable } from 'rxjs';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
