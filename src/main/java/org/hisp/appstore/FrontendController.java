@@ -3,7 +3,9 @@ package org.hisp.appstore;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,28 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @Controller
-@RequestMapping(value= "/app")
 public class FrontendController {
     private static final Log log = LogFactory.getLog( FrontendController.class );
 
-    @RequestMapping(value = "/**")
+   // @RequestMapping("/{path:[^\\.]+}/**")
+    @RequestMapping(value= {"/app", "/app/*", "/user", "/user/*"})
     public String getIndex() {
         log.warn("Frontendcontroller");
 
-        return "forward:/app/index.html";
-    }
-    /*
-    @RequestMapping(value = "/user/*")
-    public String getUser() {
-        log.warn("Frontendcontroller");
-
-        return "forward:/app/index.html";
+        return "forward:/index.html";
     }
 
-    @RequestMapping(value = "/app/*")
-    public String getApp() {
-        log.warn("Frontendcontroller");
-
-        return "forward:/app/index.html";
-    } */
+    @ExceptionHandler(value = {Exception.class})
+    public String forwardToIndex() {
+        log.warn("Exceptionhandler");
+        return "forward:/";
+    }
 }

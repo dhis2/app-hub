@@ -20,7 +20,7 @@ const prod = {
 
     /* Redirect URL to use by auth0, note that you need to allow this url
        on the auth0 side as well. */
-    API_REDIRECT_URL: 'http://localhost:8080/appstore/user/',
+    API_REDIRECT_URL: 'http://localhost:8080/appstore/user',
 
 }
 

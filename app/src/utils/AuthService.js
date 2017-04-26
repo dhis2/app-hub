@@ -1,6 +1,5 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
-import * as apiConstants from '../../config';
 import { BrowserRouter } from 'react-router-dom';
 import History from './history';
 import * as constants from '../../config';
@@ -92,6 +91,6 @@ export function getAuth() {
     if (auth)
        return auth;
 
-    auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
+    auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
     return auth;
 }

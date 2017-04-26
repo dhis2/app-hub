@@ -15,9 +15,9 @@ const tomcat = {
       //  path: path.join(__dirname,'..','target', 'classes','public', 'app'),
         path: path.join(__dirname,'..','target', 'classes', 'app'),
      //   path: path.join(__dirname, '..', 'target', 'classes', 'META-INF', 'resources', 'app'),
-        filename: '[name].js',
+        filename: path.join('js', '[name].js'),
         //this is where the files are served from
-    //    publicPath: '/dhis-appstore/app/',
+        publicPath: '/appstore',
     },
 
     module: {
@@ -52,7 +52,6 @@ const tomcat = {
             title: 'DHIS2 Appstore',
             filename: 'index.html',
             template: 'app/indexbuild.html',
-
         })
     ]
 }

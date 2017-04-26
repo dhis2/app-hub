@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -15,15 +16,17 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 @Configuration
 public class StaticResourceConfiguration extends WebMvcConfigurerAdapter {
-
+   // classpath:/META-INF/resources/app/
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        if (!registry.hasMappingForPattern("/app/**")) {
-            registry.addResourceHandler("/app/**").addResourceLocations("classpath:/META-INF/resources/app/");
+        if (!registry.hasMappingForPattern("/js/**")) {
+         //   registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+         //   registry.addResourceHandler("/js/**").addResourceLocations("classpath:/app/");
         }
         if (!registry.hasMappingForPattern("/**")) {
-            registry.addResourceHandler("/**").addResourceLocations("classpath:/META-INF/resources/app/");
+
+            registry.addResourceHandler("/**").addResourceLocations("classpath:/app/");
         }
     } /*
     @Bean
