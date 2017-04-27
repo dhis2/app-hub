@@ -10,11 +10,7 @@ const tomcat = {
         app:'./app/src/app-store.js',
     },
     output: {
-     //   path: path.join(__dirname,'..','target', 'dhis-appstore','WEB-INF','classes','app'),
-      //  path: path.join(__dirname,'..', 'src', 'webapp', 'WEB-INF', 'app'),
-      //  path: path.join(__dirname,'..','target', 'classes','public', 'app'),
-        path: path.join(__dirname,'..','target', 'classes', 'app'),
-     //   path: path.join(__dirname, '..', 'target', 'classes', 'META-INF', 'resources', 'app'),
+        path: path.join(__dirname,'..','target', 'classes', 'static'),
         filename: path.join('js', '[name].js'),
         //this is where the files are served from
         publicPath: '/appstore',
