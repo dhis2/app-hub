@@ -185,7 +185,6 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
         }
         default: {
             if (action.type.endsWith('_ERROR')) {
-                console.log(action.payload)
                 return {
                     ...state,
                     ...errorState,
@@ -198,8 +197,14 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
     return state;
 }
 
-function userInfoReducer(state = {...initialState}, action) {
+function userInfoReducer(state = {authenticated: false, ...initialState}, action) {
     switch(action.type) {
+        case "USER_AUTHENTICATED": {
+            return {
+                ...state,
+                authenticated: true,
+            }
+        }
         case actionTypes.USER_LOADED: {
             return {
                 ...state,
@@ -209,7 +214,6 @@ function userInfoReducer(state = {...initialState}, action) {
         }
         default: {
             if (action.type.endsWith('USER_ERROR')) {
-                console.log(action.payload)
                 return {
                     ...state,
                     ...errorState,

@@ -8,7 +8,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import {withRouter} from 'react-router';
-import {appTypesToUI} from '../../../constants/apiConstants';
+import {appTypesToUI} from '../../../../config';
 
 const appStatusStyle = {
     fontSize: '16px',

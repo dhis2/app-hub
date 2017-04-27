@@ -204,6 +204,7 @@ function createActionCreator(type) {
 }
 
 
+export const emptySnackbar = createActionCreator(actions.SNACKBAR_EMPTY);
 
 /**
  * openDialog - Action creator helper method for creating dialogs

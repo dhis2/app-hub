@@ -13,7 +13,7 @@ import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
-import {appTypesToUI} from '../../../constants/apiConstants';
+import {appTypesToUI} from '../../../../config';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
 class UserAppView extends Component {
@@ -127,9 +127,6 @@ class UserAppView extends Component {
                     </CardText>
                 </Card>
                 <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
-                    <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
-                        <ContentAdd />
-                    </FloatingActionButton>
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>
                         <ImageViewer images={app.images} appId={app.id} editable/>
@@ -137,6 +134,7 @@ class UserAppView extends Component {
                     <CardText>
                         <h2>Upload images</h2>
                         <MultipleUploadFileFields ref={ref => this.form = ref}
+                                                  form="imageUpload"
                                                   submitted={this.handleUploadImages.bind(this)}/>
                         <Button primary onClick={this.submitUploadImages.bind(this)}
                                 icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>

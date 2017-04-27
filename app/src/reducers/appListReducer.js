@@ -41,6 +41,7 @@ function appsListReducer(state = {...initialState}, action) {
             }
         }
         case actionTypes.APP_LOADED: {
+            //do not load userApps in this reducer
             if(action.payload.status !== 'APPROVED') {
                 return state;
             }

@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 import {Redirect, Route} from 'react-router-dom';
 import VersionList from '../appVersion/VersionList';
 import {loadApp} from '../../actions/actionCreators';
-import { appTypesToUI } from '../../constants/apiConstants';
+import { appTypesToUI } from '../../../config';
 import AppLogo from './AppLogo';
 
 
@@ -41,7 +41,7 @@ class AppView extends Component {
 
         return(
             <Grid>
-                <Col span={8} center>
+                <Col span={8} style={{maxWidth:'900px'}} center>
                 <Subheader title="App overview" backLink="/" />
                 <Card>
                     <CardHeader title={app.name} avatar={<AppLogo logo={logo} />}

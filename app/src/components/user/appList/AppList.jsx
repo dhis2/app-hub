@@ -41,7 +41,6 @@ class AppList extends Component {
     }
 
     handleApproval(app, type) {
-        console.log(app)
         switch (type) {
             case 'APPROVE': {
                 this.props.approveApp({app, status: 'APPROVED'});

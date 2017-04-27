@@ -53,6 +53,7 @@ class UploadFileField extends Component {
     handleUpload(e) {
         const files = e.target.files;
         if(files.length < 1) {
+            this.handleResetFile();
             return;
         }
         const fileArray = Object.keys(files).map((key, i) => (files[key]));
@@ -76,7 +77,7 @@ class UploadFileField extends Component {
     }
 
     render() {
-        const {renderAdd, renderRemove, uploadIconPosition, ...props} = this.props;
+        const {renderAdd, renderRemove, uploadIconPosition, value, ...props} = this.props;
         const groupStyle = {
             display: 'flex',
             alignItems: 'center',
@@ -92,15 +93,22 @@ class UploadFileField extends Component {
 
         const uploadButton = (<FAB mini onClick={this.uploadAction}><FontIcon
             className="material-icons">file_upload</FontIcon></FAB>)
+
+        const fileArray = Object.keys(value).map((key, i) => (value[key]));
+        const fileNames = fileArray.reduce((acc, elem, currInd) => {
+                const seperator = currInd !== fileArray.length -1 ?  ', ' : '';
+                return acc + elem.name + seperator}
+            , '');
+
         return (
             <div style={groupStyle}>
                 {uploadIconPosition === 'left' ? uploadButton : null}
                 <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
                     <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText}
                                errorText={props.errorText}
-                               value={this.state.fileName}
+                               value={fileNames}
                                onClick={this.uploadAction}/>
-                    {this.state.fileName ? <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
+                    {fileNames ? <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
                         <FontIcon className="material-icons">clear</FontIcon>
                     </IconButton> : null}
                 </div>

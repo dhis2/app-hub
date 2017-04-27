@@ -22,7 +22,6 @@ export class EditImageDialog extends Component {
     }
 
     handleUpdate(values) {
-        console.log("updating")
         const {appId, image} = this.props;
         this.props.editImage(appId, image.id, values);
 

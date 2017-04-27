@@ -1,0 +1,32 @@
+package org.hisp.appstore;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * Created by birkbj on 17/04/2017.
+ */
+
+@Controller
+public class FrontendController {
+    private static final Log log = LogFactory.getLog( FrontendController.class );
+
+   // @RequestMapping("/{path:[^\\.]+}/**")
+    @RequestMapping(value= {"/app", "/app/*", "/user", "/user/*"})
+    public String getIndex() {
+        log.warn("Frontendcontroller");
+
+        return "forward:/index.html";
+    }
+
+    @ExceptionHandler(value = {Exception.class})
+    public String forwardToIndex() {
+        log.warn("Exceptionhandler");
+        return "forward:/";
+    }
+}

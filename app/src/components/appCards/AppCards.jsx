@@ -21,6 +21,10 @@ class AppCards extends Component {
 
     render() {
         const styles = {
+            grid: {
+               // justifyContent: 'center',
+              //  display: 'flex',
+            },
             filters: {
                 display: 'flex',
                 alignItems: 'center',
@@ -33,16 +37,14 @@ class AppCards extends Component {
             },
             appItem: {
                 maxWidth: '300px',
-                minWidth: '250px',
             }
         }
-
         const {loading, error, byId : cards} = this.props.appList;
         const loadOrErr = loading || error;
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
             .map((app, i) => (
-                <Col key={app.id} span={3} align="middle" style={styles.appItem} additionalClasses="center">
+                <Col key={app.id} span={3} align="middle" style={styles.appItem}>
                     <AppCardItem key={app.id} app={app}/>
                 </Col>
             ))
@@ -67,9 +69,10 @@ class AppCards extends Component {
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
-                {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
+
                 <Col span={12}>
-                    <FadeAnimation component={Grid}>
+                    {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
+                    <FadeAnimation component={Grid} style={styles.grid}>
                         { apps }
                     </FadeAnimation>
                 </Col>

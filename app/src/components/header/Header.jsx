@@ -24,7 +24,7 @@ const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarTitle><Link to="/">DHIS2</Link></ToolbarTitle>
         <ToolbarTitle align="center">
-            <Link to="/">AppStore</Link>
+            <Link to="/">DHIS 2 App Store</Link>
         </ToolbarTitle>
         <ToolbarSection align="end">
             {renderProfileButton(getAuth().isLoggedIn())}

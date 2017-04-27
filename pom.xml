@@ -188,7 +188,10 @@
 	  <artifactId>guava</artifactId>
 	  <version>19.0</version>
     </dependency>
+
+
   </dependencies>
+
 
   <build>
     <finalName>appstore</finalName>
@@ -211,6 +214,57 @@
         <configuration>
           <mainClass>org.hisp.appstore.configuration.Dhis2AppStore</mainClass>
         </configuration>
+      </plugin>
+
+      <!-- Frontend build -->
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.4</version>
+        <configuration>
+          <installDirectory>target</installDirectory>
+        </configuration>
+
+        <executions>
+        <execution>
+          <id>install node and yarn</id>
+          <goals>
+            <goal>install-node-and-yarn</goal>
+          </goals>
+          <phase>generate-resources</phase>
+
+        <configuration>
+          <nodeVersion>v7.5.0</nodeVersion>
+          <yarnVersion>v0.20.0</yarnVersion>
+        </configuration>
+        </execution>
+
+          <!-- yarn install -->
+          <execution>
+          <id>yarn install</id>
+          <goals>
+            <goal>yarn</goal>
+          </goals>
+          <configuration>
+            <arguments>install</arguments>
+          </configuration>
+          </execution>
+
+          <!-- build bundle-->
+          <execution>
+            <id>webpack build</id>
+            <goals>
+              <goal>webpack</goal>
+            </goals>
+
+            <phase>generate-resources</phase>
+
+            <configuration>
+              <arguments>-p --config ./app/webpack.config.js</arguments>
+            </configuration>
+          </execution>
+
+        </executions>
       </plugin>
     </plugins>
   </build>

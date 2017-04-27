@@ -1,14 +1,16 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
-import * as apiConstants from '../constants/apiConstants';
 import { BrowserRouter } from 'react-router-dom';
 import History from './history';
+import * as constants from '../../config';
+import store from '../store';
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
+        this.parsed = false;
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: 'http://localhost:9000/user',
+                redirectUrl: constants.AUTH_REDIRECT_URL,
                 responseType: 'token',
                 params: {
                     scope: 'openid roles user_id',
@@ -16,6 +18,7 @@ export default class AuthService {
 
             }
         })
+        this.lock.on('hash_parsed', () => this.parsed = true);
         // Add callback for lock `authenticated` event
         this.lock.on('authenticated', this._doAuthentication.bind(this))
         // binds login functions to keep this context
@@ -24,8 +27,12 @@ export default class AuthService {
 
     _doAuthentication(authResult) {
         // Saves the user token
-        console.log(authResult)
         this.setToken(authResult.idToken)
+        store.dispatch({type: "USER_AUTHENTICATED"})
+    }
+
+    isHashParsed() {
+        return this.parsed;
     }
 
     login() {
@@ -84,6 +91,6 @@ export function getAuth() {
     if (auth)
        return auth;
 
-    auth = new AuthService(apiConstants.AUTH0ClientId, apiConstants.AUTH0Domain);
+    auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
     return auth;
 }

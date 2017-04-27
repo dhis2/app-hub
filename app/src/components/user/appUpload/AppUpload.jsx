@@ -17,7 +17,6 @@ class UserView extends Component {
 
     }
 
-
     render() {
         return (
             <div>
