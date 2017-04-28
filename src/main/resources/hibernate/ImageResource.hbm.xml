@@ -16,16 +16,16 @@
 
         <property name="lastUpdated" />
 
-        <property name="caption" />
+        <property name="caption" type="text" />
 
-        <property name="description" />
+        <property name="description" type="text" />
 
-        <property name="imageUrl" />
+        <property name="imageUrl" type="text" />
 
         <property name="logo" />
 
-        <many-to-one name="app" class="org.hisp.appstore.api.domain.App" column="appid"
-                     foreign-key="fk_imageresource_appid" />
+        <many-to-one name="app" class="org.hisp.appstore.api.domain.App" 
+            column="appid" foreign-key="fk_imageresource_appid" />
 
     </class>
 </hibernate-mapping>

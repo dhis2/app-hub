@@ -12,7 +12,7 @@ import java.util.Set;
 
 @Transactional
 public class HibernateAppStore
-    extends HibernateGenericDao<App> implements  AppStore
+    extends HibernateGenericDao<App> implements AppStore
 {
     private static final String APP_TABLE = "App";
 
@@ -65,7 +65,7 @@ public class HibernateAppStore
     @SuppressWarnings("unchecked")
     public List<App> getAllAppsByOwner( String owner )
     {
-        return  getCriteria().add( Restrictions.eq( "owner", owner )).list();
+        return getCriteria().add( Restrictions.eq( "owner", owner )).list();
     }
 
     private Query getHqlQuery (AppQueryParameters queryParameters )

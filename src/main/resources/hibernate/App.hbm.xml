@@ -10,25 +10,25 @@
             <generator class="native"/>
         </id>
 
-        <property name="uid"/>
+        <property name="uid "/>
 
-        <property name="created"/>
+        <property name="created" />
 
         <property name="lastUpdated" />
 
-        <property name="name" not-null="true"/>
+        <property name="name" not-null="true" />
 
-        <property name="description"/>
+        <property name="description" type="text" />
 
         <property name="owner" />
 
         <component name="developer" class="org.hisp.appstore.api.domain.Developer">
 
-            <property name="developerName"/>
+            <property name="developerName" />
 
-            <property name="address"/>
+            <property name="address" type="text" />
 
-            <property name="organisation"/>
+            <property name="organisation" />
 
             <property name="email" />
 
