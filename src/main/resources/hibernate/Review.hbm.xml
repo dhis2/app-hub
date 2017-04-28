@@ -16,7 +16,7 @@
 
         <property name="lastUpdated" />
 
-        <property name="reviewText" />
+        <property name="reviewText" type="text" />
 
         <property name="rate" />
 

@@ -22,7 +22,7 @@
 
         <property name="demoUrl" />
 
-        <property name="downloadUrl" />
+        <property name="downloadUrl" type="text"/>
 
         <property name="version" not-null="true"/>
 
