@@ -1,7 +1,7 @@
 import React, { Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Spinner} from './../utils/Loader';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 
 export class PrivateRoute extends Component {
     componentWillMount() {

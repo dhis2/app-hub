@@ -4,6 +4,7 @@ const initialState = {
         loaded: false,
         loading: true,
         error: false,
+        info: { }
 }
 
 const loadedState = {
@@ -205,6 +206,14 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
                 authenticated: true,
             }
         }
+
+        case "USER_LOGOUT": {
+            return {
+                ...state,
+                authenticated: false,
+            }
+        }
+
         case actionTypes.USER_LOADED: {
             return {
                 ...state,

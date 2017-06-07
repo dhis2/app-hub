@@ -83,6 +83,7 @@ export default class AuthService {
     logout() {
         // Clear user token and profile data from local storage
         localStorage.removeItem('id_token');
+        store.dispatch({type: 'USER_LOGOUT'});
         History.push("/")
     }
 }
