@@ -10,7 +10,7 @@
             <generator class="native"/>
         </id>
 
-        <property name="uid "/>
+        <property name="uid" />
 
         <property name="created" />
 
