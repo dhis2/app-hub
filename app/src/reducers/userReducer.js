@@ -200,14 +200,14 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
 
 function userInfoReducer(state = {authenticated: false, ...initialState}, action) {
     switch(action.type) {
-        case "USER_AUTHENTICATED": {
+        case actionTypes.USER_AUTHENTICATED: {
             return {
                 ...state,
                 authenticated: true,
             }
         }
 
-        case "USER_LOGOUT": {
+        case actionTypes.USER_LOGOUT: {
             return {
                 ...state,
                 authenticated: false,

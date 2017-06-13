@@ -4,6 +4,8 @@ import { BrowserRouter } from 'react-router-dom';
 import History from './history';
 import * as constants from '../../config';
 import store from '../store';
+import Theme from '../styles/theme';
+
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
@@ -15,7 +17,13 @@ export default class AuthService {
                 params: {
                     scope: 'openid roles user_id',
                 },
-
+            },
+            theme: {
+                logo: 'http://mastermaps.com/img/dhis2.svg',
+                primaryColor: Theme.palette.primary1Color,
+            },
+            languageDictionary: {
+                title: 'Log in'
             }
         })
         this.lock.on('hash_parsed', () => this.parsed = true);

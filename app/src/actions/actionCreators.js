@@ -185,6 +185,9 @@ export const userError = createActionCreator(actions.USER_ERROR);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
 
+export const userAuthenticated = createActionCreator(actions.USER_AUTHENTICATED);
+export const userLogout = createActionCreator(actions.USER_LOGOUT);
+
 export const loadUserApp = (appId) => {
     return createActionCreator(actions.APP_LOAD)({
         ...appId,

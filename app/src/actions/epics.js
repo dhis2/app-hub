@@ -136,7 +136,7 @@ const deleteVersion = (action$) => action$
         return api.deleteVersion(appId, version.id)
             .then(response => actionCreators.deleteAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
-                type: actions.APP_DELETE_ERROR,
+                type: actions.APP_VERSION_DELETE_ERROR,
                 payload: error,
             }));
     })

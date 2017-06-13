@@ -23,4 +23,9 @@ export default getMuiTheme({
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
     },
+
+    paddedCard: {
+        padding: ' 0 35px 35px 35px',
+    },
+
 });

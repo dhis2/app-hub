@@ -185,7 +185,7 @@ class ImageViewer extends Component {
             centerMode: true,
             slidesToShow: 1,
             centerPadding: '60px',
-            //  draggable: true,
+            draggable: true,
             swipeToSlide: true,
             infinite: false,
 

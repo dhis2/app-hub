@@ -11,7 +11,14 @@ import VersionList from '../appVersion/VersionList';
 import {loadApp} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../../config';
 import AppLogo from './AppLogo';
+import Theme from '../../styles/theme';
 
+const styles = {
+    appDescription: {
+        marginTop: '35px',
+        paddingBottom: '25px'
+    }
+}
 
 class AppView extends Component {
 
@@ -50,13 +57,14 @@ class AppView extends Component {
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>
                         <ImageViewer images={app.images} showEmptyMessage={false}/>
                     </CardText>
-                    <CardText>
-                        {app.description}
+
+                    <CardText style={{...Theme.paddedCard, ...styles.appDescription}} className="multiline-content">
+                        {description}
                     </CardText>
 
                 </Card>
 
-                <Card style={{marginTop: '10px', position: 'relative'}}>
+                <Card style={ {...Theme.paddedCard, marginTop: '10px', position: 'relative'} }>
                     <CardTitle title="Versions" />
                     <CardText>
                         <VersionList versionList={app.versions} app={app}/>

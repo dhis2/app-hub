@@ -27,6 +27,8 @@ export const USER_APPS_LOAD = 'USER_APPS_LOAD';
 export const USER_APPS_LOADED = 'USER_APPS_LOADED';
 export const USER_APPS_ERROR = 'USER_APPS_ERROR';
 
+export const USER_AUTHENTICATED = 'USER_AUTHENTICATED';
+export const USER_LOGOUT = 'USER_LOGOUT';
 
 export const OPEN_DIALOG = 'OPEN_DIALOG';
 export const CLOSE_DIALOG = 'CLOSE_DIALOG';
