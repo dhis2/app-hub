@@ -19,9 +19,8 @@ public class FrontendController {
    // @RequestMapping("/{path:[^\\.]+}/**")
     @RequestMapping(value= {"/app", "/app/*", "/user", "/user/*"})
     public String getIndex() {
-        log.warn("Frontendcontroller");
 
-        return "forward:/index.html";
+        return "forward:/";
     }
 
     @ExceptionHandler(value = {Exception.class})

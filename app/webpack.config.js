@@ -14,7 +14,7 @@ const tomcat = {
         path: path.join(__dirname, '..', 'target', 'classes', 'app'),
         filename: path.join('js', '[name].js'),
         //this is where the files are served from
-        publicPath: '/appstore/',
+        publicPath: '/appstore',
     },
 
     module: {
