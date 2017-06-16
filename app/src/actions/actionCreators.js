@@ -200,10 +200,15 @@ export const loadAppSuccess = createActionCreator(actions.APP_LOADED);
 export const appError = createActionCreator(actions.APP_ERROR);
 
 function createActionCreator(type) {
-    return (payload) => ({
-        type,
-        payload
-    });
+    return (payload) => {
+        if (payload == null) {
+            payload = {};
+        }
+        return {
+            type,
+            payload
+        };
+    }
 }
 
 

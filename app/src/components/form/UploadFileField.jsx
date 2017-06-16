@@ -32,7 +32,7 @@ class UploadFileField extends Component {
     }
 
     /**
-     * Used handle upload-action on a hidden input-field
+     * Used to handle upload-action on a hidden input-field
      * which is used hold the files. We use a regular textfield
      * to show the selected files.
      */
@@ -56,6 +56,7 @@ class UploadFileField extends Component {
             this.handleResetFile();
             return;
         }
+
         const fileArray = Object.keys(files).map((key, i) => (files[key]));
         const fileNames = fileArray.reduce((acc, elem, currInd) => {
             const seperator = currInd !== fileArray.length -1 ?  ', ' : '';
@@ -89,7 +90,7 @@ class UploadFileField extends Component {
         const removeButton = (<IconButton iconClassName="material-icons"
                                           onClick={() => {this.handleResetFile(); this.props.handleRemoveField()}}>remove</IconButton>)
         const addButton = (<IconButton iconClassName="material-icons"
-                                       onClick={this.props.handleAddField}>add</IconButton>)
+                                       onClick={() => this.props.handleAddField()}>add</IconButton>)
 
         const uploadButton = (<FAB mini onClick={this.uploadAction}><FontIcon
             className="material-icons">file_upload</FontIcon></FAB>)

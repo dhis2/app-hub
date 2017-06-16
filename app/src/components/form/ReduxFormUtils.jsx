@@ -18,7 +18,7 @@ export const renderTextField = ({input, label, meta: {touched, error}, ...props}
 
 export const renderUploadField = ({input, label, meta: {touched, error}, children, ...props}) => (
     <UploadFileField hintText={label}
-                     handleUpload={(file) => input.onChange(file)}
+                     handleUpload={(file) => { input.onChange(file);}}
                      errorText={touched && error}
                      {...input}
                      {...props}

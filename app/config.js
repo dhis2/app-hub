@@ -10,7 +10,7 @@ const dev = {
 const prod = {
 
     /* Basename for routes.
-    If this app is hosted at http://hostname/app this should be '/app' */
+    If this app is hosted at http://hostname/appstore this should be '/appstore' */
     BASE_APP_NAME: '/appstore',
 
     /* Base URL for the API.

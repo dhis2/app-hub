@@ -16,6 +16,7 @@ import Theme from '../../../styles/theme';
 import {appTypesToUI} from '../../../../config';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
+
 class UserAppView extends Component {
     constructor(props) {
         super(props);

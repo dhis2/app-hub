@@ -1,38 +1,87 @@
-import React, {PropTypes, Component} from 'react'
-import {Field, Form, reduxForm} from 'redux-form';
+import React, {PropTypes, Component} from 'react';
+import {connect} from 'react-redux';
+import {Field, Form, FieldArray, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
 import UploadFileField from './UploadFileField';
 
-class MultipleUploadFileFields extends Component {
+class UploadFieldsArray extends Component {
+
     constructor(props) {
         super(props);
-
         this.handleAddField = this.handleAddField.bind(this);
-        this.initstate = {
-            fields: [0],
-            count: 1,
-        };
-        this.state = {
-            ...this.initstate,
+        // this.handleRemoveField = this.handleRemoveField.bind(this);
+        // this.handleUploadField = this.handleUploadField.bind(this);
+    }
+
+
+    componentWillMount() {
+        this.handleAddField("")
+    }
+
+    handleRemoveField(index) {
+        const {array} = this.props;
+        array.remove('uploads', index);
+    }
+
+    handleAddField(value) {
+        if (!value || typeof value !== 'string') {
+            value = "";
+        }
+        const {array} = this.props;
+        // const fieldIndex = Object.keys(this.props.fieldsState.values).length;
+        array.push("uploads", value);
+    }
+
+
+    handleUploadField(index, e, fileArray) {
+        console.log(fileArray);
+        const currFieldName = this.props.fieldPrefix + index;
+        // this.props.change(currFieldName,fileArray[index]);
+        if (fileArray.length > 1) {
+            const currFieldName = this.props.fieldPrefix + index;
+            // this.props.change(currFieldName,fileArray[index]);
+            for (let i = index + 1; i < fileArray.length; i++) {
+                console.log("adding")
+                this.handleAddField(fileArray[i]);
+            }
         }
 
     }
 
-    handleRemoveField(index) {
-        this.setState({
-            ...this.state,
-            fields: this.state.fields.filter((id) => id !== index)
-        });
-    }
 
-    handleAddField(e) {
-
-        this.setState({
-                ...this.state,
-                count: this.state.count + 1,
-                fields: [...this.state.fields, this.state.count + 1]
-            }
+    render() {
+        const {fields, multiple, multipleSplit, multiLastOnly} = this.props;
+        return (
+            <div>
+                {fields.map((field, i) => (
+                    <Field
+                        name={`${field}.${i}`}
+                        component={formUtils.renderUploadField}
+                        renderAdd={(multiLastOnly && i == fields.length - 1) || !multiLastOnly}
+                        handleAddField={this.handleAddField}
+                        renderRemove={fields.length > 1}
+                        multiple={multiple}
+                        handleRemoveField={this.handleRemoveField.bind(this, i)}
+                        onChange={this.handleUploadField.bind(this, i)}
+                        key={i}
+                        id={'' + i}
+                    />)
+                )}
+            </div>
         )
+    }
+}
+
+UploadFieldsArray.propTypes = {
+    multipleSplit: PropTypes.bool,
+}
+
+
+class MultipleUploadFileFields extends Component {
+
+    constructor(props) {
+        super(props);
+
     }
 
     onSubmit(values) {
@@ -43,33 +92,26 @@ class MultipleUploadFileFields extends Component {
         return this.props.submitted(arr);
     }
 
+
     render() {
-        const {handleSubmit, pristine, submitting} = this.props;
-        const fields = this.state.fields.map((id, i) => {
-            return (<Field
-                name={"upload"+id}
-                component={formUtils.renderUploadField}
-                renderAdd={(this.props.multiLastOnly && i == this.state.fields.length - 1) || !this.props.multiLastOnly}
-                handleAddField={this.handleAddField}
-                renderRemove={this.state.fields.length > 1}
-                multiple
-                handleRemoveField={this.handleRemoveField.bind(this, id)}
-                key={id}
-                id={''+id}
-            />)
-        })
+        const {handleSubmit, pristine, submitting, fieldsState, ...props} = this.props;
+        if (!fieldsState) return null;
+
         return (
             <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                {fields}
+                <FieldArray name="uploads" component={UploadFieldsArray} {...props}/>
             </Form>
         )
     }
-
 }
 
 MultipleUploadFileFields.propTypes = {
     //Only render "+" button if its the last field to render.
     multiLastOnly: PropTypes.bool,
+    //If fields should accept multiple files
+    multipleField: PropTypes.bool,
+    //Should we split multiple files into new fields?
+    multipleSplit: PropTypes.bool,
     submitted: PropTypes.func.isRequired,
     //override default name of redux-form
     form: PropTypes.string,
@@ -77,6 +119,14 @@ MultipleUploadFileFields.propTypes = {
 
 MultipleUploadFileFields.defaultProps = {
     multiLastOnly: true,
+    multiple: true,
+    //name of the form in the redux-store
+    form: 'multipleUploadForm',
+    fieldPrefix: 'upload'
 
 }
-export default reduxForm({form: 'multipleUploadForm'})(MultipleUploadFileFields);
+
+const ReduxFormConnected = reduxForm({
+    form: MultipleUploadFileFields.defaultProps.form,
+})(MultipleUploadFileFields);
+export default ReduxFormConnected;
