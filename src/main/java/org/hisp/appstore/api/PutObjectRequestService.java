@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  */
 public abstract class PutObjectRequestService
 {
-    protected static final String BASE_BUCKET = "appstore.dhis2.org";
+    protected static final String BASE_BUCKET = "dhis2-appstore";
     protected static final String AMAZON_URL = "s3.amazonaws.com";
 
     protected static final Set<String> FILE_EXTENTION = Stream.of( ResourceType.values() )
