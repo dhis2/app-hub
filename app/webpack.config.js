@@ -8,7 +8,7 @@ const isDevBuild = process.argv.indexOf('-p') === -1;
 
 const tomcat = {
     entry: {
-        app: './app/src/app-store.js',
+        app: ['whatwg-fetch','./app/src/app-store.js']
     },
     output: {
         path: path.join(__dirname, '..', 'target', 'classes', 'app'),

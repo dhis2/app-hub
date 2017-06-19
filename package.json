@@ -43,6 +43,7 @@
     "redux-observable": "0.12",
     "rxjs": "5",
     "sass-loader": "^5.0.1",
-    "style-loader": "^0.13.1"
+    "style-loader": "^0.13.1",
+    "whatwg-fetch": "^2.0.3"
   }
 }
