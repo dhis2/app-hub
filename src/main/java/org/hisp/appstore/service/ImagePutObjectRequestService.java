@@ -10,6 +10,9 @@ import org.hisp.appstore.api.domain.ResourceType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by zubair on 25.02.17.
@@ -22,6 +25,8 @@ public class ImagePutObjectRequestService
         .put( AppType.APP_DASHBOARD, "images-dashboard" )
         .put( AppType.APP_TRACKER_DASHBOARD, "images-tracker-dashboard" )
         .build();
+
+    private static final Set<String> FILE_EXTENSION = ResourceType.IMAGE.getKeys();
 
     // -------------------------------------------------------------------------
     // Implementation methods
@@ -60,6 +65,6 @@ public class ImagePutObjectRequestService
     @Override
     public boolean isFormatSupported( MultipartFile file )
     {
-        return FILE_EXTENTION.contains( Files.getFileExtension( file.getOriginalFilename() ) );
+        return FILE_EXTENSION.stream().anyMatch( Files.getFileExtension( file.getOriginalFilename() )::equalsIgnoreCase );
     }
 }

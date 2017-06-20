@@ -54,7 +54,7 @@ public class AmazonS3FileStorageService implements FileStorageService
     public FileUploadStatus uploadFile( MultipartFile file, AppType type, ResourceType resourceType )
         throws WebMessageException, IOException
     {
-        String resourceKey = UUID.randomUUID().toString() + "." + resourceType.getKey();
+        String resourceKey = UUID.randomUUID().toString() + "." + Files.getFileExtension( file.getOriginalFilename() );
 
         String downloadUrl = StringUtils.EMPTY;
 

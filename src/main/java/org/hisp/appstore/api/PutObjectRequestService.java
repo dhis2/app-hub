@@ -19,9 +19,6 @@ public abstract class PutObjectRequestService
     protected static final String BASE_BUCKET = "dhis2-appstore";
     protected static final String AMAZON_URL = "s3.amazonaws.com";
 
-    protected static final Set<String> FILE_EXTENTION = Stream.of( ResourceType.values() )
-        .map( ResourceType::getKey ).collect( Collectors.toSet() );
-
     protected ObjectMetadata getMetaData( MultipartFile file )
     {
         ObjectMetadata metadata = new ObjectMetadata();
