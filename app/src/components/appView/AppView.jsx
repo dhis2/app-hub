@@ -54,9 +54,9 @@ class AppView extends Component {
                     <CardHeader title={app.name} avatar={<AppLogo logo={logo} />}
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
                     </CardHeader>
-                    <CardText style={{paddingLeft: 0, paddingRight: 0}}>
+                    {app.images.length > 0 ? <CardText style={{paddingLeft: 0, paddingRight: 0}}>
                         <ImageViewer images={app.images} showEmptyMessage={false}/>
-                    </CardText>
+                    </CardText> : null }
 
                     <CardText style={{...Theme.paddedCard, ...styles.appDescription}} className="multiline-content">
                         {description}

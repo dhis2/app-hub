@@ -17,12 +17,15 @@ export const renderTextField = ({input, label, meta: {touched, error}, ...props}
 )
 
 export const renderUploadField = ({input, label, meta: {touched, error}, children, ...props}) => (
+
     <UploadFileField hintText={label}
-                     handleUpload={(file) => { input.onChange(file);}}
-                     errorText={touched && error}
+                     handleUpload={(files) => {
+                         input.onChange(files);
+                     }}
+                     errorText={ touched && error }
                      {...input}
                      {...props}
-                      />
+    />
 )
 
 export const renderTextFieldWithClearButton = ({input, label, meta: {touched, error}, ...props}) => {
@@ -34,9 +37,9 @@ export const renderTextFieldWithClearButton = ({input, label, meta: {touched, er
                        errorText={touched && error}
                        {...input}
                        {...props} />
-            {input.value ?<IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
-                <FontIcon className="material-icons">clear</FontIcon>
-            </IconButton> : null}
+            {input.value ? <IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
+                    <FontIcon className="material-icons">clear</FontIcon>
+                </IconButton> : null}
         </div>
     )
 }
@@ -56,8 +59,10 @@ export const renderSelectField = ({input, label, meta: {touched, error}, childre
             floatingLabelText={label}
             errorText={touched && error}
             {...input}
-            onFocus={() => {}} //prevent reset of value when tabbing + enter
-            onBlur={() => {}}
+            onFocus={() => {
+            }} //prevent reset of value when tabbing + enter
+            onBlur={() => {
+            }}
             onChange={(event, index, value) => input.onChange(value)}
             children={children}/>
     )
@@ -74,8 +79,8 @@ export const renderToggle = ({input, changedCB, onToggle, label, meta: {touched,
                 }
         }}
         toggled={input.value ? true : false}
-        {...input}  
-        {...props}  
+        {...input}
+        {...props}
 
     />
 )

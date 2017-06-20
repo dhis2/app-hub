@@ -15,7 +15,6 @@ import Avatar from 'material-ui/Avatar';
 
 const renderProfileButton = (props) => {
     const avatarUrl = props.avatarImg;
-    console.log(BASE_APP_NAME)
     const isLoggedIn = props.authenticated;
     const avatar = (<Avatar size={24} src={avatarUrl} />)
     const notLoggedInIcon = (<FontIcon color="white" className="material-icons">account_circle</FontIcon>)
@@ -31,7 +30,7 @@ const renderProfileButton = (props) => {
 const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarSection align="start">
-        <Link to="/"><img style={{height: 48}} src={`${BASE_APP_NAME}/assets/img/dhis2.svg`} /></Link>
+        <Link to="/"><img style={{height: 48}} src={`/assets/img/dhis2.svg`} /></Link>
         </ToolbarSection>
         <ToolbarTitle align="center">
             <Link to="/">DHIS 2 App Store</Link>

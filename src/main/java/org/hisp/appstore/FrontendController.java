@@ -17,7 +17,7 @@ public class FrontendController {
     private static final Log log = LogFactory.getLog( FrontendController.class );
 
    // @RequestMapping("/{path:[^\\.]+}/**")
-    @RequestMapping(value= {"/app", "/app/*", "/user", "/user/*"})
+    @RequestMapping(value= {"/app", "/app/*", "/user", "/user/**"})
     public String getIndex() {
 
         return "forward:/";

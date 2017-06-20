@@ -80,9 +80,8 @@ class AppList extends Component {
     render() {
         const {loading, loaded, error, byId : appList} = this.props.appList;
         const loadOrErr = loading || error;
-        let {user: {manager}, match, appSearchFilter} = this.props;
+        let {user : { manager }, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
-        manager = true;
         const apps = sortBy(appList, ['name'])
             .filter(app => filterApp(app, searchFilter)
             && filterAppType(app, this.props.appTypeFilter)

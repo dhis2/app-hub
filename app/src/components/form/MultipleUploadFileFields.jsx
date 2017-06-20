@@ -4,69 +4,81 @@ import {Field, Form, FieldArray, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
 import UploadFileField from './UploadFileField';
 
+
 class UploadFieldsArray extends Component {
 
     constructor(props) {
         super(props);
-        this.handleAddField = this.handleAddField.bind(this);
-        // this.handleRemoveField = this.handleRemoveField.bind(this);
-        // this.handleUploadField = this.handleUploadField.bind(this);
-    }
-
-
-    componentWillMount() {
-        this.handleAddField("")
     }
 
     handleRemoveField(index) {
-        const {array} = this.props;
-        array.remove('uploads', index);
+        const {fields} = this.props;
+        fields.remove(index);
     }
 
     handleAddField(value) {
-        if (!value || typeof value !== 'string') {
-            value = "";
+        if (!value) {
+            value = [];
         }
-        const {array} = this.props;
-        // const fieldIndex = Object.keys(this.props.fieldsState.values).length;
-        array.push("uploads", value);
+        if (!Array.isArray(value)) {
+            value = [value];
+        }
+        const {fields} = this.props;
+        fields.push({files: value});
     }
 
+    /**
+     * This function is called after a change has occured to a field,
+     * but before value has been saved to the store.
+     * We therefore add fields if props.multipleSplit is true, and
+     * split the files into these fields.
+     * @param value - An Array of Files
+     * @param name
+     * @returns {*}
+     */
+    parseSplitFilesIntoFields(value, name) {
+        console.log("parse" + name)
 
-    handleUploadField(index, e, fileArray) {
-        console.log(fileArray);
-        const currFieldName = this.props.fieldPrefix + index;
-        // this.props.change(currFieldName,fileArray[index]);
-        if (fileArray.length > 1) {
-            const currFieldName = this.props.fieldPrefix + index;
-            // this.props.change(currFieldName,fileArray[index]);
-            for (let i = index + 1; i < fileArray.length; i++) {
-                console.log("adding")
-                this.handleAddField(fileArray[i]);
+        if (!value) return value;
+
+        if (!Array.isArray(value)) {
+            value = [value];
+        }
+        const currFieldVal = value.slice(0, 1);
+        if (value.length > 1) {
+            const {fields} = this.props;
+            for (let i = 1; i < value.length && i < this.props.maxImages; i++) {
+                fields.push({files: value.slice(i, i + 1)});
             }
         }
+        return currFieldVal;
 
     }
 
-
     render() {
-        const {fields, multiple, multipleSplit, multiLastOnly} = this.props;
+        const {fields, meta, multiple, multipleSplit, multiLastOnly, fieldValidate, ...rest} = this.props;
+        const error = meta.error;
         return (
             <div>
-                {fields.map((field, i) => (
-                    <Field
-                        name={`${field}.${i}`}
-                        component={formUtils.renderUploadField}
-                        renderAdd={(multiLastOnly && i == fields.length - 1) || !multiLastOnly}
-                        handleAddField={this.handleAddField}
-                        renderRemove={fields.length > 1}
-                        multiple={multiple}
-                        handleRemoveField={this.handleRemoveField.bind(this, i)}
-                        onChange={this.handleUploadField.bind(this, i)}
-                        key={i}
-                        id={'' + i}
-                    />)
-                )}
+                {fields.map((field, i) => {
+                    const name = `${field}.files`;
+                    return (
+                        <Field
+                            name={name}
+                            key={i}
+                            component={formUtils.renderUploadField}
+                            renderAdd={(!error && multiLastOnly && i == fields.length - 1) || !multiLastOnly}
+                            handleAddField={this.handleAddField.bind(this)}
+                            renderRemove={fields.length > 1}
+                            multiple={multiple}
+                            validate={fieldValidate}
+                            parse={!error && multiple && multipleSplit ? this.parseSplitFilesIntoFields.bind(this) : null}
+                            value={fields.get(i).files}
+                            handleRemoveField={this.handleRemoveField.bind(this, i)}
+                            {...rest}
+                        />)
+                })}
+                {error ? <span>{error}</span> : null}
             </div>
         )
     }
@@ -74,8 +86,37 @@ class UploadFieldsArray extends Component {
 
 UploadFieldsArray.propTypes = {
     multipleSplit: PropTypes.bool,
+    maxImages: PropTypes.number,
 }
 
+const validateUploadField = (value, allValues, props) => {
+    if (!value || !Array.isArray(value)) {
+        return 'Required';
+    }
+    console.log(value)
+    let error = undefined;
+    value.forEach((file, i) => {
+        if (!file.type || !file.type.startsWith('image')) {
+            error = (<span>Invalid filetype: Must be an image.<br />Supported extensions: PNG, JPG, GIF</span>)
+        }
+    });
+    return error;
+}
+
+/**
+ * This uses redux-form
+ * See more on api here
+ * http://redux-form.com/6.8.0/docs/api/
+ *
+ */
+
+const validateArr = (value, allValues, props) => {
+    if(!value) return undefined;
+    if (value.length >= props.maxImages) {
+        return "Max 10 images."
+    }
+    return undefined;
+}
 
 class MultipleUploadFileFields extends Component {
 
@@ -85,24 +126,71 @@ class MultipleUploadFileFields extends Component {
     }
 
     onSubmit(values) {
-        //transform object of fields to array
-        const arr = Object.keys(values).map((key, ind) => {
-            return values[key];
-        })
-        return this.props.submitted(arr);
-    }
+        console.log(values)
+        const prefix = this.props.fieldPrefix;
+        const fileArrays = values[prefix];
 
+        let mergedArr = fileArrays.reduce((a, b) => {
+            if (a.files) {
+                a = a.files;
+            }
+            if (b.files) {
+                b = b.files;
+            }
+            return a.concat(b)
+        });
+        if(mergedArr.files ) mergedArr = [mergedArr.files];
+        console.log(mergedArr)
+        return this.props.submitted(mergedArr);
+    }
 
     render() {
         const {handleSubmit, pristine, submitting, fieldsState, ...props} = this.props;
-        if (!fieldsState) return null;
-
+        const fieldArrayProps = {
+            multiLastOnly: props.multiLastOnly,
+            multiple: props.multiple,
+            multipleSplit: props.multipleSplit,
+            accept: props.accept,
+            maxImages: props.maxImages,
+            fieldValidate: props.validateUploadField || validateUploadField
+        }
         return (
-            <Form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <FieldArray name="uploads" component={UploadFieldsArray} {...props}/>
+            <Form onSubmit={handleSubmit(this.onSubmit.bind(this))} style={{margin: '0 0 15px 0'}}>
+                <FieldArray name={this.props.fieldPrefix}
+                            component={UploadFieldsArray}
+                            {...fieldArrayProps}
+                           // validate={validateArr}
+                />
             </Form>
         )
     }
+}
+
+
+const validateForm = values => {
+    console.log(values);
+    const errors = {};
+    if(!values.uploads || !values.uploads.length) {
+        errors.uploads = { _error: 'At least one file must be entered.'};
+    } else {
+        const uploadsArrayErrors = [];
+        values.uploads.forEach((uploadField, i) => {
+            console.log(uploadField)
+            const uploadErrors = {}
+            if(!uploadField || !uploadField.files || uploadField.files.length < 1 ) {
+                console.log("wut")
+                uploadErrors.files = "Required";
+                uploadsArrayErrors[i] = uploadErrors;
+            }
+            uploadsArrayErrors[i] = uploadErrors;
+        })
+        if(uploadsArrayErrors.length) {
+            errors.uploads = uploadsArrayErrors;
+        }
+    }
+    console.log(errors)
+    return errors;
+  //  return errors;
 }
 
 MultipleUploadFileFields.propTypes = {
@@ -115,18 +203,32 @@ MultipleUploadFileFields.propTypes = {
     submitted: PropTypes.func.isRequired,
     //override default name of redux-form
     form: PropTypes.string,
+    fieldPrefix: PropTypes.string,
+    //Function run validation on FieldArray-level
+    //See 'http://redux-form.com/6.8.0/docs/api/FieldArray.md/' validate prop
+    validate: PropTypes.func,
+    //Function to run validation on field-level
+    validateField: PropTypes.func,
+    maxImages: PropTypes.number,
 }
 
 MultipleUploadFileFields.defaultProps = {
     multiLastOnly: true,
     multiple: true,
+    multipleSplit: true,
     //name of the form in the redux-store
     form: 'multipleUploadForm',
-    fieldPrefix: 'upload'
+    fieldPrefix: 'uploads',
+    maxImages: 10,
+    accept: 'image/*',
 
 }
 
 const ReduxFormConnected = reduxForm({
     form: MultipleUploadFileFields.defaultProps.form,
+    touchOnChange: true,
+    initialValues: {'uploads': [{files: {}}]},
+    ...MultipleUploadFileFields.defaultProps,
+    validate: validateForm
 })(MultipleUploadFileFields);
 export default ReduxFormConnected;

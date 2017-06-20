@@ -85,7 +85,7 @@ const UploadForm = (props) => {
                    label="Minimum DHIS version" dataSource={DHISVersions}/>
             <Field name="maxVer" style={fieldStyle} component={formUtils.renderAutoCompleteField} label="Maximum DHIS version"
                    dataSource={DHISVersions}/>
-            <Field name="file" component={formUtils.renderUploadField} label="Upload app" />
+            <Field name="file" component={formUtils.renderUploadField} accept=".zip" label="Upload app" />
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField} label="Developer Name"/>
             <Field name="developerEmail" style={fieldStyle} component={formUtils.renderTextField} label="Developer Email"/>
@@ -94,7 +94,7 @@ const UploadForm = (props) => {
 
             <h2>Image</h2>
             <p>You can upload additional images once your app has been uploaded.</p>
-            <Field name="image" component={formUtils.renderUploadField} hintText="Upload logo" id="imageFile"/>
+            <Field name="image" component={formUtils.renderUploadField} accept="image/*" hintText="Upload logo" id="imageFile"/>
             <Field name="imageCaption" style={fieldStyle} component={formUtils.renderTextField} label="Image caption"/>
             <Field name="imageDescription" style={fieldStyle} component={formUtils.renderTextField} label="Image description"/>
 

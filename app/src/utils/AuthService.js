@@ -1,6 +1,7 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
 import { BrowserRouter } from 'react-router-dom';
+import { BASE_APP_NAME } from '../../config';
 import History from './history';
 import * as constants from '../../config';
 import store from '../store';
@@ -19,7 +20,7 @@ export default class AuthService {
                 },
             },
             theme: {
-                logo: './assets/img/dhis2.svg',
+                logo: `/assets/img/dhis2.svg`,
                 primaryColor: Theme.palette.primary1Color,
             },
             languageDictionary: {

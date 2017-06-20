@@ -59,9 +59,8 @@ class UserAppView extends Component {
         this.form.submit();
     }
 
-    handleUploadImages(fields) {
-        for (let i = 0; i < fields.length; i++) {
-            fields[i].map((image, i) => {
+    handleUploadImages(mergedFilesArray) {
+        mergedFilesArray.map((image, i) => {
                 const imageObj = {
                     image: {
                         caption: '',
@@ -71,8 +70,8 @@ class UserAppView extends Component {
                     file: image
                 }
                 this.props.addImageToApp(this.props.app.id, imageObj);
-            })
-        }
+
+        })
     }
 
     render() {
