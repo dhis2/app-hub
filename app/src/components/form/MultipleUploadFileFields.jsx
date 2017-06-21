@@ -159,7 +159,7 @@ class MultipleUploadFileFields extends Component {
                 <FieldArray name={this.props.fieldPrefix}
                             component={UploadFieldsArray}
                             {...fieldArrayProps}
-                           // validate={validateArr}
+                            validate={validateArr}
                 />
             </Form>
         )

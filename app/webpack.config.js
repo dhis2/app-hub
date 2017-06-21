@@ -38,7 +38,6 @@ const tomcat = {
     resolve: {
         extensions: ['.js', '.jsx']
     },
-    devtool: 'eval-source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
@@ -57,7 +56,7 @@ const tomcat = {
             filename: 'index.html',
             template: 'app/indexbuild.html',
         }),
-
+        new webpack.optimize.UglifyJsPlugin({minimize: true, comments: false}),
     ]
 }
 
@@ -114,5 +113,5 @@ const dev = {
     ]
 }
 
-console.log("Using config: " + (isDevBuild ? 'development' : 'production'));
+//console.log("Using config: " + (isDevBuild ? 'development' : 'production'));
 module.exports = isDevBuild ? dev : tomcat;

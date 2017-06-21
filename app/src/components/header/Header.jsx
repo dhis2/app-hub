@@ -30,10 +30,10 @@ const renderProfileButton = (props) => {
 const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarSection align="start">
-        <Link to="/"><img style={{height: 48}} src={`/assets/img/dhis2.svg`} /></Link>
+        <Link to="/"><img style={{height: 32}} src={`/assets/img/dhis2.svg`} /></Link>
         </ToolbarSection>
         <ToolbarTitle align="center">
-            <Link to="/">DHIS 2 App Store</Link>
+            <Link to="/">App Store</Link>
         </ToolbarTitle>
         <ToolbarSection align="end">
 

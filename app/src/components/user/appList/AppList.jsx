@@ -13,7 +13,9 @@ import FontIcon from 'material-ui/FontIcon';
 import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
-import {mapValues, sortBy} from 'lodash';
+//import {mapValues, sortBy} from 'lodash';
+import mapValues from 'lodash/mapValues';
+import sortBy from 'lodash/sortBy';
 import ErrorOrLoading from '../../utils/ErrorOrLoading';
 class AppList extends Component {
     constructor(props) {
