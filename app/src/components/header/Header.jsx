@@ -30,7 +30,7 @@ const renderProfileButton = (props) => {
 const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarSection align="start">
-        <Link to="/"><img style={{height: 32}} src={`/assets/img/dhis2.svg`} /></Link>
+        <Link to="/"><img style={{height: 32}} src={`assets/img/dhis2.svg`} /></Link>
         </ToolbarSection>
         <ToolbarTitle align="center">
             <Link to="/">App Store</Link>

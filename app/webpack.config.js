@@ -11,7 +11,7 @@ const tomcat = {
         app: ['whatwg-fetch','./app/src/app-store.js']
     },
     output: {
-        path: path.join(__dirname, '..', 'target', 'classes', 'app'),
+        path: path.join(__dirname,'..','target', 'classes', 'static'),
         filename: path.join('js', '[name].js'),
         //this is where the files are served from
         publicPath: '/appstore',

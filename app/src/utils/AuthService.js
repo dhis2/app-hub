@@ -20,7 +20,7 @@ export default class AuthService {
                 },
             },
             theme: {
-                logo: `/assets/img/dhis2.svg`,
+                logo: `assets/img/dhis2.svg`,
                 primaryColor: Theme.palette.primary1Color,
             },
             languageDictionary: {
