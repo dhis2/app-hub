@@ -1,11 +1,13 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
 import { BrowserRouter } from 'react-router-dom';
-import { BASE_APP_NAME } from '../../config';
+import config from '../../config';
 import History from './history';
-import * as constants from '../../config';
+import constants from '../../config';
 import store from '../store';
 import Theme from '../styles/theme';
+import logo from '../assets/img/dhis2.svg'
+
 
 export default class AuthService {
     constructor(clientId, domain) {
@@ -20,7 +22,7 @@ export default class AuthService {
                 },
             },
             theme: {
-                logo: `assets/img/dhis2.svg`,
+                logo,
                 primaryColor: Theme.palette.primary1Color,
             },
             languageDictionary: {

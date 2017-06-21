@@ -1,4 +1,5 @@
 
+const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.NODE_ENV === 'production'
 //used when NODE_ENV is 'development'
 const dev = {
     BASE_APP_NAME: '',
@@ -24,31 +25,28 @@ const prod = {
 }
 
 //Map to Translate API names to display-names
-export const appTypesToUI = {
+const appTypesToUI = {
     APP_STANDARD: 'Standard',
     APP_DASHBOARD: 'Dashboard',
     APP_TRACKER_DASHBOARD: 'Tracker Dashboard'
 }
 
 //Map to translate API status of apps to display-names
-export const appStatusToUI = {
+const appStatusToUI = {
     NOT_APPROVED: 'Rejected',
     PENDING: 'Pending',
     APPROVED: 'Approved',
 }
 
-export const DHISVersions = ['2.27', '2.26', '2.25', '2.24', '2.23', '2.22', '2.21'];
+const DHISVersions = ['2.27', '2.26', '2.25', '2.24', '2.23', '2.22', '2.21'];
 
-export const AUTH0ClientId = 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81';
-export const AUTH0Domain = 'dhis2.eu.auth0.com';
+const AUTH0ClientId = 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81';
+const AUTH0Domain = 'dhis2.eu.auth0.com';
 
-
-export const API_BASE_URL = process.env.NODE_ENV === 'development' ?
-    dev.API_BASE_URL: prod.API_BASE_URL;
-
-export const AUTH_REDIRECT_URL = process.env.NODE_ENV === 'development' ?
-    dev.API_REDIRECT_URL : prod.API_REDIRECT_URL;
-
-export const BASE_APP_NAME = process.env.NODE_ENV === 'development' ?
-    dev.BASE_APP_NAME : prod.BASE_APP_NAME;
-
+module.exports = Object.assign({}, (isProd ? prod : dev), {
+    DHISVersions,
+    AUTH0ClientId,
+    AUTH0Domain,
+    appTypesToUI,
+    appStatusToUI,
+})

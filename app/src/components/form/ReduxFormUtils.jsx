@@ -53,7 +53,7 @@ export const renderAutoCompleteField = ({input, label, meta: {touched, error}, .
     />
 )
 
-export const renderSelectField = ({input, label, meta: {touched, error}, children}) => {
+export const renderSelectField = ({input, label, meta: {touched, error}, children, ...props}) => {
     return (
         <SelectField
             floatingLabelText={label}
@@ -64,6 +64,7 @@ export const renderSelectField = ({input, label, meta: {touched, error}, childre
             onBlur={() => {
             }}
             onChange={(event, index, value) => input.onChange(value)}
+            {...props}
             children={children}/>
     )
 }

@@ -70,6 +70,7 @@ class UploadFileField extends Component {
                 alignItems: 'center',
             },
             field: {
+                marginTop:5,
                 marginLeft: uploadIconPosition === 'left' ? '10px' : 0,
                 marginRight: uploadIconPosition === 'right' ? '10px' : 0,
             },
