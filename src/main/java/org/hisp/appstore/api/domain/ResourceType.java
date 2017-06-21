@@ -1,26 +1,30 @@
 package org.hisp.appstore.api.domain;
 
+import com.google.common.collect.Sets;
+
+import java.util.Set;
+
 /**
  * Created by zubair on 25.02.17.
  */
 public enum ResourceType
 {
-    IMAGE( "jpg" ), ZIP( "zip" );
+    IMAGE( Sets.newHashSet( "jpg", "png" ) ), ZIP( Sets.newHashSet( "zip" ) );
 
-    ResourceType( String key )
+    ResourceType( Set<String> keys )
     {
-        this.key = key;
+        this.keys = keys;
     }
 
-    private String key;
+    private Set<String> keys;
 
-    public String getKey()
+    public Set<String> getKeys()
     {
-        return key;
+        return keys;
     }
 
-    public void setKey( String key )
+    public void setKeys( Set<String> keys )
     {
-        this.key = key;
+        this.keys = keys;
     }
 }

@@ -5,13 +5,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by birkbj on 17/04/2017.
  */
-
 @Controller
 public class FrontendController {
     private static final Log log = LogFactory.getLog( FrontendController.class );

@@ -4,12 +4,16 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
+import org.apache.commons.lang3.StringUtils;
 import org.hisp.appstore.api.PutObjectRequestService;
 import org.hisp.appstore.api.domain.AppType;
 import org.hisp.appstore.api.domain.ResourceType;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by zubair on 25.02.17.
@@ -22,6 +26,8 @@ public class ZipFilePutObjectRequestService
         .put( AppType.APP_DASHBOARD, "apps-dashboard" )
         .put( AppType.APP_TRACKER_DASHBOARD, "apps-tracker-dashboard" )
         .build();
+
+    private static final Set<String> FILE_EXTENSION = ResourceType.ZIP.getKeys();
 
     // -------------------------------------------------------------------------
     // Implementation methods
@@ -58,8 +64,9 @@ public class ZipFilePutObjectRequestService
     }
 
     @Override
-    public boolean isFormatSupported( MultipartFile file )
+    public boolean isFormatSupported( String fileExtension )
     {
-        return FILE_EXTENTION.contains( Files.getFileExtension( file.getOriginalFilename() ) );
+        return FILE_EXTENSION.stream()
+            .anyMatch( k -> StringUtils.equalsIgnoreCase( fileExtension, k ) );
     }
 }

@@ -157,7 +157,7 @@ public class AppController
 
         appStoreService.uploadApp( app, file, imageFile );
 
-        renderService.toJson( response.getOutputStream(), "App Uploaded");
+        renderService.renderOk( response, request, "App Uploaded" );
     }
 
     @PreAuthorize( "isAuthenticated()" )
