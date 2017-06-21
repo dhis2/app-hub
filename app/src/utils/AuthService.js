@@ -1,28 +1,28 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
 import { BrowserRouter } from 'react-router-dom';
-import config from '../../config';
 import History from './history';
 import constants from '../../config';
 import store from '../store';
 import Theme from '../styles/theme';
 import logo from '../assets/img/dhis2.svg'
 
-
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
         this.parsed = false;
+        console.log(constants)
+        console.log(constants.API_REDIRECT_URL)
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: constants.AUTH_REDIRECT_URL,
+                redirectUrl: constants.API_REDIRECT_URL,
                 responseType: 'token',
                 params: {
                     scope: 'openid roles user_id',
                 },
             },
             theme: {
-                logo,
+                'logo': `/${logo}`,
                 primaryColor: Theme.palette.primary1Color,
             },
             languageDictionary: {
@@ -104,5 +104,6 @@ export function getAuth() {
        return auth;
 
     auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
+    console.log(auth.auth)
     return auth;
 }

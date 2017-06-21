@@ -58,7 +58,7 @@ class UploadFileField extends Component {
     }
 
     handleResetFile() {
-        this.props.handleUpload('');
+        this.props.handleUpload([]);
     }
 
     render() {

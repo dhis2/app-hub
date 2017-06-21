@@ -1,8 +1,6 @@
 import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
 import {Field, Form, FieldArray, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
-import UploadFileField from './UploadFileField';
 
 
 class UploadFieldsArray extends Component {
@@ -37,8 +35,6 @@ class UploadFieldsArray extends Component {
      * @returns {*}
      */
     parseSplitFilesIntoFields(value, name) {
-        console.log("parse" + name)
-
         if (!value) return value;
 
         if (!Array.isArray(value)) {
@@ -93,11 +89,11 @@ const validateUploadField = (value, allValues, props) => {
     if (!value || !Array.isArray(value)) {
         return 'Required';
     }
-    console.log(value)
+
     let error = undefined;
     value.forEach((file, i) => {
         if (!file.type || !file.type.startsWith('image')) {
-            error = (<span>Invalid filetype: Must be an image.<br />Supported extensions: PNG, JPG, GIF</span>)
+            error = (<span>Invalid filetype: Must be an image.<br />Supported extensions: PNG, JPG</span>)
         }
     });
     return error;
@@ -126,7 +122,6 @@ class MultipleUploadFileFields extends Component {
     }
 
     onSubmit(values) {
-        console.log(values)
         const prefix = this.props.fieldPrefix;
         const fileArrays = values[prefix];
 
@@ -139,8 +134,8 @@ class MultipleUploadFileFields extends Component {
             }
             return a.concat(b)
         });
-        if(mergedArr.files ) mergedArr = [mergedArr.files];
-        console.log(mergedArr)
+        //Only one file, return this
+        if(mergedArr.files ) mergedArr = mergedArr.files;
         return this.props.submitted(mergedArr);
     }
 
@@ -152,6 +147,7 @@ class MultipleUploadFileFields extends Component {
             multipleSplit: props.multipleSplit,
             accept: props.accept,
             maxImages: props.maxImages,
+            fieldPrefix: props.fieldPrefix,
             fieldValidate: props.validateUploadField || validateUploadField
         }
         return (
@@ -168,14 +164,12 @@ class MultipleUploadFileFields extends Component {
 
 
 const validateForm = values => {
-    console.log(values);
     const errors = {};
     if(!values.uploads || !values.uploads.length) {
         errors.uploads = { _error: 'At least one file must be entered.'};
     } else {
         const uploadsArrayErrors = [];
         values.uploads.forEach((uploadField, i) => {
-            console.log(uploadField)
             const uploadErrors = {}
             if(!uploadField || !uploadField.files || uploadField.files.length < 1 ) {
                 console.log("wut")
@@ -188,9 +182,7 @@ const validateForm = values => {
             errors.uploads = uploadsArrayErrors;
         }
     }
-    console.log(errors)
     return errors;
-  //  return errors;
 }
 
 MultipleUploadFileFields.propTypes = {

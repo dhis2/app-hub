@@ -21,7 +21,6 @@ import {getAuth} from '../utils/AuthService';
 injectTapEventPlugin();
 
 const auth = getAuth();
-
 export default function AppStore() {
     return (
 

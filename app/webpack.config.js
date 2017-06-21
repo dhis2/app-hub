@@ -35,7 +35,7 @@ const tomcat = {
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: ["file-loader"]
+                loaders: [`file-loader?name=[name].[ext]&publicPath=${config.BASE_APP_NAME}/&outputPath=assets/`]
             }
         ],
     },
@@ -91,7 +91,7 @@ const dev = {
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: ["file-loader"]
+                loaders: ["file-loader?name=[name].[ext]&publicPath=/&outputPath=assets/"]
             }
         ],
     },

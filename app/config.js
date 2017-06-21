@@ -1,6 +1,7 @@
 
 const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.NODE_ENV === 'production'
 //used when NODE_ENV is 'development'
+
 const dev = {
     BASE_APP_NAME: '',
     API_BASE_URL: 'http://localhost:3098/api/',
