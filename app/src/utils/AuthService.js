@@ -22,7 +22,7 @@ export default class AuthService {
                 },
             },
             theme: {
-                'logo': `/${logo}`,
+                'logo': `${logo}`,
                 primaryColor: Theme.palette.primary1Color,
             },
             languageDictionary: {
