@@ -1,9 +1,12 @@
 import Auth0Lock from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper';
 import { BrowserRouter } from 'react-router-dom';
+import { BASE_APP_NAME } from '../../config';
 import History from './history';
 import * as constants from '../../config';
 import store from '../store';
+import Theme from '../styles/theme';
+
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
@@ -15,7 +18,13 @@ export default class AuthService {
                 params: {
                     scope: 'openid roles user_id',
                 },
-
+            },
+            theme: {
+                logo: `assets/img/dhis2.svg`,
+                primaryColor: Theme.palette.primary1Color,
+            },
+            languageDictionary: {
+                title: 'Log in'
             }
         })
         this.lock.on('hash_parsed', () => this.parsed = true);
@@ -83,6 +92,7 @@ export default class AuthService {
     logout() {
         // Clear user token and profile data from local storage
         localStorage.removeItem('id_token');
+        store.dispatch({type: 'USER_LOGOUT'});
         History.push("/")
     }
 }

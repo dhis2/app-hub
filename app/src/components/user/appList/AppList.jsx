@@ -13,7 +13,9 @@ import FontIcon from 'material-ui/FontIcon';
 import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
-import {mapValues, sortBy} from 'lodash';
+//import {mapValues, sortBy} from 'lodash';
+import mapValues from 'lodash/mapValues';
+import sortBy from 'lodash/sortBy';
 import ErrorOrLoading from '../../utils/ErrorOrLoading';
 class AppList extends Component {
     constructor(props) {
@@ -80,9 +82,8 @@ class AppList extends Component {
     render() {
         const {loading, loaded, error, byId : appList} = this.props.appList;
         const loadOrErr = loading || error;
-        let {user: {manager}, match, appSearchFilter} = this.props;
+        let {user : { manager }, match, appSearchFilter} = this.props;
         const searchFilter = appSearchFilter ? appSearchFilter.values.searchFilter : '';
-        manager = true;
         const apps = sortBy(appList, ['name'])
             .filter(app => filterApp(app, searchFilter)
             && filterAppType(app, this.props.appTypeFilter)
@@ -120,7 +121,7 @@ class AppList extends Component {
                     <CardText>
                         {loadOrErr ? <ErrorOrLoading loading={loading} error={error}/> : null}
                         <List>
-                            {apps}
+                            {apps.length > 0 ? apps : "We couldn't find any apps."}
                         </List>
                     </CardText>
                 </Card>

@@ -4,7 +4,9 @@ import {combineEpics} from 'redux-observable';
 import {getAuth} from '../utils/AuthService';
 import {history} from '../utils/history'
 import * as api from '../api/api';
-import { Observable } from 'rxjs';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/concatMap';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -136,7 +138,7 @@ const deleteVersion = (action$) => action$
         return api.deleteVersion(appId, version.id)
             .then(response => actionCreators.deleteAppVersionSuccess(version, action.payload.appId))
             .catch(error => ({
-                type: actions.APP_DELETE_ERROR,
+                type: actions.APP_VERSION_DELETE_ERROR,
                 payload: error,
             }));
     })

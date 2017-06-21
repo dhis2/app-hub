@@ -4,6 +4,7 @@ const initialState = {
         loaded: false,
         loading: true,
         error: false,
+        info: { }
 }
 
 const loadedState = {
@@ -199,12 +200,20 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
 
 function userInfoReducer(state = {authenticated: false, ...initialState}, action) {
     switch(action.type) {
-        case "USER_AUTHENTICATED": {
+        case actionTypes.USER_AUTHENTICATED: {
             return {
                 ...state,
                 authenticated: true,
             }
         }
+
+        case actionTypes.USER_LOGOUT: {
+            return {
+                ...state,
+                authenticated: false,
+            }
+        }
+
         case actionTypes.USER_LOADED: {
             return {
                 ...state,

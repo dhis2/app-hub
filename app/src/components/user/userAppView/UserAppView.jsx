@@ -16,6 +16,7 @@ import Theme from '../../../styles/theme';
 import {appTypesToUI} from '../../../../config';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
+
 class UserAppView extends Component {
     constructor(props) {
         super(props);
@@ -41,16 +42,16 @@ class UserAppView extends Component {
         const cardHeaderRightStyle = {
             display: 'inline-flex',
             alignItems: 'center',
-            fontSize: '14px',
+            marginLeft: '-5px',
             color: Theme.card.subtitleColor,
         }
-        const statusAlertPending = "This app is pending approval."
-        const statusAlertRejected = "This app has been rejected."
+        const statusAlertPending = "This app is pending approval"
+        const statusAlertRejected = "This app has been rejected"
 
-        return (<div style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: '16px'}}
+        return (<p style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: 'inherit'}}
                                                             className="material-icons">priority_high</FontIcon>
             {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
-        </div>)
+        </p>)
     }
 
     submitUploadImages() {
@@ -58,9 +59,8 @@ class UserAppView extends Component {
         this.form.submit();
     }
 
-    handleUploadImages(fields) {
-        for (let i = 0; i < fields.length; i++) {
-            fields[i].map((image, i) => {
+    handleUploadImages(mergedFilesArray) {
+        mergedFilesArray.map((image, i) => {
                 const imageObj = {
                     image: {
                         caption: '',
@@ -70,8 +70,8 @@ class UserAppView extends Component {
                     file: image
                 }
                 this.props.addImageToApp(this.props.app.id, imageObj);
-            })
-        }
+
+        })
     }
 
     render() {
@@ -94,7 +94,9 @@ class UserAppView extends Component {
 
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
-            Organisation: {app.developer.organisation} </div>)
+            Organisation: {app.developer.organisation} <br />
+            {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}</div>)
+
         let logo = app.images.filter(elem => elem.logo)[0];
 
         return (
@@ -104,14 +106,13 @@ class UserAppView extends Component {
                 <Card>
                     <CardHeader title={app.name} avatar={<LogoAvatar logo={logo}/>}
                                 subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
-                        {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
                         <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
                             <i className="material-icons">edit</i>
                         </IconButton>
 
                     </CardHeader>
 
-                    <CardText>
+                    <CardText style={Theme.paddedCard} className="multiline-content">
                         {app.description}
                     </CardText>
 

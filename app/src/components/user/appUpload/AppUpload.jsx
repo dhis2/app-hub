@@ -4,6 +4,7 @@ import {Card, CardText} from 'material-ui/Card';
 import UploadAppForm from '../../form/UploadAppForm';
 import SubHeader from '../../header/SubHeader';
 import {addApp} from '../../../actions/actionCreators';
+import Theme from '../../../styles/theme';
 
 class UserView extends Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class UserView extends Component {
         return (
             <div>
                 <SubHeader title="Upload app" backLink="/user"/>
-                <Card>
+                <Card style={Theme.paddedCard}>
                     <CardText>
                         <UploadAppForm submitted={this.handleSubmit.bind(this)}/>
                     </CardText>

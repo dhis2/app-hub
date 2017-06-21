@@ -2,12 +2,13 @@ const webpack = require('webpack');
 const path = require('path');
 const packageJSON = require('../package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isDevBuild = process.argv.indexOf('-p') === -1;
 
 const tomcat = {
     entry: {
-        app:'./app/src/app-store.js',
+        app: ['whatwg-fetch','./app/src/app-store.js']
     },
     output: {
         path: path.join(__dirname,'..','target', 'classes', 'static'),
@@ -37,24 +38,31 @@ const tomcat = {
     resolve: {
         extensions: ['.js', '.jsx']
     },
-    devtool: 'eval-source-map',
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('production'),
             },
         }),
+        new CopyWebpackPlugin(
+            [
+                {
+                    from: 'app/src/assets', to: 'assets'
+                }
+            ]),
+
         new HtmlWebpackPlugin({
             title: 'DHIS2 Appstore',
             filename: 'index.html',
             template: 'app/indexbuild.html',
-        })
+        }),
+        new webpack.optimize.UglifyJsPlugin({minimize: true, comments: false}),
     ]
 }
 
 const dev = {
     entry: {
-        app:'./app/src/app-store.js',
+        app: './app/src/app-store.js',
     },
     output: {
         path: path.join(__dirname, 'build'),
@@ -95,8 +103,15 @@ const dev = {
             'process.env': {
                 NODE_ENV: JSON.stringify('development'),
             },
-        })]
+        }),
+        new CopyWebpackPlugin(
+            [
+                {
+                    from: 'app/src/assets', to: 'assets'
+                }
+            ])
+    ]
 }
 
-console.log("Using config: " + (isDevBuild ? 'development' : 'production'));
+//console.log("Using config: " + (isDevBuild ? 'development' : 'production'));
 module.exports = isDevBuild ? dev : tomcat;

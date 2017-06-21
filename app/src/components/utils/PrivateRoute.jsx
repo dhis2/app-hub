@@ -1,15 +1,16 @@
 import React, { Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Spinner} from './../utils/Loader';
-import { Route } from 'react-router-dom';
-
+import { Route, Redirect } from 'react-router-dom';
+import { userLoad, userAuthenticated } from '../../actions/actionCreators';
 export class PrivateRoute extends Component {
     componentWillMount() {
         const {auth} = this.props;
         //If page is reloaded, we need to dispatch this, as the token is still valid
         //but redux-store is not updated for with this yet
         if (!this.props.authenticated && auth.isLoggedIn()) {
-            this.props.dispatch({type: "USER_AUTHENTICATED"});
+            this.props.loadUser();
+            this.props.authenticateUser();
         }
     }
 
@@ -46,5 +47,15 @@ const mapStateToProps = (state) => ({
     // authservice has successfully authenticated to auth0
     authenticated: state.user.userInfo.authenticated
 })
+
+const mapDispatchToProps = (dispatch) => ({
+    loadUser() {
+        dispatch(userLoad());
+    },
+
+    authenticateUser() {
+        dispatch(userAuthenticated());
+    }
+})
 //need pure-component else router-context won't be passed down to protected component
-export default connect(mapStateToProps, null, null, { pure: false})(PrivateRoute)
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false})(PrivateRoute)

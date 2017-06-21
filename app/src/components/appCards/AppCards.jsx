@@ -6,7 +6,9 @@ import Col from '../../material/Grid/Col';
 import {loadAllApps, loadApprovedApps} from '../../actions/actionCreators';
 import {TextFilter, filterApp, SelectFilter, filterAppType} from '../utils/Filters';
 import {ToolbarGroup} from 'material-ui/Toolbar';
-import {values, sortBy} from 'lodash';
+//import {values, sortBy} from 'lodash';
+import sortBy from 'lodash/sortBy';
+//import values from 'lodash/values';
 import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
 import {FadeAnimation} from '../utils/Animate';
@@ -37,11 +39,18 @@ class AppCards extends Component {
             },
             appItem: {
                 maxWidth: '300px',
+            },
+
+            emptyApps: {
+                textAlign: 'center',
+
             }
         }
         const {loading, error, byId : cards} = this.props.appList;
         const loadOrErr = loading || error;
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
+
+        //filter and construct appcards
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
             .map((app, i) => (
                 <Col key={app.id} span={3} align="middle" style={styles.appItem}>
@@ -49,6 +58,9 @@ class AppCards extends Component {
                 </Col>
             ))
 
+        const emptyApps = (<Col align="middle" span={12} style={styles.emptyApps}>
+            <p>We couldn't find any apps.</p>
+        </Col>)
         return (
             <Grid>
                 <Col span={12} style={{}}>
@@ -73,7 +85,7 @@ class AppCards extends Component {
                 <Col span={12}>
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                     <FadeAnimation component={Grid} style={styles.grid}>
-                        { apps }
+                        { apps.length > 0 ? apps : emptyApps }
                     </FadeAnimation>
                 </Col>
             </Grid>

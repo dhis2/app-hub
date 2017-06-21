@@ -9,8 +9,8 @@ const form = formReducer.plugin({
             case actions.APP_IMAGE_ADD_SUCCESS: {
                 return {
                     ...state,
-                    values: undefined,
-                    fields: undefined,
+                    values: state.initial,
+                    anyTouched: false
                 };
             }
 

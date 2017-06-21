@@ -34,9 +34,6 @@ export default function AppStore() {
                         <Route path='/app/:appId' component={AppView}/>
                         <PrivateRoute path='/user' auth={auth} component={UserView}/>
 
-                        <Route exact path="/login" render={(location, props) => (
-                            <LoginView auth={auth} {...props} />)}/>
-
                         <DialogRoot />
 
                         <Snackbar />

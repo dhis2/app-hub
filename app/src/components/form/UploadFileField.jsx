@@ -9,7 +9,7 @@ const uploadIconPosition = PropTypes.oneOf(['right', 'left']);
 
 
 /**
- * A Controlled field for uploading files.
+ * A helper for uploading files through redux-form.
  * Supports multiple files in one input field.
  * Note that the file themselves are not recorded in state,
  * only the fileName to be shown in the input field.
@@ -18,21 +18,19 @@ const uploadIconPosition = PropTypes.oneOf(['right', 'left']);
  * once a file has been selected.
  *
  */
+
 class UploadFileField extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            fileName: ''
-        }
         this.uploadAction = this.uploadAction.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.handleResetFile = this.handleResetFile.bind(this);
     }
 
     /**
-     * Used handle upload-action on a hidden input-field
+     * Used to handle upload-action on a hidden input-field
      * which is used hold the files. We use a regular textfield
      * to show the selected files.
      */
@@ -41,8 +39,7 @@ class UploadFileField extends Component {
     }
 
     /**
-     * Updates the state with the fileName in the controlled inputs,
-     * and calls the props handleUpload()
+     * Calls the props handleUpload()
      * with the array of Files in the input field.
      *
      * Called when a file is selected through the input-field.
@@ -52,68 +49,83 @@ class UploadFileField extends Component {
      */
     handleUpload(e) {
         const files = e.target.files;
-        if(files.length < 1) {
+        if (files.length < 1) {
             this.handleResetFile();
             return;
         }
-        const fileArray = Object.keys(files).map((key, i) => (files[key]));
-        const fileNames = fileArray.reduce((acc, elem, currInd) => {
-            const seperator = currInd !== fileArray.length -1 ?  ', ' : '';
-            return acc + elem.name + seperator}
-            , '');
-        this.setState({
-            ...this.state,
-            fileName: fileNames
-        })
+        const fileArray = [...files];
         this.props.handleUpload(fileArray);
     }
 
     handleResetFile() {
-        this.setState({
-            ...this.state,
-            fileName: '',
-        })
         this.props.handleUpload('');
     }
 
     render() {
         const {renderAdd, renderRemove, uploadIconPosition, value, ...props} = this.props;
-        const groupStyle = {
-            display: 'flex',
-            alignItems: 'center',
+
+        const styles = {
+            outerDiv: {
+                display: 'flex',
+                alignItems: 'center',
+            },
+            field: {
+                marginLeft: uploadIconPosition === 'left' ? '10px' : 0,
+                marginRight: uploadIconPosition === 'right' ? '10px' : 0,
+            },
+            resetButton: {
+                position: 'absolute',
+                right: '0px'
+            },
+            fieldDiv: {
+                position: 'relative',
+            }
         }
-        const fieldStyle = {
-            marginLeft: uploadIconPosition === 'left' ? '10px' : 0,
-            marginRight: uploadIconPosition === 'right' ? '10px' : 0,
-        }
+
         const removeButton = (<IconButton iconClassName="material-icons"
-                                          onClick={() => {this.handleResetFile(); this.props.handleRemoveField()}}>remove</IconButton>)
+                                          onClick={() => {
+                                              this.handleResetFile();
+                                              this.props.handleRemoveField()
+                                          }}>remove</IconButton>)
         const addButton = (<IconButton iconClassName="material-icons"
-                                       onClick={this.props.handleAddField}>add</IconButton>)
+                                       onClick={() => this.props.handleAddField()}>add</IconButton>)
 
         const uploadButton = (<FAB mini onClick={this.uploadAction}><FontIcon
             className="material-icons">file_upload</FontIcon></FAB>)
 
-        const fileArray = Object.keys(value).map((key, i) => (value[key]));
-        const fileNames = fileArray.reduce((acc, elem, currInd) => {
-                const seperator = currInd !== fileArray.length -1 ?  ', ' : '';
-                return acc + elem.name + seperator}
-            , '');
+
+        let textFieldOutput = "";
+        if (typeof value === 'string') {
+            textFieldOutput = value;
+        } else if (Array.isArray(value)) {
+            const fileNames = value.reduce((acc, elem, currInd) => {
+                const seperator = currInd !== value.length - 1 ? ', ' : '';
+                return acc + elem.name + seperator
+            }, '');
+            textFieldOutput = fileNames;
+        } else if (typeof value === 'File') {
+            textFieldOutput = value.name;
+        }
 
         return (
-            <div style={groupStyle}>
+            <div style={styles.outerDiv}>
                 {uploadIconPosition === 'left' ? uploadButton : null}
-                <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
-                    <TextField name={this.props.id} style={fieldStyle} readOnly hintText={props.hintText}
+
+                <div style={styles.fieldDiv}>
+                    <TextField name={this.props.name} style={styles.field} readOnly hintText={props.hintText}
                                errorText={props.errorText}
-                               value={fileNames}
+                               value={textFieldOutput}
                                onClick={this.uploadAction}/>
-                    {fileNames ? <IconButton style={{position: 'absolute', right: '0px'}} onClick={this.handleResetFile.bind(this)}>
-                        <FontIcon className="material-icons">clear</FontIcon>
-                    </IconButton> : null}
+                    {textFieldOutput ? <IconButton style={styles.resetButton} onClick={this.handleResetFile.bind(this)}>
+                            <FontIcon className="material-icons">clear</FontIcon></IconButton>
+                        : null}
                 </div>
-                <input type="file"  multiple={this.props.multiple} style={{display: 'none'}} ref={(ref) => this.fileInput = ref}
-                       onChange={this.handleUpload}/>
+
+                <input type="file" multiple={this.props.multiple} style={{display: 'none'}}
+                       ref={(ref) => this.fileInput = ref}
+                       onChange={this.handleUpload}
+                       accept={this.props.accept || ""}/>
+
                 {uploadIconPosition === 'right' ? uploadButton : null}
                 {renderRemove ? removeButton : null}
                 {renderAdd ? addButton : null}
@@ -132,6 +144,9 @@ UploadFileField.propTypes = {
     id: PropTypes.string,
     uploadIconPosition: uploadIconPosition,
     multiple: PropTypes.bool,
+    initalFiles: PropTypes.array,
+    //Filetypes to accept
+    accept: PropTypes.string,
 }
 
 UploadFileField.defaultProps = {
