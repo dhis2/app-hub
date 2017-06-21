@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
+import org.apache.commons.lang3.StringUtils;
 import org.hisp.appstore.api.PutObjectRequestService;
 import org.hisp.appstore.api.domain.AppType;
 import org.hisp.appstore.api.domain.ResourceType;
@@ -63,8 +64,9 @@ public class ZipFilePutObjectRequestService
     }
 
     @Override
-    public boolean isFormatSupported( MultipartFile file )
+    public boolean isFormatSupported( String fileExtension )
     {
-        return FILE_EXTENSION.stream().anyMatch( Files.getFileExtension( file.getOriginalFilename() )::equalsIgnoreCase );
+        return FILE_EXTENSION.stream()
+            .anyMatch( k -> StringUtils.equalsIgnoreCase( fileExtension, k ) );
     }
 }

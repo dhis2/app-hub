@@ -64,9 +64,9 @@ public class ImagePutObjectRequestService
     }
 
     @Override
-    public boolean isFormatSupported( MultipartFile file )
+    public boolean isFormatSupported( String fileExtension )
     {
         return FILE_EXTENSION.stream()
-            .anyMatch( k -> StringUtils.containsIgnoreCase( Files.getFileExtension( file.getOriginalFilename() ), k ) );
+            .anyMatch( k -> StringUtils.equalsIgnoreCase( fileExtension, k ) );
     }
 }

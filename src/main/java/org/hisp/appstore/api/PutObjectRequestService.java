@@ -34,5 +34,5 @@ public abstract class PutObjectRequestService
 
     public abstract String getBucketName( AppType appType );
 
-    public abstract boolean isFormatSupported( MultipartFile file );
+    public abstract boolean isFormatSupported( String fileExtension );
 }
