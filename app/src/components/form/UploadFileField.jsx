@@ -109,7 +109,7 @@ class UploadFileField extends Component {
         }
 
         return (
-            <div style={styles.outerDiv}>
+            <div style={{...styles.outerDiv, ...props.style}}>
                 {uploadIconPosition === 'left' ? uploadButton : null}
 
                 <div style={styles.fieldDiv}>

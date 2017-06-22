@@ -36,8 +36,21 @@ function getClassNames(props) {
     return classNames(baseClassname, modificators, props.additionalClasses);
 }
 
-const Col = ({children, style, ...props}) => (
-    <div className={getClassNames(props)} style={props.justify ? {justifySelf: props.justify, ...style} : style} >
+function handleStyleProps(props) {
+    const style = {...props.style};
+    if(props.center) {
+        style.margin = '0 auto';
+    }
+    if(props.justify) {
+        style.justifySelf = props.justify;
+    }
+
+    return style;
+
+}
+
+const Col = ({children, ...props}) => (
+    <div className={getClassNames(props)} style={handleStyleProps(props)} >
         {children}
     </div>
 )

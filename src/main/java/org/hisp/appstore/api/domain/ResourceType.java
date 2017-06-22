@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public enum ResourceType
 {
-    IMAGE( Sets.newHashSet( "jpg", "png" ) ), ZIP( Sets.newHashSet( "zip" ) );
+    IMAGE( Sets.newHashSet( "jpg", "jpeg", "png" ) ), ZIP( Sets.newHashSet( "zip" ) );
 
     ResourceType( Set<String> keys )
     {

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Grid from '../../material/Grid/Grid';
 import Col from '../../material/Grid/Col';
 import FontIcon from 'material-ui/FontIcon';
-import {Link, Route, Redirect} from 'react-router-dom';
+import {Link, Route, Redirect, Switch} from 'react-router-dom';
 import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
@@ -24,12 +24,16 @@ class UserView extends Component {
         const { userInfo } = this.props.user;
         const loadOrErr = userInfo.loading || userInfo.error;
         const contentRoutes = (
-            <div>
+            <Switch>
                 <Route exact path={`${this.props.match.url}`} component={AppList}>
                 </Route>
                 <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
                 <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
-            </div>
+                {/* No-match route - redirect to index */ }
+                <Route render={props => (
+                    <Redirect to="/user"/>)
+                }/>
+            </Switch>
         );
 
         return (

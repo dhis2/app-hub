@@ -137,7 +137,9 @@ class UserAppView extends Component {
                         <MultipleUploadFileFields ref={ref => this.form = ref}
                                                   form="imageUpload"
                                                   submitted={this.handleUploadImages.bind(this)}/>
+
                         <Button primary onClick={this.submitUploadImages.bind(this)}
+                                label="Upload"
                                 icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
                     </CardText>
                 </Card>

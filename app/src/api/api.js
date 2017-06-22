@@ -103,13 +103,14 @@ export function createAppUploadOptions(data) {
     const imageInput = data.image;
     let form = new FormData();
     const jsonPart = new Blob([JSON.stringify(data.app)], {type: 'application/json'})
-
+    console.log(jsonPart);
     form.append('file', fileInput, fileInput.name)
     form.append('app', jsonPart);
     if(imageInput) {
         form.append('imageFile', imageInput, imageInput.name);
     }
 
+    console.log(form)
 
     const fetchOptions = {
         method: 'POST',

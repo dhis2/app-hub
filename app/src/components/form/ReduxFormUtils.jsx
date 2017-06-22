@@ -16,13 +16,13 @@ export const renderTextField = ({input, label, meta: {touched, error}, ...props}
     />
 )
 
-export const renderUploadField = ({input, label, meta: {touched, error, dirty}, children, ...props}) => (
+export const renderUploadField = ({input, label, meta: {touched, error, dirty}, formMeta, children, ...props}) => (
 
     <UploadFileField hintText={label}
                      handleUpload={(files) => {
                          input.onChange(files);
                      }}
-                     errorText={ dirty && error }
+                     errorText={ (formMeta && formMeta.submitFailed || dirty) && error }
                      {...input}
                      {...props}
     />
@@ -85,3 +85,29 @@ export const renderToggle = ({input, changedCB, onToggle, label, meta: {touched,
 
     />
 )
+
+
+export const validateUploadField = (supportedExtensions = [], required) => (
+    (value, allValues, props) => {
+        console.log(value)
+        let error = undefined;
+        if(!value || !Array.isArray(value)) {
+            return error;
+        }
+        if ((Array.isArray(value) && value.length < 1 ) && required) {
+            return 'Required';
+        }
+
+        value.forEach((file, i) => {
+            const fileExtension = file.name && file.name.substring(file.name.lastIndexOf('.'));
+
+            if (!file.type || !file.type.startsWith("image") || fileExtension && !supportedExtensions.includes(fileExtension)) {
+                error = (<span>Invalid filetype: Must be an image.<br />Supported extensions: {supportedExtensions.join(", ")}</span>)
+            }
+        });
+        return error;
+    }
+)
+
+export const validateZipFile = validateUploadField([".zip"], true);
+export const validateImageFile = validateUploadField([".png", ".jpg", ".jpeg"]);
