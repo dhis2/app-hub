@@ -140,10 +140,11 @@ public class DefaultAppService
     {
         FileUploadStatus fileStatus = fileStorageService.uploadFile( file, app.getAppType(), ResourceType.ZIP );
         FileUploadStatus imageFileStatus = null;
-        if(imageFile != null) {
+
+        if( imageFile != null )
+        {
             imageFileStatus = fileStorageService.uploadFile( imageFile, app.getAppType(), ResourceType.IMAGE );
         }
-
 
         if ( fileStatus.isUploaded() )
         {
