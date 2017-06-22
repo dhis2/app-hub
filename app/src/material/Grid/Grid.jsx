@@ -8,7 +8,7 @@ const propTypes = {
 };
 
 const Grid = ({style, nested, ...props}) => {
-    const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={style}>
+    const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)}>
         <div className="mdc-layout-grid__inner">
             {props.children}
         </div>

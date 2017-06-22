@@ -90,6 +90,8 @@ export const renderToggle = ({input, changedCB, onToggle, label, meta: {touched,
 export const validateUploadField = (supportedExtensions = [], required) => (
     (value, allValues, props) => {
         let error = undefined;
+
+        const maxSize = 25* 2**20; //25mb
         if(!value || !Array.isArray(value)) {
             return error;
         }
@@ -100,8 +102,12 @@ export const validateUploadField = (supportedExtensions = [], required) => (
         value.forEach((file, i) => {
             const fileExtension = file.name && file.name.substring(file.name.lastIndexOf('.'));
 
-            if (!file.type || !file.type.startsWith("image") || fileExtension && !supportedExtensions.includes(fileExtension)) {
-                error = (<span>Invalid filetype: Must be an image.<br />Supported extensions: {supportedExtensions.join(", ")}</span>)
+            if (!file.type || fileExtension && !supportedExtensions.includes(fileExtension)) {
+                error = (<span>Invalid filetype.<br />Supported extensions: {supportedExtensions.join(", ")}</span>)
+            }
+
+            if(file.size && file.size > maxSize) {
+                error = `File limit: ${maxSize/2**20} MB`;
             }
         });
         return error;

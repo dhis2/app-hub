@@ -11,8 +11,6 @@ export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
         this.parsed = false;
-        console.log(constants)
-        console.log(constants.API_REDIRECT_URL)
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: constants.API_REDIRECT_URL,

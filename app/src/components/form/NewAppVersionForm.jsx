@@ -4,13 +4,13 @@ import * as formUtils from './ReduxFormUtils';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, Form, reduxForm} from 'redux-form';
 import {DHISVersions} from '../../constants/apiConstants';
-
+import { validateZipFile } from '../form/ReduxFormUtils';
 const validate = values => {
     const errors = {}
     const requiredFields = ['version', 'file']
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'Field is required.'
+            errors[field] = 'Required'
         }
     })
 
@@ -19,18 +19,19 @@ const validate = values => {
 
 
 const NewAppVersionForm = (props) => {
-    const {handleSubmit, pristine, submitting} = props;
+    const {handleSubmit, pristine, submitting, submitFailed} = props;
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
+
     const onSub = (values) => {
         const data = {
             version: values.version,
             minDhisVersion: values.minVer,
             maxDhisVersion: values.maxVer,
         }
-
-        return props.submitted({data, file: values.file});
+        const file = values.file[0];
+        return props.submitted({data, file: file});
     }
 
     return (
@@ -41,7 +42,11 @@ const NewAppVersionForm = (props) => {
             <Field name="maxVer" component={formUtils.renderAutoCompleteField} label="Maximum DHIS version"
                    dataSource={DHISVersions}/>
 
-            <Field name="file" component={formUtils.renderUploadField} label="Upload version" id="file"/>
+            <Field name="file" component={formUtils.renderUploadField}
+                   validate={validateZipFile}
+                   formMeta={{submitFailed}}
+                   accept=".zip"
+                   label="Upload version" id="file"/>
 
         </Form>
 

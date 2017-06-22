@@ -132,6 +132,7 @@ a {
 
 .multiline-content {
     white-space: pre-line;
+    word-break: break-all;
 }
 
 .auth0-lock-header-bg {
