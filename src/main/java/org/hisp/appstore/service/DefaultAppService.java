@@ -139,15 +139,18 @@ public class DefaultAppService
                           throws WebMessageException, IOException
     {
         FileUploadStatus fileStatus = fileStorageService.uploadFile( file, app.getAppType(), ResourceType.ZIP );
+        FileUploadStatus imageFileStatus = null;
+        if(imageFile != null) {
+            imageFileStatus = fileStorageService.uploadFile( imageFile, app.getAppType(), ResourceType.IMAGE );
+        }
 
-        FileUploadStatus imageFileStatus = fileStorageService.uploadFile( imageFile, app.getAppType(), ResourceType.IMAGE );
 
         if ( fileStatus.isUploaded() )
         {
             app.getVersions().forEach( v -> v.setDownloadUrl( fileStatus.getDownloadUrl() ) );
         }
 
-        if ( imageFileStatus.isUploaded() )
+        if ( imageFileStatus != null && imageFileStatus.isUploaded() )
         {
             for ( ImageResource imageResource : app.getImages() )
             {
