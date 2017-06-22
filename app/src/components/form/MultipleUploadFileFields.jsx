@@ -94,7 +94,6 @@ UploadFieldsArray.propTypes = {
  */
 
 const validateArr = (value, allValues, props) => {
-    console.log(value)
     if(!value) return undefined;
     if (value.length >= props.maxImages) {
         return <span style={{color: 'rgb(244, 67, 54)'}}>Max 10 images</span>
@@ -154,16 +153,13 @@ class MultipleUploadFileFields extends Component {
 
 const validateForm = values => {
     const errors = {};
-    console.log(values)
     if(!values.uploads || !values.uploads.length) {
-
         errors.uploads = { _error: 'At least one file must be entered.'};
     } else {
         const uploadsArrayErrors = [];
         values.uploads.forEach((uploadField, i) => {
             const uploadErrors = {}
             if(!uploadField || !uploadField.files || uploadField.files.length < 1 ) {
-                console.log("wut")
                 uploadErrors.files = "Required";
                 uploadsArrayErrors[i] = uploadErrors;
             }
@@ -173,7 +169,6 @@ const validateForm = values => {
             errors.uploads = uploadsArrayErrors;
         }
     }
-    console.log(errors)
     return errors;
 }
 

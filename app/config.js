@@ -3,9 +3,9 @@ const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.
 //used when NODE_ENV is 'development'
 
 const dev = {
-    BASE_APP_NAME: '',
-    API_BASE_URL: 'http://localhost:3098/api/',
-    API_REDIRECT_URL: 'http://localhost:9000/user',
+    BASE_APP_NAME: process.env.DHIS2_APPSTORE_BASE_APP_NAME ||  '',
+    API_BASE_URL: process.env.DHIS2_APPSTORE_API_BASE_URL || 'http://localhost:3098/api/',
+    API_REDIRECT_URL: process.env.DHIS2_APPSTORE_API_REDIRECT_URL || 'http://localhost:9000/user',
 }
 
 //used when NODE_ENV is not 'development'

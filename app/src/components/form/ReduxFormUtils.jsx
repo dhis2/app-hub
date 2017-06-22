@@ -89,7 +89,6 @@ export const renderToggle = ({input, changedCB, onToggle, label, meta: {touched,
 
 export const validateUploadField = (supportedExtensions = [], required) => (
     (value, allValues, props) => {
-        console.log(value)
         let error = undefined;
         if(!value || !Array.isArray(value)) {
             return error;

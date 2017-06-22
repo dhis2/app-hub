@@ -60,7 +60,6 @@ const UploadForm = (props) => {
             }]
         }
         const imageFile = values.image ? values.image[0] : null;
-        console.log(imageFile)
         const appFile = values.file[0];
         if (!imageFile) { //should be empty if image is not provided
             data.images = []
