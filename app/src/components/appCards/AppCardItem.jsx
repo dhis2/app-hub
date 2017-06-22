@@ -26,16 +26,13 @@ const AppItem = (props) => {
     }
 
     return (
-        <Card>
+        <Card style={{height:'100%'}}>
            <Link to={`/app/${id}`}>
             <CardMedia style={mediaStyle}>
             </CardMedia>
             </Link>
             <CardTitle title={<Link to={`/app/${id}`}>{name}</Link>}
                        subtitle={(<span>{developer.name ? developer.name : 'Unspecified'} <br /> {appTypesToUI[appType]} </span>)}/>
-            <CardActions>
-                <Link to={`/app/${id}`}><Button label="More" /></Link>
-            </CardActions>
         </Card>
     );
 }

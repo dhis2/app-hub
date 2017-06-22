@@ -58,7 +58,7 @@ class UploadFileField extends Component {
     }
 
     handleResetFile() {
-        this.props.handleUpload('');
+        this.props.handleUpload([]);
     }
 
     render() {
@@ -70,6 +70,7 @@ class UploadFileField extends Component {
                 alignItems: 'center',
             },
             field: {
+                marginTop:5,
                 marginLeft: uploadIconPosition === 'left' ? '10px' : 0,
                 marginRight: uploadIconPosition === 'right' ? '10px' : 0,
             },
@@ -108,7 +109,7 @@ class UploadFileField extends Component {
         }
 
         return (
-            <div style={styles.outerDiv}>
+            <div style={{...styles.outerDiv, ...props.style}}>
                 {uploadIconPosition === 'left' ? uploadButton : null}
 
                 <div style={styles.fieldDiv}>

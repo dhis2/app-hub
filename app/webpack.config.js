@@ -4,17 +4,20 @@ const packageJSON = require('../package.json');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const nodeEnv = process.env.NODE_ENV || 'development';
+
+const appstoreEnv = process.env.DHIS2_APPSTORE_ENV;
 const isDevBuild = process.argv.indexOf('-p') === -1;
+const config = require('./config');
 
 const tomcat = {
     entry: {
-        app: ['whatwg-fetch','./app/src/app-store.js']
+        app: ['whatwg-fetch','./app/src/app-store.js'],
     },
     output: {
         path: path.join(__dirname,'..','target', 'classes', 'static'),
-        filename: path.join('js', '[name].js'),
+        filename: path.join('js', `[name]_${packageJSON.version}.js`),
         //this is where the files are served from
-        publicPath: '/appstore',
+        publicPath: config.BASE_APP_NAME + '/',
     },
 
     module: {
@@ -32,6 +35,10 @@ const tomcat = {
                 test: /\.css$/,
                 loaders: ['style-loader', 'css-loader'],
             },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loaders: [`file-loader?name=[name]_${packageJSON.version}.[ext]&publicPath=${config.BASE_APP_NAME}/&outputPath=assets/`]
+            }
         ],
     },
 
@@ -84,6 +91,10 @@ const dev = {
                 test: /\.css$/,
                 loaders: ['style-loader', 'css-loader'],
             },
+            {
+                test: /\.(jpe?g|png|gif|svg)$/i,
+                loaders: ["file-loader?name=[name].[ext]&publicPath=/&outputPath=assets/"]
+            }
         ],
     },
 
@@ -113,5 +124,20 @@ const dev = {
     ]
 }
 
-//console.log("Using config: " + (isDevBuild ? 'development' : 'production'));
-module.exports = isDevBuild ? dev : tomcat;
+const tomcatDev = Object.assign({},tomcat, {
+    plugins: [
+        ...tomcat.plugins,
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('development'),
+            },
+        })],
+})
+
+
+console.log("Using config: " + (isDevBuild ? (appstoreEnv === 'tomcatDev' ?
+            'tomcatDevelopment' : 'development') : 'production'));
+
+const devProfile = appstoreEnv === 'tomcatDev' ? tomcatDev : dev;
+
+module.exports = isDevBuild ? devProfile : tomcat;

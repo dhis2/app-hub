@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-
+import '@material/toolbar/dist/mdc.toolbar.css';
 const propTypes = {
     fixed: PropTypes.bool,
     additionalClasses: PropTypes.string,
@@ -9,6 +9,10 @@ const propTypes = {
 
 const baseClassname = 'mdc-toolbar';
 const modificatorKeys = ['fixed'];
+
+const styles = {
+    padding: '0 24px'
+}
 
 function getClassNames(props) {
     const modificators = [];
@@ -25,8 +29,10 @@ function getClassNames(props) {
 }
 
 const Toolbar = ({children, style, ...props}) => (
-    <div className={getClassNames(props)} style={style}>
+    <div className={getClassNames(props)} style={{...styles, ...style}}>
+        <div className="mdc-toolbar__row">
         {children}
+        </div>
     </div>
 )
 

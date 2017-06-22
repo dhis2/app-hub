@@ -1,7 +1,6 @@
 import { reducer as formReducer} from 'redux-form';
 import * as actions from '../constants/actionTypes';
 
-
 const form = formReducer.plugin({
     imageUpload: (state, action) => {
         switch (action.type) {

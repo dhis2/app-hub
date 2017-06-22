@@ -10,7 +10,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
-
+import { validateZipFile, validateImageFile } from '../form/ReduxFormUtils';
 
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
     {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
@@ -20,18 +20,23 @@ const validate = values => {
     const requiredFields = ['appName', 'appType', 'file', 'developerName', 'developerOrg', 'version']
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'Field is required.'
+            errors[field] = 'Required'
         }
     })
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address'
+    }
+
+    if(values.minVer && values.maxVer && values.minVer > values.maxVer) {
+        errors.minVer = 'Cannot be higher than maximum version';
+        errors.maxVer = 'Cannot be lower than minimum version'
     }
     return errors
 }
 
 
 const UploadForm = (props) => {
-    const {handleSubmit, submitted, pristine, reset, submitting} = props;
+    const {handleSubmit,submitted, submitFailed, pristine, reset, dirty, submitting} = props;
 
     const onSubmit = (values) => {
         const data = {
@@ -41,7 +46,7 @@ const UploadForm = (props) => {
             developer: {
                 name: values.developerName,
                 email: values.developerEmail,
-                address: values.developerAddress,
+                address: values.developerAddress || "",
                 organisation: values.developerOrg,
             },
             versions: [{
@@ -66,38 +71,62 @@ const UploadForm = (props) => {
     const menuItems = appTypes.map((type, i) => (
         <MenuItem key={type.value} value={type.value} primaryText={type.label}/>
     ));
+    const DHISVersionItems = DHISVersions.map((version, i) => (
+        <MenuItem key={version} value={version} primaryText={version}/>
+    ))
 
     const fieldStyle = {
-        display: 'block',
+
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <Field name="appName" style={fieldStyle} component={formUtils.renderTextField} autoFocus fullWidth label="App Name"/>
-            <Field name="description" style={fieldStyle} component={formUtils.renderTextField} fullWidth multiLine rows={3}
+            <Field name="appName" style={fieldStyle} component={formUtils.renderTextField} autoFocus fullWidth
+                   label="App Name"/>
+            <Field name="description" style={fieldStyle} component={formUtils.renderTextField} fullWidth multiLine
+                   rows={2}
                    label="App Description"/>
             <br />
-            <Field name="appType" style={fieldStyle} component={formUtils.renderSelectField} fullWidth label="App Type">
+            <Field name="appType" component={formUtils.renderSelectField} label="App Type">
                 {menuItems}
             </Field>
             <h2>Version</h2>
             <Field name="version" style={fieldStyle} component={formUtils.renderTextField} label="Version"/>
-            <Field style={{display: 'block'}} name="minVer" component={formUtils.renderAutoCompleteField}
-                   label="Minimum DHIS version" dataSource={DHISVersions}/>
-            <Field name="maxVer" style={fieldStyle} component={formUtils.renderAutoCompleteField} label="Maximum DHIS version"
-                   dataSource={DHISVersions}/>
-            <Field name="file" component={formUtils.renderUploadField} accept=".zip" label="Upload app" />
+            <br />
+            <Field style={fieldStyle} name="minVer" component={formUtils.renderSelectField}
+                   label="Minimum DHIS version">
+                {DHISVersionItems}
+            </Field>
+            <br />
+            <Field name="maxVer" style={fieldStyle} component={formUtils.renderSelectField}
+                   label="Maximum DHIS version">
+                {DHISVersionItems}
+            </Field>
+            <br />
+            <Field name="file" style={{height: 72}} component={formUtils.renderUploadField}
+                   accept=".zip"
+                   validate={validateZipFile}
+                   formMeta={{dirty, submitFailed}}
+                   label="Upload app"/>
             <h2>Developer</h2>
-            <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField} label="Developer Name"/>
-            <Field name="developerEmail" style={fieldStyle} component={formUtils.renderTextField} label="Developer Email"/>
-            <Field name="developerAddress" style={fieldStyle} component={formUtils.renderTextField} label="Developer Address"/>
+            <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField}
+                   label="Developer Name"/>
+            <br />
+            <Field name="developerEmail" style={fieldStyle} component={formUtils.renderTextField}
+                   label="Developer Email"/>
+            <br />
             <Field name="developerOrg" style={fieldStyle} component={formUtils.renderTextField} label="Organisation"/>
 
             <h2>Image</h2>
-            <p>You can upload additional images once your app has been uploaded.</p>
-            <Field name="image" component={formUtils.renderUploadField} accept="image/*" hintText="Upload logo" id="imageFile"/>
+            <p>You can upload additional images and set front page image once your app has been uploaded.</p>
+            <Field name="image" component={formUtils.renderUploadField} accept="image/*" hintText="Upload logo"
+                   validate={validateImageFile}
+                   id="imageFile"/>
+            <br />
             <Field name="imageCaption" style={fieldStyle} component={formUtils.renderTextField} label="Image caption"/>
-            <Field name="imageDescription" style={fieldStyle} component={formUtils.renderTextField} label="Image description"/>
-
+            <br />
+            <Field name="imageDescription" style={fieldStyle} component={formUtils.renderTextField}
+                   label="Image description"/>
+            <br />
             <Button style={{...fieldStyle, marginTop: '20px'}}
                     icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
