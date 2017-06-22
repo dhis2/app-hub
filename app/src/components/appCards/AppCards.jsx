@@ -49,7 +49,7 @@ class AppCards extends Component {
 
             }
         }
-        const {loading, error, byId : cards} = this.props.appList;
+        const {loading, loaded, error, byId : cards} = this.props.appList;
         const loadOrErr = loading || error;
         const searchFilter = this.props.appSearchFilter ? this.props.appSearchFilter.values.searchFilter : '';
 
@@ -88,7 +88,8 @@ class AppCards extends Component {
                 <Col span={12} justify="center">
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                     <FadeAnimation component={Grid} nested style={styles.grid}>
-                        { apps.length > 0 ? apps : emptyApps }
+                        { loaded && apps.length > 0 ? apps : null }
+                        { loaded && apps.length < 0 ? emptyApps : null}
                     </FadeAnimation>
                 </Col>
             </Grid>

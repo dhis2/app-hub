@@ -121,7 +121,8 @@ class AppList extends Component {
                     <CardText>
                         {loadOrErr ? <ErrorOrLoading loading={loading} error={error}/> : null}
                         <List>
-                            {apps.length > 0 ? apps : "We couldn't find any apps."}
+                            { loaded && apps.length > 0 ? apps : null }
+                            { loaded && apps.length < 0 ? "We couldn't find any apps." : null}
                         </List>
                     </CardText>
                 </Card>

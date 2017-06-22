@@ -18,14 +18,19 @@ const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHB
 const validate = values => {
     const errors = {}
     const requiredFields = ['appName', 'appType', 'file', 'developerName', 'developerOrg', 'version']
+    const varCharFields = ['appName', 'appType', 'version', 'minVer', 'maxVer', 'developerName', 'developerEmail',
+        'developerOrg', 'imageCaption', 'imageDescription'];
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
         }
     })
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
-    }
+    varCharFields.forEach(field => {
+        if(values[field] && values[field].length > 255) {
+            errors[field] = 'Max 255 characters';
+        }
+    });
+
 
     if(values.minVer && values.maxVer && values.minVer > values.maxVer) {
         errors.minVer = 'Cannot be higher than maximum version';
@@ -83,7 +88,7 @@ const UploadForm = (props) => {
             <Field name="appName" style={fieldStyle} component={formUtils.renderTextField} autoFocus fullWidth
                    label="App Name"/>
             <Field name="description" style={fieldStyle} component={formUtils.renderTextField} fullWidth multiLine
-                   rows={2}
+                   rows={1}
                    label="App Description"/>
             <br />
             <Field name="appType" component={formUtils.renderSelectField} label="App Type">
