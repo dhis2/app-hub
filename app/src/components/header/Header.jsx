@@ -28,7 +28,7 @@ const renderProfileButton = (props) => {
 const Header = (props) =>
     (<Toolbar style={{backgroundColor: Theme.palette.primary1Color}}>
         <ToolbarSection align="start">
-        <Link to="/"><img style={{height: 32}} src={`${logo}`} /></Link>
+            <Link to="/"><img style={{display: 'flex', height: 32}} src={`${logo}`} /></Link>
         </ToolbarSection>
         <ToolbarTitle align="center">
             <Link to="/">App Store</Link>

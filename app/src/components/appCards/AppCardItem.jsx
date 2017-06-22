@@ -26,7 +26,7 @@ const AppItem = (props) => {
     }
 
     return (
-        <Card>
+        <Card style={{height:'100%'}}>
            <Link to={`/app/${id}`}>
             <CardMedia style={mediaStyle}>
             </CardMedia>

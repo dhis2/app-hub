@@ -30,12 +30,15 @@ class AppCards extends Component {
             filters: {
                 display: 'flex',
                 alignItems: 'center',
-                width: '100%',
+                flexWrap: 'wrap',
+                width: 'auto',
                 margin: '0 auto 0 auto'
             },
             filterElem: {
                 display: 'inline-flex',
                 margin: '10px',
+                width: 'auto'
+
             },
             appItem: {
                 maxWidth: '300px',
@@ -53,7 +56,7 @@ class AppCards extends Component {
         //filter and construct appcards
         const apps = sortBy(cards, ['name']).filter(app => filterApp(app, searchFilter) && filterAppType(app, this.props.filters))
             .map((app, i) => (
-                <Col key={app.id} span={3} align="middle" style={styles.appItem}>
+                <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app}/>
                 </Col>
             ))
@@ -73,7 +76,7 @@ class AppCards extends Component {
                                 form="appTypeFilter"
                                 style={styles.filters}
                                 elementStyle={styles.filterElem}
-                                labelStyle={{width: '100%'}}
+                                labelStyle={{width: 'auto'}}
                                 filters={[{label: 'Standard', toggled: true, value: 'APP_STANDARD'},
                                     {label: 'Dashboard', toggled: true, value: 'APP_DASHBOARD'},
                                     {label: 'Tracker', toggled: true, value: 'APP_TRACKER_DASHBOARD'}]}
@@ -82,9 +85,9 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
 
-                <Col span={12}>
+                <Col span={12} justify="center">
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
-                    <FadeAnimation component={Grid} style={styles.grid}>
+                    <FadeAnimation component={Grid} nested style={styles.grid}>
                         { apps.length > 0 ? apps : emptyApps }
                     </FadeAnimation>
                 </Col>

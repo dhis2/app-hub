@@ -5,7 +5,7 @@ const AlignType = PropTypes.oneOf(['top', 'middle', 'bottom']);
 const screenTypes = [ 'phone', 'tablet', 'desktop']
 const modificatorKeys = ['order', 'align', 'span', ...screenTypes];
 const baseClassname = 'mdc-layout-grid__cell';
-
+const JustifyType = PropTypes.oneOf(['start', 'end', 'center', 'stretch'])
 const propTypes = {
     span: PropTypes.number,
     tablet: PropTypes.number,
@@ -15,7 +15,7 @@ const propTypes = {
     align: AlignType,
     additionalClasses: PropTypes.string,
     children: PropTypes.node,
-    center: PropTypes.bool,
+    justify: JustifyType,
 };
 
 function getClassNames(props) {
@@ -37,7 +37,7 @@ function getClassNames(props) {
 }
 
 const Col = ({children, style, ...props}) => (
-    <div className={getClassNames(props)} style={props.center ? {margin: '0 auto 0 auto', ...style} : style} >
+    <div className={getClassNames(props)} style={props.justify ? {justifySelf: props.justify, ...style} : style} >
         {children}
     </div>
 )
