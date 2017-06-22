@@ -1,8 +1,8 @@
-import * as apiConstants from '../../config';
+import constants from '../../config';
 import { getAuth } from '../utils/AuthService';
 
 
-const baseURL = apiConstants.API_BASE_URL;
+const baseURL = constants.API_BASE_URL;
 
 const baseOptions = {
     method: 'GET'
