@@ -102,6 +102,5 @@ export function getAuth() {
        return auth;
 
     auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
-    console.log(auth.auth)
     return auth;
 }
