@@ -146,3 +146,8 @@ a {
 .auth0-lock.auth0-lock .auth0-lock-header {
     color: #ffffff !important;
 }
+
+
+.mdc-toolbar__section {
+    align-items: center !important;
+}
