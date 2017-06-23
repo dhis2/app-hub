@@ -38,8 +38,8 @@ class UserView extends Component {
         );
 
         return (
-            <Grid>
-                <Col span={2}>
+            <Grid align="left">
+                <Col span={3} phone={4} tablet={8}>
                     <List style={{padding: 0}}>
                         <Link to="/">
                             <ListItem primaryText="App Store"

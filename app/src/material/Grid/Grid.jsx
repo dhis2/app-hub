@@ -1,19 +1,47 @@
 import React, {PropTypes} from 'react';
 import classNames from 'classnames'
 import '@material/layout-grid/dist/mdc.layout-grid.css';
+
+const AlignType = PropTypes.oneOf(['center', 'left']);
+
 const propTypes = {
     children: PropTypes.node,
     additionalClasses: PropTypes.string,
     nested: PropTypes.bool,
+    align: AlignType
 };
 
-const Grid = ({style, nested, nestedStyle, ...props}) => {
-    const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={style}>
+
+function handleStyleProps(props) {
+    let style = {...props.style};
+    console.log(props)
+    if(props.nested) {
+        style = {...props.nestedStyle};
+    }
+
+    if(props.align) {
+        style.maxWidth = style.maxWidth || '1200px';
+        switch(props.align) {
+            case 'center' :
+                style.margin = '0 auto';
+                break;
+            case 'left':
+                style.marginLeft = '0';
+                break;
+    }
+
+    return style;
+
+}
+
+
+const Grid = ({nested, ...props}) => {
+    const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={handleStyleProps(props)}>
         <div className="mdc-layout-grid__inner">
             {props.children}
         </div>
     </div>);
-    const nestedElem = (<div className="mdc-layout-grid__inner" style={nestedStyle}>
+    const nestedElem = (<div className="mdc-layout-grid__inner" style={handleStyleProps(props)}>
         {props.children}
     </div>)
     return (
