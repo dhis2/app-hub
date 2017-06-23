@@ -7,13 +7,13 @@ const propTypes = {
     nested: PropTypes.bool,
 };
 
-const Grid = ({style, nested, ...props}) => {
+const Grid = ({style, nested, nestedStyle, ...props}) => {
     const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={style}>
         <div className="mdc-layout-grid__inner">
             {props.children}
         </div>
     </div>);
-    const nestedElem = (<div className="mdc-layout-grid__inner">
+    const nestedElem = (<div className="mdc-layout-grid__inner" style={nestedStyle}>
         {props.children}
     </div>)
     return (

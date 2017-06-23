@@ -24,8 +24,8 @@ class AppCards extends Component {
     render() {
         const styles = {
             grid: {
-               // justifyContent: 'center',
-              //  display: 'flex',
+               maxWidth: '1200px',
+               margin: '0 auto'
             },
             filters: {
                 display: 'flex',
@@ -85,11 +85,11 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
 
-                <Col span={12} justify="center">
+                <Col span={12} >
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
-                    <FadeAnimation component={Grid} nested style={styles.grid}>
+                    <FadeAnimation component={Grid} nested nestedStyle={styles.grid}>
                         { loaded && apps.length > 0 ? apps : null }
-                        { loaded && apps.length < 0 ? emptyApps : null}
+                        { loaded && apps.length < 1 ? emptyApps : null}
                     </FadeAnimation>
                 </Col>
             </Grid>

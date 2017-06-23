@@ -95,6 +95,7 @@ class AppList extends Component {
                              handleApprove={this.handleApproval.bind(this, app, 'APPROVE')}
                              handleReject={this.handleApproval.bind(this, app, 'REJECT')}/>
             ))
+        const emptyAppsText = manager ? "We couldn't find any apps" : "You have not uploaded any apps"
         const title = manager ? "All apps" : "Your apps";
         return (
             <div>
@@ -122,7 +123,7 @@ class AppList extends Component {
                         {loadOrErr ? <ErrorOrLoading loading={loading} error={error}/> : null}
                         <List>
                             { loaded && apps.length > 0 ? apps : null }
-                            { loaded && apps.length < 0 ? "We couldn't find any apps." : null}
+                            { loaded && apps.length < 1 ? emptyAppsText : null}
                         </List>
                     </CardText>
                 </Card>

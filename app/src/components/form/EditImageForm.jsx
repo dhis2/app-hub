@@ -45,7 +45,7 @@ const EditImageForm = (props) => {
     return (
         <Form onSubmit={handleSubmit(onSub)}>
             <Field name="caption" component={formUtils.renderTextField} autoFocus label="Image Caption"/> <br />
-            <Field name="description" component={formUtils.renderTextField} multiLine rows={3} label="Image Description"/>
+            <Field name="description" component={formUtils.renderTextField} multiLine rows={1} label="Image Description"/>
             <Field name="logo" component={formUtils.renderToggle} label="Set as logo for app" />
         </Form>
 
