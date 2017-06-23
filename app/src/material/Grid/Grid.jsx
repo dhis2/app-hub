@@ -28,6 +28,7 @@ function handleStyleProps(props) {
             case 'left':
                 style.marginLeft = '0';
                 break;
+        }
     }
 
     return style;
