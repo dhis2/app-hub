@@ -8,11 +8,12 @@ import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
+import Divider from 'material-ui/Divider';
 import LoginView from './login/LoginView';
 import {userLoad} from '../../actions/actionCreators';
-import AuthService from '../../utils/AuthService';
-import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
+import ActiveLink from '../utils/ActiveLink';
+
 class UserView extends Component {
 
     componentDidMount() {
@@ -40,14 +41,19 @@ class UserView extends Component {
             <Grid>
                 <Col span={2}>
                     <List style={{padding: 0}}>
-                        <Link to={this.props.match.url}>
+                        <Link to="/">
+                            <ListItem primaryText="App Store"
+                                      leftIcon={<FontIcon className="material-icons">home</FontIcon>}/>
+                        </Link>
+                        <Divider style={{marginTop: '8px', marginBottom: '8px'}}/>
+                        <ActiveLink to={this.props.match.url} activeOnlyWhenExact>
                             <ListItem primaryText="Apps"
                                       leftIcon={<FontIcon className="material-icons">list</FontIcon>}/>
-                        </Link>
-                        <Link to={`${this.props.match.url}/upload`}>
+                        </ActiveLink>
+                        <ActiveLink to={`${this.props.match.url}/upload`}>
                             <ListItem primaryText="Upload"
                                       leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
-                        </Link>
+                        </ActiveLink>
                         <ListItem primaryText="Logout"
                                   leftIcon={<FontIcon className="material-icons">exit_to_app</FontIcon>}
                                   onClick={() => this.props.auth.logout()}/>
