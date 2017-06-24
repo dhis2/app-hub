@@ -36,7 +36,7 @@ function handleStyleProps(props) {
 }
 
 
-const Grid = ({nested, ...props}) => {
+const Grid = ({...props}) => {
     const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={handleStyleProps(props)}>
         <div className="mdc-layout-grid__inner">
             {props.children}
@@ -46,7 +46,7 @@ const Grid = ({nested, ...props}) => {
         {props.children}
     </div>)
     return (
-        nested ? nestedElem : wrap
+        props.nested ? nestedElem : wrap
     )
 }
 

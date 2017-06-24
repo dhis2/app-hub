@@ -24,7 +24,7 @@ class AppCards extends Component {
     render() {
         const styles = {
             grid: {
-               maxWidth: '1200px',
+               maxWidth: '1500px',
                margin: '0 auto'
             },
             filters: {
@@ -85,7 +85,7 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
 
-                <Col span={12} >
+                <Col span={12}>
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                     <FadeAnimation component={Grid} nested nestedStyle={styles.grid}>
                         { loaded && apps.length > 0 ? apps : null }
