@@ -132,7 +132,7 @@ a {
 
 .multiline-content {
     white-space: pre-line;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .auth0-lock-header-bg {
