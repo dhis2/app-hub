@@ -10,19 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * Created by birkbj on 17/04/2017.
  */
 @Controller
-public class FrontendController {
+public class FrontendController
+{
     private static final Log log = LogFactory.getLog( FrontendController.class );
 
-   // @RequestMapping("/{path:[^\\.]+}/**")
-    @RequestMapping(value= {"/app", "/app/*", "/user", "/user/**"})
-    public String getIndex() {
-
+    @RequestMapping( value= { "/app", "/app/*", "/user", "/user/**" } )
+    public String getIndex()
+    {
         return "forward:/";
     }
 
     @ExceptionHandler(value = {Exception.class})
-    public String forwardToIndex() {
-        log.warn("Exceptionhandler");
+    public String forwardToIndex()
+    {
+        log.warn( "Exceptionhandler" );
+
         return "forward:/";
     }
 }

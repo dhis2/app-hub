@@ -21,7 +21,7 @@ const appStatus = {
         elem: (<FontIcon title="Approved" style={appStatusStyle} className="material-icons">check</FontIcon>),
     },
     PENDING: {
-        alt: 'Pending',
+        alt: 'Pending approval',
         elem: (<FontIcon title="Pending" style={appStatusStyle} className="material-icons">priority_high</FontIcon>),
     },
     NOT_APPROVED: {
@@ -67,11 +67,15 @@ const AppListItem = (props, state) => {
         </IconMenu>
     )
     let logo = images.filter(elem => elem.logo)[0];
-
+    const secondaryText = (
+        <p style={{display: 'inline-block', height: 'auto'}}>{developer.name} <br />
+            {appTypesToUI[appType]}
+            {!props.manager ? (<span><br />Status: {appStatus[status].alt}</span>) : null}
+        </p>)
     const listItemProps = {
         primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
         leftAvatar: (<AppLogo logo={logo} inList/>),
-        secondaryText: (<p>{developer.name} <br /> {appTypesToUI[appType]} </p>),
+        secondaryText: secondaryText,
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
         onTouchTap: () => props.history.push(`${props.match.url}/app/${id}`)

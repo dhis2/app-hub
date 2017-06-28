@@ -5,9 +5,9 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {loadUserApp, addImageToApp, openDialog, deleteAppVersion} from '../../../actions/actionCreators';
+import {loadUserApp, addImageToApp, openDialog, deleteAppVersion, editAppVersion } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
-import VersionList from '../../appVersion/VersionList';
+import VersionListEdit from '../../appVersion/VersionListEdit';
 import FontIcon from 'material-ui/FontIcon';
 import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
@@ -74,6 +74,10 @@ class UserAppView extends Component {
         })
     }
 
+    handleEditVersion(version) {
+        this.props.editVersion(this.props.app.id, version);
+    }
+
     render() {
         const app = this.props.app;
         if (!app) {
@@ -123,7 +127,8 @@ class UserAppView extends Component {
                     </FloatingActionButton>
                     <CardTitle title="Versions"/>
                     <CardText>
-                        <VersionList editable versionList={app.versions} app={app}
+                        <VersionListEdit editable versionList={app.versions} app={app}
+                                         handleEdit={this.handleEditVersion.bind(this)}
                                      handleDelete={this.handleDeleteAppVersion.bind(this)}/>
                     </CardText>
                 </Card>
@@ -173,6 +178,9 @@ const mapDispatchToProps = (dispatch) => ({
 
     openEditAppDialog(dialogProps) {
         dispatch(openDialog(dialogType.EDIT_APP, dialogProps))
+    },
+    editVersion(appId, version) {
+        dispatch(editAppVersion(appId, version));
     }
 })
 

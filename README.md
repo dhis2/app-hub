@@ -84,7 +84,7 @@ Frontend at `localhost:8080/appstore/`.
 #### Start the Web API backend independently
 
 ```bash
-mvn clean install && mvn spring-boot:run
+mvn clean install && mvn spring-boot:run -Dskip.webpack
 ```
 Will be available at `localhost:3098/api/apps`.
 

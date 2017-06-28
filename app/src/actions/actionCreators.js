@@ -81,6 +81,25 @@ export const editImageLogo = (appId, imageId, logo) => (
     })
 )
 
+export const editAppVersion = (appId, version) => {
+    return {
+        type: actions.APP_VERSION_EDIT,
+        payload: {
+            appId,
+            version
+        }
+    }
+}
+
+export const editAppVersionSuccess = (appId, version) => {
+    return {
+        type: actions.APP_VERSION_EDIT_SUCCESS,
+        payload: {
+            appId,
+            version
+        }
+    }
+}
 
 export const addAppSuccess = (app) => (
     createActionCreator(actions.APP_ADD_SUCCESS)({

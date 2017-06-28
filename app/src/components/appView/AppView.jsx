@@ -47,8 +47,8 @@ class AppView extends Component {
         let logo = images.filter(elem => elem.logo)[0];
 
         return(
-            <Grid>
-                <Col span={12} phone={4} style={{maxWidth:'900px'}} center>
+            <Grid style={{maxWidth:'900px'}}>
+                <Col span={12} phone={4}>
                 <Subheader title="App overview" backLink="/" />
                 <Card>
                     <CardHeader title={app.name} avatar={<AppLogo logo={logo} />}

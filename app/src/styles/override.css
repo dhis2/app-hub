@@ -132,7 +132,7 @@ a {
 
 .multiline-content {
     white-space: pre-line;
-    word-break: break-all;
+    word-wrap: break-word;
 }
 
 .auth0-lock-header-bg {
@@ -145,4 +145,9 @@ a {
 
 .auth0-lock.auth0-lock .auth0-lock-header {
     color: #ffffff !important;
+}
+
+
+.mdc-toolbar__section {
+    align-items: center !important;
 }

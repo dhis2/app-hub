@@ -63,18 +63,19 @@ const tomcat = {
             filename: 'index.html',
             template: 'app/indexbuild.html',
         }),
+
         new webpack.optimize.UglifyJsPlugin({minimize: true, comments: false}),
     ]
 }
 
 const dev = {
-    entry: {
-        app: './app/src/app-store.js',
-    },
-    output: {
-        path: path.join(__dirname, 'build'),
-        filename: '[name].js',
-    },
+        entry: {
+            app: './app/src/app-store.js',
+        },
+        output: {
+            path: path.join(__dirname, 'build'),
+            filename: '[name].js',
+        },
 
     module: {
         loaders: [
@@ -115,6 +116,11 @@ const dev = {
                 NODE_ENV: JSON.stringify('development'),
             },
         }),
+        new webpack.EnvironmentPlugin({
+            'DHIS2_APPSTORE_BASE_APP_NAME': null,
+            'DHIS2_APPSTORE_API_BASE_URL': null,
+            'DHIS2_APPSTORE_API_REDIRECT_URL': null
+            }),
         new CopyWebpackPlugin(
             [
                 {
@@ -127,6 +133,7 @@ const dev = {
 const tomcatDev = Object.assign({},tomcat, {
     plugins: [
         ...tomcat.plugins,
+        ...dev.plugins,
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: JSON.stringify('development'),

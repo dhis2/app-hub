@@ -3,19 +3,22 @@ import Avatar from 'material-ui/Avatar';
 import FontIcon from 'material-ui/FontIcon';
 import Theme from '../../styles/theme';
 
-const style = {
-    base: {
-        backgroundColor: Theme.palette.primary1Color,
-        marginRight: '16px',
-    },
-    list: {
-        left: '16px',
-        position: 'absolute'
-    }
-}
 
 
 const Logo = (props) => {
+
+    const style = {
+        base: {
+            backgroundColor: props.logo ? '#ffffff' : Theme.palette.primary1Color,
+            marginRight: '16px',
+        },
+        list: {
+            left: '16px',
+            position: 'absolute'
+        }
+    }
+
+
     const { logo, inList } = props;
     const avatarProps = {
         src: logo ? logo.imageUrl : null,

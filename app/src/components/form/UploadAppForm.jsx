@@ -86,7 +86,8 @@ const UploadForm = (props) => {
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Field name="appName" style={fieldStyle} component={formUtils.renderTextField} autoFocus fullWidth
-                   label="App Name"/>
+                   label="App Name *"
+            />
             <Field name="description" style={fieldStyle} component={formUtils.renderTextField} fullWidth multiLine
                    rows={1}
                    label="App Description"/>
@@ -95,7 +96,7 @@ const UploadForm = (props) => {
                 {menuItems}
             </Field>
             <h2>Version</h2>
-            <Field name="version" style={fieldStyle} component={formUtils.renderTextField} label="Version"/>
+            <Field name="version" style={fieldStyle} component={formUtils.renderTextField} label="Version *"/>
             <br />
             <Field style={fieldStyle} name="minVer" component={formUtils.renderSelectField}
                    label="Minimum DHIS version">
@@ -111,15 +112,16 @@ const UploadForm = (props) => {
                    accept=".zip"
                    validate={validateZipFile}
                    formMeta={{dirty, submitFailed}}
-                   label="Upload app"/>
+                   label="Upload app *"/>
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField}
-                   label="Developer Name"/>
+                   label="Developer Name *"/>
             <br />
             <Field name="developerEmail" style={fieldStyle} component={formUtils.renderTextField}
                    label="Developer Email"/>
             <br />
-            <Field name="developerOrg" style={fieldStyle} component={formUtils.renderTextField} label="Organisation"/>
+            <Field name="developerOrg" style={fieldStyle} component={formUtils.renderTextField}
+                   label="Organisation *"/>
 
             <h2>Image</h2>
             <p>You can upload additional images and set front page image once your app has been uploaded.</p>

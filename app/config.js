@@ -1,7 +1,6 @@
 
 const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.NODE_ENV === 'production'
 //used when NODE_ENV is 'development'
-
 const dev = {
     BASE_APP_NAME: process.env.DHIS2_APPSTORE_BASE_APP_NAME ||  '',
     API_BASE_URL: process.env.DHIS2_APPSTORE_API_BASE_URL || 'http://localhost:3098/api/',
@@ -43,6 +42,9 @@ const DHISVersions = ['2.27', '2.26', '2.25', '2.24', '2.23', '2.22', '2.21'];
 
 const AUTH0ClientId = 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81';
 const AUTH0Domain = 'dhis2.eu.auth0.com';
+
+
+
 
 module.exports = Object.assign({}, (isProd ? prod : dev), {
     DHISVersions,

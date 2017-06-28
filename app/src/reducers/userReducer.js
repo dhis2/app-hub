@@ -184,6 +184,32 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+        case actionTypes.APP_VERSION_EDIT:
+        case actionTypes.APP_VERSION_EDIT_SUCCESS: {
+            const { appId, version } = action.payload;
+            const app = state.byId[appId];
+            const list = app.versions.map((elem, ind) => {
+                if(elem.id == version.id) {
+                    return {
+                        ...elem,
+                        ...version,
+                    }
+                } else {
+                    return elem;
+                }
+            });
+             return {
+                 ...state,
+                 byId: {
+                     ...state.byId,
+                     [appId]: {
+                         ...app,
+                         versions: list
+                     }
+                 }
+             }
+        }
+
         default: {
             if (action.type.endsWith('_ERROR')) {
                 return {

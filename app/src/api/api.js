@@ -56,6 +56,13 @@ export function createNewImage(appId, payload) {
 export function deleteVersion(appId, versionId) {
     return fromApi('apps/'+appId+'/versions/'+versionId, true, deleteOpts);
 }
+export function updateVersion(appId, versionId, payload) {
+    return fromApi(`apps/${appId}/versions/${versionId}`, true, {
+        ...baseOptions,
+        ...updateOpts,
+        body: JSON.stringify(payload)
+    })
+}
 
 export function deleteApp(appId) {
     return fromApi('apps/'+appId, true, deleteOpts);
@@ -80,6 +87,8 @@ export function updateImage(appId, imageId, payload) {
         body: JSON.stringify(payload)
     })
 }
+
+
 function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
     const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};

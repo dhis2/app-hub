@@ -21,7 +21,7 @@ const AppItem = (props) => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         backgroundSize: logo ? 'cover' : 'contain',
-        backgroundColor: Theme.palette.primary1Color,
+        backgroundColor: logo ? '#ffffff' : Theme.palette.primary1Color,
         height: '190px'
     }
 

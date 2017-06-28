@@ -1,6 +1,6 @@
 {
   "name": "appstore-app",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "main": "index.js",
   "license": "BSD-3-Clause",
   "scripts": {
@@ -15,9 +15,10 @@
     "babel-preset-react-optimize": "^1.0.1",
     "babel-preset-stage-2": "6",
     "copy-webpack-plugin": "^4.0.1",
-    "html-webpack-plugin": "^2.28.0",
+    "html-webpack-plugin": "^2.29.0",
     "redux-logger": "2.8.1",
     "webpack": "^3.0.0",
+    "webpack-dev-middleware": "^1.11.0",
     "webpack-dev-server": "^2.5.0"
   },
   "dependencies": {
@@ -47,7 +48,6 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.13.1",
     "svg-loader": "^0.0.2",
-    "webpack-dev-middleware": "^1.10.2",
     "whatwg-fetch": "^2.0.3"
   }
 }

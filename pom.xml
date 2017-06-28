@@ -192,82 +192,174 @@
 
   </dependencies>
 
+  <profiles>
 
-  <build>
-    <finalName>appstore</finalName>
-    <plugins>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <useSystemClassLoader>false</useSystemClassLoader>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.5.0</version>
-        <configuration>
-          <mainClass>org.hisp.appstore.configuration.Dhis2AppStore</mainClass>
-        </configuration>
-      </plugin>
 
-      <!-- Frontend build -->
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <version>1.4</version>
-        <configuration>
-          <installDirectory>target</installDirectory>
-        </configuration>
-
-        <executions>
-        <execution>
-          <id>install node and yarn</id>
-          <goals>
-            <goal>install-node-and-yarn</goal>
-          </goals>
-          <phase>generate-resources</phase>
-
-        <configuration>
-          <nodeVersion>v7.5.0</nodeVersion>
-          <yarnVersion>v0.20.0</yarnVersion>
-        </configuration>
-        </execution>
-
-          <!-- yarn install -->
-          <execution>
-          <id>yarn install</id>
-          <goals>
-            <goal>yarn</goal>
-          </goals>
-          <configuration>
-            <arguments>install</arguments>
-          </configuration>
-          </execution>
-
-          <!-- build bundle-->
-          <execution>
-            <id>webpack build</id>
-            <goals>
-              <goal>webpack</goal>
-            </goals>
-
-            <phase>generate-resources</phase>
-
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <finalName>appstore</finalName>
+        <plugins>
+          <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-              <arguments>-p --config ./app/webpack.config.js</arguments>
+              <useSystemClassLoader>false</useSystemClassLoader>
             </configuration>
-          </execution>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
+            <configuration>
+              <mainClass>org.hisp.appstore.configuration.Dhis2AppStore</mainClass>
+            </configuration>
+          </plugin>
 
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+          <!-- Frontend build -->
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.4</version>
+            <configuration>
+              <installDirectory>target</installDirectory>
+            </configuration>
+
+            <executions>
+              <execution>
+                <id>install node and yarn</id>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <phase>generate-resources</phase>
+
+                <configuration>
+                  <nodeVersion>v7.5.0</nodeVersion>
+                  <yarnVersion>v0.20.0</yarnVersion>
+                </configuration>
+              </execution>
+
+              <!-- yarn install -->
+              <execution>
+                <id>yarn install</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+
+              <!-- build bundle-->
+              <execution>
+                <id>webpack build</id>
+                <goals>
+                  <goal>webpack</goal>
+                </goals>
+
+                <phase>generate-resources</phase>
+
+                <configuration>
+                  <arguments>-p --config ./app/webpack.config.js</arguments>
+                </configuration>
+              </execution>
+
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <profile>
+      <id>dev</id>
+      <build>
+        <finalName>appstore</finalName>
+        <plugins>
+          <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <useSystemClassLoader>false</useSystemClassLoader>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>1.5.0</version>
+            <configuration>
+              <mainClass>org.hisp.appstore.configuration.Dhis2AppStore</mainClass>
+            </configuration>
+          </plugin>
+
+          <!-- Frontend build -->
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.4</version>
+            <configuration>
+              <installDirectory>target</installDirectory>
+            </configuration>
+
+            <executions>
+              <execution>
+                <id>install node and yarn</id>
+                <goals>
+                  <goal>install-node-and-yarn</goal>
+                </goals>
+                <phase>generate-resources</phase>
+
+                <configuration>
+                  <nodeVersion>v7.5.0</nodeVersion>
+                  <yarnVersion>v0.20.0</yarnVersion>
+                </configuration>
+              </execution>
+
+              <!-- yarn install -->
+              <execution>
+                <id>yarn install</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <configuration>
+                  <arguments>install</arguments>
+                </configuration>
+              </execution>
+
+              <!-- build bundle-->
+              <execution>
+                <id>webpack build</id>
+                <goals>
+                  <goal>webpack</goal>
+                </goals>
+
+                <phase>generate-resources</phase>
+
+                <configuration>
+                  <arguments> --config ./app/webpack.config.js</arguments>
+                </configuration>
+              </execution>
+
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+
+
+
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
