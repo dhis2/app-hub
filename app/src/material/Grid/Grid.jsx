@@ -14,7 +14,6 @@ const propTypes = {
 
 function handleStyleProps(props) {
     let style = {...props.style};
-    console.log(props)
     if(props.nested) {
         style = {...props.nestedStyle};
     }

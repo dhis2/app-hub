@@ -9,6 +9,10 @@ import TextField from 'material-ui/TextField';
 import Theme from '../../styles/theme';
 
 
+
+const TableIcon = ({children}) => (<FontIcon style={{fontSize: '18px'}}
+    className="material-icons">{children}</FontIcon>)
+
 class VersionListEdit extends Component {
 
     constructor(props) {
@@ -78,15 +82,20 @@ class VersionListEdit extends Component {
     }
 
     renderRowEdit(version) {
-        const submitIcon = (<IconButton onTouchTap={() => this.handleSubmitField(version)}><FontIcon
-            className="material-icons">check</FontIcon></IconButton>)
+        const submitIcon = (<IconButton onTouchTap={() => this.handleSubmitField(version)}>
+            <TableIcon>check</TableIcon></IconButton>)
 
         return (
             <TableRow key={version.id}>
-                <TableRowColumn>
+                <TableRowColumn style={{width: '48px'}}>
                     <a href={version.downloadUrl} title="Download">
-                        <FontIcon className="material-icons">file_download</FontIcon>
+                        <TableIcon>file_download</TableIcon>
                     </a>
+                </TableRowColumn>
+                <TableRowColumn>
+                    <TextField defaultValue={version.demoUrl}
+                               onChange={this.handleValueChange.bind(this, version.id, 'demoUrl')}
+                               name="demoUrl" />
                 </TableRowColumn>
                 <TableRowColumn>
                     <TextField defaultValue={version.version}
@@ -106,24 +115,24 @@ class VersionListEdit extends Component {
                 <TableRowColumn title={new Date(version.created).toLocaleString()}>
                     {new Date(version.created).toLocaleDateString()}</TableRowColumn>
                 <TableRowColumn style={{width: "auto"}}>{submitIcon}
-                    <IconButton onTouchTap={() => this.props.handleDelete(version)}><FontIcon
-                        className="material-icons">delete</FontIcon></IconButton></TableRowColumn>
+                    <IconButton style={{width: '18dp'}} onTouchTap={() => this.props.handleDelete(version)}><TableIcon>delete</TableIcon></IconButton></TableRowColumn>
 
             </TableRow>
         )
     }
 
     renderRowNormal(version) {
-        const editIcon = (<IconButton onTouchTap={() => this.handleEditField(version)}><FontIcon
-            className="material-icons">edit</FontIcon></IconButton>)
+        const editIcon = (<IconButton onTouchTap={() => this.handleEditField(version)}>
+            <TableIcon>edit</TableIcon></IconButton>)
 
         return (
             <TableRow key={version.id}>
-                <TableRowColumn>
+                <TableRowColumn style={{width: '48px'}}>
                     <a href={version.downloadUrl} title="Download">
-                        <FontIcon className="material-icons">file_download</FontIcon>
+                        <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
+                <TableRowColumn><a href={version.demoUrl}>{version.demoUrl ? 'Demo' : 'N/A'}</a></TableRowColumn>
                 <TableRowColumn onTouchTap={this.handleOpenEditField.bind(this)}>{version.version}</TableRowColumn>
                 <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                 <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
@@ -137,6 +146,14 @@ class VersionListEdit extends Component {
 
 
     render() {
+        const styles = {
+            tableHeaderColumn: {
+                paddingLeft: '24px',
+                paddingRight: '24px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+            }
+        }
         const props = this.props;
         const versions = props.versionList.sort((a, b) => b.created - a.created).map((version, i) => {
             return (
@@ -149,19 +166,13 @@ class VersionListEdit extends Component {
             <Table selectable={false}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                     <TableRow>
-                        <TableHeaderColumn>
-                            <div>
-                                <Popover open={this.state.open} anchorEl={this.state.anchorEl}
-                                         onRequestClose={(r) => this.setState({open: false})}>
-                                    <TextField name="field"/>
-                                </Popover>
-                            </div>
-                            Download</TableHeaderColumn>
-                        <TableHeaderColumn onClick={this.handleOpenEditField.bind(this)}>Version</TableHeaderColumn>
-                        <TableHeaderColumn>Min DHIS version</TableHeaderColumn>
-                        <TableHeaderColumn>Max DHIS version</TableHeaderColumn>
-                        <TableHeaderColumn>Uploaded</TableHeaderColumn>
-                        <TableHeaderColumn style={{width: "48px"}}></TableHeaderColumn>
+                        <TableHeaderColumn style={{...styles.tableHeaderColumn, width: '48px'}} tooltip='Download link'>Download</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Demo link'>Demo</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Version of app'>Version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Minimum DHIS version that this version supports'>Min DHIS version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Maximum DHIS version that this version supports'>Max DHIS version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='The date the version was uploaded'>Uploaded</TableHeaderColumn>
+                        <TableHeaderColumn style={{...styles.tableHeaderColumn, width: "48px"}}></TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
