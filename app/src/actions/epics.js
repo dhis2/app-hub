@@ -177,7 +177,20 @@ const editImage = (action$) => action$
             }));
     })
 
+const editVersion = (action$) => action$
+    .ofType(actions.APP_VERSION_EDIT)
+    .concatMap(action => {
+        const {appId, version} = action.payload;
+        const versionId = version.id;
+        return api.updateVersion(appId, versionId, version)
+            .then(response => actionCreators.editAppVersionSuccess(appId, version))
+            .catch(error => ({
+                type: actions.APP_VERSION_EDIT_ERROR,
+                payload: error,
+            }))
+    });
+
 export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
     user, userApps, newVersion,
     newApp, deleteVersion, editApp,
-    addImage, editImage, deleteImage)
+    addImage, editImage, deleteImage, editVersion)
