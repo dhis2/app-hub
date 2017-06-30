@@ -18,6 +18,17 @@ export class PrivateRoute extends Component {
         return (nextProps.authenticated !== this.props.authenticated) || nextProps.location !== this.props.location;
     }
 
+
+    componentWillUnmount() {
+        const { auth } = this.props;
+        // dispatch logout-action when user is redirected off of this route
+        // and is not connected to auth.
+        // this happens e.g. if token expires.
+        if(!auth.isLoggedIn() && this.props.authenticated) {
+            this.props.logoutUser();
+        }
+    }
+
     render() {
         const {component, auth, ...rest} = this.props;
 
@@ -32,7 +43,6 @@ export class PrivateRoute extends Component {
             else if (auth.isLoggedIn()) {
                 return React.createElement(component, {auth, ...props})
             } else { //logged out, be sure to dispatch logout-action and redirect to index
-                this.props.logoutUser();
                 return (<Redirect to="/" />)
             }
         }}/>)
