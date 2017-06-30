@@ -1,6 +1,6 @@
 import Auth0Lock from 'auth0-lock'
-import { isTokenExpired } from './jwtHelper';
-import { BrowserRouter } from 'react-router-dom';
+import {isTokenExpired} from './jwtHelper';
+import {BrowserRouter} from 'react-router-dom';
 import History from './history';
 import constants from '../../config';
 import store from '../store';
@@ -10,7 +10,6 @@ import logo from '../assets/img/dhis2.svg'
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
-        this.parsed = false;
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: constants.API_REDIRECT_URL,
@@ -27,7 +26,7 @@ export default class AuthService {
                 title: 'Log in'
             }
         })
-        this.lock.on('hash_parsed', () => this.parsed = true);
+
         // Add callback for lock `authenticated` event
         this.lock.on('authenticated', this._doAuthentication.bind(this))
         // binds login functions to keep this context
@@ -38,10 +37,6 @@ export default class AuthService {
         // Saves the user token
         this.setToken(authResult.idToken)
         store.dispatch({type: "USER_AUTHENTICATED"})
-    }
-
-    isHashParsed() {
-        return this.parsed;
     }
 
     login() {
@@ -57,7 +52,7 @@ export default class AuthService {
 
     isManager() {
         const profile = this.getProfile();
-        if(profile) {
+        if (profile) {
             return profile.roles.includes('ROLE_MANAGER');
         }
         return null;
@@ -99,7 +94,7 @@ export default class AuthService {
 let auth;
 export function getAuth() {
     if (auth)
-       return auth;
+        return auth;
 
     auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
     return auth;

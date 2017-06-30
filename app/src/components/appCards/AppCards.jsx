@@ -12,7 +12,6 @@ import sortBy from 'lodash/sortBy';
 import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
 import {FadeAnimation} from '../utils/Animate';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import '../../styles/utils/animations.scss';
 
 class AppCards extends Component {
