@@ -9,9 +9,8 @@ import TextField from 'material-ui/TextField';
 import Theme from '../../styles/theme';
 
 
-
 const TableIcon = ({children}) => (<FontIcon style={{fontSize: '18px'}}
-    className="material-icons">{children}</FontIcon>)
+                                             className="material-icons">{children}</FontIcon>)
 
 class VersionListEdit extends Component {
 
@@ -95,22 +94,22 @@ class VersionListEdit extends Component {
                 <TableRowColumn>
                     <TextField defaultValue={version.demoUrl}
                                onChange={this.handleValueChange.bind(this, version.id, 'demoUrl')}
-                               name="demoUrl" />
+                               name="demoUrl"/>
                 </TableRowColumn>
                 <TableRowColumn>
                     <TextField defaultValue={version.version}
                                onChange={this.handleValueChange.bind(this, version.id, 'version')}
-                               name="version" />
-                    </TableRowColumn>
+                               name="version"/>
+                </TableRowColumn>
                 <TableRowColumn>
                     <TextField defaultValue={version.minDhisVersion}
                                onChange={this.handleValueChange.bind(this, version.id, 'minDhisVersion')}
-                               name="minDhisVersion" />
+                               name="minDhisVersion"/>
                 </TableRowColumn>
                 <TableRowColumn>
                     <TextField defaultValue={version.maxDhisVersion}
                                onChange={this.handleValueChange.bind(this, version.id, 'maxDhisVersion')}
-                               name="maxDhisVersion" />
+                               name="maxDhisVersion"/>
                 </TableRowColumn>
                 <TableRowColumn title={new Date(version.created).toLocaleString()}>
                     {new Date(version.created).toLocaleDateString()}</TableRowColumn>
@@ -132,7 +131,10 @@ class VersionListEdit extends Component {
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
-                <TableRowColumn><a href={version.demoUrl}>{version.demoUrl ? 'Demo' : 'N/A'}</a></TableRowColumn>
+                <TableRowColumn>
+                    {version.demoUrl ?
+                        <a href={`${version.demoUrl}`} target="_blank" style={{color: Theme.palette.primary1Color}}>Demo</a>
+                        : 'N/A'}</TableRowColumn>
                 <TableRowColumn onTouchTap={this.handleOpenEditField.bind(this)}>{version.version}</TableRowColumn>
                 <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                 <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
@@ -168,9 +170,14 @@ class VersionListEdit extends Component {
                     <TableRow>
                         <TableHeaderColumn style={{...styles.tableHeaderColumn, width: '48px'}} tooltip='Download link'>Download</TableHeaderColumn>
                         <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Demo link'>Demo</TableHeaderColumn>
-                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Version of app'>Version</TableHeaderColumn>
-                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Minimum DHIS version that this version supports'>Min DHIS version</TableHeaderColumn>
-                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Maximum DHIS version that this version supports'>Max DHIS version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn}
+                                           tooltip='Version of app'>Version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn}
+                                           tooltip='Minimum DHIS version that this version supports'>Min DHIS
+                            version</TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn}
+                                           tooltip='Maximum DHIS version that this version supports'>Max DHIS
+                            version</TableHeaderColumn>
                         <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='The date the version was uploaded'>Uploaded</TableHeaderColumn>
                         <TableHeaderColumn style={{...styles.tableHeaderColumn, width: "48px"}}></TableHeaderColumn>
                     </TableRow>

@@ -4,7 +4,7 @@ import * as formUtils from './ReduxFormUtils';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, Form, reduxForm} from 'redux-form';
 import {DHISVersions} from '../../constants/apiConstants';
-import { validateZipFile } from '../form/ReduxFormUtils';
+import {validateZipFile, validateURL} from '../form/ReduxFormUtils';
 const validate = values => {
     const errors = {}
     const requiredFields = ['version', 'file']
@@ -29,6 +29,7 @@ const NewAppVersionForm = (props) => {
             version: values.version,
             minDhisVersion: values.minVer,
             maxDhisVersion: values.maxVer,
+            demoUrl: values.demoUrl,
         }
         const file = values.file[0];
         return props.submitted({data, file: file});
@@ -41,7 +42,8 @@ const NewAppVersionForm = (props) => {
                    label="Minimum DHIS version" dataSource={DHISVersions}/>
             <Field name="maxVer" component={formUtils.renderAutoCompleteField} label="Maximum DHIS version"
                    dataSource={DHISVersions}/>
-
+            <Field name="demoUrl" component={formUtils.renderTextField} label="Demo URL"
+                   validate={validateURL}/>
             <Field name="file" component={formUtils.renderUploadField}
                    validate={validateZipFile}
                    formMeta={{submitFailed}}

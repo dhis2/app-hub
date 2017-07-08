@@ -34,7 +34,7 @@ const VersionList = (props) => {
         <Table selectable={false}>
             <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                 <TableRow>
-                    <TableHeaderColumn>Download</TableHeaderColumn>
+                    <TableHeaderColumn tooltip="Download URL">Download</TableHeaderColumn>
                     <TableHeaderColumn>Version</TableHeaderColumn>
                     <TableHeaderColumn>Min DHIS version</TableHeaderColumn>
                     <TableHeaderColumn>Max DHIS version</TableHeaderColumn>

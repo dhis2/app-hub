@@ -139,6 +139,7 @@ export function createUploadVersionOptions(data) {
         version: version.version,
         minDhisVersion: version.minDhisVersion || null,
         maxDhisVersion: version.maxDhisVersion || null,
+        demoUrl: version.demoUrl || null,
 
     }
     const dataFile = data.file;
