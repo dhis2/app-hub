@@ -19,7 +19,7 @@
     "redux-logger": "2.8.1",
     "webpack": "^3.0.0",
     "webpack-dev-middleware": "^1.11.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack-dev-server": "^2.5.1"
   },
   "dependencies": {
     "auth0-lock": "^10.18.0",

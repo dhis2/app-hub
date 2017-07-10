@@ -14,7 +14,7 @@ export class EditAppDialog extends Component {
 
     submitForm() { //submit form manually as dialog actions work as submit button
         const res = this.form.submit();
-        if(this.form.valid) {
+        if (this.form.valid) {
             return Promise.resolve(res);
         } else {
             return Promise.reject(res)
@@ -35,10 +35,7 @@ export class EditAppDialog extends Component {
         return (
             <DialogBase
                 title="Edit App"
-                approveAction={this.submitForm.bind(this)}
-                contentStyle={{maxWidth: '500px'}}
-                bodyStyle={{overflowY:'scroll'}}
-            >
+                approveAction={this.submitForm.bind(this)}>
                 <EditAppForm initialValues={{
                     appName: app.name,
                     description: app.description,
@@ -47,9 +44,9 @@ export class EditAppDialog extends Component {
                     developerEmail: app.developer.email,
                     developerAddress: app.developer.address,
                     developerOrg: app.developer.organisation,
-                }} ref={(ref) => {this.form = ref; }}
-                submitted={this.handleCreate.bind(this)}/>
-
+                }} ref={(ref) => {
+                    this.form = ref;
+                }} submitted={this.handleCreate.bind(this)}/>
             </DialogBase>
         );
     }
@@ -61,9 +58,6 @@ EditAppDialog.propTypes = {
     addVersion: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    app: state.dialog.dialogProps.app,
-});
 
 const mapDispatchToProps = dispatch => ({
     editApp(app, data) {
@@ -72,6 +66,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(EditAppDialog);

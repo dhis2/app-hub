@@ -123,7 +123,7 @@ const urlRegex = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\
 export const validateURL = value => {
     let error = undefined;
 
-    if(!urlRegex.test(value)) {
+    if(value && !urlRegex.test(value)) {
         error = 'Invalid URL';
     }
 

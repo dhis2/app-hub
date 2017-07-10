@@ -35,7 +35,13 @@ class UserAppView extends Component {
     }
 
     handleDeleteAppVersion(version) {
-        this.props.deleteVersion(version, this.props.app.id);
+        const children = (<div><p>Are you sure you want to delete version <i>{version.version} </i>
+            for app '{this.props.app.name}'?</p>
+        This cannot be undone.
+        </div>)
+        this.props.openConfirmDeleteVersion({children,
+            approveAction: () => this.props.deleteVersion(version, this.props.app.id)})
+     //   this.props.deleteVersion(version, this.props.app.id);
     }
 
     renderStatusAlert() {
@@ -181,6 +187,10 @@ const mapDispatchToProps = (dispatch) => ({
     },
     editVersion(appId, version) {
         dispatch(editAppVersion(appId, version));
+    },
+
+    openConfirmDeleteVersion(dialogProps) {
+        dispatch(openDialog(dialogType.CONFIRM_GENERIC, dialogProps))
     }
 })
 

@@ -58,11 +58,6 @@ EditImageDialog.propTypes = {
     addVersion: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    appId: state.dialog.dialogProps.appId,
-    image: state.dialog.dialogProps.image,
-});
-
 const mapDispatchToProps = dispatch => ({
     editImage(appId, imageId, data) {
         dispatch(editImage(appId, imageId, data))
@@ -70,6 +65,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(EditImageDialog);

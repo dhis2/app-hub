@@ -4,6 +4,16 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import {closeDialog} from '../../actions/actionCreators';
 
+
+const styles = {
+    bodyStyle: {
+       overflowY: 'auto'
+    },
+    contentStyle: {
+        maxWidth: '500px'
+    }
+}
+
 class DialogBase extends Component {
 
     static buildButton(action, text, primary = false) {
@@ -41,8 +51,8 @@ class DialogBase extends Component {
             title={title}
             actions={actions}
             modal={false}
-            contentStyle={contentStyle || {}}
-            bodyStyle={bodyStyle || {}}
+            contentStyle={{...styles.contentStyle, ...contentStyle} || styles.contentStyle}
+            bodyStyle={{...styles.bodyStyle, ...bodyStyle} || styles.bodyStyle}
             onRequestClose={defaultCloseDialog}
         >
             {this.props.children}

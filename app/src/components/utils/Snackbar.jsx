@@ -17,7 +17,7 @@ export class Snackbar extends Component {
 }
 
 Snackbar.propTypes = {
-    message: PropTypes.string,
+    message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 const mapStateToProps = (state) => ({

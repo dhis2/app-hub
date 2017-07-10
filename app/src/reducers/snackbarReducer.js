@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes';
 import {appStatusToUI} from '../constants/apiConstants';
-
+import React from 'react'
 const emptySnackbar = {message: '', duration: 4000,};
 const initialState = {
     ...emptySnackbar,
@@ -27,17 +27,40 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
+        case actionTypes.APP_EDIT_SUCCESS: {
+            return {
+                ...state,
+                message: (<span>App <i>{action.payload.app.name}</i> has been updated</span>)
+            }
+        }
+
         case actionTypes.APP_DELETE_SUCCESS: {
             return {
                 ...state,
                 message: action.payload.app.name + ' has been deleted',
             }
         }
+
+        case actionTypes.APP_VERSION_DELETE_SUCCESS: {
+                return {
+                    ...state,
+                    message: `Version ${action.payload.version.version} has been deleted`
+                }
+        }
+
+        case actionTypes.APP_VERSION_EDIT_SUCCESS: {
+            return {
+                ...state,
+                message: 'Version updated'
+            }
+        }
+
         case actionTypes.SNACKBAR_EMPTY: {
             return {
                 ...emptySnackbar,
             }
         }
+
         default:
             const { payload } = action;
             if (action.type.endsWith('_ERROR')) {

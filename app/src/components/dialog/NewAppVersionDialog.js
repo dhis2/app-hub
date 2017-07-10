@@ -1,8 +1,8 @@
-import React, { PropTypes, Component } from 'react';
+import React, {PropTypes, Component} from 'react';
 import TextField from 'material-ui/TextField';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import DialogBase from './DialogBase';
-import { addAppVersion } from '../../actions/actionCreators';
+import {addAppVersion} from '../../actions/actionCreators';
 import * as formUtils from '../form/ReduxFormUtils';
 import UploadFileField from '../form/UploadFileField';
 import NewAppVersionForm from '../form/NewAppVersionForm';
@@ -15,7 +15,7 @@ export class NewAppVersionDialog extends Component {
 
     submitForm() { //submit form manually as dialog actions work as submit button
         const res = this.form.submit();
-        if(this.form.valid) {
+        if (this.form.valid) {
             return Promise.resolve(res);
         } else {
             return Promise.reject(res)
@@ -36,10 +36,10 @@ export class NewAppVersionDialog extends Component {
             <DialogBase
                 title="New App Version"
                 approveAction={this.submitForm.bind(this)}
-                cancelAction={this.props.closeDialog}
-                contentStyle={{ maxWidth: '500px' }}
-            >
-                <NewAppVersionForm ref={ref => {this.form = ref}} submitted={this.handleCreate.bind(this)} />
+                cancelAction={this.props.closeDialog}>
+                <NewAppVersionForm ref={ref => {
+                    this.form = ref
+                }} submitted={this.handleCreate.bind(this)}/>
             </DialogBase>
         );
     }
@@ -51,17 +51,13 @@ NewAppVersionDialog.propTypes = {
     addVersion: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    app: state.dialog.dialogProps.app,
-});
-
 const mapDispatchToProps = dispatch => ({
     addVersion(appVersion, file, id) {
-       dispatch(addAppVersion(appVersion,file, id))
+        dispatch(addAppVersion(appVersion, file, id))
     },
 });
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(NewAppVersionDialog);

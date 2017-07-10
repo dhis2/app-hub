@@ -9,7 +9,31 @@ import TextField from 'material-ui/TextField';
 import Theme from '../../styles/theme';
 
 
-const TableIcon = ({children}) => (<FontIcon style={{fontSize: '18px'}}
+
+const styles = {
+    tableHeaderColumn: {
+        paddingLeft: '24px',
+        paddingRight: '24px',
+    },
+    columnText: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
+    editColumn: {},
+    firstColumn: {},
+    iconButton: {
+        padding: '8px',
+        width: '36px',
+        height: '36px'
+    },
+    fontIcon: {
+        fontSize: '18px',
+    }
+
+}
+
+
+const TableIcon = ({children}) => (<FontIcon style={styles.fontIcon}
                                              className="material-icons">{children}</FontIcon>)
 
 class VersionListEdit extends Component {
@@ -27,10 +51,10 @@ class VersionListEdit extends Component {
 
         this.renderRowEdit = this.renderRowEdit.bind(this);
         this.renderRowNormal = this.renderRowNormal.bind(this);
+        this.handleCancelRow = this.handleCancelRow.bind(this);
     }
 
     handleOpenEditField(e) {
-        console.log("open editfield!")
         this.setState({
             ...this.state,
             open: !this.state.open,
@@ -38,7 +62,15 @@ class VersionListEdit extends Component {
         })
     }
 
-    handleEditField(version) {
+    handleCloseEditField(e) {
+        this.setState({
+            ...this.state,
+            open: !this.state.open,
+            anchorEl: null,
+        })
+    }
+
+    handleEditRow(version) {
 
         this.setState({
             ...this.state,
@@ -46,7 +78,14 @@ class VersionListEdit extends Component {
         });
     }
 
-    handleSubmitField(version) {
+    handleCancelRow(version) {
+        this.setState({
+            ...this.state,
+            editingFields: this.state.editingFields.filter(v => v !== version.id),
+        });
+    }
+
+    handleSubmitRow(version) {
         this.setState({
             ...this.state,
             editingFields: this.state.editingFields.filter(v => v !== version.id),
@@ -81,12 +120,15 @@ class VersionListEdit extends Component {
     }
 
     renderRowEdit(version) {
-        const submitIcon = (<IconButton onTouchTap={() => this.handleSubmitField(version)}>
-            <TableIcon>check</TableIcon></IconButton>)
+        const submitIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleSubmitRow(version)}>
+            <TableIcon>check</TableIcon></IconButton>);
+
+        const cancelIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleCancelRow(version)}>
+            <TableIcon>clear</TableIcon></IconButton>);
 
         return (
             <TableRow key={version.id}>
-                <TableRowColumn style={{width: '48px'}}>
+                <TableRowColumn style={styles.firstColumn}>
                     <a href={version.downloadUrl} title="Download">
                         <TableIcon>file_download</TableIcon>
                     </a>
@@ -113,49 +155,49 @@ class VersionListEdit extends Component {
                 </TableRowColumn>
                 <TableRowColumn title={new Date(version.created).toLocaleString()}>
                     {new Date(version.created).toLocaleDateString()}</TableRowColumn>
-                <TableRowColumn style={{width: "auto"}}>{submitIcon}
-                    <IconButton style={{width: '18dp'}} onTouchTap={() => this.props.handleDelete(version)}><TableIcon>delete</TableIcon></IconButton></TableRowColumn>
+                <TableRowColumn style={styles.editColumn}>
+                    {submitIcon}
+                    {cancelIcon}
+                </TableRowColumn>
 
             </TableRow>
         )
     }
 
     renderRowNormal(version) {
-        const editIcon = (<IconButton onTouchTap={() => this.handleEditField(version)}>
+        const editIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleEditRow(version)}>
             <TableIcon>edit</TableIcon></IconButton>)
-
+        const deleteIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.props.handleDelete(version)}>
+            <TableIcon>delete</TableIcon>
+        </IconButton>)
         return (
             <TableRow key={version.id}>
-                <TableRowColumn style={{width: '48px'}}>
+                <TableRowColumn style={styles.firstColumn}>
                     <a href={version.downloadUrl} title="Download">
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
                 <TableRowColumn>
                     {version.demoUrl ?
-                        <a href={`${version.demoUrl}`} target="_blank" style={{color: Theme.palette.primary1Color}}>Demo</a>
+                        <a href={`${version.demoUrl}`} target="_blank"
+                           style={{color: Theme.palette.primary1Color}}>Demo</a>
                         : 'N/A'}</TableRowColumn>
                 <TableRowColumn onTouchTap={this.handleOpenEditField.bind(this)}>{version.version}</TableRowColumn>
                 <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                 <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
                 <TableRowColumn title={new Date(version.created).toLocaleString()}>
                     {new Date(version.created).toLocaleDateString()}</TableRowColumn>
-                <TableRowColumn style={{width: "48px"}}>{editIcon}</TableRowColumn>
-
+                <TableRowColumn style={styles.editColumn}>
+                    {editIcon}
+                    {deleteIcon}
+                </TableRowColumn>
             </TableRow>
         )
     }
 
 
     render() {
-        const styles = {
-            tableHeaderColumn: {
-                paddingLeft: '24px',
-                paddingRight: '24px',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis'
-            }
-        }
+
         const props = this.props;
         const versions = props.versionList.sort((a, b) => b.created - a.created).map((version, i) => {
             return (
@@ -163,30 +205,39 @@ class VersionListEdit extends Component {
             )
         })
 
-
         return (
             <Table selectable={false}>
                 <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
                     <TableRow>
-                        <TableHeaderColumn style={{...styles.tableHeaderColumn, width: '48px'}} tooltip='Download link'>Download</TableHeaderColumn>
-                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Demo link'>Demo</TableHeaderColumn>
+                        <TableHeaderColumn style={{...styles.tableHeaderColumn, ...styles.firstColumn}}
+                                           tooltip='Download link'>
+                            <div style={styles.columnText}>Download</div>
+                        </TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='Demo link'>
+                            <div style={styles.columnText}>Demo</div>
+                        </TableHeaderColumn>
                         <TableHeaderColumn style={styles.tableHeaderColumn}
-                                           tooltip='Version of app'>Version</TableHeaderColumn>
+                                           tooltip='Version of app'>
+                            <div style={styles.columnText}>Version</div>
+                        </TableHeaderColumn>
                         <TableHeaderColumn style={styles.tableHeaderColumn}
-                                           tooltip='Minimum DHIS version that this version supports'>Min DHIS
-                            version</TableHeaderColumn>
+                                           tooltip='Minimum DHIS version that this version supports'>
+                            <div style={styles.columnText}>Min DHIS version</div>
+                        </TableHeaderColumn>
                         <TableHeaderColumn style={styles.tableHeaderColumn}
-                                           tooltip='Maximum DHIS version that this version supports'>Max DHIS
-                            version</TableHeaderColumn>
-                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='The date the version was uploaded'>Uploaded</TableHeaderColumn>
-                        <TableHeaderColumn style={{...styles.tableHeaderColumn, width: "48px"}}></TableHeaderColumn>
+                                           tooltip='Maximum DHIS version that this version supports'>
+                            <div style={styles.columnText}>Max DHIS version</div>
+                        </TableHeaderColumn>
+                        <TableHeaderColumn style={styles.tableHeaderColumn} tooltip='The date the version was uploaded'>
+                            <div style={styles.columnText}>Uploaded</div>
+                        </TableHeaderColumn>
+                        <TableHeaderColumn
+                            style={{...styles.tableHeaderColumn, ...styles.editColumn}}></TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                     {versions}
-
                 </TableBody>
-
             </Table>
         )
     }
@@ -194,12 +245,10 @@ class VersionListEdit extends Component {
 
 VersionListEdit.propTypes = {
     versionList: PropTypes.array.isRequired,
-    editable: PropTypes.bool,
     handleDelete: PropTypes.func,
     handleEdit: PropTypes.func,
 }
 VersionListEdit.defaultProps = {
-    editable: false
 }
 
 export default VersionListEdit;

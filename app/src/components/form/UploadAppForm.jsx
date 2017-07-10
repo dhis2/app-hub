@@ -10,7 +10,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
-import { validateZipFile, validateImageFile } from '../form/ReduxFormUtils';
+import {validateZipFile, validateImageFile, validateURL} from '../form/ReduxFormUtils';
 
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
     {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
@@ -26,13 +26,13 @@ const validate = values => {
         }
     })
     varCharFields.forEach(field => {
-        if(values[field] && values[field].length > 255) {
+        if (values[field] && values[field].length > 255) {
             errors[field] = 'Max 255 characters';
         }
     });
 
 
-    if(values.minVer && values.maxVer && values.minVer > values.maxVer) {
+    if (values.minVer && values.maxVer && values.minVer > values.maxVer) {
         errors.minVer = 'Cannot be higher than maximum version';
         errors.maxVer = 'Cannot be lower than minimum version'
     }
@@ -41,7 +41,7 @@ const validate = values => {
 
 
 const UploadForm = (props) => {
-    const {handleSubmit,submitted, submitFailed, pristine, reset, dirty, submitting} = props;
+    const {handleSubmit, submitted, submitFailed, pristine, reset, dirty, submitting} = props;
 
     const onSubmit = (values) => {
         const data = {
@@ -57,7 +57,8 @@ const UploadForm = (props) => {
             versions: [{
                 version: values.version,
                 minDhisVersion: values.minVer,
-                maxDhisVersion: values.maxVer
+                maxDhisVersion: values.maxVer,
+                demoUrl: values.demoUrl,
             }],
             images: [{
                 caption: values.imageCaption,
@@ -80,9 +81,7 @@ const UploadForm = (props) => {
         <MenuItem key={version} value={version} primaryText={version}/>
     ))
 
-    const fieldStyle = {
-
-    }
+    const fieldStyle = {}
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <Field name="appName" style={fieldStyle} component={formUtils.renderTextField} autoFocus fullWidth
@@ -106,6 +105,11 @@ const UploadForm = (props) => {
             <Field name="maxVer" style={fieldStyle} component={formUtils.renderSelectField}
                    label="Maximum DHIS version">
                 {DHISVersionItems}
+            </Field>
+            <br />
+            <Field name="demoUrl" style={fieldStyle} component={formUtils.renderTextField}
+                   label="Demo URL"
+                   validate={validateURL}>
             </Field>
             <br />
             <Field name="file" style={{height: 72}} component={formUtils.renderUploadField}
