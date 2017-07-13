@@ -26,7 +26,7 @@ export const setAppApprovalSuccess = payload => ({
     payload
 })
 
-export const userLoad = () =>({
+export const userLoad = () => ({
     type: actions.USER_LOAD
 })
 
@@ -87,18 +87,20 @@ export const editAppVersion = (appId, version) => {
         payload: {
             appId,
             version
+        },
+        meta: {
+            isOptimistic: true,
         }
     }
 }
 
-export const editAppVersionSuccess = (appId, version) => {
-    return {
-        type: actions.APP_VERSION_EDIT_SUCCESS,
-        payload: {
+export const editAppVersionSuccess = (appId, version, meta) => {
+    return createActionCreator(actions.APP_VERSION_EDIT_SUCCESS)(
+        {
             appId,
             version
-        }
-    }
+        },
+        meta)
 }
 
 export const addAppSuccess = (app) => (
@@ -218,16 +220,38 @@ export const loadApp = createActionCreator(actions.APP_LOAD);
 export const loadAppSuccess = createActionCreator(actions.APP_LOADED);
 export const appError = createActionCreator(actions.APP_ERROR);
 
+/**
+ *
+ * @param type
+ * @param error
+ * @param prevState
+ * @param meta object to use in action.
+ * meta.retryAction: action that can be dispatched to retry the action that failed.
+ *
+ * @returns {*}
+ */
+export const createActionError = (type, error, meta) => {
+    return createActionCreator(type)(error, meta, true);
+}
+
 function createActionCreator(type) {
-    return (payload) => {
+    return (payload, meta, error) => {
         if (payload == null) {
             payload = {};
         }
         return {
             type,
-            payload
+            payload,
+            meta,
+            error
         };
     }
+}
+
+
+function createOptimisticActionCreator(type, payload, transactionID, error) {
+    const meta = {optimistic: {type: BEGIN, id: transactionID}};
+    return createActionCreator(type)(payload, meta)
 }
 
 
@@ -244,7 +268,7 @@ export function openDialog(dialogType, dialogprops) {
     return {
         type: actions.OPEN_DIALOG,
         payload: {
-            dialogprops: { ...dialogprops },
+            dialogprops: {...dialogprops},
             dialogType,
         },
 

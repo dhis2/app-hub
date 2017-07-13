@@ -7,6 +7,7 @@ import * as api from '../api/api';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concatMap';
+import { REVERT, COMMIT } from 'redux-optimistic-ui';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -143,16 +144,18 @@ const deleteVersion = (action$) => action$
             }));
     })
 
-const addImage = (action$) => action$
+const addImage = (action$, store) => action$
     .ofType(actions.APP_IMAGE_ADD)
     .concatMap(action => {
         const {appId, image} = action.payload;
+      //  store.getState().
         return api.createNewImage(appId, image)
             .then(response => actionCreators.addImageToAppSuccess(appId, response))
             .catch(error => ({
                 type: actions.APP_IMAGE_ADD_ERROR,
                 payload: error,
-            }));
+            }))
+           //     actionCreators.createActionError(actionTypes.APP_IMAGE_ADD_ERROR, error, ));
     })
 const deleteImage = (action$) => action$
     .ofType(actions.APP_IMAGE_DELETE)
@@ -181,14 +184,23 @@ const editVersion = (action$) => action$
     .ofType(actions.APP_VERSION_EDIT)
     .concatMap(action => {
         const {appId, version} = action.payload;
+        const { id } = action.meta.optimistic;
         const versionId = version.id;
+        console.log(action)
         return api.updateVersion(appId, versionId, version)
-            .then(response => actionCreators.editAppVersionSuccess(appId, version))
+            .then(response => actionCreators.editAppVersionSuccess(appId, version, optimisticActionMeta(false,id)))
             .catch(error => ({
                 type: actions.APP_VERSION_EDIT_ERROR,
                 payload: error,
+                meta: {...optimisticActionMeta(true, id), retryAction: action}
             }))
     });
+
+
+const optimisticActionMeta = (error, transactionID) => ({
+        optimistic: error ? {type: REVERT, id: transactionID} : {type: COMMIT, id: transactionID}
+})
+
 
 export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
     user, userApps, newVersion,

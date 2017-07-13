@@ -7,11 +7,12 @@ import appListReducer from './reducers/appListReducer';
 import dialogReducer from './reducers/dialogReducer';
 import snackbarReducer from './reducers/snackbarReducer';
 import formReducer from './reducers/formReducer';
+import optimisticMiddleware from './store/ReduxOptimisticMiddleware';
 
-const middlewares = [createEpicMiddleware(Epics)];
+const middlewares = [optimisticMiddleware,createEpicMiddleware(Epics)];
 
 if(process.env.NODE_ENV === 'development') {
-    middlewares.unshift(createLogger({
+    middlewares.push(createLogger({
         collapsed: (getState, action) => action.type.startsWith('@@redux-form')
 
     }))
