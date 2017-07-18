@@ -52,11 +52,11 @@ const setAppApproval = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
         const {app: {id}, status} = action.payload;
-        const { id: transactionID } = action.meta.optimistic;
+        const {id: transactionID} = action.meta.optimistic;
         return api.setAppApproval(id, status)
             .then(resp => actionCreators.commitOrRevertOptimisticAction(actionCreators.setAppApprovalSuccess(action.payload), transactionID))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(actions.SET_APPROVAL_APP_ERROR, error), transactionID)))
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(actions.SET_APPROVAL_APP_ERROR, error), transactionID)))
     })
 
 const deleteApp = (action$) => action$
@@ -135,7 +135,7 @@ const editApp = (action$) => action$
         return api.updateApp(app.id, data)
             .then(resp => actionCreators.commitOrRevertOptimisticAction(actionCreators.editAppSuccess(app, data)))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(
                     actions.APP_EDIT_ERROR, error), id)))
     });
 
@@ -147,26 +147,24 @@ const deleteVersion = (action$) => action$
     .ofType(actions.APP_VERSION_DELETE)
     .concatMap(action => {
         const {appId, version} = action.payload;
-        const { id } = action.meta.optimistic;
+        const {id} = action.meta.optimistic;
         return api.deleteVersion(appId, version.id)
             .then(response => actionCreators.commitOrRevertOptimisticAction(actionCreators.deleteAppVersionSuccess(version, action.payload.appId), id))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(
                     actions.APP_VERSION_DELETE_ERROR, error), id)))
     })
 
-const addImage = (action$, store) => action$
+const addImage = (action$) => action$
     .ofType(actions.APP_IMAGE_ADD)
     .concatMap(action => {
         const {appId, image} = action.payload;
-        //  store.getState().
         return api.createNewImage(appId, image)
             .then(response => actionCreators.addImageToAppSuccess(appId, response))
             .catch(error => ({
                 type: actions.APP_IMAGE_ADD_ERROR,
                 payload: error,
             }))
-        //     actionCreators.createActionError(actionTypes.APP_IMAGE_ADD_ERROR, error, ));
     })
 
 /**
@@ -182,7 +180,7 @@ const deleteImage = (action$) => action$
             .then(response =>
                 actionCreators.commitOrRevertOptimisticAction(actionCreators.deleteImageFromAppSuccess(appId, imageId), id))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(
                     actions.APP_IMAGE_DELETE_ERROR, error), id)))
     })
 
@@ -198,7 +196,7 @@ const editImage = (action$) => action$
         return api.updateImage(appId, imageId, data)
             .then(response => actionCreators.commitOrRevertOptimisticAction(actionCreators.editImageSuccess(appId, imageId, data), id))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(
                     actions.APP_IMAGE_EDIT_ERROR, error), id)))
     });
 
@@ -217,7 +215,7 @@ const editVersion = (action$) => action$
                 actionCreators.commitOrRevertOptimisticAction(actionCreators.editAppVersionSuccess(appId, version), id)
             ))
             .catch(error => (
-                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(
                     actions.APP_VERSION_EDIT_ERROR, error, {retryAction: action})
                     , id)))
     });
