@@ -136,12 +136,12 @@ export const editAppVersion = (appId, version) => (
         version
     })));
 
-export const editAppVersionSuccess = (appId, version) => {
-    return actionCreator(actions.APP_VERSION_EDIT_SUCCESS)({
+export const editAppVersionSuccess = (appId, version) => (
+    actionCreator(actions.APP_VERSION_EDIT_SUCCESS)({
         appId,
         version
     })
-}
+)
 
 export const addAppSuccess = (app) => (
     actionCreator(actions.APP_ADD_SUCCESS)({
@@ -196,12 +196,13 @@ export const deleteAppVersion = (version, appId) => (
         appId
     })))
 
-export const deleteAppVersionSuccess = (version, appId) => {
-    return actionCreator(actions.APP_VERSION_DELETE_SUCCESS)({
+export const deleteAppVersionSuccess = (version, appId) => (
+    actionCreator(actions.APP_VERSION_DELETE_SUCCESS)({
         version,
         appId
     })
-}
+)
+
 export const addAppVersionSuccess = (version, appId) => (
     actionCreator(actions.APP_VERSION_ADD_SUCCESS)({
         version,
@@ -267,7 +268,7 @@ export const actionErrorCreator = (type, error, meta) => (
 /**
  * Generic action-creator
  * @param type of action
- * @returns FSA-complient action
+ * @returns {object} FSA-complient action
  */
 function actionCreator(type) {
     return (payload, meta, error) => {
