@@ -1,13 +1,28 @@
 import * as actions from '../constants/actionTypes';
 import {REVERT, COMMIT} from 'redux-optimistic-ui';
 
+//OPTIMISTIC-ACTION HANDLERS
+
+
+/**
+ * Action-enhancer that produces an optimistic action
+ * by adding optimistic meta properties
+ * @param action
+ */
 const optimisticActionCreator = action => ({
     ...action,
     meta: {...action.meta, isOptimistic: true}
 })
 
+/**
+ * Commit or revert an optimistic action that has been handled by the server
+ * @param action to handle
+ * @param transactionID of the optimistic-action
+ * @param error: override error in action.error, willr evert the action
+ * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or commited action
+ */
 export const commitOrRevertOptimisticAction = (action, transactionID, error = false) => {
-    if(action.error) {
+    if (action.error) {
         error = true;
     }
     return {
@@ -39,20 +54,16 @@ export const revertOptimisticAction = (action, transactionID) => {
     }
 }
 
-export function loadAllApps() {
-    return {
-        type: actions.APPS_ALL_LOAD
-    }
-}
+
+//ACTION-CREATORS
+
+
+export const loadAllApps = createActionCreator(actions.APPS_ALL_LOAD);
 
 export const appsAllLoaded = createActionCreator(actions.APPS_ALL_LOADED);
 
 
-export function loadApprovedApps() {
-    return {
-        type: actions.APPS_APPROVED_LOAD
-    }
-}
+export const loadApprovedApps = createActionCreator(actions.APPS_APPROVED_LOAD);
 
 export const loadedApprovedApps = createActionCreator(actions.APPS_APPROVED_LOADED);
 
@@ -62,33 +73,30 @@ export const setAppApproval = payload => (
     }))
 )
 
-export const setAppApprovalSuccess = payload => ({
-    type: actions.SET_APPROVAL_APP_SUCCESS,
-    payload
-})
+export const setAppApprovalSuccess = payload => (
+    createActionCreator(actions.SET_APPROVAL_APP_SUCCESS)({
+        ...payload
+    })
+)
 
-export const userLoad = () => ({
-    type: actions.USER_LOAD
-})
+export const userLoad = createActionCreator(actions.USER_LOAD);
 
-export const addAppVersion = (version, file, appId) => {
-    return {
-        type: actions.APP_VERSION_ADD,
-        payload: {
-            version,
-            file,
-            appId
-        }
+export const addAppVersion = (version, file, appId) => (
+    createActionCreator(actions.APP_VERSION_ADD)({
+        version,
+        file,
+        appId
+    })
+)
 
-    }
-}
-export const addApp = (app, file, image) => {
-    return createActionCreator(actions.APP_ADD)({
+export const addApp = (app, file, image) => (
+    createActionCreator(actions.APP_ADD)({
         app,
         file,
         image
     })
-}
+)
+
 export const editApp = (app, data) => (
     optimisticActionCreator(createActionCreator(actions.APP_EDIT)({
         app,
@@ -130,9 +138,9 @@ export const editAppVersion = (appId, version) => (
 
 export const editAppVersionSuccess = (appId, version) => {
     return createActionCreator(actions.APP_VERSION_EDIT_SUCCESS)({
-            appId,
-            version
-        })
+        appId,
+        version
+    })
 }
 
 export const addAppSuccess = (app) => (
@@ -175,19 +183,18 @@ export const deleteImageFromApp = (appId, imageId) => (
     }))
 )
 
-export const deleteImageFromAppSuccess = (appId, imageId) => {
-    return createActionCreator(actions.APP_IMAGE_DELETE_SUCCESS)({
+export const deleteImageFromAppSuccess = (appId, imageId) => (
+    createActionCreator(actions.APP_IMAGE_DELETE_SUCCESS)({
         appId,
         imageId
     })
-}
+)
 
-export const deleteAppVersion = (version, appId) => {
-    return optimisticActionCreator(createActionCreator(actions.APP_VERSION_DELETE)({
+export const deleteAppVersion = (version, appId) => (
+    optimisticActionCreator(createActionCreator(actions.APP_VERSION_DELETE)({
         version,
         appId
-    }))
-}
+    })))
 
 export const deleteAppVersionSuccess = (version, appId) => {
     return createActionCreator(actions.APP_VERSION_DELETE_SUCCESS)({
@@ -195,42 +202,38 @@ export const deleteAppVersionSuccess = (version, appId) => {
         appId
     })
 }
-export const addAppVersionSuccess = (version, appId) => {
-
-    return createActionCreator(actions.APP_VERSION_ADD_SUCCESS)({
+export const addAppVersionSuccess = (version, appId) => (
+    createActionCreator(actions.APP_VERSION_ADD_SUCCESS)({
         version,
         appId
-    });
-}
+    })
+)
 
-export const editAppSuccess = (app, data) => {
-
-    return createActionCreator(actions.APP_EDIT_SUCCESS)({
+export const editAppSuccess = (app, data) => (
+    createActionCreator(actions.APP_EDIT_SUCCESS)({
         app,
         data
-    });
-}
+    })
+)
 
-export const deleteApp = (app) => {
-    return optimisticActionCreator(createActionCreator(actions.APP_DELETE)({
+export const deleteApp = (app) => (
+    optimisticActionCreator(createActionCreator(actions.APP_DELETE)({
         app
-    }));
-}
+    }))
+)
 
-export const deleteAppSuccess = (app) => {
-
-    return createActionCreator(actions.APP_DELETE_SUCCESS)({
+export const deleteAppSuccess = (app) => (
+    createActionCreator(actions.APP_DELETE_SUCCESS)({
         app
     })
-}
+)
 
-//TODO: add signature to these
-export const userLoaded = (profile) => {
-
-    return createActionCreator(actions.USER_LOADED)({
+export const userLoaded = (profile) => (
+    createActionCreator(actions.USER_LOADED)({
         profile
-    });
-}
+    })
+)
+
 export const userError = createActionCreator(actions.USER_ERROR);
 export const userAppsLoad = createActionCreator(actions.USER_APPS_LOAD);
 export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
@@ -238,12 +241,12 @@ export const userAppsLoaded = createActionCreator(actions.USER_APPS_LOADED);
 export const userAuthenticated = createActionCreator(actions.USER_AUTHENTICATED);
 export const userLogout = createActionCreator(actions.USER_LOGOUT);
 
-export const loadUserApp = (appId) => {
-    return createActionCreator(actions.APP_LOAD)({
+export const loadUserApp = (appId) => (
+    createActionCreator(actions.APP_LOAD)({
         ...appId,
         useAuth: true
-    });
-}
+    })
+)
 
 export const loadApp = createActionCreator(actions.APP_LOAD);
 export const loadAppSuccess = createActionCreator(actions.APP_LOADED);
@@ -257,10 +260,15 @@ export const appError = createActionCreator(actions.APP_ERROR);
  * meta.retryAction: action that can be dispatched to retry the action that failed.
  * @returns {action}
  */
-export const createActionError = (type, error, meta) => {
-    return createActionCreator(type)(error, meta, true);
-}
+export const createActionError = (type, error, meta) => (
+    createActionCreator(type)(error, meta, true)
+)
 
+/**
+ * Generic action-creator
+ * @param type of action
+ * @returns FSA-complient action
+ */
 function createActionCreator(type) {
     return (payload, meta, error) => {
         if (payload == null) {
@@ -285,16 +293,12 @@ export const emptySnackbar = createActionCreator(actions.SNACKBAR_EMPTY);
  * @param  {object} dialogprops The props passed to the dialog
  * @return {object}             Dialog action
  */
-export function openDialog(dialogType, dialogprops) {
-    return {
-        type: actions.OPEN_DIALOG,
-        payload: {
-            dialogprops: {...dialogprops},
-            dialogType,
-        },
-
-    };
-}
+export const openDialog = (dialogType, dialogprops) => (
+    createActionCreator(actions.OPEN_DIALOG)({
+        dialogprops: {...dialogprops},
+        dialogType,
+    })
+)
 
 /**
  * closeDialog - Action creator helper method for handling dialogs
@@ -302,8 +306,4 @@ export function openDialog(dialogType, dialogprops) {
  * @param  {string} dialogType  The type of dialog to close
  * @return {object}             Dialog action
  */
-export function closeDialog() {
-    return {
-        type: actions.CLOSE_DIALOG,
-    };
-}
+export const closeDialog = createActionCreator(actions.CLOSE_DIALOG)
