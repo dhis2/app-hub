@@ -1,12 +1,17 @@
+import { ensureState as reduxEnsureState } from 'redux-optimistic-ui';
 
+//Alias this, as the state is only optimistic for appList
+const ensureState  = (state) => (
+    reduxEnsureState(state.user.appList)
+);
 
-export const getApp = (state, appId) => state.user.appList.byId[appId];
+export const getApp = (state, appId) => ensureState(state).byId[appId];
 
 export const getUserInfo = state => state.user.userInfo;
 
-export const getAuthInfo = state => getUserInfo(state).authInfo;
+export const getUserProfile = state => getUserInfo(state).info;
 
-export const getUserAppList = state => state.user.appList;
+export const getUserAppList = state => ensureState(state);
 
 
 

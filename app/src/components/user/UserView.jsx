@@ -9,7 +9,7 @@ import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
 import AppList from './appList/AppList';
 import Divider from 'material-ui/Divider';
-import LoginView from './login/LoginView';
+import { getUserInfo } from '../../selectors/userSelectors';
 import {userLoad} from '../../actions/actionCreators';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
 import ActiveLink from '../utils/ActiveLink';
@@ -22,7 +22,7 @@ class UserView extends Component {
 
     render() {
       //  const {info, loading, loaded, error} = this.props.user;
-        const { userInfo } = this.props.user;
+        const userInfo = this.props.user;
         const loadOrErr = userInfo.loading || userInfo.error;
         const contentRoutes = (
             <Switch>
@@ -72,7 +72,7 @@ UserView.PropTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user,
+    user: getUserInfo(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -10,7 +10,7 @@ let nextTransactionID = 0;
 export default store => next => action => {
     // FSA compliant
     const {type, meta, error, payload} = action;
-    console.log("MIDDLWARE")
+
     // Ignore actions without isOptimistic flag
     if (!meta || !meta.isOptimistic) return next(action);
 
@@ -21,8 +21,6 @@ export default store => next => action => {
     if((isSuccessAction || isErrorAction)) {
         return next(action);
     }
-
-    console.log("EXTEND")
 
     // Now that we know we're optimistically updating the item, give it an ID
     let transactionID = nextTransactionID++;

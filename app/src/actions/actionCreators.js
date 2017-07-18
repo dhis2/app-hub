@@ -1,4 +1,43 @@
 import * as actions from '../constants/actionTypes';
+import {REVERT, COMMIT} from 'redux-optimistic-ui';
+
+const optimisticActionCreator = action => ({
+    ...action,
+    meta: {...action.meta, isOptimistic: true}
+})
+
+export const commitOrRevertOptimisticAction = (action, transactionID, error = false) => {
+    if(action.error) {
+        error = true;
+    }
+    return {
+        ...action,
+        meta: {
+            ...action.meta,
+            optimistic: error ? {type: REVERT, id: transactionID} : {type: COMMIT, id: transactionID}
+        }
+    }
+}
+
+export const commitOptimisticAction = (action, transactionID) => {
+    return {
+        ...action,
+        meta: {
+            ...action.meta,
+            optimistic: {type: COMMIT, id: transactionID}
+        }
+    }
+}
+
+export const revertOptimisticAction = (action, transactionID) => {
+    return {
+        ...action,
+        meta: {
+            ...action.meta,
+            optimistic: {type: REVERT, id: transactionID}
+        }
+    }
+}
 
 export function loadAllApps() {
     return {
@@ -16,10 +55,12 @@ export function loadApprovedApps() {
 }
 
 export const loadedApprovedApps = createActionCreator(actions.APPS_APPROVED_LOADED);
-export const setAppApproval = payload => ({
-    type: actions.SET_APPROVAL_APP,
-    payload
-})
+
+export const setAppApproval = payload => (
+    optimisticActionCreator(createActionCreator(actions.SET_APPROVAL_APP)({
+        ...payload
+    }))
+)
 
 export const setAppApprovalSuccess = payload => ({
     type: actions.SET_APPROVAL_APP_SUCCESS,
@@ -49,18 +90,18 @@ export const addApp = (app, file, image) => {
     })
 }
 export const editApp = (app, data) => (
-    createActionCreator(actions.APP_EDIT)({
+    optimisticActionCreator(createActionCreator(actions.APP_EDIT)({
         app,
         data
-    })
+    }))
 )
 
 export const editImage = (appId, imageId, data) => (
-    createActionCreator(actions.APP_IMAGE_EDIT)({
+    optimisticActionCreator(createActionCreator(actions.APP_IMAGE_EDIT)({
         appId,
         imageId,
         data
-    })
+    }))
 )
 
 export const editImageSuccess = (appId, imageId, data) => (
@@ -81,26 +122,17 @@ export const editImageLogo = (appId, imageId, logo) => (
     })
 )
 
-export const editAppVersion = (appId, version) => {
-    return {
-        type: actions.APP_VERSION_EDIT,
-        payload: {
-            appId,
-            version
-        },
-        meta: {
-            isOptimistic: true,
-        }
-    }
-}
+export const editAppVersion = (appId, version) => (
+    optimisticActionCreator(createActionCreator(actions.APP_VERSION_EDIT)({
+        appId,
+        version
+    })));
 
-export const editAppVersionSuccess = (appId, version, meta) => {
-    return createActionCreator(actions.APP_VERSION_EDIT_SUCCESS)(
-        {
+export const editAppVersionSuccess = (appId, version) => {
+    return createActionCreator(actions.APP_VERSION_EDIT_SUCCESS)({
             appId,
             version
-        },
-        meta)
+        })
 }
 
 export const addAppSuccess = (app) => (
@@ -137,10 +169,10 @@ export const addImageToAppSuccess = (appId, image) => (
 )
 
 export const deleteImageFromApp = (appId, imageId) => (
-    createActionCreator(actions.APP_IMAGE_DELETE)({
+    optimisticActionCreator(createActionCreator(actions.APP_IMAGE_DELETE)({
         appId,
         imageId
-    })
+    }))
 )
 
 export const deleteImageFromAppSuccess = (appId, imageId) => {
@@ -151,10 +183,10 @@ export const deleteImageFromAppSuccess = (appId, imageId) => {
 }
 
 export const deleteAppVersion = (version, appId) => {
-    return createActionCreator(actions.APP_VERSION_DELETE)({
+    return optimisticActionCreator(createActionCreator(actions.APP_VERSION_DELETE)({
         version,
         appId
-    })
+    }))
 }
 
 export const deleteAppVersionSuccess = (version, appId) => {
@@ -180,9 +212,9 @@ export const editAppSuccess = (app, data) => {
 }
 
 export const deleteApp = (app) => {
-    return createActionCreator(actions.APP_DELETE)({
+    return optimisticActionCreator(createActionCreator(actions.APP_DELETE)({
         app
-    });
+    }));
 }
 
 export const deleteAppSuccess = (app) => {
@@ -194,12 +226,9 @@ export const deleteAppSuccess = (app) => {
 
 //TODO: add signature to these
 export const userLoaded = (profile) => {
-    const info = {
-        ...profile,
-        manager: profile.roles.includes('ROLE_MANAGER'),
-    }
+
     return createActionCreator(actions.USER_LOADED)({
-        ...info
+        profile
     });
 }
 export const userError = createActionCreator(actions.USER_ERROR);
@@ -222,13 +251,11 @@ export const appError = createActionCreator(actions.APP_ERROR);
 
 /**
  *
- * @param type
- * @param error
- * @param prevState
+ * @param type of action
+ * @param error payload
  * @param meta object to use in action.
  * meta.retryAction: action that can be dispatched to retry the action that failed.
- *
- * @returns {*}
+ * @returns {action}
  */
 export const createActionError = (type, error, meta) => {
     return createActionCreator(type)(error, meta, true);
@@ -246,12 +273,6 @@ function createActionCreator(type) {
             error
         };
     }
-}
-
-
-function createOptimisticActionCreator(type, payload, transactionID, error) {
-    const meta = {optimistic: {type: BEGIN, id: transactionID}};
-    return createActionCreator(type)(payload, meta)
 }
 
 

@@ -14,6 +14,7 @@ import IconButton from 'material-ui/IconButton';
 import Subheader from '../../header/SubHeader';
 import Theme from '../../../styles/theme';
 import {appTypesToUI} from '../../../../config';
+import * as selectors from '../../../selectors/userSelectors';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
 
@@ -162,7 +163,7 @@ class UserAppView extends Component {
 UserAppView.propTypes = {}
 
 const mapStateToProps = (state, ownProps) => ({
-    app: state.user.appList.byId[ownProps.match.params.appId]
+    app: selectors.getApp(state, ownProps.match.params.appId),//state.user.appList.byId[ownProps.match.params.appId]
 })
 
 const mapDispatchToProps = (dispatch) => ({

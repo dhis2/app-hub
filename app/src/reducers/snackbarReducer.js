@@ -68,9 +68,14 @@ const snackbarReducer = (state = initialState, action) => {
                 if(payload.message && typeof payload.message === 'string') {
                     message += `: ${payload.message}`
                 }
+                let retryAction = undefined;
+                if(payload.retryAction) {
+                    retryAction = payload.retryAction;
+                }
                 return {
                     ...state,
-                    message
+                    message,
+                    retryAction
                 }
 
             } else {

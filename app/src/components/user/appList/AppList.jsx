@@ -13,10 +13,10 @@ import FontIcon from 'material-ui/FontIcon';
 import SubHeader from '../../header/SubHeader';
 import {approveApp, loadAllApps, setAppApproval, userAppsLoad, openDialog} from '../../../actions/actionCreators';
 import * as dialogTypes from '../../../constants/dialogTypes';
-//import {mapValues, sortBy} from 'lodash';
-import mapValues from 'lodash/mapValues';
 import sortBy from 'lodash/sortBy';
 import ErrorOrLoading from '../../utils/ErrorOrLoading';
+import * as selectors from '../../../selectors/userSelectors';
+
 class AppList extends Component {
     constructor(props) {
         super(props);
@@ -97,6 +97,7 @@ class AppList extends Component {
             ))
         const emptyAppsText = manager ? "We couldn't find any apps" : "You have not uploaded any apps"
         const title = manager ? "All apps" : "Your apps";
+        console.log(apps);
         return (
             <div>
                 <SubHeader title={title}>
@@ -133,8 +134,8 @@ class AppList extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    appList: state.user.appList,
-    user: state.user.userInfo.info,
+    appList: selectors.getUserAppList(state),
+    user: selectors.getUserProfile(state),
     appTypeFilter: state.form.appTypeFilter,
     appStatusFilter: state.form.appStatusFilter,
     appSearchFilter: state.form.searchFilter,

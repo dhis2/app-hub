@@ -7,7 +7,7 @@ import * as api from '../api/api';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concatMap';
-import { REVERT, COMMIT } from 'redux-optimistic-ui';
+import {REVERT, COMMIT} from 'redux-optimistic-ui';
 
 const loadAppsAll = (action$) => action$
     .ofType(actions.APPS_ALL_LOAD)
@@ -35,7 +35,7 @@ const loadAppsApproved = (action$) => action$
 const loadApp = (action$) => action$
     .ofType(actions.APP_LOAD)
     .concatMap(action => {
-        const { appId, useAuth } = action.payload;
+        const {appId, useAuth} = action.payload;
         return api.getApp(appId, useAuth)
             .then(app => actionCreators.loadAppSuccess(app))
             .catch(error => ({
@@ -44,17 +44,19 @@ const loadApp = (action$) => action$
             }));
     })
 
-
-const approveApp = (action$) => action$
+/**
+ * Optimistic action
+ * @param action$
+ */
+const setAppApproval = (action$) => action$
     .ofType(actions.SET_APPROVAL_APP)
     .concatMap(action => {
         const {app: {id}, status} = action.payload;
+        const { id: transactionID } = action.meta.optimistic;
         return api.setAppApproval(id, status)
-            .then(resp => actionCreators.setAppApprovalSuccess(action.payload))
-            .catch(error => ({
-                type: actions.SET_APPROVAL_APP_ERROR,
-                payload: error,
-            }));
+            .then(resp => actionCreators.commitOrRevertOptimisticAction(actionCreators.setAppApprovalSuccess(action.payload), transactionID))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(actions.SET_APPROVAL_APP_ERROR, error), transactionID)))
     })
 
 const deleteApp = (action$) => action$
@@ -120,89 +122,108 @@ const newApp = (action$) => action$
             }))
     });
 
+/**
+ * Optimistic action
+ * @param action$
+ */
+
 const editApp = (action$) => action$
     .ofType(actions.APP_EDIT)
     .concatMap(action => {
         const {app, data} = action.payload;
+        const {id} = action.meta.optimistic;
         return api.updateApp(app.id, data)
-            .then(resp => actionCreators.editAppSuccess(app, data))
-            .catch(error => ({
-                type: actions.APP_EDIT_ERROR,
-                payload: error
-            }))
+            .then(resp => actionCreators.commitOrRevertOptimisticAction(actionCreators.editAppSuccess(app, data)))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                    actions.APP_EDIT_ERROR, error), id)))
     });
 
+/**
+ * Optimistic action
+ * @param action$
+ */
 const deleteVersion = (action$) => action$
     .ofType(actions.APP_VERSION_DELETE)
     .concatMap(action => {
         const {appId, version} = action.payload;
+        const { id } = action.meta.optimistic;
         return api.deleteVersion(appId, version.id)
-            .then(response => actionCreators.deleteAppVersionSuccess(version, action.payload.appId))
-            .catch(error => ({
-                type: actions.APP_VERSION_DELETE_ERROR,
-                payload: error,
-            }));
+            .then(response => actionCreators.commitOrRevertOptimisticAction(actionCreators.deleteAppVersionSuccess(version, action.payload.appId), id))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                    actions.APP_VERSION_DELETE_ERROR, error), id)))
     })
 
 const addImage = (action$, store) => action$
     .ofType(actions.APP_IMAGE_ADD)
     .concatMap(action => {
         const {appId, image} = action.payload;
-      //  store.getState().
+        //  store.getState().
         return api.createNewImage(appId, image)
             .then(response => actionCreators.addImageToAppSuccess(appId, response))
             .catch(error => ({
                 type: actions.APP_IMAGE_ADD_ERROR,
                 payload: error,
             }))
-           //     actionCreators.createActionError(actionTypes.APP_IMAGE_ADD_ERROR, error, ));
+        //     actionCreators.createActionError(actionTypes.APP_IMAGE_ADD_ERROR, error, ));
     })
+
+/**
+ * Optimistic action
+ * @param action$
+ */
 const deleteImage = (action$) => action$
     .ofType(actions.APP_IMAGE_DELETE)
     .concatMap(action => {
         const {appId, imageId} = action.payload;
+        const {id} = action.meta.optimistic;
         return api.deleteImage(appId, imageId)
-            .then(response => actionCreators.deleteImageFromAppSuccess(appId, imageId))
-            .catch(error => ({
-                type: actions.APP_IMAGE_DELETE_ERROR,
-                payload: error,
-            }));
+            .then(response =>
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.deleteImageFromAppSuccess(appId, imageId), id))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                    actions.APP_IMAGE_DELETE_ERROR, error), id)))
     })
+
+/**
+ * Optimistic action
+ * @param action$
+ */
 const editImage = (action$) => action$
     .ofType(actions.APP_IMAGE_EDIT)
     .concatMap(action => {
         const {appId, imageId, data} = action.payload;
+        const {id} = action.meta.optimistic;
         return api.updateImage(appId, imageId, data)
-            .then(response => actionCreators.editImageSuccess(appId, imageId, data))
-            .catch(error => ({
-                type: actions.APP_IMAGE_EDIT_ERROR,
-                payload: error,
-            }));
-    })
+            .then(response => actionCreators.commitOrRevertOptimisticAction(actionCreators.editImageSuccess(appId, imageId, data), id))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                    actions.APP_IMAGE_EDIT_ERROR, error), id)))
+    });
 
+/**
+ * Optimistic action
+ * @param action$
+ */
 const editVersion = (action$) => action$
     .ofType(actions.APP_VERSION_EDIT)
     .concatMap(action => {
         const {appId, version} = action.payload;
-        const { id } = action.meta.optimistic;
+        const {id} = action.meta.optimistic;
         const versionId = version.id;
-        console.log(action)
         return api.updateVersion(appId, versionId, version)
-            .then(response => actionCreators.editAppVersionSuccess(appId, version, optimisticActionMeta(false,id)))
-            .catch(error => ({
-                type: actions.APP_VERSION_EDIT_ERROR,
-                payload: error,
-                meta: {...optimisticActionMeta(true, id), retryAction: action}
-            }))
+            .then(response => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.editAppVersionSuccess(appId, version), id)
+            ))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.createActionError(
+                    actions.APP_VERSION_EDIT_ERROR, error, {retryAction: action})
+                    , id)))
     });
 
 
-const optimisticActionMeta = (error, transactionID) => ({
-        optimistic: error ? {type: REVERT, id: transactionID} : {type: COMMIT, id: transactionID}
-})
-
-
-export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, approveApp, deleteApp,
+export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, setAppApproval, deleteApp,
     user, userApps, newVersion,
     newApp, deleteVersion, editApp,
     addImage, editImage, deleteImage, editVersion)

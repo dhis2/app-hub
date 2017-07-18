@@ -1,5 +1,7 @@
 import * as actionTypes from '../constants/actionTypes';
 import { combineReducers } from 'redux';
+import { optimistic, ensureState } from 'redux-optimistic-ui';
+
 const initialState = {
         loaded: false,
         loading: true,
@@ -49,7 +51,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
-        case actionTypes.SET_APPROVAL_APP_SUCCESS: {
+        case actionTypes.SET_APPROVAL_APP: {
             const appId = action.payload.app.id;
             const app = state.byId[appId];
             return {
@@ -84,7 +86,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
             }
         }
 
-        case actionTypes.APP_VERSION_DELETE_SUCCESS: {
+        case actionTypes.APP_VERSION_DELETE: {
             const version = action.payload.version;
             const appId = action.payload.appId;
             const app = state.byId[appId];
@@ -104,7 +106,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
             }
         }
 
-        case actionTypes.APP_DELETE_SUCCESS: {
+        case actionTypes.APP_DELETE: {
             const app = action.payload.app;
             const list = {...state.byId};
             delete list[action.payload.app.id];
@@ -113,7 +115,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 byId: list,
             }
         }
-        case actionTypes.APP_EDIT_SUCCESS: {
+        case actionTypes.APP_EDIT: {
             const { app, data } = action.payload;
             return {
                 ...state,
@@ -141,7 +143,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
-        case actionTypes.APP_IMAGE_EDIT_SUCCESS: {
+        case actionTypes.APP_IMAGE_EDIT: {
             const { appId, imageId, data } = action.payload;
             const app = state.byId[appId];
             const list = app.images.map((elem, ind) => {
@@ -184,8 +186,8 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
-        case actionTypes.APP_VERSION_EDIT:
-        case actionTypes.APP_VERSION_EDIT_SUCCESS: {
+        case actionTypes.APP_VERSION_EDIT: {
+       // case actionTypes.APP_VERSION_EDIT_SUCCESS: {
             const { appId, version } = action.payload;
             const app = state.byId[appId];
             const list = app.versions.map((elem, ind) => {
@@ -211,10 +213,10 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
         }
 
         default: {
-            if (action.type.endsWith('_ERROR')) {
+            if (action.type && action.type.endsWith('_ERROR')) {
                 return {
                     ...state,
-                    ...errorState,
+                  //  ...errorState,
                 }
             } else {
                 return state;
@@ -241,10 +243,14 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
         }
 
         case actionTypes.USER_LOADED: {
+            const manager = action.payload.profile.roles.includes('ROLE_MANAGER');
             return {
                 ...state,
                 ...loadedState,
-                info: action.payload,
+                info: {
+                    ...action.payload.profile,
+                    manager
+                }
             }
         }
         default: {
@@ -262,6 +268,6 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
 }
 
 export default combineReducers({
-    appList: appListReducer,
+    appList: optimistic(appListReducer),
     userInfo: userInfoReducer,
 });
