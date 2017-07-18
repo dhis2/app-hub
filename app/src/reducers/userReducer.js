@@ -171,7 +171,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
             }
         }
 
-        case actionTypes.APP_IMAGE_DELETE_SUCCESS: {
+        case actionTypes.APP_IMAGE_DELETE: {
             const { appId, imageId } = action.payload;
             const app = state.byId[appId];
             const list = app.images.filter((elem, ind) => elem.id !== imageId);
@@ -186,8 +186,8 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+
         case actionTypes.APP_VERSION_EDIT: {
-       // case actionTypes.APP_VERSION_EDIT_SUCCESS: {
             const { appId, version } = action.payload;
             const app = state.byId[appId];
             const list = app.versions.map((elem, ind) => {

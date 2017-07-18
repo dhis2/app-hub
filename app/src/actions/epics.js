@@ -62,12 +62,11 @@ const setAppApproval = (action$) => action$
 const deleteApp = (action$) => action$
     .ofType(actions.APP_DELETE)
     .concatMap(action => {
+        const {id} = action.meta.optimistic;
         return api.deleteApp(action.payload.app.id)
-            .then(resp => actionCreators.deleteAppSuccess(action.payload.app))
-            .catch(error => ({
-                type: actions.APP_DELETE_ERROR,
-                payload: error,
-            }));
+            .then(resp => actionCreators.commitOrRevertOptimisticAction(actionCreators.deleteAppSuccess(action.payload.app), id))
+            .catch(error => (
+                actionCreators.commitOrRevertOptimisticAction(actionCreators.actionErrorCreator(actions.APP_DELETE_ERROR, error), id)))
     })
 
 const user = (action$) => action$
