@@ -50,12 +50,18 @@ class UploadFileField extends Component {
     handleUpload(e) {
         const files = e.target.files;
 
+        if(files.length < 1) {
+            this.handleResetFile();
+            return;
+        }
+
         const fileArray = [...files];
         this.props.handleUpload(fileArray);
     }
 
     handleResetFile() {
         this.props.handleUpload([]);
+        this.fileInput.value = '';
     }
 
     render() {
