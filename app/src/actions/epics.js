@@ -7,6 +7,10 @@ import * as api from '../api/api';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/concatMap';
+import 'rxjs/add/operator/mergeAll';
+import 'rxjs/add/observable/from';
+import 'rxjs/add/operator/do';
+import { Observable } from 'rxjs/Observable';
 import {REVERT, COMMIT} from 'redux-optimistic-ui';
 
 const loadAppsAll = (action$) => action$
@@ -166,6 +170,28 @@ const addImage = (action$) => action$
             }))
     })
 
+const addMultipleImages = (action$) => action$
+    .ofType(actions.APP_IMAGES_ADD)
+    .concatMap(action => {
+        const {appId, images} = action.payload;
+        let successCount = 0;
+        const promises = images.map((image, i) => {
+            return api.createNewImage(appId, image)
+                .then(response => {
+                    successCount++;
+                    return actionCreators.addImageToAppSuccess(appId, response);
+                })
+                .catch(error => (actionCreators.actionErrorCreator(actions.APP_IMAGE_ADD_ERROR, {image})))
+        })
+        const allCompleted = Promise.all(promises).then(imageActions => {
+            if(successCount != images.length) {
+                return actionCreators.actionErrorCreator(actions.APP_IMAGES_ADD_ERROR)
+            }
+            return actionCreators.addMultipleImagesToAppSuccess(appId, imageActions);
+        });
+        return Observable.from([...promises, allCompleted]).mergeAll();
+    })
+
 /**
  * Optimistic action
  * @param action$
@@ -223,4 +249,4 @@ const editVersion = (action$) => action$
 export default combineEpics(loadAppsAll, loadAppsApproved, loadApp, setAppApproval, deleteApp,
     user, userApps, newVersion,
     newApp, deleteVersion, editApp,
-    addImage, editImage, deleteImage, editVersion)
+    addImage, editImage, deleteImage, editVersion, addMultipleImages)

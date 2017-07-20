@@ -35,6 +35,7 @@ export class NewAppVersionDialog extends Component {
         return (
             <DialogBase
                 title="New App Version"
+                approveLabel={'Upload'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}>
                 <NewAppVersionForm ref={ref => {

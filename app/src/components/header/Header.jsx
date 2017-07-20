@@ -10,10 +10,11 @@ import {Link} from 'react-router-dom';
 import Theme from '../../styles/theme';
 import Avatar from 'material-ui/Avatar';
 import logo from '../../assets/img/dhis2.svg';
+import { getUserInfo, getUserProfile } from '../../selectors/userSelectors';
 
 const renderProfileButton = (props) => {
     const avatarUrl = props.avatarImg;
-    const isLoggedIn = props.authenticated;
+    const isLoggedIn = getAuth().isLoggedIn();
     const avatar = (<Avatar size={24} src={avatarUrl} />)
     const notLoggedInIcon = (<FontIcon color="white" className="material-icons">account_circle</FontIcon>)
     const button = (<IconButton onClick={() => !isLoggedIn ? getAuth().login() : {}}>
@@ -41,8 +42,8 @@ const Header = (props) =>
 
 const mapStateTopProps = (state) => ({
 
-    avatarImg: state.user.userInfo.info.picture,
-    authenticated: state.user.userInfo.authenticated
+    avatarImg: getUserProfile(state).picture,
+    authenticated: getUserInfo(state).authenticated
 
 })
 

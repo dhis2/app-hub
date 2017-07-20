@@ -59,7 +59,7 @@ export default class AuthService {
     }
 
     setProfile(profile) {
-        localStorage.setItem('profile', profile);
+        localStorage.setItem('profile', JSON.stringify(profile));
     }
 
     getProfile() {
@@ -87,6 +87,7 @@ export default class AuthService {
     logout() {
         // Clear user token and profile data from local storage
         localStorage.removeItem('id_token');
+        localStorage.removeItem('profile');
         History.push("/")
     }
 }

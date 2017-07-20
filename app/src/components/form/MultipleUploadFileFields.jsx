@@ -26,7 +26,7 @@ class UploadFieldsArray extends Component {
     }
 
     /**
-     * This function is called after a change has occured to a field,
+     * This function is called after a change has occurred to a field,
      * but before value has been saved to the store.
      * We therefore add fields if props.multipleSplit is true, and
      * split the files into these fields.

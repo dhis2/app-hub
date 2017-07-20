@@ -62,15 +62,15 @@ const snackbarReducer = (state = initialState, action) => {
         }
 
         default:
-            const { payload } = action;
+            const { payload, meta } = action;
             if (action.type.endsWith('_ERROR')) {
                 let message = 'An error occured';
                 if(payload.message && typeof payload.message === 'string') {
                     message += `: ${payload.message}`
                 }
                 let retryAction = undefined;
-                if(payload.retryAction) {
-                    retryAction = payload.retryAction;
+                if(meta.retryAction) {
+                    retryAction = meta.retryAction;
                 }
                 return {
                     ...state,

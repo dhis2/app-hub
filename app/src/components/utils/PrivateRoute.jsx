@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {Spinner} from './../utils/Loader';
 import { Route, Redirect } from 'react-router-dom';
 import { userAuthenticated, userLogout } from '../../actions/actionCreators';
+import { getUserInfo } from '../../selectors/userSelectors';
 export class PrivateRoute extends Component {
 
     componentDidMount() {
@@ -61,7 +62,7 @@ PrivateRoute.propTypes = {
 const mapStateToProps = (state) => ({
     // mostly used for rerendering this component when
     // authservice has successfully authenticated to auth0
-    authenticated: state.user.userInfo.authenticated
+    authenticated: getUserInfo(state).authenticated
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -72,5 +73,5 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(userLogout());
     }
 })
-//need pure-component else router-context won't be passed down to protected component
+//need non-pure-component else router-context won't be passed down to protected component
 export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false})(PrivateRoute)

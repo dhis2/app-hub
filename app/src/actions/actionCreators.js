@@ -169,6 +169,20 @@ export const addImageToApp = (appId, image) => (
     })
 )
 
+export const addMultipleImagesToApp = (appId, images) => (
+    actionCreator(actions.APP_IMAGES_ADD)({
+        appId,
+        images
+    })
+)
+
+export const addMultipleImagesToAppSuccess = (appId, images) => (
+    actionCreator(actions.APP_IMAGES_ADD_SUCCESS)({
+        appId,
+        images
+    })
+)
+
 export const addImageToAppSuccess = (appId, image) => (
     actionCreator(actions.APP_IMAGE_ADD_SUCCESS)({
         appId,

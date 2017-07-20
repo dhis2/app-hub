@@ -5,7 +5,7 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {loadUserApp, addImageToApp, openDialog, deleteAppVersion, editAppVersion } from '../../../actions/actionCreators';
+import {loadUserApp, addImageToApp, openDialog, deleteAppVersion, editAppVersion, addMultipleImagesToApp } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionListEdit from '../../appVersion/VersionListEdit';
 import FontIcon from 'material-ui/FontIcon';
@@ -17,6 +17,7 @@ import {appTypesToUI} from '../../../../config';
 import * as selectors from '../../../selectors/userSelectors';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
+import Spinner from '../../utils/Spinner';
 
 class UserAppView extends Component {
     constructor(props) {
@@ -67,18 +68,23 @@ class UserAppView extends Component {
     }
 
     handleUploadImages(mergedFilesArray) {
-        mergedFilesArray.map((image, i) => {
-                const imageObj = {
-                    image: {
-                        caption: '',
-                        description: '',
-                        logo: false,
-                    },
-                    file: image
-                }
-                this.props.addImageToApp(this.props.app.id, imageObj);
-
+        const images = mergedFilesArray.map((image, i) => {
+            const imageObj = {
+                image: {
+                    caption: '',
+                    description: '',
+                    logo: false,
+                },
+                file: image
+            }
+            return imageObj;
         })
+        if(images.length > 1) {
+            this.props.addImagesToApp(this.props.app.id, images);
+        } else {
+            this.props.addImageToApp(this.props.app.id, images[0]);
+        }
+
     }
 
     handleEditVersion(version) {
@@ -152,7 +158,7 @@ class UserAppView extends Component {
 
                         <Button primary onClick={this.submitUploadImages.bind(this)}
                                 label="Upload"
-                                icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
+                                icon={<Spinner />} />
                     </CardText>
                 </Card>
             </div>
@@ -173,6 +179,10 @@ const mapDispatchToProps = (dispatch) => ({
 
     addImageToApp(appid, image) {
         dispatch(addImageToApp(appid, image));
+    },
+
+    addImagesToApp(appId, images) {
+      dispatch(addMultipleImagesToApp(appId, images));
     },
 
     deleteVersion(version, appId) {

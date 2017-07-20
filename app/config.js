@@ -1,5 +1,8 @@
 
 const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.NODE_ENV === 'production'
+
+console.log(isProd)
+console.log(process.env.NODE_ENV);
 //used when NODE_ENV is 'development'
 const dev = {
     BASE_APP_NAME: process.env.DHIS2_APPSTORE_BASE_APP_NAME ||  '',
@@ -10,13 +13,13 @@ const dev = {
 //used when NODE_ENV is not 'development'
 const prod = {
 
-    /* Basename for routes.
-    If this app is hosted at http://hostname/appstore this should be '/appstore' */
+     /* Basename for routes.
+     If this app is hosted at http://hostname/appstore this should be '/appstore' */
     BASE_APP_NAME: '/appstore',
 
     /* Base URL for the API.
-       Should be absolute path to the api endpoint.
-       Note the trailing '/' */
+     Should be absolute path to the api endpoint.
+     Note the trailing '/' */
     API_BASE_URL: 'https://play.dhis2.org/appstore/api/',
 
     /* Redirect URL to use by auth0, note that you need to allow this url

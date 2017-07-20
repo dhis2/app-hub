@@ -6,7 +6,7 @@ const initialState = {
         loaded: false,
         loading: true,
         error: false,
-        info: { }
+        profile: JSON.parse(localStorage.getItem('profile')) || { }
 }
 
 const loadedState = {
@@ -115,6 +115,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 byId: list,
             }
         }
+
         case actionTypes.APP_EDIT: {
             const { app, data } = action.payload;
             return {
@@ -128,6 +129,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+
         case actionTypes.APP_IMAGE_ADD_SUCCESS: {
             const { appId, imageId, image } = action.payload;
             const app = state.byId[appId];
@@ -143,6 +145,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 }
             }
         }
+
         case actionTypes.APP_IMAGE_EDIT: {
             const { appId, imageId, data } = action.payload;
             const app = state.byId[appId];
@@ -247,7 +250,7 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
             return {
                 ...state,
                 ...loadedState,
-                info: {
+                profile: {
                     ...action.payload.profile,
                     manager
                 }

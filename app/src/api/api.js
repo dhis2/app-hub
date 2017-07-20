@@ -50,8 +50,10 @@ export function createApp(payload) {
 export function createNewVersion(appId, payload) {
     return fromApi('apps/'+appId+'/versions', true, createUploadVersionOptions(payload));
 }
+
+let block = 0;
 export function createNewImage(appId, payload) {
-    return fromApi('apps/'+appId+'/images', true, createUploadImageOptions(payload));
+    return fromApi('apps/'+appId+'/images?='+ (block++), true, createUploadImageOptions(payload));
 }
 export function deleteVersion(appId, versionId) {
     return fromApi('apps/'+appId+'/versions/'+versionId, true, deleteOpts);
