@@ -204,7 +204,7 @@ public class AppController
 
     @PreAuthorize( "hasRole('ROLE_MANAGER')" )
     @RequestMapping( value = "/{uid}/approval", method = RequestMethod.POST )
-    public void approveApp( @PathVariable( "uid" ) String appUid,
+    public void setAppApproval( @PathVariable( "uid" ) String appUid,
         @RequestParam( name = "status" ) AppStatus status,
         HttpServletResponse response, HttpServletRequest request )
             throws IOException, WebMessageException
@@ -265,7 +265,7 @@ public class AppController
         decideAccess( persistedApp );
 
         App updatedApp = renderService.fromJson( request.getInputStream(), App.class );
-
+        updatedApp.setStatus(persistedApp.getStatus());
         persistedApp.mergeWith( updatedApp );
 
         appStoreService.updateApp( persistedApp );
