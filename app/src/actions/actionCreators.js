@@ -67,9 +67,10 @@ export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD);
 
 export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED);
 
-export const setAppApproval = payload => (
+export const setAppApproval = (app, status) => (
     optimisticActionCreator(actionCreator(actions.SET_APPROVAL_APP)({
-        ...payload
+        app,
+        status
     }))
 )
 

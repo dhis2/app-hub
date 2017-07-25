@@ -11,7 +11,8 @@ import {
     openDialog,
     deleteAppVersion,
     editAppVersion,
-    addMultipleImagesToApp
+    addMultipleImagesToApp,
+    setAppApproval
 } from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionListEdit from '../../appVersion/VersionListEdit';
@@ -19,16 +20,20 @@ import FontIcon from 'material-ui/FontIcon';
 import LogoAvatar from '../../appView/AppLogo';
 import IconButton from 'material-ui/IconButton';
 import Subheader from '../../header/SubHeader';
+import MenuItem from 'material-ui/MenuItem'
+import IconMenu from 'material-ui/IconMenu';
 import Theme from '../../../styles/theme';
 import {appTypesToUI} from '../../../../config';
 import * as selectors from '../../../selectors/userSelectors';
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
 import ImageViewer from '../../appView/ImageViewer';
+import { APP_STATUS_APPROVED, APP_STATUS_PENDING, APP_STATUS_REJECTED } from '../../../constants/apiConstants';
 import Spinner from '../../utils/Spinner';
 
 class UserAppView extends Component {
     constructor(props) {
         super(props);
+
     }
 
     componentDidMount() {
@@ -54,22 +59,6 @@ class UserAppView extends Component {
         })
     }
 
-    renderStatusAlert() {
-        const cardHeaderRightStyle = {
-            display: 'inline-flex',
-            alignItems: 'center',
-            marginLeft: '-5px',
-            color: Theme.card.subtitleColor,
-        }
-        const statusAlertPending = "This app is pending approval"
-        const statusAlertRejected = "This app has been rejected"
-
-        return (<p style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: 'inherit'}}
-                                                          className="material-icons">priority_high</FontIcon>
-            {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
-        </p>)
-    }
-
     handleUploadImages(mergedFilesArray) {
         const images = mergedFilesArray.map((image, i) => {
             const imageObj = {
@@ -90,6 +79,10 @@ class UserAppView extends Component {
         this.props.editVersion(this.props.app.id, version);
     }
 
+    handleSetAppApproval(status) {
+        this.props.setAppApproval(this.props.app, status);
+    }
+
     render() {
         const app = this.props.app;
         if (!app) {
@@ -108,26 +101,16 @@ class UserAppView extends Component {
             right: '4px'
         }
 
-        const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
-            Author: {app.developer.name} <br />
-            Organisation: {app.developer.organisation} <br />
-            {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
-        </div>)
 
-        let logo = app.images.filter(elem => elem.logo)[0];
-
+        console.log("render")
         return (
             <div>
                 <Subheader title="App overview" backLink="/user">
                 </Subheader>
                 <Card>
-                    <CardHeader title={app.name} avatar={<LogoAvatar logo={logo}/>}
-                                subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
-                        <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
-                            <i className="material-icons">edit</i>
-                        </IconButton>
-
-                    </CardHeader>
+                    <UserAppCardHeader app={app} appLogo = {this.props.appLogo} isManager={this.props.user.manager}
+                                      onAppApproval={this.handleSetAppApproval.bind(this)}
+                                      onOpenEditApp={this.handleOpenEditApp.bind(this)} />
 
                     <CardText style={Theme.paddedCard} className="multiline-content">
                         {app.description}
@@ -167,6 +150,8 @@ UserAppView.propTypes = {}
 
 const mapStateToProps = (state, ownProps) => ({
     app: selectors.getApp(state, ownProps.match.params.appId),
+    user: selectors.getUserProfile(state),
+    appLogo: selectors.getAppLogo(state, ownProps.match.params.appId),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -199,7 +184,96 @@ const mapDispatchToProps = (dispatch) => ({
 
     openConfirmDeleteVersion(dialogProps) {
         dispatch(openDialog(dialogType.CONFIRM_GENERIC, dialogProps))
+    },
+
+    setAppApproval(app, status) {
+        dispatch(setAppApproval(app, status))
     }
 })
+
+
+const UserAppCardHeader = ({ app, onOpenEditApp, isManager, appLogo, onAppApproval }) => {
+    const rightIconButtonStyle = {
+        position: 'absolute',
+        top: 0,
+        right: '4px'
+    };
+
+    const rightIconsStyle = {
+        position: 'absolute',
+        top: '0px',
+        right: '70px',
+        height: '48px',
+        display: 'flex',
+        alignItems: 'center'
+    }
+
+    const cardHeaderRightStyle = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        marginLeft: '-5px',
+        color: Theme.card.subtitleColor,
+    }
+
+    const statusAlertPending = "This app is pending approval"
+    const statusAlertRejected = "This app has been rejected"
+
+    const statusAlertText = (<p style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: 'inherit'}}
+                                                                       className="material-icons">priority_high</FontIcon>
+        {app.status == APP_STATUS_PENDING ? statusAlertPending : statusAlertRejected}
+    </p>)
+
+    const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
+        Author: {app.developer.name} <br />
+        Organisation: {app.developer.organisation} <br />
+        {app.status == APP_STATUS_PENDING || app.status == APP_STATUS_REJECTED ? statusAlertText : null}
+    </div>)
+
+    const editIconButton = ( <IconButton style={rightIconButtonStyle} onClick={onOpenEditApp}>
+        <i className="material-icons">edit</i>
+    </IconButton> );
+
+    if(isManager) { //Render a menu instead for managers
+
+        let menuItems = null;
+        const approveItem = (<MenuItem onTouchTap={() => onAppApproval(APP_STATUS_APPROVED)} key="approve" primaryText="Approve"/>)
+        const rejectItem = (<MenuItem onTouchTap={() => onAppApproval(APP_STATUS_REJECTED)} key="reject" primaryText="Reject"/>)
+        const pendingItems = [approveItem, rejectItem]
+
+        if (app.status === APP_STATUS_PENDING) {
+            menuItems = pendingItems
+        } else if (app.status === APP_STATUS_APPROVED) {
+            menuItems = rejectItem;
+        } else {
+            menuItems = approveItem;
+        }
+
+        var menu = (
+            <IconMenu
+                style={rightIconButtonStyle}
+                iconButtonElement={<IconButton><FontIcon className="material-icons">more_vert</FontIcon></IconButton>}>
+                {menuItems}
+                <MenuItem onTouchTap={onOpenEditApp} key='edit' primaryText='Edit' />
+            </IconMenu>
+        )
+
+    }
+
+    return (
+        <CardHeader title={app.name} avatar={<LogoAvatar logo={appLogo}/>}
+                    subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
+            {isManager ? menu : editIconButton}
+
+        </CardHeader> )
+}
+
+UserAppCardHeader.propTypes = {
+    app: PropTypes.object.isRequired,
+    onOpenEditApp: PropTypes.func.isRequired,
+    onAppApproval: PropTypes.func,
+    isManager: PropTypes.bool
+}
+
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAppView);

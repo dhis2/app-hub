@@ -16,6 +16,7 @@ import * as dialogTypes from '../../../constants/dialogTypes';
 import sortBy from 'lodash/sortBy';
 import ErrorOrLoading from '../../utils/ErrorOrLoading';
 import * as selectors from '../../../selectors/userSelectors';
+import { APP_STATUS_APPROVED, APP_STATUS_PENDING, APP_STATUS_REJECTED } from '../../../constants/apiConstants';
 
 class AppList extends Component {
     constructor(props) {
@@ -45,11 +46,11 @@ class AppList extends Component {
     handleApproval(app, type) {
         switch (type) {
             case 'APPROVE': {
-                this.props.approveApp({app, status: 'APPROVED'});
+                this.props.setAppApproval(app, APP_STATUS_APPROVED);
                 break;
             }
             case 'REJECT': {
-                this.props.approveApp({app, status: 'NOT_APPROVED'})
+                this.props.setAppApproval(app, APP_STATUS_REJECTED);
                 break;
             }
         }
@@ -73,9 +74,9 @@ class AppList extends Component {
             <SelectFilter
                 renderAllToggle
                 form="appStatusFilter"
-                filters={[{label: 'Approved', toggled: true, value: 'APPROVED'},
-                    {label: 'Pending', toggled: true, value: 'PENDING'},
-                    {label: 'Not Approved', toggled: true, value: 'NOT_APPROVED'}]}
+                filters={[{label: 'Approved', toggled: true, value: APP_STATUS_APPROVED},
+                    {label: 'Pending', toggled: true, value: APP_STATUS_PENDING},
+                    {label: 'Not Approved', toggled: true, value: APP_STATUS_REJECTED}]}
             /></div>)
     }
 
@@ -142,8 +143,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-    approveApp(payload) {
-        dispatch(setAppApproval(payload))
+    setAppApproval(app, status) {
+        dispatch(setAppApproval(app, status))
     },
 
     openDeleteDialog(app) {

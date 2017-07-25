@@ -9,6 +9,7 @@ import UploadFileField from '../form/UploadFileField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, reduxForm} from 'redux-form';
+import Divider from 'material-ui/Divider';
 import * as formUtils from './ReduxFormUtils';
 import {validateZipFile, validateImageFile, validateURL} from '../form/ReduxFormUtils';
 import Spinner from '../utils/Spinner';
@@ -18,7 +19,7 @@ const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHB
 const validate = values => {
     const errors = {}
     const requiredFields = ['appName', 'appType', 'file', 'developerName', 'developerOrg', 'version']
-    const varCharFields = ['appName', 'appType', 'version', 'minVer', 'maxVer', 'developerName', 'developerEmail',
+    const varCharFields = ['appName', 'appType', 'sourceUrl', 'version', 'minVer', 'maxVer', 'developerName', 'developerEmail',
         'developerOrg', 'imageCaption', 'imageDescription'];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -48,6 +49,7 @@ const UploadForm = (props) => {
             name: values.appName,
             description: values.description,
             appType: values.appType,
+            sourceUrl: values.sourceUrl,
             developer: {
                 name: values.developerName,
                 email: values.developerEmail,
@@ -91,6 +93,9 @@ const UploadForm = (props) => {
                    rows={1}
                    label="App Description"/>
             <br />
+            <Field name="sourceUrl" style={fieldStyle} component={formUtils.renderTextField} label="Source Code URL"
+                validate={validateURL}/>
+            <br />
             <Field name="appType" component={formUtils.renderSelectField} label="App Type">
                 {menuItems}
             </Field>
@@ -111,12 +116,14 @@ const UploadForm = (props) => {
                    label="Demo URL"
                    validate={validateURL}>
             </Field>
+
             <br />
             <Field name="file" style={{height: 72}} component={formUtils.renderUploadField}
                    accept=".zip"
                    validate={validateZipFile}
                    formMeta={{dirty, submitFailed}}
                    label="Upload app *"/>
+            <Divider />
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField}
                    label="Developer Name *"/>
@@ -128,7 +135,7 @@ const UploadForm = (props) => {
                    label="Organisation *"/>
 
             <h2>Image</h2>
-            <p>You can upload additional images and set front page image once your app has been uploaded.</p>
+            <p>You can upload additional images and set preview image once your app has been uploaded.</p>
             <Field name="image" component={formUtils.renderUploadField} accept="image/*" hintText="Upload logo"
                    validate={validateImageFile}
                    id="imageFile"/>

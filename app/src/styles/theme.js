@@ -25,7 +25,7 @@ export default getMuiTheme({
     },
 
     paddedCard: {
-        padding: ' 0px 35px',
+        padding: ' 16px 35px',
         lineHeight: '24px'
     },
 

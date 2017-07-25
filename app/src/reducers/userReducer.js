@@ -6,7 +6,6 @@ const initialState = {
         loaded: false,
         loading: true,
         error: false,
-        profile: JSON.parse(localStorage.getItem('profile')) || { }
 }
 
 const loadedState = {
@@ -229,7 +228,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
     return state;
 }
 
-function userInfoReducer(state = {authenticated: false, ...initialState}, action) {
+function userInfoReducer(state = {authenticated: false, ...initialState, profile: JSON.parse(localStorage.getItem('profile')) || { }}, action) {
     switch(action.type) {
         case actionTypes.USER_AUTHENTICATED: {
             return {
