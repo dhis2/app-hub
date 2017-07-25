@@ -143,7 +143,7 @@ class MultipleUploadFileFields extends Component {
             supportedExtensions: props.supportedExtensions,
         }
         const uploadButtonProps = {
-            icon: submitting ? <Spinner /> : <FontIcon className="material-icons">file_upload</FontIcon>,
+            icon: submitting ? <Spinner inButton /> : <FontIcon className="material-icons">file_upload</FontIcon>,
             label: !submitting ? "Upload" : null,
             style: {
                 marginTop: '20px'

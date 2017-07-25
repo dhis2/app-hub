@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Error } from './Error';
-import { Spinner } from './Loader';
+//import { Spinner } from './Loader';
+import Spinner from './Spinner';
 
 export const ErrorOrLoading = (props) => {
     if (!props.error && !props.loading) {

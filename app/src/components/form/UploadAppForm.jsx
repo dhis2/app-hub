@@ -146,7 +146,7 @@ const UploadForm = (props) => {
                    label="Image description"/>
             <br />
             <Button style={{...fieldStyle, marginTop: '20px'}}
-                    icon={submitting ? <Spinner /> : <FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
+                    icon={submitting ? <Spinner inButton /> : <FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
                     label={!submitting ? "Upload" : null}/>
         </form>
