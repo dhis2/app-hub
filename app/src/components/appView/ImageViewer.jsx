@@ -190,8 +190,8 @@ class ImageViewer extends Component {
             infinite: false,
 
         }
-        const emptyDiv = (showEmptyMessage ? <div style={{paddingLeft: '20px'}}>
-            No images for this app.
+        const emptyDiv = (showEmptyMessage ? <div style={Theme.paddedCard}>
+                {editable ? 'No images for this app. Upload your first now!' : 'No images for this app.'}
         </div> : null)
 
 

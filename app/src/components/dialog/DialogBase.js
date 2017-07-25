@@ -7,7 +7,7 @@ import {closeDialog} from '../../actions/actionCreators';
 
 const styles = {
     bodyStyle: {
-       overflowY: 'auto'
+
     },
     contentStyle: {
         maxWidth: '500px'
@@ -51,6 +51,7 @@ class DialogBase extends Component {
             title={title}
             actions={actions}
             modal={false}
+            autoScrollBodyContent
             contentStyle={{...styles.contentStyle, ...contentStyle} || styles.contentStyle}
             bodyStyle={{...styles.bodyStyle, ...bodyStyle} || styles.bodyStyle}
             onRequestClose={defaultCloseDialog}

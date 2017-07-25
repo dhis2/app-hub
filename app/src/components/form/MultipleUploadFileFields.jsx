@@ -2,6 +2,9 @@ import React, {PropTypes, Component} from 'react';
 import {Field, Form, FieldArray, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
 import { validateImageFile } from './ReduxFormUtils';
+import Button from 'material-ui/RaisedButton';
+import Spinner from '../utils/Spinner';
+import FontIcon from 'material-ui/FontIcon';
 
 class UploadFieldsArray extends Component {
 
@@ -76,6 +79,7 @@ class UploadFieldsArray extends Component {
                         />)
                 })}
                 {error ? <span>{error}</span> : null}
+
             </div>
         )
     }
@@ -127,7 +131,7 @@ class MultipleUploadFileFields extends Component {
     }
 
     render() {
-        const {handleSubmit, pristine, submitting, fieldsState, ...props} = this.props;
+        const {handleSubmit, pristine, submitting, ...props} = this.props;
         const fieldArrayProps = {
             multiLastOnly: props.multiLastOnly,
             multiple: props.multiple,
@@ -138,6 +142,13 @@ class MultipleUploadFileFields extends Component {
             fieldValidate: props.validateUploadField || validateImageFile,
             supportedExtensions: props.supportedExtensions,
         }
+        const uploadButtonProps = {
+            icon: submitting ? <Spinner /> : <FontIcon className="material-icons">file_upload</FontIcon>,
+            label: !submitting ? "Upload" : null,
+            style: {
+                marginTop: '20px'
+            }
+        }
         return (
             <Form onSubmit={handleSubmit(this.onSubmit.bind(this))} style={{margin: '0 0 15px 0'}}>
                 <FieldArray name={this.props.fieldPrefix}
@@ -145,6 +156,10 @@ class MultipleUploadFileFields extends Component {
                             {...fieldArrayProps}
                             validate={validateArr}
                 />
+
+                <Button type="submit" primary
+                        disabled={pristine || submitting}
+                        {...uploadButtonProps} />
             </Form>
         )
     }
@@ -210,6 +225,7 @@ const ReduxFormConnected = reduxForm({
     touchOnChange: true,
     initialValues: {'uploads': [{files: []}]},
     ...MultipleUploadFileFields.defaultProps,
-    validate: validateForm
+    validate: validateForm,
+    shouldValidate: (params) => (!params.props.submitting)
 })(MultipleUploadFileFields);
 export default ReduxFormConnected;

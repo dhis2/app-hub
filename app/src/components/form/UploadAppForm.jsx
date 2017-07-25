@@ -11,7 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import {Field, reduxForm} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
 import {validateZipFile, validateImageFile, validateURL} from '../form/ReduxFormUtils';
-
+import Spinner from '../utils/Spinner';
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
     {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
 
@@ -139,9 +139,9 @@ const UploadForm = (props) => {
                    label="Image description"/>
             <br />
             <Button style={{...fieldStyle, marginTop: '20px'}}
-                    icon={<FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
+                    icon={submitting ? <Spinner /> : <FontIcon className="material-icons">file_upload</FontIcon>} type="submit" primary
                     disabled={pristine || submitting}
-                    label="Upload"/>
+                    label={!submitting ? "Upload" : null}/>
         </form>
 
     )

@@ -1,8 +1,6 @@
 
 const isProd = (process.argv && process.argv.indexOf('-p') > -1) || process.env.NODE_ENV === 'production'
 
-console.log(isProd)
-console.log(process.env.NODE_ENV);
 //used when NODE_ENV is 'development'
 const dev = {
     BASE_APP_NAME: process.env.DHIS2_APPSTORE_BASE_APP_NAME ||  '',

@@ -20,9 +20,16 @@ const styles = {
 
 
 export const Spinner = (props) => (
-    <SvgIcon className="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <SvgIcon className="spinner" {...styles.outer} style={props.style} xmlns="http://www.w3.org/2000/svg">
         <circle className="path" {...styles.path}></circle>
     </SvgIcon>
 )
+
+
+Spinner.propTypes = {
+    style: PropTypes.object,
+    innerStyle: PropTypes.object,
+
+}
 
 export default Spinner;

@@ -73,7 +73,7 @@ const AppListItem = (props, state) => {
             {!props.manager ? (<span><br />Status: {appStatus[status].alt}</span>) : null}
         </p>)
     const listItemProps = {
-        primaryText: (<div style={{display: 'flex', alignItems: 'center'}}>{name} {appStatus[status].elem}</div>),
+        primaryText: (<div style={{display: 'flex', alignItems: 'center', fontWeight: '400'}}>{name} {appStatus[status].elem}</div>),
         leftAvatar: (<AppLogo logo={logo} inList/>),
         secondaryText: secondaryText,
         secondaryTextLines: 2,

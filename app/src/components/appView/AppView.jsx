@@ -12,6 +12,7 @@ import {loadApp} from '../../actions/actionCreators';
 import { appTypesToUI } from '../../../config';
 import AppLogo from './AppLogo';
 import Theme from '../../styles/theme';
+import {FadeAnimation} from '../utils/Animate';
 
 const styles = {
     appDescription: {

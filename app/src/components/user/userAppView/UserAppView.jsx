@@ -5,7 +5,14 @@ import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Button from 'material-ui/RaisedButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-import {loadUserApp, addImageToApp, openDialog, deleteAppVersion, editAppVersion, addMultipleImagesToApp } from '../../../actions/actionCreators';
+import {
+    loadUserApp,
+    addImageToApp,
+    openDialog,
+    deleteAppVersion,
+    editAppVersion,
+    addMultipleImagesToApp
+} from '../../../actions/actionCreators';
 import * as dialogType from '../../../constants/dialogTypes';
 import VersionListEdit from '../../appVersion/VersionListEdit';
 import FontIcon from 'material-ui/FontIcon';
@@ -39,11 +46,12 @@ class UserAppView extends Component {
     handleDeleteAppVersion(version) {
         const children = (<div><p>Are you sure you want to delete version <i>{version.version} </i>
             for app '{this.props.app.name}'?</p>
-        This cannot be undone.
+            This cannot be undone.
         </div>)
-        this.props.openConfirmDeleteVersion({children,
-            approveAction: () => this.props.deleteVersion(version, this.props.app.id)})
-     //   this.props.deleteVersion(version, this.props.app.id);
+        this.props.openConfirmDeleteVersion({
+            children,
+            approveAction: () => this.props.deleteVersion(version, this.props.app.id)
+        })
     }
 
     renderStatusAlert() {
@@ -57,14 +65,9 @@ class UserAppView extends Component {
         const statusAlertRejected = "This app has been rejected"
 
         return (<p style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: 'inherit'}}
-                                                            className="material-icons">priority_high</FontIcon>
+                                                          className="material-icons">priority_high</FontIcon>
             {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
         </p>)
-    }
-
-    submitUploadImages() {
-
-        this.form.submit();
     }
 
     handleUploadImages(mergedFilesArray) {
@@ -79,12 +82,8 @@ class UserAppView extends Component {
             }
             return imageObj;
         })
-        if(images.length > 1) {
-            this.props.addImagesToApp(this.props.app.id, images);
-        } else {
-            this.props.addImageToApp(this.props.app.id, images[0]);
-        }
 
+        this.props.addImagesToApp(this.props.app.id, images);
     }
 
     handleEditVersion(version) {
@@ -112,7 +111,8 @@ class UserAppView extends Component {
         const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} <br />
-            {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}</div>)
+            {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}
+        </div>)
 
         let logo = app.images.filter(elem => elem.logo)[0];
 
@@ -142,7 +142,7 @@ class UserAppView extends Component {
                     <CardText>
                         <VersionListEdit editable versionList={app.versions} app={app}
                                          handleEdit={this.handleEditVersion.bind(this)}
-                                     handleDelete={this.handleDeleteAppVersion.bind(this)}/>
+                                         handleDelete={this.handleDeleteAppVersion.bind(this)}/>
                     </CardText>
                 </Card>
                 <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
@@ -150,15 +150,12 @@ class UserAppView extends Component {
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>
                         <ImageViewer images={app.images} appId={app.id} editable/>
                     </CardText>
-                    <CardText>
+                    <CardText style={Theme.paddedCard}>
                         <h2>Upload images</h2>
-                        <MultipleUploadFileFields ref={ref => this.form = ref}
-                                                  form="imageUpload"
-                                                  submitted={this.handleUploadImages.bind(this)}/>
+                        <MultipleUploadFileFields
+                            form="imageUpload"
+                            submitted={this.handleUploadImages.bind(this)}/>
 
-                        <Button primary onClick={this.submitUploadImages.bind(this)}
-                                label="Upload"
-                                icon={<Spinner />} />
                     </CardText>
                 </Card>
             </div>
@@ -169,7 +166,7 @@ class UserAppView extends Component {
 UserAppView.propTypes = {}
 
 const mapStateToProps = (state, ownProps) => ({
-    app: selectors.getApp(state, ownProps.match.params.appId),//state.user.appList.byId[ownProps.match.params.appId]
+    app: selectors.getApp(state, ownProps.match.params.appId),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -182,7 +179,7 @@ const mapDispatchToProps = (dispatch) => ({
     },
 
     addImagesToApp(appId, images) {
-      dispatch(addMultipleImagesToApp(appId, images));
+        dispatch(addMultipleImagesToApp(appId, images));
     },
 
     deleteVersion(version, appId) {

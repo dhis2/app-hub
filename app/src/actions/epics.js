@@ -181,7 +181,8 @@ const addMultipleImages = (action$) => action$
                     successCount++;
                     return actionCreators.addImageToAppSuccess(appId, response);
                 })
-                .catch(error => (actionCreators.actionErrorCreator(actions.APP_IMAGE_ADD_ERROR, {image})))
+                .catch(error => (actionCreators.actionErrorCreator(actions.APP_IMAGE_ADD_ERROR,
+                    {...image, fieldIndex: i, message: error})))
         })
         const allCompleted = Promise.all(promises).then(imageActions => {
             if(successCount != images.length) {

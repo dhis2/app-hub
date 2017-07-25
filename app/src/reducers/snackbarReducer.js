@@ -69,7 +69,7 @@ const snackbarReducer = (state = initialState, action) => {
                     message += `: ${payload.message}`
                 }
                 let retryAction = undefined;
-                if(meta.retryAction) {
+                if(meta && meta.retryAction) {
                     retryAction = meta.retryAction;
                 }
                 return {

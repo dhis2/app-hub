@@ -28,6 +28,7 @@ export default function AppStore() {
             <MuiThemeProvider muiTheme={theme}>
                 <Router history={history}>
                     <div className="app">
+                        <DialogRoot />
                         <Header />
                         <Switch>
                             <Route exact path="/" component={AppCards}/>
@@ -38,7 +39,7 @@ export default function AppStore() {
                                 <Redirect to="/"/>)
                             }/>
                         </Switch>
-                        <DialogRoot />
+
 
                         <Snackbar />
                     </div>
