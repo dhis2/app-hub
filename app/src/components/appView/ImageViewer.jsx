@@ -45,18 +45,22 @@ const ImageElement = (props) => {
         titleBar: {
             position: 'absolute',
             display: 'flex',
-            height: props.subtitle ? 68 : 48,
             alignItems: 'center',
             background: 'rgba(0,0,0,0.4)',
+            maxHeight: '120px',
+            minHeight: '60px',
             bottom: 0,
             left: 0,
             right: 0,
+            justifyContent: 'space-between',
+            whiteSpace: 'pre-line',
+            wordWrap: 'break-word'
         },
         titleWrap: {
-            flexGrow: 1,
-            overflow: 'hidden',
+            overflowY: 'auto',
             color: 'white',
             margin: 10,
+            maxHeight: 'inherit'
         },
         title: {
             fontSize: '16px',
@@ -66,8 +70,7 @@ const ImageElement = (props) => {
         },
         subTitle: {
             fontSize: '12px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
+
         },
         actions: {}
     }
@@ -155,7 +158,7 @@ class ImageViewer extends Component {
 
     renderActions(image, index) {
         const setLogoIcon = image.logo ? "star" : "star_border";
-        return (<div>
+        return (<div style={{display: 'flex'}}>
             <IconButton tooltip="Set as logo" tooltipPosition="top-center"
                         iconStyle={styles.actionIconStyle}
                         iconClassName="material-icons"

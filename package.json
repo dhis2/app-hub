@@ -32,7 +32,7 @@
     "lodash": "^4.17.4",
     "material-components-web": "^0.13.0",
     "material-design-icons": "^3.0.1",
-    "material-ui": "^0.17.0",
+    "material-ui": "^0.18.7",
     "node-sass": "^4.5.0",
     "react": "~15.4",
     "react-dom": "~15.4",
