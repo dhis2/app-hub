@@ -2,6 +2,9 @@ import * as actionTypes from '../constants/actionTypes';
 import { combineReducers } from 'redux';
 import { optimistic, ensureState } from 'redux-optimistic-ui';
 
+
+const localStorageProfile = localStorage.getItem('profile')
+const initialProfile = localStorageProfile ? JSON.parse(localStorageProfile) : {}
 const initialState = {
         loaded: false,
         loading: true,
@@ -228,7 +231,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
     return state;
 }
 
-function userInfoReducer(state = {authenticated: false, ...initialState, profile: JSON.parse(localStorage.getItem('profile')) || { }}, action) {
+function userInfoReducer(state = {authenticated: false, ...initialState, profile: initialProfile}, action) {
     switch(action.type) {
         case actionTypes.USER_AUTHENTICATED: {
             return {

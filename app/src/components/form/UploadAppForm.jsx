@@ -123,7 +123,6 @@ const UploadForm = (props) => {
                    validate={validateZipFile}
                    formMeta={{dirty, submitFailed}}
                    label="Upload app *"/>
-            <Divider />
             <h2>Developer</h2>
             <Field name="developerName" style={fieldStyle} component={formUtils.renderTextField}
                    label="Developer Name *"/>

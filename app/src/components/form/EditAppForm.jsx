@@ -8,14 +8,14 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import * as formUtils from './ReduxFormUtils';
 import {Field, reduxForm, Form} from 'redux-form';
-
+import { validateURL } from './ReduxFormUtils';
 const appTypes = [{value: 'APP_STANDARD', label: 'Standard'}, {value: 'APP_DASHBOARD', label: 'Dashboard'},
     {value: 'APP_TRACKER_DASHBOARD', label: 'Tracker Dashboard'}]
 
 const validate = values => {
     const errors = {}
     const requiredFields = ['appName', 'appType', 'file', 'developerName', 'developerOrg', 'version']
-    const varCharFields = ['appName', 'appType', 'developerName', 'developerEmail',
+    const varCharFields = ['appName', 'sourceUrl', 'appType', 'developerName', 'developerEmail',
         'developerOrg'];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -39,6 +39,7 @@ const EditForm = (props) => {
     const onSub = (values) => {
         const data = {
             name: values.appName,
+            sourceUrl: values.sourceUrl,
             appType: values.appType,
             description: values.description,
             developer: {
@@ -60,6 +61,9 @@ const EditForm = (props) => {
         <Form onSubmit={handleSubmit(onSub)}>
             <Field name="appName" component={formUtils.renderTextField} autoFocus fullWidth label="App Name"/> <br />
             <Field name="description" component={formUtils.renderTextField} fullWidth multiLine rows={3} label="App Description"/>
+            <br />
+            <Field name="sourceUrl" component={formUtils.renderTextField} label="Source Code URL"
+                   validate={validateURL}/>
             <br />
             <Field name="appType" component={formUtils.renderSelectField} fullWidth label="App Type">
                 {menuItems}

@@ -241,8 +241,8 @@
                 <phase>generate-resources</phase>
 
                 <configuration>
-                  <nodeVersion>v7.5.0</nodeVersion>
-                  <yarnVersion>v0.20.0</yarnVersion>
+                  <nodeVersion>v8.2.1</nodeVersion>
+                  <yarnVersion>v0.27.5</yarnVersion>
                 </configuration>
               </execution>
 
