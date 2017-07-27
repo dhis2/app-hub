@@ -38,7 +38,7 @@ class UserView extends Component {
         );
 
         return (
-            <Grid align="left">
+            <Grid align="center">
                 <Col span={3} phone={4} tablet={8}>
                     <List style={{padding: 0}}>
                         <Link to="/">

@@ -6,7 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
 const VersionList = (props) => {
 
-
+    //Max 3 versions before "more button"
     const versions = props.versionList.sort((a,b) => b.created - a.created).map((version, i) => {
         const editMenu = (<IconMenu
             iconButtonElement={<IconButton><FontIcon className="material-icons">more_vert</FontIcon></IconButton>}>

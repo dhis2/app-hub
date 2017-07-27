@@ -12,14 +12,8 @@ import {Field, reduxForm, Form} from 'redux-form';
 const validate = values => {
     const errors = {}
     const maxLenCaption = 60;
-    const maxLenDescription = 140;
     if(values['caption'] && values['caption'].length > maxLenCaption) {
         errors['caption'] = `Max ${maxLenCaption} characters`;
-
-    }
-
-    if(values['description'] && values['description'].length > maxLenDescription) {
-        errors['description'] = `Max ${maxLenDescription} characters`;
 
     }
 

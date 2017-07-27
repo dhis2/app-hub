@@ -27,8 +27,8 @@ function getClassNames(props) {
 }
 
 const ToolbarSection = ({children, ...props}) => (
-    <div className={getClassNames(props)}>
-        {children}
+    <div className={getClassNames(props)} style={props.style}>
+            {children}
     </div>
 )
 

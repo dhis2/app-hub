@@ -156,3 +156,25 @@ a {
 h1, h2, h3, h4 {
     font-weight: inherit
 }
+
+/* Change toolbar-padding according to mdc-layout-grid-margins*/
+
+@media (min-width: 840px) {
+    .mdc-toolbar {
+        padding: 0 24px;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 839px)  {
+    .mdc-toolbar {
+        padding: 0 16px;
+    }
+}
+
+@media (max-width: 479px) {
+    .mdc-toolbar {
+        padding: 0 8px;
+    }
+}
+
+

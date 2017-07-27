@@ -30,6 +30,7 @@ export default function AppStore() {
                     <div className="app">
                         <DialogRoot />
                         <Header />
+                        <div id="container" style={theme.container}>
                         <Switch>
                             <Route exact path="/" component={AppCards}/>
                             <Route path='/app/:appId' component={AppView}/>
@@ -39,7 +40,7 @@ export default function AppStore() {
                                 <Redirect to="/"/>)
                             }/>
                         </Switch>
-
+                        </div>
 
                         <Snackbar />
                     </div>

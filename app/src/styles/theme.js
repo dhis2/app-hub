@@ -29,4 +29,11 @@ export default getMuiTheme({
         lineHeight: '24px'
     },
 
+    container: {
+        maxWidth: 1272, //Each card at frontpage is 300px and has space for 4, with 24 px gutter. (300*4 + (24*3) ) = 1272).
+        margin: '0 auto',
+      //  paddingLeft: 'calc(100vw - 100%)' //Scrollbar-shift fix
+    }
+
+
 });

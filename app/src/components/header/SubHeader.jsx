@@ -4,10 +4,20 @@ import IconButton from 'material-ui/IconButton';
 import {Toolbar, ToolbarTitle, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import {Link} from 'react-router-dom';
 
+
+const styles = {
+    backgroundColor: 'white',
+    marginBottom: '12px',
+    flexWrap: 'wrap',
+    minHeight: '56px',
+    height: 'auto'
+}
+
+
 const SubHeader = (props) => {
 
     return (
-        <Toolbar style={{backgroundColor: 'white', marginBottom: '10px', flexWrap: 'wrap', minHeight: '56px', height: 'auto'}}>
+        <Toolbar style={{...styles, ...props.style}}>
             {props.title || props.backLink ? <ToolbarGroup>
                 {props.backLink ? <Link to={props.backLink}>
                         <IconButton>

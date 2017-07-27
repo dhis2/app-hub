@@ -11,6 +11,11 @@ const propTypes = {
     align: AlignType
 };
 
+const styles = {
+    inner: {
+        maxWidth: 'inherit'
+    }
+}
 
 function handleStyleProps(props) {
     let style = {...props.style};
@@ -19,7 +24,7 @@ function handleStyleProps(props) {
     }
 
     if(props.align) {
-        style.maxWidth = style.maxWidth || '1200px';
+        style.maxWidth = style.maxWidth || '1272px';
         switch(props.align) {
             case 'center' :
                 style.margin = '0 auto';
@@ -37,11 +42,11 @@ function handleStyleProps(props) {
 
 const Grid = ({...props}) => {
     const wrap = (<div className={classNames('mdc-layout-grid', props.additionalClasses)} style={handleStyleProps(props)}>
-        <div className="mdc-layout-grid__inner">
+        <div className="mdc-layout-grid__inner" style={styles.inner}>
             {props.children}
         </div>
     </div>);
-    const nestedElem = (<div className="mdc-layout-grid__inner" style={handleStyleProps(props)}>
+    const nestedElem = (<div className="mdc-layout-grid__inner" style={{...styles.inner, ...handleStyleProps(props)}}>
         {props.children}
     </div>)
     return (

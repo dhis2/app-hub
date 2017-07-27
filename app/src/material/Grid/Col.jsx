@@ -17,6 +17,10 @@ const propTypes = {
     children: PropTypes.node,
 };
 
+const styles = {
+    maxWidth: 'inherit'
+}
+
 function getClassNames(props) {
     let modificators = [];
 
@@ -36,7 +40,7 @@ function getClassNames(props) {
 }
 
 function handleStyleProps(props) {
-    const style = {...props.style};
+    const style = {...styles, ...props.style};
     if(props.center) {
         style.margin = '0 auto';
     }

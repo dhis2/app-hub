@@ -92,13 +92,18 @@ class UserAppView extends Component {
             margin: 0,
             top: 0,
             right: 10,
-            top: '-25px',
+            top: '-26px',
             position: 'absolute',
         };
         const rightIconButtonStyle = {
             position: 'absolute',
             top: 0,
             right: '4px'
+        }
+
+        const cardStyle = {
+            marginTop: '12px',
+            position: 'relative'
         }
 
 
@@ -117,7 +122,7 @@ class UserAppView extends Component {
                     </CardText>
 
                 </Card>
-                <Card style={{marginTop: '10px', position: 'relative'}}>
+                <Card style={cardStyle}>
                     <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
                         <ContentAdd />
                     </FloatingActionButton>
@@ -128,7 +133,7 @@ class UserAppView extends Component {
                                          handleDelete={this.handleDeleteAppVersion.bind(this)}/>
                     </CardText>
                 </Card>
-                <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
+                <Card style={cardStyle} expandable={true} expanded={false}>
                     <CardTitle title="Images" actAsExpander={true}/>
                     <CardText style={{paddingLeft: 0, paddingRight: 0}}>
                         <ImageViewer images={app.images} appId={app.id} editable/>

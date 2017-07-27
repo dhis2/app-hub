@@ -9,6 +9,8 @@ const propTypes = {
     align: AlignType,
     additionalClasses: PropTypes.string,
     children: PropTypes.node,
+    style: PropTypes.object,
+    titleStyle: PropTypes.object,
 };
 
 const defaultProps = {
@@ -31,8 +33,8 @@ function getClassNames(props) {
     return classNames(baseClassname, modificators, props.additionalClasses);
 }
 const ToolbarTitle = ({children, ...props}) => (
-        <section className={getClassNames(props)}>
-            <span className="mdc-toolbar__title">
+        <section className={getClassNames(props)} style={props.style}>
+            <span className="mdc-toolbar__title" style={props.titleStyle}>
                 {props.text ? props.text : children}
                 </span>
         </section>

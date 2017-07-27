@@ -65,7 +65,7 @@ class AppView extends Component {
 
                 </Card>
 
-                <Card style={ {...Theme.paddedCard, marginTop: '10px', position: 'relative'} }>
+                <Card style={ {...Theme.paddedCard, marginTop: '12px', position: 'relative'} }>
                     <CardTitle title="Versions" />
                     <CardText>
                         <VersionList versionList={app.versions} app={app}/>

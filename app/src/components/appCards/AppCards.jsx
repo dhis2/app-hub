@@ -13,7 +13,7 @@ import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
 import {FadeAnimation} from '../utils/Animate';
 import '../../styles/utils/animations.scss';
-
+import Theme from '../../styles/theme';
 class AppCards extends Component {
 
     componentDidMount() {
@@ -23,8 +23,6 @@ class AppCards extends Component {
     render() {
         const styles = {
             grid: {
-               maxWidth: '1500px',
-               margin: '0 auto'
             },
             filters: {
                 display: 'flex',
@@ -66,7 +64,7 @@ class AppCards extends Component {
         return (
             <Grid>
                 <Col span={12} style={{}}>
-                    <SubHeader>
+                    <SubHeader style={{marginBottom: 0}}>
                         <ToolbarGroup>
                             <TextFilter hintText="Search"/>
                         </ToolbarGroup>
@@ -83,7 +81,6 @@ class AppCards extends Component {
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
-
                 <Col span={12}>
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
                     <FadeAnimation component={Grid} nested nestedStyle={styles.grid}>
