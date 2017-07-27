@@ -1,4 +1,4 @@
-@package org.hisp.appstore.api;
+package org.hisp.appstore.api;
 
 import java.util.Set;
 
