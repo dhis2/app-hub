@@ -49,8 +49,7 @@ class VersionListEdit extends Component {
 
         }
 
-        this.renderRowEdit = this.renderRowEdit.bind(this);
-        this.renderRowNormal = this.renderRowNormal.bind(this);
+        this.renderRow = this.renderRow.bind(this);
         this.handleCancelRow = this.handleCancelRow.bind(this);
     }
 
@@ -119,57 +118,22 @@ class VersionListEdit extends Component {
         })
     }
 
-    renderRowEdit(version) {
-        const submitIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleSubmitRow(version)}>
+    renderRow(version, edit) {
+        const editIcon = (<IconButton key="edit" style={styles.iconButton} onTouchTap={() => this.handleEditRow(version)}>
+            <TableIcon>edit</TableIcon></IconButton>)
+        const submitIcon = (<IconButton key="submit" style={styles.iconButton} onTouchTap={() => this.handleSubmitRow(version)}>
             <TableIcon>check</TableIcon></IconButton>);
 
-        const cancelIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleCancelRow(version)}>
+        const cancelIcon = (<IconButton key="cancel" style={styles.iconButton} onTouchTap={() => this.handleCancelRow(version)}>
             <TableIcon>clear</TableIcon></IconButton>);
 
-        return (
-            <TableRow key={version.id}>
-                <TableRowColumn style={styles.firstColumn}>
-                    <a href={version.downloadUrl} title="Download">
-                        <TableIcon>file_download</TableIcon>
-                    </a>
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField defaultValue={version.demoUrl}
-                               onChange={this.handleValueChange.bind(this, version.id, 'demoUrl')}
-                               name="demoUrl"/>
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField defaultValue={version.version}
-                               onChange={this.handleValueChange.bind(this, version.id, 'version')}
-                               name="version"/>
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField defaultValue={version.minDhisVersion}
-                               onChange={this.handleValueChange.bind(this, version.id, 'minDhisVersion')}
-                               name="minDhisVersion"/>
-                </TableRowColumn>
-                <TableRowColumn>
-                    <TextField defaultValue={version.maxDhisVersion}
-                               onChange={this.handleValueChange.bind(this, version.id, 'maxDhisVersion')}
-                               name="maxDhisVersion"/>
-                </TableRowColumn>
-                <TableRowColumn title={new Date(version.created).toLocaleString()}>
-                    {new Date(version.created).toLocaleDateString()}</TableRowColumn>
-                <TableRowColumn style={styles.editColumn}>
-                    {submitIcon}
-                    {cancelIcon}
-                </TableRowColumn>
-
-            </TableRow>
-        )
-    }
-
-    renderRowNormal(version) {
-        const editIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.handleEditRow(version)}>
-            <TableIcon>edit</TableIcon></IconButton>)
-        const deleteIcon = (<IconButton style={styles.iconButton} onTouchTap={() => this.props.handleDelete(version)}>
+        const deleteIcon = (<IconButton key="delete" style={styles.iconButton} onTouchTap={() => this.props.handleDelete(version)}>
             <TableIcon>delete</TableIcon>
         </IconButton>)
+
+        const editingIcons = [submitIcon, cancelIcon];
+        const normalIcons = [editIcon, deleteIcon];
+
         return (
             <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
@@ -178,30 +142,50 @@ class VersionListEdit extends Component {
                     </a>
                 </TableRowColumn>
                 <TableRowColumn>
-                    {version.demoUrl ?
-                        <a href={`${version.demoUrl}`} target="_blank"
-                           style={{color: Theme.palette.primary1Color}}>Demo</a>
-                        : 'N/A'}</TableRowColumn>
-                <TableRowColumn onTouchTap={this.handleOpenEditField.bind(this)}>{version.version}</TableRowColumn>
-                <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
-                <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
+                    {edit ? <TextField defaultValue={version.demoUrl}
+                               onChange={this.handleValueChange.bind(this, version.id, 'demoUrl')}
+                               name="demoUrl"/> :
+                        version.demoUrl ?
+                            <a href={`${version.demoUrl}`} target="_blank"
+                               style={{color: Theme.palette.primary1Color}}>Demo</a>
+                            : 'N/A'}
+                </TableRowColumn>
+                <TableRowColumn>
+                    {edit ? <TextField defaultValue={version.version}
+                               onChange={this.handleValueChange.bind(this, version.id, 'version')}
+                               name="version"/> :
+                        version.version}
+                </TableRowColumn>
+                <TableRowColumn>
+                    {edit ? <TextField defaultValue={version.minDhisVersion}
+                               onChange={this.handleValueChange.bind(this, version.id, 'minDhisVersion')}
+                               name="minDhisVersion"/> :
+                        version.minDhisVersion } 
+                </TableRowColumn>
+                <TableRowColumn>
+                    {edit ? <TextField defaultValue={version.maxDhisVersion}
+                               onChange={this.handleValueChange.bind(this, version.id, 'maxDhisVersion')}
+                               name="maxDhisVersion"/> :
+                        version.maxDhisVersion}
+                </TableRowColumn>
                 <TableRowColumn title={new Date(version.created).toLocaleString()}>
                     {new Date(version.created).toLocaleDateString()}</TableRowColumn>
                 <TableRowColumn style={styles.editColumn}>
-                    {editIcon}
-                    {deleteIcon}
+                    {edit ? editingIcons : normalIcons }
                 </TableRowColumn>
+
             </TableRow>
         )
     }
-
 
     render() {
 
         const props = this.props;
         const versions = props.versionList.sort((a, b) => b.created - a.created).map((version, i) => {
+            const editingRow = this.state.editingFields.indexOf(version.id) > -1;
+
             return (
-                this.state.editingFields.indexOf(version.id) > -1 ? this.renderRowEdit(version) : this.renderRowNormal(version)
+                this.renderRow(version, editingRow)
             )
         })
 

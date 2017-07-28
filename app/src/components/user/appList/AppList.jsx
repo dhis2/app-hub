@@ -98,7 +98,7 @@ class AppList extends Component {
             ))
         const emptyAppsText = manager ? "We couldn't find any apps" : "You have not uploaded any apps"
         const title = manager ? "All apps" : "Your apps";
-        console.log(apps);
+
         return (
             <div>
                 <SubHeader title={title}>
