@@ -7,34 +7,35 @@ import UploadFileField from './UploadFileField';
 import Toggle from 'material-ui/Toggle';
 import React from 'react';
 
-export const renderTextField = ({input, label, meta: {touched, error}, ...props}) => (
+export const renderTextField = ({input, label, forceShowErrors, meta: {touched, error}, ...props}) => (
     <TextField hintText={label}
                floatingLabelText={label}
-               errorText={touched && error}
+               errorText={(touched || forceShowErrors) && error}
                {...input}
                {...props}
     />
 )
 
-export const renderUploadField = ({input, label, meta: {touched, error, dirty}, formMeta, children, ...props}) => (
+export const renderUploadField = ({input, label, forceShowErrors, meta: {touched, error, dirty}, formMeta, children, ...props}) => {
+    return (
 
     <UploadFileField hintText={label}
                      handleUpload={(files) => {
                          input.onChange(files);
                      }}
-                     errorText={ (formMeta && formMeta.submitFailed || dirty) && error }
+                     errorText={ ((formMeta && formMeta.submitFailed) || dirty || touched || forceShowErrors) && error }
                      {...input}
                      {...props}
     />
-)
+)}
 
-export const renderTextFieldWithClearButton = ({input, label, meta: {touched, error}, ...props}) => {
+export const renderTextFieldWithClearButton = ({input, label, forceShowErrors, meta: {touched, error}, ...props}) => {
 
     return (
         <div style={{position: 'relative', display: 'flex', alignItems: 'center'}}>
             <TextField hintText={label}
                        floatingLabelText={label}
-                       errorText={touched && error}
+                       errorText={(touched || forceShowErrors) && error}
                        {...input}
                        {...props} />
             {input.value ? <IconButton style={{position: 'absolute', right: '-5px'}} onClick={() => input.onChange('')}>
@@ -44,20 +45,20 @@ export const renderTextFieldWithClearButton = ({input, label, meta: {touched, er
     )
 }
 
-export const renderAutoCompleteField = ({input, label, meta: {touched, error}, ...props}) => (
+export const renderAutoCompleteField = ({input, label, forceShowErrors, meta: {touched, error}, ...props}) => (
     <AutoComplete hintText={label}
                   floatingLabelText={label}
-                  errorText={touched && error}
+                  errorText={(touched || forceShowErrors ) && error}
                   {...input}
                   {...props}
     />
 )
 
-export const renderSelectField = ({input, label, meta: {touched, error}, children, ...props}) => {
+export const renderSelectField = ({input, label, forceShowErrors, meta: {touched, error}, children, ...props}) => {
     return (
         <SelectField
             floatingLabelText={label}
-            errorText={touched && error}
+            errorText={(touched || forceShowErrors) && error}
             {...input}
             onFocus={() => {
             }} //prevent reset of value when tabbing + enter

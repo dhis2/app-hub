@@ -7,6 +7,7 @@ import {Link, Route, Redirect, Switch} from 'react-router-dom';
 import UserAppView from './userAppView/UserAppView';
 import {List, ListItem} from 'material-ui/List';
 import AppUpload from './appUpload/AppUpload';
+import AppUploadStepper from './appUpload/AppUploadStepper';
 import AppList from './appList/AppList';
 import Divider from 'material-ui/Divider';
 import { getUserInfo } from '../../selectors/userSelectors';
@@ -29,6 +30,7 @@ class UserView extends Component {
                 <Route exact path={`${this.props.match.url}`} component={AppList}>
                 </Route>
                 <Route path={`${this.props.match.url}/upload`} component={AppUpload}/>
+                <Route path={`${this.props.match.url}/uploadstep`} component={AppUploadStepper}/>
                 <Route path={`${this.props.match.url}/app/:appId`} component={UserAppView}/>
                 {/* No-match route - redirect to index */ }
                 <Route render={props => (
@@ -52,6 +54,10 @@ class UserView extends Component {
                         </ActiveLink>
                         <ActiveLink to={`${this.props.match.url}/upload`}>
                             <ListItem primaryText="Upload"
+                                      leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
+                        </ActiveLink>
+                        <ActiveLink to={`${this.props.match.url}/uploadstep`}>
+                            <ListItem primaryText="Upload 2"
                                       leftIcon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
                         </ActiveLink>
                         <ListItem primaryText="Logout"
