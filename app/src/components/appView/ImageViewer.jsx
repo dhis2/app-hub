@@ -24,8 +24,7 @@ const styles = {
     imageStyle: {
         maxHeight: '100%',
     },
-    expandedImageStyle: {
-    },
+    expandedImageStyle: {},
     actionIconStyle: {
         color: 'white',
     }
@@ -179,7 +178,7 @@ class ImageViewer extends Component {
     }
 
     render() {
-        const {images, editable, showEmptyMessage }  = this.props;
+        const {images, editable, showEmptyMessage}  = this.props;
         const {current} = this.state;
         const sliderProps = {
             className: 'slide-center',
@@ -195,7 +194,7 @@ class ImageViewer extends Component {
         }
         const emptyDiv = (showEmptyMessage ? <div style={Theme.paddedCard}>
                 {editable ? 'No images for this app. Upload your first now!' : 'No images for this app.'}
-        </div> : null)
+            </div> : null)
 
 
         const tiles = images.map((tile, i) => {
@@ -205,7 +204,7 @@ class ImageViewer extends Component {
                                       renderTitleBar={i == current && (editable || !!tile.caption || !!tile.description) }
                                       title={tile.caption}
                                       subtitle={tile.description}
-                                      actions={editable ? this.renderActions(tile, i): null}
+                                      actions={editable ? this.renderActions(tile, i) : null}
                         >
                             <img style={styles.imageStyle} src={tile.imageUrl}
                                  onClick={this.handleExpandImage.bind(this, i)}/>
@@ -215,10 +214,11 @@ class ImageViewer extends Component {
         )
 
         return (
-            images.length > 0 ? <Slider afterChange={this.handleChangeIndex.bind(this)} {...sliderProps} ref={ref => this.slider = ref}
-                    style={styles.gridList} cols={2}>
-                {tiles}
-            </Slider> : emptyDiv
+            images.length > 0 ?
+                <Slider afterChange={this.handleChangeIndex.bind(this)} {...sliderProps} ref={ref => this.slider = ref}
+                        style={styles.gridList} cols={2}>
+                    {tiles}
+                </Slider> : emptyDiv
         )
     }
 }

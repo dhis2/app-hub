@@ -11,7 +11,7 @@ import sortBy from 'lodash/sortBy';
 //import values from 'lodash/values';
 import SubHeader from '../header/SubHeader';
 import ErrorOrLoading from '../utils/ErrorOrLoading';
-import {FadeAnimation} from '../utils/Animate';
+import {FadeAnimation, FadeAnimationList} from '../utils/Animate';
 import '../../styles/utils/animations.scss';
 import Theme from '../../styles/theme';
 class AppCards extends Component {
@@ -23,6 +23,7 @@ class AppCards extends Component {
     render() {
         const styles = {
             grid: {
+                padding: 0
             },
             filters: {
                 display: 'flex',
@@ -83,10 +84,10 @@ class AppCards extends Component {
                 </Col>
                 <Col span={12}>
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
-                    <FadeAnimation component={Grid} nested nestedStyle={styles.grid}>
-                        { loaded && apps.length > 0 ? apps : null }
-                        { loaded && apps.length < 1 ? emptyApps : null}
-                    </FadeAnimation>
+                    <FadeAnimationList component={Grid} nested nestedStyle={styles.grid}>
+                        { loaded && apps.length > 0 && apps}
+                        { loaded && apps.length < 1 && emptyApps}
+                    </FadeAnimationList>
                 </Col>
             </Grid>
         )

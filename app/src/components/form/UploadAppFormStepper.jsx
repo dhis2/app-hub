@@ -4,10 +4,6 @@ import {Card, CardText} from 'material-ui/Card';
 import Button from 'material-ui/RaisedButton';
 import AutoComplete from 'material-ui/AutoComplete';
 import {DHISVersions} from '../../../config';
-import TextField from 'material-ui/TextField';
-import FontIcon from 'material-ui/FontIcon';
-import UploadFileField from '../form/UploadFileField';
-import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Field, FormSection, reduxForm, getFormSyncErrors} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
@@ -21,6 +17,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import WarningIcon from 'material-ui/svg-icons/alert/warning';
 import {red500} from 'material-ui/styles/colors';
+import {FadeAnimation} from '../utils/Animate';
 import _size from 'lodash/size';
 import _keys from 'lodash/keys';
 import _max from 'lodash/max';
@@ -373,10 +370,11 @@ class UploadAppFormStepper extends Component {
                 <Stepper activeStep={this.state.stepIndex} linear={false}>
                     {steps}
                 </Stepper>
-
+                <FadeAnimation>
                 <div>
                     {this.getStepContent(this.state.stepIndex)}
                 </div>
+                </FadeAnimation>
                 {submitFailed && this.state.stepIndex == this.state.lastStep && (<p style={{color: red500}}>{error}</p>)}
                 <div>
                 {this.state.stepIndex > 0 && (<RaisedButton

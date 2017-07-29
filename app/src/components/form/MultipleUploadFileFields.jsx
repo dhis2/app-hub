@@ -131,7 +131,6 @@ class MultipleUploadFileFields extends Component {
     }
 
     render() {
-        console.log("render")
         const {handleSubmit, pristine, submitting, ...props} = this.props;
         const fieldArrayProps = {
             multiLastOnly: props.multiLastOnly,
