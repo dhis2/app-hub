@@ -239,10 +239,10 @@ class UploadAppFormStepper extends Component {
             appType: values.general.appType,
             sourceUrl: values.general.sourceUrl,
             developer: {
-                name: values.general.developerName,
-                email: values.general.developerEmail,
-                address: values.general.developerAddress || "",
-                organisation: values.general.developerOrg,
+                name: values.developer.developerName,
+                email: values.developer.developerEmail,
+                address: values.developer.developerAddress || "",
+                organisation: values.developer.developerOrg,
             },
             versions: [{
                 version: values.version.version,
@@ -251,15 +251,14 @@ class UploadAppFormStepper extends Component {
                 demoUrl: values.version.demoUrl,
             }],
             images: [{
-                caption: values.image.imageCaption,
-                description: values.image.imageDescription,
+                caption: values.image ? values.image.imageCaption : '',
+                description: values.image ? values.image.imageDescription : '',
             }]
         }
-        const imageFile = values.image.image ? values.image.image[0] : null;
+        const imageFile = values.image && values.image.image ? values.image.image[0] : [];
+        data.images = imageFile ? data.images : [];
         const appFile = values.version.file[0];
-        if (!imageFile) { //should be empty if image is not provided
-            data.images = []
-        }
+
 
         this.props.submitted({data, file: appFile, image: imageFile});
     }
@@ -358,8 +357,8 @@ class UploadAppFormStepper extends Component {
         const sectionErrorIcon = (<WarningIcon color={red500} />);
 
         const steps = this.state.sections.map((section, i) => {
-            const showError = (_max(this.state.visited) > i || this.state.visited.indexOf(i) > -1 || i < this.state.stepIndex)  && this.props.errorState &&
-                this.props.errorState[section] && _size(this.props.errorState[section]) > 0;
+            const showError = (i < this.state.stepIndex || this.state.visited.indexOf(i) > -1 || _max(this.state.visited) > i )
+                && this.props.errorState && hasError(this.props.errorState[section])
             const sectionName = section.charAt(0).toUpperCase() + section.slice(1);
             return (
             <Step key={section} completed={this.state.completed.indexOf(i) > -1}>
@@ -421,5 +420,5 @@ const mapStateToProps = (state, ownProps) => ({
     valid: false,
     validate
 })
-const ReduxFormConnected = reduxForm({destroyOnUnmount: true})(UploadAppFormStepper);
+const ReduxFormConnected = reduxForm({})(UploadAppFormStepper);
 export default connect(mapStateToProps)(ReduxFormConnected);

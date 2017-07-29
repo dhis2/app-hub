@@ -71,7 +71,9 @@ class UserAppView extends Component {
             }
             return imageObj;
         })
-
+        if(images.length < 1) {
+            throw new Error("No images");
+        }
         this.props.addImagesToApp(this.props.app.id, images);
     }
 

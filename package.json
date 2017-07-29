@@ -43,7 +43,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "recompose": "0.21",
     "redux": "3",
-    "redux-form": "^7.0.3",
+    "redux-form": "6.8.0",
     "redux-observable": "0.12",
     "redux-optimistic-ui": "^2.0.0",
     "rxjs": "5",

@@ -1,5 +1,5 @@
 import React, {PropTypes, Component} from 'react';
-import {Field, Form, FieldArray, reduxForm} from 'redux-form';
+import {Field, Form, FieldArray, reduxForm, defaultShouldValidate} from 'redux-form';
 import * as formUtils from './ReduxFormUtils';
 import { validateImageFile } from './ReduxFormUtils';
 import Button from 'material-ui/RaisedButton';
@@ -131,6 +131,7 @@ class MultipleUploadFileFields extends Component {
     }
 
     render() {
+        console.log("render")
         const {handleSubmit, pristine, submitting, ...props} = this.props;
         const fieldArrayProps = {
             multiLastOnly: props.multiLastOnly,
@@ -226,6 +227,6 @@ const ReduxFormConnected = reduxForm({
     initialValues: {'uploads': [{files: []}]},
     ...MultipleUploadFileFields.defaultProps,
     validate: validateForm,
-    shouldValidate: (params) => (!params.props.submitting)
+    shouldValidate: (params) => (defaultShouldValidate(params) && !params.props.submitting),
 })(MultipleUploadFileFields);
 export default ReduxFormConnected;
