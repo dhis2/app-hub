@@ -63,6 +63,9 @@ const validateSection = (values, section) => {
     return errors;
 }
 
+const hasError = errors => _keys(errors).find(key => _size(errors[key]) > 0) !== undefined
+
+
 const validate = values => {
     const errors = {};
     errors.general = validateSection(values.general, 'general');
@@ -75,7 +78,8 @@ const validate = values => {
         errors.version.maxVer = 'Cannot be lower than minimum version'
     }
     //Check if any subsection has error
-    if(_keys(errors).filter(key => _size(errors[key]) > 0).length > 1) {
+    console.log(hasError(errors))
+    if(hasError(errors)) {
         errors._error = "Your submission contains an error. Please check previous steps and try again."
     }
     return errors
@@ -221,6 +225,7 @@ class UploadAppFormStepper extends Component {
         }
 
         this.getStepContent = this.getStepContent.bind(this);
+        this.updateStateForStep = this.updateStateForStep.bind(this);
         this.nextStep = this.nextStep.bind(this);
         this.prevStep = this.prevStep.bind(this);
         this.goToStep = this.goToStep.bind(this);
@@ -299,6 +304,20 @@ class UploadAppFormStepper extends Component {
 
     }
 
+    updateStateForStep(nextStep) {
+        const currStep = this.state.stepIndex;
+        const currSection = this.state.sections[currStep];
+        const errorFields = this.props.errorState[currSection];
+        const completedIndex = this.state.completed.indexOf(currStep);
+        const completedWithoutCurrent = this.state.completed.filter(step => step !== currStep);
+        this.setState({
+            ...this.state,
+            stepIndex: nextStep,
+            completed: hasError(errorFields) ? completedWithoutCurrent : completedWithoutCurrent.concat(currStep),
+            visited: this.state.visited.concat(currStep)
+        });
+    }
+
     nextStep() {
         const currIndex = this.state.stepIndex;
         const currSection = this.state.sections[currIndex];
@@ -311,14 +330,9 @@ class UploadAppFormStepper extends Component {
             this.props.touch(...errorFieldNames);
             return;
         }
-        //TODO: Fix completed state to check for errors. Should probably have a method for this
 
-        this.setState({
-            ...this.state,
-            stepIndex: currIndex < this.state.lastStep ? currIndex + 1 : 0,
-            completed: this.state.completed.concat(currIndex),
-            visited: this.state.visited.concat(currIndex)
-        });
+        this.updateStateForStep(currIndex + 1);
+
     }
 
     prevStep() {
@@ -335,12 +349,7 @@ class UploadAppFormStepper extends Component {
             throw new Error(`Index must be between 0 and ${this.state.lastStep} (including).`)
         }
 
-        this.setState({
-            ...this.state,
-            stepIndex: index,
-            completed: this.state.completed.concat(index),
-            visited: this.state.visited.concat(this.state.stepIndex)
-        })
+        this.updateStateForStep(index);
 
     }
 
@@ -349,7 +358,7 @@ class UploadAppFormStepper extends Component {
         const sectionErrorIcon = (<WarningIcon color={red500} />);
 
         const steps = this.state.sections.map((section, i) => {
-            const showError = (_max(this.state.visited) > i || i < this.state.stepIndex)  && this.props.errorState &&
+            const showError = (_max(this.state.visited) > i || this.state.visited.indexOf(i) > -1 || i < this.state.stepIndex)  && this.props.errorState &&
                 this.props.errorState[section] && _size(this.props.errorState[section]) > 0;
             const sectionName = section.charAt(0).toUpperCase() + section.slice(1);
             return (
