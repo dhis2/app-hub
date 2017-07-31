@@ -25,7 +25,7 @@ class AppUploadStepper extends Component {
                 <SubHeader title="Upload app" backLink="/user"/>
                 <Card style={Theme.paddedCard}>
                     <CardText>
-                        <UploadAppForm form="uploadAppFormStepper" submitted={this.handleSubmit.bind(this)}/>
+                        <UploadAppForm form="uploadAppForm" submitted={this.handleSubmit.bind(this)}/>
                     </CardText>
                 </Card>
             </div>

@@ -17,7 +17,7 @@ const renderProfileButton = (props) => {
     const isLoggedIn = getAuth().isLoggedIn();
     const avatar = (<Avatar size={24} src={avatarUrl}/>)
     const notLoggedInIcon = (<FontIcon color="white" className="material-icons">account_circle</FontIcon>)
-    const button = (<IconButton style={{paddingRight: '0'}} onClick={() => !isLoggedIn ? getAuth().login() : {}}>
+    const button = (<IconButton style={{paddingLeft: '0', paddingRight: '0'}} onClick={() => !isLoggedIn ? getAuth().login() : {}}>
         {isLoggedIn && typeof props.avatarImg === 'string' ? avatar : notLoggedInIcon}
     </IconButton>)
     return (isLoggedIn ? <Link to="/user">

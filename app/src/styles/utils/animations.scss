@@ -1,11 +1,9 @@
 .fade-enter {
   opacity: 0.01;
-  height: 0;
 }
 
 .fade-enter.fade-enter-active {
   opacity: 1;
-  height: auto;
   transition: opacity 300ms ease-in;
 }
 

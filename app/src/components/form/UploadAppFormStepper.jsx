@@ -525,7 +525,7 @@ const mapStateToProps = (state, ownProps) => ({
     initialValues:
         ownProps.initialValues ||
         UploadAppFormStepper.defaultProps.initialValues,
-    errorState: getFormSyncErrors("uploadAppFormStepper")(state),
+    errorState: getFormSyncErrors("uploadAppForm")(state),
     valid: false,
     validate
 });
