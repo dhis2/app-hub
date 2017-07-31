@@ -4,12 +4,12 @@ import { optimistic, ensureState } from 'redux-optimistic-ui';
 
 
 const localStorageProfile = localStorage.getItem('profile')
-const initialProfile = localStorageProfile ? () => {
+const initialProfile = localStorageProfile ? (() => {
     try {
         return JSON.parse(localStorageProfile)
     } catch(error) {
         return {};
-    }} : {}
+    }})() : {}
 
 const initialState = {
         loaded: false,

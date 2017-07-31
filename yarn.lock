@@ -4238,6 +4238,13 @@ rc@~1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~1.0.4"
 
+react-animate-height@^0.9.9:
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/react-animate-height/-/react-animate-height-0.9.9.tgz#96bd0fc5fb10e33ae1b97d8076d488eace93ad00"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.8"
+
 "react-dom@^15.6.1 || ^16.0.0":
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
