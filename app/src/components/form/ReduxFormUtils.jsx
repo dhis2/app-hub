@@ -6,6 +6,8 @@ import SelectField from 'material-ui/SelectField';
 import UploadFileField from './UploadFileField';
 import Toggle from 'material-ui/Toggle';
 import React from 'react';
+import _size from "lodash/size";
+import _keys from "lodash/keys";
 
 export const renderTextField = ({input, label, forceShowErrors, meta: {touched, error}, ...props}) => (
     <TextField hintText={label}
@@ -131,3 +133,11 @@ export const validateURL = value => {
     return error;
 
 }
+
+/**
+ * Check if the object is an redux-form error, i.e has any keys with values.
+ * @param errors object to check if contains errors.
+ */
+
+export const hasError = errors =>
+_keys(errors).find(key => _size(errors[key]) > 0) !== undefined;

@@ -7,14 +7,10 @@ import * as formUtils from "./ReduxFormUtils";
 import {
     validateZipFile,
     validateImageFile,
-    validateURL
+    validateURL,
+    hasError
 } from "../form/ReduxFormUtils";
 import { red500 } from "material-ui/styles/colors";
-
-import _size from "lodash/size";
-import _keys from "lodash/keys";
-
-
 import FormStepper from "./FormStepper";
 
 const appTypes = [
@@ -58,9 +54,6 @@ const validateSection = (values, section) => {
     return errors;
 };
 
-const hasError = errors =>
-    _keys(errors).find(key => _size(errors[key]) > 0) !== undefined;
-
 const validate = values => {
     const errors = {};
     errors.general = validateSection(values.general, "general");
@@ -78,7 +71,6 @@ const validate = values => {
         errors.version.maxVer = "Cannot be lower than minimum version";
     }
     //Check if any subsection has error
-    console.log(hasError(errors));
     if (hasError(errors)) {
         errors._error =
             "Your submission contains an error. Please check previous steps and try again.";
@@ -268,7 +260,6 @@ AppImageSection.defaultProps = {
 class UploadAppFormStepper extends Component {
     constructor(props) {
         super(props);
-
     }
 
     /**
@@ -281,7 +272,6 @@ class UploadAppFormStepper extends Component {
      * @param values
      */
     onSubmit(values) {
-        console.log(values);
         const data = {
             name: values.general.appName,
             description: values.general.description,
@@ -319,7 +309,6 @@ class UploadAppFormStepper extends Component {
     }
 
     render() {
-
         return (
             <FormStepper
                 form="uploadAppForm"
@@ -341,9 +330,6 @@ UploadAppFormStepper.propTypes = {
     form: PropTypes.string.isRequired
 };
 
-UploadAppFormStepper.defaultProps = {
-
-};
-
+UploadAppFormStepper.defaultProps = {};
 
 export default UploadAppFormStepper;

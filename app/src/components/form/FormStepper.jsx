@@ -9,14 +9,9 @@ import Step from "material-ui/Stepper/Step";
 import StepButton from "material-ui/Stepper/StepButton";
 import WarningIcon from "material-ui/svg-icons/alert/warning";
 import { red500 } from "material-ui/styles/colors";
-import _size from "lodash/size";
-import _keys from "lodash/keys";
 import _max from "lodash/max";
 import AnimateHeight from "react-animate-height";
-
-const hasError = errors =>
-    _keys(errors).find(key => _size(errors[key]) > 0) !== undefined;
-
+import { hasError } from './ReduxFormUtils';
 const sectionErrorIcon = <WarningIcon color={red500} />;
 
 /**
@@ -50,7 +45,7 @@ class FormStepper extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.stepIndex !== this.state.stepIndex) {
+        if (this.state.sectionHeight !== "auto") {
             this.setState({
                 ...this.state,
                 sectionHeight: "auto"
@@ -186,6 +181,7 @@ class FormStepper extends Component {
                 </AnimateHeight>
 
                 {submitFailed &&
+                    error &&
                     stepIndex == this.props.sections.length - 1 &&
                     <p style={{ color: red500 }}>
                         {error}
