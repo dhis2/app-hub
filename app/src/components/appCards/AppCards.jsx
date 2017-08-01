@@ -84,7 +84,7 @@ class AppCards extends Component {
                 </Col>
                 <Col span={12}>
                     {loadOrErr ? <ErrorOrLoading loading={loading} error={error} retry={this.props.loadApps}/> : null}
-                    <FadeAnimationList component={Grid} nested nestedStyle={styles.grid}>
+                    <FadeAnimationList unmountOnExit appear component={Grid} nested nestedStyle={styles.grid}>
                         { loaded && apps.length > 0 && apps}
                         { loaded && apps.length < 1 && emptyApps}
                     </FadeAnimationList>

@@ -6,7 +6,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import Slider from 'react-slick';
 import FontIcon from 'material-ui/FontIcon';
 import IconButton from 'material-ui/IconButton';
-import {FadeAnimation} from '../utils/Animate';
+import {FadeAnimation, FadeAnimationList} from '../utils/Animate';
 import Theme from '../../styles/theme';
 const styles = {
     root: {
@@ -76,7 +76,7 @@ const ImageElement = (props) => {
     return (
         <div style={{...imageElementStyle.root, ...props.style}}>
             {props.renderTitleBar ?
-                <FadeAnimation in appear>
+                <FadeAnimation exit={false} in appear mountOnEnter unmountOnExit>
                     <div style={imageElementStyle.titleBar}>
                         <div style={imageElementStyle.titleWrap}>
                             <div style={imageElementStyle.title}>

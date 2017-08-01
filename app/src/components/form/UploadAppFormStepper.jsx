@@ -1,29 +1,22 @@
 import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
 import { Card, CardText } from "material-ui/Card";
-import Button from "material-ui/RaisedButton";
-import AutoComplete from "material-ui/AutoComplete";
 import { DHISVersions } from "../../../config";
 import MenuItem from "material-ui/MenuItem";
-import { Field, FormSection, reduxForm, getFormSyncErrors } from "redux-form";
+import { Field, FormSection } from "redux-form";
 import * as formUtils from "./ReduxFormUtils";
 import {
     validateZipFile,
     validateImageFile,
     validateURL
 } from "../form/ReduxFormUtils";
-import Spinner from "../utils/Spinner";
-import Stepper from "material-ui/Stepper/Stepper";
-import Step from "material-ui/Stepper/Step";
-import StepButton from "material-ui/Stepper/StepButton";
-import StepLabel from "material-ui/Stepper";
-import WarningIcon from "material-ui/svg-icons/alert/warning";
 import { red500 } from "material-ui/styles/colors";
-import { FadeAnimation, FadeAnimationList } from "../utils/Animate";
+
 import _size from "lodash/size";
 import _keys from "lodash/keys";
-import _max from "lodash/max";
-import AnimateHeight from "react-animate-height";
+
+
+import FormStepper from "./FormStepper";
+
 const appTypes = [
     { value: "APP_STANDARD", label: "Standard" },
     { value: "APP_DASHBOARD", label: "Dashboard" },
@@ -102,7 +95,7 @@ const DHISVersionItems = DHISVersions.map((version, i) =>
 
 const AppGeneralSection = props => {
     return (
-        <div>
+        <FormSection name={props.name}>
             <Field
                 name="appName"
                 component={formUtils.renderTextField}
@@ -132,7 +125,7 @@ const AppGeneralSection = props => {
             >
                 {appTypesItems}
             </Field>
-        </div>
+        </FormSection>
     );
 };
 
@@ -146,7 +139,7 @@ AppGeneralSection.defaultProps = {
 
 const AppVersionSection = props => {
     return (
-        <div>
+        <FormSection name={props.name}>
             <Field
                 name="version"
                 component={formUtils.renderTextField}
@@ -186,7 +179,7 @@ const AppVersionSection = props => {
                 validate={validateZipFile}
                 label="Upload app *"
             />
-        </div>
+        </FormSection>
     );
 };
 
@@ -201,7 +194,7 @@ AppVersionSection.defaultProps = {
 
 const AppDeveloperSection = props => {
     return (
-        <div>
+        <FormSection name={props.name}>
             <Field
                 name="developerName"
                 autoFocus
@@ -220,7 +213,7 @@ const AppDeveloperSection = props => {
                 component={formUtils.renderTextField}
                 label="Organisation *"
             />
-        </div>
+        </FormSection>
     );
 };
 
@@ -234,7 +227,7 @@ AppDeveloperSection.defaultProps = {
 
 const AppImageSection = props => {
     return (
-        <div>
+        <FormSection name={props.name}>
             <p>
                 You can upload additional images and set preview image once your
                 app has been uploaded.
@@ -260,7 +253,7 @@ const AppImageSection = props => {
                 label="Image description"
             />
             <br />
-        </div>
+        </FormSection>
     );
 };
 
@@ -276,31 +269,17 @@ class UploadAppFormStepper extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            stepIndex: 0,
-            lastStep: 3,
-            completed: [],
-            visited: [],
-            sectionHeight: "auto",
-            sections: ["general", "version", "developer", "image"]
-        };
-
-        this.getStepContent = this.getStepContent.bind(this);
-        this.updateStateForStep = this.updateStateForStep.bind(this);
-        this.nextStep = this.nextStep.bind(this);
-        this.prevStep = this.prevStep.bind(this);
-        this.goToStep = this.goToStep.bind(this);
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.stepIndex !== this.state.stepIndex) {
-            this.setState({
-                ...this.state,
-                sectionHeight: "auto"
-            });
-        }
-    }
-
+    /**
+     * Get the values from redux-form when submitted (after validation)
+     * The values are structured according to the FormSection-names and their
+     * respective Fields.
+     *
+     * Calls this.props.submitted(), with data from the form converted to
+     * a format the api understands.
+     * @param values
+     */
     onSubmit(values) {
         console.log(values);
         const data = {
@@ -339,175 +318,21 @@ class UploadAppFormStepper extends Component {
         this.props.submitted({ data, file: appFile, image: imageFile });
     }
 
-    getStepContent(index) {
-        const errors = this.props.errorState
-            ? this.props.errorState[this.state.sections[index]]
-            : {};
-
-        const sections = [
-            AppGeneralSection,
-            AppVersionSection,
-            AppDeveloperSection,
-            AppImageSection
-        ];
-        const CurrSection = sections[index];
-        return (
-            <FormSection
-                key={this.state.sections[index]}
-                name={this.state.sections[index]}
-            >
-                <CurrSection error={errors} />
-            </FormSection>
-        );
-    }
-
-    updateStateForStep(nextStep) {
-        const currStep = this.state.stepIndex;
-        if (currStep == nextStep) return;
-        const currSection = this.state.sections[currStep];
-        const errorFields = this.props.errorState[currSection];
-        const completedIndex = this.state.completed.indexOf(currStep);
-        const completedWithoutCurrent = this.state.completed.filter(
-            step => step !== currStep
-        );
-        this.setState({
-            ...this.state,
-            stepIndex: nextStep,
-            completed: hasError(errorFields)
-                ? completedWithoutCurrent
-                : completedWithoutCurrent.concat(currStep),
-            visited: this.state.visited.concat(currStep),
-            sectionHeight: 0
-        });
-    }
-
-    nextStep() {
-        const currIndex = this.state.stepIndex;
-        const currSection = this.state.sections[currIndex];
-        const errorFields = this.props.errorState[currSection];
-        const errorFieldNames = Object.keys(errorFields).map(
-            (field, i) => `${currSection}.${field}`
-        );
-        //Touch all fields that has an error, so that the fields are updated to show the error
-        //and prevent transition
-        if (errorFieldNames.length > 0) {
-            this.props.touch(...errorFieldNames);
-            return;
-        }
-
-        this.updateStateForStep(currIndex + 1);
-    }
-
-    prevStep() {
-        let currIndex = this.state.stepIndex;
-        this.setState({
-            ...this.state,
-            stepIndex: currIndex > 0 ? --currIndex : 0
-        });
-    }
-
-    goToStep(index) {
-        //if (index > this.state.stepIndex && this.props.invalid) return;
-        if (index > this.state.lastStep && index > -1) {
-            throw new Error(
-                `Index must be between 0 and ${this.state
-                    .lastStep} (including).`
-            );
-        }
-
-        this.updateStateForStep(index);
-    }
-
     render() {
-        const {
-            handleSubmit,
-            submitted,
-            submitFailed,
-            pristine,
-            error,
-            invalid,
-            valid,
-            reset,
-            dirty,
-            submitting
-        } = this.props;
-
-        const styles = {
-            nextButton: {
-                position: 'absolute',
-                right: 0
-            },
-            backButton: {
-                position: 'absolute',
-                left: 0
-            }
-        }
-        const sectionErrorIcon = <WarningIcon color={red500} />;
-
-        const steps = this.state.sections.map((section, i) => {
-            const showError =
-                (i < this.state.stepIndex ||
-                    this.state.visited.indexOf(i) > -1 ||
-                    _max(this.state.visited) > i) &&
-                this.props.errorState &&
-                hasError(this.props.errorState[section]);
-            const sectionName =
-                section.charAt(0).toUpperCase() + section.slice(1);
-            return (
-                <Step
-                    key={section}
-                    completed={this.state.completed.indexOf(i) > -1}
-                >
-                    <StepButton
-                        onClick={() => this.goToStep(i)}
-                        {...showError && { icon: sectionErrorIcon }}
-                    >
-                        {sectionName}
-                    </StepButton>
-                </Step>
-            );
-        });
 
         return (
-            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <Stepper activeStep={this.state.stepIndex} linear={false}>
-                    {steps}
-                </Stepper>
-
-                <AnimateHeight height={this.state.sectionHeight}>
-                    {this.getStepContent(this.state.stepIndex)}
-                </AnimateHeight>
-                {submitFailed &&
-                    this.state.stepIndex == this.state.lastStep &&
-                    <p style={{ color: red500 }}>
-                        {error}
-                    </p>}
-                <div style={{padding: '16px 0', position:'relative'}}>
-                    {this.state.stepIndex > 0 &&
-                        <Button
-                            style={styles.backButton}
-                            label="Back"
-                            primary={true}
-                            onTouchTap={this.prevStep}
-                        />}
-                    {this.state.stepIndex < this.state.lastStep &&
-                        <Button
-                            style={styles.nextButton}
-                            label="Continue"
-                            primary={true}
-                            onTouchTap={this.nextStep}
-                        />}
-                    {this.state.stepIndex === this.state.lastStep &&
-                        <Button
-                            style={styles.nextButton}
-                            icon={submitting ? <Spinner inButton /> : null}
-                            type="submit"
-                            primary
-                            disabled={submitting}
-                            label={!submitting ? "Finish" : null}
-                        />}
-                </div>
-            </form>
+            <FormStepper
+                form="uploadAppForm"
+                onSubmit={this.onSubmit.bind(this)}
+                validate={validate}
+                sections={[
+                    <AppGeneralSection name="general" />,
+                    <AppVersionSection name="version" />,
+                    <AppDeveloperSection name="developer" />,
+                    <AppImageSection name="image" />
+                ]}
+                initialValues={{ general: { appType: appTypes[0].value } }}
+            />
         );
     }
 }
@@ -517,17 +342,8 @@ UploadAppFormStepper.propTypes = {
 };
 
 UploadAppFormStepper.defaultProps = {
-    initialValues: { general: { appType: appTypes[0].value } }
+
 };
 
-const mapStateToProps = (state, ownProps) => ({
-    form: ownProps.form,
-    initialValues:
-        ownProps.initialValues ||
-        UploadAppFormStepper.defaultProps.initialValues,
-    errorState: getFormSyncErrors("uploadAppForm")(state),
-    valid: false,
-    validate
-});
-const ReduxFormConnected = reduxForm({})(UploadAppFormStepper);
-export default connect(mapStateToProps)(ReduxFormConnected);
+
+export default UploadAppFormStepper;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Card, CardText} from 'material-ui/Card';
-import UploadAppForm from '../../form/UploadAppForm';
+import UploadAppFormStepper from '../../form/UploadAppFormStepper';
 import SubHeader from '../../header/SubHeader';
 import {addApp} from '../../../actions/actionCreators';
 import Theme from '../../../styles/theme';
@@ -24,7 +24,7 @@ class AppUpload extends Component {
                 <SubHeader title="Upload app" backLink="/user"/>
                 <Card style={Theme.paddedCard}>
                     <CardText>
-                        <UploadAppForm submitted={this.handleSubmit.bind(this)}/>
+                        <UploadAppFormStepper submitted={this.handleSubmit.bind(this)}/>
                     </CardText>
                 </Card>
             </div>
