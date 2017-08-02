@@ -227,7 +227,7 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
             if (action.type && action.type.endsWith('_ERROR')) {
                 return {
                     ...state,
-                  //  ...errorState,
+                    ...errorState,
                 }
             } else {
                 return state;

@@ -34,15 +34,6 @@ class AppList extends Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        //Load when user is loaded and no applist has been loaded yet
-        if (nextProps.user && !nextProps.appList) {
-            //  nextProps.user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
-
-        }
-
-    }
-
     handleApproval(app, type) {
         switch (type) {
             case 'APPROVE': {

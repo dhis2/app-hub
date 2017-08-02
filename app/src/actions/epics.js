@@ -18,11 +18,9 @@ const loadAppsAll = (action$) => action$
     .concatMap(action => {
         return api.getAllApps()
             .then(apps => actionCreators.appsAllLoaded(apps))
-            .catch(error => ({
-                type: actions.APPS_ALL_ERROR,
-                payload: error,
-            }));
-    })
+            .catch(error => actionCreators.actionErrorCreator(
+                actions.APPS_ALL_ERROR, error));
+    });
 
 
 const loadAppsApproved = (action$) => action$
@@ -30,10 +28,8 @@ const loadAppsApproved = (action$) => action$
     .concatMap(action => {
         return api.getApprovedApps()
             .then(apps => actionCreators.loadedApprovedApps(apps))
-            .catch(error => ({
-                type: actions.APPS_APPROVED_ERROR,
-                payload: error,
-            }));
+            .catch(error => actionCreators.actionErrorCreator(
+                actions.APPS_APPROVED_ERROR, error));
     })
 
 const loadApp = (action$) => action$
