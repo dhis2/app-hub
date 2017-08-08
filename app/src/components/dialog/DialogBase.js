@@ -1,27 +1,21 @@
-import React, {PropTypes, Component} from 'react';
-import {connect} from 'react-redux';
-import FlatButton from 'material-ui/FlatButton';
-import Dialog from 'material-ui/Dialog';
-import {closeDialog} from '../../actions/actionCreators';
-
+import React, { PropTypes, Component } from "react";
+import { connect } from "react-redux";
+import FlatButton from "material-ui/FlatButton";
+import Dialog from "material-ui/Dialog";
+import { closeDialog } from "../../actions/actionCreators";
 
 const styles = {
-    bodyStyle: {
-
-    },
+    bodyStyle: {},
     contentStyle: {
-        maxWidth: '500px'
+        maxWidth: "500px"
     }
-}
+};
 
 class DialogBase extends Component {
-
     static buildButton(action, text, primary = false) {
-        return (<FlatButton
-            label={text}
-            primary={primary}
-            onTouchTap={action}
-        />);
+        return (
+            <FlatButton label={text} primary={primary} onTouchTap={action} />
+        );
     }
 
     render() {
@@ -39,25 +33,45 @@ class DialogBase extends Component {
         const actions = [];
 
         const finalAction = () => {
-            Promise.resolve(approveAction()).then(() => defaultCloseDialog()).catch(() => {})
+            Promise.resolve(approveAction())
+                .then(() => defaultCloseDialog())
+                .catch(() => {});
+        };
 
-    };
+        actions.push(
+            DialogBase.buildButton(
+                cancelAction || defaultCloseDialog,
+                cancelLabel || "Cancel"
+            )
+        );
+        if (approveAction)
+            actions.push(
+                DialogBase.buildButton(
+                    finalAction,
+                    approveLabel || "Done",
+                    true
+                )
+            );
 
-        actions.push(DialogBase.buildButton(cancelAction || defaultCloseDialog, cancelLabel || 'Cancel'));
-        if (approveAction) actions.push(DialogBase.buildButton(finalAction, approveLabel || 'Done', true));
-
-        return (<Dialog
-            open
-            title={title}
-            actions={actions}
-            modal={false}
-            autoScrollBodyContent
-            contentStyle={{...styles.contentStyle, ...contentStyle} || styles.contentStyle}
-            bodyStyle={{...styles.bodyStyle, ...bodyStyle} || styles.bodyStyle}
-            onRequestClose={defaultCloseDialog}
-        >
-            {this.props.children}
-        </Dialog>);
+        return (
+            <Dialog
+                open
+                title={title}
+                actions={actions}
+                modal={false}
+                autoScrollBodyContent
+                contentStyle={
+                    { ...styles.contentStyle, ...contentStyle } ||
+                    styles.contentStyle
+                }
+                bodyStyle={
+                    { ...styles.bodyStyle, ...bodyStyle } || styles.bodyStyle
+                }
+                onRequestClose={defaultCloseDialog}
+            >
+                {this.props.children}
+            </Dialog>
+        );
     }
 }
 
@@ -69,16 +83,13 @@ DialogBase.propTypes = {
     approveAction: PropTypes.func,
     defaultCloseDialog: PropTypes.func,
     contentStyle: PropTypes.object,
-    bodyStyle: PropTypes.object,
+    bodyStyle: PropTypes.object
 };
 
 const mapDispatchToProps = dispatch => ({
     defaultCloseDialog() {
         dispatch(closeDialog());
-    },
+    }
 });
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(DialogBase);
+export default connect(null, mapDispatchToProps)(DialogBase);

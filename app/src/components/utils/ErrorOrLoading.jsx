@@ -1,23 +1,23 @@
-import React, { PropTypes } from 'react';
-import { Error } from './Error';
+import React, { PropTypes } from "react";
+import { Error } from "./Error";
 //import { Spinner } from './Loader';
-import Spinner from './Spinner';
+import Spinner from "./Spinner";
 
-export const ErrorOrLoading = (props) => {
+export const ErrorOrLoading = props => {
     if (!props.error && !props.loading) {
-        return null
+        return null;
     }
-    const error = <Error retry={props.retry} message={props.errorMessage}/>;
-    const loading = <Spinner size="large"/>;
-    return (props.error ? error : loading)
-}
+    const error = <Error retry={props.retry} message={props.errorMessage} />;
+    const loading = <Spinner size="large" />;
+    return props.error ? error : loading;
+};
 
 ErrorOrLoading.propTypes = {
     loading: PropTypes.bool.isRequired,
     error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
     errorMessage: PropTypes.string,
     errorObject: PropTypes.object,
-    retry: PropTypes.func,
-}
+    retry: PropTypes.func
+};
 
 export default ErrorOrLoading;

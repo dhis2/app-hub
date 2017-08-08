@@ -1,19 +1,18 @@
-import { reducer as formReducer} from 'redux-form';
-import * as actions from '../constants/actionTypes';
-
+import { reducer as formReducer } from "redux-form";
+import * as actions from "../constants/actionTypes";
 
 const submittedSuccess = {
     submitted: true,
     submitting: false,
-    submitSucceeded: true,
-}
+    submitSucceeded: true
+};
 
 const submittedError = {
     submitted: true,
     submitting: false,
     submitSucceeded: false,
-    submitFailed: true,
-}
+    submitFailed: true
+};
 
 const form = formReducer.plugin({
     imageUpload: (state, action) => {
@@ -22,7 +21,7 @@ const form = formReducer.plugin({
                 return {
                     ...state,
                     submitting: true
-                }
+                };
             }
             case actions.APP_IMAGES_ADD_SUCCESS: {
                 return {
@@ -34,9 +33,16 @@ const form = formReducer.plugin({
             }
 
             case actions.APP_IMAGE_ADD_ERROR: {
-                const {fieldIndex, message, file} = action.payload;
-                const newUploads = Object.assign([...state.syncErrors.uploads], {[fieldIndex]: {files: 'Failed to upload file: ' + message}})
-                const newValues =  {uploads: [{files: [file]}]}
+                const { fieldIndex, message, file } = action.payload;
+                const newUploads = Object.assign(
+                    [...state.syncErrors.uploads],
+                    {
+                        [fieldIndex]: {
+                            files: "Failed to upload file: " + message
+                        }
+                    }
+                );
+                const newValues = { uploads: [{ files: [file] }] };
                 return {
                     ...state,
                     syncErrors: {
@@ -44,15 +50,15 @@ const form = formReducer.plugin({
                         uploads: newUploads
                     },
                     values: newValues
-                }
+                };
             }
 
             case actions.APP_IMAGES_ADD_ERROR: {
                 return {
                     ...state,
                     ...submittedError,
-                    anyTouched: true,
-                }
+                    anyTouched: true
+                };
             }
             default: {
                 return state;
@@ -62,25 +68,24 @@ const form = formReducer.plugin({
 
     uploadAppForm: (state, action) => {
         switch (action.type) {
-
             case actions.APP_ADD: {
                 return {
                     ...state,
                     submitting: true
-                }
+                };
             }
             case actions.APP_ADD_SUCCESS: {
                 return {
                     ...state,
                     ...submittedSuccess
-                }
+                };
             }
 
             case actions.APP_ADD_ERROR: {
                 return {
                     ...state,
                     ...submittedError
-                }
+                };
             }
 
             default: {

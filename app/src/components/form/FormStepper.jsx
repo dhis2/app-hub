@@ -11,7 +11,7 @@ import WarningIcon from "material-ui/svg-icons/alert/warning";
 import { red500 } from "material-ui/styles/colors";
 import _max from "lodash/max";
 import AnimateHeight from "react-animate-height";
-import { hasError } from './ReduxFormUtils';
+import { hasError } from "./ReduxFormUtils";
 const sectionErrorIcon = <WarningIcon color={red500} />;
 
 /**

@@ -1,10 +1,10 @@
-import React, { PropTypes } from 'react';
-import classNames from 'classnames';
+import React, { PropTypes } from "react";
+import classNames from "classnames";
 
-const AlignType = PropTypes.oneOf(['top', 'middle', 'bottom']);
-const screenTypes = [ 'phone', 'tablet', 'desktop']
-const modificatorKeys = ['order', 'align', 'span', ...screenTypes];
-const baseClassname = 'mdc-layout-grid__cell';
+const AlignType = PropTypes.oneOf(["top", "middle", "bottom"]);
+const screenTypes = ["phone", "tablet", "desktop"];
+const modificatorKeys = ["order", "align", "span", ...screenTypes];
+const baseClassname = "mdc-layout-grid__cell";
 
 const propTypes = {
     span: PropTypes.number,
@@ -14,12 +14,12 @@ const propTypes = {
     order: PropTypes.number,
     align: AlignType,
     additionalClasses: PropTypes.string,
-    children: PropTypes.node,
+    children: PropTypes.node
 };
 
 const styles = {
-    maxWidth: 'inherit'
-}
+    maxWidth: "inherit"
+};
 
 function getClassNames(props) {
     let modificators = [];
@@ -30,7 +30,7 @@ function getClassNames(props) {
         if (value) {
             let mod = `${baseClassname}--${key}-${value}`;
             if (screenTypes.includes(key)) {
-                mod = `${baseClassname}--span-${value}-${key}`
+                mod = `${baseClassname}--span-${value}-${key}`;
             }
             modificators.push(mod);
         }
@@ -40,20 +40,18 @@ function getClassNames(props) {
 }
 
 function handleStyleProps(props) {
-    const style = {...styles, ...props.style};
-    if(props.center) {
-        style.margin = '0 auto';
+    const style = { ...styles, ...props.style };
+    if (props.center) {
+        style.margin = "0 auto";
     }
 
     return style;
-
 }
 
-const Col = ({children, ...props}) => (
-    <div className={getClassNames(props)} style={handleStyleProps(props)} >
+const Col = ({ children, ...props }) =>
+    <div className={getClassNames(props)} style={handleStyleProps(props)}>
         {children}
-    </div>
-)
+    </div>;
 
 Col.propTypes = propTypes;
 

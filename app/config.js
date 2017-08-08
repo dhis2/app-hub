@@ -13,16 +13,16 @@ const prod = {
 
      /* Basename for routes.
      If this app is hosted at http://hostname/appstore this should be '/appstore' */
-    BASE_APP_NAME: '/appstore',
+    BASE_APP_NAME: '/appstoreDev',
 
     /* Base URL for the API.
      Should be absolute path to the api endpoint.
      Note the trailing '/' */
-    API_BASE_URL: 'https://play.dhis2.org/appstore/api/',
+    API_BASE_URL: 'https://play.dhis2.org/appstoreDev/api/',
 
     /* Redirect URL to use by auth0, note that you need to allow this url
        on the auth0 side as well. */
-    API_REDIRECT_URL: 'https://play.dhis2.org/appstore/user',
+    API_REDIRECT_URL: 'https://play.dhis2.org/appstoreDev/user',
 }
 
 //Map to Translate API names to display-names

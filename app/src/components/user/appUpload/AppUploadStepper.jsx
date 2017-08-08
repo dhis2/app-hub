@@ -1,11 +1,10 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Card, CardText} from 'material-ui/Card';
-import UploadAppForm from '../../form/UploadAppFormStepper';
-import SubHeader from '../../header/SubHeader';
-import {addApp} from '../../../actions/actionCreators';
-import Theme from '../../../styles/theme';
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Card, CardText } from "material-ui/Card";
+import UploadAppForm from "../../form/UploadAppFormStepper";
+import SubHeader from "../../header/SubHeader";
+import { addApp } from "../../../actions/actionCreators";
+import Theme from "../../../styles/theme";
 
 class AppUploadStepper extends Component {
     constructor(props) {
@@ -16,31 +15,32 @@ class AppUploadStepper extends Component {
 
     handleSubmit(data) {
         this.props.addApp(data.data, data.file, data.image);
-
     }
 
     render() {
         return (
             <div>
-                <SubHeader title="Upload app" backLink="/user"/>
+                <SubHeader title="Upload app" backLink="/user" />
                 <Card style={Theme.paddedCard}>
                     <CardText>
-                        <UploadAppForm form="uploadAppForm" submitted={this.handleSubmit.bind(this)}/>
+                        <UploadAppForm
+                            form="uploadAppForm"
+                            submitted={this.handleSubmit.bind(this)}
+                        />
                     </CardText>
                 </Card>
             </div>
-        )
+        );
     }
 }
-const mapStateToProps = (state) => ({
-    appList: state.appsList.appList,
+const mapStateToProps = state => ({
+    appList: state.appsList.appList
 });
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     addApp(app, file, image) {
-        dispatch(addApp(app, file, image))
+        dispatch(addApp(app, file, image));
     }
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    AppUploadStepper);
+export default connect(mapStateToProps, mapDispatchToProps)(AppUploadStepper);
