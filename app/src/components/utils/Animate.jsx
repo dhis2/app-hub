@@ -7,17 +7,14 @@ import "../../styles/utils/animations.scss";
 const duration = 300;
 
 export const FadeAnimation = ({
-    component,
-    in: inProp,
     children: child,
     ...rest
 }) => {
     return (
         <CSSTransition
-            classNames="fade"
-            in={inProp}
-            timeout={duration}
             {...rest}
+            classNames="fade"
+            timeout={duration}
         >
             {child}
         </CSSTransition>
@@ -25,49 +22,62 @@ export const FadeAnimation = ({
 };
 
 const defaultStyle = {
-    transition: `opacity ${duration}ms ease-in-out`,
-    opacity: 0
+    transition: `opacity ${duration}ms linear`,
+    opacity: 0,
+    border: '2px solid red',
 };
 
 const transitionStyles = {
-    entering: { opacity: 1 },
-    entered: { opacity: 1 }
+    entering: { opacity: 0, border: '2px solid yellow', transition: `opacity ${duration}ms linear`,},
+    entered: { opacity: 1, border: '2px solid blue', },
+    exited: {opacity: 1}
 };
 
-export const FadeAnimationBasic = ({
-    component,
-    in: inProp,
-    children: child,
-    ...rest
-}) =>
+const getStylesForTransitionState = (state) => {
+    console.log('State', state);
+    return {
+        ...defaultStyle,
+        ...transitionStyles[state]
+    }
+}
+
+
+const onEnter = (html, isAppearing) => {
+    console.log("ENTER " + isAppearing);
+};
+
+const onEntering = (html, isAppearing) => {
+    console.log("ENTERING DONE " + isAppearing);
+};
+
+const onEntered = (html, isAppearing) => {
+    console.log("ENTERED " + isAppearing);
+};
+
+export const FadeAnimationBasic = ({ component, children: child, ...props }) =>
     <Transition
-        appear
-        in={inProp}
         timeout={duration}
-        unmountOnExit
-        mountOnEnter
+        onEnter={onEnter}
+        onEntering={onEntering}
+        onEntered={onEntered}
+        {...props}
+        appear={true}
     >
         {state =>
             React.cloneElement(child, {
-                style: { ...defaultStyle, ...transitionStyles[state] }
+                style: {...child.props.style, ...getStylesForTransitionState(state)}
             })}
     </Transition>;
 
 export const FadeAnimationList = ({ component, children, ...rest }) => {
     return (
-        <TransitionGroup
-            component={component}
-            appear
-            enter
-            exit={false}
-            {...rest}
-        >
+        <TransitionGroup component={component} {...rest}>
             {React.Children.map(children, (child, i) => {
-                if (child == null) return null;
+                console.log(child)
                 return (
-                    <FadeAnimationBasic appear={true} key={child.key || child}>
+                    <FadeAnimation exit={false} key={child.key || child}>
                         {child}
-                    </FadeAnimationBasic>
+                    </FadeAnimation>
                 );
             })}
         </TransitionGroup>

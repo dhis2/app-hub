@@ -17,8 +17,8 @@ const optimisticActionCreator = action => ({
  * Commit or revert an optimistic action that has been handled by the server
  * @param action to handle
  * @param transactionID of the optimistic-action
- * @param error: override error in action.error, willr evert the action
- * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or commited action
+ * @param error: override error in action.error, will revert the action
+ * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or committed action
  */
 export const commitOrRevertOptimisticAction = (
     action,
@@ -275,7 +275,7 @@ export const actionErrorCreator = (type, error, meta) =>
 /**
  * Generic action-creator
  * @param type of action
- * @returns {object} FSA-complient action
+ * @returns {object} FSA-compliant action
  */
 function actionCreator(type) {
     return (payload, meta, error) => {

@@ -69,9 +69,11 @@ class AppCards extends Component {
             );
 
         const emptyApps = (
+            <FadeAnimation appear>
             <Col align="middle" span={12} style={styles.emptyApps}>
                 <p>We couldn't find any apps.</p>
             </Col>
+            </FadeAnimation>
         );
         return (
             <Grid>
@@ -108,23 +110,20 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
                 <Col span={12}>
-                    {loadOrErr
+                    {loadOrErr || !apps
                         ? <ErrorOrLoading
                               loading={loading}
                               error={error}
                               retry={this.props.loadApps}
                           />
-                        : null}
-                    <FadeAnimationList
-                        unmountOnExit
-                        appear
-                        component={Grid}
-                        nested
-                        nestedStyle={styles.grid}
-                    >
-                        {loaded && apps.length > 0 && apps}
-                        {loaded && apps.length < 1 && emptyApps}
-                    </FadeAnimationList>
+                        : <FadeAnimationList
+                              component={Grid}
+                              nested
+                              nestedStyle={styles.grid}
+                          >
+                              {apps}
+                          </FadeAnimationList>}
+                    {loaded && apps.length < 1 && emptyApps}
                 </Col>
             </Grid>
         );
