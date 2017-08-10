@@ -11,7 +11,7 @@ const config = require('./config');
 
 const prod = {
     entry: {
-        app: ['whatwg-fetch', './app/src/app-store.js'],
+        app: ['babel-polyfill','whatwg-fetch', './app/src/app-store.js'],
     },
     output: {
         path: path.join(__dirname, '..', 'target', 'classes', 'static'),
@@ -70,7 +70,7 @@ const prod = {
 
 const dev = Object.assign({}, prod, {
     entry: {
-        app: './app/src/app-store.js',
+        app: ['babel-polyfill','whatwg-fetch', './app/src/app-store.js'],
     },
     output: {
         path: path.join(__dirname, 'build'),
@@ -83,6 +83,8 @@ const dev = Object.assign({}, prod, {
         inline: true,
         contentBase: './app',
         historyApiFallback: true,
+        host: '0.0.0.0',
+        disableHostCheck: true
     },
     devtool: 'eval-source-map',
     plugins: [
