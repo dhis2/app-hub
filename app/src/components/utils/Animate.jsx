@@ -6,16 +6,9 @@ import "../../styles/utils/animations.scss";
 
 const duration = 300;
 
-export const FadeAnimation = ({
-    children: child,
-    ...rest
-}) => {
+export const FadeAnimation = ({ children: child, ...rest }) => {
     return (
-        <CSSTransition
-            {...rest}
-            classNames="fade"
-            timeout={duration}
-        >
+        <CSSTransition {...rest} classNames="fade" timeout={duration}>
             {child}
         </CSSTransition>
     );
@@ -23,24 +16,21 @@ export const FadeAnimation = ({
 
 const defaultStyle = {
     transition: `opacity ${duration}ms linear`,
-    opacity: 0,
-    border: '2px solid red',
+    opacity: 0
 };
 
 const transitionStyles = {
-    entering: { opacity: 0, border: '2px solid yellow', transition: `opacity ${duration}ms linear`,},
-    entered: { opacity: 1, border: '2px solid blue', },
-    exited: {opacity: 1}
+    entering: { opacity: 1 },
+    entered: { opacity: 1 }
 };
 
-const getStylesForTransitionState = (state) => {
-    console.log('State', state);
+const getStylesForTransitionState = state => {
+    console.log("State", state);
     return {
         ...defaultStyle,
         ...transitionStyles[state]
-    }
-}
-
+    };
+};
 
 const onEnter = (html, isAppearing) => {
     console.log("ENTER " + isAppearing);
@@ -61,11 +51,13 @@ export const FadeAnimationBasic = ({ component, children: child, ...props }) =>
         onEntering={onEntering}
         onEntered={onEntered}
         {...props}
-        appear={true}
     >
         {state =>
             React.cloneElement(child, {
-                style: {...child.props.style, ...getStylesForTransitionState(state)}
+                style: {
+                    ...child.props.style,
+                    ...getStylesForTransitionState(state)
+                }
             })}
     </Transition>;
 
@@ -73,9 +65,8 @@ export const FadeAnimationList = ({ component, children, ...rest }) => {
     return (
         <TransitionGroup component={component} {...rest}>
             {React.Children.map(children, (child, i) => {
-                console.log(child)
                 return (
-                    <FadeAnimation exit={false} key={child.key || child}>
+                    <FadeAnimation key={child.key || child}>
                         {child}
                     </FadeAnimation>
                 );

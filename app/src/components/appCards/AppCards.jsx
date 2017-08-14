@@ -120,6 +120,7 @@ class AppCards extends Component {
                               component={Grid}
                               nested
                               nestedStyle={styles.grid}
+                              exit={false}
                           >
                               {apps}
                           </FadeAnimationList>}
