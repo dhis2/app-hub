@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Card, CardText } from "material-ui/Card";
-import UploadAppFormStepper from "../../form/UploadAppFormStepper";
+import UploadAppForm from "../../form/UploadAppFormStepper";
 import SubHeader from "../../header/SubHeader";
 import { addApp } from "../../../actions/actionCreators";
 import Theme from "../../../styles/theme";
 
-class AppUpload extends Component {
+class AppUploadStepper extends Component {
     constructor(props) {
         super(props);
 
@@ -23,7 +23,8 @@ class AppUpload extends Component {
                 <SubHeader title="Upload app" backLink="/user" />
                 <Card style={Theme.paddedCard}>
                     <CardText>
-                        <UploadAppFormStepper
+                        <UploadAppForm
+                            form="uploadAppForm"
                             submitted={this.handleSubmit.bind(this)}
                         />
                     </CardText>
@@ -42,4 +43,4 @@ const mapDispatchToProps = dispatch => ({
     }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppUpload);
+export default connect(mapStateToProps, mapDispatchToProps)(AppUploadStepper);

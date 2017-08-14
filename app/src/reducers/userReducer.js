@@ -1,42 +1,53 @@
-import * as actionTypes from '../constants/actionTypes';
-import { combineReducers } from 'redux';
+import * as actionTypes from "../constants/actionTypes";
+import { combineReducers } from "redux";
+import { optimistic, ensureState } from "redux-optimistic-ui";
+
+const localStorageProfile = localStorage.getItem("profile");
+const initialProfile = localStorageProfile
+    ? (() => {
+          try {
+              return JSON.parse(localStorageProfile);
+          } catch (error) {
+              return {};
+          }
+      })()
+    : {};
+
 const initialState = {
-        loaded: false,
-        loading: true,
-        error: false,
-        info: { }
-}
+    loaded: false,
+    loading: true,
+    error: false
+};
 
 const loadedState = {
     loaded: true,
     loading: false,
-    error: false,
-}
+    error: false
+};
 const errorState = {
     loaded: false,
     loading: false,
-    error: true,
-}
-function appListReducer(state = {...initialState, byId: {}}, action) {
-    switch(action.type) {
+    error: true
+};
+function appListReducer(state = { ...initialState, byId: {} }, action) {
+    switch (action.type) {
         case actionTypes.APPS_APPROVED_ERROR: {
             return {
                 ...state,
                 error: action.payload
-            }
+            };
         }
         case actionTypes.APPS_ALL_LOADED:
-        case actionTypes.USER_APPS_LOADED:
-        {
-            const byId = {}
+        case actionTypes.USER_APPS_LOADED: {
+            const byId = {};
             action.payload.map((app, i) => {
-                byId[app.id] = app
-            })
+                byId[app.id] = app;
+            });
             return {
                 ...state,
                 ...loadedState,
                 byId
-            }
+            };
         }
         case actionTypes.APP_LOADED: {
             const appId = action.payload.id;
@@ -45,11 +56,11 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                 ...loadedState,
                 byId: {
                     ...state.byId,
-                    [appId]: action.payload,
+                    [appId]: action.payload
                 }
-            }
+            };
         }
-        case actionTypes.SET_APPROVAL_APP_SUCCESS: {
+        case actionTypes.SET_APPROVAL_APP: {
             const appId = action.payload.app.id;
             const app = state.byId[appId];
             return {
@@ -61,14 +72,13 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                         status: action.payload.status
                     }
                 }
-            }
-
+            };
         }
         case actionTypes.APP_VERSION_ADD_SUCCESS: {
             const version = action.payload.version;
             const appId = action.payload.appId;
             const app = state.byId[appId];
-            if(!app) {
+            if (!app) {
                 return state;
             }
             const newVer = [...app.versions, version];
@@ -78,42 +88,43 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        versions: newVer,
+                        versions: newVer
                     }
                 }
-            }
+            };
         }
 
-        case actionTypes.APP_VERSION_DELETE_SUCCESS: {
+        case actionTypes.APP_VERSION_DELETE: {
             const version = action.payload.version;
             const appId = action.payload.appId;
             const app = state.byId[appId];
-            if(!app) {
+            if (!app) {
                 return state;
             }
-            const newVer = app.versions.filter( v => v.id !== version.id);
+            const newVer = app.versions.filter(v => v.id !== version.id);
             return {
                 ...state,
                 byId: {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        versions: newVer,
+                        versions: newVer
                     }
                 }
-            }
+            };
         }
 
-        case actionTypes.APP_DELETE_SUCCESS: {
+        case actionTypes.APP_DELETE: {
             const app = action.payload.app;
-            const list = {...state.byId};
+            const list = { ...state.byId };
             delete list[action.payload.app.id];
             return {
                 ...state,
-                byId: list,
-            }
+                byId: list
+            };
         }
-        case actionTypes.APP_EDIT_SUCCESS: {
+
+        case actionTypes.APP_EDIT: {
             const { app, data } = action.payload;
             return {
                 ...state,
@@ -124,8 +135,9 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                         ...data
                     }
                 }
-            }
+            };
         }
+
         case actionTypes.APP_IMAGE_ADD_SUCCESS: {
             const { appId, imageId, image } = action.payload;
             const app = state.byId[appId];
@@ -136,25 +148,27 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        images: list,
+                        images: list
                     }
                 }
-            }
+            };
         }
-        case actionTypes.APP_IMAGE_EDIT_SUCCESS: {
+
+        case actionTypes.APP_IMAGE_EDIT: {
             const { appId, imageId, data } = action.payload;
             const app = state.byId[appId];
             const list = app.images.map((elem, ind) => {
-                if(elem.id == imageId) {
+                if (elem.id == imageId) {
                     return {
                         ...elem,
-                        ...data,
-                    }
-                } else if(elem.logo && data.logo) { //clear prev logo
+                        ...data
+                    };
+                } else if (elem.logo && data.logo) {
+                    //clear prev logo
                     return {
                         ...elem,
-                        logo: false,
-                    }
+                        logo: false
+                    };
                 } else return elem;
             });
             return {
@@ -163,13 +177,13 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        images: list,
+                        images: list
                     }
                 }
-            }
+            };
         }
 
-        case actionTypes.APP_IMAGE_DELETE_SUCCESS: {
+        case actionTypes.APP_IMAGE_DELETE: {
             const { appId, imageId } = action.payload;
             const app = state.byId[appId];
             const list = app.images.filter((elem, ind) => elem.id !== imageId);
@@ -179,17 +193,43 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        images: list,
+                        images: list
                     }
                 }
-            }
+            };
         }
+
+        case actionTypes.APP_VERSION_EDIT: {
+            const { appId, version } = action.payload;
+            const app = state.byId[appId];
+            const list = app.versions.map((elem, ind) => {
+                if (elem.id == version.id) {
+                    return {
+                        ...elem,
+                        ...version
+                    };
+                } else {
+                    return elem;
+                }
+            });
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [appId]: {
+                        ...app,
+                        versions: list
+                    }
+                }
+            };
+        }
+
         default: {
-            if (action.type.endsWith('_ERROR')) {
+            if (action.type && action.type.endsWith("_ERROR")) {
                 return {
                     ...state,
-                    ...errorState,
-                }
+                    ...errorState
+                };
             } else {
                 return state;
             }
@@ -198,35 +238,44 @@ function appListReducer(state = {...initialState, byId: {}}, action) {
     return state;
 }
 
-function userInfoReducer(state = {authenticated: false, ...initialState}, action) {
-    switch(action.type) {
+function userInfoReducer(
+    state = { authenticated: false, ...initialState, profile: initialProfile },
+    action
+) {
+    switch (action.type) {
         case actionTypes.USER_AUTHENTICATED: {
             return {
                 ...state,
-                authenticated: true,
-            }
+                authenticated: true
+            };
         }
 
         case actionTypes.USER_LOGOUT: {
             return {
                 ...state,
-                authenticated: false,
-            }
+                authenticated: false
+            };
         }
 
         case actionTypes.USER_LOADED: {
+            const manager = action.payload.profile.roles.includes(
+                "ROLE_MANAGER"
+            );
             return {
                 ...state,
                 ...loadedState,
-                info: action.payload,
-            }
+                profile: {
+                    ...action.payload.profile,
+                    manager
+                }
+            };
         }
         default: {
-            if (action.type.endsWith('USER_ERROR')) {
+            if (action.type.endsWith("USER_ERROR")) {
                 return {
                     ...state,
-                    ...errorState,
-                }
+                    ...errorState
+                };
             } else {
                 return state;
             }
@@ -236,6 +285,6 @@ function userInfoReducer(state = {authenticated: false, ...initialState}, action
 }
 
 export default combineReducers({
-    appList: appListReducer,
-    userInfo: userInfoReducer,
+    appList: optimistic(appListReducer),
+    userInfo: userInfoReducer
 });

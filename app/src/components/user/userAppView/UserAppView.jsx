@@ -1,21 +1,38 @@
-import React, {Component, PropTypes} from 'react';
-import {connect} from 'react-redux';
-import {Card, CardText, CardTitle, CardHeader} from 'material-ui/Card';
-import {Toolbar, ToolbarGroup, ToolbarTitle} from 'material-ui/Toolbar';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import Button from 'material-ui/RaisedButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import {loadUserApp, addImageToApp, openDialog, deleteAppVersion} from '../../../actions/actionCreators';
-import * as dialogType from '../../../constants/dialogTypes';
-import VersionList from '../../appVersion/VersionList';
-import FontIcon from 'material-ui/FontIcon';
-import LogoAvatar from '../../appView/AppLogo';
-import IconButton from 'material-ui/IconButton';
-import Subheader from '../../header/SubHeader';
-import Theme from '../../../styles/theme';
-import {appTypesToUI} from '../../../../config';
-import MultipleUploadFileFields from '../../form/MultipleUploadFileFields';
-import ImageViewer from '../../appView/ImageViewer';
+import React, { Component, PropTypes } from "react";
+import { connect } from "react-redux";
+import { Card, CardText, CardTitle, CardHeader } from "material-ui/Card";
+import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
+import FloatingActionButton from "material-ui/FloatingActionButton";
+import Button from "material-ui/RaisedButton";
+import ContentAdd from "material-ui/svg-icons/content/add";
+import {
+    loadUserApp,
+    addImageToApp,
+    openDialog,
+    deleteAppVersion,
+    editAppVersion,
+    addMultipleImagesToApp,
+    setAppApproval
+} from "../../../actions/actionCreators";
+import * as dialogType from "../../../constants/dialogTypes";
+import VersionListEdit from "../../appVersion/VersionListEdit";
+import FontIcon from "material-ui/FontIcon";
+import LogoAvatar from "../../appView/AppLogo";
+import IconButton from "material-ui/IconButton";
+import Subheader from "../../header/SubHeader";
+import MenuItem from "material-ui/MenuItem";
+import IconMenu from "material-ui/IconMenu";
+import Theme from "../../../styles/theme";
+import { appTypesToUI } from "../../../../config";
+import * as selectors from "../../../selectors/userSelectors";
+import MultipleUploadFileFields from "../../form/MultipleUploadFileFields";
+import ImageViewer from "../../appView/ImageViewer";
+import {
+    APP_STATUS_APPROVED,
+    APP_STATUS_PENDING,
+    APP_STATUS_REJECTED
+} from "../../../constants/apiConstants";
+import Spinner from "../../utils/Spinner";
 
 class UserAppView extends Component {
     constructor(props) {
@@ -23,55 +40,59 @@ class UserAppView extends Component {
     }
 
     componentDidMount() {
-        this.props.loadApp({appId: this.props.match.params.appId})
+        this.props.loadApp({ appId: this.props.match.params.appId });
     }
 
     handleOpenDialog() {
-        this.props.openNewVersionDialog({app: this.props.app});
+        this.props.openNewVersionDialog({ app: this.props.app });
     }
 
     handleOpenEditApp() {
-        this.props.openEditAppDialog({app: this.props.app});
+        this.props.openEditAppDialog({ app: this.props.app });
     }
 
     handleDeleteAppVersion(version) {
-        this.props.deleteVersion(version, this.props.app.id);
-    }
-
-    renderStatusAlert() {
-        const cardHeaderRightStyle = {
-            display: 'inline-flex',
-            alignItems: 'center',
-            marginLeft: '-5px',
-            color: Theme.card.subtitleColor,
-        }
-        const statusAlertPending = "This app is pending approval"
-        const statusAlertRejected = "This app has been rejected"
-
-        return (<p style={cardHeaderRightStyle}><FontIcon style={{color: 'inherit', fontSize: 'inherit'}}
-                                                            className="material-icons">priority_high</FontIcon>
-            {this.props.app.status == 'PENDING' ? statusAlertPending : statusAlertRejected}
-        </p>)
-    }
-
-    submitUploadImages() {
-
-        this.form.submit();
+        const children = (
+            <div>
+                <p>
+                    Are you sure you want to delete version{" "}
+                    <i>{version.version} </i>
+                    for app '{this.props.app.name}'?
+                </p>
+                This cannot be undone.
+            </div>
+        );
+        this.props.openConfirmDeleteVersion({
+            children,
+            approveAction: () =>
+                this.props.deleteVersion(version, this.props.app.id)
+        });
     }
 
     handleUploadImages(mergedFilesArray) {
-        mergedFilesArray.map((image, i) => {
-                const imageObj = {
-                    image: {
-                        caption: '',
-                        description: '',
-                        logo: false,
-                    },
-                    file: image
-                }
-                this.props.addImageToApp(this.props.app.id, imageObj);
+        const images = mergedFilesArray.map((image, i) => {
+            const imageObj = {
+                image: {
+                    caption: "",
+                    description: "",
+                    logo: false
+                },
+                file: image
+            };
+            return imageObj;
+        });
+        if (images.length < 1) {
+            throw new Error("No images");
+        }
+        this.props.addImagesToApp(this.props.app.id, images);
+    }
 
-        })
+    handleEditVersion(version) {
+        this.props.editVersion(this.props.app.id, version);
+    }
+
+    handleSetAppApproval(status) {
+        this.props.setAppApproval(this.props.app, status);
     }
 
     render() {
@@ -83,78 +104,92 @@ class UserAppView extends Component {
             margin: 0,
             top: 0,
             right: 10,
-            top: '-25px',
-            position: 'absolute',
+            top: "-26px",
+            position: "absolute"
         };
         const rightIconButtonStyle = {
-            position: 'absolute',
+            position: "absolute",
             top: 0,
-            right: '4px'
-        }
+            right: "4px"
+        };
 
-        const subtitle = (<div>Type: {appTypesToUI[app.appType]} <br />
-            Author: {app.developer.name} <br />
-            Organisation: {app.developer.organisation} <br />
-            {app.status == 'PENDING' || app.status == 'NOT_APPROVED' ? this.renderStatusAlert.bind(this)() : null}</div>)
+        const cardStyle = {
+            marginTop: "12px",
+            position: "relative"
+        };
 
-        let logo = app.images.filter(elem => elem.logo)[0];
-
+        console.log("render");
         return (
             <div>
-                <Subheader title="App overview" backLink="/user">
-                </Subheader>
+                <Subheader title="App overview" backLink="/user" />
                 <Card>
-                    <CardHeader title={app.name} avatar={<LogoAvatar logo={logo}/>}
-                                subtitle={subtitle} titleStyle={{fontSize: '2em'}}>
-                        <IconButton style={rightIconButtonStyle} onClick={this.handleOpenEditApp.bind(this)}>
-                            <i className="material-icons">edit</i>
-                        </IconButton>
+                    <UserAppCardHeader
+                        app={app}
+                        appLogo={this.props.appLogo}
+                        isManager={this.props.user.manager}
+                        onAppApproval={this.handleSetAppApproval.bind(this)}
+                        onOpenEditApp={this.handleOpenEditApp.bind(this)}
+                    />
 
-                    </CardHeader>
-
-                    <CardText style={Theme.paddedCard} className="multiline-content">
+                    <CardText
+                        style={Theme.paddedCard}
+                        className="multiline-content"
+                    >
                         {app.description}
                     </CardText>
-
                 </Card>
-                <Card style={{marginTop: '10px', position: 'relative'}}>
-                    <FloatingActionButton mini={true} style={FABStyle} onTouchTap={this.handleOpenDialog.bind(this)}>
+                <Card style={cardStyle}>
+                    <FloatingActionButton
+                        mini={true}
+                        style={FABStyle}
+                        onTouchTap={this.handleOpenDialog.bind(this)}
+                    >
                         <ContentAdd />
                     </FloatingActionButton>
-                    <CardTitle title="Versions"/>
+                    <CardTitle title="Versions" />
                     <CardText>
-                        <VersionList editable versionList={app.versions} app={app}
-                                     handleDelete={this.handleDeleteAppVersion.bind(this)}/>
+                        <VersionListEdit
+                            editable
+                            versionList={app.versions}
+                            app={app}
+                            handleEdit={this.handleEditVersion.bind(this)}
+                            handleDelete={this.handleDeleteAppVersion.bind(
+                                this
+                            )}
+                        />
                     </CardText>
                 </Card>
-                <Card style={{marginTop: '10px', position: 'relative'}} expandable={true} expanded={false}>
-                    <CardTitle title="Images" actAsExpander={true}/>
-                    <CardText style={{paddingLeft: 0, paddingRight: 0}}>
-                        <ImageViewer images={app.images} appId={app.id} editable/>
+                <Card style={cardStyle} expandable={true} expanded={false}>
+                    <CardTitle title="Images" actAsExpander={true} />
+                    <CardText style={{ paddingLeft: 0, paddingRight: 0 }}>
+                        <ImageViewer
+                            images={app.images}
+                            appId={app.id}
+                            editable
+                        />
                     </CardText>
-                    <CardText>
+                    <CardText style={Theme.paddedCard}>
                         <h2>Upload images</h2>
-                        <MultipleUploadFileFields ref={ref => this.form = ref}
-                                                  form="imageUpload"
-                                                  submitted={this.handleUploadImages.bind(this)}/>
-
-                        <Button primary onClick={this.submitUploadImages.bind(this)}
-                                label="Upload"
-                                icon={<FontIcon className="material-icons">file_upload</FontIcon>}/>
+                        <MultipleUploadFileFields
+                            form="imageUpload"
+                            submitted={this.handleUploadImages.bind(this)}
+                        />
                     </CardText>
                 </Card>
             </div>
-        )
+        );
     }
 }
 
-UserAppView.propTypes = {}
+UserAppView.propTypes = {};
 
 const mapStateToProps = (state, ownProps) => ({
-    app: state.user.appList.byId[ownProps.match.params.appId]
-})
+    app: selectors.getApp(state, ownProps.match.params.appId),
+    user: selectors.getUserProfile(state),
+    appLogo: selectors.getAppLogo(state, ownProps.match.params.appId)
+});
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
     loadApp(appid) {
         dispatch(loadUserApp(appid));
     },
@@ -163,17 +198,164 @@ const mapDispatchToProps = (dispatch) => ({
         dispatch(addImageToApp(appid, image));
     },
 
+    addImagesToApp(appId, images) {
+        dispatch(addMultipleImagesToApp(appId, images));
+    },
+
     deleteVersion(version, appId) {
-        dispatch(deleteAppVersion(version, appId))
+        dispatch(deleteAppVersion(version, appId));
     },
 
     openNewVersionDialog(dialogProps) {
-        dispatch(openDialog(dialogType.NEW_VERSION, dialogProps))
+        dispatch(openDialog(dialogType.NEW_VERSION, dialogProps));
     },
 
     openEditAppDialog(dialogProps) {
-        dispatch(openDialog(dialogType.EDIT_APP, dialogProps))
+        dispatch(openDialog(dialogType.EDIT_APP, dialogProps));
+    },
+    editVersion(appId, version) {
+        dispatch(editAppVersion(appId, version));
+    },
+
+    openConfirmDeleteVersion(dialogProps) {
+        dispatch(openDialog(dialogType.CONFIRM_GENERIC, dialogProps));
+    },
+
+    setAppApproval(app, status) {
+        dispatch(setAppApproval(app, status));
     }
-})
+});
+
+const UserAppCardHeader = ({
+    app,
+    onOpenEditApp,
+    isManager,
+    appLogo,
+    onAppApproval
+}) => {
+    const rightIconButtonStyle = {
+        position: "absolute",
+        top: 0,
+        right: "4px"
+    };
+
+    const rightIconsStyle = {
+        position: "absolute",
+        top: "0px",
+        right: "70px",
+        height: "48px",
+        display: "flex",
+        alignItems: "center"
+    };
+
+    const cardHeaderRightStyle = {
+        display: "inline-flex",
+        alignItems: "center",
+        marginLeft: "-5px",
+        color: Theme.card.subtitleColor
+    };
+
+    const statusAlertPending = "This app is pending approval";
+    const statusAlertRejected = "This app has been rejected";
+
+    const statusAlertText = (
+        <p style={cardHeaderRightStyle}>
+            <FontIcon
+                style={{ color: "inherit", fontSize: "inherit" }}
+                className="material-icons"
+            >
+                priority_high
+            </FontIcon>
+            {app.status == APP_STATUS_PENDING
+                ? statusAlertPending
+                : statusAlertRejected}
+        </p>
+    );
+
+    const subtitle = (
+        <div>
+            Type: {appTypesToUI[app.appType]} <br />
+            Author: {app.developer.name} <br />
+            Organisation: {app.developer.organisation} <br />
+            {app.status == APP_STATUS_PENDING ||
+            app.status == APP_STATUS_REJECTED
+                ? statusAlertText
+                : null}
+        </div>
+    );
+
+    const editIconButton = (
+        <IconButton style={rightIconButtonStyle} onClick={onOpenEditApp}>
+            <i className="material-icons">edit</i>
+        </IconButton>
+    );
+
+    if (isManager) {
+        //Render a menu instead for managers
+
+        let menuItems = null;
+        const approveItem = (
+            <MenuItem
+                onTouchTap={() => onAppApproval(APP_STATUS_APPROVED)}
+                key="approve"
+                primaryText="Approve"
+            />
+        );
+        const rejectItem = (
+            <MenuItem
+                onTouchTap={() => onAppApproval(APP_STATUS_REJECTED)}
+                key="reject"
+                primaryText="Reject"
+            />
+        );
+        const pendingItems = [approveItem, rejectItem];
+
+        if (app.status === APP_STATUS_PENDING) {
+            menuItems = pendingItems;
+        } else if (app.status === APP_STATUS_APPROVED) {
+            menuItems = rejectItem;
+        } else {
+            menuItems = approveItem;
+        }
+
+        var menu = (
+            <IconMenu
+                style={rightIconButtonStyle}
+                iconButtonElement={
+                    <IconButton>
+                        <FontIcon className="material-icons">
+                            more_vert
+                        </FontIcon>
+                    </IconButton>
+                }
+            >
+                {menuItems}
+                <MenuItem
+                    onTouchTap={onOpenEditApp}
+                    key="edit"
+                    primaryText="Edit"
+                />
+            </IconMenu>
+        );
+    }
+
+    return (
+        <CardHeader
+            title={app.name}
+            avatar={<LogoAvatar logo={appLogo} />}
+            subtitle={subtitle}
+            titleStyle={{ fontSize: "2em" }}
+        >
+            {isManager ? menu : editIconButton}
+        </CardHeader>
+    );
+};
+
+UserAppCardHeader.propTypes = {
+    app: PropTypes.object.isRequired,
+    onOpenEditApp: PropTypes.func.isRequired,
+    onAppApproval: PropTypes.func,
+    isManager: PropTypes.bool
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAppView);

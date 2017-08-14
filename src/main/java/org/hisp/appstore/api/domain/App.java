@@ -22,6 +22,8 @@ public class App
 
     private String owner;
 
+    private String sourceUrl;
+
     private AppType appType = AppType.APP_STANDARD;
 
     private Set<AppVersion> versions = Sets.newHashSet();
@@ -135,6 +137,11 @@ public class App
         this.images = images;
     }
 
+    @JsonProperty
+    public String getSourceUrl() { return sourceUrl; }
+
+    public void setSourceUrl( String sourceUrl) { this.sourceUrl = sourceUrl; }
+
     @Override
     public void mergeWith( IdentifiableObject other )
     {
@@ -150,6 +157,7 @@ public class App
             owner = app.getOwner() != null ? app.getOwner() : owner;
             appType = app.getAppType() != null ? app.getAppType() : appType;
             status = app.getStatus() != null ? app.getStatus() : status;
+            sourceUrl = app.getSourceUrl() != null ? app.getSourceUrl() : sourceUrl;
         }
     }
 }

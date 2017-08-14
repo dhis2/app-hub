@@ -1,116 +1,140 @@
-import constants from '../../config';
-import { getAuth } from '../utils/AuthService';
-
+import constants from "../../config";
+import { getAuth } from "../utils/AuthService";
 
 const baseURL = constants.API_BASE_URL;
 
 const baseOptions = {
-    method: 'GET'
-}
+    method: "GET"
+};
 const postOpts = {
-    method: 'POST'
-}
+    method: "POST"
+};
 
 const deleteOpts = {
-    method: 'DELETE'
-}
+    method: "DELETE"
+};
 
 const updateOpts = {
-    method: 'PUT',
-}
+    method: "PUT"
+};
 
 export function getAllApps() {
-    return fromApi('apps/all', true);
+    return fromApi("apps/all", true);
 }
 
 export function getApprovedApps() {
-    return fromApi('apps')
+    return fromApi("apps");
 }
 
 export function getApp(appId, auth) {
-    return fromApi('apps/'+appId, auth || false);
+    return fromApi("apps/" + appId, auth || false);
 }
 
 export function getUser() {
-    return fromApi('users/me', true);
+    return fromApi("users/me", true);
 }
 
 export function getUserApps() {
-    return fromApi('apps/myapps', true)
+    return fromApi("apps/myapps", true);
 }
 
 export function setAppApproval(appId, status) {
-    return fromApi('apps/'+appId+'/approval?status='+status, true, postOpts )
+    return fromApi(
+        "apps/" + appId + "/approval?status=" + status,
+        true,
+        postOpts
+    );
 }
 
 export function createApp(payload) {
-    return fromApi('apps/', true, createAppUploadOptions(payload))
+    return fromApi("apps/", true, createAppUploadOptions(payload));
 }
 
 export function createNewVersion(appId, payload) {
-    return fromApi('apps/'+appId+'/versions', true, createUploadVersionOptions(payload));
+    return fromApi(
+        "apps/" + appId + "/versions",
+        true,
+        createUploadVersionOptions(payload)
+    );
 }
+
 export function createNewImage(appId, payload) {
-    return fromApi('apps/'+appId+'/images', true, createUploadImageOptions(payload));
+    return fromApi(
+        "apps/" + appId + "/images",
+        true,
+        createUploadImageOptions(payload)
+    );
 }
 export function deleteVersion(appId, versionId) {
-    return fromApi('apps/'+appId+'/versions/'+versionId, true, deleteOpts);
+    return fromApi(
+        "apps/" + appId + "/versions/" + versionId,
+        true,
+        deleteOpts
+    );
+}
+export function updateVersion(appId, versionId, payload) {
+    return fromApi(`apps/${appId}/versions/${versionId}`, true, {
+        ...baseOptions,
+        ...updateOpts,
+        body: JSON.stringify(payload)
+    });
 }
 
 export function deleteApp(appId) {
-    return fromApi('apps/'+appId, true, deleteOpts);
+    return fromApi("apps/" + appId, true, deleteOpts);
 }
 
 export function deleteImage(appId, imageId) {
-    return fromApi('apps/'+appId+"/images/"+imageId, true, deleteOpts);
+    return fromApi("apps/" + appId + "/images/" + imageId, true, deleteOpts);
 }
 
 export function updateApp(appId, payload) {
-    return fromApi('apps/'+appId, true, {
+    return fromApi("apps/" + appId, true, {
         ...baseOptions,
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify(payload)
     });
 }
 
 export function updateImage(appId, imageId, payload) {
-    return fromApi('apps/'+appId+"/images/"+imageId, true,{
+    return fromApi("apps/" + appId + "/images/" + imageId, true, {
         ...baseOptions,
         ...updateOpts,
         body: JSON.stringify(payload)
-    })
+    });
 }
+
 function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
-    const opts =  auth ? {headers, ...baseOptions, ...extraOpts} : {...baseOptions, ...extraOpts};
-    return fetch(baseURL+url,opts)
-        .then(response => response.ok ? response : Promise.reject(response))
-        .then(response => response.json())
+    const opts = auth
+        ? { headers, ...baseOptions, ...extraOpts }
+        : { ...baseOptions, ...extraOpts };
+    return fetch(baseURL + url, opts)
+        .then(response => (response.ok ? response : Promise.reject(response)))
+        .then(response => response.json());
 }
-
-
 
 function getAuthHeaders() {
     const headers = {};
-    headers['Authorization'] = 'Bearer ' + getAuth().getToken();
+    headers["Authorization"] = "Bearer " + getAuth().getToken();
     return headers;
 }
-
-
 
 export function createAppUploadOptions(data) {
     const fileInput = data.file;
     const imageInput = data.image;
     let form = new FormData();
-    const jsonPart = new Blob([JSON.stringify(data.app)], {type: 'application/json'})
-    form.append('file', fileInput, fileInput.name)
-    form.append('app', jsonPart);
-    if(imageInput) {
-        form.append('imageFile', imageInput, imageInput.name);
+    const jsonPart = new Blob([JSON.stringify(data.app)], {
+        type: "application/json"
+    });
+    form.append("file", fileInput, fileInput.name);
+    form.append("app", jsonPart);
+    if (imageInput) {
+        form.append("imageFile", imageInput, imageInput.name);
     }
 
     const fetchOptions = {
-        method: 'POST',
+        method: "POST",
         body: form
     };
     return fetchOptions;
@@ -130,17 +154,19 @@ export function createUploadVersionOptions(data) {
         version: version.version,
         minDhisVersion: version.minDhisVersion || null,
         maxDhisVersion: version.maxDhisVersion || null,
-
-    }
+        demoUrl: version.demoUrl || null
+    };
     const dataFile = data.file;
     let form = new FormData();
-    const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+    const jsonPart = new Blob([JSON.stringify(jsonData)], {
+        type: "application/json"
+    });
 
-    form.append('file', dataFile, dataFile.name)
-    form.append('version', jsonPart);
+    form.append("file", dataFile, dataFile.name);
+    form.append("version", jsonPart);
 
     const fetchOptions = {
-        method: 'POST',
+        method: "POST",
         body: form
     };
     return fetchOptions;
@@ -151,21 +177,20 @@ export function createUploadImageOptions(data) {
     const jsonData = {
         caption: image.caption || null,
         description: image.description || null,
-        logo: image.logo || false,
-
-    }
+        logo: image.logo || false
+    };
     const dataFile = data.file;
     let form = new FormData();
-    const jsonPart = new Blob([JSON.stringify(jsonData)], {type: 'application/json'})
+    const jsonPart = new Blob([JSON.stringify(jsonData)], {
+        type: "application/json"
+    });
 
-    form.append('file', dataFile, dataFile.name)
-    form.append('image', jsonPart);
+    form.append("file", dataFile, dataFile.name);
+    form.append("image", jsonPart);
 
     const fetchOptions = {
-        method: 'POST',
+        method: "POST",
         body: form
     };
     return fetchOptions;
 }
-
-

@@ -1,9 +1,9 @@
-import React, {Component, PropTypes} from 'react';
-import Grid from '../../../material/Grid/Grid';
-import Col from '../../../material/Grid/Col';
-import FontIcon from 'material-ui/FontIcon';
-import {Card, CardText, CardTitle} from 'material-ui/Card';
-import RaisedButton from 'material-ui/RaisedButton';
+import React, { Component, PropTypes } from "react";
+import Grid from "../../../material/Grid/Grid";
+import Col from "../../../material/Grid/Col";
+import FontIcon from "material-ui/FontIcon";
+import { Card, CardText, CardTitle } from "material-ui/Card";
+import RaisedButton from "material-ui/RaisedButton";
 class LoginView extends Component {
     constructor(props) {
         super(props);
@@ -11,10 +11,9 @@ class LoginView extends Component {
     }
 
     componentDidMount() {
-        if(!this.props.auth.isLoggedIn()) {
+        if (!this.props.auth.isLoggedIn()) {
             this.props.auth.login();
         }
-
     }
 
     handleLogin() {
@@ -23,14 +22,14 @@ class LoginView extends Component {
 
     render() {
         const colStyle = {
-            margin: '20px auto 0 auto'
-        }
+            margin: "20px auto 0 auto"
+        };
         return null;
     }
 }
 
 LoginView.propTypes = {
-    auth: PropTypes.object.isRequired,
-}
+    auth: PropTypes.object.isRequired
+};
 
 export default LoginView;
