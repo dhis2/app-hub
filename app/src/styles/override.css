@@ -177,4 +177,22 @@ h1, h2, h3, h4 {
     }
 }
 
+@media (min-width: 840px) {
+    .mdc-layout-grid_cell {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 839px)  {
+    ..mdc-layout-grid_cell {
+        max-width: 300px;
+    }
+}
+
+
+@media (max-width: 479px) {
+    .mdc-layout-grid_cell {
+        max-width: initial;
+    }
+}
 

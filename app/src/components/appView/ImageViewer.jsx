@@ -73,11 +73,12 @@ const ImageElement = props => {
         },
         actions: {}
     };
+
     return (
         <div style={{ ...imageElementStyle.root, ...props.style }}>
             {props.renderTitleBar
                 ? <FadeAnimationBasic appear in>
-                      <div key={this.key} style={imageElementStyle.titleBar}>
+                      <div style={imageElementStyle.titleBar}>
                           <div style={imageElementStyle.titleWrap}>
                               <div style={imageElementStyle.title}>
                                   {props.title}

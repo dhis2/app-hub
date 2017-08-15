@@ -42,7 +42,6 @@ class AppCards extends Component {
                 width: "auto"
             },
             appItem: {
-                maxWidth: "300px"
             },
 
             emptyApps: {
