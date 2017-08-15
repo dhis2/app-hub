@@ -302,7 +302,7 @@ class UploadAppFormStepper extends Component {
         };
         const imageFile =
             values.image && values.image.image ? values.image.image[0] : [];
-        data.images = imageFile ? data.images : [];
+        data.images = imageFile.length > 0 ? data.images : [];
         const appFile = values.version.file[0];
 
         this.props.submitted({ data, file: appFile, image: imageFile });
