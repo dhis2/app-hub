@@ -253,7 +253,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>install</arguments>
+                  <arguments>install --cache-folder ${build.directory}/node/cache/</arguments>
                 </configuration>
               </execution>
 
@@ -320,8 +320,8 @@
                 <phase>generate-resources</phase>
 
                 <configuration>
-                  <nodeVersion>v7.5.0</nodeVersion>
-                  <yarnVersion>v0.20.0</yarnVersion>
+                  <nodeVersion>v8.2.1</nodeVersion>
+                  <yarnVersion>v0.27.5</yarnVersion>
                 </configuration>
               </execution>
 
@@ -332,7 +332,7 @@
                   <goal>yarn</goal>
                 </goals>
                 <configuration>
-                  <arguments>install</arguments>
+                  <arguments>install ${build.directory}/node/cache/</arguments>
                 </configuration>
               </execution>
 
