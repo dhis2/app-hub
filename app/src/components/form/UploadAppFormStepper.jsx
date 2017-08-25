@@ -12,7 +12,9 @@ import {
 } from "../form/ReduxFormUtils";
 import { red500 } from "material-ui/styles/colors";
 import FormStepper from "./FormStepper";
-
+import PersonIcon from 'material-ui/svg-icons/social/person';
+import ImageIcon from 'material-ui/svg-icons/editor/insert-photo';
+import VersionIcon from 'material-ui/svg-icons/'
 const appTypes = [
     { value: "APP_STANDARD", label: "Standard" },
     { value: "APP_DASHBOARD", label: "Dashboard" },

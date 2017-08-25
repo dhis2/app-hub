@@ -142,6 +142,7 @@ class UserAppView extends Component {
                     <FloatingActionButton
                         mini={true}
                         style={FABStyle}
+                        title="New version"
                         onTouchTap={this.handleOpenDialog.bind(this)}
                     >
                         <ContentAdd />

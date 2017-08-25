@@ -12,6 +12,7 @@ import { red500 } from "material-ui/styles/colors";
 import _max from "lodash/max";
 import AnimateHeight from "react-animate-height";
 import { hasError } from "./ReduxFormUtils";
+
 const sectionErrorIcon = <WarningIcon color={red500} />;
 
 /**
@@ -157,6 +158,7 @@ class FormStepper extends Component {
                       >
                           <StepButton
                               onClick={() => this.goToStep(i)}
+                              {... (section.props.icon && { icon: sections.props.icon})}
                               {...showError && { icon: sectionErrorIcon }}
                           >
                               {sectionDisplayName}
@@ -232,6 +234,8 @@ FormStepper.propTypes = {
     /**
      * An array of sections, each section should be a react-node
      * Each section should render a FormSection, and MUST have a "name"-prop.
+     * Sections can provide these additional props:
+     *    icon - the icon to be rendered in the stepper for this section.
      * Each section is rendered in the order they are provided, and gets the following props when rendered:
      *    errors - the errorState of the section.
      */

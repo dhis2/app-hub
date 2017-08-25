@@ -20,7 +20,7 @@ const defaultStyle = {
 };
 
 const transitionStyles = {
-    entering: { opacity: 0 },
+    entering: { opacity: 1 },
     entered: { opacity: 1 }
 };
 

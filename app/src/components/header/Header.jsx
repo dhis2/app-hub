@@ -25,6 +25,7 @@ const renderProfileButton = props => {
         <IconButton
             style={{ transform: "translate(12px)" }}
             onClick={() => (!isLoggedIn ? getAuth().login() : {})}
+            title = "Account"
         >
             {isLoggedIn && typeof props.avatarImg === "string"
                 ? avatar
