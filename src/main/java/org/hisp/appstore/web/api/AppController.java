@@ -62,6 +62,8 @@ public class AppController
 
         List<App> apps = appStoreService.get( queryParameters );
 
+        response.setContentType( "application/json" );
+
         renderService.toJson( response.getOutputStream(), apps );
     }
 
@@ -71,6 +73,8 @@ public class AppController
     {
         List<App> apps = appStoreService.getAllAppsByOwner( currentUserService.getCurrentUserId() );
 
+        response.setContentType( "application/json" );
+
         renderService.toJson( response.getOutputStream(), apps );
     }
 
@@ -79,6 +83,8 @@ public class AppController
     public void getAllApps( HttpServletRequest request, HttpServletResponse response ) throws IOException
     {
         List<App> apps = appStoreService.getAllApps();
+
+        response.setContentType( "application/json" );
 
         renderService.toJson( response.getOutputStream(), apps );
     }
@@ -100,6 +106,8 @@ public class AppController
             decideAccess( app );
         }
 
+        response.setContentType( "application/json" );
+
         renderService.toJson( response.getOutputStream(), app );
     }
 
@@ -118,6 +126,8 @@ public class AppController
 
         Set<Review> reviews = app.getReviews();
 
+        response.setContentType( "application/json" );
+
         renderService.toJson( response.getOutputStream(), reviews );
     }
 
@@ -135,6 +145,8 @@ public class AppController
         }
 
         Set<AppVersion> versions = app.getVersions();
+
+        response.setContentType( "application/json" );
 
         renderService.toJson( response.getOutputStream(), versions );
     }
