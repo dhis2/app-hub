@@ -63,12 +63,11 @@ describe("API", () => {
                 .and.to.have.property("ok", false);
         });
 
-        it("should call fetch with given URL concatenated to baseURL", (done) => {
+        it("should call fetch with given URL concatenated to baseURL", () => {
             const url = "apps/all";
-            api.fromApi(url).then(() => {
+            return api.fromApi(url).then(() => {
                 const args = fetchStub.args[0];
                 expect(args[0]).to.include(url);
-                done()
             });
         });
 

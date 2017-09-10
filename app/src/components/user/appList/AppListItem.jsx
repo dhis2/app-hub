@@ -8,7 +8,7 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
 import { withRouter } from "react-router";
-import { appTypesToUI } from "../../../../config";
+import config from "../../../config";
 
 const appStatusStyle = {
     fontSize: "16px",
@@ -117,12 +117,12 @@ const AppListItem = (props, state) => {
     const secondaryText = (
         <p style={{ display: "inline-block", height: "auto" }}>
             {developer.name} <br />
-            {appTypesToUI[appType]}
-            {!props.manager
-                ? <span>
-                      <br />Status: {appStatus[status].alt}
-                  </span>
-                : null}
+            {config.ui.appTypeToDisplayName[appType]}
+            {!props.manager ? (
+                <span>
+                    <br />Status: {appStatus[status].alt}
+                </span>
+            ) : null}
         </p>
     );
     const listItemProps = {

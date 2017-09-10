@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import { Redirect, Route } from "react-router-dom";
 import VersionList from "../appVersion/VersionList";
 import { loadApp } from "../../actions/actionCreators";
-import { appTypesToUI } from "../../../config";
+import config from "../../config";
 import AppLogo from "./AppLogo";
 import Theme from "../../styles/theme";
 import { FadeAnimation } from "../utils/Animate";
@@ -57,7 +57,7 @@ class AppView extends Component {
         );
         const subtitle = (
             <div>
-                Type: {appTypesToUI[app.appType]} <br />
+                Type: {config.ui.appTypeToDisplayName[app.appType]} <br />
                 Author: {app.developer.name} <br />
                 Organisation: {app.developer.organisation}{" "}
             </div>
@@ -76,16 +76,16 @@ class AppView extends Component {
                             subtitle={subtitle}
                             titleStyle={{ fontSize: "2em" }}
                         />
-                        {app.images.length > 0
-                            ? <CardText
-                                  style={{ paddingLeft: 0, paddingRight: 0 }}
-                              >
-                                  <ImageViewer
-                                      images={app.images}
-                                      showEmptyMessage={false}
-                                  />
-                              </CardText>
-                            : null}
+                        {app.images.length > 0 ? (
+                            <CardText
+                                style={{ paddingLeft: 0, paddingRight: 0 }}
+                            >
+                                <ImageViewer
+                                    images={app.images}
+                                    showEmptyMessage={false}
+                                />
+                            </CardText>
+                        ) : null}
 
                         <CardText
                             style={{

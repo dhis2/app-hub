@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { appTypesToUI } from "../../../config";
+import config from "../../config";
 import {
     Card,
     CardMedia,
@@ -46,15 +46,11 @@ const AppItem = props => {
                 <CardMedia style={mediaStyle} />
             </Link>
             <CardTitle
-                title={
-                    <Link to={`/app/${id}`}>
-                        {name}
-                    </Link>
-                }
+                title={<Link to={`/app/${id}`}>{name}</Link>}
                 subtitle={
                     <span>
                         {developer.name ? developer.name : "Unspecified"} <br />{" "}
-                        {appTypesToUI[appType]}{" "}
+                        {config.ui.appTypeToDisplayName[appType]}{" "}
                     </span>
                 }
             />

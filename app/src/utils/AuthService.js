@@ -2,7 +2,7 @@ import Auth0Lock from "auth0-lock";
 import { isTokenExpired } from "./jwtHelper";
 import { BrowserRouter } from "react-router-dom";
 import History from "./history";
-import constants from "../../config";
+import config from "../config";
 import store from "../store";
 import Theme from "../styles/theme";
 import logo from "../assets/img/dhis2.svg";
@@ -12,7 +12,7 @@ export default class AuthService {
         // Configure Auth0
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: constants.API_REDIRECT_URL,
+                redirectUrl: config.API_REDIRECT_URL,
                 responseType: "token",
                 params: {
                     scope: "openid roles user_id"
@@ -95,6 +95,6 @@ let auth;
 export function getAuth() {
     if (auth) return auth;
 
-    auth = new AuthService(constants.AUTH0ClientId, constants.AUTH0Domain);
+    auth = new AuthService(config.auth0.clientID, config.auth0.domain);
     return auth;
 }

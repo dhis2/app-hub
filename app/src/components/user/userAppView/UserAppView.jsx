@@ -23,7 +23,7 @@ import Subheader from "../../header/SubHeader";
 import MenuItem from "material-ui/MenuItem";
 import IconMenu from "material-ui/IconMenu";
 import Theme from "../../../styles/theme";
-import { appTypesToUI } from "../../../../config";
+import config from "../../../config";
 import * as selectors from "../../../selectors/userSelectors";
 import MultipleUploadFileFields from "../../form/MultipleUploadFileFields";
 import ImageViewer from "../../appView/ImageViewer";
@@ -267,21 +267,23 @@ const UserAppCardHeader = ({
             >
                 priority_high
             </FontIcon>
-            {app.status == APP_STATUS_PENDING
-                ? statusAlertPending
-                : statusAlertRejected}
+            {app.status == APP_STATUS_PENDING ? (
+                statusAlertPending
+            ) : (
+                statusAlertRejected
+            )}
         </p>
     );
 
     const subtitle = (
         <div>
-            Type: {appTypesToUI[app.appType]} <br />
+            Type: {config.ui.appTypeToDisplayName[app.appType]} <br />
             Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} <br />
             {app.status == APP_STATUS_PENDING ||
-            app.status == APP_STATUS_REJECTED
-                ? statusAlertText
-                : null}
+            app.status == APP_STATUS_REJECTED ? (
+                statusAlertText
+            ) : null}
         </div>
     );
 

@@ -10,3 +10,5 @@ target
 .project
 .settings
 node_modules
+app/build
+build
