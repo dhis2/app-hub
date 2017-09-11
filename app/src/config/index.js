@@ -1,5 +1,3 @@
-//const sub =
-//let conf; //= __APP_CONFIG__ !== undefined ? __APP_CONFIG__ : getConfig();
 let conf;
 if (typeof __APP_CONFIG__ !== "undefined") {
     //running in webpack, use predefined config
