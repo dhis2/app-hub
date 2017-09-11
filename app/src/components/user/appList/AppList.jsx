@@ -125,7 +125,7 @@ class AppList extends Component {
                         ? filterAppStatus(app, this.props.appStatusFilter)
                         : true)
             )
-            .map((app, i) =>
+            .map((app, i) => (
                 <AppListItem
                     app={app}
                     key={app.id}
@@ -139,7 +139,7 @@ class AppList extends Component {
                     )}
                     handleReject={this.handleApproval.bind(this, app, "REJECT")}
                 />
-            );
+            ));
         const emptyAppsText = manager
             ? "We couldn't find any apps"
             : "You have not uploaded any apps";
@@ -189,9 +189,9 @@ class AppList extends Component {
                 </SubHeader>
                 <Card>
                     <CardText>
-                        {loadOrErr
-                            ? <ErrorOrLoading loading={loading} error={error} />
-                            : null}
+                        {loadOrErr ? (
+                            <ErrorOrLoading loading={loading} error={error} />
+                        ) : null}
                         <List>
                             {loaded && apps.length > 0 ? apps : null}
                             {loaded && apps.length < 1 ? emptyAppsText : null}
