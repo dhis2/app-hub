@@ -122,7 +122,8 @@ const tomcatDev = Object.assign({}, prod, {
 });
 
 module.exports = env => {
-    const isTomcatDev = (env.tomcat || env.tomcat === "true") && isDevBuild;
+    const isTomcatDev =
+        env && (env.tomcat || env.tomcat === "true") && isDevBuild;
     const buildName = isTomcatDev
         ? "tomcatDev"
         : isDevBuild ? "development" : "production";

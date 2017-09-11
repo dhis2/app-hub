@@ -11,6 +11,7 @@ import FontIcon from "material-ui/FontIcon";
 import IconMenu from "material-ui/IconMenu";
 import IconButton from "material-ui/IconButton";
 import MenuItem from "material-ui/MenuItem";
+
 const VersionList = props => {
     //Max 3 versions before "more button"
     const versions = props.versionList
@@ -42,25 +43,17 @@ const VersionList = props => {
                             </FontIcon>
                         </a>
                     </TableRowColumn>
-                    <TableRowColumn>
-                        {version.version}
-                    </TableRowColumn>
-                    <TableRowColumn>
-                        {version.minDhisVersion}
-                    </TableRowColumn>
-                    <TableRowColumn>
-                        {version.maxDhisVersion}
-                    </TableRowColumn>
+                    <TableRowColumn>{version.version}</TableRowColumn>
+                    <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
+                    <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
                     <TableRowColumn
                         title={new Date(version.created).toLocaleString()}
                     >
                         {new Date(version.created).toLocaleDateString()}
                     </TableRowColumn>
-                    {props.editable
-                        ? <TableRowColumn>
-                              {editMenu}
-                          </TableRowColumn>
-                        : null}
+                    {props.editable ? (
+                        <TableRowColumn>{editMenu}</TableRowColumn>
+                    ) : null}
                 </TableRow>
             );
         });
@@ -76,14 +69,12 @@ const VersionList = props => {
                     <TableHeaderColumn>Min DHIS version</TableHeaderColumn>
                     <TableHeaderColumn>Max DHIS version</TableHeaderColumn>
                     <TableHeaderColumn>Uploaded</TableHeaderColumn>
-                    {props.editable
-                        ? <TableHeaderColumn>Edit</TableHeaderColumn>
-                        : null}
+                    {props.editable ? (
+                        <TableHeaderColumn>Edit</TableHeaderColumn>
+                    ) : null}
                 </TableRow>
             </TableHeader>
-            <TableBody displayRowCheckbox={false}>
-                {versions}
-            </TableBody>
+            <TableBody displayRowCheckbox={false}>{versions}</TableBody>
         </Table>
     );
 };
