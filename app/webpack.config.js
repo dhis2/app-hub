@@ -80,30 +80,6 @@ const dev = Object.assign({}, prod, {
         filename: "[name].js",
         publicPath: "/"
     },
-    module: {
-        loaders: [
-            {
-                test: /\.jsx?$/,
-                loader: "babel-loader",
-                exclude: /node_modules/
-            },
-            {
-                test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
-            },
-            {
-                test: /\.css$/,
-                loaders: ["style-loader", "css-loader"]
-            },
-            {
-                test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: [
-                    `file-loader?name=[name].[ext]&publicPath=${config.routes
-                        .baseAppName}/&outputPath=assets/`
-                ]
-            }
-        ]
-    },
 
     devServer: {
         port: 9000,
@@ -139,5 +115,4 @@ const tomcatDev = Object.assign({}, prod, {
 
 console.log("Using config: " + (isDevBuild ? "development" : "production"));
 
-console.log("asf");
 module.exports = env => dev;
