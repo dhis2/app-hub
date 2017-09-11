@@ -1,3 +1,5 @@
+const merge = require("lodash/merge");
+
 const relPath = "../..";
 
 const defaultConfigs = ["default.config.js", "config.js"];
@@ -25,17 +27,13 @@ function getConfig() {
 
     //Get default config
     let configs = defaultConfigs.map(filename => loadFile(filename));
-    configs = configs
-        .filter(config => !!config)
-        .map(cfg => Object.assign(config, cfg));
+    configs = configs.filter(config => !!config).map(cfg => merge(config, cfg));
     //Get environment specific config
     if (envConfigNames[nodeEnv]) {
         const configs = envConfigNames[nodeEnv].map(filename =>
             loadFile(filename)
         );
-        configs
-            .filter(config => !!config)
-            .map(cfg => Object.assign(config, cfg));
+        configs.filter(config => !!config).map(cfg => merge(config, cfg));
     }
     getConfig.config = config;
     return config;
