@@ -60,7 +60,7 @@ Environment specific configurations are also supported, and are loaded if enviro
 * development.config.js
 * production.config.js
 
-Note that the exported objects from each config file are (shallowly) merged with the previous, so any options not changed are kept from the previous config. This also means that if you include any nested settings, like `api`, you will need to include the nested settings in this object if you want to keep them.
+Note that the exported objects from each config file are merged with the previous, so any options not changed are kept from the previous config.
 
 *Note: If you make any changes, you will need to rebuild or restart webpack-dev-server for the changes to take effect.*
 

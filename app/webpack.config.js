@@ -110,9 +110,27 @@ const dev = Object.assign({}, prod, {
 });
 
 const tomcatDev = Object.assign({}, prod, {
-    plugins: [...prod.plugins, ...dev.plugins]
+    plugins: [
+        ...prod.plugins,
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("development")
+            },
+            __APP_CONFIG__: JSON.stringify(config)
+        })
+    ]
 });
 
-console.log("Using config: " + (isDevBuild ? "development" : "production"));
+module.exports = env => {
+    const isTomcatDev = (env.tomcat || env.tomcat === "true") && isDevBuild;
+    const buildName = isTomcatDev
+        ? "tomcatDev"
+        : isDevBuild ? "development" : "production";
 
-module.exports = env => dev;
+    console.log(`Using config ${buildName}`);
+
+    if (isTomcatDev) {
+        return tomcatDev;
+    }
+    return isDevBuild ? dev : prod;
+};
