@@ -22,9 +22,9 @@ public class ImagePutObjectRequestService
         extends PutObjectRequestService
 {
     private static final ImmutableMap<AppType, String> IMAGE_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
-        .put( AppType.APP_STANDARD, "images-standard" )
-        .put( AppType.APP_DASHBOARD, "images-dashboard" )
-        .put( AppType.APP_TRACKER_DASHBOARD, "images-tracker-dashboard" )
+        .put( AppType.APP, "images-standard" )
+        .put( AppType.DASHBOARD_WIDGET, "images-dashboard" )
+        .put( AppType.TRACKER_DASHBOARD_WIDGET, "images-tracker-dashboard" )
         .build();
 
     private static final Set<String> FILE_EXTENSION = ResourceType.IMAGE.getKeys();

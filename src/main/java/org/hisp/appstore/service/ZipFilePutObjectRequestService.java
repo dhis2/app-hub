@@ -22,9 +22,9 @@ public class ZipFilePutObjectRequestService
         extends PutObjectRequestService
 {
     private static final ImmutableMap<AppType, String> APP_FOLDER_MAPPER = new ImmutableMap.Builder<AppType, String>()
-        .put( AppType.APP_STANDARD, "apps-standard" )
-        .put( AppType.APP_DASHBOARD, "apps-dashboard" )
-        .put( AppType.APP_TRACKER_DASHBOARD, "apps-tracker-dashboard" )
+        .put( AppType.APP, "apps-standard" )
+        .put( AppType.DASHBOARD_WIDGET, "apps-dashboard" )
+        .put( AppType.TRACKER_DASHBOARD_WIDGET, "apps-tracker-dashboard" )
         .build();
 
     private static final Set<String> FILE_EXTENSION = ResourceType.ZIP.getKeys();

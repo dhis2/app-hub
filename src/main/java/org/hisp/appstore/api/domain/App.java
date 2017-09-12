@@ -24,7 +24,7 @@ public class App
 
     private String sourceUrl;
 
-    private AppType appType = AppType.APP_STANDARD;
+    private AppType appType = AppType.APP;
 
     private Set<AppVersion> versions = Sets.newHashSet();
 
