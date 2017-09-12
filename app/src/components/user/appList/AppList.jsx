@@ -161,7 +161,7 @@ class AppList extends Component {
                         onRequestClose={r => this.setState({ open: false })}
                     >
                         <div style={{ padding: "10px" }}>
-                            <h4>App type</h4>
+                            <h3>App type</h3>
                             <SelectFilter
                                 renderAllToggle
                                 form="appTypeFilter"
@@ -169,17 +169,17 @@ class AppList extends Component {
                                     {
                                         label: "Standard",
                                         toggled: true,
-                                        value: "APP_STANDARD"
+                                        value: "APP"
                                     },
                                     {
                                         label: "Dashboard",
                                         toggled: true,
-                                        value: "APP_DASHBOARD"
+                                        value: "DASHBOARD_WIDGET"
                                     },
                                     {
                                         label: "Tracker",
                                         toggled: true,
-                                        value: "APP_TRACKER_DASHBOARD"
+                                        value: "TRACKER_DASHBOARD_WIDGET"
                                     }
                                 ]}
                             />
