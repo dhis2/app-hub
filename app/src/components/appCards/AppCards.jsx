@@ -41,8 +41,7 @@ class AppCards extends Component {
                 margin: "10px",
                 width: "auto"
             },
-            appItem: {
-            },
+            appItem: {},
 
             emptyApps: {
                 textAlign: "center"
@@ -61,17 +60,17 @@ class AppCards extends Component {
                     filterApp(app, searchFilter) &&
                     filterAppType(app, this.props.filters)
             )
-            .map((app, i) =>
+            .map((app, i) => (
                 <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app} />
                 </Col>
-            );
+            ));
 
         const emptyApps = (
             <FadeAnimation appear>
-            <Col align="middle" span={12} style={styles.emptyApps}>
-                <p>We couldn't find any apps.</p>
-            </Col>
+                <Col align="middle" span={12} style={styles.emptyApps}>
+                    <p>We couldn't find any apps.</p>
+                </Col>
             </FadeAnimation>
         );
         return (
@@ -91,17 +90,17 @@ class AppCards extends Component {
                                     {
                                         label: "Standard app",
                                         toggled: true,
-                                        value: "APP_STANDARD"
+                                        value: "APP"
                                     },
                                     {
                                         label: "Dashboard app",
                                         toggled: true,
-                                        value: "APP_DASHBOARD"
+                                        value: "DASHBOARD_WIDGET"
                                     },
                                     {
                                         label: "Tracker widget",
                                         toggled: true,
-                                        value: "APP_TRACKER_DASHBOARD"
+                                        value: "TRACKER_DASHBOARD_WIDGET"
                                     }
                                 ]}
                             />
@@ -109,20 +108,22 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
                 <Col span={12}>
-                    {loadOrErr || !apps
-                        ? <ErrorOrLoading
-                              loading={loading}
-                              error={error}
-                              retry={this.props.loadApps}
-                          />
-                        : <FadeAnimationList
-                              component={Grid}
-                              nested
-                              nestedStyle={styles.grid}
-                              exit={false}
-                          >
-                              {apps}
-                          </FadeAnimationList>}
+                    {loadOrErr || !apps ? (
+                        <ErrorOrLoading
+                            loading={loading}
+                            error={error}
+                            retry={this.props.loadApps}
+                        />
+                    ) : (
+                        <FadeAnimationList
+                            component={Grid}
+                            nested
+                            nestedStyle={styles.grid}
+                            exit={false}
+                        >
+                            {apps}
+                        </FadeAnimationList>
+                    )}
                     {loaded && apps.length < 1 && emptyApps}
                 </Col>
             </Grid>
