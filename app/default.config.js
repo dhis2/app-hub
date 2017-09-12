@@ -27,9 +27,9 @@ module.exports = {
             APPROVED: "Approved"
         },
         appTypeToDisplayName: {
-            APP_STANDARD: "Standard",
-            APP_DASHBOARD: "Dashboard",
-            APP_TRACKER_DASHBOARD: "Tracker Dashboard"
+            APP: "Standard",
+            DASHBOARD_WIDGET: "Dashboard",
+            TRACKER_DASHBOARD_WIDGET: "Tracker Dashboard"
         }
     }
 };
