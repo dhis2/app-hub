@@ -9,4 +9,8 @@ target
 .classpath
 .project
 .settings
+.vscode
 node_modules
+build
+app/build
+app/*config.js
