@@ -5,5 +5,18 @@ package org.hisp.appstore.api.domain;
  */
 public enum AppType
 {
-    APP_DASHBOARD, APP_STANDARD, APP_TRACKER_DASHBOARD
+    /**
+     * Normal app (to be displayed in menus, and rendered through /api/apps/{app-name})
+     */
+    APP,
+
+    /**
+     * Dashboard widget, can be placed on the main system dashboard as 'widgets' (portlets).
+     */
+    DASHBOARD_WIDGET,
+
+    /**
+     * Tracker dashboard widget, used for tracker capture dashboard.
+     */
+    TRACKER_DASHBOARD_WIDGET
 }
