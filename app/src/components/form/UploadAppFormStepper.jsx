@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from "react";
 import { Card, CardText } from "material-ui/Card";
-import { DHISVersions } from "../../../config";
+import config from "../../config";
 import MenuItem from "material-ui/MenuItem";
 import { Field, FormSection } from "redux-form";
 import * as formUtils from "./ReduxFormUtils";
@@ -12,14 +12,14 @@ import {
 } from "../form/ReduxFormUtils";
 import { red500 } from "material-ui/styles/colors";
 import FormStepper from "./FormStepper";
-import PersonIcon from 'material-ui/svg-icons/social/person';
-import ImageIcon from 'material-ui/svg-icons/editor/insert-photo';
-import VersionIcon from 'material-ui/svg-icons/'
-const appTypes = [
-    { value: "APP_STANDARD", label: "Standard" },
-    { value: "APP_DASHBOARD", label: "Dashboard" },
-    { value: "APP_TRACKER_DASHBOARD", label: "Tracker Dashboard" }
-];
+import PersonIcon from "material-ui/svg-icons/social/person";
+import ImageIcon from "material-ui/svg-icons/editor/insert-photo";
+import VersionIcon from "material-ui/svg-icons/";
+
+const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
+    value: key,
+    label: config.ui.appTypeToDisplayName[key]
+}));
 
 const requiredFields = {
     general: ["appName", "appType"],
@@ -80,12 +80,12 @@ const validate = values => {
     return errors;
 };
 
-const appTypesItems = appTypes.map((type, i) =>
+const appTypesItems = appTypes.map((type, i) => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
-);
-const DHISVersionItems = DHISVersions.map((version, i) =>
+));
+const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
     <MenuItem key={version} value={version} primaryText={version} />
-);
+));
 
 const AppGeneralSection = props => {
     return (

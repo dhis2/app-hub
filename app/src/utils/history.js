@@ -1,6 +1,7 @@
 import createBrowserHistory from "history/createBrowserHistory";
-import { BASE_APP_NAME } from "../../config";
+import config from "../config";
+
 export const history = (() =>
-    createBrowserHistory({ basename: BASE_APP_NAME }))();
+    createBrowserHistory({ basename: config.routes.baseAppName }))();
 
 export default history;

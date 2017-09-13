@@ -1,7 +1,7 @@
-import constants from "../../config";
+import config from "../config";
 import { getAuth } from "../utils/AuthService";
 
-const baseURL = constants.API_BASE_URL;
+const baseURL = config.api.baseURL;
 
 const baseOptions = {
     method: "GET"
@@ -104,7 +104,19 @@ export function updateImage(appId, imageId, payload) {
     });
 }
 
-function fromApi(url, auth = false, extraOpts) {
+export function createReview(appId, payload) {
+    return fromApi(`apps/${appId}/reviews`, true, {
+        ...baseOptions,
+        ...postOpts,
+        body: JSON.stringify(payload)
+    });
+}
+
+export function deleteReview(appId, reviewId) {
+    return fromApi(`apps/${appId}/reviews/${reviewId}`, true, deleteOpts);
+}
+
+export function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders();
     const opts = auth
         ? { headers, ...baseOptions, ...extraOpts }
@@ -114,7 +126,7 @@ function fromApi(url, auth = false, extraOpts) {
         .then(response => response.json());
 }
 
-function getAuthHeaders() {
+export function getAuthHeaders() {
     const headers = {};
     headers["Authorization"] = "Bearer " + getAuth().getToken();
     return headers;

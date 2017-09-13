@@ -3,8 +3,11 @@ import { Card, CardText } from "material-ui/Card";
 import * as formUtils from "./ReduxFormUtils";
 import MenuItem from "material-ui/MenuItem";
 import { Field, Form, reduxForm } from "redux-form";
-import { DHISVersions } from "../../constants/apiConstants";
+import config from "../../config";
 import { validateZipFile, validateURL } from "../form/ReduxFormUtils";
+
+const DHISVersions = config.ui.dhisVersions;
+
 const validate = values => {
     const errors = {};
     const requiredFields = ["version", "file"];
