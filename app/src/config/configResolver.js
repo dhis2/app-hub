@@ -1,5 +1,5 @@
 const merge = require("lodash/merge");
-
+const isDevBuild = process.argv.indexOf("-p") === -1;
 const relPath = "../..";
 
 const defaultConfigs = ["default.config.js", "config.js"];
@@ -22,7 +22,8 @@ function getConfig() {
     if (getConfig.config) {
         return getConfig.config;
     }
-    const nodeEnv = process.env.NODE_ENV || "development";
+    const production = process.env.NODE_ENV || !isDevBuild && 'production';
+    const nodeEnv = production || "development";
     const config = {};
 
     //Get default config
