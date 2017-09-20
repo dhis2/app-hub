@@ -78,7 +78,7 @@ const dev = Object.assign({}, prod, {
     output: {
         path: path.join(__dirname, "build"),
         filename: "[name].js",
-        publicPath: ""
+        publicPath: "/"
     },
 
     devServer: {

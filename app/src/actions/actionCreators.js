@@ -272,6 +272,7 @@ export const appError = actionCreator(actions.APP_ERROR);
 export const actionErrorCreator = (type, error, meta) =>
     actionCreator(type)(error, meta, true);
 
+
 /**
  * Generic action-creator
  * @param type of action
