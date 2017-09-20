@@ -44,14 +44,12 @@ const onEntered = (html, isAppearing) => {
     console.log("ENTERED " + isAppearing);
 };
 
-export const FadeAnimationBasic = ({ component, children: child, ...props }) =>
-    <Transition
-        timeout={duration}
-        onEnter={onEnter}
-        onEntering={onEntering}
-        onEntered={onEntered}
-        {...props}
-    >
+export const FadeAnimationBasic = ({
+    component,
+    children: child,
+    ...props
+}) => (
+    <Transition timeout={duration} {...props}>
         {state =>
             React.cloneElement(child, {
                 style: {
@@ -59,7 +57,8 @@ export const FadeAnimationBasic = ({ component, children: child, ...props }) =>
                     ...getStylesForTransitionState(state)
                 }
             })}
-    </Transition>;
+    </Transition>
+);
 
 export const FadeAnimationList = ({ component, children, ...rest }) => {
     return (
