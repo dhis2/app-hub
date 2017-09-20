@@ -84,9 +84,11 @@ class Textfilter extends Component {
                 style={style}
                 hintText={hintText}
                 component={
-                    clearButton
-                        ? renderTextFieldWithClearButton
-                        : renderTextField
+                    clearButton ? (
+                        renderTextFieldWithClearButton
+                    ) : (
+                        renderTextField
+                    )
                 }
             />
         );
@@ -112,6 +114,8 @@ export const TextFilter = reduxForm({
 })(Textfilter);
 
 /**
+ * Renders a list of toggle buttons, with props.filters as base.
+ * 
  * A redux-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
  *     Where mountedReduxForm is the value where redux-form is connected at app-start.
  *     And props.form is a prop to this component (default: filters).
@@ -142,7 +146,7 @@ class Selectfilter extends Component {
             onFilterChange,
             ...props
         } = this.props;
-        const toggles = filters.map(filter =>
+        const toggles = filters.map(filter => (
             <Field
                 key={filter.value}
                 name={filter.value}
@@ -151,21 +155,21 @@ class Selectfilter extends Component {
                 style={elementStyle}
                 labelStyle={labelStyle}
             />
-        );
+        ));
         return (
             <div style={style}>
                 {toggles}
-                {this.props.renderAllToggle
-                    ? <Field
-                          name="all"
-                          component={renderToggle}
-                          label={"All"}
-                          onToggle={this.toggleAll.bind(this)}
-                          labelStyle={labelStyle}
-                          value={true}
-                          style={elementStyle}
-                      />
-                    : null}
+                {this.props.renderAllToggle ? (
+                    <Field
+                        name="all"
+                        component={renderToggle}
+                        label={"All"}
+                        onToggle={this.toggleAll.bind(this)}
+                        labelStyle={labelStyle}
+                        value={true}
+                        style={elementStyle}
+                    />
+                ) : null}
             </div>
         );
     }
@@ -195,7 +199,7 @@ Selectfilter.propTypes = {
 };
 Selectfilter.defaultProps = {
     form: "filters",
-    destroyOnUnmount: false
+    destroyOnUnmount: true
 };
 //handle default with connect
 export const SelectedFilterForm = reduxForm({
@@ -217,4 +221,5 @@ const mapStateToProps = (state, ownProps) => {
         filterState: state.form
     };
 };
+
 export const SelectFilter = connect(mapStateToProps, null)(SelectedFilterForm);

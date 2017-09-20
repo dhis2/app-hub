@@ -99,7 +99,7 @@ class AppList extends Component {
                             value: APP_STATUS_PENDING
                         },
                         {
-                            label: "Not Approved",
+                            label: "Rejected",
                             toggled: true,
                             value: APP_STATUS_REJECTED
                         }

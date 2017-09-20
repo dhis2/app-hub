@@ -78,7 +78,7 @@ const dev = Object.assign({}, prod, {
     output: {
         path: path.join(__dirname, "build"),
         filename: "[name].js",
-        publicPath: "/"
+        publicPath: ""
     },
 
     devServer: {
@@ -87,7 +87,7 @@ const dev = Object.assign({}, prod, {
         contentBase: "./app",
         historyApiFallback: true
     },
-    devtool: "eval-source-map",
+    devtool: "eval",
     plugins: [
         new CopyWebpackPlugin([
             {
