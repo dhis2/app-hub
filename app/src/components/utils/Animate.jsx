@@ -25,7 +25,6 @@ const transitionStyles = {
 };
 
 const getStylesForTransitionState = state => {
-    console.log("State", state);
     return {
         ...defaultStyle,
         ...transitionStyles[state]
