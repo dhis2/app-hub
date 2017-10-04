@@ -118,7 +118,6 @@ class UserAppView extends Component {
             position: "relative"
         };
 
-        console.log("render");
         return (
             <div>
                 <Subheader title="App overview" backLink="/user" />
