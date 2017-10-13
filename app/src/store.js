@@ -1,5 +1,5 @@
 import Epics from "./actions/epics";
-import { createStore, applyMiddleware, combineReducers } from "redux";
+import { createStore, applyMiddleware, combineReducers, compose } from "redux";
 import { createEpicMiddleware } from "redux-observable";
 import createLogger from "redux-logger";
 import userReducer from "./reducers/userReducer";
@@ -27,5 +27,6 @@ const reducer = combineReducers({
     snackbar: snackbarReducer,
     form: formReducer
 });
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-export default createStore(reducer, applyMiddleware(...middlewares));
+export default createStore(reducer, composeEnhancers(applyMiddleware(...middlewares)));

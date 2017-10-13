@@ -1,32 +1,29 @@
 import * as actions from "../constants/actionTypes";
 import { REVERT, COMMIT } from "redux-optimistic-ui";
-
-//OPTIMISTIC-ACTION HANDLERS
-
-/**
- * Action-enhancer that produces an optimistic action
- * by adding optimistic meta properties
- * @param action
- */
-const optimisticActionCreator = action => ({
-    ...action,
-    meta: { ...action.meta, isOptimistic: true }
-});
+import { optimisticAction } from '../utils/optimisticActions';
 
 /**
- * Commit or revert an optimistic action that has been handled by the server
- * @param action to handle
- * @param transactionID of the optimistic-action
- * @param error: override error in action.error, will revert the action
+ * Commit or revert an optimistic action that has been handled by the server by checking if the action is
+ * an error.
+ * This will return a new action of 'action' with added optimistic-meta-properties
+ * which can be dispatched to commit or revert a transaction.
+ * @param action - Resulting action of the closed transaction (committed or reverted).
+ * @param {integer|action} transaction of the optimistic-action. Either the transactionID (action.meta.optimistic.id)
+ * of the initiating optimistic-action, or the action-object itself.
+ * @param error - override error in action.error, results in a reverted action.
  * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or committed action
  */
 export const commitOrRevertOptimisticAction = (
     action,
-    transactionID,
+    transaction,
     error = false
 ) => {
     if (action.error) {
         error = true;
+    }
+    let transactionID = transaction;
+    if (transaction && transaction.meta && transaction.meta.optimistic) {
+        transactionID = transaction.meta.optimistic.id;
     }
     return {
         ...action,
@@ -70,7 +67,7 @@ export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD);
 export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED);
 
 export const setAppApproval = (app, status) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.SET_APPROVAL_APP)({
             app,
             status
@@ -99,7 +96,7 @@ export const addApp = (app, file, image) =>
     });
 
 export const editApp = (app, data) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_EDIT)({
             app,
             data
@@ -107,7 +104,7 @@ export const editApp = (app, data) =>
     );
 
 export const editImage = (appId, imageId, data) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_IMAGE_EDIT)({
             appId,
             imageId,
@@ -132,7 +129,7 @@ export const editImageLogo = (appId, imageId, logo) =>
     });
 
 export const editAppVersion = (appId, version) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_VERSION_EDIT)({
             appId,
             version
@@ -188,7 +185,7 @@ export const addImageToAppSuccess = (appId, image) =>
     });
 
 export const deleteImageFromApp = (appId, imageId) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_IMAGE_DELETE)({
             appId,
             imageId
@@ -202,7 +199,7 @@ export const deleteImageFromAppSuccess = (appId, imageId) =>
     });
 
 export const deleteAppVersion = (version, appId) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_VERSION_DELETE)({
             version,
             appId
@@ -228,7 +225,7 @@ export const editAppSuccess = (app, data) =>
     });
 
 export const deleteApp = app =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_DELETE)({
             app
         })
@@ -278,7 +275,7 @@ export const actionErrorCreator = (type, error, meta) =>
  * @param type of action
  * @returns {object} FSA-compliant action
  */
-function actionCreator(type) {
+export function actionCreator(type) {
     return (payload, meta, error) => {
         if (payload == null) {
             payload = {};

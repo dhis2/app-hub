@@ -138,7 +138,7 @@ const AppVersionSection = props => {
                 name="version"
                 component={formUtils.renderTextField}
                 autoFocus
-                label="Version *"
+                label="App Version *"
             />
             <br />
             <Field
