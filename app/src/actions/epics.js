@@ -166,7 +166,8 @@ const editApp = action$ =>
             .updateApp(app.id, data)
             .then(resp =>
                 actionCreators.commitOrRevertOptimisticAction(
-                    actionCreators.editAppSuccess(app, data)
+                    actionCreators.editAppSuccess(app, data),
+                    id
                 )
             )
             .catch(error =>

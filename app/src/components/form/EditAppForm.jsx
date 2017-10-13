@@ -9,11 +9,12 @@ import MenuItem from "material-ui/MenuItem";
 import * as formUtils from "./ReduxFormUtils";
 import { Field, reduxForm, Form } from "redux-form";
 import { validateURL } from "./ReduxFormUtils";
-const appTypes = [
-    { value: "APP_STANDARD", label: "Standard" },
-    { value: "APP_DASHBOARD", label: "Dashboard" },
-    { value: "APP_TRACKER_DASHBOARD", label: "Tracker Dashboard" }
-];
+import config from "../../config";
+
+const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
+    value: key,
+    label: config.ui.appTypeToDisplayName[key]
+}));
 
 const validate = values => {
     const errors = {};
@@ -69,13 +70,13 @@ const EditForm = props => {
         return props.submitted({ data });
     };
 
-    const menuItems = appTypes.map((type, i) =>
+    const menuItems = appTypes.map((type, i) => (
         <MenuItem
             key={type.value}
             value={type.value}
             primaryText={type.label}
         />
-    );
+    ));
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
