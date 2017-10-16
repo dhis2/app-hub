@@ -80,12 +80,12 @@ const validate = values => {
     return errors;
 };
 
-const appTypesItems = appTypes.map((type, i) => (
+const appTypesItems = appTypes.map((type, i) =>
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
-));
-const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
+);
+const DHISVersionItems = config.ui.dhisVersions.map((version, i) =>
     <MenuItem key={version} value={version} primaryText={version} />
-));
+);
 
 const AppGeneralSection = props => {
     return (
@@ -95,6 +95,7 @@ const AppGeneralSection = props => {
                 component={formUtils.renderTextField}
                 fullWidth
                 label="App Name *"
+                autoFocus
             />
             <Field
                 name="description"
@@ -322,6 +323,7 @@ class UploadAppFormStepper extends Component {
                     <AppDeveloperSection name="developer" />,
                     <AppImageSection name="image" />
                 ]}
+                responsive
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
         );
