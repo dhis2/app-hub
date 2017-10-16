@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import { Card, CardText } from "material-ui/Card";
 import config from "../../config";
 import MenuItem from "material-ui/MenuItem";

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Card, CardText, CardTitle, CardHeader } from "material-ui/Card";
 import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
@@ -142,7 +143,7 @@ class UserAppView extends Component {
                         mini={true}
                         style={FABStyle}
                         title="New version"
-                        onTouchTap={this.handleOpenDialog.bind(this)}
+                        onClick={this.handleOpenDialog.bind(this)}
                     >
                         <ContentAdd />
                     </FloatingActionButton>
@@ -298,14 +299,14 @@ const UserAppCardHeader = ({
         let menuItems = null;
         const approveItem = (
             <MenuItem
-                onTouchTap={() => onAppApproval(APP_STATUS_APPROVED)}
+                onClick={() => onAppApproval(APP_STATUS_APPROVED)}
                 key="approve"
                 primaryText="Approve"
             />
         );
         const rejectItem = (
             <MenuItem
-                onTouchTap={() => onAppApproval(APP_STATUS_REJECTED)}
+                onClick={() => onAppApproval(APP_STATUS_REJECTED)}
                 key="reject"
                 primaryText="Reject"
             />
@@ -333,7 +334,7 @@ const UserAppCardHeader = ({
             >
                 {menuItems}
                 <MenuItem
-                    onTouchTap={onOpenEditApp}
+                    onClick={onOpenEditApp}
                     key="edit"
                     primaryText="Edit"
                 />

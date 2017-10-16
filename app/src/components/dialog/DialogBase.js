@@ -15,7 +15,7 @@ const styles = {
 class DialogBase extends Component {
     static buildButton(action, text, primary = false) {
         return (
-            <FlatButton label={text} primary={primary} onTouchTap={action} />
+            <FlatButton label={text} primary={primary} onClick={action} />
         );
     }
 

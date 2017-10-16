@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import "../../styles/utils/loaders.scss";
 
 const SizeType = PropTypes.oneOf(["small", "medium", "large"]);
