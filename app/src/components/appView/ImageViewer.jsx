@@ -206,23 +206,25 @@ class ImageViewer extends Component {
 
         const tiles = images.map((tile, i) => {
             return (
-                <ImageElement
-                    key={i}
-                    style={styles.tileStyle}
-                    renderTitleBar={
-                        i == current &&
-                        (editable || !!tile.caption || !!tile.description)
-                    }
-                    title={tile.caption}
-                    subtitle={tile.description}
-                    actions={editable ? this.renderActions(tile, i) : null}
-                >
-                    <img
-                        style={styles.imageStyle}
-                        src={tile.imageUrl}
-                        onClick={this.handleExpandImage.bind(this, i)}
-                    />
-                </ImageElement>
+                <div id={i}>
+                    <ImageElement
+                        key={i}
+                        style={styles.tileStyle}
+                        renderTitleBar={
+                            i == current &&
+                            (editable || !!tile.caption || !!tile.description)
+                        }
+                        title={tile.caption}
+                        subtitle={tile.description}
+                        actions={editable ? this.renderActions(tile, i) : null}
+                    >
+                        <img
+                            style={styles.imageStyle}
+                            src={tile.imageUrl}
+                            onClick={this.handleExpandImage.bind(this, i)}
+                        />
+                    </ImageElement>
+                </div>
             );
         });
 
