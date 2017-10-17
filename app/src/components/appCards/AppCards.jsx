@@ -87,7 +87,7 @@ class AppCards extends Component {
                                 labelStyle={{ width: "auto" }}
                                 filters={[
                                     {
-                                        label: "Standard sapp",
+                                        label: "Standard app",
                                         toggled: true,
                                         value: "APP"
                                     },

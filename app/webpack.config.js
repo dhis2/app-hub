@@ -24,7 +24,13 @@ const prod = {
             {
                 test: /\.jsx?$/,
                 loader: "babel-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                options: {
+                    // This is a feature of `babel-loader` for webpack (not Babel itself).
+                    // It enables caching results in ./node_modules/.cache/babel-loader/
+                    // directory for faster rebuilds.
+                    cacheDirectory: true,
+                },
             },
             {
                 test: /\.scss$/,
@@ -87,7 +93,7 @@ const dev = Object.assign({}, prod, {
         contentBase: "./app",
         historyApiFallback: true
     },
-    devtool: "eval",
+    devtool: "cheap-module-source-map",
     plugins: [
         new CopyWebpackPlugin([
             {
