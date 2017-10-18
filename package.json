@@ -5,8 +5,10 @@
     "license": "BSD-3-Clause",
     "scripts": {
         "start": "NODE_ENV='development' webpack-dev-server --hot --inline --config app/webpack.config.js",
-        "build": "webpack -p --config app/webpack.config.js",
-        "test": "NODE_ENV=test mocha --opts app/test/mocha.opts"
+        "build": "webpack -p --config app/webpack.config.js --progress",
+        "build-standalone": "webpack -p --config app/webpack.config.js --output-path=build --progress",
+        "test": "NODE_ENV=test mocha --opts app/test/mocha.opts",
+        "analyze": "source-map-explorer build/js/app*"
     },
     "devDependencies": {
         "babel-core": "6",
@@ -31,6 +33,7 @@
         "sinon": "^3.2.1",
         "sinon-chai": "^2.13.0",
         "webpack": "^3.8.0",
+        "webpack-bundle-analyzer": "^2.9.0",
         "webpack-dev-middleware": "^1.11.0",
         "webpack-dev-server": "^2.9.2"
     },

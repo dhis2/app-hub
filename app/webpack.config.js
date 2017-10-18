@@ -4,10 +4,11 @@ const packageJSON = require("../package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const nodeEnv = process.env.NODE_ENV || "development";
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isDevBuild = process.argv.indexOf("-p") === -1;
 const config = require("./src/config/configResolver.js").default;
-
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const prod = {
     entry: {
         app: ["babel-polyfill", "whatwg-fetch", "./app/src/app-store.js"]
@@ -49,9 +50,17 @@ const prod = {
             }
         ]
     },
+    devtool: shouldUseSourceMap ? 'source-map' : false,
+
 
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        alias: {
+            'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
+            'react': path.resolve(__dirname, '../node_modules/react'),
+            'prop-types': path.resolve(__dirname, '../node_modules/prop-types'),
+            'lodash-es': path.resolve(__dirname,'../node_modules/lodash')
+        }
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -60,12 +69,6 @@ const prod = {
             },
             __APP_CONFIG__: JSON.stringify(config)
         }),
-        new CopyWebpackPlugin([
-            {
-                from: "app/src/assets",
-                to: "assets"
-            }
-        ]),
 
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
@@ -73,7 +76,8 @@ const prod = {
             template: "app/indexbuild.html"
         }),
 
-        new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false })
+        new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false, sourceMap: shouldUseSourceMap}),
+        new BundleAnalyzerPlugin()
     ]
 };
 
@@ -95,12 +99,6 @@ const dev = Object.assign({}, prod, {
     },
     devtool: "cheap-module-source-map",
     plugins: [
-        new CopyWebpackPlugin([
-            {
-                from: "app/src/assets",
-                to: "assets"
-            }
-        ]),
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
             filename: "index.html",
@@ -134,7 +132,7 @@ module.exports = env => {
         ? "tomcatDev"
         : isDevBuild ? "development" : "production";
 
-    console.log(`Using config ${buildName}`);
+    //console.log(`Using config ${buildName}`);
 
     if (isTomcatDev) {
         return tomcatDev;

@@ -206,7 +206,7 @@ class ImageViewer extends Component {
 
         const tiles = images.map((tile, i) => {
             return (
-                <div id={i}>
+                <div key={i}>
                     <ImageElement
                         key={i}
                         style={styles.tileStyle}
