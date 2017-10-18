@@ -2,62 +2,6 @@ import * as actions from "../constants/actionTypes";
 import { REVERT, COMMIT } from "redux-optimistic-ui";
 import { optimisticAction } from '../utils/optimisticActions';
 
-/**
- * Commit or revert an optimistic action that has been handled by the server by checking if the action is
- * an error.
- * This will return a new action of 'action' with added optimistic-meta-properties
- * which can be dispatched to commit or revert a transaction.
- * @param action - Resulting action of the closed transaction (committed or reverted).
- * @param {integer|action} transaction of the optimistic-action. Either the transactionID (action.meta.optimistic.id)
- * of the initiating optimistic-action, or the action-object itself.
- * @param error - override error in action.error, results in a reverted action.
- * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or committed action
- */
-export const commitOrRevertOptimisticAction = (
-    action,
-    transaction,
-    error = false
-) => {
-    if (action.error) {
-        error = true;
-    }
-    let transactionID = transaction;
-    if (transaction && transaction.meta && transaction.meta.optimistic) {
-        transactionID = transaction.meta.optimistic.id;
-    }
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: error
-                ? { type: REVERT, id: transactionID }
-                : { type: COMMIT, id: transactionID }
-        }
-    };
-};
-
-export const commitOptimisticAction = (action, transactionID) => {
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: { type: COMMIT, id: transactionID }
-        }
-    };
-};
-
-export const revertOptimisticAction = (action, transactionID) => {
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: { type: REVERT, id: transactionID }
-        }
-    };
-};
-
-//ACTION-CREATORS
-
 export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD);
 
 export const appsAllLoaded = actionCreator(actions.APPS_ALL_LOADED);
