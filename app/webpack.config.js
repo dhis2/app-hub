@@ -2,13 +2,13 @@ const webpack = require("webpack");
 const path = require("path");
 const packageJSON = require("../package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const nodeEnv = process.env.NODE_ENV || "development";
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isDevBuild = process.argv.indexOf("-p") === -1;
 const config = require("./src/config/configResolver.js").default;
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+
 const prod = {
     entry: {
         app: ["babel-polyfill", "whatwg-fetch", "./app/src/app-store.js"]
@@ -69,6 +69,12 @@ const prod = {
             },
             __APP_CONFIG__: JSON.stringify(config)
         }),
+        // Makes variables available in index.html.
+        // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+        // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+        new InterpolateHtmlPlugin({
+            'BASE_URL': config.routes.baseAppName
+        }),
 
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
@@ -77,7 +83,6 @@ const prod = {
         }),
 
         new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false, sourceMap: shouldUseSourceMap}),
-        new BundleAnalyzerPlugin()
     ]
 };
 
@@ -99,6 +104,10 @@ const dev = Object.assign({}, prod, {
     },
     devtool: "cheap-module-source-map",
     plugins: [
+        //Empty in dev
+        new InterpolateHtmlPlugin({
+            'BASE_URL': ""
+        }),
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
             filename: "index.html",
@@ -118,7 +127,7 @@ const tomcatDev = Object.assign({}, prod, {
         ...prod.plugins,
         new webpack.DefinePlugin({
             "process.env": {
-                NODE_ENV: JSON.stringify("development")
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV) || JSON.stringify("tomcat")
             },
             __APP_CONFIG__: JSON.stringify(config)
         })
@@ -132,7 +141,7 @@ module.exports = env => {
         ? "tomcatDev"
         : isDevBuild ? "development" : "production";
 
-    //console.log(`Using config ${buildName}`);
+    console.log(`Using config ${buildName}`);
 
     if (isTomcatDev) {
         return tomcatDev;
