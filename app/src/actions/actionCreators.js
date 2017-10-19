@@ -1,65 +1,6 @@
 import * as actions from "../constants/actionTypes";
 import { REVERT, COMMIT } from "redux-optimistic-ui";
-
-//OPTIMISTIC-ACTION HANDLERS
-
-/**
- * Action-enhancer that produces an optimistic action
- * by adding optimistic meta properties
- * @param action
- */
-const optimisticActionCreator = action => ({
-    ...action,
-    meta: { ...action.meta, isOptimistic: true }
-});
-
-/**
- * Commit or revert an optimistic action that has been handled by the server
- * @param action to handle
- * @param transactionID of the optimistic-action
- * @param error: override error in action.error, will revert the action
- * @returns action with enhanced properties so that redux-optimistic-ui can handle the reverted or committed action
- */
-export const commitOrRevertOptimisticAction = (
-    action,
-    transactionID,
-    error = false
-) => {
-    if (action.error) {
-        error = true;
-    }
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: error
-                ? { type: REVERT, id: transactionID }
-                : { type: COMMIT, id: transactionID }
-        }
-    };
-};
-
-export const commitOptimisticAction = (action, transactionID) => {
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: { type: COMMIT, id: transactionID }
-        }
-    };
-};
-
-export const revertOptimisticAction = (action, transactionID) => {
-    return {
-        ...action,
-        meta: {
-            ...action.meta,
-            optimistic: { type: REVERT, id: transactionID }
-        }
-    };
-};
-
-//ACTION-CREATORS
+import { optimisticAction } from '../utils/optimisticActions';
 
 export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD);
 
@@ -70,7 +11,7 @@ export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD);
 export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED);
 
 export const setAppApproval = (app, status) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.SET_APPROVAL_APP)({
             app,
             status
@@ -99,7 +40,7 @@ export const addApp = (app, file, image) =>
     });
 
 export const editApp = (app, data) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_EDIT)({
             app,
             data
@@ -107,7 +48,7 @@ export const editApp = (app, data) =>
     );
 
 export const editImage = (appId, imageId, data) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_IMAGE_EDIT)({
             appId,
             imageId,
@@ -132,7 +73,7 @@ export const editImageLogo = (appId, imageId, logo) =>
     });
 
 export const editAppVersion = (appId, version) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_VERSION_EDIT)({
             appId,
             version
@@ -188,7 +129,7 @@ export const addImageToAppSuccess = (appId, image) =>
     });
 
 export const deleteImageFromApp = (appId, imageId) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_IMAGE_DELETE)({
             appId,
             imageId
@@ -202,7 +143,7 @@ export const deleteImageFromAppSuccess = (appId, imageId) =>
     });
 
 export const deleteAppVersion = (version, appId) =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_VERSION_DELETE)({
             version,
             appId
@@ -228,7 +169,7 @@ export const editAppSuccess = (app, data) =>
     });
 
 export const deleteApp = app =>
-    optimisticActionCreator(
+    optimisticAction(
         actionCreator(actions.APP_DELETE)({
             app
         })
@@ -278,7 +219,7 @@ export const actionErrorCreator = (type, error, meta) =>
  * @param type of action
  * @returns {object} FSA-compliant action
  */
-function actionCreator(type) {
+export function actionCreator(type) {
     return (payload, meta, error) => {
         if (payload == null) {
             payload = {};

@@ -56,7 +56,9 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
                 ...loadedState,
                 byId: {
                     ...state.byId,
-                    [appId]: action.payload
+                    [appId]: {
+                        ...action.payload,
+                    }
                 }
             };
         }

@@ -2,11 +2,12 @@ const webpack = require("webpack");
 const path = require("path");
 const packageJSON = require("../package.json");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 const nodeEnv = process.env.NODE_ENV || "development";
 
 const isDevBuild = process.argv.indexOf("-p") === -1;
 const config = require("./src/config/configResolver.js").default;
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
 const prod = {
     entry: {
@@ -24,7 +25,13 @@ const prod = {
             {
                 test: /\.jsx?$/,
                 loader: "babel-loader",
-                exclude: /node_modules/
+                exclude: /node_modules/,
+                options: {
+                    // This is a feature of `babel-loader` for webpack (not Babel itself).
+                    // It enables caching results in ./node_modules/.cache/babel-loader/
+                    // directory for faster rebuilds.
+                    cacheDirectory: true,
+                },
             },
             {
                 test: /\.scss$/,
@@ -43,9 +50,17 @@ const prod = {
             }
         ]
     },
+    devtool: shouldUseSourceMap ? 'source-map' : false,
+
 
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
+        alias: {
+            'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
+            'react': path.resolve(__dirname, '../node_modules/react'),
+            'prop-types': path.resolve(__dirname, '../node_modules/prop-types'),
+            'lodash-es': path.resolve(__dirname,'../node_modules/lodash')
+        }
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -54,12 +69,12 @@ const prod = {
             },
             __APP_CONFIG__: JSON.stringify(config)
         }),
-        new CopyWebpackPlugin([
-            {
-                from: "app/src/assets",
-                to: "assets"
-            }
-        ]),
+        // Makes variables available in index.html.
+        // The public URL is available as %PUBLIC_URL% in index.html, e.g.:
+        // <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+        new InterpolateHtmlPlugin({
+            'BASE_URL': config.routes.baseAppName
+        }),
 
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
@@ -67,7 +82,7 @@ const prod = {
             template: "app/indexbuild.html"
         }),
 
-        new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false })
+        new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false, sourceMap: shouldUseSourceMap}),
     ]
 };
 
@@ -87,14 +102,12 @@ const dev = Object.assign({}, prod, {
         contentBase: "./app",
         historyApiFallback: true
     },
-    devtool: "eval",
+    devtool: "cheap-module-source-map",
     plugins: [
-        new CopyWebpackPlugin([
-            {
-                from: "app/src/assets",
-                to: "assets"
-            }
-        ]),
+        //Empty in dev
+        new InterpolateHtmlPlugin({
+            'BASE_URL': ""
+        }),
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
             filename: "index.html",
@@ -114,7 +127,7 @@ const tomcatDev = Object.assign({}, prod, {
         ...prod.plugins,
         new webpack.DefinePlugin({
             "process.env": {
-                NODE_ENV: JSON.stringify("development")
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV) || JSON.stringify("tomcat")
             },
             __APP_CONFIG__: JSON.stringify(config)
         })

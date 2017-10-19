@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import { Card, CardText } from "material-ui/Card";
 import config from "../../config";
 import MenuItem from "material-ui/MenuItem";
@@ -12,9 +13,6 @@ import {
 } from "../form/ReduxFormUtils";
 import { red500 } from "material-ui/styles/colors";
 import FormStepper from "./FormStepper";
-import PersonIcon from "material-ui/svg-icons/social/person";
-import ImageIcon from "material-ui/svg-icons/editor/insert-photo";
-import VersionIcon from "material-ui/svg-icons/";
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
@@ -80,12 +78,12 @@ const validate = values => {
     return errors;
 };
 
-const appTypesItems = appTypes.map((type, i) => (
+const appTypesItems = appTypes.map((type, i) =>
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
-));
-const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
+);
+const DHISVersionItems = config.ui.dhisVersions.map((version, i) =>
     <MenuItem key={version} value={version} primaryText={version} />
-));
+);
 
 const AppGeneralSection = props => {
     return (
@@ -95,6 +93,7 @@ const AppGeneralSection = props => {
                 component={formUtils.renderTextField}
                 fullWidth
                 label="App Name *"
+                autoFocus
             />
             <Field
                 name="description"
@@ -138,7 +137,7 @@ const AppVersionSection = props => {
                 name="version"
                 component={formUtils.renderTextField}
                 autoFocus
-                label="Version *"
+                label="App Version *"
             />
             <br />
             <Field
@@ -322,6 +321,7 @@ class UploadAppFormStepper extends Component {
                     <AppDeveloperSection name="developer" />,
                     <AppImageSection name="image" />
                 ]}
+                responsive
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
         );

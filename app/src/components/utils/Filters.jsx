@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import TextField from "material-ui/TextField";
 import Toggle from "material-ui/Toggle";
@@ -84,9 +85,11 @@ class Textfilter extends Component {
                 style={style}
                 hintText={hintText}
                 component={
-                    clearButton
-                        ? renderTextFieldWithClearButton
-                        : renderTextField
+                    clearButton ? (
+                        renderTextFieldWithClearButton
+                    ) : (
+                        renderTextField
+                    )
                 }
             />
         );
@@ -144,7 +147,7 @@ class Selectfilter extends Component {
             onFilterChange,
             ...props
         } = this.props;
-        const toggles = filters.map(filter =>
+        const toggles = filters.map(filter => (
             <Field
                 key={filter.value}
                 name={filter.value}
@@ -153,21 +156,21 @@ class Selectfilter extends Component {
                 style={elementStyle}
                 labelStyle={labelStyle}
             />
-        );
+        ));
         return (
             <div style={style}>
                 {toggles}
-                {this.props.renderAllToggle
-                    ? <Field
-                          name="all"
-                          component={renderToggle}
-                          label={"All"}
-                          onToggle={this.toggleAll.bind(this)}
-                          labelStyle={labelStyle}
-                          value={true}
-                          style={elementStyle}
-                      />
-                    : null}
+                {this.props.renderAllToggle ? (
+                    <Field
+                        name="all"
+                        component={renderToggle}
+                        label={"All"}
+                        onToggle={this.toggleAll.bind(this)}
+                        labelStyle={labelStyle}
+                        value={true}
+                        style={elementStyle}
+                    />
+                ) : null}
             </div>
         );
     }

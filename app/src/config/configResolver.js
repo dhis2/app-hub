@@ -35,6 +35,9 @@ function getConfig() {
             loadFile(filename)
         );
         configs.filter(config => !!config).map(cfg => merge(config, cfg));
+    } else if (nodeEnv && typeof nodeEnv === 'string' && nodeEnv !== 'development') { //custom environment, support custom.config.js
+        const customEnvConfig = loadFile(nodeEnv.concat('.config.js'));
+        customEnvConfig && merge(config, customEnvConfig);
     }
     getConfig.config = config;
     return config;

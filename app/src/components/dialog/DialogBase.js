@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import FlatButton from "material-ui/FlatButton";
 import Dialog from "material-ui/Dialog";
@@ -14,7 +15,7 @@ const styles = {
 class DialogBase extends Component {
     static buildButton(action, text, primary = false) {
         return (
-            <FlatButton label={text} primary={primary} onTouchTap={action} />
+            <FlatButton label={text} primary={primary} onClick={action} />
         );
     }
 

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from "react";
+import PropTypes from 'prop-types';
+import React, { Component } from "react";
 import {
     Table,
     TableBody,
@@ -128,7 +129,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="edit"
                 style={styles.iconButton}
-                onTouchTap={() => this.handleEditRow(version)}
+                onClick={() => this.handleEditRow(version)}
             >
                 <TableIcon>edit</TableIcon>
             </IconButton>
@@ -137,7 +138,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="submit"
                 style={styles.iconButton}
-                onTouchTap={() => this.handleSubmitRow(version)}
+                onClick={() => this.handleSubmitRow(version)}
             >
                 <TableIcon>check</TableIcon>
             </IconButton>
@@ -147,7 +148,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="cancel"
                 style={styles.iconButton}
-                onTouchTap={() => this.handleCancelRow(version)}
+                onClick={() => this.handleCancelRow(version)}
             >
                 <TableIcon>clear</TableIcon>
             </IconButton>
@@ -157,7 +158,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="delete"
                 style={styles.iconButton}
-                onTouchTap={() => this.props.handleDelete(version)}
+                onClick={() => this.props.handleDelete(version)}
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>
