@@ -1,0 +1,12 @@
+engines:
+  duplication:
+    enabled: false
+    config:
+      languages:
+      - javascript
+ratings:
+  paths:
+  - "**.js"
+exclude_paths:
+- "**.spec.js"
+- "src/"
