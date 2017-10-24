@@ -197,7 +197,7 @@ Selectfilter.propTypes = {
 };
 Selectfilter.defaultProps = {
     form: "filters",
-    destroyOnUnmount: true
+    destroyOnUnmount: false
 };
 //handle default with connect
 export const SelectedFilterForm = reduxForm({

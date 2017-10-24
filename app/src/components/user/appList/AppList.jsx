@@ -164,7 +164,7 @@ class AppList extends Component {
                             <h3>App type</h3>
                             <SelectFilter
                                 renderAllToggle
-                                form="appTypeFilter"
+                                form="appTypeFilterUser"
                                 filters={[
                                     {
                                         label: "Standard",
@@ -206,7 +206,7 @@ class AppList extends Component {
 const mapStateToProps = state => ({
     appList: selectors.getUserAppList(state),
     user: selectors.getUserProfile(state),
-    appTypeFilter: state.form.appTypeFilter,
+    appTypeFilter: state.form.appTypeFilterUser,
     appStatusFilter: state.form.appStatusFilter,
     appSearchFilter: state.form.searchFilter
 });
