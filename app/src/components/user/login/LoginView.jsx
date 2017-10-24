@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import Grid from "../../../material/Grid/Grid";
 import Col from "../../../material/Grid/Col";
 import FontIcon from "material-ui/FontIcon";

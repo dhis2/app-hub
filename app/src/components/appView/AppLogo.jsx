@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React from "react";
+import React, { PropTypes } from "react";
 import Avatar from "material-ui/Avatar";
 import FontIcon from "material-ui/FontIcon";
 import Theme from "../../styles/theme";

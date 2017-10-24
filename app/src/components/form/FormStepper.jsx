@@ -1,16 +1,12 @@
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import { Card, CardText } from "material-ui/Card";
 import Button from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
 import { reduxForm, getFormSyncErrors } from "redux-form";
 import Spinner from "../utils/Spinner";
 import Stepper from "material-ui/Stepper/Stepper";
 import Step from "material-ui/Stepper/Step";
 import StepButton from "material-ui/Stepper/StepButton";
-import StepContent from "material-ui/Stepper/StepContent";
-import StepLabel from "material-ui/Stepper/StepLabel";
 import WarningIcon from "material-ui/svg-icons/alert/warning";
 import { red500 } from "material-ui/styles/colors";
 import _max from "lodash/max";
@@ -26,17 +22,6 @@ const sectionErrorIcon = <WarningIcon color={red500} />;
  *
  * All validation is done through redux-form.
  */
-
-const styles = {
-    nextButton: {
-        position: "absolute",
-        right: 0
-    },
-    backButton: {
-        position: "absolute",
-        left: 0
-    }
-};
 
 class FormStepper extends Component {
     constructor(props) {
@@ -54,7 +39,6 @@ class FormStepper extends Component {
         this.nextStep = this.nextStep.bind(this);
         this.prevStep = this.prevStep.bind(this);
         this.goToStep = this.goToStep.bind(this);
-        this.renderStepActions = this.renderStepActions.bind(this);
     }
 
     getSectionName(id) {
@@ -107,7 +91,11 @@ class FormStepper extends Component {
     }
 
     prevStep() {
-        return this.goToStep(this.state.stepIndex -1);
+        let currStep = this.state.stepIndex;
+        this.setState({
+            ...this.state,
+            stepIndex: currStep > 0 ? --currStep : 0
+        });
     }
 
     goToStep(index) {
@@ -120,127 +108,6 @@ class FormStepper extends Component {
 
         this.updateStateForStep(index);
     }
-
-    renderVerticalStepActions = stepIndex => {
-        const { submitting } = this.props;
-        return (
-            <div style={{ margin: "12px 0" }}>
-                {stepIndex < this.props.sections.length - 1 &&
-                    <Button
-                        label="Continue"
-                        primary={true}
-                        onClick={this.nextStep}
-                    />}
-                {this.state.stepIndex === this.props.sections.length - 1 &&
-                    <Button
-                        icon={submitting ? <Spinner inButton /> : null}
-                        type="submit"
-                        primary
-                        disabled={submitting}
-                        label={!submitting ? "Finish" : null}
-                    />}
-                {stepIndex > 0 &&
-                    <FlatButton
-                        label="Back"
-                        disableTouchRipple={true}
-                        disableFocusRipple={true}
-                        onClick={this.prevStep}
-                    />}
-            </div>
-        );
-    };
-
-    renderStepActions(stepIndex) {
-        const { submitting } = this.props;
-        return (
-            <div style={{ padding: "16px 0", position: "relative" }}>
-                {stepIndex > 0 &&
-                    <Button
-                        style={styles.backButton}
-                        label="Back"
-                        primary={true}
-                        onClick={this.prevStep}
-                    />}
-                {stepIndex < this.props.sections.length - 1 &&
-                    <Button
-                        style={styles.nextButton}
-                        label="Continue"
-                        primary={true}
-                        onClick={this.nextStep}
-                    />}
-                {this.state.stepIndex === this.props.sections.length - 1 &&
-                    <Button
-                        style={styles.nextButton}
-                        icon={submitting ? <Spinner inButton /> : null}
-                        type="submit"
-                        primary
-                        disabled={submitting}
-                        label={!submitting ? "Finish" : null}
-                    />}
-            </div>
-        );
-    }
-
-    renderSteps = currStepErrors => {
-        const vertical = this.shouldRenderVertical();
-        const { stepIndex } = this.state;
-
-        return this.props.sections.map((section, i) => {
-            const sectionName = this.getSectionName(i);
-            const showError =
-                (i < this.state.stepIndex ||
-                    this.state.visited.indexOf(i) > -1 ||
-                    _max(this.state.visited) > i) &&
-                this.props.errorState &&
-                hasError(this.props.errorState[sectionName]);
-            const sectionDisplayName =
-                sectionName.charAt(0).toUpperCase() +
-                this.getSectionName(i).slice(1);
-            return vertical
-                ? <Step
-                      key={sectionName}
-                      completed={this.state.completed.indexOf(i) > -1}
-                  >
-                      <StepLabel
-                          onClick={() => this.goToStep(i)}
-                          {...section.props.icon && {
-                              icon: section.props.icon
-                          }}
-                          {...showError && { icon: sectionErrorIcon }}
-                      >
-                          {sectionDisplayName}
-                      </StepLabel>
-                      <StepContent>
-                          {React.cloneElement(this.props.sections[stepIndex], {
-                              errors: currStepErrors
-                          })}
-                          {this.renderVerticalStepActions(stepIndex)}
-                      </StepContent>
-                  </Step>
-                : <Step
-                      key={sectionName}
-                      completed={this.state.completed.indexOf(i) > -1}
-                  >
-                      <StepButton
-                          onClick={() => this.goToStep(i)}
-                          {...section.props.icon && {
-                              icon: section.props.icon
-                          }}
-                          {...showError && { icon: sectionErrorIcon }}
-                      >
-                          {sectionDisplayName}
-                      </StepButton>
-                  </Step>;
-        });
-    };
-
-    shouldRenderVertical = () => {
-        return (
-            this.props.orientation === "vertical" ||
-            (this.props.responsive &&
-                window.matchMedia("(max-width: 550px)").matches)
-        );
-    };
 
     render() {
         const {
@@ -256,33 +123,65 @@ class FormStepper extends Component {
             submitting
         } = this.props;
         const { stepIndex } = this.state;
-        const vertical = this.shouldRenderVertical();
+        const styles = {
+            nextButton: {
+                position: "absolute",
+                right: 0
+            },
+            backButton: {
+                position: "absolute",
+                left: 0
+            }
+        };
+
         const currStepErrors = this.props.errorState
             ? this.props.errorState[this.getSectionName(stepIndex)]
             : {};
 
         const steps = this.props.stepsRender
-            ? this.props.stepsRender(this.props, this.state)
-            : this.renderSteps(currStepErrors);
+            ? this.props.stepsRender({ ...this.props, ...this.state })
+            : this.props.sections.map((section, i) => {
+                  const sectionName = this.getSectionName(i);
+                  const showError =
+                      (i < this.state.stepIndex ||
+                          this.state.visited.indexOf(i) > -1 ||
+                          _max(this.state.visited) > i) &&
+                      this.props.errorState &&
+                      hasError(this.props.errorState[sectionName]);
+                  const sectionDisplayName =
+                      sectionName.charAt(0).toUpperCase() +
+                      this.getSectionName(i).slice(1);
+                  return (
+                      <Step
+                          key={sectionName}
+                          completed={this.state.completed.indexOf(i) > -1}
+                      >
+                          <StepButton
+                              onClick={() => this.goToStep(i)}
+                              {... (section.props.icon && { icon: sections.props.icon})}
+                              {...showError && { icon: sectionErrorIcon }}
+                          >
+                              {sectionDisplayName}
+                          </StepButton>
+                      </Step>
+                  );
+              });
 
         return (
             <form onSubmit={handleSubmit}>
                 <Stepper
                     activeStep={stepIndex}
-                    orientation={
-                        this.shouldRenderVertical() ? "vertical" : "horizontal"
-                    }
                     linear={this.props.stepperLinear}
                 >
                     {steps}
                 </Stepper>
 
-                {!vertical &&
-                    <AnimateHeight height={this.state.sectionHeight}>
-                        {React.cloneElement(this.props.sections[stepIndex], {
-                            errors: currStepErrors
-                        })}
-                    </AnimateHeight>}
+                <AnimateHeight height={this.state.sectionHeight}>
+                    {React.cloneElement(this.props.sections[stepIndex], {
+                        errors: currStepErrors
+                    })}
+                </AnimateHeight>
+
                 {submitFailed &&
                     error &&
                     stepIndex == this.props.sections.length - 1 &&
@@ -290,19 +189,45 @@ class FormStepper extends Component {
                         {error}
                     </p>}
 
-                {this.props.renderContent
-                    ? this.props.renderContent(this.props, this.state)
-                    : !vertical ? this.renderStepActions(stepIndex) : null}
-
+                {this.props.content
+                    ? React.cloneElement(this.props.content, {
+                          stepperState: this.state,
+                          stepperProps: this.props
+                      })
+                    : <div style={{ padding: "16px 0", position: "relative" }}>
+                          {stepIndex > 0 &&
+                              <Button
+                                  style={styles.backButton}
+                                  label="Back"
+                                  primary={true}
+                                  onTouchTap={this.prevStep}
+                              />}
+                          {stepIndex < this.props.sections.length - 1 &&
+                              <Button
+                                  style={styles.nextButton}
+                                  label="Continue"
+                                  primary={true}
+                                  onTouchTap={this.nextStep}
+                              />}
+                          {this.state.stepIndex ===
+                              this.props.sections.length - 1 &&
+                              <Button
+                                  style={styles.nextButton}
+                                  icon={
+                                      submitting ? <Spinner inButton /> : null
+                                  }
+                                  type="submit"
+                                  primary
+                                  disabled={submitting}
+                                  label={!submitting ? "Finish" : null}
+                              />}
+                      </div>}
                 {this.props.children}
             </form>
         );
     }
 }
 FormStepper.propTypes = {
-    /**
-     * The name of the form in the redux-store.
-     */
     form: PropTypes.string.isRequired,
     stepperLinear: PropTypes.bool,
 
@@ -322,26 +247,18 @@ FormStepper.propTypes = {
      */
     onSubmit: PropTypes.func.isRequired,
     /**
-     * Override the content, next-buttons etc, called with the entire state and props of the FormStepper
-     * Mostly useful for horizontal-orientation to override the default next-buttons, where you have
-     * access to the state of the stepper.
-     *  renderContent(stepperProps, stepperState)
+     * Override the content, next-buttons etc, this gets the entire state and props of the Stepper
+     *  props: stepperState, stepperProps
      */
-    renderContent: PropTypes.func,
+    content: PropTypes.node,
 
     /**
-     * Override the steps, a function which should return an array of Steps (material-ui react-nodes)
-     * The function is called with the props and state of the FormStepper.
-     * stepsRender(props, state)
+     * Override the steps, a function which should return an array of Steps (react-nodes)
+     * The function is called with the props of the stepper with the state shallowly merged in.
+     * stepsRender(props)
      */
-    stepsRender: PropTypes.func,
+    stepsRender: PropTypes.func
 
-    orientation: PropTypes.oneOf(["vertical", "horizontal"]),
-
-    /**
-     * Renders a vertical-stepper if the viewport is narrow (<550px).
-     */
-    responsive: PropTypes.bool
     /**
      * See http://redux-form.com/7.0.3/docs/api/ReduxForm.md/
      * for other props that may be passed to the form
@@ -349,8 +266,7 @@ FormStepper.propTypes = {
 };
 
 FormStepper.defaultProps = {
-    stepperLinear: false,
-    orientation: "horizontal"
+    stepperLinear: false
 };
 
 const mapStateToProps = (state, ownProps) => ({

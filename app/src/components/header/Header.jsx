@@ -50,9 +50,7 @@ const Header = props =>
             align="center"
             style={{
                 maxWidth: Theme.container.maxWidth - 48,
-                margin: "0 auto",
-                width: '100%',
-                flex: '1 0 auto'
+                margin: "0 auto"
             }}
         >
             <Link to="/">

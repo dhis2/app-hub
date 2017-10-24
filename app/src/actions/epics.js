@@ -12,10 +12,6 @@ import "rxjs/add/observable/from";
 import "rxjs/add/operator/do";
 import { Observable } from "rxjs/Observable";
 import { REVERT, COMMIT } from "redux-optimistic-ui";
-import {
-    commitOptimisticAction,
-    revertOptimisticAction
-} from "../utils/optimisticActions";
 
 const loadAppsAll = action$ =>
     action$.ofType(actions.APPS_ALL_LOAD).concatMap(action => {
@@ -63,13 +59,13 @@ const setAppApproval = action$ =>
         return api
             .setAppApproval(id, status)
             .then(resp =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.setAppApprovalSuccess(action.payload),
                     transactionID
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.SET_APPROVAL_APP_ERROR,
                         error
@@ -85,13 +81,13 @@ const deleteApp = action$ =>
         return api
             .deleteApp(action.payload.app.id)
             .then(resp =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.deleteAppSuccess(action.payload.app),
                     id
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_DELETE_ERROR,
                         error
@@ -165,21 +161,22 @@ const newApp = action$ =>
 const editApp = action$ =>
     action$.ofType(actions.APP_EDIT).concatMap(action => {
         const { app, data } = action.payload;
+        const { id } = action.meta.optimistic;
         return api
             .updateApp(app.id, data)
             .then(resp =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.editAppSuccess(app, data),
-                    action
+                    id
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_EDIT_ERROR,
                         error
                     ),
-                    action
+                    id
                 )
             );
     });
@@ -195,7 +192,7 @@ const deleteVersion = action$ =>
         return api
             .deleteVersion(appId, version.id)
             .then(response =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.deleteAppVersionSuccess(
                         version,
                         action.payload.appId
@@ -204,7 +201,7 @@ const deleteVersion = action$ =>
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_VERSION_DELETE_ERROR,
                         error
@@ -275,13 +272,13 @@ const deleteImage = action$ =>
         return api
             .deleteImage(appId, imageId)
             .then(response =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.deleteImageFromAppSuccess(appId, imageId),
                     id
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_IMAGE_DELETE_ERROR,
                         error
@@ -302,13 +299,13 @@ const editImage = action$ =>
         return api
             .updateImage(appId, imageId, data)
             .then(response =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.editImageSuccess(appId, imageId, data),
                     id
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_IMAGE_EDIT_ERROR,
                         error
@@ -330,13 +327,13 @@ const editVersion = action$ =>
         return api
             .updateVersion(appId, versionId, version)
             .then(response =>
-                commitOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.editAppVersionSuccess(appId, version),
                     id
                 )
             )
             .catch(error =>
-                revertOptimisticAction(
+                actionCreators.commitOrRevertOptimisticAction(
                     actionCreators.actionErrorCreator(
                         actions.APP_VERSION_EDIT_ERROR,
                         error,

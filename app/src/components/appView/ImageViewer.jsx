@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import {
     deleteImageFromApp,
@@ -13,7 +12,6 @@ import FontIcon from "material-ui/FontIcon";
 import IconButton from "material-ui/IconButton";
 import { FadeAnimationBasic } from "../utils/Animate";
 import Theme from "../../styles/theme";
-
 const styles = {
     root: {
         display: "flex",
@@ -118,6 +116,7 @@ class ImageViewer extends Component {
             expandedImage: null,
             current: 0
         };
+        this.renderExpandedImage = this.renderExpandedImage.bind(this);
         this.renderActions = this.renderActions.bind(this);
         this.handleDeleteImage = this.handleDeleteImage.bind(this);
         this.handleEditImage = this.handleEditImage.bind(this);
@@ -134,6 +133,16 @@ class ImageViewer extends Component {
             ...this.state,
             current: index
         });
+    }
+
+    renderExpandedImage() {
+        if (!this.state.expandedImage) return null;
+        return (
+            <img
+                style={styles.expandedImageStyle}
+                src={this.state.expandedImage.url}
+            />
+        );
     }
 
     handleDeleteImage(imageId) {
@@ -187,13 +196,14 @@ class ImageViewer extends Component {
         const { images, editable, showEmptyMessage } = this.props;
         const { current } = this.state;
         const sliderProps = {
+            className: "slide-center",
             accessibility: true,
             dots: true,
-            swipeToSlide: true,
-            draggable: true,
             centerMode: true,
             slidesToShow: 1,
             centerPadding: "60px",
+            draggable: true,
+            swipeToSlide: true,
             infinite: false
         };
         const emptyDiv = showEmptyMessage

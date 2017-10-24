@@ -11,13 +11,14 @@ import {
     filterAppType
 } from "../utils/Filters";
 import { ToolbarGroup } from "material-ui/Toolbar";
+//import {values, sortBy} from 'lodash';
 import sortBy from "lodash/sortBy";
+//import values from 'lodash/values';
 import SubHeader from "../header/SubHeader";
 import ErrorOrLoading from "../utils/ErrorOrLoading";
 import { FadeAnimation, FadeAnimationList } from "../utils/Animate";
 import "../../styles/utils/animations.scss";
 import Theme from "../../styles/theme";
-
 class AppCards extends Component {
     componentDidMount() {
         this.props.loadApps();
@@ -59,11 +60,11 @@ class AppCards extends Component {
                     filterApp(app, searchFilter) &&
                     filterAppType(app, this.props.filters)
             )
-            .map((app, i) =>
+            .map((app, i) => (
                 <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app} />
                 </Col>
-            );
+            ));
 
         const emptyApps = (
             <FadeAnimation appear>
@@ -107,20 +108,22 @@ class AppCards extends Component {
                     </SubHeader>
                 </Col>
                 <Col span={12}>
-                    {loadOrErr || !apps
-                        ? <ErrorOrLoading
-                              loading={loading}
-                              error={error}
-                              retry={this.props.loadApps}
-                          />
-                        : <FadeAnimationList
-                              component={Grid}
-                              nested
-                              nestedStyle={styles.grid}
-                              exit={false}
-                          >
-                              {apps}
-                          </FadeAnimationList>}
+                    {loadOrErr || !apps ? (
+                        <ErrorOrLoading
+                            loading={loading}
+                            error={error}
+                            retry={this.props.loadApps}
+                        />
+                    ) : (
+                        <FadeAnimationList
+                            component={Grid}
+                            nested
+                            nestedStyle={styles.grid}
+                            exit={false}
+                        >
+                            {apps}
+                        </FadeAnimationList>
+                    )}
                     {loaded && apps.length < 1 && emptyApps}
                 </Col>
             </Grid>

@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { ListItem } from "material-ui/List";
@@ -79,14 +78,14 @@ const AppListItem = (props, state) => {
     if (props.isManager) {
         const approveItem = (
             <MenuItem
-                onClick={props.handleApprove}
+                onTouchTap={props.handleApprove}
                 key="approve"
                 primaryText="Approve"
             />
         );
         const rejectItem = (
             <MenuItem
-                onClick={props.handleReject}
+                onTouchTap={props.handleReject}
                 key="reject"
                 primaryText="Reject"
             />
@@ -111,7 +110,7 @@ const AppListItem = (props, state) => {
             }
         >
             {menuItems}
-            <MenuItem onClick={props.handleDelete} primaryText="Delete" />
+            <MenuItem onTouchTap={props.handleDelete} primaryText="Delete" />
         </IconMenu>
     );
     let logo = images.filter(elem => elem.logo)[0];
@@ -142,7 +141,7 @@ const AppListItem = (props, state) => {
         secondaryText: secondaryText,
         secondaryTextLines: 2,
         rightIconButton: props.isManager ? menu : null,
-        onClick: () => props.history.push(`${props.match.url}/app/${id}`)
+        onTouchTap: () => props.history.push(`${props.match.url}/app/${id}`)
     };
 
     return <ListItem {...listItemProps} />;

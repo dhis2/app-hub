@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import {
     Table,
     TableBody,
@@ -29,7 +28,7 @@ const VersionList = props => {
                     }
                 >
                     <MenuItem
-                        onClick={() => props.handleDelete(version)}
+                        onTouchTap={() => props.handleDelete(version)}
                         primaryText="Delete"
                     />
                 </IconMenu>

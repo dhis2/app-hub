@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React, { Component } from "react";
+import React, { Component, PropTypes } from "react";
 import { connect } from "react-redux";
 import { Spinner } from "./../utils/Loader";
 import { Route, Redirect } from "react-router-dom";
