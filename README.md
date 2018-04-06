@@ -1,6 +1,6 @@
 # App Store for DHIS 2
 
-DHIS 2 app store
+Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
 
 # Setup
 
