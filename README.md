@@ -1,4 +1,6 @@
 # App Store for DHIS 2
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdhis2%2Fdhis2-appstore.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdhis2%2Fdhis2-appstore?ref=badge_shield)
+
 
 Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
 
@@ -127,3 +129,7 @@ Will be available at `localhost:9000`. Using webpack-dev-server.
 
 Note that to use all the features of the app, you will need to run a back-end server. This can be done in frontend-development by running the back-end server as shown in the previous section, and changing the appropriate config settings (most likely just api.baseURL, api.redirectURL and routes.baseAppName).
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fdhis2%2Fdhis2-appstore.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fdhis2%2Fdhis2-appstore?ref=badge_large)
