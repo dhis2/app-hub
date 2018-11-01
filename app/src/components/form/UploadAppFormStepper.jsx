@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from "react";
-import { Card, CardText } from "material-ui/Card";
 import config from "../../config";
 import MenuItem from "material-ui/MenuItem";
 import { Field, FormSection } from "redux-form";
@@ -10,11 +9,7 @@ import {
     validateURL,
     hasError
 } from "../form/ReduxFormUtils";
-import { red500 } from "material-ui/styles/colors";
 import FormStepper from "./FormStepper";
-import PersonIcon from "material-ui/svg-icons/social/person";
-import ImageIcon from "material-ui/svg-icons/editor/insert-photo";
-import VersionIcon from "material-ui/svg-icons/";
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
