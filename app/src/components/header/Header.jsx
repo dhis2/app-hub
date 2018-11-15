@@ -9,9 +9,14 @@ import { getAuth } from "../../utils/AuthService";
 import { Link } from "react-router-dom";
 import Theme from "../../styles/theme";
 import Avatar from "material-ui/Avatar";
-import logo from "../../assets/img/dhis2.svg";
+import logo from "../../assets/img/dhis2_logo_reversed.svg";
 import { getUserInfo, getUserProfile } from "../../selectors/userSelectors";
 
+const styles = {
+    logo: {
+        height: 32
+    }
+}
 const renderProfileButton = props => {
     const avatarUrl = props.avatarImg;
     const isLoggedIn = getAuth().isLoggedIn();
@@ -53,8 +58,8 @@ const Header = props =>
                 margin: "0 auto"
             }}
         >
-            <Link to="/">
-                <img style={{ height: 32 }} src={`${logo}`} />
+            <Link to="/" style={styles.logo}>
+                <img style={styles.logo} src={`${logo}`} />
             </Link>
             <ToolbarTitle align="center" titleStyle={{ margin: 0 }}>
                 <Link to="/">App Store</Link>
