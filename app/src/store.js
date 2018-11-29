@@ -9,7 +9,8 @@ import snackbarReducer from "./reducers/snackbarReducer";
 import formReducer from "./reducers/formReducer";
 import optimisticMiddleware from "./store/ReduxOptimisticMiddleware";
 
-const middlewares = [optimisticMiddleware, createEpicMiddleware(Epics)];
+const epicMiddleware = createEpicMiddleware();
+const middlewares = [optimisticMiddleware, epicMiddleware];
 
 if (process.env.NODE_ENV === "development") {
     middlewares.push(
@@ -28,4 +29,7 @@ const reducer = combineReducers({
     form: formReducer
 });
 
-export default createStore(reducer, applyMiddleware(...middlewares));
+const store = createStore(reducer, applyMiddleware(...middlewares));
+epicMiddleware.run(Epics);
+
+export default store;

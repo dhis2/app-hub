@@ -4,40 +4,41 @@ import { combineEpics } from "redux-observable";
 import { getAuth } from "../utils/AuthService";
 import { history } from "../utils/history";
 import * as api from "../api/api";
-import "rxjs/add/observable/of";
-import "rxjs/add/operator/map";
-import "rxjs/add/operator/concatMap";
-import "rxjs/add/operator/mergeAll";
-import "rxjs/add/observable/from";
-import "rxjs/add/operator/do";
-import { Observable } from "rxjs/Observable";
 import { REVERT, COMMIT } from "redux-optimistic-ui";
+import { of, map, concatMap, mergeAll, from} from 'rxjs/operators';
+import { ofType } from "redux-observable";
 
 const loadAppsAll = action$ =>
-    action$.ofType(actions.APPS_ALL_LOAD).concatMap(action => {
-        return api
-            .getAllApps()
-            .then(apps => actionCreators.appsAllLoaded(apps))
-            .catch(error =>
-                actionCreators.actionErrorCreator(actions.APPS_ALL_ERROR, error)
-            );
-    });
+    action$.pipe(
+        ofType(actions.APPS_ALL_LOAD),
+        concatMap(action => {
+            return api
+                .getAllApps()
+                .then(apps => actionCreators.appsAllLoaded(apps))
+                .catch(error =>
+                    actionCreators.actionErrorCreator(actions.APPS_ALL_ERROR, error)
+                );
+        }));
 
 const loadAppsApproved = action$ =>
-    action$.ofType(actions.APPS_APPROVED_LOAD).concatMap(action => {
-        return api
-            .getApprovedApps()
-            .then(apps => actionCreators.loadedApprovedApps(apps))
-            .catch(error =>
-                actionCreators.actionErrorCreator(
-                    actions.APPS_APPROVED_ERROR,
-                    error
-                )
-            );
-    });
+    action$.pipe(
+        ofType(actions.APPS_APPROVED_LOAD),
+        concatMap(action => {
+            return api
+                .getApprovedApps()
+                .then(apps => actionCreators.loadedApprovedApps(apps))
+                .catch(error =>
+                    actionCreators.actionErrorCreator(
+                        actions.APPS_APPROVED_ERROR,
+                        error
+                    )
+                );
+        }));
 
 const loadApp = action$ =>
-    action$.ofType(actions.APP_LOAD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_LOAD),
+        concatMap(action => {
         const { appId, useAuth } = action.payload;
         return api
             .getApp(appId, useAuth)
@@ -46,14 +47,16 @@ const loadApp = action$ =>
                 type: actions.APP_ERROR,
                 payload: error
             }));
-    });
+    }));
 
 /**
  * Optimistic action
  * @param action$
  */
 const setAppApproval = action$ =>
-    action$.ofType(actions.SET_APPROVAL_APP).concatMap(action => {
+    action$.pipe(
+        ofType(actions.SET_APPROVAL_APP),
+        concatMap(action => {
         const { app: { id }, status } = action.payload;
         const { id: transactionID } = action.meta.optimistic;
         return api
@@ -73,10 +76,12 @@ const setAppApproval = action$ =>
                     transactionID
                 )
             );
-    });
+    }));
 
 const deleteApp = action$ =>
-    action$.ofType(actions.APP_DELETE).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_DELETE),
+        concatMap(action => {
         const { id } = action.meta.optimistic;
         return api
             .deleteApp(action.payload.app.id)
@@ -95,10 +100,12 @@ const deleteApp = action$ =>
                     id
                 )
             );
-    });
+    }));
 
 const user = action$ =>
-    action$.ofType(actions.USER_LOAD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.USER_LOAD),
+        concatMap(action => {
         const auth = getAuth();
         return new Promise((resolve, reject) => {
             auth.lock.getProfile(auth.getToken(), (error, profile) => {
@@ -110,10 +117,12 @@ const user = action$ =>
                 }
             });
         });
-    });
+    }));
 
 const userApps = action$ =>
-    action$.ofType(actions.USER_APPS_LOAD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.USER_APPS_LOAD),
+        concatMap(action => {
         return api
             .getUserApps()
             .then(apps => actionCreators.userAppsLoaded(apps))
@@ -121,10 +130,12 @@ const userApps = action$ =>
                 type: actions.USER_APPS_ERROR,
                 payload: error
             }));
-    });
+    }));
 
 const newVersion = action$ =>
-    action$.ofType(actions.APP_VERSION_ADD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_VERSION_ADD),
+        concatMap(action => {
         return api
             .createNewVersion(action.payload.appId, action.payload)
             .then(version =>
@@ -137,10 +148,12 @@ const newVersion = action$ =>
                 type: actions.APP_VERSION_ADD_ERROR,
                 payload: error
             }));
-    });
+    }));
 
 const newApp = action$ =>
-    action$.ofType(actions.APP_ADD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_ADD),
+        concatMap(action => {
         return api
             .createApp(action.payload)
             .then(app => {
@@ -151,7 +164,7 @@ const newApp = action$ =>
                 type: actions.APP_ADD_ERROR,
                 payload: error
             }));
-    });
+    }));
 
 /**
  * Optimistic action
@@ -159,7 +172,9 @@ const newApp = action$ =>
  */
 
 const editApp = action$ =>
-    action$.ofType(actions.APP_EDIT).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_EDIT),
+        concatMap(action => {
         const { app, data } = action.payload;
         const { id } = action.meta.optimistic;
         return api
@@ -179,14 +194,16 @@ const editApp = action$ =>
                     id
                 )
             );
-    });
+    }));
 
 /**
  * Optimistic action
  * @param action$
  */
 const deleteVersion = action$ =>
-    action$.ofType(actions.APP_VERSION_DELETE).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_VERSION_DELETE),
+    concatMap(action => {
         const { appId, version } = action.payload;
         const { id } = action.meta.optimistic;
         return api
@@ -209,10 +226,12 @@ const deleteVersion = action$ =>
                     id
                 )
             );
-    });
+    }));
 
 const addImage = action$ =>
-    action$.ofType(actions.APP_IMAGE_ADD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_IMAGE_ADD),
+        concatMap(action => {
         const { appId, image } = action.payload;
         return api
             .createNewImage(appId, image)
@@ -223,10 +242,12 @@ const addImage = action$ =>
                 type: actions.APP_IMAGE_ADD_ERROR,
                 payload: error
             }));
-    });
+    }));
 
 const addMultipleImages = action$ =>
-    action$.ofType(actions.APP_IMAGES_ADD).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_IMAGES_ADD),
+        concatMap(action => {
         const { appId, images } = action.payload;
         let successCount = 0;
         const promises = images.map((image, i) => {
@@ -258,15 +279,20 @@ const addMultipleImages = action$ =>
                 imageActions
             );
         });
-        return Observable.from([...promises, allCompleted]).mergeAll();
-    });
+        return [...promises, allCompleted];
+        //return from([...promises, allCompleted]).pipe(mergeAll())
+    }),
+        mergeAll()
+    );
 
 /**
  * Optimistic action
  * @param action$
  */
 const deleteImage = action$ =>
-    action$.ofType(actions.APP_IMAGE_DELETE).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_IMAGE_DELETE),
+        concatMap(action => {
         const { appId, imageId } = action.payload;
         const { id } = action.meta.optimistic;
         return api
@@ -286,14 +312,16 @@ const deleteImage = action$ =>
                     id
                 )
             );
-    });
+    }));
 
 /**
  * Optimistic action
  * @param action$
  */
-const editImage = action$ =>
-    action$.ofType(actions.APP_IMAGE_EDIT).concatMap(action => {
+ const editImage = action$ =>
+    action$.pipe(
+        ofType(actions.APP_IMAGE_EDIT),
+        concatMap(action => {
         const { appId, imageId, data } = action.payload;
         const { id } = action.meta.optimistic;
         return api
@@ -313,14 +341,16 @@ const editImage = action$ =>
                     id
                 )
             );
-    });
+    }));
 
 /**
  * Optimistic action
  * @param action$
  */
 const editVersion = action$ =>
-    action$.ofType(actions.APP_VERSION_EDIT).concatMap(action => {
+    action$.pipe(
+        ofType(actions.APP_VERSION_EDIT),
+        concatMap(action => {
         const { appId, version } = action.payload;
         const { id } = action.meta.optimistic;
         const versionId = version.id;
@@ -342,7 +372,7 @@ const editVersion = action$ =>
                     id
                 )
             );
-    });
+        }));
 
 export default combineEpics(
     loadAppsAll,
