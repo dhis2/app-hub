@@ -8,9 +8,11 @@ const nodeEnv = process.env.NODE_ENV || "development";
 const isDevBuild = process.argv.indexOf("-p") === -1;
 const config = require("./src/config/configResolver.js").default;
 
+const appEntry = path.join(__dirname, 'src/app-store.js');
+
 const prod = {
     entry: {
-        app: ["babel-polyfill", "whatwg-fetch", "./app/src/app-store.js"]
+        app: ["babel-polyfill", "whatwg-fetch", appEntry]
     },
     output: {
         path: path.join(__dirname, "..", "target", "classes", "static"),
@@ -56,7 +58,7 @@ const prod = {
         }),
         new CopyWebpackPlugin([
             {
-                from: "app/src/assets",
+                from: path.join(__dirname, "src/assets"),
                 to: "assets"
             }
         ]),
@@ -64,7 +66,7 @@ const prod = {
         new HtmlWebpackPlugin({
             title: "DHIS2 Appstore",
             filename: "index.html",
-            template: "app/indexbuild.html"
+            template: path.join(__dirname, "indexbuild.html")
         }),
 
         new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false })
@@ -73,7 +75,7 @@ const prod = {
 
 const dev = Object.assign({}, prod, {
     entry: {
-        app: ["babel-polyfill", "whatwg-fetch", "./app/src/app-store.js"]
+        app: ["babel-polyfill", "whatwg-fetch", appEntry]
     },
     output: {
         path: path.join(__dirname, "build"),
@@ -91,7 +93,7 @@ const dev = Object.assign({}, prod, {
     plugins: [
         new CopyWebpackPlugin([
             {
-                from: "app/src/assets",
+                from: path.join(__dirname, "src/assets"),
                 to: "assets"
             }
         ]),
