@@ -87,7 +87,7 @@ class UploadFieldsArray extends Component {
                             handleAddField={this.handleAddField.bind(this)}
                             renderRemove={fields.length > 1}
                             multiple={multiple}
-                            validate={(v, a, p) => fieldValidate(v, a, p, true)}
+                            validate={fieldValidate}
                             parse={
                                 !error && multiple && multipleSplit
                                     ? this.parseSplitFilesIntoFields.bind(this)

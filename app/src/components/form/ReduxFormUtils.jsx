@@ -41,7 +41,6 @@ export const renderUploadField = ({
             }}
             errorText={
                 ((formMeta && formMeta.submitFailed) ||
-                    dirty ||
                     touched ||
                     forceShowErrors) &&
                 error
@@ -142,7 +141,7 @@ export const renderToggle = ({
         {...props}
     />;
 
-export const validateUploadField = (supportedExtensions = [], required) => (
+export const validateUploadField = (supportedExtensions = [], required = false) => (
     value,
     allValues,
     props
