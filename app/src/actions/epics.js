@@ -1,12 +1,10 @@
 import * as actions from "../constants/actionTypes";
 import * as actionCreators from "./actionCreators";
-import { combineEpics } from "redux-observable";
+import { combineEpics, ofType } from "redux-observable";
 import { getAuth } from "../utils/AuthService";
 import { history } from "../utils/history";
 import * as api from "../api/api";
-import { REVERT, COMMIT } from "redux-optimistic-ui";
-import { of, map, concatMap, mergeAll, from} from 'rxjs/operators';
-import { ofType } from "redux-observable";
+import { concatMap, mergeAll } from 'rxjs/operators';
 
 const loadAppsAll = action$ =>
     action$.pipe(

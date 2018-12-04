@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const nodeEnv = process.env.NODE_ENV || "development";
 
 const isDevBuild = process.argv.indexOf("-p") === -1;
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const config = require("./src/config/configResolver.js").default;
 
 const appEntry = path.join(__dirname, 'src/app-store.js');
@@ -22,7 +23,7 @@ const prod = {
     },
 
     module: {
-        loaders: [
+        rules: [
             {
                 test: /\.jsx?$/,
                 loader: "babel-loader",
@@ -45,9 +46,9 @@ const prod = {
             }
         ]
     },
-
+    devtool: shouldUseSourceMap ? 'source-map' : false,
     resolve: {
-        extensions: [".js", ".jsx"]
+        extensions: [".js", ".jsx"],
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -56,6 +57,7 @@ const prod = {
             },
             __APP_CONFIG__: JSON.stringify(config)
         }),
+        new webpack.optimize.ModuleConcatenationPlugin(),
         new CopyWebpackPlugin([
             {
                 from: path.join(__dirname, "src/assets"),
@@ -68,8 +70,6 @@ const prod = {
             filename: "index.html",
             template: path.join(__dirname, "indexbuild.html")
         }),
-
-        new webpack.optimize.UglifyJsPlugin({ minimize: true, comments: false })
     ]
 };
 
