@@ -10,18 +10,20 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 const config = require("./src/config/configResolver.js").default;
 
 const appEntry = path.join(__dirname, 'src/app-store.js');
+const polyfillEntry = path.join(__dirname, 'src/polyfills.js');
 
 const prod = {
     entry: {
-        app: ["babel-polyfill", "whatwg-fetch", appEntry]
+        polyfills: polyfillEntry,
+        app: appEntry
     },
     output: {
         path: path.join(__dirname, "..", "target", "classes", "static"),
-        filename: path.join("js", `[name]_${packageJSON.version}.js`),
+        filename: path.join("js", `[name]_[chunkhash:8].js`),
         //this is where the files are served from
         publicPath: config.routes.baseAppName + "/"
     },
-
+    mode: "production",
     module: {
         rules: [
             {
@@ -31,17 +33,23 @@ const prod = {
             },
             {
                 test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
+                use: ["style-loader", "css-loader", "sass-loader"]
             },
             {
                 test: /\.css$/,
-                loaders: ["style-loader", "css-loader"]
+                use: ["style-loader", "css-loader"]
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: [
-                    `file-loader?name=[name]_${packageJSON.version}.[ext]&publicPath=${config
-                        .routes.baseAppName}/&outputPath=assets/`
+                use: [
+                    {
+                        loader: "file-loader",
+                        options: {
+                            name: `[name]_${packageJSON.version}.[ext]`,
+                            puplicPath: config.routes.baseAppName,
+                            outputPath: 'assets/'
+                        }
+                    }
                 ]
             }
         ]
@@ -52,9 +60,6 @@ const prod = {
     },
     plugins: [
         new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production")
-            },
             __APP_CONFIG__: JSON.stringify(config)
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
@@ -75,14 +80,15 @@ const prod = {
 
 const dev = Object.assign({}, prod, {
     entry: {
-        app: ["babel-polyfill", "whatwg-fetch", appEntry]
+        polyfills: polyfillEntry,
+        app: appEntry
     },
     output: {
         path: path.join(__dirname, "build"),
         filename: "[name].js",
         publicPath: "/"
     },
-
+    mode: "development",
     devServer: {
         port: 9000,
         inline: true,
@@ -103,9 +109,6 @@ const dev = Object.assign({}, prod, {
             template: "app/indexbuild.html"
         }),
         new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("development")
-            },
             __APP_CONFIG__: JSON.stringify(config)
         })
     ]

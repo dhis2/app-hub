@@ -1,7 +1,8 @@
+import { hot } from 'react-hot-loader';
+
 import React, { Component } from "react";
 import { Router, Route, Redirect, Switch } from "react-router-dom";
 import { history } from "../utils/history";
-import "material-components-web/dist/material-components-web.css";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import theme from "../styles/theme";
 import "../styles/override.css";
@@ -20,8 +21,7 @@ import { getAuth } from "../utils/AuthService";
 injectTapEventPlugin();
 
 const auth = getAuth();
-export default function AppStore() {
-    return (
+const AppStore = () => 
         <Provider store={store}>
             <MuiThemeProvider muiTheme={theme}>
                 <Router history={history}>
@@ -47,5 +47,5 @@ export default function AppStore() {
                 </Router>
             </MuiThemeProvider>
         </Provider>
-    );
-}
+
+export default hot(module)(AppStore);

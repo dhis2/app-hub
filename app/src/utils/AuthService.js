@@ -5,7 +5,7 @@ import History from "./history";
 import config from "../config";
 import store from "../store";
 import Theme from "../styles/theme";
-import logo from "../assets/img/dhis2.svg";
+import logo from "../assets/img/dhis2_logo_reversed.svg";
 
 export default class AuthService {
     constructor(clientId, domain) {
