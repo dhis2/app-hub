@@ -2,12 +2,11 @@ openapi: 3.0.0
 info:
   title: DHIS2 App Store API
   description: >-
-    Optional multiline or single-line description in
-    [CommonMark](http://commonmark.org/help/) or HTML.
-  version: 1.0.0
+    API Specification for the DHIS2 App Store.
+  version: 2.0.0
 
 servers:
-  - url: 'http://api.example.com/v1'
+  - url: 'http://api.example.com/v2'
     description: 'Optional server description, e.g. Main (production) server'
   - url: 'http://staging-api.example.com'
     description: 'Optional server description, e.g. Internal staging server for testing'
@@ -73,9 +72,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/WebApp'
 
-  /{id}:
+  /{appId}:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -134,9 +133,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /{id}/reviews:
+  /{appId}/reviews:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -179,9 +178,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /{id}/reviews/{reviewId}:
+  /{appId}/reviews/{reviewId}:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -231,9 +230,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /{id}/versions:
+  /{appId}/versions:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -277,9 +276,9 @@ paths:
                 $ref: '#/components/schemas/Error'
                 
                 
-  /{id}/versions/{versionId}:
+  /{appId}/versions/{versionId}:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -330,14 +329,15 @@ paths:
                 $ref: '#/components/schemas/Error'
               
 
-  /{id}/approval:
+  /{appId}/approval:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
       schema:
         type: string
+
     post:
       summary: Publish a version
       description: Publish a version for the WebApp with ID
@@ -365,10 +365,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /{id}/images:
+  /{appId}/images:
 
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -392,9 +392,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
                 
-  /{id}/images/{imageId}:
+  /{appId}/images/{imageId}:
     parameters:
-    - name: id
+    - name: appId
       in: path
       required: true
       description: The ID of the WebApp
@@ -412,14 +412,14 @@ paths:
         content:
           'application/json':
             schema:
-              $ref: '#/components/schemas/ImageResource'
+              $ref: '#/components/schemas/Image'
       responses:
         '200':
           description: Result view for image update
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ImageResource'
+                $ref: '#/components/schemas/Image'
                 
         default:
           description: error payload
@@ -515,11 +515,14 @@ components:
             $ref: '#/components/schemas/Version'
         appType:
           type: string
-          $ref: '#/components/schemas/AppType'
+          enum:
+          - APP
+          - DASHBOARD_WIDGET
+          - TRACKER_DASHBOARD_WIDGET
         images:
           type: array
           items:
-            $ref: '#/components/schemas/ImageResource'
+            $ref: '#/components/schemas/Image'
         status:
           type: string
           $ref: '#/components/schemas/AppStatus'
@@ -550,14 +553,7 @@ components:
         app:
           $ref: '#/components/schemas/WebApp'
           
-    AppType:
-      type: string
-      enum:
-      - APP
-      - DASHBOARD_WIDGET
-      - TRACKER_DASHBOARD_WIDGET
-      
-    ImageResource:
+    Image:
       type: object
       properties:
         caption:
@@ -591,5 +587,3 @@ components:
           type: string
           enum:
           - zip
-    
-    
