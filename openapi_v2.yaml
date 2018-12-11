@@ -513,7 +513,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Version'
-        appType:
+        type:
           type: string
           enum:
           - APP
