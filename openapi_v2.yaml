@@ -550,8 +550,6 @@ components:
           type: string
         demoUrl:
           type: string
-        app:
-          $ref: '#/components/schemas/WebApp'
           
     Image:
       type: object
@@ -564,8 +562,6 @@ components:
           type: string
         logo:
           type: boolean
-        app:
-          $ref: '#/components/schemas/WebApp'
 
     AppStatus:
       type: string
