@@ -5,7 +5,7 @@ exports.up = async function(knex, Promise) {
         t.increments('developer_id').unsigned().primary()
         t.integer('organisation').unsigned().nullable()
 
-        t.uuid('uuid')
+        t.uuid('uuid').defaultTo(knex.raw('uuid_generate_v4()'))
         t.string('name').notNullable()
         t.string('oauth').nullable()
         t.string('email').unique()
