@@ -16,7 +16,7 @@ exports.up = async function(knex, Promise) {
         .select()
 
     const updated_imgs = ires.map(i => {
-        id = mapped_apps.filter(a => a.aId === i.appid)[0]
+        const id = mapped_apps.filter(a => a.aId === i.appid)[0]
 
         return {
             caption: i.caption,
