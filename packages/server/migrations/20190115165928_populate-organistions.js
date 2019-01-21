@@ -1,4 +1,3 @@
-
 exports.up = async function(knex, Promise) {
     // get all orgs
     const orgs = await knex('app')
@@ -22,20 +21,24 @@ exports.up = async function(knex, Promise) {
 
     // strip out duplicate orgs
     const new_orgs = orgs
-        .filter((obj, pos, arr) => arr.map(x => x['organisation']).indexOf(obj['organisation']) === pos)
-        .map(x => { return {
-            name: x.organisation,
-            address: x.address,
-        }})
+        .filter(
+            (obj, pos, arr) =>
+                arr.map(x => x['organisation']).indexOf(obj['organisation']) ===
+                pos
+        )
+        .map(x => {
+            return {
+                name: x.organisation,
+                address: x.address,
+            }
+        })
 
     // insert unique orgs into table
-    await knex('organisations')
-        .insert(new_orgs)
-};
+    await knex('organisations').insert(new_orgs)
+}
 
 exports.down = async function(knex, Promise) {
-    const orgs = await knex('organisations')
-        .select('name', 'address')
+    const orgs = await knex('organisations').select('name', 'address')
 
     for (const { name, address } of orgs) {
         await knex('app')
@@ -45,4 +48,6 @@ exports.down = async function(knex, Promise) {
                 address: address,
             })
     }
-};
+
+    await knex('organisations').del()
+}
