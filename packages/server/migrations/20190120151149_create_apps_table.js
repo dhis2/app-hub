@@ -20,11 +20,13 @@ exports.up = async function(knex, Promise) {
 
         t.string('status')
         t.string('type')
-        t.string('source_url')
+
+        t.text('source_url')
 
         t.integer('organisation')
             .unsigned()
             .nullable()
+
         t.integer('developer')
             .unsigned()
             .notNullable()

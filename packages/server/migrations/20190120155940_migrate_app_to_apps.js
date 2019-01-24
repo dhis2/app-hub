@@ -4,6 +4,7 @@ exports.up = async function(knex, Promise) {
     const updated_apps = apps.map(a => {
         return {
             name: a.name,
+            type: a.type,
             description: a.description,
             created_at: a.created,
             updated_at: a.lastupdated,
