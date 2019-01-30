@@ -1,4 +1,5 @@
 const Boom = require('boom')
+const { AppStatus } = require('../enums')
 
 module.exports = [
     {
@@ -6,10 +7,17 @@ module.exports = [
         path: '/apps',
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
-            return await h.context.db
+            const apps = await h.context.db
                 .select()
-                .from('apps')
-                .where('status', 'APPROVED')
+                .from('apps_view')
+                .where('status', AppStatus.APPROVED)
+
+            request.logger.info(apps)
+            return apps.map(app => ({
+                type: app.type,
+                uuid: app.uuid,
+                name: app.name,
+            }))
         },
     },
     {
