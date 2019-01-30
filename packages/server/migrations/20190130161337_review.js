@@ -1,6 +1,14 @@
 exports.up = async knex => {
     await knex.schema.createTable('review', table => {
-        table.increments('id').primary()
+        table
+            .increments('id')
+            .unsigned()
+            .primary()
+
+        table
+            .uuid('uuid')
+            .unique()
+            .notNullable()
 
         table
             .integer('app_version_id')

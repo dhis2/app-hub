@@ -16,7 +16,12 @@ module.exports = [
             return apps.map(app => ({
                 type: app.type,
                 uuid: app.uuid,
-                name: app.name,
+                version: app.version,
+                supported_dhis2_version: {
+                    min: app.min_dhis2_version,
+                    max: app.max_dhis2_version,
+                },
+                channel: { name: app.channel_name, id: app.channel_uuid },
             }))
         },
     },

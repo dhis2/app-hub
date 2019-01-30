@@ -89,7 +89,7 @@ exports.up = async knex => {
             .inTable('user')
     })
 
-    await knex.schema.createTable('app_version_localized', table => {
+    await knex.schema.createTable('app_version_localised', table => {
         table
             .increments('id')
             .unsigned()
@@ -103,6 +103,10 @@ exports.up = async knex => {
             .inTable('app_version')
 
         table.string('language_code', 2)
+
+        table.string('name', 100).notNullable()
+
+        table.text('description')
 
         //One version can only have the same language once.
         table.unique(['app_version_id', 'language_code'])
@@ -162,20 +166,10 @@ exports.up = async knex => {
             .references('id')
             .inTable('user')
     })
-
-    await knex.raw(`
-        CREATE VIEW apps_view AS 
-            SELECT app.id AS app_id, app.uuid, app.type, s.status FROM app 
-                INNER JOIN app_status AS s
-                    ON app.id = s.app_id
-                INNER JOIN app_version AS appver
-                    ON app.id = appver.app_id 
-    `)
 }
 
 exports.down = async knex => {
-    await knex.raw('DROP VIEW apps_view')
-    await knex.schema.dropTable('app_version_localized')
+    await knex.schema.dropTable('app_version_localised')
     await knex.schema.dropTable('app_version')
     await knex.schema.dropTable('app_status')
     await knex.schema.dropTable('app')
