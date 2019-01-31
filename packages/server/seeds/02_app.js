@@ -17,7 +17,7 @@ exports.seed = async knex => {
     await knex('app_status').insert([
         {
             app_id: dhis2App.id,
-            status: AppStatus.NOT_APPROVED,
+            status: AppStatus.APPROVED,
             created_by_user_id: 1,
         },
         {

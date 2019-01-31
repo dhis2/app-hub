@@ -7,22 +7,59 @@ module.exports = [
         path: '/apps',
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
+
+            const apiVersion = request.pre.apiVersion;
+            request.logger.info(`Using api version: ${apiVersion}`)
+
             const apps = await h.context.db
                 .select()
                 .from('apps_view')
-                .where('status', AppStatus.APPROVED)
+                .where({
+                    'status': AppStatus.APPROVED,
+                    'language_code': 'en'
+                })
 
-            request.logger.info(apps)
-            return apps.map(app => ({
-                type: app.type,
-                uuid: app.uuid,
-                version: app.version,
-                supported_dhis2_version: {
-                    min: app.min_dhis2_version,
-                    max: app.max_dhis2_version,
-                },
-                channel: { name: app.channel_name, id: app.channel_uuid },
-            }))
+            const formattedApps = {};
+            //request.logger.info(apps)
+             apps.forEach(app => {
+                console.log("Checking app: "+ app.uuid)
+
+                let currentApp = formattedApps[app.uuid];
+                if ( !currentApp ) {
+                    const basicAppInfo = {
+                        appType: app.type,
+                        created: 123,
+                        id: app.uuid,
+                        description: app.description,
+                        name: app.name,
+                        status: app.status,
+                        versions: [],
+                        developer: {address:'', email: '', organisation: '', name:''},
+                        images: [],
+                        lastUpdated: 123,
+                        sourceUrl: '',
+                        owner: '',
+                        reviews: ''
+                        //channel: { name: app.channel_name, id: app.channel_uuid }
+                    }
+                    currentApp = formattedApps[app.uuid] = basicAppInfo
+                }
+                
+                
+                currentApp.versions.push({
+                    created: app.version_created_at,
+                    demoUrl: '',
+                    downloadUrl: '',
+                    id: app.version_uuid,
+                    lastUpdated: 123,
+                    maxDhisVersion: app.max_dhis2_version,
+                    minDhisVersion: app.min_dhis2_version,
+                    version: app.version
+                })
+
+            })
+
+            return Object.keys(formattedApps).map(id => (formattedApps[id]));
         },
     },
     {

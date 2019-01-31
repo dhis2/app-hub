@@ -64,6 +64,11 @@ exports.up = async knex => {
             .unsigned()
             .notNullable()
 
+        table
+            .uuid('uuid')
+            .unique()
+            .notNullable()            
+
         table.string('version', 50).notNullable()
 
         table.unique(['app_id', 'version'])

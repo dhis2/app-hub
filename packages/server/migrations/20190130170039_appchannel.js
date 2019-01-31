@@ -53,7 +53,15 @@ exports.up = async knex => {
 
     await knex.raw(`
         CREATE VIEW apps_view AS 
-            SELECT app.id AS app_id, appver.version, localisedapp.language_code, localisedapp.name, localisedapp.description, app.uuid, app.type, s.status, c.name AS channel_name, c.uuid AS channel_uuid FROM app 
+            SELECT  app.id AS app_id, 
+                    app.uuid, app.type,
+                    appver.version, appver.uuid AS version_uuid, appver.created_at AS version_created_at,
+                    localisedapp.language_code, localisedapp.name, localisedapp.description,  
+                    s.status, s.created_at AS status_created_at, 
+                    ac.min_dhis2_version, ac.max_dhis2_version, 
+                    c.name AS channel_name, c.uuid AS channel_uuid
+                FROM app 
+
                 INNER JOIN app_status AS s
                     ON app.id = s.app_id
                 INNER JOIN app_version AS appver

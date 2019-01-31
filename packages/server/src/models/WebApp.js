@@ -1,5 +1,7 @@
 const joi = require('joi')
 
+const { AppStatuses, AppTypes } = require('../enums')
+
 const Developer = require('./Developer.js')
 const Organisation = require('./Organisation.js')
 const Review = require('./Review')
@@ -30,11 +32,11 @@ const def = joi.object().keys({
 
     description: joi.string().required(),
 
-    status: joi.string().valid(['PENDING', 'NOT_APPROVED', 'APPROVED']),
+    status: joi.string().valid(AppStatuses),
 
     type: joi
         .string()
-        .valid(['APP', 'DASHBOARD_WIDGET', 'TRACKER_DASHBOARD_WIDGET']),
+        .valid(AppTypes),
 
     source_url: joi
         .string()

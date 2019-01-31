@@ -12,5 +12,7 @@ const AppType = {
 
 module.exports = {
     AppStatus,
+    AppStatuses: [AppStatus.PENDING, AppStatus.NOT_APPROVED, AppStatus.APPROVED],
     AppType,
+    AppTypes: [AppType.APP, AppType.DASHBOARD_WIDGET, AppType.TRACKER_DASHBOARD_WIDGET]
 }
