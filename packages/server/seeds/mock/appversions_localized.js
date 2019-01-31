@@ -1,5 +1,6 @@
-const { dhis2App, whoApp } = require('./apps')
-const { dhis2AppVersions, whoAppVersions } = require('./appversions')
+const appVersions = require('./appversions')
+
+const [ dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions ] = appVersions;
 
 const dhis2AppVersionsLocalized = [
     {
@@ -100,7 +101,30 @@ const whoAppVersionsLocalized = [
     },
 ]
 
-module.exports = {
+
+const pendingAppVersionsLocalized = [
+    {
+        app_version_id: pendingAppVersions[0].id,
+        language_code: 'en',
+        created_by_user_id: pendingAppVersions[0].created_by_user_id,
+        name: 'Pending App app',
+        description: 'This app is pending approval.',
+    },
+]
+
+const rejectedAppVersionsLocalized = [
+    {
+        app_version_id: rejectedAppVersions[0].id,
+        language_code: 'en',
+        created_by_user_id: rejectedAppVersions[0].created_by_user_id,
+        name: 'Rejected App app',
+        description: 'This app is in state rejected.',
+    },
+]
+
+module.exports = [
     dhis2AppVersionsLocalized,
     whoAppVersionsLocalized,
-}
+    pendingAppVersionsLocalized,
+    rejectedAppVersionsLocalized
+]

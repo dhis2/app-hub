@@ -1,6 +1,8 @@
-const { dhis2App, whoApp } = require('./mock/apps')
-const { dhis2AppVersions, whoAppVersions } = require('./mock/appversions')
+const apps = require('./mock/apps')
+const appVersions = require('./mock/appversions')
 const uuid = require('uuid/v4')
+
+const [ dhis2AppVersions, whoAppVersions ] = appVersions;
 
 exports.seed = async knex => {
     const reviews = [

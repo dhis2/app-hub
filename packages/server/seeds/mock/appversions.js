@@ -1,5 +1,7 @@
-const { dhis2App, whoApp } = require('./apps')
+const apps = require('./apps')
 const uuid = require('uuid/v4')
+
+const [ dhis2App, whoApp, pendingApp, rejectedApp ] = apps;
 
 const dhis2AppVersions = [
     {
@@ -48,7 +50,29 @@ const whoAppVersions = [
     },
 ]
 
-module.exports = {
+const pendingAppVersions = [
+    {
+        id: 7,
+        uuid: uuid(),
+        app_id: pendingApp.id,
+        created_by_user_id: pendingApp.created_by_user_id,
+        version: '0.1',
+    },
+]
+
+const rejectedAppVersions = [
+    {
+        id: 8,
+        uuid: uuid(),
+        app_id: rejectedApp.id,
+        created_by_user_id: rejectedApp.created_by_user_id,
+        version: '0.1',
+    },
+]
+
+module.exports = [
     dhis2AppVersions,
     whoAppVersions,
-}
+    pendingAppVersions,
+    rejectedAppVersions
+]

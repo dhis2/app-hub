@@ -1,7 +1,7 @@
 module.exports = {
     api: {
         baseURL: 'http://localhost:3000/',
-        redirectURL: 'https://play.dhis2.org/appstore/user',
+        redirectURL: 'http://localhost:9000/user',
     },
     auth0: {
         clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',

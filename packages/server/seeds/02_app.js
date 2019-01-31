@@ -1,29 +1,36 @@
 const { AppStatus } = require('../src/enums')
 
-const { dhis2App, whoApp } = require('./mock/apps')
-const { dhis2AppVersions, whoAppVersions } = require('./mock/appversions')
-const {
-    dhis2AppVersionsLocalized,
-    whoAppVersionsLocalized,
-} = require('./mock/appversions_localized')
+const apps = require('./mock/apps')
+const appVersions = require('./mock/appversions')
+const appVersionsLocalised = require('./mock/appversions_localized')
 
 const { flatten } = require('../src/utils')
 
 exports.seed = async knex => {
     await knex('app').del()
-    await knex('app').insert([dhis2App, whoApp])
+    await knex('app').insert(apps)
 
     await knex('app_status').del()
     await knex('app_status').insert([
         {
-            app_id: dhis2App.id,
+            app_id: 1,
             status: AppStatus.APPROVED,
             created_by_user_id: 1,
         },
         {
-            app_id: whoApp.id,
+            app_id: 2,
             status: AppStatus.APPROVED,
             created_by_user_id: 1,
+        },
+        {
+          app_id: 3,
+          status: AppStatus.PENDING,
+          created_by_user_id: 1,
+        },
+        {
+          app_id: 4,
+          status: AppStatus.NOT_APPROVED,
+          created_by_user_id: 1,
         },
     ])
 
@@ -31,10 +38,10 @@ exports.seed = async knex => {
     await knex('app_version').del()
 
     await knex('app_version').insert(
-        flatten([dhis2AppVersions, whoAppVersions])
+        flatten(appVersions)
     )
 
     await knex('app_version_localised').insert(
-        flatten([dhis2AppVersionsLocalized, whoAppVersionsLocalized])
+        flatten(appVersionsLocalised)
     )
 }
