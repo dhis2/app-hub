@@ -31,17 +31,29 @@ const prod = {
             },
             {
                 test: /\.scss$/,
-                loaders: ["style-loader", "css-loader", "sass-loader"]
+                use: [
+                    {loader:"style-loader"},
+                    {loader:"css-loader"},
+                    {loader:"sass-loader"},
+                ]
             },
             {
                 test: /\.css$/,
-                loaders: ["style-loader", "css-loader"]
+                use: [
+                    {loader:"style-loader"},
+                    {loader:"css-loader"},
+                ]
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
-                loaders: [
-                    `file-loader?name=[name]_${packageJSON.version}.[ext]&publicPath=${config
-                        .routes.baseAppName}/&outputPath=assets/`
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: `[name]_${packageJSON.version}.[ext]&publicPath=${config
+                                .routes.baseAppName}/&outputPath=assets/`
+                        }
+                    }
                 ]
             }
         ]
