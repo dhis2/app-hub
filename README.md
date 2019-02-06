@@ -2,6 +2,9 @@
 
 Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
 
+Note: The master branch currently holds the version 2 of the unreleased App Store. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
+
+
 # Setup
 
 ## Clone the repo
