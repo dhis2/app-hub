@@ -10,18 +10,34 @@ git clone https://github.com/dhis2/dhis2-appstore.git
 ```
 
 ## Create & seed test-database
-Create a database `appstore` in postgres with user/login appstore/appstore123 (or change credentials in `packages/server/src/knexfile.js`
+Create a database `appstore` in postgres with user/login appstore/appstore123 (or change credentials in `packages/server/src/knexfile.js`)
 
+If you want to use a local sqllite3 database instead of setting up a new postgres-database, use NODE_ENV=test (this will also be used for unit/integration tests)
+
+### Migrate/create tables
 ```bash
 cd packages/server
 yarn install
-knex migrate:latest
+npx knex migrate:latest
+```
+
+### Seed testdata
+```bash
+cd packages/server
+npx knex seed:run
+```
+
+### Reset & recreate database
+```bash
+cd packages/server
+npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
+```
 
 ## Create back-end config file
 Coming soon
 
 
-```
+```bash
 auth0.domain=<auth0 domain>
 auth0.issuer=<auth0 certificate issuer>
 auth0.clientId=<auth0 client id>
