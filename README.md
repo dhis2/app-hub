@@ -9,27 +9,19 @@ Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
 git clone https://github.com/dhis2/dhis2-appstore.git
 ```
 
-## Create back-end config file
-Create config file called `appstore.conf` in `/opt/hisp/appstore` with the following config
+## Create & seed test-database
+Create a database `appstore` in postgres with user/login appstore/appstore123 (or change credentials in `packages/server/src/knexfile.js`
 
-> Note to change the credentials and secrets etc.
+```bash
+cd packages/server
+yarn install
+knex migrate:latest
+
+## Create back-end config file
+Coming soon
+
 
 ```
-# JDBC driver connection URL
-connection.url=jdbc:postgresql:appstore_db
-
-# Database username
-connection.username=<database username>
-
-# Database password
-connection.password=<database password>
-
-#AmazonS3 access id
-access.id=<AmazonS3 id>
-
-#AmazonS3 secret key
-secret.key=<AmazonS3 secret>
-
 auth0.domain=<auth0 domain>
 auth0.issuer=<auth0 certificate issuer>
 auth0.clientId=<auth0 client id>
@@ -40,10 +32,7 @@ auth0.authorityStrategy=ROLES
 auth0.defaultAuth0ApiSecurityEnabled=false
 auth0.signingAlgorithm=HS256
 ```
-## Create postgres database (if you do not have one yet)
-```sql
-CREATE DATABASE appstore_db OWNER dhis;
-```
+
 
 ## Frontend config
 The frontend needs to know some basic information about the server to configure routes and API endpoints.
@@ -102,24 +91,25 @@ The URL to be used when auth0 has successfully logged in a user, and is redirect
 ```bash
 mvn clean install
 ```
-This will create a .war which can be deployed using tomcat.
-The API and frontend will be hosted on the same instance. 
 
-Web API available at `localhost:8080/appstore/api`.
+Web API available at `localhost:3000/`.
 
-Frontend at `localhost:8080/appstore/`.
+Frontend at `localhost:9000/appstore/`.
 
 #### Start the Web API backend independently
 
 ```bash
-mvn clean install && mvn spring-boot:run -Dskip.webpack
+cd packages/server
+yarn install
+yarn start
 ```
-Will be available at `localhost:3098/api/apps`.
+Will be available at `localhost:9000/`.
 This will skip the webpack-bundling, and the frontend will not be available.
 
 ### Start the front-end app independently (dev)
 
 ```bash
+cd packages/client
 yarn install
 yarn start
 ```
