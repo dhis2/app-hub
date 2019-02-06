@@ -1,5 +1,5 @@
 module.exports = {
-    development_: {
+    test: {
         client: 'sqlite3',
         connection: {
             filename: './appstore_dev.sqlite',

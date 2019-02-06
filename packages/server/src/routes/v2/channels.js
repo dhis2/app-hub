@@ -1,10 +1,10 @@
 const Boom = require('boom')
-const { AppStatus } = require('../enums')
+const { AppStatus } = require('../../enums')
 
 module.exports = [
     {
         method: 'GET',
-        path: '/channels',
+        path: '/v2/channels',
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
             const channels = await h.context.db.select().from('channel')
@@ -18,7 +18,7 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/channels/{id}',
+        path: '/v2/channels/{id}',
         handler: async (request, h) => {
             request.logger.info(
                 'In handler %s, looking for %s',

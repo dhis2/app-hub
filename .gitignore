@@ -14,3 +14,5 @@ node_modules
 build
 app/build
 app/*config.js
+packages/server/yarn-error.log
+packages/server/appstore_dev.sqlite

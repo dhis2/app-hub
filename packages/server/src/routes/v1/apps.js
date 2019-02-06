@@ -1,10 +1,28 @@
 const Boom = require('boom')
-const { AppStatus } = require('../enums')
+const Joi = require('joi')
+const { AppStatus } = require('../../enums')
+
+const AppModel = require('../../models/v1/out/App')
+
 
 module.exports = [
     {
         method: 'GET',
-        path: '/apps',
+        path: '/v1/apps',
+        options: {
+            tags: ['api'],
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        '200': {
+                            description: 'Success',
+                            schema: Joi.array().items(AppModel.def)
+                        }
+                    }
+                }
+            },
+        },
+
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
 
@@ -64,7 +82,7 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/apps',
+        path: '/v1/apps',
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
 
@@ -73,7 +91,12 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/apps/all',
+        path: '/v1/apps/all',
+        options: {
+            tags: ['api'],
+        },
+        
+        
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
             const apiVersion = request.pre.apiVersion;
@@ -87,8 +110,8 @@ module.exports = [
                 })
 
             const formattedApps = {};
-            //request.logger.info(apps)
-             apps.forEach(app => {
+
+            apps.forEach(app => {
                 console.log("Checking app: "+ app.uuid)
 
                 let currentApp = formattedApps[app.uuid];
@@ -127,11 +150,11 @@ module.exports = [
             })
 
             return Object.keys(formattedApps).map(id => (formattedApps[id]));
-        },
+        }
     },
     {
         method: 'GET',
-        path: '/apps/{id}',
+        path: '/v1/apps/{id}',
         handler: async (request, h) => {
             request.logger.info(
                 'In handler %s, looking for %s',
@@ -146,7 +169,7 @@ module.exports = [
     },
     {
         method: 'PUT',
-        path: '/apps/{id}',
+        path: '/v1/apps/{id}',
         handler: async (request, h) => {
             request.logger.info(
                 'In handler %s, looking for %s',
@@ -158,7 +181,7 @@ module.exports = [
     },
     {
         method: 'DELETE',
-        path: '/apps/{id}',
+        path: '/v1/apps/{id}',
         handler: async (request, h) => {
             request.logger.info(
                 'In handler %s, looking for %s',

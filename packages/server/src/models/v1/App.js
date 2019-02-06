@@ -1,12 +1,12 @@
 const joi = require('joi')
 
-const { AppStatuses, AppTypes } = require('../enums')
+const { AppStatuses, AppTypes } = require('../../../enums')
 
-const Developer = require('./Developer.js')
-const Organisation = require('./Organisation.js')
-const Review = require('./Review')
-const Version = require('./Version')
-const Image = require('./Image')
+/*const Developer = require('./Developer.js')
+const Organisation = require('./out/Organisation.js')
+const Review = require('./out/Review')
+const Version = require('./out/Version')
+const Image = require('./out/Image')*/
 
 // database def
 const def = joi.object().keys({
@@ -20,6 +20,7 @@ const def = joi.object().keys({
         .date()
         .iso()
         .required(),
+        
     updated_at: joi
         .date()
         .iso()

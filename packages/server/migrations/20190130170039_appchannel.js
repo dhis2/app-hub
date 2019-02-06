@@ -23,6 +23,7 @@ exports.up = async knex => {
             .integer('app_version_id')
             .unsigned()
             .notNullable()
+
         table
             .integer('channel_id')
             .unsigned()
@@ -49,6 +50,12 @@ exports.up = async knex => {
             .foreign('created_by_user_id')
             .references('id')
             .inTable('user')
+
+        table
+            .foreign('channel_id')
+            .references('id')
+            .inTable('channel')
+
     })
 
     await knex.raw(`
