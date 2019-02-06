@@ -37,19 +37,6 @@ npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 Coming soon
 
 
-```bash
-auth0.domain=<auth0 domain>
-auth0.issuer=<auth0 certificate issuer>
-auth0.clientId=<auth0 client id>
-auth0.clientSecret=<auth0 client secret>
-auth0.securedRoute=/secured/*
-auth0.base64EncodedSecret=false 
-auth0.authorityStrategy=ROLES
-auth0.defaultAuth0ApiSecurityEnabled=false
-auth0.signingAlgorithm=HS256
-```
-
-
 ## Frontend config
 The frontend needs to know some basic information about the server to configure routes and API endpoints.
 This is located in `app/default.config.js`.
@@ -109,6 +96,9 @@ mvn clean install
 ```
 
 Web API available at `localhost:3000/`.
+
+Swagger UI available at `localhost:3000/documentation`
+Swagger specs available at `localhost:3000/swagger.json`
 
 Frontend at `localhost:9000/appstore/`.
 
