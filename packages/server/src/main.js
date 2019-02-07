@@ -9,28 +9,19 @@ const jwksRsa = require('jwks-rsa');
 const Inert = require('inert');
 const Vision = require('vision');
 const Blipp = require('blipp')
+
 const HapiSwagger = require('hapi-swagger');
 
-const HapiApiVersion = require('hapi-api-version')
+const knexConfig = require('../knexfile')
 
-const api_v1 = require('./routes/v1')
-const api_v2 = require('./routes/v2')
+const routes = require('./routes')
 
-const { flatten } = require('./utils')
 
-const routes = flatten([api_v1.routes, api_v2.routes]);
 
-const db = Knex({
-    client: 'pg',
-    connection: {
-        host: '127.0.0.1',
-        user: 'appstore',
-        password: 'appstore123',
-        database: 'appstore',
-    },
-})
+console.log("Using env: " + process.env.NODE_ENV)
 
 // server things before start
+const db = new Knex(knexConfig[process.env.NODE_ENV])
 
 const server = Hapi.server({
     port: 3000,
@@ -68,20 +59,14 @@ server.bind({
 server.route(routes)
 
 // kick it
-
 const init = async () => {
-    await server.register({
-        plugin: Pino,
-        options: {
-            prettyPrint: true,
-            logEvents: ['response', 'onPostStart'],
-        },        
-    })
-
-    await server.register({
-        plugin: HapiApiVersion,
-        options: require('./options').apiVersions
-    })
+        await server.register({
+            plugin: Pino,
+            options: {
+                prettyPrint:  process.env.NODE_ENV !== 'test',
+                logEvents: ['response', 'onPostStart'],
+            },        
+        })
 
 
     //Swagger
@@ -116,18 +101,7 @@ const init = async () => {
         })
         registerRoutes()
       }) */
-    
-        // Add a route - handler and route definition is the same for all versions
-        server.route({
-            method: 'GET',
-            path: '/version',
-            handler: function(request, reply) {
-                // Return the api-version which was requested
-                return reply({
-                    version: request.pre.apiVersion
-                });
-            }
-        });
+
 
     await server.start()
 
@@ -140,3 +114,6 @@ process.on('unhandledRejection', err => {
 })
 
 init()
+
+
+module.exports = { server, db };

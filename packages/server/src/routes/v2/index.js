@@ -1,5 +1,5 @@
 const { flatten } = require('../../utils')
 
-exports.routes = flatten([
+module.exports = flatten([
     require('./apps.js'),
 ])

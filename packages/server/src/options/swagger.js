@@ -2,8 +2,8 @@ module.exports = {
     pathPrefixSize: 2,
     basePath: '/',
     info: {
-            title: 'Test API Documentation',
-            description: 'DHIS2 App Store API',
+            title: 'DHIS-2 App Store API Documentation',
+            description: '.',
     },
     /*pathReplacements: [
         {
@@ -12,5 +12,6 @@ module.exports = {
             replacement: ''
         }
     ],*/
-    deReference: false
+    deReference: false,
+    jsonEditor: true
 }
