@@ -6,9 +6,10 @@ const { AppStatuses, AppTypes } = require('../../../enums')
 const Organisation = require('./Organisation.js')
 const Review = require('./Review')*/
 const Version = require('./Version')
-/*const Image = require('./Image')*/
+const Developer = require('./User')
+const Image = require('./Image')
 
-// database def
+// v1 api schema
 const def = Joi.object().keys({
     
     appType: Joi
@@ -16,40 +17,56 @@ const def = Joi.object().keys({
             .required()
             .valid(AppTypes),
 
+    created: Joi
+            .number(),
+
+    description: Joi
+            .string()
+            .max(255, 'utf8')
+            .required(),
+
+    developer: Developer.required(),
+
+    images: Joi.array().items(Image).required(),
+
     id: Joi
         .string()
         .guid({ version: 'uuidv4' })
         .required(),
-
-    created: Joi
-        .date()
-        .iso()
-        .required(),
         
     lastUpdated: Joi
-        .date()
-        .iso()
-        .required(),
+                .number(),
 
     name: Joi
         .string()
         .max(255, 'utf8')
         .required(),
 
-    description: Joi
+    owner: Joi
+            .string()
+            .required(),
+
+    reviews: Joi
+            .array()
+            .items(Joi.any())
+            .required(),
+
+    sourceUrl: Joi
                 .string()
-                .max(255, 'utf8')
-                .required(),
+                .uri()
+                .required()
+                .allow(''),
 
     status: Joi
             .string()
             .required()
             .valid(AppStatuses),
 
-    versions: Joi.array().items(Version).required().min(1)
-    // foreign key references
-//    developer: joi.number().required(),
-    //organisation: joi.number(),
+    versions: Joi
+                .array()
+                .items(Version)
+                .min(1),   
+
 })
 
 module.exports = {

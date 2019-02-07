@@ -1,11 +1,8 @@
-const joi = require('joi')
+const Joi = require('joi')
 
-const Organisation = require('./Organisation.js')
-
-module.exports = joi.object().keys({
-    uuid: joi.string().guid({ version: 'uuidv4' }),
-    name: joi.string(),
-    oauth: joi.string(),
-    organisation: Organisation,
-    email: joi.string().email(),
+module.exports = Joi.object().keys({
+    address: Joi.string().allow(''),
+    email: Joi.string().email(),
+    name: Joi.string(),
+    organisation: Joi.string()    
 })

@@ -7,7 +7,7 @@
     "private": true,
     "scripts": {
         "start": "NODE_ENV=development nodemon src/main.js",
-        "test": "NODE_ENV=test npm run test-db && lab -a code -t 85 -v  -I 'Reflect,core,_babelPolyfill,regeneratorRuntime,__core-js_shared__'",
+        "test": "NODE_ENV=test npm run test-db && lab -a code -t 85 -v -I 'core,__core-js_shared__'",
         "test-coverage": "NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html",
         "test-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run"
     },

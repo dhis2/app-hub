@@ -34,7 +34,7 @@ module.exports = [
             },*/
         },
 
-        handler: 
+        handler: () => {}
     },
     {
         method: 'POST',

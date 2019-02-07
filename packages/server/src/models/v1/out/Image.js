@@ -1,8 +1,11 @@
-const joi = require('joi')
+const Joi = require('joi')
 
-module.exports = joi.object().keys({
-    caption: joi.string(),
-    description: joi.string(),
-    imageUrl: joi.string().uri(),
-    logo: joi.boolean(),
+module.exports = Joi.object().keys({
+    caption: Joi.string(),
+    created: Joi.date().iso().required(),
+    description: Joi.string().allow(null),
+    id: Joi.string(),
+    imageUrl: Joi.string().uri(),
+    lastUpdated: Joi.number(),
+    logo: Joi.boolean(),
 })
