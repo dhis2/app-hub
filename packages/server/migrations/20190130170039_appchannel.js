@@ -63,10 +63,13 @@ exports.up = async knex => {
             SELECT  app.id AS app_id, 
                     app.uuid, app.type,
                     appver.version, appver.uuid AS version_uuid, appver.created_at AS version_created_at,
-                    localisedapp.language_code, localisedapp.name, localisedapp.description,  
+                    localisedapp.language_code, localisedapp.name, localisedapp.description, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
-                    c.name AS channel_name, c.uuid AS channel_uuid
+                    c.name AS channel_name, c.uuid AS channel_uuid,
+                    "user".id AS developer_id, "user".uuid AS developer_uuid, "user".first_name AS developer_first_name, "user".last_name AS developer_last_name,
+                    "user".email AS developer_email,
+                    org.name AS organisation
                 FROM app 
 
                 INNER JOIN app_status AS s
@@ -80,6 +83,17 @@ exports.up = async knex => {
                     ON ac.id = appver.id
                 INNER JOIN channel AS c 
                     ON ac.channel_id = c.id
+
+                INNER JOIN "user" 
+                    ON app.created_by_user_id = "user".id
+
+                INNER JOIN user_organisation AS user_org  
+                    ON user_org.user_id = "user".id
+
+                INNER JOIN organisation AS org 
+                    ON org.id = (SELECT organisation_id FROM user_organisation WHERE user_organisation.user_id = "user".id ORDER BY user_organisation.created_at LIMIT 1)
+
+                WHERE user_org.user_id = "user".id 
     `)
 }
 

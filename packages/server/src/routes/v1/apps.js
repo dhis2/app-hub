@@ -20,7 +20,7 @@ function convertAppToV1App(app) {
         description: app.description,
         
         versions: [],
-        developer: {address:'', email: 'test@test.com', organisation: 'test', name:'tester'},
+        developer: {address:'', email: app.developer_email, organisation: app.organisation, name: `${app.developer_first_name} ${app.developer_last_name}`.trim()},
         owner: 'oauth-token|id',
         images: [],
 

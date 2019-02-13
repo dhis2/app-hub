@@ -26,6 +26,16 @@ describe('Get all published apps [v1]', () => {
     
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
+
+        const approvedApps = apps.filter(app => app.status === 'APPROVED');
+        expect(approvedApps.length).to.be.equal(apps.length)
+
+        const whoApp = apps.filter(app => app.name === 'A nice app by WHO')
+        
+        expect(whoApp).to.be.array()
+        expect(whoApp[0].developer.email).to.be.equal('erik@dhis2.org')
+        expect(whoApp[0].developer.organisation).to.be.equal('WHO')
+        expect(whoApp[0].developer.name).to.be.equal('Erik Arenhill')
     })
 })
 
