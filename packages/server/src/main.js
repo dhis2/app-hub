@@ -1,10 +1,9 @@
 const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
-const Boom = require('boom')
 
-const jwt = require('hapi-auth-jwt2');
-const jwksRsa = require('jwks-rsa');
+//const jwt = require('hapi-auth-jwt2');
+//const jwksRsa = require('jwks-rsa');
 
 const Inert = require('inert');
 const Vision = require('vision');
@@ -16,9 +15,10 @@ const knexConfig = require('../knexfile')
 
 const routes = require('./routes')
 
+const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
 
-
-console.log("Using env: " + process.env.NODE_ENV)
+console.log("Using env: ", process.env.NODE_ENV)
+console.log("Injecting config vars into process.env: ", config)
 
 // server things before start
 const db = new Knex(knexConfig[process.env.NODE_ENV])
@@ -34,42 +34,23 @@ const server = Hapi.server({
     }
 })
 
-/* const validateUser = (decoded, request, callback) => {
-    // This is a simple check that the `sub` claim
-    // exists in the Access Token. Modify it to suit
-    // the needs of your application
-    if (decoded && decoded.sub) {
-      if (decoded.scope)
-        return callback(null, true, {
-          scope: decoded.scope.split(' ')
-        })
-  
-      return callback(null, true);
-    }
-  
-    return callback(null, false);
-  } */
-
-
-
 server.bind({
     db,
 })
 
-server.route(routes)
-
 // kick it
 const init = async () => {
-        await server.register({
-            plugin: Pino,
-            options: {
-                prettyPrint:  process.env.NODE_ENV !== 'test',
-                logEvents: ['response', 'onPostStart'],
-            },        
-        })
 
+    //Add pino, logging lib
+    await server.register({
+        plugin: Pino,
+        options: {
+            prettyPrint:  process.env.NODE_ENV !== 'test',
+            logEvents: ['response', 'onPostStart'],
+        },        
+    })
 
-    //Swagger
+    //Swagger + deps to render swaggerui
     await server.register([
         Inert,
         Vision,
@@ -78,30 +59,26 @@ const init = async () => {
             plugin: HapiSwagger,
             options: require('./options').swaggerOptions
         }
-    ]);
+    ])
 
-/*     await server.register(jwt, err => {
-        if (err) throw err;
-        server.auth.strategy('jwt', 'jwt', 'required', {
-          complete: true,
-          // verify the Access Token against the
-          // remote Auth0 JWKS
-          key: jwksRsa.hapiJwt2Key({
-            cache: true,
-            rateLimit: true,
-            jwksRequestsPerMinute: 5,
-            jwksUri: `https://dhis2.eu.auth0.com/.well-known/jwks.json` //TODO: move to config/env var
-          }),
-          verifyOptions: {
-            audience: 'https://dhis2.eu.auth0.com/api/v2/',
-            issuer: `https://dhis2.eu.auth0.com/`,
-            algorithms: ['RS256']
-          },
-          validateFunc: validateUser
-        })
-        registerRoutes()
-      }) */
+    
 
+    //TODO: add auth
+    //await server.register(jwt)
+    /* server.auth.strategy('jwt', 'jwt', 'required', {
+        // verify the Access Token against the
+        // remote Auth0 JWKS
+        key: process.env.auth0_secret,
+        verifyOptions: {
+            audience: process.env.auth0_audience, //TODO: move to config/env var
+            issuer: process.env.auth0_domain, //TODO: move to config/env var
+            algorithms: [process.env.auth0_alg]
+        },
+        validate: validateUser
+    })*/
+
+
+    server.route(routes)
 
     await server.start()
 

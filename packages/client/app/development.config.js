@@ -1,6 +1,6 @@
 module.exports = {
     api: {
-        baseURL: 'http://localhost:3000/',
+        baseURL: 'http://localhost:3000/v1/',
         redirectURL: 'http://localhost:9000/user',
     },
     auth0: {

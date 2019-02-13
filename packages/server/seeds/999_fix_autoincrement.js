@@ -2,6 +2,10 @@
 
 exports.seed = async knex => {
 
+    if ( knex.client.config.client !== 'postgres' ) {
+        return false;
+
+    }
     const tables = (await knex
         .raw(`
                 select tc.table_schema, tc.table_name, kc.column_name

@@ -47,7 +47,7 @@ export function setAppApproval(appId, status) {
 }
 
 export function createApp(payload) {
-    return fromApi("apps/", true, createAppUploadOptions(payload));
+    return fromApi("apps", true, createAppUploadOptions(payload));
 }
 
 export function createNewVersion(appId, payload) {

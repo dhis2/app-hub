@@ -2,9 +2,6 @@ const Joi = require('joi')
 
 const { AppStatuses, AppTypes } = require('../../../enums')
 
-/*const Developer = require('./Developer.js')
-const Organisation = require('./Organisation.js')
-const Review = require('./Review')*/
 const Version = require('./Version')
 const Developer = require('./User')
 const Image = require('./Image')
@@ -54,7 +51,6 @@ const def = Joi.object().keys({
     sourceUrl: Joi
                 .string()
                 .uri()
-                .required()
                 .allow(''),
 
     status: Joi

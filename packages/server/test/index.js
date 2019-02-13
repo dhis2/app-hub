@@ -7,6 +7,7 @@ const { it, describe, before, beforeEach } = lab
 
 // prepare environment
 const { server, db } = require('../src/main.js')
+const FormData = require('form-data')
 
 console.log("Tests are running in env: " + process.env.NODE_ENV)
 
