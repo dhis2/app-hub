@@ -87,13 +87,8 @@ exports.up = async knex => {
                 INNER JOIN "user" 
                     ON app.created_by_user_id = "user".id
 
-                INNER JOIN user_organisation AS user_org  
-                    ON user_org.user_id = "user".id
-
                 INNER JOIN organisation AS org 
-                    ON org.id = (SELECT organisation_id FROM user_organisation WHERE user_organisation.user_id = "user".id ORDER BY user_organisation.created_at LIMIT 1)
-
-                WHERE user_org.user_id = "user".id 
+                    ON org.id = app.organisation_id
     `)
 }
 
