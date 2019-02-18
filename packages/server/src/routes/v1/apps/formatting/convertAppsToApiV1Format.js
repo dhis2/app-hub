@@ -16,11 +16,10 @@ function convertDbAppViewRowToAppApiV1Object(app) {
         //TODO: set address
         developer: {address:'', email: app.developer_email, organisation: app.organisation, name: `${app.developer_first_name} ${app.developer_last_name}`.trim()},
 
-        //TODO: set correct owner
-        owner: 'oauth-token|id',
+        //TODO: can we use developer_email here ? previous it was oauth token|id
+        owner: app.developer_email,
         images: [],
 
-        //TODO: set sourceUrl
         sourceUrl: app.source_url || '',
         reviews: []
     }
@@ -33,7 +32,6 @@ function convertAppToV1AppVersion(app, serverUrl) {
     return ({
         created: +new Date(app.version_created_at),
 
-        //TODO: set demoUrl
         demoUrl: app.demo_url || '',
         downloadUrl: `${serverUrl}/apps/download/${app.organisation_slug}/${app.appver_slug}/${app.version}`,
         id: app.version_uuid,
@@ -64,8 +62,6 @@ module.exports = (apps, request) => {
             
         currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
     })
-    
-    console.log(formattedApps)
 
     return Object.keys(formattedApps).map(x => formattedApps[x])
 }

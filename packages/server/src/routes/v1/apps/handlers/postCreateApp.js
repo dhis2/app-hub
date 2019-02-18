@@ -1,7 +1,11 @@
-const uuid = require('uuid/v4')
-const CreateAppModel = require('../../../models/v1/in/CreateAppModel')
+const Boom = require('boom')
+const Joi = require('joi')
 
-const AWSFileHandler = require('../../../utils/AWSFileHandler')
+const uuid = require('uuid/v4')
+const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
+
+const defaultFailHandler = require('../../defaultFailHandler')
+const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 
 module.exports = {
     method: 'POST',
@@ -16,15 +20,7 @@ module.exports = {
         },
         validate: {
             payload: CreateAppModel.payloadSchema,
-            failAction: async function(request, h, err) {
-                console.dir(request.payload.app);
-                if ( err.isJoi ) {  //schema validation error
-                    throw Boom.badRequest('Schema validation error:' + JSON.stringify(err.details))
-                }
-                console.log("=================================================")
-                console.dir(err);
-                throw Boom.badRequest()
-            }
+            failAction: defaultFailHandler
         },
         plugins: {
             'hapi-swagger': {
@@ -37,15 +33,7 @@ module.exports = {
                 //400: Joi.any(),
                 //500: Joi.string()
             },
-            failAction: async function(request, h, err) {
-                
-                if ( err.isJoi ) {  //schema validation error
-                    throw Boom.badImplementation('Schema validation error:' + JSON.stringify(err.details))
-                }
-                console.log("=================================================")
-                console.dir(err);
-                throw Boom.badImplementation()
-            }
+            failAction: defaultFailHandler
         },
     },
     handler: async (request, h) => {

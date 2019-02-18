@@ -1,8 +1,6 @@
 const Boom = require('boom')
 const Joi = require('joi')
 
-const { AppStatus } = require('../../enums')
-
 const AppModel = require('../../models/v2/out/App')
 
 module.exports = [

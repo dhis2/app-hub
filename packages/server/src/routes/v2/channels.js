@@ -1,5 +1,4 @@
 const Boom = require('boom')
-const { AppStatus } = require('../../enums')
 
 module.exports = [
     {
