@@ -1,4 +1,5 @@
 const uuid = require('uuid/v4')
+const slugify = require('slugify')
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,8 +16,8 @@ exports.seed = async knex => {
     //Organisations
     await knex('organisation').del()
     await knex('organisation').insert([
-        { id: 1, uuid: uuid(), name: 'DHIS2' },
-        { id: 2, uuid: uuid(), name: 'WHO' },
+        { id: 1, uuid: uuid(), name: 'DHIS2', slug: slugify('DHIS2', {lower: true}) },
+        { id: 2, uuid: uuid(), name: 'World Health Organization', slug: slugify('World Health Organization', {lower: true}) },
     ])
 
     //user-organisations

@@ -1,6 +1,8 @@
 const uuid = require('uuid/v4')
 const CreateAppModel = require('../../../models/v1/in/CreateAppModel')
 
+const AWSFileHandler = require('../../../utils/AWSFileHandler')
+
 module.exports = {
     method: 'POST',
     path: '/v1/apps',

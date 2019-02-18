@@ -35,7 +35,7 @@ function convertAppToV1AppVersion(app, serverUrl) {
 
         //TODO: set demoUrl
         demoUrl: app.demo_url || '',
-        downloadUrl: `${serverUrl}/apps/download/${app.version_uuid}`,
+        downloadUrl: `${serverUrl}/apps/download/${app.organisation_slug}/${app.appver_slug}/${app.version}`,
         id: app.version_uuid,
         lastUpdated: +new Date(app.version_created_at),
         maxDhisVersion: app.max_dhis2_version,
