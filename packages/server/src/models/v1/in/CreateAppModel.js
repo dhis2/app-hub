@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const { AppStatuses, AppTypes } = require('../../../enums')
+const { AppTypes } = require('../../../enums')
 
 const CreateModelAppData = Joi.object().keys({
     name: Joi.string(),

@@ -11,7 +11,7 @@ module.exports = {
         migrations: {
             tableName: 'knex_migrations',
         },
-        useNullAsDefault: false,
+        useNullAsDefault: true,
     },
     development: {
         client: 'pg',

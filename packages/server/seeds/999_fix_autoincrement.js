@@ -2,9 +2,10 @@
 
 exports.seed = async knex => {
 
-    if ( knex.client.config.client !== 'postgres' ) {
+    if ( knex.client.config.client !== 'pg' ) {
+        console.log("skipping serial sequence reset")
+        console.log(knex.client.config.client);
         return false;
-
     }
     const tables = (await knex
         .raw(`
@@ -22,7 +23,7 @@ exports.seed = async knex => {
         .rows
         .map(r => ({table_name: r.table_name, column_name: r.column_name }))
 
-    // reset serial sequence values
+    // reset serial sequence values after seeding static id's
     await Promise.all(tables.map(async (obj) => {
         const { table_name, column_name } = obj
         console.log(`Reset serial sequence for table: ${table_name} with id ${column_name}`)

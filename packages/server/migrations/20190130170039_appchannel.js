@@ -62,7 +62,7 @@ exports.up = async knex => {
         CREATE VIEW apps_view AS 
             SELECT  app.id AS app_id, 
                     app.uuid, app.type,
-                    appver.version, appver.uuid AS version_uuid, appver.created_at AS version_created_at,
+                    appver.version, appver.uuid AS version_uuid, appver.created_at AS version_created_at, appver.source_url, appver.demo_url, 
                     localisedapp.language_code, localisedapp.name, localisedapp.description, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 

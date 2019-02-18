@@ -89,6 +89,12 @@ exports.up = async knex => {
             .notNullable()
 
         table
+            .string('source_url', 500)
+
+        table
+            .string('demo_url', 500)
+
+        table
             .foreign('created_by_user_id')
             .references('id')
             .inTable('user')
