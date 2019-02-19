@@ -7,8 +7,6 @@ const defaultFailHandler = require('../../defaultFailHandler')
 const { getAppsByStatusAndLanguage } = require('../data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
-
-
 module.exports = {
     //unauthenticated endpoint returning all approved apps
     method: 'GET',
@@ -18,10 +16,10 @@ module.exports = {
         tags: ['api', 'v1'],
         response: {
             status: {
-                200: Joi.array().items(AppModel.def),
-                500: Joi.string()
+               // 200: Joi.array().items(AppModel.def),
+               // 500: Joi.string()
             },
-            failAction: defaultFailHandler
+            //failAction: defaultFailHandler
         },
     },
     handler: async (request, h) => {

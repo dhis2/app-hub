@@ -11,7 +11,7 @@
         "test": "NODE_ENV=test npm run reset-db && lab -a code -t 80 -v -I 'core,__core-js_shared__'",
         "test-coverage": "NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html",
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
-        "zip": "rm -rf ./build && mkdir build && git archive --format=zip HEAD -o build/server.zip"
+        "zip": "rm -rf ./build && mkdir build && zip -r build/server.zip . --exclude=node_modules*"
     },
     "dependencies": {
         "aws-sdk": "^2.401.0",

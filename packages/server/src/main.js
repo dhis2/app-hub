@@ -11,11 +11,10 @@ const Blipp = require('blipp')
 
 const HapiSwagger = require('hapi-swagger');
 
-const knexConfig = require('../knexfile')
-
 const routes = require('./routes')
 
 const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
+const knexConfig = require('../knexfile')
 
 console.log("Using env: ", process.env.NODE_ENV)
 console.log("Injecting config vars into process.env: ", config)
@@ -45,8 +44,8 @@ const init = async () => {
     await server.register({
         plugin: Pino,
         options: {
-            prettyPrint:  process.env.NODE_ENV !== 'test',
-            logEvents: ['response', 'onPostStart'],
+            prettyPrint:  true, //process.env.NODE_ENV !== 'production',
+            redact: ['req.headers.authorization']
         },        
     })
 

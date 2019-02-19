@@ -14,7 +14,7 @@ module.exports = class AWSFileHandler {
             this._s3api = new AWS.S3({
                 apiVersion: '2006-03-01',
                 region: this.region
-            });
+            })
         }
         return this._s3api
     }

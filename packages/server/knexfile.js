@@ -1,3 +1,5 @@
+const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
+
 module.exports = {
     test: {
         client: 'sqlite3',
@@ -37,6 +39,7 @@ module.exports = {
             password: process.env.RDS_PASSWORD,
             database: process.env.RDS_DB_NAME
         },
+        searchPath: ['knex', 'public', 'postgres', 'appstore'],
         pool: {
             min: 2,
             max: 10,

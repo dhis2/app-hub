@@ -1,8 +1,11 @@
 const Boom = require('boom')
 const Joi = require('joi')
 
+const slugify = require('slugify')
+
 const uuid = require('uuid/v4')
 const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
+const { AppStatus } = require('../../../../enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 const AWSFileHandler = require('../../../../utils/AWSFileHandler')
@@ -47,34 +50,83 @@ module.exports = {
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
+        console.log("Received json: ", appJsonPayload);
         //TODO: see if current authed user exists or create a new user/organisation
 
         //generate a new uuid to insert
         const app_uuid = uuid()
+        const version_uuid = uuid()
 
         const knex = h.context.db;
 
         let insertedAppId = -1;
-        try {
-            insertedAppId = await knex('app').insert({
-                created_at: knex.fn.now(),
-                created_by_user_id: 1,  //todo: change to real id
-                organisation_id: 1,     //todo: change to real id
-                type: appJsonPayload.appType,
-                uuid: app_uuid
-            }).returning('id')
+        let insertedVersionId = -1;
+        let insertedLocalisedAppVersionId = -1;
 
-            if ( insertedAppId <= 0 ) {
-                throw new Error("Could not insert app to database")
+        //knex.transaction(async(trx) => {
+            try {
+                //TODO: transaction
+                //TODO: upsert developer and organisation
+
+                insertedAppId = await knex('app').insert({
+                    created_at: knex.fn.now(),
+                    created_by_user_id: 2,  //todo: change to real id
+                    organisation_id: 2,     //todo: change to real id
+                    type: appJsonPayload.appType,
+                    uuid: app_uuid
+                }).returning('id')
+
+                if ( insertedAppId[0] <= 0 ) {
+                    throw new Error("Could not insert app to database")
+                }
+                console.log("Inserted app with id: ", insertedAppId)
+
+                await knex('app_status').insert({
+                    created_at: knex.fn.now(),
+                    created_by_user_id: 2,  //todo: change to real id
+                    app_id: insertedAppId[0],     //todo: change to real id
+                    status: AppStatus.APPROVED  //TODO: set as pending after demo
+                }).returning('id')
+
+                insertedVersionId = await knex('app_version').insert({
+                    app_id: insertedAppId[0],
+                    created_at: knex.fn.now(),
+                    created_by_user_id: 2,
+                    uuid: version_uuid,
+                    demo_url: appJsonPayload.versions[0].demoUrl,
+                    source_url: appJsonPayload.sourceUrl,
+                    version: appJsonPayload.versions[0].version
+                }).returning('id')
+                if ( insertedVersionId[0] <= 0 ) {
+                    throw new Error("Could not insert app to database")
+                }
+                console.log("Inserted app version with id: ", insertedVersionId)
+
+                insertedLocalisedAppVersionId = await knex('app_version_localised').insert({
+                    app_version_id: insertedVersionId[0],
+                    created_at: knex.fn.now(),
+                    created_by_user_id: 2,  //todo: change to real id
+                    description: appJsonPayload.description,
+                    name: appJsonPayload.name,
+                    slug: slugify(appJsonPayload.name, {lower:true}),
+                    language_code: 'en'
+                }).returning('id')
+                console.log("Inserted localised app version with id: ", insertedLocalisedAppVersionId)
+
+                await knex('app_channel').insert({
+                    app_version_id: insertedVersionId[0],
+                    channel_id: 1, //TODO: set dynamically
+                    created_at: knex.fn.now(),
+                    created_by_user_id: 2,  //TODO: set dynamically based on current user or provided data
+                    min_dhis2_version: appJsonPayload.versions[0].minDhisVersion,
+                    max_dhis2_version: appJsonPayload.versions[0].maxDhisVersion,
+                }).returning('id')
+
+            } catch ( err ) {
+                console.log(err)
+                throw Boom.internal(err)
             }
-
-            console.log("Inserted app with id: ", insertedAppId)
-
-            //TODO: insert version, localized, developer, etc...
-        } catch ( err ) {
-            console.log(err)
-            throw Boom.internal(err)
-        }
+        //})
 
         const fileHandler = new AWSFileHandler(process.env.AWS_REGION,
                                                process.env.AWS_BUCKET_NAME)
@@ -83,8 +135,8 @@ module.exports = {
         const file = request.payload.file;
 
         try  {
-            const appUpload = fileHandler.saveFile(app_uuid, 'app.zip', file._data)
-            const iconUpload = fileHandler.saveFile(app_uuid, 'icon', imageFile._data)
+            const appUpload = fileHandler.saveFile(`${app_uuid}/${version_uuid}`, 'app.zip', file._data)
+            const iconUpload = fileHandler.saveFile(`${app_uuid}/${version_uuid}`, 'icon', imageFile._data)
             const results = await Promise.all([appUpload, iconUpload])
             console.log("result:", results)
 

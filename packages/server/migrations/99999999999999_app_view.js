@@ -15,19 +15,22 @@ exports.up = async knex => {
                 FROM app 
 
                 INNER JOIN app_status AS s
-                    ON app.id = s.app_id
+                    ON s.app_id = app.id
+
                 INNER JOIN app_version AS appver
-                    ON app.id = appver.app_id 
+                    ON appver.app_id = s.app_id
+
                 INNER JOIN app_version_localised AS localisedapp
-                    ON appver.id = localisedapp.app_version_id 
+                    ON localisedapp.app_version_id = appver.id
 
                 INNER JOIN app_channel AS ac
-                    ON ac.id = appver.id
+                    ON ac.app_version_id = appver.id
+
                 INNER JOIN channel AS c 
-                    ON ac.channel_id = c.id
+                    ON c.id = ac.channel_id
 
                 INNER JOIN "user" 
-                    ON app.created_by_user_id = "user".id
+                    ON "user".id = app.created_by_user_id
 
                 INNER JOIN organisation AS org 
                     ON org.id = app.organisation_id
