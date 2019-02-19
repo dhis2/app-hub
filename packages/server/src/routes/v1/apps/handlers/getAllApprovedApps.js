@@ -1,4 +1,3 @@
-const Boom = require('boom')
 const Joi = require('joi')
 
 const { AppStatus } = require('../../../../enums')

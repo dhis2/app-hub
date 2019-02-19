@@ -24,7 +24,7 @@ console.log("Injecting config vars into process.env: ", config)
 const db = new Knex(knexConfig[process.env.NODE_ENV])
 
 const server = Hapi.server({
-    port: 3000,
+    port: process.env.PORT || 3000,
     host: 'localhost',
     routes: {
         cors: {

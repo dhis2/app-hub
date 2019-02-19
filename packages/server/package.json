@@ -6,10 +6,12 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
+        "production": "NODE_ENV=production node src/main.js",
         "start": "NODE_ENV=development nodemon src/main.js",
         "test": "NODE_ENV=test npm run reset-db && lab -a code -t 80 -v -I 'core,__core-js_shared__'",
         "test-coverage": "NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html",
-        "reset-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run"
+        "reset-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
+        "zip": "rm -rf ./build && mkdir build && git archive --format=zip HEAD -o build/server.zip"
     },
     "dependencies": {
         "aws-sdk": "^2.401.0",

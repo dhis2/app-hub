@@ -1,3 +1,5 @@
+const Boom = require('boom')
+
 module.exports = async function(request, h, err) {
     console.log("=================================================")
     console.dir(err);
