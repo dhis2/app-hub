@@ -40,7 +40,7 @@ describe('Get all published apps [v1]', () => {
 
         expect(whoApp[0].versions[0].version).to.be.equal('1.0')
         expect(whoApp[0].versions[0].demoUrl).to.be.equal('https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report')
-        expect(whoApp[0].versions[0].downloadUrl).to.be.equal('http://localhost:3000/apps/download/world-health-organization/a-nice-app-by-who/1.0')
+        expect(whoApp[0].versions[0].downloadUrl).to.be.equal('http://localhost:3000/v1/apps/download/world-health-organization/a-nice-app-by-who/1.0/app.zip')
 
         expect(whoApp[0].sourceUrl).to.be.equal('https://github.com/dhis2/who-immunization-analysis-app/')
     })
