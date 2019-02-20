@@ -19,13 +19,13 @@ module.exports = {
         request.logger.info('In handler %s', request.path)
 
         const fileHandler = new AWSFileHandler(process.env.AWS_REGION,
-                                                process.env.AWS_BUCKET_NAME)
+                                               process.env.AWS_BUCKET_NAME)
 
         const { organisation_slug, appver_slug, app_version } = request.params
 
         const knex = h.context.db
 
-        const row = await knex
+        const appRows = await knex
                     .select()
                     .from('apps_view')
                     .where({
@@ -36,10 +36,7 @@ module.exports = {
                         'language_code': 'en'
                     })
 
-        console.log("got row:" , row)
-
- 
-        const item = row[0]
+        const item = appRows[0]
 
         console.log(`Fetching file from ${item.uuid}/${item.version_uuid}`)
         const file =  await fileHandler.getFile(`${item.uuid}/${item.version_uuid}`, 'app.zip')
@@ -47,7 +44,6 @@ module.exports = {
 
         return h.response(file.Body)
                 .type('application/zip')
-                .header('Content-type', file.ContentType)
                 .header('Content-length', file.ContentLength)
                 
     }

@@ -6,6 +6,8 @@ const defaultFailHandler = require('../../defaultFailHandler')
 const { getAllAppsByLanguage } = require('../data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
+const { canSeeAllApps } = require('../../../../security')
+
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'GET',
@@ -25,8 +27,17 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        const apps = await getAllAppsByLanguage('en', h.context.db)
+        if ( !canSeeAllApps(request, h) ) {
+            throw Boom.unauthorized();
+        }
 
-        return convertAppsToApiV1Format(apps)
+        try {
+            const apps = await getAllAppsByLanguage('en', h.context.db)
+            return convertAppsToApiV1Format(apps, request)
+        } catch  ( err ) {
+            console.log(err)
+        }
+        
+        return [];
     }
 }

@@ -10,6 +10,8 @@ const { AppStatus } = require('../../../../enums')
 const defaultFailHandler = require('../../defaultFailHandler')
 const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 
+const { canCreateApp } = require('../../../../security')
+
 module.exports = {
     method: 'POST',
     path: '/v1/apps',
@@ -43,6 +45,10 @@ module.exports = {
         request.logger.info('In handler %s', request.path)
         request.logger.info(`app id: ${request.params.app_uuid}`)
 
+        if ( !canCreateApp(request, h) ) {
+            throw Boom.unauthorized();
+        }
+
         const app = request.payload.app;
         const appJsonPayload = JSON.parse(app._data.toString('utf8').trim())
         const appJsonValidationResult = CreateAppModel.def.validate(appJsonPayload);
@@ -70,7 +76,7 @@ module.exports = {
 
                 insertedAppId = await knex('app').insert({
                     created_at: knex.fn.now(),
-                    created_by_user_id: 2,  //todo: change to real id
+                    created_by_user_id: 1,  //todo: change to real id
                     organisation_id: 2,     //todo: change to real id
                     type: appJsonPayload.appType,
                     uuid: app_uuid
@@ -83,15 +89,15 @@ module.exports = {
 
                 await knex('app_status').insert({
                     created_at: knex.fn.now(),
-                    created_by_user_id: 2,  //todo: change to real id
+                    created_by_user_id: 1,  //todo: change to real id
                     app_id: insertedAppId[0],     //todo: change to real id
-                    status: AppStatus.APPROVED  //TODO: set as pending after demo
+                    status: AppStatus.PENDING  //TODO: set as pending after demo
                 }).returning('id')
 
                 insertedVersionId = await knex('app_version').insert({
                     app_id: insertedAppId[0],
                     created_at: knex.fn.now(),
-                    created_by_user_id: 2,
+                    created_by_user_id: 1,
                     uuid: version_uuid,
                     demo_url: appJsonPayload.versions[0].demoUrl,
                     source_url: appJsonPayload.sourceUrl,
@@ -105,7 +111,7 @@ module.exports = {
                 insertedLocalisedAppVersionId = await knex('app_version_localised').insert({
                     app_version_id: insertedVersionId[0],
                     created_at: knex.fn.now(),
-                    created_by_user_id: 2,  //todo: change to real id
+                    created_by_user_id: 1,  //todo: change to real id
                     description: appJsonPayload.description,
                     name: appJsonPayload.name,
                     slug: slugify(appJsonPayload.name, {lower:true}),

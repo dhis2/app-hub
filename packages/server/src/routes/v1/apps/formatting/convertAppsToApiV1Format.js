@@ -29,6 +29,9 @@ function convertDbAppViewRowToAppApiV1Object(app) {
 
 
 function convertAppToV1AppVersion(app, serverUrl) {
+    if ( serverUrl === null || typeof ( serverUrl) === 'undefined' ) {
+        throw new Error('Missing parameter: serverUrl')
+    }
     return ({
         created: +new Date(app.version_created_at),
 
@@ -44,7 +47,9 @@ function convertAppToV1AppVersion(app, serverUrl) {
 
 
 module.exports = (apps, request) => {
-    
+    if ( request === null || typeof ( request) === 'undefined' ) {
+        throw new Error('Missing parameter: request')
+    }
     const serverUrl = `${request.server.info.protocol}://${request.info.host}`
 
     console.log(`Using serverUrl: ${serverUrl}`)

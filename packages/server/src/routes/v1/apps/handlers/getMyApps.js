@@ -5,6 +5,7 @@ const AppModel = require('../../../../models/v1/out/App')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
+
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
     method: 'GET',
