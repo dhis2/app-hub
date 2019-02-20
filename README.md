@@ -37,18 +37,21 @@ npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 ```
 
 ## Create back-end config file
-Env vars needed for running in AWS Elastic Beanstalk (place in ~/.dhis2/appstore/vars):
+Env vars
 ```bash
+#For the S3 storage where application files will be stored.
 AWS_REGION
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_BUCKET_NAME
 
+#EB will inject these so no need to set them manually in EB Environments
 RDS_HOSTNAME
 RDS_USERNAME
 RDS_PASSWORD
 RDS_DB_NAME
 ```
+See /packages/server/knexfile.js to change database connections/credentials or server which will be used depending on process.env.NODE_ENV
 
 ## Frontend config
 The frontend needs to know some basic information about the server to configure routes and API endpoints.
