@@ -37,7 +37,7 @@ npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 ```
 
 ## Create back-end config file
-Env vars
+Env vars (~/.dhis2/appstore/vars)
 ```bash
 #For the S3 storage where application files will be stored.
 AWS_REGION
