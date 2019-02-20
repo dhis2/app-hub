@@ -14,6 +14,7 @@ exports.up = async knex => {
             .foreign('app_version_id')
             .references('id')
             .inTable('app_version')
+            .onDelete('CASCADE')
 
         table.string('language_code', 2)
 
