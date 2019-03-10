@@ -1,15 +1,19 @@
+'use strict'
+
 const Boom = require('boom')
 const Joi = require('joi')
 
+const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 const defaultFailHandler = require('../../defaultFailHandler')
 
 const { canDeleteApp } = require('../../../../security')
-
+const getAppsByUUID = require('../data/getAppsByUUID')
+const deleteApp = require('../data/deleteApp')
 
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'DELETE',
-    path: '/v1/apps/{app_uuid}',
+    path: '/v1/apps/{appUUID}',
     config: {
         //TODO: add auth
         //auth: 'jwt',
@@ -20,9 +24,10 @@ module.exports = {
                 500: Joi.any()
             },
             failAction: defaultFailHandler
-        },
+        }
     },
     handler: async (request, h) => {
+
         request.logger.info('In handler %s', request.path)
 
         if ( !canDeleteApp(request, h) ) {
@@ -33,13 +38,22 @@ module.exports = {
 
         const knex = h.context.db;
 
-        const result = await knex('app').where('uuid', request.params.app_uuid).del()
+        const appUUID = request.params.appUUID
 
-        //TODO: delete files
+        const appRows = await getAppsByUUID(appUUID, 'en', knex)
 
-        //{"message":"Status changed for app: WHO Data Quality Tool","httpStatus":"OK","httpStatusCode":200}
-        console.log(result)
+        const item = appRows[0]
+        //TODO: delete files. All versions?
+        const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
 
-        return {message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200}
+        try {
+            await fileHandler.deleteDir(`${item.uuid}`)
+            const result = await deleteApp(appUUID, knex)
+            console.log(result)
+
+            return { message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200 }
+        } catch ( err ) {
+            return { message: 'An error occurred', httpStatus: 'Internal Server Error', httpStatusCode: 500 }
+        }
     }
 }

@@ -1,3 +1,5 @@
+'use strict'
+
 const canDeleteApp = () => true
 const canChangeAppStatus = () => true
 const canCreateAppVersion = () => true

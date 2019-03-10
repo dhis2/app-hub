@@ -1,8 +1,11 @@
-module.exports = async (languageCode, dbConnection)  => {
-    return await dbConnection
-                .select()
-                .from('apps_view')
-                .where({
-                    'language_code': languageCode
-                })
+'use strict'
+
+module.exports = (languageCode, dbConnection) => {
+
+    return dbConnection
+        .select()
+        .from('apps_view')
+        .where({
+            'language_code': languageCode
+        })
 }

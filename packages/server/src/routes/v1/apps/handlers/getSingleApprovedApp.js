@@ -1,3 +1,5 @@
+'use strict'
+
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -6,13 +8,16 @@ const { AppStatus } = require('../../../../enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 const getAppsByUUID = require('../data/getAppsByUUID')
+const getAppsByUUIDAndStatus = require('../data/getAppsByUUIDAndStatus')
 const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format')
+
+const { canSeeAllApps } = require('../../../../security')
 
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
     method: 'GET',
-    path: '/v1/apps/{app_uuid}',
+    path: '/v1/apps/{appUUID}',
     config: {
         auth: false,
         tags: ['api', 'v1'],
@@ -23,22 +28,26 @@ module.exports = {
                 500: Joi.string()
             },
             failAction: defaultFailHandler
-        },
+        }
     },
     handler: async (request, h) => {
+
         request.logger.info('In handler %s', request.path)
-        
-        if ( )
 
-        const app_uuid = request.params.app_uuid;
+        const appUUID = request.params.appUUID;
 
-        const apps = await getAppsByUUID(app_uuid, AppStatus.APPROVED, 'en', h.context.db)
+
+        let apps = null
+
+        if ( canSeeAllApps(request) ) {
+            apps = await getAppsByUUID(appUUID, 'en', h.context.db)
+        } else {
+            apps = await getAppsByUUIDAndStatus(appUUID, AppStatus.APPROVED, 'en', h.context.db)
+        }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)
 
-
-
-        if ( v1FormattedArray.length < 1 ) {
+        if ( v1FormattedArray.length === 0 ) {
             throw Boom.notFound()
         }
 

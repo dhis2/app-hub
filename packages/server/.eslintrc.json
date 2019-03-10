@@ -1,0 +1,22 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "hapi"
+    ],
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "semi": 0,
+        "brace-style": [2, "1tbs"],
+        "no-console": 0,
+        "hapi/hapi-capitalize-modules": 0
+    },    
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "ecmaFeatures": {
+          "globalReturn": true,
+          "experimentalObjectRestSpread": true
+        }
+    }
+}

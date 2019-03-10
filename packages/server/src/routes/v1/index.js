@@ -1,3 +1,5 @@
+'use strict'
+
 const { flatten } = require('../../utils')
 
 module.exports = flatten(

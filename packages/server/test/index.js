@@ -2,6 +2,7 @@
 
 // load deps
 const { expect } = require('code')
+
 let lab = exports.lab = require('lab').script()
 const { it, describe, before, beforeEach } = lab
 
@@ -15,7 +16,8 @@ console.log("Tests are running in env: " + process.env.NODE_ENV)
 
 describe('Get all published apps [v1]', () => {
 
-    it('should return some test-apps from seeded db', async() => {
+    it('should return some test-apps from seeded db', async () => {
+
         const injectOptions = {
             method: 'GET',
             url: '/v1/apps'
@@ -27,10 +29,10 @@ describe('Get all published apps [v1]', () => {
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
 
-        const approvedApps = apps.filter(app => app.status === 'APPROVED');
+        const approvedApps = apps.filter((app) => app.status === 'APPROVED');
         expect(approvedApps.length).to.be.equal(apps.length)
 
-        const whoApp = apps.filter(app => app.name === 'A nice app by WHO')
+        const whoApp = apps.filter((app) => app.name === 'A nice app by WHO')
         
         expect(whoApp).to.be.array()
         
@@ -48,9 +50,11 @@ describe('Get all published apps [v1]', () => {
 
 
 
+
 describe('Get all published apps [v2]', () => {
 
-    it('should just return a 501 not implemented for the moment being', async() => {
+    it('should just return a 501 not implemented for the moment being', async () => {
+        
         const injectOptions = {
             method: 'GET',
             url: '/v2/apps'

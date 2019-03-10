@@ -1,3 +1,5 @@
+'use strict'
+
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -22,9 +24,10 @@ module.exports = {
                 500: Joi.string()
             },
             failAction: defaultFailHandler
-        },
+        }
     },
     handler: async (request, h) => {
+
         request.logger.info('In handler %s', request.path)
 
         if ( !canSeeAllApps(request, h) ) {
@@ -37,7 +40,7 @@ module.exports = {
         } catch  ( err ) {
             console.log(err)
         }
-        
+
         return [];
     }
 }

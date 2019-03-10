@@ -1,9 +1,9 @@
+'use strict'
+
 const Joi = require('joi')
 
 const { AppStatus } = require('../../../../enums')
-const AppModel = require('../../../../models/v1/out/App')
 
-const defaultFailHandler = require('../../defaultFailHandler')
 const { getAppsByStatusAndLanguage } = require('../data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
@@ -16,13 +16,13 @@ module.exports = {
         tags: ['api', 'v1'],
         response: {
             status: {
-               // 200: Joi.array().items(AppModel.def),
-               // 500: Joi.string()
-            },
-            //failAction: defaultFailHandler
-        },
+                // 200: Joi.array().items(AppModel.def),
+                // 500: Joi.string()
+            }
+        }
     },
     handler: async (request, h) => {
+
         request.logger.info('In handler %s', request.path)
 
         const apps = await getAppsByStatusAndLanguage(AppStatus.APPROVED, 'en', h.context.db);
