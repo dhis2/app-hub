@@ -33,6 +33,11 @@ module.exports = class AWSFileHandler {
         return this.api.putObject(objectParams).promise()
     }
 
+    /**
+     * Downloads the binary data for a file
+     * @param {*} path 
+     * @param {*} filename 
+     */
     getFile(path, filename) {
         return this.api.getObject({
             Bucket: this.bucketName, 
@@ -40,10 +45,44 @@ module.exports = class AWSFileHandler {
         }).promise()
     }
 
+    /**
+     * Deletes a single file with the specified path and filename
+     * @param {*} path 
+     * @param {*} filename 
+     */
     deleteFile(path, filename) {
         return this.api.deleteObject({
             Bucket: this.bucketName, 
             Key: this.generateKey(path, filename)
         }).promise()
+    }
+
+    async deleteDir(path) {
+        const objectsInPath = await this.api.listObjectsV2({Bucket: this.bucketName, Prefix: path}).promise()
+
+        if ( objectsInPath.Contents.length === 0 ) {
+            await this.api.deleteObject({
+                Bucket: this.bucketName,
+                Key: path
+            }).promise()
+        } else {
+            const deleteParams = {
+                Bucket: this.bucketName,
+                Delete: { 
+                    Objects: []
+                }
+            }
+            objectsInPath.Contents.forEach(obj => {
+                console.log("Will try to delete: ", obj.Key)
+                deleteParams.Delete.Objects.push({Key: obj.Key})
+            })
+
+            await this.api.deleteObjects(deleteParams).promise()
+
+            if ( objectsInPath.IsTruncated ) {
+                console.log("Did not get all objects first time, call it again")
+                await this.deleteDir(path)
+            }
+        }
     }
 }
