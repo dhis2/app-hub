@@ -1,7 +1,7 @@
-'use strict'
 
 
-const { AppStatus } = require('../../../../enums')
+
+const { AppStatus } = require('@enums')
 const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 
 module.exports = {

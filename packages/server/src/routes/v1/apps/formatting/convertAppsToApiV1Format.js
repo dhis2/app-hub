@@ -1,4 +1,4 @@
-'use strict'
+
 
 const convertDbAppViewRowToAppApiV1Object = (app) => ({
     appType: app.type,

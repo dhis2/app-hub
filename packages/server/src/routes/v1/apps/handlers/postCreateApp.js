@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Boom = require('boom')
 
@@ -6,12 +6,14 @@ const slugify = require('slugify')
 
 const uuid = require('uuid/v4')
 const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
-const { AppStatus } = require('../../../../enums')
+const { AppStatus } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 
 const { canCreateApp } = require('../../../../security')
+
+const createAppAsync = require('@data/createApp')
 
 module.exports = {
     method: 'POST',
@@ -75,16 +77,13 @@ module.exports = {
         try {
             //TODO: transaction
             //TODO: upsert developer and organisation
+            const trx = knex.transaction()
 
-            insertedAppId = await knex('app').insert({
-                created_at: knex.fn.now(),
-                created_by_user_id: 1,  //todo: change to real id
-                organisation_id: 2,     //todo: change to real id
-                type: appJsonPayload.appType,
-                uuid: appUUID
-            }).returning('id')
+            //TODO insert real org id / dev id
+            insertedAppId = await createAppAsync(2, 1, appJsonPayload.appType, appUUID, trx)
 
             if ( insertedAppId[0] <= 0 ) {
+                trx.rollback()
                 throw new Error('Could not insert app to database')
             }
 
@@ -92,9 +91,9 @@ module.exports = {
 
             await knex('app_status').insert({
                 created_at: knex.fn.now(),
-                created_by_user_id: 1,  //todo: change to real id
-                app_id: insertedAppId[0],     //todo: change to real id
-                status: AppStatus.PENDING  //TODO: set as pending after demo
+                created_by_user_id: 1,      //TODO: change to real id
+                app_id: insertedAppId[0],   //TODO: change to real id
+                status: AppStatus.PENDING   //TODO: set as pending after demo
             }).returning('id')
 
             insertedVersionId = await knex('app_version').insert({

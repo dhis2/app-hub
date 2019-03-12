@@ -1,14 +1,14 @@
-'use strict'
+
 
 const Boom = require('boom')
 const Joi = require('joi')
 
-const AWSFileHandler = require('../../../../utils/AWSFileHandler')
+const AWSFileHandler = require('@utils/AWSFileHandler')
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const { canDeleteApp } = require('../../../../security')
-const getAppsByUUID = require('../data/getAppsByUUID')
-const deleteApp = require('../data/deleteApp')
+const { canDeleteApp } = require('@security')
+const getAppsByUUID = require('@data/getAppsByUUID')
+const deleteApp = require('@data/deleteApp')
 
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have

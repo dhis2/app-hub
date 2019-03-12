@@ -1,14 +1,14 @@
-'use strict'
+
 
 const Boom = require('boom')
 const Joi = require('joi')
 
 const AppModel = require('../../../../models/v1/out/App')
 const defaultFailHandler = require('../../defaultFailHandler')
-const { getAllAppsByLanguage } = require('../data')
+const { getAllAppsByLanguage } = require('@data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
-const { canSeeAllApps } = require('../../../../security')
+const { canSeeAllApps } = require('@security')
 
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have

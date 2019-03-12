@@ -1,4 +1,4 @@
-'use strict'
+
 
 const Knex = require('knex')
 const Hapi = require('hapi')

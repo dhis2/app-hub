@@ -6,6 +6,7 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
+        "postinstall": "link-module-alias",
         "production": "NODE_ENV=production node src/main.js",
         "start": "NODE_ENV=development nodemon src/main.js",
         "test": "NODE_ENV=test npm run reset-db && lab -a code -t 80 -v -I 'core,__core-js_shared__'",
@@ -36,7 +37,16 @@
         "eslint-config-hapi": "^12.0.0",
         "eslint-plugin-hapi": "^4.1.0",
         "lab": "^18.0.2",
+        "link-module-alias": "^1.1.6",
         "nodemon": "^1.18.10",
         "sqlite3": "^4.0.6"
+    },
+    "_moduleAliases": {
+        "@data": "src/data",
+        "@security": "src/security",
+        "@utils": "src/utils",
+        "@models": "src/models",
+        "@enums": "src/enums",
+        "~": "src"
     }
 }

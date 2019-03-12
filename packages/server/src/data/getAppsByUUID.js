@@ -1,4 +1,4 @@
-'use strict'
+
 
 /**
  * Returns all apps from apps_view based on uuid and languageCode

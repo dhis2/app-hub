@@ -1,17 +1,19 @@
-'use strict'
+
 
 const Boom = require('boom')
 const Joi = require('joi')
 
 const AppModel = require('../../../../models/v1/out/App')
-const { AppStatus } = require('../../../../enums')
+const { AppStatus } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const getAppsByUUID = require('../data/getAppsByUUID')
-const getAppsByUUIDAndStatus = require('../data/getAppsByUUIDAndStatus')
+
+const getAppsByUUIDAsync = require('@data/getAppsByUUID')
+const getAppsByUUIDAndStatusAsync = require('@data/getAppsByUUIDAndStatus')
+
 const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format')
 
-const { canSeeAllApps } = require('../../../../security')
+const { canSeeAllApps } = require('@security')
 
 
 module.exports = {
@@ -40,9 +42,9 @@ module.exports = {
         let apps = null
 
         if ( canSeeAllApps(request) ) {
-            apps = await getAppsByUUID(appUUID, 'en', h.context.db)
+            apps = await getAppsByUUIDAsync(appUUID, 'en', h.context.db)
         } else {
-            apps = await getAppsByUUIDAndStatus(appUUID, AppStatus.APPROVED, 'en', h.context.db)
+            apps = await getAppsByUUIDAndStatusAsync(appUUID, AppStatus.APPROVED, 'en', h.context.db)
         }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)

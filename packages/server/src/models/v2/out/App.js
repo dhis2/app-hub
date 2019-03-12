@@ -1,15 +1,15 @@
 const Joi = require('joi')
 
-const { AppStatuses, AppTypes } = require('../../../enums')
+const { AppTypes } = require('@enums')
 
 
 // database def
 const def = Joi.object().keys({
-    
+
     appType: Joi
-            .string()
-            .required()
-            .valid(AppTypes),
+        .string()
+        .required()
+        .valid(AppTypes),
 
     id: Joi
         .string()

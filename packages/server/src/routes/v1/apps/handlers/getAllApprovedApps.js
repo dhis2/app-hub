@@ -1,10 +1,6 @@
-'use strict'
+const { AppStatus } = require('@enums')
 
-const Joi = require('joi')
-
-const { AppStatus } = require('../../../../enums')
-
-const { getAppsByStatusAndLanguage } = require('../data')
+const { getAppsByStatusAndLanguage } = require('@data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
 module.exports = {

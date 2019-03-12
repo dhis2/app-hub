@@ -1,12 +1,6 @@
 const joi = require('joi')
 
-const { AppStatuses, AppTypes } = require('../../../enums')
-
-/*const Developer = require('./Developer.js')
-const Organisation = require('./out/Organisation.js')
-const Review = require('./out/Review')
-const Version = require('./out/Version')
-const Image = require('./out/Image')*/
+const { AppStatuses, AppTypes } = require('@enums')
 
 // database def
 const def = joi.object().keys({
@@ -20,7 +14,7 @@ const def = joi.object().keys({
         .date()
         .iso()
         .required(),
-        
+
     updated_at: joi
         .date()
         .iso()
@@ -51,5 +45,5 @@ const def = joi.object().keys({
 
 module.exports = {
     def,
-    validate: obj => def.validate(obj),
+    validate: (obj) => def.validate(obj),
 }

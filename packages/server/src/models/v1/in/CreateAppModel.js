@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const { AppTypes } = require('../../../enums')
+const { AppTypes } = require('@enums')
 
 const CreateModelAppData = Joi.object().keys({
     name: Joi.string(),
@@ -24,7 +24,7 @@ const CreateModelAppData = Joi.object().keys({
 
 const payloadSchema = {
     //multipart gets parsed as streams so we have to allow any and manually validate in the handler.
-    app: Joi.any(), 
+    app: Joi.any(),
     imageFile: Joi.any(),
     file: Joi.any()
 }
