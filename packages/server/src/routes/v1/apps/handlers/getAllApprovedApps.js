@@ -1,6 +1,6 @@
 const { AppStatus } = require('@enums')
 
-const { getAppsByStatusAndLanguage } = require('@data')
+const { getAppsByStatusAndLanguageAsync } = require('@data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
 module.exports = {
@@ -21,7 +21,7 @@ module.exports = {
 
         request.logger.info('In handler %s', request.path)
 
-        const apps = await getAppsByStatusAndLanguage(AppStatus.APPROVED, 'en', h.context.db);
+        const apps = await getAppsByStatusAndLanguageAsync(AppStatus.APPROVED, 'en', h.context.db);
 
         return convertAppsToApiV1Format(apps, request)
     }

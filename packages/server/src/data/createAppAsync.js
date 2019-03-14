@@ -37,8 +37,8 @@ const createAppAsync = async (userId, orgId, appType, knex, transaction) =>  {
         .transacting(transaction)
         .insert({
             created_at: knex.fn.now(),
-            created_by_user_id: userId,  //todo: change to real id
-            organisation_id: orgId,     //todo: change to real id
+            created_by_user_id: userId,
+            organisation_id: orgId,
             type: appType,
             uuid: appUuid
         }).returning('id')
