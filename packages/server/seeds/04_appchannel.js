@@ -4,6 +4,7 @@ const appVersions = require('./mock/appversions')
 const [ dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions ] = appVersions;
 
 exports.seed = async knex => {
+    
     await knex('app_channel').del()
 
     await knex('channel').del()

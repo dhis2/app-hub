@@ -2,10 +2,10 @@
 
 
 module.exports = {
-    getAppsByStatusAndLanguageAsync: require('./getAppsByStatusAndLanguage'),
-    getAllAppsByLanguageAsync: require('./getAllAppsByLanguage'),
-    getAppsByUUIDAndStatusAsync: require('./getAppsByUUIDAndStatus'),
-    getAppsByUUIDAsync: require('./getAppsByUUID'),
-    deleteAppAsync: require('./deleteApp'),
-    createAppAsync: require('./createApp')
+    getAppsByStatusAndLanguageAsync: require('./getAppsByStatusAndLanguageAsync'),
+    getAllAppsByLanguageAsync: require('./getAllAppsByLanguageAsync'),
+    getAppsByUuidAndStatusAsync: require('./getAppsByUuidAndStatusAsync'),
+    getAppsByUuidAsync: require('./getAppsByUuidAsync'),
+    deleteAppAsync: require('./deleteAppAsync'),
+    createAppAsync: require('./createAppAsync')
 }

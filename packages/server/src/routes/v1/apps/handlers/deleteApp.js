@@ -7,8 +7,8 @@ const AWSFileHandler = require('@utils/AWSFileHandler')
 const defaultFailHandler = require('../../defaultFailHandler')
 
 const { canDeleteApp } = require('@security')
-const getAppsByUUID = require('@data/getAppsByUUID')
-const deleteApp = require('@data/deleteApp')
+const getAppsByUuidAsync = require('@data/getAppsByUuidAsync')
+const deleteAppAsync = require('@data/deleteAppAsync')
 
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
@@ -40,7 +40,7 @@ module.exports = {
 
         const appUUID = request.params.appUUID
 
-        const appRows = await getAppsByUUID(appUUID, 'en', knex)
+        const appRows = await getAppsByUuidAsync(appUUID, 'en', knex)
 
         const item = appRows[0]
         //TODO: delete files. All versions?
@@ -48,7 +48,7 @@ module.exports = {
 
         try {
             await fileHandler.deleteDir(`${item.uuid}`)
-            const result = await deleteApp(appUUID, knex)
+            const result = await deleteAppAsync(appUUID, knex)
             console.log(result)
 
             return { message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200 }

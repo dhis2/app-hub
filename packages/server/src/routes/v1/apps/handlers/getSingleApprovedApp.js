@@ -8,13 +8,12 @@ const { AppStatus } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const getAppsByUUIDAsync = require('@data/getAppsByUUID')
-const getAppsByUUIDAndStatusAsync = require('@data/getAppsByUUIDAndStatus')
+const getAppsByUuidAsync = require('@data/getAppsByUuidAsync')
+const getAppsByUuidAndStatusAsync = require('@data/getAppsByUuidAndStatusAsync')
 
 const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format')
 
 const { canSeeAllApps } = require('@security')
-
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
@@ -42,9 +41,9 @@ module.exports = {
         let apps = null
 
         if ( canSeeAllApps(request) ) {
-            apps = await getAppsByUUIDAsync(appUUID, 'en', h.context.db)
+            apps = await getAppsByUuidAsync(appUUID, 'en', h.context.db)
         } else {
-            apps = await getAppsByUUIDAndStatusAsync(appUUID, AppStatus.APPROVED, 'en', h.context.db)
+            apps = await getAppsByUuidAndStatusAsync(appUUID, AppStatus.APPROVED, 'en', h.context.db)
         }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)

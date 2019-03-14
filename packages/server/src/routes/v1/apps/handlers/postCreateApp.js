@@ -2,9 +2,6 @@
 
 const Boom = require('boom')
 
-const slugify = require('slugify')
-
-const uuid = require('uuid/v4')
 const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
 const { AppStatus } = require('@enums')
 
@@ -13,7 +10,11 @@ const AWSFileHandler = require('../../../../utils/AWSFileHandler')
 
 const { canCreateApp } = require('../../../../security')
 
-const createAppAsync = require('@data/createApp')
+const createAppAsync = require('@data/createAppAsync')
+const createAppStatusAsync = require('@data/createAppStatusAsync')
+const createAppVersionAsync = require('@data/createAppVersionAsync')
+const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionAsync')
+const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
 
 module.exports = {
     method: 'POST',
@@ -56,87 +57,51 @@ module.exports = {
         const app = request.payload.app;
         const appJsonPayload = JSON.parse(app._data.toString('utf8').trim())
         const appJsonValidationResult = CreateAppModel.def.validate(appJsonPayload);
+
         if ( appJsonValidationResult.error !== null ) {
             throw Boom.badRequest(appJsonValidationResult.error);
         }
 
         console.log('Received json: ', appJsonPayload)
-        //TODO: see if current authed user exists or create a new user/organisation
-
-        //generate a new uuid to insert
-        const appUUID = uuid()
-        const versionUUID = uuid()
 
         const knex = h.context.db;
 
-        let insertedAppId = -1;
-        let insertedVersionId = -1;
-        let insertedLocalisedAppVersionId = -1;
+        //TODO: see if current authed user exists or create a new user/organisation
+        const currentUserId = 2
+        const organisationId = 1
+        let appUuid = null
+        let versionUuid = null
 
-        //knex.transaction(async(trx) => {
+        const trx = knex.transaction
+        knex.transaction = (callback) => knex.transaction(callback)
+
         try {
-            //TODO: transaction
-            //TODO: upsert developer and organisation
-            const trx = knex.transaction()
+            const app = await createAppAsync(currentUserId, organisationId, appJsonPayload.appType, knex, trx)
+            appUuid = app.uuid
+            await createAppStatusAsync(currentUserId, app.id, AppStatus.PENDING, knex, trx)
 
-            //TODO insert real org id / dev id
-            insertedAppId = await createAppAsync(2, 1, appJsonPayload.appType, appUUID, trx)
+            const { demoUrl, sourceUrl, version } =  appJsonPayload.versions[0]
+            const appVersion = await createAppVersionAsync(currentUserId, app.id, demoUrl, sourceUrl, version, knex, trx)
+            versionUuid = appVersion.uuid
 
-            if ( insertedAppId[0] <= 0 ) {
-                trx.rollback()
-                throw new Error('Could not insert app to database')
-            }
+            await createLocalizedAppVersionAsync(currentUserId, appVersion.id , appJsonPayload.description, appJsonPayload.name, 'en', knex, trx)
 
-            console.log('Inserted app with id: ', insertedAppId)
+            const { minDhisVersion, maxDhisVersion } = appJsonPayload.versions[0]
+            await addAppVersionToChannelAsync(appVersion.id, currentUserId, 'Stable', minDhisVersion, maxDhisVersion, knex, trx)
 
-            await knex('app_status').insert({
-                created_at: knex.fn.now(),
-                created_by_user_id: 1,      //TODO: change to real id
-                app_id: insertedAppId[0],   //TODO: change to real id
-                status: AppStatus.PENDING   //TODO: set as pending after demo
-            }).returning('id')
-
-            insertedVersionId = await knex('app_version').insert({
-                app_id: insertedAppId[0],
-                created_at: knex.fn.now(),
-                created_by_user_id: 1,
-                uuid: versionUUID,
-                demo_url: appJsonPayload.versions[0].demoUrl,
-                source_url: appJsonPayload.sourceUrl,
-                version: appJsonPayload.versions[0].version
-            }).returning('id')
-
-            if ( insertedVersionId[0] <= 0 ) {
-                throw new Error('Could not insert app to database')
-            }
-
-            console.log('Inserted app version with id: ', insertedVersionId)
-
-            insertedLocalisedAppVersionId = await knex('app_version_localised').insert({
-                app_version_id: insertedVersionId[0],
-                created_at: knex.fn.now(),
-                created_by_user_id: 1,  //todo: change to real id
-                description: appJsonPayload.description,
-                name: appJsonPayload.name,
-                slug: slugify(appJsonPayload.name, { lower:true }),
-                language_code: 'en'
-            }).returning('id')
-
-            console.log('Inserted localised app version with id: ', insertedLocalisedAppVersionId)
-
-            await knex('app_channel').insert({
-                app_version_id: insertedVersionId[0],
-                channel_id: 1, //TODO: set dynamically
-                created_at: knex.fn.now(),
-                created_by_user_id: 2,  //TODO: set dynamically based on current user or provided data
-                min_dhis2_version: appJsonPayload.versions[0].minDhisVersion,
-                max_dhis2_version: appJsonPayload.versions[0].maxDhisVersion
-            }).returning('id')
 
         } catch ( err ) {
+            await trx.rollback();
             console.log(err)
             throw Boom.internal(err)
         }
+
+        if ( appUuid === null || versionUuid === null ) {
+            await trx.rollback()
+            throw Boom.internal(`Could not create app`)
+        }
+
+        await trx.commit()
 
         const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
 
@@ -144,8 +109,8 @@ module.exports = {
         const file = request.payload.file;
 
         try  {
-            const appUpload = fileHandler.saveFile(`${appUUID}/${versionUUID}`, 'app.zip', file._data)
-            const iconUpload = fileHandler.saveFile(`${appUUID}/${versionUUID}`, 'icon', imageFile._data)
+            const appUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, 'app.zip', file._data)
+            const iconUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, 'icon', imageFile._data)
             const results = await Promise.all([appUpload, iconUpload])
             console.log('result:', results)
         } catch (ex) {
