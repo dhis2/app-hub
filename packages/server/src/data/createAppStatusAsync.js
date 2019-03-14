@@ -23,7 +23,7 @@ const createAppStatusAsync = async (userId, appId, status, knex, transaction) =>
         throw new Error(`Could not save app status: ${status} for appId: ${appId}`);
     }
 
-    return appStatusIds[0]
+    return { id: appStatusIds[0] }
 }
 
 module.exports = createAppStatusAsync

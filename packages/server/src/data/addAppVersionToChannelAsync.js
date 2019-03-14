@@ -24,6 +24,7 @@ const addAppVersionToChannelAsync = async (appVersionId, currentUserId, channelN
             max_dhis2_version: maxDhisVersion
         }).returning('id')
 
+
     if ( !id || id[0] <= 0 ) {
         throw new Error(`Could not add app version with id ${appVersionId} to channel ${channelName}`)
     }

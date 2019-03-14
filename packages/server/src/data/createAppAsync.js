@@ -50,7 +50,7 @@ const createAppAsync = async (userId, orgId, appType, knex, transaction) =>  {
 
 
     return {
-        id: insertedAppId,
+        id: insertedAppId[0],
         uuid: appUuid,
     }
 }

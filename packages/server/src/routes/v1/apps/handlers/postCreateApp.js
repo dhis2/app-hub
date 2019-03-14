@@ -72,16 +72,23 @@ module.exports = {
         let appUuid = null
         let versionUuid = null
 
-        const trx = knex.transaction
-        knex.transaction = (callback) => knex.transaction(callback)
+        const createTransaction = () => {
+
+            return new Promise((resolve) => {
+
+                return knex.transaction(resolve);
+            });
+        }
+        
+        const trx = await createTransaction()
 
         try {
-            const app = await createAppAsync(currentUserId, organisationId, appJsonPayload.appType, knex, trx)
-            appUuid = app.uuid
-            await createAppStatusAsync(currentUserId, app.id, AppStatus.PENDING, knex, trx)
+            const dbApp = await createAppAsync(currentUserId, organisationId, appJsonPayload.appType, knex, trx)
+            appUuid = dbApp.uuid
+            await createAppStatusAsync(currentUserId, dbApp.id, AppStatus.PENDING, knex, trx)
 
             const { demoUrl, sourceUrl, version } =  appJsonPayload.versions[0]
-            const appVersion = await createAppVersionAsync(currentUserId, app.id, demoUrl, sourceUrl, version, knex, trx)
+            const appVersion = await createAppVersionAsync(currentUserId, dbApp.id, demoUrl, sourceUrl, version, knex, trx)
             versionUuid = appVersion.uuid
 
             await createLocalizedAppVersionAsync(currentUserId, appVersion.id , appJsonPayload.description, appJsonPayload.name, 'en', knex, trx)
@@ -91,8 +98,9 @@ module.exports = {
 
 
         } catch ( err ) {
-            await trx.rollback();
+            console.log('ROLLING BACK TRANSACTION')
             console.log(err)
+            await trx.rollback();            
             throw Boom.internal(err)
         }
 
@@ -102,6 +110,7 @@ module.exports = {
         }
 
         await trx.commit()
+        //}
 
         const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
 
