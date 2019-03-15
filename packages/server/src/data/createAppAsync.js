@@ -33,25 +33,24 @@ const createAppAsync = async (userId, orgId, appType, knex, transaction) =>  {
     //generate a new uuid to insert
     const appUuid = uuid()
 
-    const insertedAppId = await knex('app')
-        .transacting(transaction)
-        .insert({
-            created_at: knex.fn.now(),
-            created_by_user_id: userId,
-            organisation_id: orgId,
-            type: appType,
-            uuid: appUuid
-        }).returning('id')
+    try {
+        const [id] = await knex('app')
+            .transacting(transaction)
+            .insert({
+                created_at: knex.fn.now(),
+                created_by_user_id: userId,
+                organisation_id: orgId,
+                type: appType,
+                uuid: appUuid
+            }).returning('id')
 
+        if ( id < 0 ) {
+            throw new Error('Inserted id was < 0')
+        }
 
-    if ( !insertedAppId || insertedAppId[0] <= 0 ) {
-        throw new Error('Could not insert app to database')
-    }
-
-
-    return {
-        id: insertedAppId[0],
-        uuid: appUuid,
+        return { id, uuid: appUuid }
+    } catch ( err ) {
+        throw new Error(`Could not insert app to database. ${err.message}`)
     }
 }
 

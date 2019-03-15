@@ -3,7 +3,7 @@
 /**
  * Returns all apps from apps_view based on uuid and languageCode
  * @param {*} uuid
- * @param {*} languageCode
+ * @param {string} languageCode
  * @param {*} dbConnection
  */
 module.exports = (uuid, languageCode, dbConnection) => {
