@@ -1,5 +1,7 @@
-exports.up = async knex => {
-    await knex.schema.createTable('user_organisation', table => {
+exports.up = async (knex) => {
+
+    await knex.schema.createTable('user_organisation', (table) => {
+
         table
             .timestamp('created_at', true)
             .defaultTo(knex.fn.now())
@@ -22,7 +24,7 @@ exports.up = async knex => {
         table
             .foreign('user_id')
             .references('id')
-            .inTable('user')
+            .inTable('users')
 
         table
             .foreign('organisation_id')
@@ -32,7 +34,7 @@ exports.up = async knex => {
 
     await knex.raw(`
         CREATE VIEW users_with_organisations  
-        AS SELECT u.id AS user_id, u.uuid AS user_uuid, u.first_name, u.last_name, u.email, o.name AS organisation_name, o.uuid AS organisation_uuid FROM "user" AS u 
+        AS SELECT u.id AS user_id, u.uuid AS user_uuid, u.first_name, u.last_name, u.email, o.name AS organisation_name, o.uuid AS organisation_uuid FROM users AS u 
             INNER JOIN user_organisation AS dorg 
                 ON dorg.user_id = user_id 
             INNER JOIN organisation AS o 
@@ -40,7 +42,8 @@ exports.up = async knex => {
         `)
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
+
     await knex.raw('DROP VIEW users_with_organisations')
     await knex.schema.dropTable('user_organisation')
 }

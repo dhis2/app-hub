@@ -18,6 +18,8 @@ exports.up = async knex => {
         table.timestamp('updated_at', true)
 
         table.string('name', 100).unique()
+
+        table.string('slug', 150).unique()
     })
 }
 

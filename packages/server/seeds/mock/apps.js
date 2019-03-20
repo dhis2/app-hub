@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4')
-const { AppType } = require('../../src/enums')
+const { AppType } = require('@enums')
 
 const dhis2App = {
     id: 1,

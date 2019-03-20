@@ -1,3 +1,5 @@
+
+
 function flatten(arr, result = []) {
     for (let i = 0, length = arr.length; i < length; i++) {
         const value = arr[i]
@@ -13,5 +15,6 @@ function flatten(arr, result = []) {
 }
 
 module.exports = {
-    flatten,
+    flatten, 
+    AWSFileHandler: require('./AWSFileHandler')
 }

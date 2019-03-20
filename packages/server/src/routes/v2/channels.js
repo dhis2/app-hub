@@ -1,25 +1,27 @@
-const Boom = require('boom')
-const { AppStatus } = require('../../enums')
+
+
 
 module.exports = [
     {
         method: 'GET',
         path: '/v2/channels',
         handler: async (request, h) => {
+
             request.logger.info('In handler %s', request.path)
             const channels = await h.context.db.select().from('channel')
 
-            return channels.map(channel => ({
+            return channels.map((channel) => ({
                 uuid: channel.uuid,
                 name: channel.name,
-                uri: `${request.path}/${channel.uuid}`,
+                uri: `${request.path}/${channel.uuid}`
             }))
-        },
+        }
     },
     {
         method: 'GET',
         path: '/v2/channels/{id}',
         handler: async (request, h) => {
+
             request.logger.info(
                 'In handler %s, looking for %s',
                 request.path,
@@ -31,18 +33,18 @@ module.exports = [
                 .where('channel_uuid', request.params.id)
 
             const apps = {}
-            channelApps.forEach(app => {
+            channelApps.forEach((app) => {
+
                 if (!apps[app.uuid]) {
                     apps[app.uuid] = []
                 }
 
-                const version = apps[app.uuid].find(
-                    x => x.version === app.version
-                )
+                const version = apps[app.uuid].find((x) => x.version === app.version)
+
                 if (!version) {
                     apps[app.uuid].push({
                         version: app.version,
-                        name: { [app.language_code]: app.name },
+                        name: { [app.language_code]: app.name }
                     })
                 } else {
                     version.name[app.language_code] = app.name
@@ -50,6 +52,6 @@ module.exports = [
             })
 
             return apps
-        },
-    },
+        }
+    }
 ]

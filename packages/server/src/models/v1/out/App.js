@@ -1,6 +1,6 @@
 const Joi = require('joi')
 
-const { AppStatuses, AppTypes } = require('../../../enums')
+const { AppStatuses, AppTypes } = require('@enums')
 
 const Version = require('./Version')
 const Developer = require('./User')
@@ -8,19 +8,19 @@ const Image = require('./Image')
 
 // v1 api schema
 const def = Joi.object().keys({
-    
+
     appType: Joi
-            .string()
-            .required()
-            .valid(AppTypes),
+        .string()
+        .required()
+        .valid(AppTypes),
 
     created: Joi
-            .number(),
+        .number(),
 
     description: Joi
-            .string()
-            .max(255, 'utf8')
-            .required(),
+        .string()
+        .max(255, 'utf8')
+        .required(),
 
     developer: Developer.required(),
 
@@ -30,9 +30,9 @@ const def = Joi.object().keys({
         .string()
         .guid({ version: 'uuidv4' })
         .required(),
-        
+
     lastUpdated: Joi
-                .number(),
+        .number(),
 
     name: Joi
         .string()
@@ -40,28 +40,28 @@ const def = Joi.object().keys({
         .required(),
 
     owner: Joi
-            .string()
-            .required(),
+        .string()
+        .required(),
 
     reviews: Joi
-            .array()
-            .items(Joi.any())
-            .required(),
+        .array()
+        .items(Joi.any())
+        .required(),
 
     sourceUrl: Joi
-                .string()
-                .uri()
-                .allow(''),
+        .string()
+        .uri()
+        .allow(''),
 
     status: Joi
-            .string()
-            .required()
-            .valid(AppStatuses),
+        .string()
+        .required()
+        .valid(AppStatuses),
 
     versions: Joi
-                .array()
-                .items(Version)
-                .min(1),   
+        .array()
+        .items(Version)
+        .min(1),
 
 })
 

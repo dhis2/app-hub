@@ -37,8 +37,21 @@ npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 ```
 
 ## Create back-end config file
-Coming soon
+Env vars (~/.dhis2/appstore/vars)
+```bash
+#For the S3 storage where application files will be stored.
+AWS_REGION
+AWS_ACCESS_KEY_ID
+AWS_SECRET_ACCESS_KEY
+AWS_BUCKET_NAME
 
+#EB will inject these so no need to set them manually in EB Environments
+RDS_HOSTNAME
+RDS_USERNAME
+RDS_PASSWORD
+RDS_DB_NAME
+```
+See /packages/server/knexfile.js to change database connections/credentials or server which will be used depending on process.env.NODE_ENV
 
 ## Frontend config
 The frontend needs to know some basic information about the server to configure routes and API endpoints.
@@ -64,7 +77,7 @@ Note that the exported objects from each config file are merged with the previou
 ```javascript
 module.exports = {
     api: {
-        baseURL: "http://localhost:3098/api/",
+        baseURL: "http://localhost:3000/v1/",
         redirectURL: "http://localhost:9000/user"
     },
     routes: {
@@ -94,9 +107,6 @@ The URL to be used when auth0 has successfully logged in a user, and is redirect
 # Run the project
 
 ### Start the backend and frontend
-```bash
-mvn clean install
-```
 
 Web API available at `localhost:3000/`.
 

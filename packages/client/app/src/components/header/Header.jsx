@@ -9,7 +9,7 @@ import { getAuth } from "../../utils/AuthService";
 import { Link } from "react-router-dom";
 import Theme from "../../styles/theme";
 import Avatar from "material-ui/Avatar";
-import logo from "../../assets/img/dhis2_logo_reversed.svg";
+import Logo from "../../assets/img/dhis2_logo_reversed.js";
 import { getUserInfo, getUserProfile } from "../../selectors/userSelectors";
 
 const styles = {
@@ -59,7 +59,7 @@ const Header = props =>
             }}
         >
             <Link to="/" style={styles.logo}>
-                <img style={styles.logo} src={`${logo}`} />
+                <Logo />
             </Link>
             <ToolbarTitle align="center" titleStyle={{ margin: 0 }}>
                 <Link to="/">App Store</Link>

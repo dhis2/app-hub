@@ -1,9 +1,10 @@
 const uuid = require('uuid/v4')
 const appVersions = require('./mock/appversions')
 
-const [ dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions ] = appVersions;
+const [dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions] = appVersions;
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
+
     await knex('app_channel').del()
 
     await knex('channel').del()
@@ -53,16 +54,16 @@ exports.seed = async knex => {
         },
 
         {
-          app_version_id: pendingAppVersions[0].id,
-          channel_id: 1,
-          min_dhis2_version: '2.30',
-          created_by_user_id: pendingAppVersions[0].created_by_user_id,
+            app_version_id: pendingAppVersions[0].id,
+            channel_id: 1,
+            min_dhis2_version: '2.30',
+            created_by_user_id: pendingAppVersions[0].created_by_user_id,
         },
         {
-          app_version_id: rejectedAppVersions[0].id,
-          channel_id: 1,
-          min_dhis2_version: '2.30',
-          created_by_user_id: rejectedAppVersions[0].created_by_user_id,
+            app_version_id: rejectedAppVersions[0].id,
+            channel_id: 1,
+            min_dhis2_version: '2.30',
+            created_by_user_id: rejectedAppVersions[0].created_by_user_id,
         },
     ])
 }

@@ -1,3 +1,5 @@
+
+
 const { flatten } = require('../utils')
 
 const routes = flatten([
@@ -5,6 +7,4 @@ const routes = flatten([
     require('./v2')
 ])
 
-console.log(routes)
-
-module.exports = routes 
+module.exports = routes

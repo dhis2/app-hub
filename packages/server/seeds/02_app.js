@@ -6,7 +6,8 @@ const appVersionsLocalised = require('./mock/appversions_localized')
 
 const { flatten } = require('../src/utils')
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
+
     await knex('app').del()
     await knex('app').insert(apps)
 
@@ -23,14 +24,14 @@ exports.seed = async knex => {
             created_by_user_id: 1,
         },
         {
-          app_id: 3,
-          status: AppStatus.PENDING,
-          created_by_user_id: 1,
+            app_id: 3,
+            status: AppStatus.PENDING,
+            created_by_user_id: 1,
         },
         {
-          app_id: 4,
-          status: AppStatus.NOT_APPROVED,
-          created_by_user_id: 1,
+            app_id: 4,
+            status: AppStatus.NOT_APPROVED,
+            created_by_user_id: 1,
         },
     ])
 

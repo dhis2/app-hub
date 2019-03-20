@@ -1,0 +1,33 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "hapi"
+    ],
+    "env": {
+        "node": true,
+        "commonjs": true,
+        "es6": true
+    },
+    "rules": {
+        "semi": 0,
+        "brace-style": [2, "1tbs"],
+        "comma-dangle": ["error", {
+            "arrays": "only-multiline",
+            "objects": "only-multiline",
+            "imports": "never",
+            "exports": "always",
+            "functions": "ignore"
+        }],
+        "no-console": 0,
+        "hapi/hapi-capitalize-modules": 0
+    },
+    "parser": "esprima",
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+          "globalReturn": true,
+          "experimentalObjectRestSpread": true
+        }
+    }
+}

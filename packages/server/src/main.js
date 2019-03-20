@@ -1,3 +1,5 @@
+
+
 const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
@@ -11,31 +13,31 @@ const Blipp = require('blipp')
 
 const HapiSwagger = require('hapi-swagger');
 
-const knexConfig = require('../knexfile')
-
 const routes = require('./routes')
 
 const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
+const knexConfig = require('../knexfile')
 
-console.log("Using env: ", process.env.NODE_ENV)
-console.log("Injecting config vars into process.env: ", config)
+console.log('Using env: ', process.env.NODE_ENV)
+console.log('Injecting config vars into process.env: ', config)
 
 // server things before start
 const db = new Knex(knexConfig[process.env.NODE_ENV])
+console.log(knexConfig[process.env.NODE_ENV])
 
 const server = Hapi.server({
-    port: 3000,
+    port: process.env.PORT || 3000,
     host: 'localhost',
     routes: {
         cors: {
-             //TODO: load the URLs from database or something, so we can dynamically manage these
-            origin: ['http://localhost:9000']  
+            //TODO: load the URLs from database or something, so we can dynamically manage these
+            origin: ['http://localhost:9000']
         }
     }
 })
 
 server.bind({
-    db,
+    db
 })
 
 // kick it
@@ -46,8 +48,8 @@ const init = async () => {
         plugin: Pino,
         options: {
             prettyPrint:  process.env.NODE_ENV !== 'test',
-            logEvents: ['response', 'onPostStart'],
-        },        
+            redact: ['req.headers.authorization']
+        }
     })
 
     //Swagger + deps to render swaggerui
@@ -61,7 +63,6 @@ const init = async () => {
         }
     ])
 
-    
 
     //TODO: add auth
     //await server.register(jwt)
@@ -85,7 +86,8 @@ const init = async () => {
     console.log(`Server running at: ${server.info.uri}`)
 }
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
+
     console.log(err)
     process.exit(1)
 })
@@ -93,4 +95,4 @@ process.on('unhandledRejection', err => {
 init()
 
 
-module.exports = { server, db };
+module.exports = { server, db }

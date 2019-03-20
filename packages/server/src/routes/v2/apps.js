@@ -1,7 +1,7 @@
+
+
 const Boom = require('boom')
 const Joi = require('joi')
-
-const { AppStatus } = require('../../enums')
 
 const AppModel = require('../../models/v2/out/App')
 
@@ -13,15 +13,17 @@ module.exports = [
             tags: ['api', 'v2'],
             response: {
                 schema: Joi.array().items(AppModel.def),
-                failAction: async function(request, h, err) {
+                failAction: (request, h, err) => {
+
                     request.logger.info(err);
                     throw Boom.internal;
                 }
-            },
+            }
         },
-        handler: async (request, h) => {
+        handler: (request, h) => {
+
             throw Boom.notImplemented()
         }
-        
+
     }
 ]
