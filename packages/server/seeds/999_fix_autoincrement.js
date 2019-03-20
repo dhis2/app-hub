@@ -1,12 +1,13 @@
 
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
 
     if ( knex.client.config.client !== 'pg' ) {
-        console.log("skipping serial sequence reset")
+        console.log('skipping serial sequence reset')
         console.log(knex.client.config.client);
         return false;
     }
+
     const tables = (await knex
         .raw(`
                 select tc.table_schema, tc.table_name, kc.column_name
@@ -19,12 +20,13 @@ exports.seed = async knex => {
                         tc.table_name,
                         kc.position_in_unique_constraint;
             `)
-        )
+    )
         .rows
-        .map(r => ({table_name: r.table_name, column_name: r.column_name }))
+        .map((r) => ({ table_name: r.table_name, column_name: r.column_name }))        
 
     // reset serial sequence values after seeding static id's
-    await Promise.all(tables.map(async (obj) => {
+    await Promise.all(tables.map((obj) => {
+
         const { table_name, column_name } = obj
         console.log(`Reset serial sequence for table: ${table_name} with id ${column_name}`)
         return knex
@@ -34,6 +36,5 @@ exports.seed = async knex => {
                 coalesce(max(${column_name}), 0) + 1, false)
               FROM "${table_name}";
             `)
-        })
-    )
+    }))
 }

@@ -38,6 +38,7 @@
         "eslint-plugin-hapi": "^4.1.0",
         "lab": "^18.0.2",
         "link-module-alias": "^1.1.6",
+        "mock-knex": "^0.4.4",
         "nodemon": "^1.18.10",
         "sqlite3": "^4.0.6"
     },

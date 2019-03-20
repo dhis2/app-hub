@@ -23,6 +23,7 @@ console.log('Injecting config vars into process.env: ', config)
 
 // server things before start
 const db = new Knex(knexConfig[process.env.NODE_ENV])
+console.log(knexConfig[process.env.NODE_ENV])
 
 const server = Hapi.server({
     port: process.env.PORT || 3000,
@@ -46,7 +47,7 @@ const init = async () => {
     await server.register({
         plugin: Pino,
         options: {
-            prettyPrint:  true, //process.env.NODE_ENV !== 'production',
+            prettyPrint:  process.env.NODE_ENV !== 'test',
             redact: ['req.headers.authorization']
         }
     })

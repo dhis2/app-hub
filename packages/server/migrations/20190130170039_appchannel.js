@@ -1,5 +1,7 @@
-exports.up = async knex => {
-    await knex.schema.createTable('channel', table => {
+exports.up = async (knex) => {
+
+    await knex.schema.createTable('channel', (table) => {
+
         table
             .increments('id')
             .unsigned()
@@ -13,7 +15,8 @@ exports.up = async knex => {
         table.string('name', 50).notNullable()
     })
 
-    await knex.schema.createTable('app_channel', table => {
+    await knex.schema.createTable('app_channel', (table) => {
+
         table
             .increments('id')
             .unsigned()
@@ -49,7 +52,7 @@ exports.up = async knex => {
         table
             .foreign('created_by_user_id')
             .references('id')
-            .inTable('user')
+            .inTable('users')
 
         table
             .foreign('channel_id')
@@ -60,8 +63,8 @@ exports.up = async knex => {
 
 }
 
-exports.down = async knex => {
-    
+exports.down = async (knex) => {
+
     await knex.schema.dropTable('app_channel')
     await knex.schema.dropTable('channel')
 }

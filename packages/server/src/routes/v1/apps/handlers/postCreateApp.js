@@ -79,41 +79,66 @@ module.exports = {
                 return knex.transaction(resolve);
             });
         }
-        
+
         const trx = await createTransaction()
 
         try {
-            const dbApp = await createAppAsync(currentUserId, organisationId, appJsonPayload.appType, knex, trx)
+            const dbApp = await createAppAsync({
+                userId: currentUserId,
+                orgId: organisationId,
+                appType: appJsonPayload.appType
+            }, knex, trx)
+
             appUuid = dbApp.uuid
-            await createAppStatusAsync(currentUserId, dbApp.id, AppStatus.PENDING, knex, trx)
+            await createAppStatusAsync({
+                userId: currentUserId,
+                appId: dbApp.id,
+                status: AppStatus.PENDING
+            }, knex, trx)
 
             const { demoUrl, sourceUrl, version } =  appJsonPayload.versions[0]
-            const appVersion = await createAppVersionAsync(currentUserId, dbApp.id, demoUrl, sourceUrl, version, knex, trx)
+            const appVersion = await createAppVersionAsync({
+                currentUserId,
+                appId: dbApp.id,
+                demoUrl,
+                sourceUrl,
+                version
+            }, knex, trx)
             versionUuid = appVersion.uuid
 
-            await createLocalizedAppVersionAsync(currentUserId, appVersion.id , appJsonPayload.description, appJsonPayload.name, 'en', knex, trx)
+            await createLocalizedAppVersionAsync({
+                userId: currentUserId,
+                appVersionId: appVersion.id,
+                description: appJsonPayload.description,
+                name: appJsonPayload.name,
+                languageCode: 'en'
+            }, knex, trx)
 
             const { minDhisVersion, maxDhisVersion } = appJsonPayload.versions[0]
-            await addAppVersionToChannelAsync(appVersion.id, currentUserId, 'Stable', minDhisVersion, maxDhisVersion, knex, trx)
+            await addAppVersionToChannelAsync({
+                appVersionId: appVersion.id,
+                createdByUserId: currentUserId,
+                channelName: 'Stable',
+                minDhisVersion,
+                maxDhisVersion
+            }, knex, trx)
 
 
         } catch ( err ) {
             console.log('ROLLING BACK TRANSACTION')
             console.log(err)
-            await trx.rollback();            
-            throw Boom.internal(err)
+            await trx.rollback()
+            throw Boom.internal('Could not create app', err)
         }
 
         if ( appUuid === null || versionUuid === null ) {
             await trx.rollback()
-            throw Boom.internal(`Could not create app`)
+            throw Boom.internal('Could not create app')
         }
 
         await trx.commit()
-        //}
 
         const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
-
         const imageFile = request.payload.imageFile;
         const file = request.payload.file;
 
@@ -127,6 +152,9 @@ module.exports = {
             throw Boom.internal(ex)
         }
 
-        return { statusCode: 200 }
+        return {
+            statusCode: 200,
+            uuid: appUuid
+        }
     }
 }

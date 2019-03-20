@@ -2,16 +2,13 @@ const slugify = require('slugify')
 
 /**
  * Inserts a localized application version
- * @param {number} userId Created by user id
- * @param {number} appVersionId
- * @param {string} description Description of the app version in the specified languageCode
- * @param {string} name Name of the app version in the specified languageCode
- * @param {string} languageCode 2 character ISO code for language
+ * @param {object} params
  * @param {object} knex
  * @param {object} transaction
  */
-const createLocalizedAppVersionAsync = async (userId, appVersionId, description, name, languageCode, knex, transaction) => {
+const createLocalizedAppVersionAsync = async (params, knex, transaction) => {
 
+    const { userId, appVersionId, description, name, languageCode } = params
     try {
         const [id] = await knex('app_version_localised')
             .transacting(transaction)

@@ -8,8 +8,9 @@ const uuid = require('uuid/v4')
  * @param {object} knex
  * @param {object} transaction
  */
-const createAppAsync = async (userId, orgId, appType, knex, transaction) =>  {
+const createAppAsync = async (params, knex, transaction) =>  {
 
+    const { userId, orgId, appType } = params
     if ( !userId ) {
         throw new Error(`Parameter missing: 'userId'`)
     }

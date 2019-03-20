@@ -2,12 +2,69 @@
 const { expect } = require('code')
 
 const lab = exports.lab = require('lab').script()
-const { it, describe } = lab
+const { it, describe, beforeEach, afterEach, before, after } = lab
 
 // prepare environment
 const { server } = require('../src/main.js')
 
 console.log('Tests are running in env: ' + process.env.NODE_ENV)
+
+const joi = require('joi')
+
+/*const def = joi.object().keys({
+    a: joi.number().required(),
+    b: joi.number().required()
+}).options({ stripUnknown: true })
+
+describe('Test joi schema validation', () => {
+
+    it('should allow to pass an object extending the schema',  () => {
+
+        const result = joi.validate({ a: 1, b: 2, c: 3 }, def)
+        expect(result.error).to.be.null()
+    })
+
+})*/
+
+describe('Test validations parameter objects', () => {
+
+    const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
+
+    const knex = require('knex')
+    const mockKnex = require('mock-knex')
+
+    const db = knex({
+        client: 'postgres'
+    })
+
+    //const tracker = mockKnex.getTracker()
+    mockKnex.mock(db)
+
+    //tracker.install()
+    /*tracker.on('query', (query) => {
+        expect(query.transacting).to.be.false()
+        resolve()
+    })*/
+
+/*    it('should fail if not sending all required parameters', (flags) => {
+
+        return new Promise((resolve) => {
+            db.transaction(async (trx) => {
+
+                const result = await addAppVersionToChannelAsync({
+                    appVersionId: 1,
+                    createdByUserId: 1,
+                    channelName: 'A',
+                    minDhisVersion : 'B',
+                    maxDhisVersion: ''
+                }, db, trx)
+
+                expect(result).to.not.be.null()
+                resolve()
+            })
+        })
+    })*/
+})
 
 
 
