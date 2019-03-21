@@ -1,7 +1,7 @@
 
 exports.up = async (knex) => {
 
-    await knex.schema.createTable('content_type', (table) => {
+    await knex.schema.createTable('media_type', (table) => {
 
         table
             .increments('id')
@@ -12,12 +12,12 @@ exports.up = async (knex) => {
             .string('description', 100)
 
         table
-            .string('content_type', 255)
+            .string('mime', 255)
 
     })
 }
 
 exports.down = async (knex) => {
 
-    await knex.schema.dropTable('content_type')
+    await knex.schema.dropTable('media_type')
 }

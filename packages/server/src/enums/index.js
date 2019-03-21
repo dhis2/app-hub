@@ -10,9 +10,9 @@ const AppType = {
     TRACKER_DASHBOARD_WIDGET: 'TRACKER_DASHBOARD_WIDGET',
 }
 
-const MediaType = {
-    Logo: 1,
-    Image: 2
+const ImageType = {
+    Logo: 0,
+    Screenshot: 1
 }
 
 module.exports = {
@@ -20,6 +20,6 @@ module.exports = {
     AppStatuses: [AppStatus.PENDING, AppStatus.NOT_APPROVED, AppStatus.APPROVED],
     AppType,
     AppTypes: [AppType.APP, AppType.DASHBOARD_WIDGET, AppType.TRACKER_DASHBOARD_WIDGET],
-    MediaType,
-    MediaTypes: [MediaType.Logo, MediaType.Image]
+    ImageType,
+    ImageTypes: [ImageType.Logo, ImageType.Screenshot]
 }

@@ -5,7 +5,10 @@ const [dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions
 
 exports.seed = async (knex) => {
 
+    console.log('Seeding channels')
+
     await knex('app_channel').del()
+
 
     await knex('channel').del()
     await knex('channel').insert([

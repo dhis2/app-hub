@@ -1,18 +1,20 @@
 
 exports.seed = async (knex) => {
 
-    const tableName = 'content_type'
+    console.log('Seeding media_type')
+
+    const tableName = 'media_type'
 
     const seedData = [
         {
             id: 1,
-            description: 'Jpeg images',
-            content_type: 'image/jpeg'
+            description: 'JPG/JPEG images',
+            mime: 'image/jpeg'
         },
         {
             id: 2,
             description: 'PNG images',
-            content_type: 'image/png'
+            mime: 'image/png'
         }
     ]
 

@@ -7,7 +7,7 @@ const paramSchema = joi.object().keys({
     channelName: joi.string().required().max(50),
     minDhisVersion : joi.string().required().min(1),
     maxDhisVersion: joi.string().required().allow(''),
-})
+}).options({ allowUnknown: true })
 
 
 /**
@@ -35,6 +35,7 @@ const addAppVersionToChannelAsync = async (params, knex, transaction) => {
         const [channel] = await knex('channel').select('id').where({ name: channelName })
 
         const [id] = await knex('app_channel')
+            .transacting(transaction)
             .insert({
                 app_version_id: appVersionId,
                 channel_id: channel.id,

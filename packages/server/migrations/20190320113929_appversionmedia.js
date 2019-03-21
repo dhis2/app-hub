@@ -15,7 +15,7 @@ exports.up = async (knex) => {
             .notNullable()
 
         table
-            .integer('media_type')
+            .integer('image_type')
             .unsigned()
             .notNullable()
 
@@ -34,14 +34,14 @@ exports.up = async (knex) => {
             .notNullable()
 
         table
-            .integer('content_type_id')
+            .integer('media_type_id')
             .unsigned()
             .notNullable()
 
         table
-            .foreign('content_type_id')
+            .foreign('media_type_id')
             .references('id')
-            .inTable('content_type')
+            .inTable('media_type')
 
         table
             .integer('app_version_id')
