@@ -4,7 +4,10 @@ const uuid = require('uuid/v4')
 
 const [ dhis2AppVersions, whoAppVersions ] = appVersions;
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
+
+    console.log('Seeding reviews')
+
     const reviews = [
         {
             id: 1,

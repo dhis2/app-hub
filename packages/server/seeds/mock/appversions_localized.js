@@ -4,13 +4,14 @@ const [ dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersion
 const slugify = require('slugify')
 
 const mockAppVersion = (sourceArr, index, languageCode, name, desc) => {
+
     return {
         app_version_id: sourceArr[index].id,
         language_code: languageCode,
         created_by_user_id: sourceArr[index].created_by_user_id,
-        name: name,
+        name,
         description: desc,
-        slug: slugify(name, {lower: true})
+        slug: slugify(name, { lower: true })
     }
 }
 
@@ -45,7 +46,7 @@ const pendingAppVersionsLocalized = [
         created_by_user_id: pendingAppVersions[0].created_by_user_id,
         name: 'Pending App app',
         description: 'This app is pending approval.',
-        slug: slugify('Pending App app', {lower: true})
+        slug: slugify('Pending App app', { lower: true })
     },
 ]
 
@@ -56,7 +57,7 @@ const rejectedAppVersionsLocalized = [
         created_by_user_id: rejectedAppVersions[0].created_by_user_id,
         name: 'Rejected App app',
         description: 'This app is in state rejected.',
-        slug: slugify('Rejected App app', {lower: true})
+        slug: slugify('Rejected App app', { lower: true })
     },
 ]
 
