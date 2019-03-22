@@ -1,4 +1,5 @@
-
+const path = require('path')
+const { ImageType } = require('@enums')
 
 const convertDbAppViewRowToAppApiV1Object = (app) => ({
     appType: app.type,
@@ -26,12 +27,27 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
 })
 
 
+const convertAppToV1Media = (app, serverUrl) => {
+
+    return ({
+        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.appver_slug}/${app.version}/${app.media_uuid}`,
+        caption: '',
+        created: +new Date(app.media_created_at),
+        description: '',
+        id: app.media_uuid,
+        lastUpdated: +new Date(app.media_created_at),
+        logo: app.image_type === ImageType.Logo
+    })
+}
+
 
 const convertAppToV1AppVersion = (app, serverUrl) => {
 
     if ( serverUrl === null || typeof ( serverUrl) === 'undefined' ) {
         throw new Error('Missing parameter: serverUrl')
     }
+
+    console.log(app)
 
     return ({
         created: +new Date(app.version_created_at),
@@ -69,6 +85,7 @@ module.exports = (apps, request) => {
             currentApp = v1App;
         }
 
+        currentApp.images.push(convertAppToV1Media(app, serverUrl))
         currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
     })
 

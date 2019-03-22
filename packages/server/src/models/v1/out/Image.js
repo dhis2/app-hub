@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 module.exports = Joi.object().keys({
     caption: Joi.string().allow([null, '']),
-    created: Joi.date().iso().required(),
+    created: Joi.number().required(),
     description: Joi.string().allow([null, '']),
     id: Joi.string(),
     imageUrl: Joi.string().uri(),

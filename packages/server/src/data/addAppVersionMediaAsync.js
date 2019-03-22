@@ -53,8 +53,10 @@ const addAppVersionMediaAsync = async (params, knex, transaction) => {
             throw new Error(`Something went wrong when trying to get mediaTypeId for ${mime}`)
         }
 
+        const mediaUuid = uuid();
+
         insertData = {
-            uuid: uuid(),
+            uuid: mediaUuid,
             image_type: imageType,
             original_filename: fileName,
             created_at: knex.fn.now(),
@@ -68,7 +70,7 @@ const addAppVersionMediaAsync = async (params, knex, transaction) => {
             .insert(insertData)
             .returning('id')
 
-        return { id }
+        return { id, uuid: mediaUuid }
 
     } catch ( err ) {
         throw new Error(`Could not add media to app version: ${JSON.stringify(insertData)}. ` + err.message)

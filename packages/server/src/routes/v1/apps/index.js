@@ -8,5 +8,6 @@ module.exports = [
     require('./handlers/postCreateApp'),
     require('./handlers/getAppFile'),
     require('./handlers/postApprovalStatus'),
-    require('./handlers/deleteApp')
+    require('./handlers/deleteApp'),
+    require('./handlers/getMedia')
 ]

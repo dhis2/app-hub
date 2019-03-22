@@ -1,4 +1,4 @@
-
+const path = require('path')
 
 const Boom = require('boom')
 
@@ -78,6 +78,7 @@ module.exports = {
         const organisationId = 1
         let appUuid = null
         let versionUuid = null
+        let iconUUid = null
 
         const createTransaction = () => {
 
@@ -141,7 +142,7 @@ module.exports = {
                 console.log('Inserting logo to db')
                 const imageFileMetadata = imageFile.hapi
 
-                const {id} = await addAppVersionMediaAsync({
+                const { id, uuid } = await addAppVersionMediaAsync({
                     ...userAndOrgIds,
                     appVersionId: appVersion.id,
                     imageType: ImageType.Logo,
@@ -149,8 +150,9 @@ module.exports = {
                     mime: imageFileMetadata.headers['content-type']
                 }, knex, trx)
 
-                console.log(`Logo inserted with id: ${id}`)
 
+                console.log(`Logo inserted with id '${id}' and uuid '${uuid}'`)
+                iconUUid = uuid
             }
 
 
@@ -172,9 +174,13 @@ module.exports = {
 
         try  {
             const appUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, 'app.zip', file._data)
-            const iconUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, 'icon', imageFile._data)
-            const results = await Promise.all([appUpload, iconUpload])
-            console.log('result:', results)
+            if ( imageFile ) {
+                const iconUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, iconUUid, imageFile._data)
+                await Promise.all([appUpload, iconUpload])
+            } else {
+                await appUpload
+            }
+            
         } catch (ex) {
             console.log(ex)
             throw Boom.internal(ex)

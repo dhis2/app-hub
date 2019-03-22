@@ -5,6 +5,7 @@ exports.up = async (knex) => {
             SELECT  app.id AS app_id, 
                     app.uuid, app.type,
                     appver.version, appver.uuid AS version_uuid, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
+                    media.id AS media_id, media.original_filename, media.uuid AS media_uuid, media.created_at AS media_created_at, media.image_type, 
                     localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
@@ -20,8 +21,8 @@ exports.up = async (knex) => {
                 INNER JOIN app_version AS appver
                     ON appver.app_id = s.app_id
 
-                INNER JOIN organisation AS org 
-                    ON org.id = app.organisation_id
+                INNER JOIN app_version_media AS media 
+                    ON media.app_version_id = appver.id 
 
                 INNER JOIN app_version_localised AS localisedapp
                     ON localisedapp.app_version_id = appver.id
