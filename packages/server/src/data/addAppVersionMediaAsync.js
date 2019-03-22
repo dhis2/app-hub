@@ -17,9 +17,9 @@ const paramSchema = joi.object().keys({
  * @param {object} params The parameters used to publish an app version to a specific channel
  * @param {number} params.appVersionId The app version db id this media belongs to
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")
- * @param {number} params.imageType MediaType enum that determines if this is a logotype or image/screenshot
- * @param {string} params.fileName MediaType enum that determines if this is a logotype or image/screenshot
- * @param {string} params.mediaType MediaType enum that determines if this is a logotype or image/screenshot
+ * @param {number} params.imageType ImageType enum that determines if this is a logotype or image/screenshot
+ * @param {string} params.fileName Original filename as when uploaded
+ * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
  * @param {object} knex DB instance of knex
  * @param {object} trx The transaction to operate on
  */
