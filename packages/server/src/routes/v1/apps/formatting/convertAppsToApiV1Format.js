@@ -47,8 +47,6 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
         throw new Error('Missing parameter: serverUrl')
     }
 
-    console.log(app)
-
     return ({
         created: +new Date(app.version_created_at),
 
