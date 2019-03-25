@@ -2,13 +2,13 @@ const path = require('path')
 
 const Boom = require('boom')
 
-const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
+const CreateAppModel = require('@models/v1/in/CreateAppModel')
 const { AppStatus, ImageType } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const AWSFileHandler = require('../../../../utils/AWSFileHandler')
+const AWSFileHandler = require('@utils/AWSFileHandler')
 
-const { canCreateApp } = require('../../../../security')
+const { canCreateApp } = require('@security')
 
 const createAppAsync = require('@data/createAppAsync')
 const createAppStatusAsync = require('@data/createAppStatusAsync')
@@ -21,6 +21,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps',
     config: {
+        auth: 'jwt',
         tags: ['api', 'v1'],
         payload: {
             maxBytes: 20 * 1024 * 1024, //20MB

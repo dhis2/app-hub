@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -15,8 +13,7 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps/all',
     config: {
-        //TODO: add auth
-        //auth: 'jwt',
+        auth: 'jwt',
         tags: ['api', 'v1'],
         response: {
             status: {
@@ -27,8 +24,6 @@ module.exports = {
         }
     },
     handler: async (request, h) => {
-
-        request.logger.info('In handler %s', request.path)
 
         if ( !canSeeAllApps(request, h) ) {
             throw Boom.unauthorized();

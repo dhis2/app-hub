@@ -1,6 +1,6 @@
 
 
-const { flatten } = require('../utils')
+const { flatten } = require('@utils')
 
 const routes = flatten([
     require('./v1'),

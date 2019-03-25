@@ -4,8 +4,7 @@ const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
 
-//const jwt = require('hapi-auth-jwt2');
-//const jwksRsa = require('jwks-rsa');
+const jwt = require('hapi-auth-jwt2');
 
 const Inert = require('inert');
 const Vision = require('vision');
@@ -40,6 +39,20 @@ server.bind({
     db
 })
 
+const validateUser = async (decoded, request) => {
+
+    console.log('ValidateUser')
+    if (decoded && decoded.sub) {
+        console.log('Valid user')
+        //TODO: check that it exists
+        return { isValid: true }
+    }
+
+    console.log('Invalid user')
+    return { isValid: false }
+};
+
+
 // kick it
 const init = async () => {
 
@@ -48,7 +61,7 @@ const init = async () => {
         plugin: Pino,
         options: {
             prettyPrint:  process.env.NODE_ENV !== 'test',
-            redact: ['req.headers.authorization']
+            //redact: ['req.headers.authorization']
         }
     })
 
@@ -64,11 +77,10 @@ const init = async () => {
     ])
 
 
-    //TODO: add auth
-    //await server.register(jwt)
-    /* server.auth.strategy('jwt', 'jwt', 'required', {
-        // verify the Access Token against the
-        // remote Auth0 JWKS
+    await server.register(jwt)
+
+    server.auth.strategy('jwt', 'jwt', {
+        complete: true,
         key: process.env.auth0_secret,
         verifyOptions: {
             audience: process.env.auth0_audience, //TODO: move to config/env var
@@ -76,7 +88,7 @@ const init = async () => {
             algorithms: [process.env.auth0_alg]
         },
         validate: validateUser
-    })*/
+    })
 
 
     server.route(routes)

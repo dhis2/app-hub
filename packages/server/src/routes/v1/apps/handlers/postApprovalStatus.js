@@ -11,8 +11,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps/{appUUID}/approval',
     config: {
-        //TODO: add auth
-        //auth: 'jwt',
+        auth: 'jwt',
         tags: ['api', 'v1'],
         response: {
             status: {
@@ -24,7 +23,7 @@ module.exports = {
     },
     handler: async (request, h) => {
 
-        request.logger.info('In handler %s', request.path)
+        //request.logger.info('In handler %s', request.path)
 
         if ( !canChangeAppStatus(request, h) ) {
             throw Boom.unauthorized();
@@ -46,14 +45,10 @@ module.exports = {
             .innerJoin('app_version_localised', { 'app_version_localised.app_version_id': 'app_version.id' })
             .where({ 'app.uuid': request.params.appUUID, 'language_code': 'en' })
 
-        //{"message":"Status changed for app: WHO Data Quality Tool","httpStatus":"OK","httpStatusCode":200}
-        console.log(row)
         if ( row.length > 0 ) {
             const updated = await knex('app_status')
                 .where({ 'app_id': row[0].id })
                 .update({ status })
-
-            console.log(updated)
 
             return {
                 'message': `Status changed for app: ${row[0].name}`, 'httpStatus': 'OK', 'httpStatusCode': 200
