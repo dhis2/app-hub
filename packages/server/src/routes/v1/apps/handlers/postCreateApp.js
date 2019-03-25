@@ -73,8 +73,9 @@ module.exports = {
         const file = request.payload.file
         const packageFileMetadata = file.hapi
         
-
         //TODO: see if current authed user exists or create a new user/organisation
+        
+        
         const currentUserId = 2
         const organisationId = 1
         let appUuid = null

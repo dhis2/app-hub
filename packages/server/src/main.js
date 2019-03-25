@@ -83,8 +83,8 @@ const init = async () => {
         complete: true,
         key: process.env.auth0_secret,
         verifyOptions: {
-            audience: process.env.auth0_audience, //TODO: move to config/env var
-            issuer: process.env.auth0_domain, //TODO: move to config/env var
+            audience: process.env.auth0_audience,
+            issuer: process.env.auth0_domain,
             algorithms: [process.env.auth0_alg]
         },
         validate: validateUser
