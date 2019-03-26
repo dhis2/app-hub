@@ -9,7 +9,7 @@ const { server } = require('../src/main.js')
 
 console.log('Tests are running in env: ' + process.env.NODE_ENV)
 
-const joi = require('joi')
+//const joi = require('joi')
 
 /*const def = joi.object().keys({
     a: joi.number().required(),
@@ -25,6 +25,22 @@ describe('Test joi schema validation', () => {
     })
 
 })*/
+
+describe('Test auth', () => {
+
+    it('Should deny access without a valid authorisation token', async () => {
+
+        const injectOptions = {
+            method: 'GET',
+            url: '/v1/apps/all'
+        }
+
+        const response = await server.inject(injectOptions)
+
+        expect(response.statusCode).to.be.equal(401)
+
+    })
+})
 
 describe('Test validations parameter objects', () => {
 

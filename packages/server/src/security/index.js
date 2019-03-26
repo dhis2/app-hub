@@ -5,7 +5,7 @@
 const isAuthenticated = (request) => {
 
     try {
-        return request.auth.isAuthenticated
+        return request.auth.isAuthenticated === true
     } catch (err) {
         return false
     }
@@ -14,7 +14,7 @@ const isAuthenticated = (request) => {
 /**
  * Returns true if the JWT/user for the request contains a role with the specified name
  * @param {*} request 
- * @param {*} role 
+ * @param {string} role 
  */
 const hasRole = (request, role) => {
 
@@ -25,11 +25,40 @@ const hasRole = (request, role) => {
     }
 }
 
-const canDeleteApp = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_ADMIN')
-const canChangeAppStatus = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_ADMIN')
+/**
+ * Checks if the user on the request has permissions to delete an app
+ * @param {*} request 
+ * @param {*} hapi 
+ */
+const canDeleteApp = (request, hapi) => (isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER'))
+
+/**
+ * Checks if the user on the request has permissions to change the status of an app
+ * @param {*} request 
+ * @param {*} hapi 
+ */
+const canChangeAppStatus = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+
+/**
+ * Checks if the user on the request has permissions to create an app version
+ * @param {*} request 
+ * @param {*} hapi 
+ */
 const canCreateAppVersion = (request, hapi) => isAuthenticated(request)
+
+/**
+ * Checks if the user on the request has permissions to create an app
+ * @param {*} request 
+ * @param {*} hapi 
+ */
 const canCreateApp = (request, hapi) => isAuthenticated(request)
-const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_ADMIN')
+
+/**
+ * Checks if the user on the request has permissions to see all apps
+ * @param {*} request 
+ * @param {*} hapi 
+ */
+const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
 module.exports = {
     canDeleteApp,

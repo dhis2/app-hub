@@ -69,15 +69,35 @@ module.exports = {
         const knex = h.context.db
 
         const imageFile = request.payload.imageFile
-
         const file = request.payload.file
-        const packageFileMetadata = file.hapi
         
         //TODO: see if current authed user exists or create a new user/organisation
         
-        
-        const currentUserId = 2
-        const organisationId = 1
+        //getCurrentUserAsync, getOrganisationAsync, createOrganisationAsync, getDeveloperAsync, createDeveloperAsync, addDeveloperToOrganisationAsync
+        /*
+        const appDeveloper = appJsonPayload.developer
+        const currentUser = await getCurrentUserAsync(request, knex);
+        const currentUserId = currentUser.id
+
+        //Load the organisation, or create it if it doesnt exist.
+        let organisation = await getOrganisationAsync(appDeveloper, knex)
+        if ( organisation === null ) {
+            //Create organisation
+            organization = await createOrganisationAsync(appDeveloper, knex)
+        }
+
+        //Load developer or create if it doesnt exist
+        let appDeveloper = await getDeveloperAsync(appDeveloper, knex)
+        if ( appDeveloper === null ) {
+            //Create developer
+            const developer = await createDeveloperAsync(appDeveloper, knex)
+            await addDeveloperToOrganisationAsync({developer, organisation}, knex)
+        } else {
+            //TODO: check if developer
+        }*/
+
+        const currentUserId = 2;
+        const organisationId = 1;
         let appUuid = null
         let versionUuid = null
         let iconUUid = null

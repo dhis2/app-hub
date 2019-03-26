@@ -61,7 +61,7 @@ const init = async () => {
         plugin: Pino,
         options: {
             prettyPrint:  process.env.NODE_ENV !== 'test',
-            //redact: ['req.headers.authorization']
+            redact: ['req.headers.authorization']
         }
     })
 
