@@ -1,6 +1,7 @@
 
 const { expect } = require('code')
-const { lab } = require('../index')
+
+const { lab } = exports.lab = require('../index')
 
 const { it, describe } = lab
 

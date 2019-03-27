@@ -2,6 +2,8 @@
 
 
 module.exports = {
+    addAppVersionMediaAsync: require('./addAppVersionMediaAsync'),
+    addAppVersionToChannelAsync: require('./addAppVersionToChannelAsync'),
     getAppsByStatusAndLanguageAsync: require('./getAppsByStatusAndLanguageAsync'),
     getAllAppsByLanguageAsync: require('./getAllAppsByLanguageAsync'),
     getAppsByUuidAndStatusAsync: require('./getAppsByUuidAndStatusAsync'),
