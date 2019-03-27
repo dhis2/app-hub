@@ -2,11 +2,11 @@
 
 /**
  * Returns all apps from apps_view based on uuid and languageCode
- * @param {*} uuid
+ * @param {string} uuid
  * @param {string} languageCode
  * @param {*} dbConnection
  */
-module.exports = (uuid, languageCode, dbConnection) => {
+module.exports = async (uuid, languageCode, dbConnection) => {
 
     if ( !uuid ) {
         throw new Error(`Missing parameter 'uuid'`)
@@ -19,6 +19,8 @@ module.exports = (uuid, languageCode, dbConnection) => {
     if ( !dbConnection ) {
         throw new Error(`Missing parameter 'dbConnection'`)
     }
+
+    //TODO: try-catch and return results
 
     return dbConnection
         .select()

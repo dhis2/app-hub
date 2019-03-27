@@ -2,7 +2,7 @@
 const appVersions = require('./mock/appversions')
 const uuid = require('uuid/v4')
 const { ImageType } = require('@enums')
-const { flatten } = require('../src/utils')
+const { flatten } = require('@utils')
 
 exports.seed = async (knex) => {
 

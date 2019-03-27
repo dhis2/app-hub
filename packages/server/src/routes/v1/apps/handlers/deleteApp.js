@@ -15,8 +15,7 @@ module.exports = {
     method: 'DELETE',
     path: '/v1/apps/{appUUID}',
     config: {
-        //TODO: add auth
-        //auth: 'jwt',
+        auth: 'jwt',
         tags: ['api', 'v1'],
         response: {
             status: {
@@ -28,13 +27,13 @@ module.exports = {
     },
     handler: async (request, h) => {
 
-        request.logger.info('In handler %s', request.path)
+
+        //request.logger.info('In handler %s', request.path)
 
         if ( !canDeleteApp(request, h) ) {
             throw Boom.unauthorized();
         }
         //todo: validate
-        //todo: auth/permission
 
         const knex = h.context.db;
 

@@ -63,7 +63,7 @@ const addAppVersionMediaAsync = async (params, knex, transaction) => {
             created_by_user_id: userId,
             media_type_id: mediaTypeId,
             app_version_id: appVersionId
-        }        
+        }
 
         const [id] = await knex('app_version_media')
             .transacting(transaction)

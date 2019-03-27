@@ -2,13 +2,13 @@ const path = require('path')
 
 const Boom = require('boom')
 
-const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
+const CreateAppModel = require('@models/v1/in/CreateAppModel')
 const { AppStatus, ImageType } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const AWSFileHandler = require('../../../../utils/AWSFileHandler')
+const AWSFileHandler = require('@utils/AWSFileHandler')
 
-const { canCreateApp } = require('../../../../security')
+const { canCreateApp } = require('@security')
 
 const createAppAsync = require('@data/createAppAsync')
 const createAppStatusAsync = require('@data/createAppStatusAsync')
@@ -17,10 +17,20 @@ const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionA
 const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
 const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
 
+const {
+    getCurrentUserAsync,
+    getOrganisationAsync,
+    createOrganisationAsync,
+    getDeveloperAsync,
+    createDeveloperAsync,
+    addDeveloperToOrganisationAsync
+} = require('@data')
+
 module.exports = {
     method: 'POST',
     path: '/v1/apps',
     config: {
+        auth: 'jwt',
         tags: ['api', 'v1'],
         payload: {
             maxBytes: 20 * 1024 * 1024, //20MB
@@ -68,14 +78,32 @@ module.exports = {
         const knex = h.context.db
 
         const imageFile = request.payload.imageFile
-
         const file = request.payload.file
-        const packageFileMetadata = file.hapi
         
 
-        //TODO: see if current authed user exists or create a new user/organisation
-        const currentUserId = 2
-        const organisationId = 1
+        const appDeveloperFromPayload = appJsonPayload.developer
+        const currentUser = await getCurrentUserAsync(request, knex);
+        const currentUserId = currentUser.id
+
+        //Load the organisation, or create it if it doesnt exist.
+        let organisation = await getOrganisationAsync(appDeveloperFromPayload, knex)
+        if ( organisation === null ) {
+            //Create organisation
+            organization = await createOrganisationAsync(appDeveloperFromPayload, knex)
+        }
+        const organisationId = organisation.id
+
+        //Load developer or create if it doesnt exist
+        let appDeveloper = await getDeveloperAsync(appDeveloperFromPayload, knex)
+        if ( appDeveloper === null ) {
+            //Create developer
+            appDeveloper = await createDeveloperAsync(appDeappDeveloperFromPayloadveloper, knex)
+            await addDeveloperToOrganisationAsync({developer, organisation}, knex)
+        } else {
+            //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
+            //TODO: decide business rules for how we should allow someone to be added to an organisation
+        }
+
         let appUuid = null
         let versionUuid = null
         let iconUUid = null
@@ -139,7 +167,7 @@ module.exports = {
 
 
             if ( imageFile ) {
-                console.log('Inserting logo to db')
+                console.log('Inserting logo metadata to db and link it to the appVersion')
                 const imageFileMetadata = imageFile.hapi
 
                 const { id, uuid } = await addAppVersionMediaAsync({

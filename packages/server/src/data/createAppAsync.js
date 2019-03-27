@@ -1,35 +1,35 @@
 const uuid = require('uuid/v4')
 
+const joi = require('joi')
+
+const { AppType } = require('@enums')
+
+const paramsSchema = joi.object().keys({
+    userId: joi.number().required(),
+    orgId: joi.number().required(),
+    appType: joi.string().required().valid(AppType),
+}).options({ allowUnknown: true })
+
+
 /**
  * Creates an app and returns the database id
- * @param {number} userId
- * @param {number} orgId
- * @param {*} appType
+ * @param {object} params
+ * @param {number} params.userId User id creating the app
+ * @param {number} params.orgId Organisation id for the organisation owning this app
+ * @param {string} params.appType Type of the app
  * @param {object} knex
  * @param {object} transaction
  */
 const createAppAsync = async (params, knex, transaction) =>  {
 
+    const validation = joi.validate(params, paramsSchema)
+
+    if ( validation.error !== null ) {
+        throw new Error(validation.error)
+    }
+
     const { userId, orgId, appType } = params
-    if ( !userId ) {
-        throw new Error(`Parameter missing: 'userId'`)
-    }
 
-    if ( !orgId ) {
-        throw new Error(`Parameter missing: 'orgId'`)
-    }
-
-    if ( !appType ) {
-        throw new Error(`Parameter missing: 'appType''`)
-    }
-
-    if ( !knex ) {
-        throw new Error(`Parameter missing: 'knex'`)
-    }
-
-    if ( !transaction ) {
-        throw new Error(`Parameter missing: 'transaction'`)
-    }
 
     //generate a new uuid to insert
     const appUuid = uuid()
