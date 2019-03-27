@@ -2,12 +2,12 @@ const uuid = require('uuid/v4')
 
 const joi = require('joi')
 
-const { AppType } = require('@enum')
+const { AppType } = require('@enums')
 
 const paramsSchema = joi.object().keys({
     userId: joi.number().required(),
     orgId: joi.number().required(),
-    appType: joi.string().required.valid(AppType),
+    appType: joi.string().required().valid(AppType),
 }).options({ allowUnknown: true })
 
 

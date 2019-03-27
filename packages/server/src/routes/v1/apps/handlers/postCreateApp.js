@@ -17,6 +17,15 @@ const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionA
 const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
 const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
 
+const {
+    getCurrentUserAsync,
+    getOrganisationAsync,
+    createOrganisationAsync,
+    getDeveloperAsync,
+    createDeveloperAsync,
+    addDeveloperToOrganisationAsync
+} = require('@data')
+
 module.exports = {
     method: 'POST',
     path: '/v1/apps',
@@ -71,33 +80,30 @@ module.exports = {
         const imageFile = request.payload.imageFile
         const file = request.payload.file
         
-        //TODO: see if current authed user exists or create a new user/organisation
-        
-        //getCurrentUserAsync, getOrganisationAsync, createOrganisationAsync, getDeveloperAsync, createDeveloperAsync, addDeveloperToOrganisationAsync
-        /*
-        const appDeveloper = appJsonPayload.developer
+
+        const appDeveloperFromPayload = appJsonPayload.developer
         const currentUser = await getCurrentUserAsync(request, knex);
         const currentUserId = currentUser.id
 
         //Load the organisation, or create it if it doesnt exist.
-        let organisation = await getOrganisationAsync(appDeveloper, knex)
+        let organisation = await getOrganisationAsync(appDeveloperFromPayload, knex)
         if ( organisation === null ) {
             //Create organisation
-            organization = await createOrganisationAsync(appDeveloper, knex)
+            organization = await createOrganisationAsync(appDeveloperFromPayload, knex)
         }
+        const organisationId = organisation.id
 
         //Load developer or create if it doesnt exist
-        let appDeveloper = await getDeveloperAsync(appDeveloper, knex)
+        let appDeveloper = await getDeveloperAsync(appDeveloperFromPayload, knex)
         if ( appDeveloper === null ) {
             //Create developer
-            const developer = await createDeveloperAsync(appDeveloper, knex)
+            appDeveloper = await createDeveloperAsync(appDeappDeveloperFromPayloadveloper, knex)
             await addDeveloperToOrganisationAsync({developer, organisation}, knex)
         } else {
-            //TODO: check if developer
-        }*/
+            //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
+            //TODO: decide business rules for how we should allow someone to be added to an organisation
+        }
 
-        const currentUserId = 2;
-        const organisationId = 1;
         let appUuid = null
         let versionUuid = null
         let iconUUid = null
@@ -161,7 +167,7 @@ module.exports = {
 
 
             if ( imageFile ) {
-                console.log('Inserting logo to db')
+                console.log('Inserting logo metadata to db and link it to the appVersion')
                 const imageFileMetadata = imageFile.hapi
 
                 const { id, uuid } = await addAppVersionMediaAsync({

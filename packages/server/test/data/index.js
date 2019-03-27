@@ -43,7 +43,7 @@ describe('@data::createAppAsync', () => {
         await expect(createAppAsync({ userId: '' }, null, null)).to.reject(Error)
     })
 
-    it('should require userId parameter and it to be a number', async () => {
+    it('should require orgId parameter and it to be a number', async () => {
 
         const config = {
             userId: 1
@@ -53,49 +53,5 @@ describe('@data::createAppAsync', () => {
 
         await expect(createAppAsync({ ...config, orgId: '' }, null, null)).to.reject(Error)
 
-        await expect(createAppAsync({ ...config, orgId: 1 }, null, null)).to.resolve(Error)
     })
 })
-
-/*
-describe('Test validations parameter objects', () => {
-
-    const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
-
-    const knex = require('knex')
-    const mockKnex = require('mock-knex')
-
-    const db = knex({
-        client: 'postgres'
-    })
-
-    //const tracker = mockKnex.getTracker()
-    mockKnex.mock(db)
-
-    //tracker.install()
-    /*tracker.on('query', (query) => {
-        expect(query.transacting).to.be.false()
-        resolve()
-    })*/
-
-/*    it('should fail if not sending all required parameters', (flags) => {
-
-        return new Promise((resolve) => {
-            db.transaction(async (trx) => {
-
-                const result = await addAppVersionToChannelAsync({
-                    appVersionId: 1,
-                    createdByUserId: 1,
-                    channelName: 'A',
-                    minDhisVersion : 'B',
-                    maxDhisVersion: ''
-                }, db, trx)
-
-                expect(result).to.not.be.null()
-                resolve()
-            })
-        })
-    })*/
-/*})*/
-
-
