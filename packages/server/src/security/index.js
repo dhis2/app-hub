@@ -30,7 +30,7 @@ const hasRole = (request, role) => {
  * @param {*} request 
  * @param {*} hapi 
  */
-const canDeleteApp = (request, hapi) => (isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER'))
+const canDeleteApp = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
 /**
  * Checks if the user on the request has permissions to change the status of an app
