@@ -15,6 +15,7 @@ const paramsSchema = joi.object().keys({
  * Creates an app and returns the database id
  * @param {object} params
  * @param {number} params.userId User id creating the app
+ * @param {number} params.orgId Organisation id for the organisation owning this app
  * @param {string} params.appType Type of the app
  * @param {object} knex
  * @param {object} transaction
