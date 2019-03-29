@@ -1,7 +1,7 @@
 
 const { expect } = require('code')
 
-const { lab } = require('../index')
+const { lab, db } = require('../index')
 
 const { it, describe } = lab
 
@@ -55,3 +55,64 @@ describe('@data::createAppAsync', () => {
 
     })
 })
+
+
+describe('@data::getOrganisationAsync', () => {
+
+    const { getOrganisationByUuidAsync, getOrganisationByNameAsync } = require('@data')
+
+    it('should throw an error passing invalid uuid', async () => {
+
+        await expect(getOrganisationByUuidAsync('asdf', db)).to.reject(Error)
+    })
+
+    it('get the organisation with the specified uuid', async () => {
+
+        const dhis2Org = await getOrganisationByNameAsync('DHIS2', db)
+        expect(dhis2Org).to.not.be.null()
+        
+        const dhis2OrgByUuid = await getOrganisationByUuidAsync(dhis2Org.uuid, db)
+        expect(dhis2OrgByUuid).to.not.be.null()
+
+        expect(dhis2Org.id).to.equal(dhis2OrgByUuid.id)
+    })
+
+    it('get the organisation named DHIS2', async () => {
+
+        const dhis2Org = await getOrganisationByNameAsync('DHIS2', db)
+
+        expect(dhis2Org).to.not.be.null()
+        expect(dhis2Org.name).to.equal('DHIS2')
+    })
+})
+
+/*
+describe('@data::addDeveloperToOrganisationAsync', () => {
+
+    const { addDeveloperToOrganisationAsync } = require('@data')
+
+    it('should add a developer to an organisation without throwing',  async () => {
+        
+        const success = await addDeveloperToOrganisationAsync(1,1)
+
+        expect(success).to.be.true()
+    })
+    
+})
+
+describe('@data::createOrganisationAsync', () => {
+
+    const { createOrganisationAsync } = require('@data')
+
+    it('should create an organisation and return the inserted id', async () => {
+
+        const id = createOrganisationAsync({
+            name: 'Test organisation'
+        })
+
+        expect(id).to.be.a.number().min(1)
+
+    })
+    
+})
+*/

@@ -15,7 +15,7 @@ export default class AuthService {
                 redirectUrl: config.api.redirectURL,
                 responseType: "token",
                 params: {
-                    scope: "openid roles user_id"
+                    scope: "openid roles user_id email"
                 }
             },
             theme: {

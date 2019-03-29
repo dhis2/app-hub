@@ -13,7 +13,7 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps/myapps',
     config: {
-        auth: false,
+        auth: 'jwt',
         tags: ['api', 'v1'],
         response: {
             status: {
@@ -26,6 +26,8 @@ module.exports = {
     handler: (request, h) => {
 
         request.logger.info('In handler %s', request.path)
+
+        //TODO: implement fetching of apps for which the current user has access to, E.G. the organisations it belongs to
 
         return Boom.notImplemented()
     }

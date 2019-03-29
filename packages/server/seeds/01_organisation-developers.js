@@ -19,8 +19,8 @@ exports.seed = async (knex) => {
 
     //Organisations
     await knex('organisation').insert([
-        { id: 1, uuid: uuid(), name: 'DHIS2', slug: slugify('DHIS2', {lower: true}) },
-        { id: 2, uuid: uuid(), name: 'World Health Organization', slug: slugify('World Health Organization', {lower: true}) },
+        { id: 1, uuid: uuid(), name: 'DHIS2', slug: slugify('DHIS2', { lower: true }) },
+        { id: 2, uuid: uuid(), name: 'World Health Organization', slug: slugify('World Health Organization', { lower: true }) },
     ])
 
     console.log('Inserting users')

@@ -59,7 +59,7 @@ module.exports = {
     handler: async (request, h) => {
 
         request.logger.info('In handler %s', request.path)
-        request.logger.info(`app id: ${request.params.appUUID}`)
+        request.logger.info(`app id: ${request.params.appUuid}`)
 
         if ( !canCreateApp(request, h) ) {
             throw Boom.unauthorized()
@@ -84,6 +84,7 @@ module.exports = {
         const appDeveloperFromPayload = appJsonPayload.developer
         const currentUser = await getCurrentUserAsync(request, knex);
         const currentUserId = currentUser.id
+
 
         //Load the organisation, or create it if it doesnt exist.
         let organisation = await getOrganisationAsync(appDeveloperFromPayload, knex)

@@ -45,9 +45,10 @@ module.exports = {
     deleteAppAsync: require('./deleteAppAsync'),
     createAppAsync: require('./createAppAsync'),
     getCurrentUserAsync,
-    getOrganisationAsync,
-    createOrganisationAsync,
+    getOrganisationByUuidAsync: require('./getOrganisationByUuidAsync'),
+    getOrganisationByNameAsync: require('./getOrganisationByNameAsync'),
+    createOrganisationAsync: require('./createOrganisationAsync'),
     getDeveloperAsync,
     createDeveloperAsync,
-    addDeveloperToOrganisationAsync
+    addDeveloperToOrganisationAsync: require('./addDeveloperToOrganisationAsync')
 }

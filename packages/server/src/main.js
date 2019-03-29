@@ -17,6 +17,8 @@ const routes = require('./routes')
 const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
 const knexConfig = require('../knexfile')
 
+const { createUserValidationFunc } = require('@security')
+
 console.log('Using env: ', process.env.NODE_ENV)
 console.log('Injecting config vars into process.env: ', config)
 
@@ -39,20 +41,6 @@ server.bind({
     db
 })
 
-const validateUser = async (decoded, request) => {
-
-    console.log('ValidateUser')
-    if (decoded && decoded.sub) {
-        console.log('Valid user')
-        //TODO: check that it exists
-        return { isValid: true }
-    }
-
-    console.log('Invalid user')
-    return { isValid: false }
-};
-
-
 // kick it
 const init = async () => {
 
@@ -66,6 +54,7 @@ const init = async () => {
     })
 
     //Swagger + deps to render swaggerui
+    //served from the url /documentation
     await server.register([
         Inert,
         Vision,
@@ -87,7 +76,7 @@ const init = async () => {
             issuer: process.env.auth0_domain,
             algorithms: [process.env.auth0_alg]
         },
-        validate: validateUser
+        validate: createUserValidationFunc(db)
     })
 
 
