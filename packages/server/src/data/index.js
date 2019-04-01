@@ -7,17 +7,7 @@ const getCurrentUserAsync = async (request, knex) => {
     }
 }
 
-const getOrganisationAsync = async (developer, knex) => {
 
-    //TODO: implement
-    return {
-        id: 1
-    }
-}
-
-const createOrganisationAsync = async (developer, knex) => {
-    //TODO: implement
-}
 
 const getDeveloperAsync = async (developer, knex) => {
 
@@ -31,8 +21,12 @@ const createDeveloperAsync = async (developer, knex) => {
     //TODO: implement
 }
 
-const addDeveloperToOrganisationAsync = async ({ developer, organisation }, knex) => {
-    //TODO: implement
+const createTransaction = (knex) => {
+
+    return new Promise((resolve) => {
+
+        return knex.transaction(resolve);
+    });
 }
 
 module.exports = {
@@ -48,7 +42,9 @@ module.exports = {
     getOrganisationByUuidAsync: require('./getOrganisationByUuidAsync'),
     getOrganisationByNameAsync: require('./getOrganisationByNameAsync'),
     createOrganisationAsync: require('./createOrganisationAsync'),
+    deleteOrganisationAsync: require('./deleteOrganisationAsync'),
     getDeveloperAsync,
     createDeveloperAsync,
-    addDeveloperToOrganisationAsync: require('./addDeveloperToOrganisationAsync')
+    addDeveloperToOrganisationAsync: require('./addDeveloperToOrganisationAsync'),
+    createTransaction
 }

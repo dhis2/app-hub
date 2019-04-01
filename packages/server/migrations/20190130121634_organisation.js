@@ -1,5 +1,7 @@
-exports.up = async knex => {
-    await knex.schema.createTable('organisation', table => {
+exports.up = async (knex) => {
+
+    await knex.schema.createTable('organisation', (table) => {
+
         table
             .increments('id')
             .unsigned()
@@ -15,14 +17,25 @@ exports.up = async knex => {
             .defaultTo(knex.fn.now())
             .notNullable()
 
+        table
+            .timestamp('created_by_user_id', true)
+            .defaultTo(knex.fn.now())
+            .notNullable()
+
+        table
+            .foreign('created_by_user_id')
+            .references('id')
+            .inTable('users')
+
         table.timestamp('updated_at', true)
 
         table.string('name', 100).unique()
 
-        table.string('slug', 150).unique()
+        table.string('slug', 100).unique()
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
+
     await knex.schema.dropTable('organisation')
 }

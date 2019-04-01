@@ -86,6 +86,41 @@ describe('@data::getOrganisationAsync', () => {
     })
 })
 
+describe('@data::createOrganisationAsync', () => {
+
+    const { deleteOrganisationAsync, createOrganisationAsync, getOrganisationByNameAsync, createTransaction } = require('@data')
+
+    it('should create an organisation and then delete it', async () => {
+
+        const transaction = await createTransaction(db)
+
+        const org = await createOrganisationAsync({
+            userId: 1,
+            name: 'Test create organisation åäöèé'
+        }, db, transaction)
+
+        await transaction.commit()
+
+        expect(org.id).to.be.a.number().min(1)
+
+        expect(org.uuid.length).to.be.equal(36)
+        expect(org.slug).to.equal('test-create-organisation-aaoee')
+        expect(org.name).to.equal('Test create organisation åäöèé')
+
+        const shouldExist = await getOrganisationByNameAsync(org.name, db)
+        expect(shouldExist.id).to.be.equal(org.id)
+        expect(shouldExist.uuid).to.be.equal(org.uuid)
+        expect(shouldExist.name).to.be.equal(org.name)
+        expect(shouldExist.slug).to.be.equal(org.slug)
+        
+        //Delete then try to fetch again.
+        const deletedRows = await deleteOrganisationAsync({uuid: org.uuid}, db, transaction)
+        expect(deletedRows).to.equal(1)
+
+        await expect(getOrganisationByNameAsync(org.name, db)).to.reject('Organisation should not exist anymore')
+    })    
+})
+
 /*
 describe('@data::addDeveloperToOrganisationAsync', () => {
 
@@ -100,19 +135,4 @@ describe('@data::addDeveloperToOrganisationAsync', () => {
     
 })
 
-describe('@data::createOrganisationAsync', () => {
-
-    const { createOrganisationAsync } = require('@data')
-
-    it('should create an organisation and return the inserted id', async () => {
-
-        const id = createOrganisationAsync({
-            name: 'Test organisation'
-        })
-
-        expect(id).to.be.a.number().min(1)
-
-    })
-    
-})
 */

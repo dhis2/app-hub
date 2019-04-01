@@ -19,11 +19,12 @@ const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
 
 const {
     getCurrentUserAsync,
-    getOrganisationAsync,
+    getOrganisationByNameAsync,
     createOrganisationAsync,
     getDeveloperAsync,
     createDeveloperAsync,
-    addDeveloperToOrganisationAsync
+    addDeveloperToOrganisationAsync,
+    createTransaction
 } = require('@data')
 
 module.exports = {
@@ -85,9 +86,8 @@ module.exports = {
         const currentUser = await getCurrentUserAsync(request, knex);
         const currentUserId = currentUser.id
 
-
         //Load the organisation, or create it if it doesnt exist.
-        let organisation = await getOrganisationAsync(appDeveloperFromPayload, knex)
+        let organisation = await getOrganisationByNameAsync(appDeveloperFromPayload.organisation, knex)
         if ( organisation === null ) {
             //Create organisation
             organization = await createOrganisationAsync(appDeveloperFromPayload, knex)
@@ -109,15 +109,8 @@ module.exports = {
         let versionUuid = null
         let iconUUid = null
 
-        const createTransaction = () => {
 
-            return new Promise((resolve) => {
-
-                return knex.transaction(resolve);
-            });
-        }
-
-        const trx = await createTransaction()
+        const trx = await createTransaction(knex)
 
         try {
             let userAndOrgIds = { userId: currentUserId, orgId: organisationId }
