@@ -21,7 +21,11 @@ const deleteOrganisationAsync = async (params, knex, transaction) => {
     }
 
     if ( !knex ) {
-        throw new Error(`Missing parameter: knex`)
+        throw new Error('Missing parameter: knex')
+    }
+
+    if ( !transaction ) {
+        throw new Error('Missing parameter: transaction')
     }
 
     try {
