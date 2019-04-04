@@ -43,8 +43,8 @@ exports.seed = async (knex) => {
     console.log('Inserting user-organisations #01')
     //user-organisations
     await knex('user_organisation').insert([
-        { organisation_id: 1, user_id: 2 }, //viktor -> dhis2
-        { organisation_id: 2, user_id: 1 }, //erik -> who
+        { organisation_id: 1, user_id: 3 }, //viktor -> dhis2
+        { organisation_id: 2, user_id: 2 }, //erik -> who
     ])
 
     console.log('Inserting user-organisations #02')
