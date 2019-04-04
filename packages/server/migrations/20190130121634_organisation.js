@@ -18,8 +18,8 @@ exports.up = async (knex) => {
             .notNullable()
 
         table
-            .timestamp('created_by_user_id', true)
-            .defaultTo(knex.fn.now())
+            .integer('created_by_user_id')
+            .unsigned()
             .notNullable()
 
         table

@@ -70,13 +70,13 @@ const init = async () => {
 
     server.auth.strategy('jwt', 'jwt', {
         complete: true,
-        key: process.env.auth0_secret,
+        key: [process.env.auth0_secret, process.env.auth0_m2m_secret],
         verifyOptions: {
             audience: process.env.auth0_audience,
             issuer: process.env.auth0_domain,
             algorithms: [process.env.auth0_alg]
         },
-        validate: createUserValidationFunc(db)
+        validate: createUserValidationFunc(db, process.env.auth0_audience)
     })
 
 

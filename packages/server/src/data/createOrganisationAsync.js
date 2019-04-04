@@ -38,10 +38,25 @@ const createOrganisationAsync = async (params, knex, transaction) => {
     }
 
     const { userId, name } = params
-    const slug = slugify(name, { lower: true })
+    const originalSlug = slugify(name, { lower: true })
+    let slug = originalSlug
+
     const orgUuid = uuid()
 
     try {
+
+        let slugUniqueness = 2
+        let foundUniqueSlug = false
+        while ( !foundUniqueSlug ) {
+            const [{ count }] = await knex.count('id').from('organisation').where('slug', slug)
+            if ( count > 0 ) {
+                slug = `${originalSlug}-${slugUniqueness}`
+                slugUniqueness++
+            } else {
+                foundUniqueSlug = true
+            }
+        }
+
         const [id] = await knex('organisation')
             .transacting(transaction)
             .insert({

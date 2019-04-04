@@ -34,7 +34,7 @@ exports.up = async (knex) => {
                     ON c.id = ac.channel_id
 
                 INNER JOIN users
-                    ON users.id = app.created_by_user_id
+                    ON users.id = app.developer_user_id
 
                 INNER JOIN organisation AS org 
                     ON org.id = app.organisation_id

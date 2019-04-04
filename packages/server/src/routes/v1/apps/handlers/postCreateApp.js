@@ -17,11 +17,12 @@ const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionA
 const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
 const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
 
+const { getCurrentUserFromRequest } = require('@utils')
+
 const {
-    getCurrentUserAsync,
-    getOrganisationByNameAsync,
+    getOrganisationsByNameAsync,
     createOrganisationAsync,
-    getDeveloperAsync,
+    getDeveloperByEmailAsync,
     createDeveloperAsync,
     addDeveloperToOrganisationAsync,
     createTransaction
@@ -60,7 +61,7 @@ module.exports = {
     handler: async (request, h) => {
 
         request.logger.info('In handler %s', request.path)
-        request.logger.info(`app id: ${request.params.appUuid}`)
+        //request.logger.info(`app id: ${request.params.appUuid}`)
 
         if ( !canCreateApp(request, h) ) {
             throw Boom.unauthorized()
@@ -74,7 +75,7 @@ module.exports = {
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
-        console.log('Received json: ', appJsonPayload)
+        request.logger.info(`Received json: ${appJsonPayload}`)
 
         const knex = h.context.db
 
@@ -82,29 +83,10 @@ module.exports = {
         const file = request.payload.file
         
 
-        const appDeveloperFromPayload = appJsonPayload.developer
-        const currentUser = await getCurrentUserAsync(request, knex);
+        const currentUser = getCurrentUserFromRequest(request, knex);
         const currentUserId = currentUser.id
 
         //Load the organisation, or create it if it doesnt exist.
-        let organisation = await getOrganisationByNameAsync(appDeveloperFromPayload.organisation, knex)
-        if ( organisation === null ) {
-            //Create organisation
-            organization = await createOrganisationAsync(appDeveloperFromPayload, knex)
-        }
-        const organisationId = organisation.id
-
-        //Load developer or create if it doesnt exist
-        let appDeveloper = await getDeveloperAsync(appDeveloperFromPayload, knex)
-        if ( appDeveloper === null ) {
-            //Create developer
-            appDeveloper = await createDeveloperAsync(appDeappDeveloperFromPayloadveloper, knex)
-            await addDeveloperToOrganisationAsync({developer, organisation}, knex)
-        } else {
-            //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
-            //TODO: decide business rules for how we should allow someone to be added to an organisation
-        }
-
         let appUuid = null
         let versionUuid = null
         let iconUUid = null
@@ -113,18 +95,50 @@ module.exports = {
         const trx = await createTransaction(knex)
 
         try {
-            let userAndOrgIds = { userId: currentUserId, orgId: organisationId }
+            let organisation = null
+            const organisations = await getOrganisationsByNameAsync(appJsonPayload.developer.organisation, knex)
+            if ( organisations.length === 0 ) {
+                //Create organisation
+                organisation = await createOrganisationAsync({
+                    userId: currentUserId,
+                    name: appJsonPayload.developer.organisation
+                }, knex, trx)
+
+            } else {
+                //TODO: what if multiple orgs is found?
+                organisation = organisations[0]
+            }
+            
+    
+            //Load developer or create if it doesnt exist
+            let appDeveloper = await getDeveloperByEmailAsync(appJsonPayload.developer.email, knex)
+            if ( appDeveloper === null ) {
+                //Create developer
+                appDeveloper = await createDeveloperAsync(appJsonPayload.developer, knex, trx)
+                await addDeveloperToOrganisationAsync({developer, organisation}, knex, trx)
+            } else {
+                //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
+                //TODO: decide business rules for how we should allow someone to be added to an organisation
+            }
+    
+
+            const organisationId = organisation.id
+            const requestUserId = currentUserId
+            const developerUserId = appDeveloper.id
 
             //Create the basic app
             const dbApp = await createAppAsync({ 
-                ...userAndOrgIds,
+                userId: requestUserId,
+                developerUserId,
+                orgId: organisationId,
                 appType: appJsonPayload.appType
             }, knex, trx)
 
             //Set newly uploaded apps as pending
             appUuid = dbApp.uuid
             await createAppStatusAsync({
-                ...userAndOrgIds,
+                userId: requestUserId,      //the current user set the status
+                orgId: organisationId,
                 appId: dbApp.id,
                 status: AppStatus.PENDING
             }, knex, trx)
@@ -132,7 +146,8 @@ module.exports = {
             //Create the version of the app
             const { demoUrl, sourceUrl, version } =  appJsonPayload.versions[0]
             const appVersion = await createAppVersionAsync({
-                ...userAndOrgIds, 
+                userId: requestUserId,
+                orgId: organisationId,
                 appId: dbApp.id,
                 demoUrl,
                 sourceUrl,
@@ -142,7 +157,7 @@ module.exports = {
 
             //Add the texts as english language, only supported for now
             await createLocalizedAppVersionAsync({
-                ...userAndOrgIds, 
+                userId: requestUserId, 
                 appVersionId: appVersion.id,
                 description: appJsonPayload.description,
                 name: appJsonPayload.name,
@@ -165,7 +180,7 @@ module.exports = {
                 const imageFileMetadata = imageFile.hapi
 
                 const { id, uuid } = await addAppVersionMediaAsync({
-                    ...userAndOrgIds,
+                    userId: requestUserId,
                     appVersionId: appVersion.id,
                     imageType: ImageType.Logo,
                     fileName: imageFileMetadata.filename,
@@ -182,7 +197,7 @@ module.exports = {
             console.log('ROLLING BACK TRANSACTION')
             console.log(err)
             await trx.rollback()
-            throw Boom.internal('Could not create app', err)
+            throw Boom.badRequest(err.message, err)
         }
 
         if ( appUuid === null || versionUuid === null ) {

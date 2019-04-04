@@ -20,8 +20,6 @@ module.exports = async (uuid, languageCode, dbConnection) => {
         throw new Error(`Missing parameter 'dbConnection'`)
     }
 
-    //TODO: try-catch and return results
-
     return dbConnection
         .select()
         .from('apps_view')

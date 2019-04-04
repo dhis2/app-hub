@@ -59,7 +59,7 @@ describe('@data::createAppAsync', () => {
 
 describe('@data::getOrganisationAsync', () => {
 
-    const { getOrganisationByUuidAsync, getOrganisationByNameAsync } = require('@data')
+    const { getOrganisationByUuidAsync, getOrganisationsByNameAsync } = require('@data')
 
     it('should throw an error passing invalid uuid', async () => {
 
@@ -68,7 +68,7 @@ describe('@data::getOrganisationAsync', () => {
 
     it('get the organisation with the specified uuid', async () => {
 
-        const dhis2Org = await getOrganisationByNameAsync('DHIS2', db)
+        const [dhis2Org] = await getOrganisationsByNameAsync('DHIS2', db)
         expect(dhis2Org).to.not.be.null()
         
         const dhis2OrgByUuid = await getOrganisationByUuidAsync(dhis2Org.uuid, db)
@@ -79,7 +79,7 @@ describe('@data::getOrganisationAsync', () => {
 
     it('get the organisation named DHIS2', async () => {
 
-        const dhis2Org = await getOrganisationByNameAsync('DHIS2', db)
+        const [dhis2Org] = await getOrganisationsByNameAsync('DHIS2', db)
 
         expect(dhis2Org).to.not.be.null()
         expect(dhis2Org.name).to.equal('DHIS2')
@@ -88,11 +88,11 @@ describe('@data::getOrganisationAsync', () => {
 
 describe('@data::createOrganisationAsync', () => {
 
-    const { deleteOrganisationAsync, createOrganisationAsync, getOrganisationByNameAsync, createTransaction } = require('@data')
+    const { deleteOrganisationAsync, createOrganisationAsync, getOrganisationsByNameAsync, createTransaction } = require('@data')
 
     it('should create an organisation and then delete it', async () => {
 
-        const transaction = await createTransaction(db)
+        let transaction = await createTransaction(db)
 
         const org = await createOrganisationAsync({
             userId: 1,
@@ -107,18 +107,22 @@ describe('@data::createOrganisationAsync', () => {
         expect(org.slug).to.equal('test-create-organisation-aaoee')
         expect(org.name).to.equal('Test create organisation åäöèé')
 
-        const shouldExist = await getOrganisationByNameAsync(org.name, db)
+        const [shouldExist] = await getOrganisationsByNameAsync(org.name, db)
         expect(shouldExist.id).to.be.equal(org.id)
         expect(shouldExist.uuid).to.be.equal(org.uuid)
         expect(shouldExist.name).to.be.equal(org.name)
         expect(shouldExist.slug).to.be.equal(org.slug)
         
         //Delete then try to fetch again.
-        const deletedRows = await deleteOrganisationAsync({uuid: org.uuid}, db, transaction)
-        expect(deletedRows).to.equal(1)
+        transaction = await createTransaction(db)
+        const successfullyDeleted = await deleteOrganisationAsync({uuid: org.uuid}, db, transaction)
+        transaction.commit()
 
-        await expect(getOrganisationByNameAsync(org.name, db)).to.reject('Organisation should not exist anymore')
-    })    
+        expect(successfullyDeleted).to.be.true()
+
+        const organisationsWithName = await getOrganisationsByNameAsync(org.name, db)
+        expect(organisationsWithName).to.be.empty()
+    })
 })
 
 /*
