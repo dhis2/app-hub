@@ -34,7 +34,7 @@ exports.up = async (knex) => {
 
     await knex.raw(`
         CREATE VIEW users_with_organisations  
-        AS SELECT u.id AS user_id, u.uuid AS user_uuid, u.first_name, u.last_name, u.email, o.name AS organisation_name, o.uuid AS organisation_uuid FROM users AS u 
+        AS SELECT u.id AS user_id, u.uuid AS user_uuid, u.name as user_name, u.email, o.name AS organisation_name, o.uuid AS organisation_uuid FROM users AS u 
             INNER JOIN user_organisation AS dorg 
                 ON dorg.user_id = user_id 
             INNER JOIN organisation AS o 

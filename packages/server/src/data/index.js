@@ -1,14 +1,4 @@
 
-
-
-
-
-
-const createDeveloperAsync = async (developer, knex) => {
-    //TODO: implement
-
-}
-
 const createTransaction = (knex) => {
 
     return new Promise((resolve) => {
@@ -30,8 +20,8 @@ module.exports = {
     getOrganisationsByNameAsync: require('./getOrganisationsByNameAsync'),
     createOrganisationAsync: require('./createOrganisationAsync'),
     deleteOrganisationAsync: require('./deleteOrganisationAsync'),
-    getDeveloperByEmailAsync: require('./getDeveloperByEmailAsync'),
-    createDeveloperAsync,
-    addDeveloperToOrganisationAsync: require('./addDeveloperToOrganisationAsync'),
+    getUserByEmailAsync: require('./getUserByEmailAsync'),
+    createUserAsync: require('./createUserAsync'),
+    addUserToOrganisationAsync: require('./addUserToOrganisationAsync'),
     createTransaction
 }

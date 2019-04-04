@@ -22,9 +22,9 @@ const { getCurrentUserFromRequest } = require('@utils')
 const {
     getOrganisationsByNameAsync,
     createOrganisationAsync,
-    getDeveloperByEmailAsync,
-    createDeveloperAsync,
-    addDeveloperToOrganisationAsync,
+    getUserByEmailAsync,
+    createUserAsync,
+    addUserToOrganisationAsync,
     createTransaction
 } = require('@data')
 
@@ -111,11 +111,14 @@ module.exports = {
             
     
             //Load developer or create if it doesnt exist
-            let appDeveloper = await getDeveloperByEmailAsync(appJsonPayload.developer.email, knex)
+            let appDeveloper = await getUserByEmailAsync(appJsonPayload.developer.email, knex)
             if ( appDeveloper === null ) {
                 //Create developer
-                appDeveloper = await createDeveloperAsync(appJsonPayload.developer, knex, trx)
-                await addDeveloperToOrganisationAsync({developer, organisation}, knex, trx)
+                appDeveloper = await createUserAsync(appJsonPayload.developer, knex, trx)
+                await addUserToOrganisationAsync({ 
+                    userId: appDeveloper.id, 
+                    organisationId: organisation.id
+                }, knex, trx)
             } else {
                 //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
                 //TODO: decide business rules for how we should allow someone to be added to an organisation

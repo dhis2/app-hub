@@ -21,9 +21,9 @@ exports.seed = async (knex) => {
 
     //Developers
     await knex('users').insert([
-        { id: 1, uuid: '58262f57-4f38-45c5-a3c2-9e30ab3ba2da', email: 'appstore-api@dhis2.org', first_name: 'Mr', last_name: 'Jenkins' },
-        { id: 2, uuid: 'd30bfdae-ac6e-4ed4-8b2c-3cd1787922f4', email: 'erik@dhis2.org', first_name: 'Erik', last_name: 'Arenhill' },
-        { id: 3, uuid: '71bced64-c7f7-4b70-aa09-9b8d1e59ed49', email: 'viktor@dhis2.org', first_name: 'Viktor', last_name: 'Varland' },
+        { id: 1, uuid: '58262f57-4f38-45c5-a3c2-9e30ab3ba2da', email: 'appstore-api@dhis2.org', name: 'Mr Jenkins' },
+        { id: 2, uuid: 'd30bfdae-ac6e-4ed4-8b2c-3cd1787922f4', email: 'erik@dhis2.org', name: 'Erik Arenhill' },
+        { id: 3, uuid: '71bced64-c7f7-4b70-aa09-9b8d1e59ed49', email: 'viktor@dhis2.org', name: 'Viktor Varland' },
     ])
 
     console.log('Inserting user_external_id')

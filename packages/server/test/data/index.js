@@ -125,18 +125,40 @@ describe('@data::createOrganisationAsync', () => {
     })
 })
 
-/*
-describe('@data::addDeveloperToOrganisationAsync', () => {
 
-    const { addDeveloperToOrganisationAsync } = require('@data')
+describe('@data::createUserAsync', () => {
 
-    it('should add a developer to an organisation without throwing',  async () => {
-        
-        const success = await addDeveloperToOrganisationAsync(1,1)
+    const { createUserAsync, createTransaction } = require('@data')
 
-        expect(success).to.be.true()
+    it('should create a new user', async () => {
+
+        let transaction = await createTransaction(db)
+
+        const { id } = await createUserAsync({
+            email: 'test@test.com'
+        }, db, transaction)
+
+        transaction.commit()
+
+        expect(id).to.be.number().min(1)
     })
-    
+
 })
 
-*/
+
+describe('@data::addUserToOrganisationAsync', () => {
+
+    const { addUserToOrganisationAsync, createTransaction, getOrganisationsByNameAsync, createOrganisationAsync } = require('@data')
+
+    it('should add a user to an organisation without throwing',  async () => {
+        
+        let transaction = await createTransaction(db)
+
+        const org = await createOrganisationAsync({ userId: 1, name: 'A new organisation' }, db, transaction)
+       
+        await addUserToOrganisationAsync( { userId: 1, organisationId: org.id }, db, transaction )
+
+        transaction.commit()
+       
+    })    
+})

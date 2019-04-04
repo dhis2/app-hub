@@ -10,7 +10,7 @@ exports.up = async (knex) => {
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
                     c.name AS channel_name, c.uuid AS channel_uuid,
-                    users.id AS developer_id, users.uuid AS developer_uuid, users.first_name AS developer_first_name, users.last_name AS developer_last_name,
+                    users.id AS developer_id, users.uuid AS developer_uuid, users.name AS developer_name,
                     users.email AS developer_email,
                     org.name AS organisation, org.slug AS organisation_slug 
                 FROM app 
