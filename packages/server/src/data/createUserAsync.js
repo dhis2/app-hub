@@ -6,7 +6,14 @@ const paramsSchema = joi.object().keys({
     name: joi.string()
 }).options({ allowUnknown: true })
 
-
+/**
+ * Creates a new user 
+ * @param {object} params 
+ * @param {string} params.email The users email
+ * @param {string} params.name The name of the user 
+ * @param {*} knex 
+ * @param {*} transaction 
+ */
 const createUserAsync = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
@@ -38,7 +45,7 @@ const createUserAsync = async (params, knex, transaction) => {
             .into('users')
             .returning('id')
 
-        return { id }
+        return { id, email, uuid: newUuid, name }
 
     } catch ( err ) {
         throw new Error(`Could not create user: ${params.email}. ${err.message}`)
