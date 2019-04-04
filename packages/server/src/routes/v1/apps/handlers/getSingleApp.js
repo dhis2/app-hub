@@ -3,7 +3,7 @@
 const Boom = require('boom')
 const Joi = require('joi')
 
-const AppModel = require('../../../../models/v1/out/App')
+const AppModel = require('@models/v1/out/App')
 const { AppStatus } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
@@ -20,7 +20,10 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: false,
+        auth: {
+            strategy: 'jwt',
+            mode: 'try'         //allow unauthenticated requests, but decode the jwt if it exists.
+        },
         tags: ['api', 'v1'],
         response: {
             status: {
@@ -36,7 +39,6 @@ module.exports = {
         request.logger.info('In handler %s', request.path)
 
         const appUuid = request.params.appUuid;
-
 
         let apps = null
 
