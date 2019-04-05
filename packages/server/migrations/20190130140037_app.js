@@ -32,6 +32,11 @@ exports.up = async (knex) => {
             .unsigned()
             .notNullable()
 
+        table
+            .integer('developer_user_id')
+            .unsigned()
+            .notNullable()
+
         table.integer('updated_by_user_id').unsigned()
 
         table
@@ -43,6 +48,11 @@ exports.up = async (knex) => {
             .foreign('organisation_id')
             .references('id')
             .inTable('organisation')
+
+        table
+            .foreign('developer_user_id')
+            .references('id')
+            .inTable('users')
 
         table
             .foreign('created_by_user_id')

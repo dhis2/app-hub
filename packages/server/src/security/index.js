@@ -1,3 +1,4 @@
+
 /**
  * This returns true if the request is authenticated (e.g. contains a valid token)
  * @param {*} request
@@ -19,7 +20,7 @@ const isAuthenticated = (request) => {
 const hasRole = (request, role) => {
 
     try {
-        return request.auth.credentials.payload.roles.indexOf(role) !== -1
+        return request.auth.credentials.roles.indexOf(role) !== -1
     } catch ( err ) {
         return false
     }
@@ -60,10 +61,15 @@ const canCreateApp = (request, hapi) => isAuthenticated(request)
  */
 const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
+
+
+
+
 module.exports = {
     canDeleteApp,
     canChangeAppStatus,
     canCreateApp,
     canCreateAppVersion,
-    canSeeAllApps
+    canSeeAllApps,
+    createUserValidationFunc: require('./createUserValidationFunc')
 }

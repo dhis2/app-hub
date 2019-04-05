@@ -2,19 +2,21 @@ const uuid = require('uuid/v4')
 
 const joi = require('joi')
 
-const { AppType } = require('@enums')
+const { AppTypes } = require('@enums')
 
 const paramsSchema = joi.object().keys({
     userId: joi.number().required(),
+    developerUserId: joi.number().required(),
     orgId: joi.number().required(),
-    appType: joi.string().required().valid(AppType),
+    appType: joi.string().required().valid(AppTypes),
 }).options({ allowUnknown: true })
 
 
 /**
  * Creates an app and returns the database id
  * @param {object} params
- * @param {number} params.userId User id creating the app
+ * @param {number} params.userId User id creating the app (admin, manager, api user making the actual upload)
+ * @param {number} params.developerUserId User id for the developer of the app
  * @param {number} params.orgId Organisation id for the organisation owning this app
  * @param {string} params.appType Type of the app
  * @param {object} knex
@@ -28,7 +30,7 @@ const createAppAsync = async (params, knex, transaction) =>  {
         throw new Error(validation.error)
     }
 
-    const { userId, orgId, appType } = params
+    const { userId, developerUserId, orgId, appType } = params
 
 
     //generate a new uuid to insert
@@ -40,6 +42,7 @@ const createAppAsync = async (params, knex, transaction) =>  {
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,
+                developer_user_id: developerUserId,
                 organisation_id: orgId,
                 type: appType,
                 uuid: appUuid

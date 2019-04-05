@@ -3,7 +3,7 @@
 module.exports = [
     require('./handlers/getAllApprovedApps'),
     require('./handlers/getAllApps'),
-    require('./handlers/getSingleApprovedApp'),
+    require('./handlers/getSingleApp'),
     require('./handlers/getMyApps'),
     require('./handlers/postCreateApp'),
     require('./handlers/getAppFile'),

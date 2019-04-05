@@ -1,38 +1,10 @@
 
-const getCurrentUserAsync = async (request, knex) => {
+const createTransaction = (knex) => {
 
-    //TODO: implement
-    return {
-        id: 2
-    }
-}
+    return new Promise((resolve) => {
 
-const getOrganisationAsync = async (developer, knex) => {
-
-    //TODO: implement
-    return {
-        id: 1
-    }
-}
-
-const createOrganisationAsync = async (developer, knex) => {
-    //TODO: implement
-}
-
-const getDeveloperAsync = async (developer, knex) => {
-
-    //TODO: implement
-    return {
-        id: 2
-    }
-}
-
-const createDeveloperAsync = async (developer, knex) => {
-    //TODO: implement
-}
-
-const addDeveloperToOrganisationAsync = async ({ developer, organisation }, knex) => {
-    //TODO: implement
+        return knex.transaction(resolve);
+    });
 }
 
 module.exports = {
@@ -44,10 +16,12 @@ module.exports = {
     getAppsByUuidAsync: require('./getAppsByUuidAsync'),
     deleteAppAsync: require('./deleteAppAsync'),
     createAppAsync: require('./createAppAsync'),
-    getCurrentUserAsync,
-    getOrganisationAsync,
-    createOrganisationAsync,
-    getDeveloperAsync,
-    createDeveloperAsync,
-    addDeveloperToOrganisationAsync
+    getOrganisationByUuidAsync: require('./getOrganisationByUuidAsync'),
+    getOrganisationsByNameAsync: require('./getOrganisationsByNameAsync'),
+    createOrganisationAsync: require('./createOrganisationAsync'),
+    deleteOrganisationAsync: require('./deleteOrganisationAsync'),
+    getUserByEmailAsync: require('./getUserByEmailAsync'),
+    createUserAsync: require('./createUserAsync'),
+    addUserToOrganisationAsync: require('./addUserToOrganisationAsync'),
+    createTransaction
 }

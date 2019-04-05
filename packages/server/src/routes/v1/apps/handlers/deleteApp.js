@@ -13,7 +13,7 @@ const deleteAppAsync = require('@data/deleteAppAsync')
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'DELETE',
-    path: '/v1/apps/{appUUID}',
+    path: '/v1/apps/{appUuid}',
     config: {
         auth: 'jwt',
         tags: ['api', 'v1'],
@@ -37,9 +37,9 @@ module.exports = {
 
         const knex = h.context.db;
 
-        const appUUID = request.params.appUUID
+        const appUuid = request.params.appUuid
 
-        const appRows = await getAppsByUuidAsync(appUUID, 'en', knex)
+        const appRows = await getAppsByUuidAsync(appUuid, 'en', knex)
 
         const item = appRows[0]
         //TODO: delete files. All versions?
@@ -47,7 +47,7 @@ module.exports = {
 
         try {
             await fileHandler.deleteDir(`${item.uuid}`)
-            const result = await deleteAppAsync(appUUID, knex)
+            const result = await deleteAppAsync(appUuid, knex)
             console.log(result)
 
             return { message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200 }

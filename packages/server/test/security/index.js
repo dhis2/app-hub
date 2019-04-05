@@ -15,9 +15,7 @@ describe('@security::canDeleteApp', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    payload: {
-                        roles: ['ROLE_MANAGER']
-                    }
+                    roles: ['ROLE_MANAGER']
                 }
             }
         }
@@ -47,9 +45,7 @@ describe('@security::canDeleteApp', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    payload: {
-                        roles: null
-                    }
+                    roles: null
                 }
             }
         }
@@ -69,9 +65,7 @@ describe('@security::canChangeAppStatus', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    payload: {
-                        roles: ['ROLE_MANAGER']
-                    }
+                    roles: ['ROLE_MANAGER']
                 }
             }
         }
@@ -91,9 +85,7 @@ describe('@security::canSeeAllApps', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    payload: {
-                        roles: ['ROLE_MANAGER']
-                    }
+                    roles: ['ROLE_MANAGER']
                 }
             }
         }
