@@ -62,6 +62,7 @@ module.exports = class LocalFileSystemHandler {
                 if ( err ) {
                     reject(err)
                 } else {
+                    //use the same format as AWS api, setting the file contents to the Body property
                     resolve({ Body: data })
                 }
             })
