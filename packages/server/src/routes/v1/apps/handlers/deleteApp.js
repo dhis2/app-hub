@@ -3,7 +3,7 @@
 const Boom = require('boom')
 const Joi = require('joi')
 
-const AWSFileHandler = require('@utils/AWSFileHandler')
+const { deleteDir } = require('@utils')
 const defaultFailHandler = require('../../defaultFailHandler')
 
 const { canDeleteApp } = require('@security')
@@ -43,10 +43,9 @@ module.exports = {
 
         const item = appRows[0]
         //TODO: delete files. All versions?
-        const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
 
         try {
-            await fileHandler.deleteDir(`${item.uuid}`)
+            await deleteDir(`${item.uuid}`)
             const result = await deleteAppAsync(appUuid, knex)
             console.log(result)
 

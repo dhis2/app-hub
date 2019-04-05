@@ -6,7 +6,7 @@ const CreateAppModel = require('@models/v1/in/CreateAppModel')
 const { AppStatus, ImageType } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const AWSFileHandler = require('@utils/AWSFileHandler')
+const { saveFile } = require('@utils')
 
 const { canCreateApp } = require('@security')
 
@@ -210,12 +210,11 @@ module.exports = {
 
         await trx.commit()
 
-        const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
-
+        
         try  {
-            const appUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, 'app.zip', file._data)
+            const appUpload = saveFile(`${appUuid}/${versionUuid}`, 'app.zip', file._data)
             if ( imageFile ) {
-                const iconUpload = fileHandler.saveFile(`${appUuid}/${versionUuid}`, iconUUid, imageFile._data)
+                const iconUpload = saveFile(`${appUuid}/${versionUuid}`, iconUUid, imageFile._data)
                 await Promise.all([appUpload, iconUpload])
             } else {
                 await appUpload

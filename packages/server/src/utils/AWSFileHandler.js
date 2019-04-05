@@ -1,8 +1,8 @@
-
-
-
 const AWS = require('aws-sdk')
 
+/**
+ * Store files in an AWS S3 bucket
+ */
 module.exports = class AWSFileHandler {
 
     constructor(region, bucketName) {

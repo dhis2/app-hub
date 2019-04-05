@@ -5,7 +5,8 @@ const { lab } = exports.lab = require('../index')
 
 const { it, describe } = lab
 
-const { AWSFileHandler, flatten } = require('@utils')
+const { flatten } = require('@utils')
+const AWSFileHandler = require('@utils/AWSFileHandler')
 
 describe('@utils::AWSFileHandler', () => {
 
