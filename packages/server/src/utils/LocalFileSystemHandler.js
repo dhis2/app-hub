@@ -31,6 +31,7 @@ module.exports = class LocalFileSystemHandler {
                 this.createDirectoryIfNotExists(path.join(this._uploadDirectory, directoryPath))
             } catch ( err ) {
                 reject(err)
+                return
             }
             
             fs.writeFile(path.join(this._uploadDirectory, directoryPath, filename), buffer, (err) => {
@@ -54,6 +55,7 @@ module.exports = class LocalFileSystemHandler {
                 this.verifyPath(directoryPath)
             } catch ( err ) {
                 reject(err)
+                return
             }
 
             fs.readFile(path.join(this._uploadDirectory, directoryPath, filename), (err, data) => {
@@ -78,6 +80,7 @@ module.exports = class LocalFileSystemHandler {
                 this.verifyPath(directoryPath)
             } catch ( err ) {
                 reject(err)
+                return
             }
 
             fs.unlink(path.join(directoryPath, filename), (err) => {
@@ -96,6 +99,7 @@ module.exports = class LocalFileSystemHandler {
                 this.verifyPath(directoryPath)
             } catch ( err ) {
                 reject(err)
+                return
             }
 
             rimraf(path.join(this._uploadDirectory, directoryPath), (err) => {
