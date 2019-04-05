@@ -13,6 +13,10 @@ module.exports = class LocalFileSystemHandler {
         this.createDirectoryIfNotExists(this._uploadDirectory)
     }
 
+    get directory() {
+        return this._uploadDirectory
+    }
+
     createDirectoryIfNotExists(dir) {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true, mode: '0744' });
@@ -21,9 +25,9 @@ module.exports = class LocalFileSystemHandler {
 
 
     saveFile(directoryPath, filename, buffer) {
-        this.verifyPath(directoryPath)
         return new Promise((resolve, reject) => {
             try {
+                this.verifyPath(directoryPath)
                 this.createDirectoryIfNotExists(path.join(this._uploadDirectory, directoryPath))
             } catch ( err ) {
                 reject(err)
@@ -45,10 +49,13 @@ module.exports = class LocalFileSystemHandler {
      * @param {*} filename
      */
     getFile(directoryPath, filename) {
-        this.verifyPath(directoryPath)
-
-        console.log(`Fetching file from ${path.join(this._uploadDirectory, directoryPath, filename)}`)
         return new Promise((resolve, reject) => {
+            try {
+                this.verifyPath(directoryPath)
+            } catch ( err ) {
+                reject(err)
+            }
+
             fs.readFile(path.join(this._uploadDirectory, directoryPath, filename), (err, data) => {
                 if ( err ) {
                     console.log(err)
@@ -66,8 +73,13 @@ module.exports = class LocalFileSystemHandler {
      * @param {*} filename
      */
     deleteFile(directoryPath, filename) {
-        this.verifyPath(directoryPath)
         return new Promise((resolve, reject) => {
+            try {
+                this.verifyPath(directoryPath)
+            } catch ( err ) {
+                reject(err)
+            }
+
             fs.unlink(path.join(directoryPath, filename), (err) => {
                 if ( err ) {
                     reject(err)
@@ -79,8 +91,13 @@ module.exports = class LocalFileSystemHandler {
     }
 
     deleteDir(directoryPath) {
-        this.verifyPath(directoryPath)
         return new Promise((resolve, reject) => {
+            try {
+                this.verifyPath(directoryPath)
+            } catch ( err ) {
+                reject(err)
+            }
+
             rimraf(path.join(this._uploadDirectory, directoryPath), (err) => {
                 if ( err ) { 
                     reject(err)
