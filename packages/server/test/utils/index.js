@@ -1,17 +1,20 @@
 
-const { expect } = require('code')
+const { expect, fail } = require('code')
 
 const { lab } = exports.lab = require('../index')
 
 const { it, describe } = lab
 
 const { flatten } = require('@utils')
-const AWSFileHandler = require('@utils/AWSFileHandler')
+
 
 describe('@utils::AWSFileHandler', () => {
 
+    
     const region = 'my-region'
     const bucket = 'a-bucket'
+
+    const AWSFileHandler = require('@utils/AWSFileHandler')
     const fileHandler = new AWSFileHandler(region, bucket)
 
     it('should generate a key combined with a /', () => {
@@ -61,3 +64,48 @@ describe('@utils::flatten', () => {
         })
     })
 })
+
+
+describe('@utils::LocalFileSystemHandler', () => {
+    const LocalFileSystemHandler = require('@utils/LocalFileSystemHandler')
+
+    it('should contain the same contents on disk after upload as the original', async () => {
+
+        const path = require('path')
+        const fs = require('fs')
+
+        const handler = new LocalFileSystemHandler()
+        const testFile = path.join(__dirname, 'testfile.json')
+
+        const testFileBuffer = await fs.promises.readFile(testFile)
+
+        try {
+            const destinationFilename = 'the-uploaded-file.json'
+            const destinationPath = 'test-directory'
+
+            //save the file
+            await handler.saveFile(destinationPath, destinationFilename, testFileBuffer)
+
+            //then compare it to the original
+            const uploadedFileData = await fs.promises.readFile(path.join(handler.directory, destinationPath, destinationFilename))
+            expect(uploadedFileData.toString()).to.equal(testFileBuffer.toString())
+        } catch ( err ) {
+            fail(`should not get an error saving file to disk, got error: ${err.message}`)
+        }
+    })
+
+    it('should throw an error if using relative paths', async () => {
+
+        const handler = new LocalFileSystemHandler()
+
+        await expect(handler.saveFile('../whatever', 'file', Buffer.from('foobar'))).to.reject(Error)
+    })
+
+    it('should not allow the use of absolute paths', async () => {
+
+        const handler = new LocalFileSystemHandler()
+
+        await expect(handler.getFile('/etc', 'passwd')).to.reject(Error)
+    })
+})
+
