@@ -42,10 +42,9 @@ module.exports = {
         const appRows = await getAppsByUuidAsync(appUuid, 'en', knex)
 
         const item = appRows[0]
-        //TODO: delete files. All versions?
 
         try {
-            await deleteDir(`${item.uuid}`)
+            await deleteDir(item.uuid)
             const result = await deleteAppAsync(appUuid, knex)
             console.log(result)
 
