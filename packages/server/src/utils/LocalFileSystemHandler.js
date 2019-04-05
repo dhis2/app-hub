@@ -60,10 +60,9 @@ module.exports = class LocalFileSystemHandler {
 
             fs.readFile(path.join(this._uploadDirectory, directoryPath, filename), (err, data) => {
                 if ( err ) {
-                    console.log(err)
                     reject(err)
                 } else {
-                    resolve({ Body:data })
+                    resolve({ Body: data })
                 }
             })
         })
