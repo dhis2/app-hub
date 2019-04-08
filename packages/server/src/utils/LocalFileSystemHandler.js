@@ -8,9 +8,9 @@ const rimraf = require('rimraf');
  */
 module.exports = class LocalFileSystemHandler {
 
-    constructor() {
-        this._uploadDirectory = __dirname + '/../../upload' //app-store/packages/server/upload
-        this.createDirectoryIfNotExists(this._uploadDirectory)
+    constructor(uploadPath) {
+        this._uploadDirectory = path.normalize(__dirname + (uploadPath || '/../../upload')) //app-store/packages/server/upload if no other is provided
+        this.createDirectoryIfNotExists(this._uploadDirectory)    
     }
 
     get directory() {
@@ -19,7 +19,7 @@ module.exports = class LocalFileSystemHandler {
 
     createDirectoryIfNotExists(dir) {
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true, mode: '0744' });
+            fs.mkdirSync(dir, { recursive: true, mode: '0744' })
         }
     }
 
@@ -113,16 +113,13 @@ module.exports = class LocalFileSystemHandler {
     }
 
     verifyPath(directoryPath) {
-        if ( directoryPath.indexOf('..') !== -1 ) {
-            throw new Error('Relative paths not allowed')
-        }
 
-        if ( directoryPath.indexOf('~') === 0 ) {
-            throw new Error('Tilde not allowed in directoryPath')   //avoid reading from current user directory
-        }
+        const fullPath = path.join(this._uploadDirectory, directoryPath)
+        const normalized = path.normalize(fullPath)
 
-        if ( directoryPath.indexOf('/') === 0 ) {
-            throw new Error('Absolute paths not allowed')   //not allowed at the moment at least.
+        //Check that we're trying to use a path within/below the upload root
+        if ( normalized.indexOf(this._uploadDirectory) !== 0 ) {
+            throw new Error('Invalid directory')
         }
     }
 }

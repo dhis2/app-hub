@@ -94,14 +94,14 @@ describe('@utils::LocalFileSystemHandler', () => {
         }
     })
 
-    it('should throw an error if using relative paths', async () => {
+    it('should throw an error if trying to save a file outside the upload root directory', async () => {
 
         const handler = new LocalFileSystemHandler()
 
         await expect(handler.saveFile('../whatever', 'file', Buffer.from('foobar'))).to.reject(Error)
     })
 
-    it('should not allow the use of absolute paths', async () => {
+    it('should not allow getting a file outside of the upload directory root', async () => {
 
         const handler = new LocalFileSystemHandler()
 
