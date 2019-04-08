@@ -6,6 +6,7 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
+        "preinstall": "link-module-alias clean",
         "postinstall": "link-module-alias",
         "production": "NODE_ENV=production node src/main.js",
         "start": "NODE_ENV=development no_auth_mapped_user_id=1 nodemon src/main.js",
@@ -24,7 +25,7 @@
         "hapi": "^18.1.0",
         "hapi-auth-jwt2": "^8.3.0",
         "hapi-pino": "^5.4.1",
-        "hapi-swagger": "^9.3.1",
+        "hapi-swagger": "^9.4.2",
         "inert": "^5.1.2",
         "joi": "^14.3.1",
         "knex": "^0.16.3",
