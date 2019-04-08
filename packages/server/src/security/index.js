@@ -6,7 +6,7 @@
 const isAuthenticated = (request) => {
 
     try {
-        return request.auth.isAuthenticated === true
+        return getCurrentAuthStrategy() === false || request.auth.isAuthenticated === true
     } catch (err) {
         return false
     }
@@ -18,6 +18,11 @@ const isAuthenticated = (request) => {
  * @param {string} role
  */
 const hasRole = (request, role) => {
+
+    //if no authentication is used assume all roles
+    if ( getCurrentAuthStrategy() === false ) {
+        return true
+    }
 
     try {
         return request.auth.credentials.roles.indexOf(role) !== -1
@@ -62,7 +67,50 @@ const canCreateApp = (request, hapi) => isAuthenticated(request)
 const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
 
+/**
+ * Returns the current auth strategy, for example 'jwt' if using auth0, false if no strategy
+ */
+const getCurrentAuthStrategy = () => {
+    if ( process.env.auth_strategy !== undefined ) {
+        return process.env.auth_strategy
+    }
 
+    return false
+}
+
+/**
+ * Returns the auth strategy config in optional mode
+ */
+const getCurrentAuthStrategyOptional = () => {
+    if ( process.env.auth_strategy === 'jwt' ) {
+        return {
+            auth: process.env.auth_strategy,
+            mode: 'try'
+        }
+    }
+
+    return false
+}
+
+
+const getCurrentUserFromRequest = (request, knex) => {
+
+    let user = null
+
+    if ( getCurrentAuthStrategy() === false ) {
+        //TODO: this might be done in a better way, but somehow we must know what to map to when we don't use any authentication
+        //only to be used for test/dev and not in production where authentication should be used.
+        user = {
+            id: process.env.no_auth_mapped_user_id
+        }
+    } else if ( request !== null && request.auth !== null && request.auth.credentials !== null ) {
+        user = {
+            id: request.auth.credentials.userId
+        }
+    }
+
+    return user
+}
 
 
 module.exports = {
@@ -71,5 +119,8 @@ module.exports = {
     canCreateApp,
     canCreateAppVersion,
     canSeeAllApps,
-    createUserValidationFunc: require('./createUserValidationFunc')
+    createUserValidationFunc: require('./createUserValidationFunc'),
+    getCurrentAuthStrategy,
+    getCurrentAuthStrategyOptional,
+    getCurrentUserFromRequest
 }

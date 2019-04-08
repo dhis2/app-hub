@@ -17,8 +17,6 @@ const routes = require('./routes')
 const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
 const knexConfig = require('../knexfile')
 
-const { createUserValidationFunc } = require('@security')
-
 console.log('Using env: ', process.env.NODE_ENV)
 console.log('Injecting config vars into process.env: ', config)
 
@@ -68,16 +66,33 @@ const init = async () => {
 
     await server.register(jwt)
 
-    server.auth.strategy('jwt', 'jwt', {
-        complete: true,
-        key: [process.env.auth0_secret, process.env.auth0_m2m_secret],
-        verifyOptions: {
-            audience: process.env.auth0_audience,
-            issuer: process.env.auth0_domain,
-            algorithms: [process.env.auth0_alg]
-        },
-        validate: createUserValidationFunc(db, process.env.auth0_audience)
-    })
+    if ( process.env.auth_strategy === 'jwt'
+        && process.env.auth0_secret
+        && process.env.auth0_m2m_secret
+        && process.env.auth0_audience
+        && process.env.auth0_domain
+        && process.env.auth0_alg ) {
+
+        const registerAuth0Provider = require('@security/auth0')
+
+        registerAuth0Provider(server, {
+            keys: [process.env.auth0_secret, process.env.auth0_m2m_secret],
+            verifyOptions: {
+                audience: process.env.auth0_audience,
+                issuer: process.env.auth0_domain,
+                algorithms: [process.env.auth0_alg]
+            }
+        })
+    } else {
+        //Warn with red background
+        console.warn('\x1b[41m', 'No authentication method configured, all endpoints are running unprotected', '\x1b[0m')
+
+        if ( !process.env.no_auth_mapped_user_id ) {
+            console.error('\x1b[41m', 'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.no_auth_mapped_user_id', '\x1b[m')
+            process.exit(1)
+            return
+        }
+    }
 
 
     server.route(routes)

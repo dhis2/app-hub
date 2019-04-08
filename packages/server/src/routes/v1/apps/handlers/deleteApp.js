@@ -10,12 +10,14 @@ const { canDeleteApp } = require('@security')
 const getAppsByUuidAsync = require('@data/getAppsByUuidAsync')
 const deleteAppAsync = require('@data/deleteAppAsync')
 
+const { getCurrentAuthStrategy } = require('@security')
+
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'DELETE',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: 'jwt',
+        auth: getCurrentAuthStrategy(),
         tags: ['api', 'v1'],
         response: {
             status: {

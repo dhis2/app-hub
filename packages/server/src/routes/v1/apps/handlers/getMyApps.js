@@ -7,13 +7,14 @@ const AppModel = require('../../../../models/v1/out/App')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
+const { getCurrentAuthStrategy } = require('@security')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
     method: 'GET',
     path: '/v1/apps/myapps',
     config: {
-        auth: 'jwt',
+        auth: getCurrentAuthStrategy(),
         tags: ['api', 'v1'],
         response: {
             status: {
