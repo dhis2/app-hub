@@ -2,7 +2,7 @@
 
 
 const { AppStatus } = require('@enums')
-const AWSFileHandler = require('@utils/AWSFileHandler')
+const { getFile } = require('@utils')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
@@ -36,8 +36,7 @@ module.exports = {
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
         //console.log(`Fetching file from ${item.uuid}/${item.version_uuid}`)
-        const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
-        const file =  await fileHandler.getFile(`${item.uuid}/${item.version_uuid}`, 'app.zip')
+        const file =  await getFile(`${item.uuid}/${item.version_uuid}`, 'app.zip')
 
         return h.response(file.Body)
             .type('application/zip')

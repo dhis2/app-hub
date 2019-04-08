@@ -19,7 +19,9 @@
             "functions": "ignore"
         }],
         "no-console": 0,
-        "hapi/hapi-capitalize-modules": 0
+        "hapi/hapi-capitalize-modules": 0,
+        "hapi/hapi-for-you": 0,
+        "hapi/hapi-scope-start": 0
     },
     "parser": "esprima",
     "parserOptions": {

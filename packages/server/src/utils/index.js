@@ -29,8 +29,18 @@ const getCurrentUserFromRequest = (request, knex) => {
     return user
 }
 
+const createBackingStorageInstance = require('./createBackingStorageInstance')
+
+const saveFile = (path, filename, buffer) => createBackingStorageInstance().saveFile(path, filename, buffer)
+const getFile = (path, filename) => createBackingStorageInstance().getFile(path, filename)
+const deleteFile = (path, filename) => createBackingStorageInstance().deleteFile(path, filename)
+const deleteDir = (path) => createBackingStorageInstance().deleteDir(path)
+
 module.exports = {
     flatten, 
-    AWSFileHandler: require('./AWSFileHandler'),
-    getCurrentUserFromRequest
+    getCurrentUserFromRequest,
+    saveFile,
+    getFile,
+    deleteFile,
+    deleteDir
 }

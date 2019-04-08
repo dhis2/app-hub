@@ -2,9 +2,8 @@
 
 const Boom = require('boom')
 const Joi = require('joi')
-const path = require('path')
 
-const AWSFileHandler = require('@utils/AWSFileHandler')
+const { getFile } = require('@utils')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
@@ -46,11 +45,10 @@ module.exports = {
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
         //console.log(`Fetching file from ${item.uuid}/${item.version_uuid}`)
-        const fileHandler = new AWSFileHandler(process.env.AWS_REGION, process.env.AWS_BUCKET_NAME)
 
         try {
 
-            const file =  await fileHandler.getFile(`${item.uuid}/${item.version_uuid}`, filename)
+            const file =  await getFile(`${item.uuid}/${item.version_uuid}`, filename)
 
             return h.response(file.Body)
                 .type(media.mime)
