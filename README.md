@@ -36,9 +36,26 @@ cd packages/server
 npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 ```
 
-## Create back-end config file
+## Create back-end config file (optional)
+
+The back-end config file contain credentials for database, AWS S3 bucket and Auth0.
+
 Env vars (~/.dhis2/appstore/vars)
 ```bash
+
+#Secrets for signing jwt token
+auth0_secret
+auth0_m2m_secret
+
+#The m2m api must use the same audience as the web app, specify the audience to use here
+auth0_audience
+
+#Auth0 domain, usually https://{tenant}.{region}.auth0.com
+auth0_domain
+
+#algorithm used for signing the jwt-tokens for example HS256
+auth0_alg
+
 #For the S3 storage where application files will be stored.
 AWS_REGION
 AWS_ACCESS_KEY_ID
