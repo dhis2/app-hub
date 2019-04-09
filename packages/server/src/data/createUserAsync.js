@@ -7,14 +7,24 @@ const paramsSchema = joi.object().keys({
 }).options({ allowUnknown: true })
 
 /**
- * Creates a new user 
- * @param {object} params 
- * @param {string} params.email The users email
- * @param {string} params.name The name of the user 
- * @param {*} knex 
- * @param {*} transaction 
+ * @typedef CreateUserResult
+ * @property {number} id The inserted database id for the user
+ * @property {string} uuid The generated UUID for the user
+ * @property {string} email Email stored for the user
+ * @property {string} name Name of the user
  */
-const createUserAsync = async (params, knex, transaction) => {
+
+/**
+ * Creates a new user
+ * @function createUser
+ * @param {object} params
+ * @param {string} params.email The user email
+ * @param {string} params.name The name of the user
+ * @param {*} knex
+ * @param {*} transaction
+ * @returns {Promise<CreateUserResult>}
+ */
+module.exports = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -52,5 +62,3 @@ const createUserAsync = async (params, knex, transaction) => {
     }
 }
 
-
-module.exports = createUserAsync

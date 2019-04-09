@@ -13,7 +13,15 @@ const paramSchema = joi.object().keys({
 }).options({ allowUnknown: true })
 
 /**
+ * @typedef {object} AppVersionMediaResult
+ * @property {number} id Database id for the inserted media
+ * @property {string} uuid The generated uuid for the created media
+ */
+
+/**
  * Publish an app version to a channel
+ * 
+ * @function addAppVersionMedia
  * @param {object} params The parameters used to publish an app version to a specific channel
  * @param {number} params.appVersionId The app version db id this media belongs to
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")
@@ -22,8 +30,9 @@ const paramSchema = joi.object().keys({
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
  * @param {object} knex DB instance of knex
  * @param {object} trx The transaction to operate on
+ * @returns {Promise<AppVersionMediaResult>}
  */
-const addAppVersionMediaAsync = async (params, knex, transaction) => {
+module.exports = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
 
@@ -77,4 +86,4 @@ const addAppVersionMediaAsync = async (params, knex, transaction) => {
     }
 }
 
-module.exports = addAppVersionMediaAsync
+

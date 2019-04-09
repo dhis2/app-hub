@@ -1,9 +1,11 @@
 /**
- * 
- * @param {string} email Email to fetch the user for.
- * @param {*} knex 
+ * Load a user from db for the specified email
+ * @function getUserByEmail
+ * @param {string} email Email to try and find the user for
+ * @param {*} knex db instance
+ * @param {Promise<object>}
  */
-const getUserByEmailAsync = async (email, knex) => {
+module.exports = async (email, knex) => {
 
     let user = null
 
@@ -17,6 +19,4 @@ const getUserByEmailAsync = async (email, knex) => {
 
     return user
 }
-
-module.exports = getUserByEmailAsync
 

@@ -2,11 +2,12 @@ const joi = require('joi')
 
 /**
  * Finds an organisation by one of the optional parameters. If passing multiple they will be evaluated in the following order: id, uuid, name
+ * @function getOrganisationsByName
  * @param {string} name Name of the organisation to get
  * @param {*} knex db instance
  * @returns {Array<Organisation>} The organisations found by name or empty array if no matches
  */
-const getOrganisationsByNameAsync = async (name, knex) => {
+module.exports = async (name, knex) => {
 
     if ( !knex ) {
         throw new Error(`Missing knex instance passed as parameter.`)
@@ -25,4 +26,4 @@ const getOrganisationsByNameAsync = async (name, knex) => {
     }
 }
 
-module.exports = getOrganisationsByNameAsync
+

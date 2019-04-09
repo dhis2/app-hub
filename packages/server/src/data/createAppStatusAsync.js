@@ -1,14 +1,20 @@
 
 /**
+ * @typedef CreateAppStatusResult
+ * @property {number} id Database id for the inserted status
+ */
+
+/**
  * Inserts an app status and returns the database id
- * @param {number} userId
- * @param {number} appId
- * @param {*} status
+ * @function createAppStatus
+ * @param {object} params
+ * @param {number} params.userId
+ * @param {number} params.appId
  * @param {object} knex
  * @param {object} transaction
- * @returns {Promise<number>} inserted id
+ * @returns {Promise<CreateAppStatusResult>} inserted id
  */
-const createAppStatusAsync = async (params, knex, transaction) =>  {
+module.exports = async (params, knex, transaction) =>  {
 
     const { userId, appId, status } = params
     try {
@@ -32,4 +38,4 @@ const createAppStatusAsync = async (params, knex, transaction) =>  {
     }
 }
 
-module.exports = createAppStatusAsync
+
