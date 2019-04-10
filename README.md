@@ -43,18 +43,25 @@ The back-end config file contain credentials for database, AWS S3 bucket and Aut
 Env vars (~/.dhis2/appstore/vars)
 ```bash
 
+#Set auth strategy used in backend, to use auth0 for example set this to 'jwt' and fill in the other auth0 vars
+AUTH_STRATEGY
+
+#Only need to set this if no auth is used (dev/test), to map requests against a database user by its id
+#This needs to be set if AUTH_STRATEGY is not set
+NO_AUTH_MAPPED_USER_ID
+
 #Secrets for signing jwt token
-auth0_secret
-auth0_m2m_secret
+AUTH0_SECRET
+AUTH0_M2M_SECRET
 
 #The m2m api must use the same audience as the web app, specify the audience to use here
-auth0_audience
+AUTH0_AUDIENCE
 
 #Auth0 domain, usually https://{tenant}.{region}.auth0.com
-auth0_domain
+AUTH0_DOMAIN
 
 #algorithm used for signing the jwt-tokens for example HS256
-auth0_alg
+AUTH0_ALG
 
 #For the S3 storage where application files will be stored.
 AWS_REGION
@@ -62,7 +69,7 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_BUCKET_NAME
 
-#EB will inject these so no need to set them manually in EB Environments
+#EBS will inject these so no need to set them manually in EBS Environments
 RDS_HOSTNAME
 RDS_USERNAME
 RDS_PASSWORD

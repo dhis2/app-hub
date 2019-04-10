@@ -71,8 +71,8 @@ const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(req
  * Returns the current auth strategy, for example 'jwt' if using auth0, false if no strategy
  */
 const getCurrentAuthStrategy = () => {
-    if ( process.env.auth_strategy !== undefined ) {
-        return process.env.auth_strategy
+    if ( process.env.AUTH_STRATEGY !== undefined ) {
+        return process.env.AUTH_STRATEGY
     }
 
     return false
@@ -84,7 +84,7 @@ const getCurrentAuthStrategy = () => {
 const getCurrentAuthStrategyOptional = () => {
     if ( process.env.auth_strategy === 'jwt' ) {
         return {
-            auth: process.env.auth_strategy,
+            auth: process.env.AUTH_STRATEGY,
             mode: 'try'
         }
     }
@@ -101,7 +101,7 @@ const getCurrentUserFromRequest = (request, knex) => {
         //TODO: this might be done in a better way, but somehow we must know what to map to when we don't use any authentication
         //only to be used for test/dev and not in production where authentication should be used.
         user = {
-            id: process.env.no_auth_mapped_user_id
+            id: process.env.NO_AUTH_MAPPED_USER_ID
         }
     } else if ( request !== null && request.auth !== null && request.auth.credentials !== null ) {
         user = {
