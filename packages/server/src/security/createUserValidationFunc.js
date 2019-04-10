@@ -1,7 +1,7 @@
 const Boom = require('boom')
 const uuid = require('uuid/v4')
 
-const { createUserAsync } = require('@data')
+const { createUser } = require('@data')
 
 const createUserValidationFunc = (db, audience) => {
 
@@ -30,7 +30,7 @@ const createUserValidationFunc = (db, audience) => {
 
                 if ( user === null ) {
                     console.log('user does not exist in db, create it')
-                    user = await createUserAsync({
+                    user = await createUser({
                         email,
                         name
                     })

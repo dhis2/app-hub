@@ -5,42 +5,42 @@ const { lab, db } = require('../index')
 
 const { it, describe } = lab
 
-const { addAppVersionMediaAsync, getAppsByUuidAsync, createAppAsync } = require('@data')
+const { addAppVersionMedia, getAppsByUuid, createApp } = require('@data')
 
-describe('@data::addAppVersionMediaAsync', () => {
+describe('@data::addAppVersionMedia', () => {
 
     it('Should throw an error if config object does not pass validation', async () => {
 
-        await expect(addAppVersionMediaAsync({}, null, null)).to.reject(Error, 'ValidationError: child "appVersionId" fails because ["appVersionId" is required]')
+        await expect(addAppVersionMedia({}, null, null)).to.reject(Error, 'ValidationError: child "appVersionId" fails because ["appVersionId" is required]')
     })
 })
 
 
-describe('@data::getAppsByUuidAsync', () => {
+describe('@data::getAppsByUuid', () => {
 
     it('should require uuid parameter', async () => {
 
-        await expect(getAppsByUuidAsync(null, 'sv', null)).to.reject(Error, `Missing parameter 'uuid'`)
+        await expect(getAppsByUuid(null, 'sv', null)).to.reject(Error, `Missing parameter 'uuid'`)
     })
 
     it('should require languagecode parameter', async () => {
 
-        await expect(getAppsByUuidAsync('1234', null, null)).to.reject(Error, `Missing parameter 'languageCode'`)
+        await expect(getAppsByUuid('1234', null, null)).to.reject(Error, `Missing parameter 'languageCode'`)
     })
 
     it('should require dbConnection parameter', async () => {
 
-        await expect(getAppsByUuidAsync('1234', 'sv', null)).to.reject(Error, `Missing parameter 'dbConnection'`)
+        await expect(getAppsByUuid('1234', 'sv', null)).to.reject(Error, `Missing parameter 'dbConnection'`)
     })
 })
 
-describe('@data::createAppAsync', () => {
+describe('@data::createApp', () => {
 
     it('should require userId parameter and it to be a number', async () => {
 
-        await expect(createAppAsync({}, null, null)).to.reject(Error)
+        await expect(createApp({}, null, null)).to.reject(Error)
 
-        await expect(createAppAsync({ userId: '' }, null, null)).to.reject(Error)
+        await expect(createApp({ userId: '' }, null, null)).to.reject(Error)
     })
 
     it('should require orgId parameter and it to be a number', async () => {
@@ -49,29 +49,29 @@ describe('@data::createAppAsync', () => {
             userId: 1
         }
 
-        await expect(createAppAsync(config, null, null)).to.reject(Error)
+        await expect(createApp(config, null, null)).to.reject(Error)
 
-        await expect(createAppAsync({ ...config, orgId: '' }, null, null)).to.reject(Error)
+        await expect(createApp({ ...config, orgId: '' }, null, null)).to.reject(Error)
 
     })
 })
 
 
-describe('@data::getOrganisationAsync', () => {
+describe('@data::getOrganisation', () => {
 
-    const { getOrganisationByUuidAsync, getOrganisationsByNameAsync } = require('@data')
+    const { getOrganisationByUuid, getOrganisationsByName } = require('@data')
 
     it('should throw an error passing invalid uuid', async () => {
 
-        await expect(getOrganisationByUuidAsync('asdf', db)).to.reject(Error)
+        await expect(getOrganisationByUuid('asdf', db)).to.reject(Error)
     })
 
     it('get the organisation with the specified uuid', async () => {
 
-        const [dhis2Org] = await getOrganisationsByNameAsync('DHIS2', db)
+        const [dhis2Org] = await getOrganisationsByName('DHIS2', db)
         expect(dhis2Org).to.not.be.null()
         
-        const dhis2OrgByUuid = await getOrganisationByUuidAsync(dhis2Org.uuid, db)
+        const dhis2OrgByUuid = await getOrganisationByUuid(dhis2Org.uuid, db)
         expect(dhis2OrgByUuid).to.not.be.null()
 
         expect(dhis2Org.id).to.equal(dhis2OrgByUuid.id)
@@ -79,22 +79,22 @@ describe('@data::getOrganisationAsync', () => {
 
     it('get the organisation named DHIS2', async () => {
 
-        const [dhis2Org] = await getOrganisationsByNameAsync('DHIS2', db)
+        const [dhis2Org] = await getOrganisationsByName('DHIS2', db)
 
         expect(dhis2Org).to.not.be.null()
         expect(dhis2Org.name).to.equal('DHIS2')
     })
 })
 
-describe('@data::createOrganisationAsync', () => {
+describe('@data::createOrganisation', () => {
 
-    const { deleteOrganisationAsync, createOrganisationAsync, getOrganisationsByNameAsync, createTransaction } = require('@data')
+    const { deleteOrganisation, createOrganisation, getOrganisationsByName, createTransaction } = require('@data')
 
     it('should create an organisation and then delete it', async () => {
 
         let transaction = await createTransaction(db)
 
-        const org = await createOrganisationAsync({
+        const org = await createOrganisation({
             userId: 1,
             name: 'Test create organisation åäöèé'
         }, db, transaction)
@@ -107,7 +107,7 @@ describe('@data::createOrganisationAsync', () => {
         expect(org.slug).to.equal('test-create-organisation-aaoee')
         expect(org.name).to.equal('Test create organisation åäöèé')
 
-        const [shouldExist] = await getOrganisationsByNameAsync(org.name, db)
+        const [shouldExist] = await getOrganisationsByName(org.name, db)
         expect(shouldExist.id).to.be.equal(org.id)
         expect(shouldExist.uuid).to.be.equal(org.uuid)
         expect(shouldExist.name).to.be.equal(org.name)
@@ -115,26 +115,26 @@ describe('@data::createOrganisationAsync', () => {
         
         //Delete then try to fetch again.
         transaction = await createTransaction(db)
-        const successfullyDeleted = await deleteOrganisationAsync({uuid: org.uuid}, db, transaction)
+        const successfullyDeleted = await deleteOrganisation({uuid: org.uuid}, db, transaction)
         transaction.commit()
 
         expect(successfullyDeleted).to.be.true()
 
-        const organisationsWithName = await getOrganisationsByNameAsync(org.name, db)
+        const organisationsWithName = await getOrganisationsByName(org.name, db)
         expect(organisationsWithName).to.be.empty()
     })
 })
 
 
-describe('@data::createUserAsync', () => {
+describe('@data::createUser', () => {
 
-    const { createUserAsync, createTransaction } = require('@data')
+    const { createUser, createTransaction } = require('@data')
 
     it('should create a new user', async () => {
 
         let transaction = await createTransaction(db)
 
-        const { id } = await createUserAsync({
+        const { id } = await createUser({
             email: 'test@test.com'
         }, db, transaction)
 
@@ -146,17 +146,17 @@ describe('@data::createUserAsync', () => {
 })
 
 
-describe('@data::addUserToOrganisationAsync', () => {
+describe('@data::addUserToOrganisation', () => {
 
-    const { addUserToOrganisationAsync, createTransaction, getOrganisationsByNameAsync, createOrganisationAsync } = require('@data')
+    const { addUserToOrganisation, createTransaction, getOrganisationsByName, createOrganisation } = require('@data')
 
     it('should add a user to an organisation without throwing',  async () => {
         
         let transaction = await createTransaction(db)
 
-        const org = await createOrganisationAsync({ userId: 1, name: 'A new organisation' }, db, transaction)
+        const org = await createOrganisation({ userId: 1, name: 'A new organisation' }, db, transaction)
        
-        await addUserToOrganisationAsync( { userId: 1, organisationId: org.id }, db, transaction )
+        await addUserToOrganisation( { userId: 1, organisationId: org.id }, db, transaction )
 
         transaction.commit()
        

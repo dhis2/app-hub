@@ -1393,10 +1393,10 @@ hapi-scope-start@2.x.x:
   resolved "https://registry.yarnpkg.com/hapi-scope-start/-/hapi-scope-start-2.1.1.tgz#7495a726fe72b7bca8de2cdcc1d87cd8ce6ab4f2"
   integrity sha1-dJWnJv5yt7yo3izcwdh82M5qtPI=
 
-hapi-swagger@^9.3.1:
-  version "9.3.1"
-  resolved "https://registry.yarnpkg.com/hapi-swagger/-/hapi-swagger-9.3.1.tgz#59865d7cfc231b172d3355e3e60f0e22db90ee76"
-  integrity sha512-kFW2QUp/9b/3u+PNa10QMzpjN+oE5J65lQcknvgF2ATpzjcnfavgON7G0iQPV4M+3GSrzaCb6gygDloyYqWZUw==
+hapi-swagger@^9.4.2:
+  version "9.4.2"
+  resolved "https://registry.yarnpkg.com/hapi-swagger/-/hapi-swagger-9.4.2.tgz#90e46ef7dc3da7de66ab8a02709722110d4439f3"
+  integrity sha512-IVxcEwszwabkEbUWQ5vbvAwHSs0xngKBVbk4/wKeCH0qNocl/ZUi1KX6wgmRovuD8EWISoQMKYo7cYOAlKV3bw==
   dependencies:
     boom "^7.1.1"
     handlebars "^4.0.11"

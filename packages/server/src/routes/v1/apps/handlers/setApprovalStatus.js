@@ -53,7 +53,9 @@ module.exports = {
                 .update({ status })
 
             return {
-                'message': `Status changed for app: ${row[0].name}`, 'httpStatus': 'OK', 'httpStatusCode': 200
+                'message': `Status changed for app: ${row[0].name}`,
+                'httpStatus': 'OK',
+                'httpStatusCode': 200
             }
         }
 

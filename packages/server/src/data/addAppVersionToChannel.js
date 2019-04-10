@@ -9,9 +9,15 @@ const paramSchema = joi.object().keys({
     maxDhisVersion: joi.string().required().allow(''),
 }).options({ allowUnknown: true })
 
+/**
+ * @typedef {object} AddAppVersionToChannelResult
+ * @property {number} id The inserted database id
+ */
+
 
 /**
  * Publish an app version to a channel
+ *
  * @param {object} params The parameters used to publish an app version to a specific channel
  * @param {number} params.appVersionId The appversion db id to publish
  * @param {number} params.currentUserId The id for the user doing this action
@@ -20,11 +26,11 @@ const paramSchema = joi.object().keys({
  * @param {string} params.maxDhisVersion Maximum dhis2 version supported for example 2.31
  * @param {object} knex DB instance of knex
  * @param {object} trx The transaction to operate on
+ * @returns {Promise<AddAppVersionToChannelResult>}
  */
-const addAppVersionToChannelAsync = async (params, knex, transaction) => {
+const addAppVersionToChannel = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
-    console.log('addAppVersionToChannelAsync with params', params)
 
     if ( validation.error !== null ) {
         throw new Error(validation.error)
@@ -56,5 +62,4 @@ const addAppVersionToChannelAsync = async (params, knex, transaction) => {
     }
 }
 
-
-module.exports = addAppVersionToChannelAsync
+module.exports = addAppVersionToChannel

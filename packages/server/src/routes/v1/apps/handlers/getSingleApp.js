@@ -8,8 +8,8 @@ const { AppStatus } = require('@enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const getAppsByUuidAsync = require('@data/getAppsByUuidAsync')
-const getAppsByUuidAndStatusAsync = require('@data/getAppsByUuidAndStatusAsync')
+const getAppsByUuid = require('@data/getAppsByUuid')
+const getAppsByUuidAndStatus = require('@data/getAppsByUuidAndStatus')
 
 const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format')
 
@@ -42,9 +42,9 @@ module.exports = {
         let apps = null
 
         if ( canSeeAllApps(request) ) {
-            apps = await getAppsByUuidAsync(appUuid, 'en', h.context.db)
+            apps = await getAppsByUuid(appUuid, 'en', h.context.db)
         } else {
-            apps = await getAppsByUuidAndStatusAsync(appUuid, AppStatus.APPROVED, 'en', h.context.db)
+            apps = await getAppsByUuidAndStatus(appUuid, AppStatus.APPROVED, 'en', h.context.db)
         }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)

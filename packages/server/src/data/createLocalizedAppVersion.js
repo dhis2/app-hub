@@ -1,12 +1,26 @@
 const slugify = require('slugify')
 
 /**
+ * @typedef CreateLocalizedAppVersionResult
+ * @property {number} id The inserted database id
+ */
+
+/**
  * Inserts a localized application version
+ *
  * @param {object} params
+ * @param {number} params.appVersionId Database id of the app version to insert the texts for
+ * @param {number} params.userId User id inserting this
+ * @param {string} params.description Description of the app version on the specified language
+ * @param {string} params.name Name of the app version
+ * @param {string} params.languageCode 2 char language code
  * @param {object} knex
  * @param {object} transaction
+ * @param {Promise<{id}>}
  */
-const createLocalizedAppVersionAsync = async (params, knex, transaction) => {
+const createLocalizedAppVersion = async (params, knex, transaction) => {
+
+    //TODO: add validation of params with joi
 
     const { userId, appVersionId, description, name, languageCode } = params
     try {
@@ -33,4 +47,4 @@ const createLocalizedAppVersionAsync = async (params, knex, transaction) => {
 
 }
 
-module.exports = createLocalizedAppVersionAsync
+module.exports = createLocalizedAppVersion
