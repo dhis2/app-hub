@@ -1,7 +1,7 @@
 module.exports = {
     api: {
         baseURL: 'http://localhost:3000/v1/',
-        redirectURL: 'http://localhost:9000/user',
+        redirectURL: 'http://localhost:3000/appstore/user',
     },
     auth0: {
         clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',

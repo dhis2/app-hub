@@ -3,6 +3,7 @@
 const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
+const path = require('path')
 
 const jwt = require('hapi-auth-jwt2');
 
@@ -93,6 +94,18 @@ const init = async () => {
             return
         }
     }
+
+
+    //Temporary route to serve frontend static build until we've flattened the project structure
+    server.route({
+        method: 'GET',
+        path: '/appstore/{param*}',
+        handler: {
+            directory: {
+                path: path.join(__dirname, '../../client/target/classes/static/')
+            }
+        }
+    });
 
 
     server.route(routes)
