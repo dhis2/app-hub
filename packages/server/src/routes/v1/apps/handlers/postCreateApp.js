@@ -10,21 +10,21 @@ const { saveFile } = require('@utils')
 
 const { canCreateApp } = require('@security')
 
-const createAppAsync = require('@data/createAppAsync')
-const createAppStatusAsync = require('@data/createAppStatusAsync')
-const createAppVersionAsync = require('@data/createAppVersionAsync')
-const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionAsync')
-const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
-const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
+const createApp = require('@data/createApp')
+const createAppStatus = require('@data/createAppStatus')
+const createAppVersion = require('@data/createAppVersion')
+const createLocalizedAppVersion = require('@data/createLocalizedAppVersion')
+const addAppVersionToChannel = require('@data/addAppVersionToChannel')
+const addAppVersionMedia = require('@data/addAppVersionMedia')
 
 const { getCurrentUserFromRequest } = require('@utils')
 
 const {
-    getOrganisationsByNameAsync,
-    createOrganisationAsync,
-    getUserByEmailAsync,
-    createUserAsync,
-    addUserToOrganisationAsync,
+    getOrganisationsByName,
+    createOrganisation,
+    getUserByEmail,
+    createUser,
+    addUserToOrganisation,
     createTransaction
 } = require('@data')
 
@@ -81,7 +81,7 @@ module.exports = {
 
         const imageFile = request.payload.imageFile
         const file = request.payload.file
-        
+
 
         const currentUser = getCurrentUserFromRequest(request, knex);
         const currentUserId = currentUser.id
@@ -96,26 +96,29 @@ module.exports = {
 
         try {
             let organisation = null
-            const organisations = await getOrganisationsByNameAsync(appJsonPayload.developer.organisation, knex)
+            const organisations = await getOrganisationsByName(appJsonPayload.developer.organisation, knex)
             if ( organisations.length === 0 ) {
                 //Create organisation
-                organisation = await createOrganisationAsync({
+                organisation = await createOrganisation({
                     userId: currentUserId,
                     name: appJsonPayload.developer.organisation
                 }, knex, trx)
 
             } else {
-                //TODO: what if multiple orgs is found?
-                organisation = organisations[0]
+                //TODO: only allow this if
+                if ( currentUserId !== organisation.created_by_user_id ) {
+
+                }
+                //organisation = organisations[0]
             }
-            
-    
+
+
             //Load developer or create if it doesnt exist
-            let appDeveloper = await getUserByEmailAsync(appJsonPayload.developer.email, knex)
+            let appDeveloper = await getUserByEmail(appJsonPayload.developer.email, knex)
             if ( appDeveloper === null ) {
                 //Create developer
-                appDeveloper = await createUserAsync(appJsonPayload.developer, knex, trx)
-                await addUserToOrganisationAsync({ 
+                appDeveloper = await createUser(appJsonPayload.developer, knex, trx)
+                await addUserToOrganisation({ 
                     userId: appDeveloper.id, 
                     organisationId: organisation.id
                 }, knex, trx)
@@ -130,7 +133,7 @@ module.exports = {
             const developerUserId = appDeveloper.id
 
             //Create the basic app
-            const dbApp = await createAppAsync({ 
+            const dbApp = await createApp({ 
                 userId: requestUserId,
                 developerUserId,
                 orgId: organisationId,
@@ -139,7 +142,7 @@ module.exports = {
 
             //Set newly uploaded apps as pending
             appUuid = dbApp.uuid
-            await createAppStatusAsync({
+            await createAppStatus({
                 userId: requestUserId,      //the current user set the status
                 orgId: organisationId,
                 appId: dbApp.id,
@@ -148,7 +151,7 @@ module.exports = {
 
             //Create the version of the app
             const { demoUrl, sourceUrl, version } =  appJsonPayload.versions[0]
-            const appVersion = await createAppVersionAsync({
+            const appVersion = await createAppVersion({
                 userId: requestUserId,
                 orgId: organisationId,
                 appId: dbApp.id,
@@ -159,7 +162,7 @@ module.exports = {
             versionUuid = appVersion.uuid
 
             //Add the texts as english language, only supported for now
-            await createLocalizedAppVersionAsync({
+            await createLocalizedAppVersion({
                 userId: requestUserId, 
                 appVersionId: appVersion.id,
                 description: appJsonPayload.description,
@@ -169,7 +172,7 @@ module.exports = {
 
             //Publish the app to Stable channel by default
             const { minDhisVersion, maxDhisVersion } = appJsonPayload.versions[0]
-            await addAppVersionToChannelAsync({
+            await addAppVersionToChannel({
                 appVersionId: appVersion.id,
                 createdByUserId: currentUserId,
                 channelName: 'Stable',
@@ -182,7 +185,7 @@ module.exports = {
                 console.log('Inserting logo metadata to db and link it to the appVersion')
                 const imageFileMetadata = imageFile.hapi
 
-                const { id, uuid } = await addAppVersionMediaAsync({
+                const { id, uuid } = await addAppVersionMedia({
                     userId: requestUserId,
                     appVersionId: appVersion.id,
                     imageType: ImageType.Logo,

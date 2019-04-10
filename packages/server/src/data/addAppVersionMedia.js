@@ -20,8 +20,7 @@ const paramSchema = joi.object().keys({
 
 /**
  * Publish an app version to a channel
- * 
- * @function addAppVersionMedia
+ *
  * @param {object} params The parameters used to publish an app version to a specific channel
  * @param {number} params.appVersionId The app version db id this media belongs to
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")
@@ -32,7 +31,7 @@ const paramSchema = joi.object().keys({
  * @param {object} trx The transaction to operate on
  * @returns {Promise<AppVersionMediaResult>}
  */
-module.exports = async (params, knex, transaction) => {
+module.exports.addAppVersionMedia = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
 

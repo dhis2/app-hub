@@ -17,7 +17,7 @@ const paramsSchema = joi.object().keys({
 
 /**
  * Creates a version for the app
- * @function createAppVersion
+ *
  * @param {object} params
  * @param {number} params.userId User id
  * @param {number} params.appId App id
@@ -28,7 +28,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @property {Promise<CreateAppVersionResult>}
  */
-module.exports = async (params, knex, transaction) => {
+module.exports.createAppVersion = async (params, knex, transaction) => {
 
     const paramsValidation = paramsSchema.validate(params)
     if ( paramsValidation.error !== null ) {

@@ -3,7 +3,7 @@ const Joi = require('joi')
 
 const AppModel = require('../../../../models/v1/out/App')
 const defaultFailHandler = require('../../defaultFailHandler')
-const { getAllAppsByLanguageAsync } = require('@data')
+const { getAllAppsByLanguage } = require('@data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
 const { canSeeAllApps } = require('@security')
@@ -30,7 +30,7 @@ module.exports = {
         }
 
         try {
-            const apps = await getAllAppsByLanguageAsync('en', h.context.db)
+            const apps = await getAllAppsByLanguage('en', h.context.db)
             return convertAppsToApiV1Format(apps, request)
         } catch  ( err ) {
             console.log(err)

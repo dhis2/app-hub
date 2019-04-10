@@ -19,7 +19,7 @@ const paramsSchema = joi.object().keys({
 
 /**
  * Creates an app and returns the database id
- * @function createApp
+ *
  * @param {object} params
  * @param {number} params.userId User id creating the app (admin, manager, api user making the actual upload)
  * @param {number} params.developerUserId User id for the developer of the app
@@ -29,7 +29,7 @@ const paramsSchema = joi.object().keys({
  * @param {object} transaction
  * @returns {Promise<CreateAppResult>}
  */
-module.exports = async (params, knex, transaction) =>  {
+module.exports.createApp = async (params, knex, transaction) =>  {
 
     const validation = joi.validate(params, paramsSchema)
 

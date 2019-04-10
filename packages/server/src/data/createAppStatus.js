@@ -6,7 +6,7 @@
 
 /**
  * Inserts an app status and returns the database id
- * @function createAppStatus
+ * 
  * @param {object} params
  * @param {number} params.userId
  * @param {number} params.appId
@@ -14,7 +14,7 @@
  * @param {object} transaction
  * @returns {Promise<CreateAppStatusResult>} inserted id
  */
-module.exports = async (params, knex, transaction) =>  {
+module.exports.createAppStatus = async (params, knex, transaction) =>  {
 
     const { userId, appId, status } = params
     try {

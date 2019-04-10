@@ -8,7 +8,7 @@ const paramsSchema = joi.object().keys({
 
 /**
  * Adds a user to an organisation
- * @function addUserToOrganisation
+ *
  * @param {object} params
  * @param {Number} params.userId User id for the user
  * @param {Number} params.organisationId organisationId Organisation id which we want to add the user to
@@ -16,7 +16,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction knex transaction
  * @returns {Promise}
  */
-module.exports = async (params, knex, transaction) => {
+module.exports.addUserToOrganisation = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 

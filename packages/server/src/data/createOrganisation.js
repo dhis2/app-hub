@@ -18,7 +18,7 @@ const paramsSchema = joi.object().keys({
 
 /**
  * Create a new organisation with the specified name
- * @function createOrganisation
+ *
  * @param {object} params
  * @param {number} params.userId The userId of the user thats creating the organisation
  * @param {string} params.name Name of the company to create (1-100 chars)
@@ -26,7 +26,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @returns {Promise<Organisation>} The created organisation
  */
-module.exports = async (params, knex, transaction) => {
+module.exports.createOrganisation = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 

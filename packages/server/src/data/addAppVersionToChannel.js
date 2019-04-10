@@ -17,7 +17,7 @@ const paramSchema = joi.object().keys({
 
 /**
  * Publish an app version to a channel
- * @function addAppVersionToChannel
+ *
  * @param {object} params The parameters used to publish an app version to a specific channel
  * @param {number} params.appVersionId The appversion db id to publish
  * @param {number} params.currentUserId The id for the user doing this action
@@ -28,7 +28,7 @@ const paramSchema = joi.object().keys({
  * @param {object} trx The transaction to operate on
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
-module.exports = async (params, knex, transaction) => {
+module.exports.addAppVersionToChannel = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
 
