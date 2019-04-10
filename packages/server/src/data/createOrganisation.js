@@ -26,7 +26,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @returns {Promise<Organisation>} The created organisation
  */
-module.exports.createOrganisation = async (params, knex, transaction) => {
+const createOrganisation = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -74,3 +74,4 @@ module.exports.createOrganisation = async (params, knex, transaction) => {
     }
 }
 
+module.exports = createOrganisation

@@ -14,7 +14,7 @@
  * @param {object} transaction
  * @returns {Promise<CreateAppStatusResult>} inserted id
  */
-module.exports.createAppStatus = async (params, knex, transaction) =>  {
+const createAppStatus = async (params, knex, transaction) =>  {
 
     const { userId, appId, status } = params
     try {
@@ -39,3 +39,4 @@ module.exports.createAppStatus = async (params, knex, transaction) =>  {
 }
 
 
+module.exports = createAppStatus

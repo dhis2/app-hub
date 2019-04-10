@@ -8,7 +8,7 @@
  * @returns {Promise<Array>}
  * 
  */
-module.exports.getAppsByStatusAndLanguage = (status, languageCode, dbConnection) => {
+const getAppsByStatusAndLanguage = (status, languageCode, dbConnection) => {
 
     return dbConnection
         .select()
@@ -18,3 +18,5 @@ module.exports.getAppsByStatusAndLanguage = (status, languageCode, dbConnection)
             'language_code': languageCode
         })
 }
+
+module.exports = getAppsByStatusAndLanguage

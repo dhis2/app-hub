@@ -8,7 +8,7 @@
  * @param {*} dbConnection db instance
  * @param {Promise<Array>}
  */
-module.exports.getAppsByUuid = async (uuid, languageCode, dbConnection) => {
+const getAppsByUuid = async (uuid, languageCode, dbConnection) => {
 
     if ( !uuid ) {
         throw new Error(`Missing parameter 'uuid'`)
@@ -36,3 +36,5 @@ module.exports.getAppsByUuid = async (uuid, languageCode, dbConnection) => {
         throw new Error(`Could not get apps with uuid: ${uuid} and languageCode: ${languageCode}`)
     }
 }
+
+module.exports = getAppsByUuid

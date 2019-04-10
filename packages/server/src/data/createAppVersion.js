@@ -28,7 +28,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @property {Promise<CreateAppVersionResult>}
  */
-module.exports.createAppVersion = async (params, knex, transaction) => {
+const createAppVersion = async (params, knex, transaction) => {
 
     const paramsValidation = paramsSchema.validate(params)
     if ( paramsValidation.error !== null ) {
@@ -61,3 +61,4 @@ module.exports.createAppVersion = async (params, knex, transaction) => {
     }
 }
 
+module.exports = createAppVersion

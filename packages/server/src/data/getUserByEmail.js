@@ -5,7 +5,7 @@
  * @param {*} knex db instance
  * @param {Promise<object>}
  */
-module.exports.getUserByEmail = async (email, knex) => {
+const getUserByEmail = async (email, knex) => {
 
     let user = null
 
@@ -20,3 +20,4 @@ module.exports.getUserByEmail = async (email, knex) => {
     return user
 }
 
+module.exports = getUserByEmail

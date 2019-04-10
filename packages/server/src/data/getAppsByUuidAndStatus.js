@@ -9,7 +9,7 @@
  * @param {object} dbConnection db instance (knex)
  * @returns {Promise<Array>}
  */
-module.exports.getAppsByUuidAndStatus = (uuid, status, languageCode, dbConnection) => {
+const getAppsByUuidAndStatus = (uuid, status, languageCode, dbConnection) => {
 
     //TODO: add validation for parameters
 
@@ -22,3 +22,5 @@ module.exports.getAppsByUuidAndStatus = (uuid, status, languageCode, dbConnectio
             'language_code': languageCode
         })
 }
+
+module.exports = getAppsByUuidAndStatus

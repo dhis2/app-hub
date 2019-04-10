@@ -18,7 +18,7 @@ const slugify = require('slugify')
  * @param {object} transaction
  * @param {Promise<{id}>}
  */
-module.exports.createLocalizedAppVersion = async (params, knex, transaction) => {
+const createLocalizedAppVersion = async (params, knex, transaction) => {
 
     //TODO: add validation of params with joi
 
@@ -47,3 +47,4 @@ module.exports.createLocalizedAppVersion = async (params, knex, transaction) => 
 
 }
 
+module.exports = createLocalizedAppVersion

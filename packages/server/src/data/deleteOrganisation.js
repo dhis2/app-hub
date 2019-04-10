@@ -13,7 +13,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */
-module.exports.deleteOrganisation = async (params, knex, transaction) => {
+const deleteOrganisation = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -41,5 +41,7 @@ module.exports.deleteOrganisation = async (params, knex, transaction) => {
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }
+
+module.exports = deleteOrganisation
 
 

@@ -28,7 +28,7 @@ const paramSchema = joi.object().keys({
  * @param {object} trx The transaction to operate on
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
-module.exports.addAppVersionToChannel = async (params, knex, transaction) => {
+const addAppVersionToChannel = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
 
@@ -62,3 +62,4 @@ module.exports.addAppVersionToChannel = async (params, knex, transaction) => {
     }
 }
 
+module.exports = addAppVersionToChannel

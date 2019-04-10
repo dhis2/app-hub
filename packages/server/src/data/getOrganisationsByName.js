@@ -7,7 +7,7 @@ const joi = require('joi')
  * @param {*} knex db instance
  * @returns {Array<Organisation>} The organisations found by name or empty array if no matches
  */
-module.exports.getOrganisationsByName = async (name, knex) => {
+const getOrganisationsByName = async (name, knex) => {
 
     if ( !knex ) {
         throw new Error(`Missing knex instance passed as parameter.`)
@@ -26,4 +26,5 @@ module.exports.getOrganisationsByName = async (name, knex) => {
     }
 }
 
+module.exports = getOrganisationsByName
 

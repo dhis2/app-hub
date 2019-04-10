@@ -7,7 +7,7 @@ const joi = require('joi')
  * @param {*} knex db instance
  * @returns {Promise<object>}
  */
-module.exports.getOrganisationByUuid = async (uuid, knex) => {
+const getOrganisationByUuid = async (uuid, knex) => {
 
     if ( !knex ) {
         throw new Error(`Missing knex instance passed as parameter.`)
@@ -26,3 +26,4 @@ module.exports.getOrganisationByUuid = async (uuid, knex) => {
     }
 }
 
+module.exports = getOrganisationByUuid

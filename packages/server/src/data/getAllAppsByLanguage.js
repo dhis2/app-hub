@@ -6,7 +6,7 @@
  * @param {object} dbConnection db instance
  * @returns {Promise<Array>}
  */
-module.exports.getAllAppsByLanguage = (languageCode, dbConnection) => {
+const getAllAppsByLanguage = (languageCode, dbConnection) => {
 
     return dbConnection
         .select()
@@ -15,3 +15,6 @@ module.exports.getAllAppsByLanguage = (languageCode, dbConnection) => {
             'language_code': languageCode
         })
 }
+
+module.exports = getAllAppsByLanguage
+

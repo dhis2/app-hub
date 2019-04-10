@@ -24,7 +24,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction
  * @returns {Promise<CreateUserResult>}
  */
-module.exports.createUser = async (params, knex, transaction) => {
+const createUser = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -62,3 +62,4 @@ module.exports.createUser = async (params, knex, transaction) => {
     }
 }
 
+module.exports = createUser

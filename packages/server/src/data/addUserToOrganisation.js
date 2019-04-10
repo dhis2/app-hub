@@ -16,7 +16,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} transaction knex transaction
  * @returns {Promise}
  */
-module.exports.addUserToOrganisation = async (params, knex, transaction) => {
+const addUserToOrganisation = async (params, knex, transaction) => {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -46,3 +46,5 @@ module.exports.addUserToOrganisation = async (params, knex, transaction) => {
         throw new Error(`Could not add developer to organisation: ${userId} => ${organisationId}. ${err.message}`)
     }
 }
+
+module.exports = addUserToOrganisation

@@ -31,7 +31,7 @@ const paramSchema = joi.object().keys({
  * @param {object} trx The transaction to operate on
  * @returns {Promise<AppVersionMediaResult>}
  */
-module.exports.addAppVersionMedia = async (params, knex, transaction) => {
+const addAppVersionMedia = async (params, knex, transaction) => {
 
     const validation = paramSchema.validate(params)
 
@@ -85,4 +85,4 @@ module.exports.addAppVersionMedia = async (params, knex, transaction) => {
     }
 }
 
-
+module.exports = addAppVersionMedia
