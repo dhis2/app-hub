@@ -5,9 +5,9 @@ module.exports = [
     require('./handlers/getAllApps'),
     require('./handlers/getSingleApp'),
     require('./handlers/getMyApps'),
-    require('./handlers/postCreateApp'),
+    require('./handlers/createApp'),
     require('./handlers/getAppFile'),
-    require('./handlers/postApprovalStatus'),
+    require('./handlers/setApprovalStatus'),
     require('./handlers/deleteApp'),
     require('./handlers/getMedia')
 ]
