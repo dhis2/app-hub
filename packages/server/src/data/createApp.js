@@ -11,9 +11,15 @@ const paramsSchema = joi.object().keys({
     appType: joi.string().required().valid(AppTypes),
 }).options({ allowUnknown: true })
 
+/**
+ * @typedef {object} CreateAppResult
+ * @property {number} id Database id of the created app
+ * @property {string} uuid The generated UUID for the created app
+ */
 
 /**
  * Creates an app and returns the database id
+ *
  * @param {object} params
  * @param {number} params.userId User id creating the app (admin, manager, api user making the actual upload)
  * @param {number} params.developerUserId User id for the developer of the app
@@ -21,8 +27,9 @@ const paramsSchema = joi.object().keys({
  * @param {string} params.appType Type of the app
  * @param {object} knex
  * @param {object} transaction
+ * @returns {Promise<CreateAppResult>}
  */
-const createAppAsync = async (params, knex, transaction) =>  {
+const createApp = async (params, knex, transaction) =>  {
 
     const validation = joi.validate(params, paramsSchema)
 
@@ -58,5 +65,4 @@ const createAppAsync = async (params, knex, transaction) =>  {
     }
 }
 
-
-module.exports = createAppAsync
+module.exports = createApp

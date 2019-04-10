@@ -9,14 +9,26 @@ const paramsSchema = joi.object().keys({
     version: joi.string().allow('')
 }).options({ allowUnknown: true })
 
+/**
+ * @typedef {object} CreateAppVersionResult
+ * @param {number} id Database id of the newly created app version
+ * @param {string} uuid The generated UUID of the app version
+ */
 
 /**
  * Creates a version for the app
- * @param {*} params
+ *
+ * @param {object} params
+ * @param {number} params.userId User id
+ * @param {number} params.appId App id
+ * @param {string} params.demoUrl URL where the app can be seen or tested
+ * @param {string} params.sourceUrl URL where to find the source, for example github
+ * @param {string} params.version A version for the app version to create for example normally something like 1.2 or 1.4.5
  * @param {*} knex
  * @param {*} transaction
+ * @property {Promise<CreateAppVersionResult>}
  */
-const createAppVersionAsync = async (params, knex, transaction) => {
+const createAppVersion = async (params, knex, transaction) => {
 
     const paramsValidation = paramsSchema.validate(params)
     if ( paramsValidation.error !== null ) {
@@ -49,4 +61,4 @@ const createAppVersionAsync = async (params, knex, transaction) => {
     }
 }
 
-module.exports = createAppVersionAsync
+module.exports = createAppVersion

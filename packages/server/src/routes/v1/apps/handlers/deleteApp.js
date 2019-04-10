@@ -7,8 +7,8 @@ const { deleteDir } = require('@utils')
 const defaultFailHandler = require('../../defaultFailHandler')
 
 const { canDeleteApp } = require('@security')
-const getAppsByUuidAsync = require('@data/getAppsByUuidAsync')
-const deleteAppAsync = require('@data/deleteAppAsync')
+const getAppsByUuid = require('@data/getAppsByUuid')
+const deleteApp = require('@data/deleteApp')
 
 const { getCurrentAuthStrategy } = require('@security')
 
@@ -41,13 +41,13 @@ module.exports = {
 
         const appUuid = request.params.appUuid
 
-        const appRows = await getAppsByUuidAsync(appUuid, 'en', knex)
+        const appRows = await getAppsByUuid(appUuid, 'en', knex)
 
         const item = appRows[0]
 
         try {
             await deleteDir(item.uuid)
-            const result = await deleteAppAsync(appUuid, knex)
+            const result = await deleteApp(appUuid, knex)
             console.log(result)
 
             return { message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200 }
