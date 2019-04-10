@@ -50,8 +50,9 @@ const prod = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: `[name]_${packageJSON.version}.[ext]&publicPath=${config
-                                .routes.baseAppName}/&outputPath=assets/`
+                            name: `[name]_${packageJSON.version}.[ext]`,
+                            publicPath: `${config.routes.baseAppName}/`,
+                            outputPath: 'assets/'
                         }
                     }
                 ]
