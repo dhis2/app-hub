@@ -10,7 +10,7 @@ const defaultFailHandler = require('../../defaultFailHandler')
 module.exports = {
     //unauthenticated endpoint returning the icon for an app with the specified uuid
     method: 'GET',
-    path: '/v1/apps/media/{organisation_slug}/{appver_slug}/{app_version}/{filename}',
+    path: '/v1/apps/media/{organisation_slug}/{version_uuid}/{filename}',
     config: {
         auth: false,
         tags: ['api', 'v1'],
@@ -22,19 +22,19 @@ module.exports = {
 
         //request.logger.info('In handler %s', request.path)
 
-        const { organisation_slug, appver_slug, app_version, filename } = request.params
+        const { organisation_slug, version_uuid, filename } = request.params
 
         const knex = h.context.db
 
-        const [item] = await knex
+        const appversions = await knex
             .select()
             .from('apps_view')
             .where({
                 organisation_slug,
-                appver_slug,
-                'version': app_version
+                version_uuid
             })
 
+        const [item] = appversions
 
         const [media] = await knex
             .select()
@@ -44,18 +44,23 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        //console.log(`Fetching file from ${item.uuid}/${item.version_uuid}`)
+        console.log(`Fetching file from ${item.uuid}/${item.version_uuid}/${filename}`)
 
         try {
 
             const file =  await getFile(`${item.uuid}/${item.version_uuid}`, filename)
 
-            return h.response(file.Body)
-                .type(media.mime)
-                .header('Content-length', file.ContentLength)
+            if ( file && file.Body ) {
+                return h.response(file.Body)
+                    .type(media.mime)
+                    .header('Content-length', file.ContentLength)
+            }
+
+            return Boom.internal(`Was not able to fetch file: ${item.uuid}/${item.version_uuid}/${filename}`)
 
         } catch ( err ) {
 
+            //AWS S3 error code if object is missing
             if ( err.code === 'NoSuchKey' ) {
                 //The file does not exist in the file storage
                 return Boom.notFound()

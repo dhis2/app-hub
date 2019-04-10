@@ -8,7 +8,7 @@ const { AppStatus, ImageType } = require('@enums')
 const defaultFailHandler = require('../../defaultFailHandler')
 const { saveFile } = require('@utils')
 
-const { canCreateApp } = require('@security')
+const { canCreateApp, getCurrentAuthStrategy, getCurrentUserFromRequest } = require('@security')
 
 const createAppAsync = require('@data/createAppAsync')
 const createAppStatusAsync = require('@data/createAppStatusAsync')
@@ -17,7 +17,6 @@ const createLocalizedAppVersionAsync = require('@data/createLocalizedAppVersionA
 const addAppVersionToChannelAsync = require('@data/addAppVersionToChannelAsync')
 const addAppVersionMediaAsync = require('@data/addAppVersionMediaAsync')
 
-const { getCurrentUserFromRequest } = require('@utils')
 
 const {
     getOrganisationsByNameAsync,
@@ -32,7 +31,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps',
     config: {
-        auth: 'jwt',
+        auth: getCurrentAuthStrategy(),
         tags: ['api', 'v1'],
         payload: {
             maxBytes: 20 * 1024 * 1024, //20MB

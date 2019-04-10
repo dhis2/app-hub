@@ -15,15 +15,14 @@ const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format
 
 const { canSeeAllApps } = require('@security')
 
+const { getCurrentAuthStrategyOptional } = require('@security')
+
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
     method: 'GET',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: {
-            strategy: 'jwt',
-            mode: 'try'         //allow unauthenticated requests, but decode the jwt if it exists.
-        },
+        auth: getCurrentAuthStrategyOptional(),
         tags: ['api', 'v1'],
         response: {
             status: {
