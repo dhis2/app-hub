@@ -12,8 +12,6 @@ const deleteApp = require('@data/deleteApp')
 
 const { getCurrentAuthStrategy } = require('@security')
 
-const { getCurrentAuthStrategy } = require('@security')
-
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'DELETE',
