@@ -93,23 +93,28 @@ const getCurrentAuthStrategyOptional = () => {
 }
 
 
-const getCurrentUserFromRequest = (request, knex) => {
+const getCurrentUserFromRequest = async (request, knex) => {
 
-    let user = null
+    return new Promise((resolve, reject) => {
+        let user = null
 
-    if ( getCurrentAuthStrategy() === false ) {
-        //TODO: this might be done in a better way, but somehow we must know what to map to when we don't use any authentication
-        //only to be used for test/dev and not in production where authentication should be used.
-        user = {
-            id: process.env.NO_AUTH_MAPPED_USER_ID
+        if ( getCurrentAuthStrategy() === false ) {
+            //TODO: this might be done in a better way, but somehow we must know what to map to when we don't use any authentication
+            //only to be used for test/dev and not in production where authentication should be used.
+            user = {
+                id: process.env.NO_AUTH_MAPPED_USER_ID
+            }
+        } else if ( request !== null && request.auth !== null && request.auth.credentials !== null ) {
+            user = {
+                id: request.auth.credentials.userId
+            }
+        } else {
+            reject()
+            return
         }
-    } else if ( request !== null && request.auth !== null && request.auth.credentials !== null ) {
-        user = {
-            id: request.auth.credentials.userId
-        }
-    }
 
-    return user
+        resolve(user)
+    })
 }
 
 
