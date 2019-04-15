@@ -9,7 +9,7 @@ const getUserByEmail = async (email, knex) => {
 
     let user = null
 
-    const usersWithEmail = await knex.select().from('users').where('email', email)
+    const usersWithEmail = await knex('users').select().where('email', email)
     console.dir(usersWithEmail)
     if ( usersWithEmail && usersWithEmail.length === 1 ) {
         user = usersWithEmail[0]

@@ -5,10 +5,10 @@
  *
  * @param {string} uuid UUID for the apps to fetch (apps_view will match multiple rows on same UUID based on how many versions there are)
  * @param {string} languageCode language code for which language to fetch the translations on
- * @param {*} dbConnection db instance
+ * @param {*} knex db instance
  * @param {Promise<Array>}
  */
-const getAppsByUuid = async (uuid, languageCode, dbConnection) => {
+const getAppsByUuid = async (uuid, languageCode, knex) => {
 
     if ( !uuid ) {
         throw new Error(`Missing parameter 'uuid'`)
@@ -18,14 +18,13 @@ const getAppsByUuid = async (uuid, languageCode, dbConnection) => {
         throw new Error(`Missing parameter 'languageCode'`)
     }
 
-    if ( !dbConnection ) {
-        throw new Error(`Missing parameter 'dbConnection'`)
+    if ( !knex ) {
+        throw new Error(`Missing parameter 'knex'`)
     }
 
     try {
-        const apps = await dbConnection
+        const apps = await knex('apps_view')
             .select()
-            .from('apps_view')
             .where({
                 uuid,
                 'language_code': languageCode
@@ -38,3 +37,4 @@ const getAppsByUuid = async (uuid, languageCode, dbConnection) => {
 }
 
 module.exports = getAppsByUuid
+

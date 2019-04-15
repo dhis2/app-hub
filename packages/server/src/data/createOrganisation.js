@@ -49,7 +49,7 @@ const createOrganisation = async (params, knex, transaction) => {
         let slugUniqueness = 2
         let foundUniqueSlug = false
         while ( !foundUniqueSlug ) {
-            const [{ count }] = await knex.count('id').from('organisation').where('slug', slug)
+            const [{ count }] = await knex('organisation').count('id').where('slug', slug)
             if ( count > 0 ) {
                 slug = `${originalSlug}-${slugUniqueness}`
                 slugUniqueness++

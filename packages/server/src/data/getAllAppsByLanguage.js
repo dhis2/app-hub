@@ -6,11 +6,18 @@
  * @param {object} dbConnection db instance
  * @returns {Promise<Array>}
  */
-const getAllAppsByLanguage = (languageCode, dbConnection) => {
+const getAllAppsByLanguage = (languageCode, knex) => {
 
-    return dbConnection
+    if ( !languageCode ) {
+        throw new Error('Missing/invalid paramter: languageCode')
+    }
+
+    if ( !knex ) {
+        throw new Error('Missing parameter: knex')
+    }
+
+    return knex('apps_view')
         .select()
-        .from('apps_view')
         .where({
             'language_code': languageCode
         })
