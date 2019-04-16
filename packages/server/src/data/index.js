@@ -1,11 +1,4 @@
 
-const createTransaction = (knex) => {
-
-    return new Promise((resolve) => {
-
-        return knex.transaction(resolve);
-    });
-}
 
 module.exports = {
     addAppVersionMedia: require('./addAppVersionMedia'),
@@ -23,5 +16,6 @@ module.exports = {
     getUserByEmail: require('./getUserByEmail'),
     createUser: require('./createUser'),
     addUserToOrganisation: require('./addUserToOrganisation'),
-    createTransaction
+    createTransaction: require('./createTransaction'),
+    updateApp: require('./updateApp'),
 }
