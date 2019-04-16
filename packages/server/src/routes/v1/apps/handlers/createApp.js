@@ -82,7 +82,7 @@ module.exports = {
         const file = request.payload.file
 
 
-        const currentUser = getCurrentUserFromRequest(request, knex);
+        const currentUser = await getCurrentUserFromRequest(request, knex);
         const currentUserId = currentUser.id
 
         //Load the organisation, or create it if it doesnt exist.

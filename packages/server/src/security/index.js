@@ -84,7 +84,7 @@ const getCurrentAuthStrategy = () => {
 const getCurrentAuthStrategyOptional = () => {
     if ( process.env.AUTH_STRATEGY === 'jwt' ) {
         return {
-            auth: process.env.AUTH_STRATEGY,
+            strategy: process.env.AUTH_STRATEGY,
             mode: 'try'
         }
     }
