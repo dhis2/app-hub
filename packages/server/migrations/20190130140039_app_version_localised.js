@@ -23,7 +23,7 @@ exports.up = async (knex) => {
 
         table.text('description')
 
-        table.string('slug', 150).notNullable()
+        table.string('slug', 100).notNullable()
 
         //One version can only have the same language once.
         table.unique(['app_version_id', 'language_code'])
@@ -40,6 +40,19 @@ exports.up = async (knex) => {
 
         table
             .foreign('created_by_user_id')
+            .references('id')
+            .inTable('users')
+
+        table
+            .timestamp('updated_at', true)
+            .defaultTo(knex.fn.now())
+
+        table
+            .integer('updated_by_user_id')
+            .unsigned()
+
+        table
+            .foreign('updated_by_user_id')
             .references('id')
             .inTable('users')
     })
