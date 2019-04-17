@@ -19,7 +19,7 @@ const createUserValidationFunc = (db, audience) => {
             if ( email_verified ) {
                 let user = null
                 try {
-                    const users = await db.select().from('users').where('email', email)
+                    const users = await db('users').select().where('email', email)
                     if ( users && users.length === 1 ) {
                         user = users[0]
                         console.log(`Found user: ${user.email} with id ${user.id}`)
@@ -35,12 +35,11 @@ const createUserValidationFunc = (db, audience) => {
                         name
                     })
                     console.log(`created user with id ${user.id} for email ${user.email}`)
-                    await db
+                    await db('user_external_id')
                         .insert({
                             user_id: user.id,
                             external_id: decoded.sub
                         })
-                        .into('user_external_id')
                 } 
 
                 returnObj.credentials.userId = user.id
@@ -50,8 +49,7 @@ const createUserValidationFunc = (db, audience) => {
 
                 //If we get here we're dealing with an M2M API authenticated user
                 try {
-                    const [apiUser] = await db.select()
-                        .from('users')
+                    const [apiUser] = await db('users').select()
                         .innerJoin('user_external_id', 'user_external_id.user_id', 'users.id')
                         .where('external_id', `${audience}@clients`)
 
