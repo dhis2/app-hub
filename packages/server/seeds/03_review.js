@@ -2,10 +2,9 @@ const apps = require('./mock/apps')
 const appVersions = require('./mock/appversions')
 const uuid = require('uuid/v4')
 
-const [ dhis2AppVersions, whoAppVersions ] = appVersions;
+const [dhis2AppVersions, whoAppVersions] = appVersions
 
-exports.seed = async (knex) => {
-
+exports.seed = async knex => {
     console.log('Seeding reviews')
 
     const reviews = [

@@ -1,7 +1,7 @@
 const apps = require('./apps')
 const uuid = require('uuid/v4')
 
-const [ dhis2App, whoApp, pendingApp, rejectedApp ] = apps;
+const [dhis2App, whoApp, pendingApp, rejectedApp] = apps
 
 const dhis2AppVersions = [
     {
@@ -34,7 +34,8 @@ const whoAppVersions = [
         created_by_user_id: whoApp.created_by_user_id,
         version: '1.0',
         source_url: 'https://github.com/dhis2/who-immunization-analysis-app/',
-        demo_url: 'https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report'
+        demo_url:
+            'https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report',
     },
     {
         id: 5,
@@ -43,7 +44,8 @@ const whoAppVersions = [
         created_by_user_id: whoApp.created_by_user_id,
         version: '1.0.1-beta',
         source_url: 'https://github.com/dhis2/who-immunization-analysis-app/',
-        demo_url: 'https://play.dhis2.org/2.31.0/api/apps/Immunization-analysis/index.html#!/report'
+        demo_url:
+            'https://play.dhis2.org/2.31.0/api/apps/Immunization-analysis/index.html#!/report',
     },
     {
         id: 6,
@@ -52,7 +54,8 @@ const whoAppVersions = [
         created_by_user_id: whoApp.created_by_user_id,
         version: '1.0.2-dev',
         source_url: 'https://github.com/dhis2/who-immunization-analysis-app/',
-        demo_url: 'https://play.dhis2.org/2.31dev/api/apps/Immunization-analysis/index.html#!/report'
+        demo_url:
+            'https://play.dhis2.org/2.31dev/api/apps/Immunization-analysis/index.html#!/report',
     },
 ]
 
@@ -80,5 +83,5 @@ module.exports = [
     dhis2AppVersions,
     whoAppVersions,
     pendingAppVersions,
-    rejectedAppVersions
+    rejectedAppVersions,
 ]

@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -28,31 +26,35 @@ module.exports = {
             status: {
                 200: AppModel.def,
                 404: Joi.string(),
-                500: Joi.string()
+                500: Joi.string(),
             },
-            failAction: defaultFailHandler
-        }
+            failAction: defaultFailHandler,
+        },
     },
     handler: async (request, h) => {
-
         request.logger.info('In handler %s', request.path)
 
-        const appUuid = request.params.appUuid;
+        const appUuid = request.params.appUuid
 
         let apps = null
 
-        if ( canSeeAllApps(request) ) {
+        if (canSeeAllApps(request)) {
             apps = await getAppsByUuid(appUuid, 'en', h.context.db)
         } else {
-            apps = await getAppsByUuidAndStatus(appUuid, AppStatus.APPROVED, 'en', h.context.db)
+            apps = await getAppsByUuidAndStatus(
+                appUuid,
+                AppStatus.APPROVED,
+                'en',
+                h.context.db
+            )
         }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)
 
-        if ( v1FormattedArray.length === 0 ) {
+        if (v1FormattedArray.length === 0) {
             throw Boom.notFound()
         }
 
-        return v1FormattedArray[0];
-    }
+        return v1FormattedArray[0]
+    },
 }

@@ -4,7 +4,10 @@ const uuid = require('uuid/v4')
 
 const paramsSchema = joi.object().keys({
     userId: joi.number().required(),
-    name: joi.string().min(1).max(100)
+    name: joi
+        .string()
+        .min(1)
+        .max(100),
 })
 
 /**
@@ -27,14 +30,13 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise<Organisation>} The created organisation
  */
 const createOrganisation = async (params, knex, transaction) => {
-
     const validation = joi.validate(params, paramsSchema)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error(`Missing parameter: knex`)
     }
 
@@ -45,12 +47,13 @@ const createOrganisation = async (params, knex, transaction) => {
     const orgUuid = uuid()
 
     try {
-
         let slugUniqueness = 2
         let foundUniqueSlug = false
-        while ( !foundUniqueSlug ) {
-            const [{ count }] = await knex('organisation').count('id').where('slug', slug)
-            if ( count > 0 ) {
+        while (!foundUniqueSlug) {
+            const [{ count }] = await knex('organisation')
+                .count('id')
+                .where('slug', slug)
+            if (count > 0) {
                 slug = `${originalSlug}-${slugUniqueness}`
                 slugUniqueness++
             } else {
@@ -65,11 +68,12 @@ const createOrganisation = async (params, knex, transaction) => {
                 created_by_user_id: userId,
                 name,
                 slug,
-                uuid: orgUuid
-            }).returning('id')
+                uuid: orgUuid,
+            })
+            .returning('id')
 
         return { id, name, slug, uuid: orgUuid }
-    } catch ( err ) {
+    } catch (err) {
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }

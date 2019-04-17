@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -22,22 +20,20 @@ module.exports = {
         response: {
             status: {
                 200: Joi.any(),
-                500: Joi.any()
+                500: Joi.any(),
             },
-            failAction: defaultFailHandler
-        }
+            failAction: defaultFailHandler,
+        },
     },
     handler: async (request, h) => {
-
-
         //request.logger.info('In handler %s', request.path)
 
-        if ( !canDeleteApp(request, h) ) {
-            throw Boom.unauthorized();
+        if (!canDeleteApp(request, h)) {
+            throw Boom.unauthorized()
         }
         //todo: validate
 
-        const knex = h.context.db;
+        const knex = h.context.db
 
         const appUuid = request.params.appUuid
 
@@ -50,9 +46,17 @@ module.exports = {
             const result = await deleteApp(appUuid, knex)
             console.log(result)
 
-            return { message: 'Successfully deleted app', httpStatus: 'OK', httpStatusCode: 200 }
-        } catch ( err ) {
-            return { message: 'An error occurred', httpStatus: 'Internal Server Error', httpStatusCode: 500 }
+            return {
+                message: 'Successfully deleted app',
+                httpStatus: 'OK',
+                httpStatusCode: 200,
+            }
+        } catch (err) {
+            return {
+                message: 'An error occurred',
+                httpStatus: 'Internal Server Error',
+                httpStatusCode: 500,
+            }
         }
-    }
+    },
 }

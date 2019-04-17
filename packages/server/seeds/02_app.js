@@ -6,8 +6,7 @@ const appVersionsLocalised = require('./mock/appversions_localized')
 
 const { flatten } = require('@utils')
 
-exports.seed = async (knex) => {
-
+exports.seed = async knex => {
     console.log('Seeding apps')
 
     await knex('app').del()
@@ -44,11 +43,7 @@ exports.seed = async (knex) => {
 
     console.log('Seeding appversions')
 
-    await knex('app_version').insert(
-        flatten(appVersions)
-    )
+    await knex('app_version').insert(flatten(appVersions))
 
-    await knex('app_version_localised').insert(
-        flatten(appVersionsLocalised)
-    )
+    await knex('app_version_localised').insert(flatten(appVersionsLocalised))
 }

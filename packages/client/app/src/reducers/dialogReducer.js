@@ -1,9 +1,9 @@
-import * as actions from "../constants/actionTypes";
+import * as actions from '../constants/actionTypes'
 
-const emptyDialog = { dialogType: null, dialogProps: {} };
+const emptyDialog = { dialogType: null, dialogProps: {} }
 const initialState = {
-    ...emptyDialog
-};
+    ...emptyDialog,
+}
 
 const dialog = (state = initialState, action) => {
     switch (action.type) {
@@ -11,21 +11,21 @@ const dialog = (state = initialState, action) => {
             return {
                 ...state,
                 dialogType: action.payload.dialogType,
-                dialogProps: action.payload.dialogprops
-            };
+                dialogProps: action.payload.dialogprops,
+            }
         }
 
         case actions.CLOSE_DIALOG: {
             return {
                 ...state,
-                ...emptyDialog
-            };
+                ...emptyDialog,
+            }
         }
 
         default: {
-            return state;
+            return state
         }
     }
-};
+}
 
-export default dialog;
+export default dialog

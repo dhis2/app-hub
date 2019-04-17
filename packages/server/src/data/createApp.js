@@ -4,12 +4,18 @@ const joi = require('joi')
 
 const { AppTypes } = require('@enums')
 
-const paramsSchema = joi.object().keys({
-    userId: joi.number().required(),
-    developerUserId: joi.number().required(),
-    orgId: joi.number().required(),
-    appType: joi.string().required().valid(AppTypes),
-}).options({ allowUnknown: true })
+const paramsSchema = joi
+    .object()
+    .keys({
+        userId: joi.number().required(),
+        developerUserId: joi.number().required(),
+        orgId: joi.number().required(),
+        appType: joi
+            .string()
+            .required()
+            .valid(AppTypes),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * @typedef {object} CreateAppResult
@@ -29,16 +35,14 @@ const paramsSchema = joi.object().keys({
  * @param {object} transaction
  * @returns {Promise<CreateAppResult>}
  */
-const createApp = async (params, knex, transaction) =>  {
-
+const createApp = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
     const { userId, developerUserId, orgId, appType } = params
-
 
     //generate a new uuid to insert
     const appUuid = uuid()
@@ -52,15 +56,16 @@ const createApp = async (params, knex, transaction) =>  {
                 developer_user_id: developerUserId,
                 organisation_id: orgId,
                 type: appType,
-                uuid: appUuid
-            }).returning('id')
+                uuid: appUuid,
+            })
+            .returning('id')
 
-        if ( id < 0 ) {
+        if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
         return { id, uuid: appUuid }
-    } catch ( err ) {
+    } catch (err) {
         throw new Error(`Could not insert app to database. ${err.message}`)
     }
 }

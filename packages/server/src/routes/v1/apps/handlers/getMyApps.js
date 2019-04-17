@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -19,17 +17,16 @@ module.exports = {
         response: {
             status: {
                 200: Joi.array().items(AppModel.def),
-                500: Joi.string()
+                500: Joi.string(),
             },
-            failAction: defaultFailHandler
-        }
+            failAction: defaultFailHandler,
+        },
     },
     handler: (request, h) => {
-
         request.logger.info('In handler %s', request.path)
 
         //TODO: implement fetching of apps for which the current user has access to, E.G. the organisations it belongs to
 
         return Boom.notImplemented()
-    }
+    },
 }

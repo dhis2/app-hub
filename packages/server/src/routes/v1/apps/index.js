@@ -1,5 +1,3 @@
-
-
 module.exports = [
     require('./handlers/getAllApprovedApps'),
     require('./handlers/getAllApps'),

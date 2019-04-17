@@ -1,5 +1,3 @@
-
-
 module.exports = {
     addAppVersionMedia: require('./addAppVersionMedia'),
     addAppVersionToChannel: require('./addAppVersionToChannel'),

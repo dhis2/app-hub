@@ -1,172 +1,172 @@
-import ConfigImport, { getConfig } from "../../src/config/configResolver.js";
-import DirectDefaultConfig from "../../default.config.js";
-import fs from "fs";
-import merge from "lodash/merge";
-const defaultConfigPath = "../../src/config/";
-const Config = ConfigImport.default;
+import ConfigImport, { getConfig } from '../../src/config/configResolver.js'
+import DirectDefaultConfig from '../../default.config.js'
+import fs from 'fs'
+import merge from 'lodash/merge'
+const defaultConfigPath = '../../src/config/'
+const Config = ConfigImport.default
 
-describe("ConfigResolver", () => {
-    describe("exports", () => {
-        before(() => {});
+describe('ConfigResolver', () => {
+    describe('exports', () => {
+        before(() => {})
 
-        after(() => {});
+        after(() => {})
 
-        it("should export the default config object as if it was imported directly", () => {
-            expect(Config).to.deep.equal(DirectDefaultConfig);
-        });
+        it('should export the default config object as if it was imported directly', () => {
+            expect(Config).to.deep.equal(DirectDefaultConfig)
+        })
 
-        it("should return the same object-reference if imported multiple times", () => {
+        it('should return the same object-reference if imported multiple times', () => {
             let newConfig = require(defaultConfigPath.concat(
-                "configResolver.js"
-            )).default;
-            expect(newConfig).to.equal(Config);
-            expect(newConfig).to.deep.equal(DirectDefaultConfig);
-        });
-    });
+                'configResolver.js'
+            )).default
+            expect(newConfig).to.equal(Config)
+            expect(newConfig).to.deep.equal(DirectDefaultConfig)
+        })
+    })
 
-    describe("getConfig()", () => {
+    describe('getConfig()', () => {
         const override = {
-            routes: { baseAppName: "baseAppName" },
-            ui: { dhisVersions: ["2.28"] }
-        };
+            routes: { baseAppName: 'baseAppName' },
+            ui: { dhisVersions: ['2.28'] },
+        }
         const addition = {
-            another: "setting"
-        };
-        let configOverride;
+            another: 'setting',
+        }
+        let configOverride
 
-        let loadOverrideFileStub, loadProdFileStub, loadDevFileStub;
+        let loadOverrideFileStub, loadProdFileStub, loadDevFileStub
 
-        let prodConfig;
-        let devConfig;
-        let prevConfig;
+        let prodConfig
+        let devConfig
+        let prevConfig
         before(() => {
-            configOverride = merge({}, DirectDefaultConfig, override, addition);
+            configOverride = merge({}, DirectDefaultConfig, override, addition)
             prodConfig = {
                 api: {
-                    baseURL: "https://dhis2.org/appstore/api/"
-                }
-            };
+                    baseURL: 'https://dhis2.org/appstore/api/',
+                },
+            }
             devConfig = {
                 api: {
-                    baseURL: "https://localhost:8080/appstore/api/",
-                    redirectURL: "https://localhost:8080/appstore/user/"
-                }
-            };
+                    baseURL: 'https://localhost:8080/appstore/api/',
+                    redirectURL: 'https://localhost:8080/appstore/user/',
+                },
+            }
             //sanity check
-            expect(configOverride).to.not.deep.equal(DirectDefaultConfig);
-            loadOverrideFileStub = sinon.stub().returns(configOverride);
+            expect(configOverride).to.not.deep.equal(DirectDefaultConfig)
+            loadOverrideFileStub = sinon.stub().returns(configOverride)
 
             loadProdFileStub = sinon
                 .stub()
                 .onFirstCall()
                 .returns(DirectDefaultConfig)
                 .onSecondCall()
-                .returns(prodConfig);
+                .returns(prodConfig)
             loadDevFileStub = sinon
                 .stub()
                 .onFirstCall()
                 .returns(DirectDefaultConfig)
                 .onSecondCall()
-                .returns(devConfig);
-        });
+                .returns(devConfig)
+        })
 
-        after(() => {});
+        after(() => {})
 
         beforeEach(() => {
-            prevConfig = Config;
-            getConfig.config = Config;
-        });
+            prevConfig = Config
+            getConfig.config = Config
+        })
 
         afterEach(() => {
-            getConfig.config = prevConfig;
-        });
+            getConfig.config = prevConfig
+        })
 
-        it("should return the default config object as if it was imported directly", () => {
-            expect(getConfig()).to.deep.equal(DirectDefaultConfig);
-        });
+        it('should return the default config object as if it was imported directly', () => {
+            expect(getConfig()).to.deep.equal(DirectDefaultConfig)
+        })
 
-        it("should should return the same as default export", () => {
-            expect(getConfig()).to.deep.equal(Config);
-        });
+        it('should should return the same as default export', () => {
+            expect(getConfig()).to.deep.equal(Config)
+        })
 
-        it("should return the same object-reference as default export", () => {
-            expect(getConfig()).to.equal(Config);
-        });
+        it('should return the same object-reference as default export', () => {
+            expect(getConfig()).to.equal(Config)
+        })
 
-        it("should return the same object and object-reference if called multiple times", () => {
-            expect(getConfig()).to.equal(Config);
-            expect(getConfig()).to.equal(getConfig());
-            expect(getConfig()).to.equal(Config);
-        });
+        it('should return the same object and object-reference if called multiple times', () => {
+            expect(getConfig()).to.equal(Config)
+            expect(getConfig()).to.equal(getConfig())
+            expect(getConfig()).to.equal(Config)
+        })
 
-        it("should store last config on the function if its not already", () => {
-            getConfig.config = null;
-            const conf = getConfig();
-            expect(conf).to.deep.equal(DirectDefaultConfig);
-            expect(getConfig.config).to.be.equal(conf);
-        });
+        it('should store last config on the function if its not already', () => {
+            getConfig.config = null
+            const conf = getConfig()
+            expect(conf).to.deep.equal(DirectDefaultConfig)
+            expect(getConfig.config).to.be.equal(conf)
+        })
 
-        it("should merge the default.config.js with config.js, and override if exists", () => {
-            ConfigImport.__Rewire__("loadFile", loadOverrideFileStub);
-            getConfig.config = null;
+        it('should merge the default.config.js with config.js, and override if exists', () => {
+            ConfigImport.__Rewire__('loadFile', loadOverrideFileStub)
+            getConfig.config = null
 
-            const conf = getConfig();
+            const conf = getConfig()
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig);
+            expect(conf).to.not.deep.equal(DirectDefaultConfig)
             expect(DirectDefaultConfig.routes.baseAppName).to.be.equal(
-                "/appstore"
-            );
-            expect(conf.routes.baseAppName).to.equal("baseAppName");
+                '/appstore'
+            )
+            expect(conf.routes.baseAppName).to.equal('baseAppName')
             //should deep merge
-            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui);
+            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
             expect(conf.api)
-                .to.have.property("redirectURL")
-                .that.equals(DirectDefaultConfig.api.redirectURL);
-            expect(DirectDefaultConfig).to.not.have.property("another");
+                .to.have.property('redirectURL')
+                .that.equals(DirectDefaultConfig.api.redirectURL)
+            expect(DirectDefaultConfig).to.not.have.property('another')
             expect(conf)
-                .to.be.an("object")
-                .that.includes(addition);
+                .to.be.an('object')
+                .that.includes(addition)
 
-            ConfigImport.__ResetDependency__("loadFile");
-        });
+            ConfigImport.__ResetDependency__('loadFile')
+        })
 
         it("should override with production.config.js if NODE_ENV = 'production", () => {
-            ConfigImport.__Rewire__("loadFile", loadProdFileStub);
-            getConfig.config = null;
-            const prevEnv = process.env.NODE_ENV;
-            process.env.NODE_ENV = "production";
+            ConfigImport.__Rewire__('loadFile', loadProdFileStub)
+            getConfig.config = null
+            const prevEnv = process.env.NODE_ENV
+            process.env.NODE_ENV = 'production'
 
-            const conf = getConfig();
-            expect(conf.api.baseURL).to.equal(prodConfig.api.baseURL);
+            const conf = getConfig()
+            expect(conf.api.baseURL).to.equal(prodConfig.api.baseURL)
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig);
+            expect(conf).to.not.deep.equal(DirectDefaultConfig)
 
             expect(conf)
-                .to.have.property("auth0")
-                .that.is.deep.equal(DirectDefaultConfig.auth0);
+                .to.have.property('auth0')
+                .that.is.deep.equal(DirectDefaultConfig.auth0)
             expect(conf)
-                .to.have.property("ui")
-                .that.is.deep.equal(DirectDefaultConfig.ui);
-            ConfigImport.__ResetDependency__("loadFile");
-            process.env.NODE_ENV = prevEnv;
-        });
+                .to.have.property('ui')
+                .that.is.deep.equal(DirectDefaultConfig.ui)
+            ConfigImport.__ResetDependency__('loadFile')
+            process.env.NODE_ENV = prevEnv
+        })
 
         it("should override with development.config.js if NODE_ENV = 'development", () => {
-            ConfigImport.__Rewire__("loadFile", loadDevFileStub);
-            const prevEnv = process.env.NODE_ENV;
+            ConfigImport.__Rewire__('loadFile', loadDevFileStub)
+            const prevEnv = process.env.NODE_ENV
 
-            getConfig.config = null;
-            process.env.NODE_ENV = "development";
-            const conf = getConfig();
+            getConfig.config = null
+            process.env.NODE_ENV = 'development'
+            const conf = getConfig()
             //should override api object
-            expect(conf.api).to.deep.equal(devConfig.api);
+            expect(conf.api).to.deep.equal(devConfig.api)
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig);
+            expect(conf).to.not.deep.equal(DirectDefaultConfig)
             //should keep the same properties that are not overriden
-            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui);
-            expect(conf.auth0).to.deep.equal(DirectDefaultConfig.auth0);
-            ConfigImport.__ResetDependency__("loadFile");
-            process.env.NODE_ENV = prevEnv;
-        });
-    });
-});
+            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
+            expect(conf.auth0).to.deep.equal(DirectDefaultConfig.auth0)
+            ConfigImport.__ResetDependency__('loadFile')
+            process.env.NODE_ENV = prevEnv
+        })
+    })
+})

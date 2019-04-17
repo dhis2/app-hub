@@ -1,13 +1,16 @@
 const uuid = require('uuid/v4')
 const joi = require('joi')
 
-const paramsSchema = joi.object().keys({
-    userId: joi.number().required(),
-    appId: joi.number().required(),
-    demoUrl: joi.string().allow(''),
-    sourceUrl: joi.string().allow(),
-    version: joi.string().allow('')
-}).options({ allowUnknown: true })
+const paramsSchema = joi
+    .object()
+    .keys({
+        userId: joi.number().required(),
+        appId: joi.number().required(),
+        demoUrl: joi.string().allow(''),
+        sourceUrl: joi.string().allow(),
+        version: joi.string().allow(''),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * @typedef {object} CreateAppVersionResult
@@ -29,9 +32,8 @@ const paramsSchema = joi.object().keys({
  * @property {Promise<CreateAppVersionResult>}
  */
 const createAppVersion = async (params, knex, transaction) => {
-
     const paramsValidation = paramsSchema.validate(params)
-    if ( paramsValidation.error !== null ) {
+    if (paramsValidation.error !== null) {
         throw new Error(paramsValidation.error)
     }
 
@@ -48,16 +50,21 @@ const createAppVersion = async (params, knex, transaction) => {
                 uuid: versionUuid,
                 demo_url: demoUrl,
                 source_url: sourceUrl,
-                version
-            }).returning('id')
+                version,
+            })
+            .returning('id')
 
-        if ( id < 0 ) {
+        if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
         return { id, uuid: versionUuid }
-    } catch ( err ) {
-        throw new Error(`Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${err.message}`)
+    } catch (err) {
+        throw new Error(
+            `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${
+                err.message
+            }`
+        )
     }
 }
 

@@ -35,4 +35,4 @@ module.exports = {
             TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
         },
     },
-};
+}

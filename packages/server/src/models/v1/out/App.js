@@ -8,63 +8,51 @@ const Image = require('./Image')
 
 // v1 api schema
 const def = Joi.object().keys({
-
-    appType: Joi
-        .string()
+    appType: Joi.string()
         .required()
         .valid(AppTypes),
 
-    created: Joi
-        .number(),
+    created: Joi.number(),
 
-    description: Joi
-        .string()
+    description: Joi.string()
         .allow('')
         .max(255, 'utf8'),
 
     developer: Developer.required(),
 
-    images: Joi.array().items(Image).required(),
+    images: Joi.array()
+        .items(Image)
+        .required(),
 
-    id: Joi
-        .string()
+    id: Joi.string()
         .guid({ version: 'uuidv4' })
         .required(),
 
-    lastUpdated: Joi
-        .number(),
+    lastUpdated: Joi.number(),
 
-    name: Joi
-        .string()
+    name: Joi.string()
         .max(255, 'utf8')
         .required(),
 
-    owner: Joi
-        .string()
-        .required(),
+    owner: Joi.string().required(),
 
-    reviews: Joi
-        .array()
+    reviews: Joi.array()
         .items(Joi.any())
         .required(),
 
-    sourceUrl: Joi
-        .string()
+    sourceUrl: Joi.string()
         .uri()
         .allow(''),
 
-    status: Joi
-        .string()
+    status: Joi.string()
         .required()
         .valid(AppStatuses),
 
-    versions: Joi
-        .array()
+    versions: Joi.array()
         .items(Version)
         .min(1),
-
 })
 
 module.exports = {
-    def
+    def,
 }

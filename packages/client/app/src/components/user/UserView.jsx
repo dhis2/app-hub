@@ -1,29 +1,29 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
-import Grid from "../../material/Grid/Grid";
-import Col from "../../material/Grid/Col";
-import FontIcon from "material-ui/FontIcon";
-import { Link, Route, Redirect, Switch } from "react-router-dom";
-import UserAppView from "./userAppView/UserAppView";
-import { List, ListItem } from "material-ui/List";
-import AppUpload from "./appUpload/AppUpload";
-import AppUploadStepper from "./appUpload/AppUploadStepper";
-import AppList from "./appList/AppList";
-import Divider from "material-ui/Divider";
-import { getUserInfo } from "../../selectors/userSelectors";
-import { userLoad } from "../../actions/actionCreators";
-import ErrorOrLoading from "../utils/ErrorOrLoading";
-import ActiveLink from "../utils/ActiveLink";
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import Grid from '../../material/Grid/Grid'
+import Col from '../../material/Grid/Col'
+import FontIcon from 'material-ui/FontIcon'
+import { Link, Route, Redirect, Switch } from 'react-router-dom'
+import UserAppView from './userAppView/UserAppView'
+import { List, ListItem } from 'material-ui/List'
+import AppUpload from './appUpload/AppUpload'
+import AppUploadStepper from './appUpload/AppUploadStepper'
+import AppList from './appList/AppList'
+import Divider from 'material-ui/Divider'
+import { getUserInfo } from '../../selectors/userSelectors'
+import { userLoad } from '../../actions/actionCreators'
+import ErrorOrLoading from '../utils/ErrorOrLoading'
+import ActiveLink from '../utils/ActiveLink'
 
 class UserView extends Component {
     componentDidMount() {
-        this.props.loadUser();
+        this.props.loadUser()
     }
 
     render() {
         //  const {info, loading, loaded, error} = this.props.user;
-        const userInfo = this.props.user;
-        const loadOrErr = userInfo.loading || userInfo.error;
+        const userInfo = this.props.user
+        const loadOrErr = userInfo.loading || userInfo.error
         const contentRoutes = (
             <Switch>
                 <Route
@@ -42,7 +42,7 @@ class UserView extends Component {
                 {/* No-match route - redirect to index */}
                 <Route render={props => <Redirect to="/user" />} />
             </Switch>
-        );
+        )
 
         return (
             <Grid align="center">
@@ -59,7 +59,7 @@ class UserView extends Component {
                             />
                         </Link>
                         <Divider
-                            style={{ marginTop: "8px", marginBottom: "8px" }}
+                            style={{ marginTop: '8px', marginBottom: '8px' }}
                         />
                         <ActiveLink
                             to={this.props.match.url}
@@ -95,31 +95,36 @@ class UserView extends Component {
                         />
                     </List>
                 </Col>
-                <Col span={8} style={{ maxWidth: "900px" }}>
-                    {loadOrErr
-                        ? <ErrorOrLoading
-                              {...userInfo}
-                              retry={this.props.loadUser}
-                          />
-                        : contentRoutes}
+                <Col span={8} style={{ maxWidth: '900px' }}>
+                    {loadOrErr ? (
+                        <ErrorOrLoading
+                            {...userInfo}
+                            retry={this.props.loadUser}
+                        />
+                    ) : (
+                        contentRoutes
+                    )}
                 </Col>
             </Grid>
-        );
+        )
     }
 }
 
 UserView.PropTypes = {
-    auth: PropTypes.object
-};
+    auth: PropTypes.object,
+}
 
 const mapStateToProps = state => ({
-    user: getUserInfo(state)
-});
+    user: getUserInfo(state),
+})
 
 const mapDispatchToProps = dispatch => ({
     loadUser() {
-        dispatch(userLoad());
-    }
-});
+        dispatch(userLoad())
+    },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(UserView);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UserView)

@@ -1,10 +1,10 @@
-let conf;
-if (typeof __APP_CONFIG__ !== "undefined") {
+let conf
+if (typeof __APP_CONFIG__ !== 'undefined') {
     //running in webpack, use predefined config
-    conf = __APP_CONFIG__;
+    conf = __APP_CONFIG__
 } else {
     //Not in webpack, ie in tests and webpack.config - provide default
-    conf = require("../../default.config");
+    conf = require('../../default.config')
 }
 
-export default conf;
+export default conf

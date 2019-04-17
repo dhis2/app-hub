@@ -1,82 +1,83 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component, PropTypes } from 'react'
 import {
     Table,
     TableBody,
     TableHeader,
     TableHeaderColumn,
     TableRow,
-    TableRowColumn
-} from "material-ui/Table";
-import FontIcon from "material-ui/FontIcon";
-import IconMenu from "material-ui/IconMenu";
-import IconButton from "material-ui/IconButton";
-import MenuItem from "material-ui/MenuItem";
-import Popover from "material-ui/Popover";
-import TextField from "material-ui/TextField";
-import Theme from "../../styles/theme";
+    TableRowColumn,
+} from 'material-ui/Table'
+import FontIcon from 'material-ui/FontIcon'
+import IconMenu from 'material-ui/IconMenu'
+import IconButton from 'material-ui/IconButton'
+import MenuItem from 'material-ui/MenuItem'
+import Popover from 'material-ui/Popover'
+import TextField from 'material-ui/TextField'
+import Theme from '../../styles/theme'
 
 const styles = {
     tableHeaderColumn: {
-        paddingLeft: "24px",
-        paddingRight: "24px"
+        paddingLeft: '24px',
+        paddingRight: '24px',
     },
     columnText: {
-        overflow: "hidden",
-        textOverflow: "ellipsis"
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
     },
     editColumn: {},
     firstColumn: {},
     iconButton: {
-        padding: "8px",
-        width: "36px",
-        height: "36px"
+        padding: '8px',
+        width: '36px',
+        height: '36px',
     },
     fontIcon: {
-        fontSize: "18px"
-    }
-};
+        fontSize: '18px',
+    },
+}
 
-const TableIcon = ({ children }) =>
+const TableIcon = ({ children }) => (
     <FontIcon style={styles.fontIcon} className="material-icons">
         {children}
-    </FontIcon>;
+    </FontIcon>
+)
 
 class VersionListEdit extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.state = {
             open: false,
             anchorEl: null,
             editingFields: [],
-            editedValues: {}
-        };
+            editedValues: {},
+        }
 
-        this.renderRow = this.renderRow.bind(this);
-        this.handleCancelRow = this.handleCancelRow.bind(this);
+        this.renderRow = this.renderRow.bind(this)
+        this.handleCancelRow = this.handleCancelRow.bind(this)
     }
 
     handleOpenEditField(e) {
         this.setState({
             ...this.state,
             open: !this.state.open,
-            anchorEl: e.currentTarget
-        });
+            anchorEl: e.currentTarget,
+        })
     }
 
     handleCloseEditField(e) {
         this.setState({
             ...this.state,
             open: !this.state.open,
-            anchorEl: null
-        });
+            anchorEl: null,
+        })
     }
 
     handleEditRow(version) {
         this.setState({
             ...this.state,
-            editingFields: [...this.state.editingFields, version.id]
-        });
+            editingFields: [...this.state.editingFields, version.id],
+        })
     }
 
     handleCancelRow(version) {
@@ -84,8 +85,8 @@ class VersionListEdit extends Component {
             ...this.state,
             editingFields: this.state.editingFields.filter(
                 v => v !== version.id
-            )
-        });
+            ),
+        })
     }
 
     handleSubmitRow(version) {
@@ -93,14 +94,14 @@ class VersionListEdit extends Component {
             ...this.state,
             editingFields: this.state.editingFields.filter(
                 v => v !== version.id
-            )
-        });
+            ),
+        })
         const newVersion = {
-            ...this.state.editedValues[version.id]
-        };
-        const mergedVers = { ...version, ...newVersion };
+            ...this.state.editedValues[version.id],
+        }
+        const mergedVers = { ...version, ...newVersion }
 
-        this.props.handleEdit(mergedVers);
+        this.props.handleEdit(mergedVers)
     }
 
     /**
@@ -111,16 +112,16 @@ class VersionListEdit extends Component {
      * @param newValue from TextField
      */
     handleValueChange(versionId, fieldName, e, newValue) {
-        const editedValues = this.state.editedValues;
+        const editedValues = this.state.editedValues
         this.setState({
             ...this.state,
             editedValues: {
                 ...editedValues,
                 [versionId]: {
-                    [fieldName]: newValue
-                }
-            }
-        });
+                    [fieldName]: newValue,
+                },
+            },
+        })
     }
 
     renderRow(version, edit) {
@@ -132,7 +133,7 @@ class VersionListEdit extends Component {
             >
                 <TableIcon>edit</TableIcon>
             </IconButton>
-        );
+        )
         const submitIcon = (
             <IconButton
                 key="submit"
@@ -141,7 +142,7 @@ class VersionListEdit extends Component {
             >
                 <TableIcon>check</TableIcon>
             </IconButton>
-        );
+        )
 
         const cancelIcon = (
             <IconButton
@@ -151,7 +152,7 @@ class VersionListEdit extends Component {
             >
                 <TableIcon>clear</TableIcon>
             </IconButton>
-        );
+        )
 
         const deleteIcon = (
             <IconButton
@@ -161,10 +162,10 @@ class VersionListEdit extends Component {
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>
-        );
+        )
 
-        const editingIcons = [submitIcon, cancelIcon];
-        const normalIcons = [editIcon, deleteIcon];
+        const editingIcons = [submitIcon, cancelIcon]
+        const normalIcons = [editIcon, deleteIcon]
 
         return (
             <TableRow key={version.id}>
@@ -174,64 +175,72 @@ class VersionListEdit extends Component {
                     </a>
                 </TableRowColumn>
                 <TableRowColumn>
-                    {edit
-                        ? <TextField
-                              defaultValue={version.demoUrl}
-                              onChange={this.handleValueChange.bind(
-                                  this,
-                                  version.id,
-                                  "demoUrl"
-                              )}
-                              name="demoUrl"
-                          />
-                        : version.demoUrl
-                          ? <a
-                                href={`${version.demoUrl}`}
-                                target="_blank"
-                                style={{ color: Theme.palette.primary1Color }}
-                            >
-                                Demo
-                            </a>
-                          : "N/A"}
+                    {edit ? (
+                        <TextField
+                            defaultValue={version.demoUrl}
+                            onChange={this.handleValueChange.bind(
+                                this,
+                                version.id,
+                                'demoUrl'
+                            )}
+                            name="demoUrl"
+                        />
+                    ) : version.demoUrl ? (
+                        <a
+                            href={`${version.demoUrl}`}
+                            target="_blank"
+                            style={{ color: Theme.palette.primary1Color }}
+                        >
+                            Demo
+                        </a>
+                    ) : (
+                        'N/A'
+                    )}
                 </TableRowColumn>
                 <TableRowColumn>
-                    {edit
-                        ? <TextField
-                              defaultValue={version.version}
-                              onChange={this.handleValueChange.bind(
-                                  this,
-                                  version.id,
-                                  "version"
-                              )}
-                              name="version"
-                          />
-                        : version.version}
+                    {edit ? (
+                        <TextField
+                            defaultValue={version.version}
+                            onChange={this.handleValueChange.bind(
+                                this,
+                                version.id,
+                                'version'
+                            )}
+                            name="version"
+                        />
+                    ) : (
+                        version.version
+                    )}
                 </TableRowColumn>
                 <TableRowColumn>
-                    {edit
-                        ? <TextField
-                              defaultValue={version.minDhisVersion}
-                              onChange={this.handleValueChange.bind(
-                                  this,
-                                  version.id,
-                                  "minDhisVersion"
-                              )}
-                              name="minDhisVersion"
-                          />
-                        : version.minDhisVersion}
+                    {edit ? (
+                        <TextField
+                            defaultValue={version.minDhisVersion}
+                            onChange={this.handleValueChange.bind(
+                                this,
+                                version.id,
+                                'minDhisVersion'
+                            )}
+                            name="minDhisVersion"
+                        />
+                    ) : (
+                        version.minDhisVersion
+                    )}
                 </TableRowColumn>
                 <TableRowColumn>
-                    {edit
-                        ? <TextField
-                              defaultValue={version.maxDhisVersion}
-                              onChange={this.handleValueChange.bind(
-                                  this,
-                                  version.id,
-                                  "maxDhisVersion"
-                              )}
-                              name="maxDhisVersion"
-                          />
-                        : version.maxDhisVersion}
+                    {edit ? (
+                        <TextField
+                            defaultValue={version.maxDhisVersion}
+                            onChange={this.handleValueChange.bind(
+                                this,
+                                version.id,
+                                'maxDhisVersion'
+                            )}
+                            name="maxDhisVersion"
+                        />
+                    ) : (
+                        version.maxDhisVersion
+                    )}
                 </TableRowColumn>
                 <TableRowColumn
                     title={new Date(version.created).toLocaleString()}
@@ -242,19 +251,19 @@ class VersionListEdit extends Component {
                     {edit ? editingIcons : normalIcons}
                 </TableRowColumn>
             </TableRow>
-        );
+        )
     }
 
     render() {
-        const props = this.props;
+        const props = this.props
         const versions = props.versionList
             .sort((a, b) => b.created - a.created)
             .map((version, i) => {
                 const editingRow =
-                    this.state.editingFields.indexOf(version.id) > -1;
+                    this.state.editingFields.indexOf(version.id) > -1
 
-                return this.renderRow(version, editingRow);
-            });
+                return this.renderRow(version, editingRow)
+            })
 
         return (
             <Table selectable={false}>
@@ -263,7 +272,7 @@ class VersionListEdit extends Component {
                         <TableHeaderColumn
                             style={{
                                 ...styles.tableHeaderColumn,
-                                ...styles.firstColumn
+                                ...styles.firstColumn,
                             }}
                             tooltip="Download link"
                         >
@@ -306,24 +315,22 @@ class VersionListEdit extends Component {
                         <TableHeaderColumn
                             style={{
                                 ...styles.tableHeaderColumn,
-                                ...styles.editColumn
+                                ...styles.editColumn,
                             }}
                         />
                     </TableRow>
                 </TableHeader>
-                <TableBody displayRowCheckbox={false}>
-                    {versions}
-                </TableBody>
+                <TableBody displayRowCheckbox={false}>{versions}</TableBody>
             </Table>
-        );
+        )
     }
 }
 
 VersionListEdit.propTypes = {
     versionList: PropTypes.array.isRequired,
     handleDelete: PropTypes.func,
-    handleEdit: PropTypes.func
-};
-VersionListEdit.defaultProps = {};
+    handleEdit: PropTypes.func,
+}
+VersionListEdit.defaultProps = {}
 
-export default VersionListEdit;
+export default VersionListEdit

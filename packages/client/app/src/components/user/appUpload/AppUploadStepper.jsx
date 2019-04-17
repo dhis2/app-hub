@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { Card, CardText } from "material-ui/Card";
-import UploadAppForm from "../../form/UploadAppFormStepper";
-import SubHeader from "../../header/SubHeader";
-import { addApp } from "../../../actions/actionCreators";
-import Theme from "../../../styles/theme";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Card, CardText } from 'material-ui/Card'
+import UploadAppForm from '../../form/UploadAppFormStepper'
+import SubHeader from '../../header/SubHeader'
+import { addApp } from '../../../actions/actionCreators'
+import Theme from '../../../styles/theme'
 
 class AppUploadStepper extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this)
     }
 
     handleSubmit(data) {
-        this.props.addApp(data.data, data.file, data.image);
+        this.props.addApp(data.data, data.file, data.image)
     }
 
     render() {
@@ -30,17 +30,20 @@ class AppUploadStepper extends Component {
                     </CardText>
                 </Card>
             </div>
-        );
+        )
     }
 }
 const mapStateToProps = state => ({
-    appList: state.appsList.appList
-});
+    appList: state.appsList.appList,
+})
 
 const mapDispatchToProps = dispatch => ({
     addApp(app, file, image) {
-        dispatch(addApp(app, file, image));
-    }
-});
+        dispatch(addApp(app, file, image))
+    },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppUploadStepper);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppUploadStepper)

@@ -6,12 +6,14 @@
  * @param {Promise<object>}
  */
 const getUserByEmail = async (email, knex) => {
-
     let user = null
 
     try {
-        user = await knex('users').select().where('email', email).first()
-    } catch ( err ) {
+        user = await knex('users')
+            .select()
+            .where('email', email)
+            .first()
+    } catch (err) {
         //TODO: log, re-throw or something other than silent fail?
         console.log(err)
     }

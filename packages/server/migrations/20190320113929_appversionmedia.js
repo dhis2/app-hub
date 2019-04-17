@@ -1,9 +1,5 @@
-
-exports.up = async (knex) => {
-
-
-    await knex.schema.createTable('app_version_media', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('app_version_media', table => {
         table
             .increments('id')
             .unsigned()
@@ -19,9 +15,7 @@ exports.up = async (knex) => {
             .unsigned()
             .notNullable()
 
-        table
-            .string('original_filename', 255)
-            .notNullable()
+        table.string('original_filename', 255).notNullable()
 
         table
             .timestamp('created_at', true)
@@ -55,8 +49,6 @@ exports.up = async (knex) => {
     })
 }
 
-
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.schema.dropTable('app_version_media')
 }

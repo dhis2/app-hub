@@ -1,9 +1,7 @@
 const { AppStatus } = require('../src/enums')
 
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('app_status', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('app_status', table => {
         table
             .increments('id')
             .unsigned()
@@ -42,10 +40,8 @@ exports.up = async (knex) => {
             .references('id')
             .inTable('users')
     })
-
 }
 
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.schema.dropTable('app_status')
 }

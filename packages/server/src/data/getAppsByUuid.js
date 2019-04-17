@@ -1,5 +1,3 @@
-
-
 /**
  * Returns all apps from apps_view based on uuid and languageCode
  *
@@ -9,16 +7,15 @@
  * @param {Promise<Array>}
  */
 const getAppsByUuid = async (uuid, languageCode, knex) => {
-
-    if ( !uuid ) {
+    if (!uuid) {
         throw new Error(`Missing parameter 'uuid'`)
     }
 
-    if ( !languageCode ) {
+    if (!languageCode) {
         throw new Error(`Missing parameter 'languageCode'`)
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error(`Missing parameter 'knex'`)
     }
 
@@ -27,14 +24,15 @@ const getAppsByUuid = async (uuid, languageCode, knex) => {
             .select()
             .where({
                 uuid,
-                'language_code': languageCode
+                language_code: languageCode,
             })
 
         return apps
-    } catch ( err ) {
-        throw new Error(`Could not get apps with uuid: ${uuid} and languageCode: ${languageCode}`)
+    } catch (err) {
+        throw new Error(
+            `Could not get apps with uuid: ${uuid} and languageCode: ${languageCode}`
+        )
     }
 }
 
 module.exports = getAppsByUuid
-

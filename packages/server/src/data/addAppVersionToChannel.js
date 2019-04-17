@@ -1,19 +1,32 @@
-
 const joi = require('joi')
 
-const paramSchema = joi.object().keys({
-    appVersionId: joi.number().required(),
-    createdByUserId: joi.number().required().min(1),
-    channelName: joi.string().required().max(50),
-    minDhisVersion : joi.string().required().min(1),
-    maxDhisVersion: joi.string().required().allow(''),
-}).options({ allowUnknown: true })
+const paramSchema = joi
+    .object()
+    .keys({
+        appVersionId: joi.number().required(),
+        createdByUserId: joi
+            .number()
+            .required()
+            .min(1),
+        channelName: joi
+            .string()
+            .required()
+            .max(50),
+        minDhisVersion: joi
+            .string()
+            .required()
+            .min(1),
+        maxDhisVersion: joi
+            .string()
+            .required()
+            .allow(''),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * @typedef {object} AddAppVersionToChannelResult
  * @property {number} id The inserted database id
  */
-
 
 /**
  * Publish an app version to a channel
@@ -29,16 +42,23 @@ const paramSchema = joi.object().keys({
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
 const addAppVersionToChannel = async (params, knex, transaction) => {
-
     const validation = paramSchema.validate(params)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
-    }    
+    }
 
-    const { appVersionId, createdByUserId, channelName, minDhisVersion, maxDhisVersion } = params
+    const {
+        appVersionId,
+        createdByUserId,
+        channelName,
+        minDhisVersion,
+        maxDhisVersion,
+    } = params
     try {
-        const [channel] = await knex('channel').select('id').where({ name: channelName })
+        const [channel] = await knex('channel')
+            .select('id')
+            .where({ name: channelName })
 
         const [id] = await knex('app_channel')
             .transacting(transaction)
@@ -48,17 +68,21 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
                 created_at: knex.fn.now(),
                 created_by_user_id: createdByUserId,
                 min_dhis2_version: minDhisVersion,
-                max_dhis2_version: maxDhisVersion
-            }).returning('id')
+                max_dhis2_version: maxDhisVersion,
+            })
+            .returning('id')
 
-        if ( id < 0 ) {
+        if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
         return { id }
-
-    } catch ( err ) {
-        throw new Error(`Could not add app version with id ${appVersionId} to channel ${channelName}. ${err.message}`)
+    } catch (err) {
+        throw new Error(
+            `Could not add app version with id ${appVersionId} to channel ${channelName}. ${
+                err.message
+            }`
+        )
     }
 }
 

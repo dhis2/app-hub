@@ -1,4 +1,3 @@
-
 const Boom = require('boom')
 
 const EditAppModel = require('@models/v1/in/EditAppModel')
@@ -6,18 +5,18 @@ const EditAppModel = require('@models/v1/in/EditAppModel')
 const {
     getCurrentAuthStrategy,
     getCurrentUserFromRequest,
-    currentUserIsManager
+    currentUserIsManager,
 } = require('@security')
 
-const  { createTransaction, updateApp, getAppsByUuid } = require('@data')
+const { createTransaction, updateApp, getAppsByUuid } = require('@data')
 
 const userIsDeveloperOfAppWithUuid = async (params, db) => {
     try {
         const [firstApp] = await getAppsByUuid(params.uuid, 'en', db)
         return firstApp.developer_id === params.userId
-    } catch ( err ) {
+    } catch (err) {
         return false
-    }    
+    }
 }
 
 module.exports = {
@@ -29,8 +28,8 @@ module.exports = {
         validate: {
             payload: EditAppModel.payloadSchema,
             failAction: (request, h, err) => {
-                return err;
-            }
+                return err
+            },
         },
         plugins: {
             //TODO: set correct payloadType for 'hapi-swagger'
@@ -41,45 +40,53 @@ module.exports = {
         response: {
             status: {
                 //TODO: add response statuses
-            }
+            },
         },
     },
     handler: async (request, h) => {
-
         request.logger.info('In handler %s', request.path)
-
 
         const db = h.context.db
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const currentUserIsAppDeveloper = await userIsDeveloperOfAppWithUuid({ userId: currentUser.id, uuid: request.params.appUuid }, db)
+        const currentUserIsAppDeveloper = await userIsDeveloperOfAppWithUuid(
+            { userId: currentUser.id, uuid: request.params.appUuid },
+            db
+        )
 
-        if ( currentUserIsManager(request) || currentUserIsAppDeveloper ) {
+        if (currentUserIsManager(request) || currentUserIsAppDeveloper) {
             //can edit app
             const transaction = await createTransaction(db)
 
             try {
-                const { name, description, appType, sourceUrl } = request.payload
-
-                await updateApp({
-                    uuid: request.params.appUuid,
-                    userId: currentUser.id,
+                const {
                     name,
                     description,
-                    sourceUrl,
                     appType,
-                    languageCode: 'en'
-                }, db, transaction)
+                    sourceUrl,
+                } = request.payload
+
+                await updateApp(
+                    {
+                        uuid: request.params.appUuid,
+                        userId: currentUser.id,
+                        name,
+                        description,
+                        sourceUrl,
+                        appType,
+                        languageCode: 'en',
+                    },
+                    db,
+                    transaction
+                )
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?
 
                 transaction.commit()
-
-            } catch ( err ) {
+            } catch (err) {
                 transaction.rollback()
                 throw Boom.internal(err)
             }
-
         } else {
             throw Boom.unauthorized()
         }
@@ -88,8 +95,7 @@ module.exports = {
         return {
             httpStatus: 'OK',
             httpStatusCode: 200,
-            message: 'App updated'
+            message: 'App updated',
         }
-    }
+    },
 }
-

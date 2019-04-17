@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -14,16 +12,13 @@ module.exports = [
             response: {
                 schema: Joi.array().items(AppModel.def),
                 failAction: (request, h, err) => {
-
-                    request.logger.info(err);
-                    throw Boom.internal;
-                }
-            }
+                    request.logger.info(err)
+                    throw Boom.internal
+                },
+            },
         },
         handler: (request, h) => {
-
             throw Boom.notImplemented()
-        }
-
-    }
+        },
+    },
 ]

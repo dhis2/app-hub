@@ -1,45 +1,45 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import {
     Card,
     CardText,
     CardTitle,
     CardHeader,
-    CardMedia
-} from "material-ui/Card";
-import ImageViewer from "./ImageViewer";
-import Subheader from "../header/SubHeader";
-import Grid from "../../material/Grid/Grid";
-import Col from "../../material/Grid/Col";
-import { Link } from "react-router-dom";
-import { Redirect, Route } from "react-router-dom";
-import VersionList from "../appVersion/VersionList";
-import { loadApp } from "../../actions/actionCreators";
-import config from "../../config";
-import AppLogo from "./AppLogo";
-import Theme from "../../styles/theme";
-import { FadeAnimation } from "../utils/Animate";
+    CardMedia,
+} from 'material-ui/Card'
+import ImageViewer from './ImageViewer'
+import Subheader from '../header/SubHeader'
+import Grid from '../../material/Grid/Grid'
+import Col from '../../material/Grid/Col'
+import { Link } from 'react-router-dom'
+import { Redirect, Route } from 'react-router-dom'
+import VersionList from '../appVersion/VersionList'
+import { loadApp } from '../../actions/actionCreators'
+import config from '../../config'
+import AppLogo from './AppLogo'
+import Theme from '../../styles/theme'
+import { FadeAnimation } from '../utils/Animate'
 
 const styles = {
     appDescription: {
-        marginTop: "35px",
-        paddingBottom: "25px"
-    }
-};
+        marginTop: '35px',
+        paddingBottom: '25px',
+    },
+}
 
 class AppView extends Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     componentDidMount() {
-        this.props.loadApp({ appId: this.props.match.params.appId });
+        this.props.loadApp({ appId: this.props.match.params.appId })
     }
 
     render() {
-        const app = this.props.app;
+        const app = this.props.app
         if (!this.props.app) {
-            return null;
+            return null
         }
 
         const {
@@ -50,23 +50,23 @@ class AppView extends Component {
             images,
             appType,
             requiredDhisVersion,
-            lastUpdated
-        } = app;
+            lastUpdated,
+        } = app
         const versions = app.versions.sort(
             (a, b) => a.lastUpdated - b.lastUpdated
-        );
+        )
         const subtitle = (
             <div>
                 Type: {config.ui.appTypeToDisplayName[app.appType]} <br />
                 Author: {app.developer.name} <br />
-                Organisation: {app.developer.organisation}{" "}
+                Organisation: {app.developer.organisation}{' '}
             </div>
-        );
+        )
 
-        let logo = images.filter(elem => elem.logo)[0];
+        let logo = images.filter(elem => elem.logo)[0]
 
         return (
-            <Grid style={{ maxWidth: "900px" }}>
+            <Grid style={{ maxWidth: '900px' }}>
                 <Col span={12} phone={4}>
                     <Subheader title="App overview" backLink="/" />
                     <Card>
@@ -74,7 +74,7 @@ class AppView extends Component {
                             title={app.name}
                             avatar={<AppLogo logo={logo} />}
                             subtitle={subtitle}
-                            titleStyle={{ fontSize: "2em" }}
+                            titleStyle={{ fontSize: '2em' }}
                         />
                         {app.images.length > 0 ? (
                             <CardText
@@ -90,7 +90,7 @@ class AppView extends Component {
                         <CardText
                             style={{
                                 ...Theme.paddedCard,
-                                ...styles.appDescription
+                                ...styles.appDescription,
                             }}
                             className="multiline-content"
                         >
@@ -101,8 +101,8 @@ class AppView extends Component {
                     <Card
                         style={{
                             ...Theme.paddedCard,
-                            marginTop: "12px",
-                            position: "relative"
+                            marginTop: '12px',
+                            position: 'relative',
                         }}
                     >
                         <CardTitle title="Versions" />
@@ -112,22 +112,25 @@ class AppView extends Component {
                     </Card>
                 </Col>
             </Grid>
-        );
+        )
     }
 }
 
 AppView.propTypes = {
-    app: PropTypes.object
-};
+    app: PropTypes.object,
+}
 
 const mapStateToProps = (state, ownProps) => ({
-    app: state.appsList.byId[ownProps.match.params.appId]
-});
+    app: state.appsList.byId[ownProps.match.params.appId],
+})
 
 const mapDispatchToProps = dispatch => ({
     loadApp(appId) {
-        dispatch(loadApp(appId));
-    }
-});
+        dispatch(loadApp(appId))
+    },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppView);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppView)

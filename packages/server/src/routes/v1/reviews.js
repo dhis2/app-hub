@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 
 module.exports = [
@@ -7,17 +5,15 @@ module.exports = [
         method: 'GET',
         path: '/reviews',
         handler: (request, h) => {
-
             request.logger.info('In handler %s', request.path)
 
             throw Boom.notImplemented()
-        }
+        },
     },
     {
         method: 'GET',
         path: '/reviews/{uuid}',
         handler: async (request, h) => {
-
             request.logger.info('In handler %s', request.path)
 
             const reviews = await h.context
@@ -26,6 +22,6 @@ module.exports = [
                 .where('apps.uuid', request.params.uuid)
 
             return reviews
-        }
-    }
+        },
+    },
 ]

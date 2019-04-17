@@ -7,7 +7,7 @@ const dhis2App = {
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.APP,
-    developer_user_id: 2
+    developer_user_id: 2,
 }
 const whoApp = {
     id: 2,
@@ -15,7 +15,7 @@ const whoApp = {
     organisation_id: 2,
     created_by_user_id: 1,
     type: AppType.APP,
-    developer_user_id: 2
+    developer_user_id: 2,
 }
 const rejectedApp = {
     id: 3,
@@ -23,7 +23,7 @@ const rejectedApp = {
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.APP,
-    developer_user_id: 2
+    developer_user_id: 2,
 }
 const pendingApp = {
     id: 4,
@@ -31,12 +31,7 @@ const pendingApp = {
     organisation_id: 1,
     created_by_user_id: 2,
     type: AppType.APP,
-    developer_user_id: 3
+    developer_user_id: 3,
 }
 
-module.exports = [
-    dhis2App,
-    whoApp,
-    rejectedApp,
-    pendingApp
-]
+module.exports = [dhis2App, whoApp, rejectedApp, pendingApp]

@@ -8,21 +8,32 @@ const joi = require('joi')
  * @returns {Promise<object>}
  */
 const getOrganisationByUuid = async (uuid, knex) => {
-
-    if ( !knex ) {
+    if (!knex) {
         throw new Error(`Missing knex instance passed as parameter.`)
     }
 
-    const validation = joi.validate({ uuid }, { uuid: joi.string().guid().required() })
-    if ( validation.error !== null ) {
+    const validation = joi.validate(
+        { uuid },
+        {
+            uuid: joi
+                .string()
+                .guid()
+                .required(),
+        }
+    )
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
     try {
-        const [organisation] = await knex('organisation').select().where('uuid', uuid)
+        const [organisation] = await knex('organisation')
+            .select()
+            .where('uuid', uuid)
         return organisation
-    } catch ( err ) {
-        throw new Error(`Could not fetch organisation by uuid ${uuid}, ${err.message}.`)
+    } catch (err) {
+        throw new Error(
+            `Could not fetch organisation by uuid ${uuid}, ${err.message}.`
+        )
     }
 }
 

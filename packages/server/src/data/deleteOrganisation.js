@@ -1,7 +1,7 @@
 const joi = require('joi')
 
 const paramsSchema = joi.object().keys({
-    uuid: joi.string().uuid()
+    uuid: joi.string().uuid(),
 })
 
 /**
@@ -14,18 +14,17 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */
 const deleteOrganisation = async (params, knex, transaction) => {
-
     const validation = joi.validate(params, paramsSchema)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error('Missing parameter: knex')
     }
 
-    if ( !transaction ) {
+    if (!transaction) {
         throw new Error('Missing parameter: transaction')
     }
 
@@ -36,12 +35,9 @@ const deleteOrganisation = async (params, knex, transaction) => {
             .delete()
 
         return deletedRows > 0
-
-    } catch ( err ) {
+    } catch (err) {
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }
 
 module.exports = deleteOrganisation
-
-

@@ -1,9 +1,10 @@
-import React from "react";
-import Col from "../material/Grid/Col";
+import React from 'react'
+import Col from '../material/Grid/Col'
 
-const AppItem = props =>
+const AppItem = props => (
     <Col span={4} align="top">
         {props.children}
-    </Col>;
+    </Col>
+)
 
-export default AppItem;
+export default AppItem

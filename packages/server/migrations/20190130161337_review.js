@@ -1,7 +1,5 @@
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('review', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('review', table => {
         table
             .increments('id')
             .unsigned()
@@ -44,8 +42,7 @@ exports.up = async (knex) => {
     `)
 }
 
-exports.down = async (knex) => {
-    
+exports.down = async knex => {
     await knex.raw('DROP VIEW app_review')
     await knex.schema.dropTable('review')
 }

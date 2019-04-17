@@ -1,5 +1,3 @@
-
-
 /**
  * Deletes an app with the specified uuid
  *
@@ -7,9 +5,9 @@
  * @returns {Promise}
  */
 const deleteApp = (uuid, knex) => {
-
-    return knex('app').where('uuid', uuid).del()
+    return knex('app')
+        .where('uuid', uuid)
+        .del()
 }
 
 module.exports = deleteApp
-

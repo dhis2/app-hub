@@ -1,7 +1,5 @@
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('user_organisation', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('user_organisation', table => {
         table
             .timestamp('created_at', true)
             .defaultTo(knex.fn.now())
@@ -42,8 +40,7 @@ exports.up = async (knex) => {
         `)
 }
 
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.raw('DROP VIEW users_with_organisations')
     await knex.schema.dropTable('user_organisation')
 }

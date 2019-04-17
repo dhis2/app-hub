@@ -14,15 +14,18 @@ module.exports = {
             status: {
                 // 200: Joi.array().items(AppModel.def),
                 // 500: Joi.string()
-            }
-        }
+            },
+        },
     },
     handler: async (request, h) => {
-
         request.logger.info('In handler %s', request.path)
 
-        const apps = await getAppsByStatusAndLanguage(AppStatus.APPROVED, 'en', h.context.db);
+        const apps = await getAppsByStatusAndLanguage(
+            AppStatus.APPROVED,
+            'en',
+            h.context.db
+        )
 
         return convertAppsToApiV1Format(apps, request)
-    }
+    },
 }
