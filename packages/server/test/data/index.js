@@ -28,9 +28,9 @@ describe('@data::getAppsByUuid', () => {
         await expect(getAppsByUuid('1234', null, null)).to.reject(Error, `Missing parameter 'languageCode'`)
     })
 
-    it('should require dbConnection parameter', async () => {
+    it('should require knex parameter', async () => {
 
-        await expect(getAppsByUuid('1234', 'sv', null)).to.reject(Error, `Missing parameter 'dbConnection'`)
+        await expect(getAppsByUuid('1234', 'sv', null)).to.reject(Error, `Missing parameter 'knex'`)
     })
 })
 
@@ -161,4 +161,47 @@ describe('@data::addUserToOrganisation', () => {
         transaction.commit()
        
     })    
+})
+
+
+describe('@data::updateApp', () => {
+    const { updateApp, createTransaction, getAllAppsByLanguage } = require('@data')
+
+    it('should update the app', async () => {
+
+        const transaction = await createTransaction(db)
+
+        let allApps = await getAllAppsByLanguage('en', db)
+
+        const firstApp = allApps[0]
+        expect(firstApp).to.not.be.null()
+        expect(firstApp.uuid).to.not.be.null()
+
+        const { uuid } = firstApp
+
+        const newData = {
+            uuid: firstApp.uuid,
+            userId: firstApp.developer_id,
+            name: 'Changed name',
+            sourceUrl: 'https://some/url',
+            demoUrl: 'http://some/other/url',
+            description: 'Changed description',
+            languageCode: 'en'
+        }
+
+        await updateApp(newData, db, transaction)
+
+        await transaction.commit()
+
+        const allAppVersionsWithUuid = await getAppsByUuid(uuid, 'en', db)
+
+        expect(allAppVersionsWithUuid.length).to.be.min(1)
+
+        allAppVersionsWithUuid.forEach((app) => {
+            expect(app.name).to.be.equal(newData.name)
+            expect(app.source_url).to.be.equal(newData.sourceUrl)
+            expect(app.description).to.be.equal(newData.description)
+        })
+    })
+
 })

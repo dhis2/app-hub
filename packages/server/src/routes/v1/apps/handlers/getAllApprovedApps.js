@@ -8,7 +8,7 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps',
     config: {
-        //auth: false,
+        auth: false,
         tags: ['api', 'v1'],
         response: {
             status: {

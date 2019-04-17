@@ -19,7 +19,7 @@ const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
 const requiredFields = {
     general: ["appName", "appType"],
     version: ["file", "version"],
-    developer: ["developerName", "developerOrg"],
+    developer: ["developerName", "developerEmail", "developerOrg"],
     image: []
 };
 
@@ -194,7 +194,7 @@ const AppDeveloperSection = props => {
             <Field
                 name="developerEmail"
                 component={formUtils.renderTextField}
-                label="Developer Email"
+                label="Developer Email *"
             />
             <br />
             <Field

@@ -3,6 +3,7 @@
 const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
+const path = require('path')
 
 const jwt = require('hapi-auth-jwt2');
 
@@ -12,13 +13,15 @@ const Blipp = require('blipp')
 
 const HapiSwagger = require('hapi-swagger');
 
-const routes = require('./routes')
-
 const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
-const knexConfig = require('../knexfile')
 
 console.log('Using env: ', process.env.NODE_ENV)
 console.log('Injecting config vars into process.env: ', config)
+
+const routes = require('./routes')
+
+const knexConfig = require('../knexfile')
+
 
 // server things before start
 const db = new Knex(knexConfig[process.env.NODE_ENV])
@@ -47,7 +50,7 @@ const init = async () => {
         plugin: Pino,
         options: {
             prettyPrint:  process.env.NODE_ENV !== 'test',
-            redact: ['req.headers.authorization']
+            //redact: ['req.headers.authorization']
         }
     })
 
@@ -64,35 +67,48 @@ const init = async () => {
     ])
 
 
-    await server.register(jwt)
 
-    if ( process.env.auth_strategy === 'jwt'
+    if ( process.env.AUTH_STRATEGY === 'jwt'
         && process.env.AUTH0_SECRET
         && process.env.AUTH0_M2M_SECRET
         && process.env.AUTH0_AUDIENCE
         && process.env.AUTH0_DOMAIN
         && process.env.AUTH0_ALG ) {
 
-        const registerAuth0Provider = require('@security/auth0')
+        await server.register(jwt)
 
-        registerAuth0Provider(server, {
-            keys: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
+        const registerAuth0 = require('@security/registerAuth0')
+
+        registerAuth0(server, db, {
+            key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
             verifyOptions: {
                 audience: process.env.AUTH0_AUDIENCE,
                 issuer: process.env.AUTH0_DOMAIN,
                 algorithms: [process.env.AUTH0_ALG]
             }
         })
+
     } else {
         //Warn with red background
         console.warn('\x1b[41m', 'No authentication method configured, all endpoints are running unprotected', '\x1b[0m')
-
-        if ( !process.env.no_auth_mapped_user_id ) {
+        if ( !process.env.NO_AUTH_MAPPED_USER_ID ) {
             console.error('\x1b[41m', 'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.NO_AUTH_MAPPED_USER_ID', '\x1b[m')
             process.exit(1)
             return
         }
     }
+
+
+    //Temporary route to serve frontend static build until we've flattened the project structure
+    server.route({
+        method: 'GET',
+        path: '/appstore/{param*}',
+        handler: {
+            directory: {
+                path: path.join(__dirname, '../../client/target/classes/static/')
+            }
+        }
+    });
 
 
     server.route(routes)

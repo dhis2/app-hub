@@ -19,8 +19,8 @@ const def = Joi.object().keys({
 
     description: Joi
         .string()
-        .max(255, 'utf8')
-        .required(),
+        .allow('')
+        .max(255, 'utf8'),
 
     developer: Developer.required(),
 

@@ -25,7 +25,7 @@ const def = joi.object().keys({
         .max(255, 'utf8')
         .required(),
 
-    description: joi.string().required(),
+    description: joi.string().allow(''),
 
     status: joi.string().valid(AppStatuses),
 

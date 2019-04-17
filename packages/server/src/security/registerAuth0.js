@@ -1,7 +1,7 @@
 
 const { createUserValidationFunc } = require('@security')
 
-module.exports = (server, opts) => {
+const registerAuth0 = (server, db, opts) => {
 
     server.auth.strategy('jwt', 'jwt', {
         ...opts, 
@@ -9,3 +9,5 @@ module.exports = (server, opts) => {
         validate: createUserValidationFunc(db, opts.verifyOptions.audience)
     })
 }
+
+module.exports = registerAuth0

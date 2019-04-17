@@ -29,6 +29,10 @@ exports.up = async (knex) => {
             .notNullable()
 
         table
+            .timestamp('updated_at', true)
+            .defaultTo(knex.fn.now())
+
+        table
             .foreign('app_id')
             .references('id')
             .inTable('app')
@@ -40,6 +44,10 @@ exports.up = async (knex) => {
             .notNullable()
 
         table
+            .integer('updated_by_user_id')
+            .unsigned()
+
+        table
             .string('source_url', 500)
 
         table
@@ -47,6 +55,11 @@ exports.up = async (knex) => {
 
         table
             .foreign('created_by_user_id')
+            .references('id')
+            .inTable('users')
+
+        table
+            .foreign('updated_by_user_id')
             .references('id')
             .inTable('users')
     })

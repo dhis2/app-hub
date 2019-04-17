@@ -83,7 +83,10 @@ module.exports = (apps, request) => {
             currentApp = v1App;
         }
 
-        currentApp.images.push(convertAppToV1Media(app, serverUrl))
+        if ( app.media_uuid !== null ) {
+            currentApp.images.push(convertAppToV1Media(app, serverUrl))
+        }
+
         currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
     })
 

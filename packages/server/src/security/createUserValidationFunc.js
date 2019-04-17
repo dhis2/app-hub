@@ -1,7 +1,7 @@
 const Boom = require('boom')
 const uuid = require('uuid/v4')
 
-const { createUser } = require('@data')
+const { createUser, createTransaction } = require('@data')
 
 const createUserValidationFunc = (db, audience) => {
 
@@ -19,7 +19,14 @@ const createUserValidationFunc = (db, audience) => {
             if ( email_verified ) {
                 let user = null
                 try {
-                    const users = await db.select().from('users').where('email', email)
+                    const users = await db('users')
+                        .innerJoin('user_external_id', 'users.id', 'user_external_id.user_id')
+                        .select('users.*')
+                        .where({
+                            email,
+                            external_id: decoded.sub
+                        })
+
                     if ( users && users.length === 1 ) {
                         user = users[0]
                         console.log(`Found user: ${user.email} with id ${user.id}`)
@@ -30,18 +37,32 @@ const createUserValidationFunc = (db, audience) => {
 
                 if ( user === null ) {
                     console.log('user does not exist in db, create it')
-                    user = await createUser({
-                        email,
-                        name
-                    })
+
+                    //check if the user exists without checking external id
+                    user = await db('users').where('email', email).first('id', 'email')
+
+                    if ( user === null ) {
+                        //create the user if it doesn't exist
+                        const transaction = createTransaction()
+                        try {
+                            user = await createUser({
+                                email,
+                                name
+                            }, db, transaction)
+                            transaction.commit()
+                        } catch ( err ) {
+                            transaction.rollback()
+                            throw Boom.internal()
+                        }
+                    }
+
                     console.log(`created user with id ${user.id} for email ${user.email}`)
-                    await db
+                    await db('user_external_id')
                         .insert({
                             user_id: user.id,
                             external_id: decoded.sub
                         })
-                        .into('user_external_id')
-                } 
+                }
 
                 returnObj.credentials.userId = user.id
                 returnObj.credentials.uuid = user.uuid
@@ -50,8 +71,7 @@ const createUserValidationFunc = (db, audience) => {
 
                 //If we get here we're dealing with an M2M API authenticated user
                 try {
-                    const [apiUser] = await db.select()
-                        .from('users')
+                    const [apiUser] = await db('users').select()
                         .innerJoin('user_external_id', 'user_external_id.user_id', 'users.id')
                         .where('external_id', `${audience}@clients`)
 

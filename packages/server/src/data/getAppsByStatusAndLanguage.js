@@ -8,11 +8,10 @@
  * @returns {Promise<Array>}
  * 
  */
-const getAppsByStatusAndLanguage = (status, languageCode, dbConnection) => {
+const getAppsByStatusAndLanguage = (status, languageCode, knex) => {
 
-    return dbConnection
+    return knex('apps_view')
         .select()
-        .from('apps_view')
         .where({
             status,
             'language_code': languageCode

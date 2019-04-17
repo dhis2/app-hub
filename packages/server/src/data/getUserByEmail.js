@@ -9,12 +9,11 @@ const getUserByEmail = async (email, knex) => {
 
     let user = null
 
-    const usersWithEmail = await knex.select().from('users').where('email', email)
-    console.dir(usersWithEmail)
-    if ( usersWithEmail && usersWithEmail.length === 1 ) {
-        user = usersWithEmail[0]
-    } else if ( usersWithEmail && usersWithEmail.length > 1 ) {
-        throw new Error(`Multiple developers found with same e-mail: ${email}`)
+    try {
+        user = await knex('users').select().where('email', email).first()
+    } catch ( err ) {
+        //TODO: log, re-throw or something other than silent fail?
+        console.log(err)
     }
 
     return user
