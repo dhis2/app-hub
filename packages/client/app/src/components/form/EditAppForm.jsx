@@ -23,6 +23,7 @@ const validate = values => {
         "appType",
         "file",
         "developerName",
+        "developerEmail",
         "developerOrg",
         "version"
     ];
