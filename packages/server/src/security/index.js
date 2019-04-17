@@ -66,6 +66,8 @@ const canCreateApp = (request, hapi) => isAuthenticated(request)
  */
 const canSeeAllApps = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
+const currentUserIsManager = (request, hapi) => isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+
 
 /**
  * Returns the current auth strategy, for example 'jwt' if using auth0, false if no strategy
@@ -77,6 +79,7 @@ const getCurrentAuthStrategy = () => {
 
     return false
 }
+
 
 /**
  * Returns the auth strategy config in optional mode
@@ -127,5 +130,6 @@ module.exports = {
     createUserValidationFunc: require('./createUserValidationFunc'),
     getCurrentAuthStrategy,
     getCurrentAuthStrategyOptional,
-    getCurrentUserFromRequest
+    getCurrentUserFromRequest,
+    currentUserIsManager,
 }

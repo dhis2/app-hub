@@ -2,12 +2,11 @@ const slugify = require('slugify')
 const joi = require('joi')
 
 const paramsSchema = joi.object().keys({
-    uuid: joi.string().uuid(),
+    uuid: joi.string().uuid().required(),
     userId: joi.number(),
     name: joi.string().max(100),
     description: joi.string(),
     sourceUrl: joi.string().allow('').max(500),
-    demoUrl: joi.string().allow('').max(500),
     languageCode: joi.string().max(2).required()
 }).options({ allowUnknown: true })
 
@@ -22,7 +21,6 @@ const paramsSchema = joi.object().keys({
  * @param {string} params.name The name of the app
  * @param {string} params.description Description of the app
  * @param {string} params.sourceUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
- * @param {string} params.demoUrl An url to where you can test the app
  * @param {string} params.languageCode The 2 char language code for which language to update
  * @param {*} knex
  * @param {*} transaction
@@ -75,7 +73,6 @@ const updateApp = async (params, knex, transaction) => {
         await knex('app_version')
             .transacting(transaction)
             .update({
-                demo_url: demoUrl,
                 source_url: sourceUrl,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId

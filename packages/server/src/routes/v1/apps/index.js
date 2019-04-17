@@ -9,5 +9,6 @@ module.exports = [
     require('./handlers/getAppFile'),
     require('./handlers/setApprovalStatus'),
     require('./handlers/deleteApp'),
-    require('./handlers/getMedia')
+    require('./handlers/getMedia'),
+    require('./handlers/editApp'),
 ]

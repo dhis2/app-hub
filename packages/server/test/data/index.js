@@ -200,7 +200,6 @@ describe('@data::updateApp', () => {
         allAppVersionsWithUuid.forEach((app) => {
             expect(app.name).to.be.equal(newData.name)
             expect(app.source_url).to.be.equal(newData.sourceUrl)
-            expect(app.demo_url).to.be.equal(newData.demoUrl)
             expect(app.description).to.be.equal(newData.description)
         })
     })
