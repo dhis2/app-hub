@@ -21,7 +21,7 @@ exports.up = async (knex) => {
                 INNER JOIN app_version AS appver
                     ON appver.app_id = s.app_id
 
-                INNER JOIN app_version_media AS media 
+                LEFT JOIN app_version_media AS media 
                     ON media.app_version_id = appver.id 
 
                 INNER JOIN app_version_localised AS localisedapp
@@ -38,10 +38,7 @@ exports.up = async (knex) => {
 
                 INNER JOIN organisation AS org 
                     ON org.id = app.organisation_id
-
-
     `)
-
 }
 
 
