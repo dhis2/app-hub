@@ -56,10 +56,11 @@ module.exports = {
 
         if ( currentUserIsManager(request) || currentUserIsAppDeveloper ) {
             //can edit app
+            const transaction = await createTransaction(db)
+
             try {
                 const { name, description, appType, developer, sourceUrl } = request.payload
-                const transaction = await createTransaction(db)
-                
+
                 await updateApp({
                     uuid: request.params.appUuid,
                     userId: currentUser.id,
@@ -69,7 +70,12 @@ module.exports = {
                     languageCode: 'en'
                 }, db, transaction)
 
+                //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?
+
+                transaction.commit()
+
             } catch ( err ) {
+                transaction.rollback()
                 throw Boom.internal(err)
             }
 
