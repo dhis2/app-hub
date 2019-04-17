@@ -1,4 +1,3 @@
-
 /**
  * Returns all apps with translations on a specific language (if available)
  *
@@ -7,21 +6,19 @@
  * @returns {Promise<Array>}
  */
 const getAllAppsByLanguage = (languageCode, knex) => {
-
-    if ( !languageCode ) {
+    if (!languageCode) {
         throw new Error('Missing/invalid paramter: languageCode')
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error('Missing parameter: knex')
     }
 
     return knex('apps_view')
         .select()
         .where({
-            'language_code': languageCode
+            language_code: languageCode,
         })
 }
 
 module.exports = getAllAppsByLanguage
-

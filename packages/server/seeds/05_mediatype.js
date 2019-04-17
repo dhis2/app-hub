@@ -1,6 +1,4 @@
-
-exports.seed = async (knex) => {
-
+exports.seed = async knex => {
     console.log('Seeding media_type')
 
     const tableName = 'media_type'
@@ -9,17 +7,16 @@ exports.seed = async (knex) => {
         {
             id: 1,
             description: 'JPG/JPEG images',
-            mime: 'image/jpeg'
+            mime: 'image/jpeg',
         },
         {
             id: 2,
             description: 'PNG images',
-            mime: 'image/png'
-        }
+            mime: 'image/png',
+        },
     ]
 
     await knex(tableName).del()
 
     await knex(tableName).insert(seedData)
-
 }

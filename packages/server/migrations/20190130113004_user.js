@@ -1,7 +1,5 @@
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('users', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('users', table => {
         table
             .increments('id')
             .unsigned()
@@ -23,8 +21,7 @@ exports.up = async (knex) => {
         table.string('name', 255)
     })
 
-    await knex.schema.createTable('user_external_id', (table) => {
-
+    await knex.schema.createTable('user_external_id', table => {
         table
             .increments('id')
             .unsigned()
@@ -35,8 +32,7 @@ exports.up = async (knex) => {
             .defaultTo(knex.fn.now())
             .notNullable()
 
-        table
-            .string('external_id', 100).unique()
+        table.string('external_id', 100).unique()
 
         table
             .integer('user_id')
@@ -49,13 +45,10 @@ exports.up = async (knex) => {
             .inTable('users')
 
         table.timestamp('updated_at', true)
-
     })
-
 }
 
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.schema.dropTable('user_external_id')
     await knex.schema.dropTable('users')
 }

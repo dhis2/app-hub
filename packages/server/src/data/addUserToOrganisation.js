@@ -1,10 +1,18 @@
 const joi = require('joi')
 
-const paramsSchema = joi.object().keys({
-    userId: joi.number().required().min(1),
-    organisationId: joi.number().required().min(1),
-}).options({ allowUnknown: true })
-
+const paramsSchema = joi
+    .object()
+    .keys({
+        userId: joi
+            .number()
+            .required()
+            .min(1),
+        organisationId: joi
+            .number()
+            .required()
+            .min(1),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * Adds a user to an organisation
@@ -17,33 +25,36 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise}
  */
 const addUserToOrganisation = async (params, knex, transaction) => {
-
     const validation = joi.validate(params, paramsSchema)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error('Missing parameter: knex')
     }
 
-    if ( !transaction ) {
+    if (!transaction) {
         throw new Error('Missing parameter: transaction')
     }
 
     const { userId, organisationId } = params
 
     try {
-        await knex.transacting(transaction)
+        await knex
+            .transacting(transaction)
             .insert({
                 user_id: userId,
-                organisation_id: organisationId
+                organisation_id: organisationId,
             })
             .into('user_organisation')
-
-    } catch ( err ) {
-        throw new Error(`Could not add developer to organisation: ${userId} => ${organisationId}. ${err.message}`)
+    } catch (err) {
+        throw new Error(
+            `Could not add developer to organisation: ${userId} => ${organisationId}. ${
+                err.message
+            }`
+        )
     }
 }
 

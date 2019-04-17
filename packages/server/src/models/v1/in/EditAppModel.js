@@ -9,10 +9,10 @@ const payloadSchema = {
         address: joi.string().allow(''),
         email: joi.string().email(),
         name: joi.string(),
-        organisation: joi.string()
+        organisation: joi.string(),
     }),
     name: joi.string().max(100),
-    sourceUrl: joi.string().allow('')
+    sourceUrl: joi.string().allow(''),
 }
 
 const EditAppModel = joi.object().keys(payloadSchema)
@@ -20,5 +20,5 @@ const EditAppModel = joi.object().keys(payloadSchema)
 module.exports = {
     payloadSchema,
     def: EditAppModel,
-    validate: (objectToValidate) => joi.validate(objectToValidate, EditAppModel)
+    validate: objectToValidate => joi.validate(objectToValidate, EditAppModel),
 }

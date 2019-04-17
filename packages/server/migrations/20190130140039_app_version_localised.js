@@ -1,9 +1,7 @@
 const { AppStatus, AppType } = require('../src/enums')
 
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('app_version_localised', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('app_version_localised', table => {
         table
             .increments('id')
             .unsigned()
@@ -43,24 +41,17 @@ exports.up = async (knex) => {
             .references('id')
             .inTable('users')
 
-        table
-            .timestamp('updated_at', true)
-            .defaultTo(knex.fn.now())
+        table.timestamp('updated_at', true).defaultTo(knex.fn.now())
 
-        table
-            .integer('updated_by_user_id')
-            .unsigned()
+        table.integer('updated_by_user_id').unsigned()
 
         table
             .foreign('updated_by_user_id')
             .references('id')
             .inTable('users')
     })
-
-
 }
 
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.schema.dropTable('app_version_localised')
 }

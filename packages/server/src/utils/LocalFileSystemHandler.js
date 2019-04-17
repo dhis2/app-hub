@@ -1,16 +1,16 @@
-
 const fs = require('fs')
 const path = require('path')
-const rimraf = require('rimraf');
+const rimraf = require('rimraf')
 
 /**
  * Store files in local file system (app-store/packages/server/upload)
  */
 module.exports = class LocalFileSystemHandler {
-
     constructor(uploadPath) {
-        this._uploadDirectory = path.normalize(__dirname + (uploadPath || '/../../upload')) //app-store/packages/server/upload if no other is provided
-        this.createDirectoryIfNotExists(this._uploadDirectory)    
+        this._uploadDirectory = path.normalize(
+            __dirname + (uploadPath || '/../../upload')
+        ) //app-store/packages/server/upload if no other is provided
+        this.createDirectoryIfNotExists(this._uploadDirectory)
     }
 
     get directory() {
@@ -23,24 +23,29 @@ module.exports = class LocalFileSystemHandler {
         }
     }
 
-
     saveFile(directoryPath, filename, buffer) {
         return new Promise((resolve, reject) => {
             try {
                 this.verifyPath(directoryPath)
-                this.createDirectoryIfNotExists(path.join(this._uploadDirectory, directoryPath))
-            } catch ( err ) {
+                this.createDirectoryIfNotExists(
+                    path.join(this._uploadDirectory, directoryPath)
+                )
+            } catch (err) {
                 reject(err)
                 return
             }
-            
-            fs.writeFile(path.join(this._uploadDirectory, directoryPath, filename), buffer, (err) => {
-                if ( err ) {
-                    reject(err)
-                } else {
-                    resolve()
+
+            fs.writeFile(
+                path.join(this._uploadDirectory, directoryPath, filename),
+                buffer,
+                err => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve()
+                    }
                 }
-            })
+            )
         })
     }
 
@@ -53,19 +58,22 @@ module.exports = class LocalFileSystemHandler {
         return new Promise((resolve, reject) => {
             try {
                 this.verifyPath(directoryPath)
-            } catch ( err ) {
+            } catch (err) {
                 reject(err)
                 return
             }
 
-            fs.readFile(path.join(this._uploadDirectory, directoryPath, filename), (err, data) => {
-                if ( err ) {
-                    reject(err)
-                } else {
-                    //use the same format as AWS api, setting the file contents to the Body property
-                    resolve({ Body: data })
+            fs.readFile(
+                path.join(this._uploadDirectory, directoryPath, filename),
+                (err, data) => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        //use the same format as AWS api, setting the file contents to the Body property
+                        resolve({ Body: data })
+                    }
                 }
-            })
+            )
         })
     }
 
@@ -78,13 +86,13 @@ module.exports = class LocalFileSystemHandler {
         return new Promise((resolve, reject) => {
             try {
                 this.verifyPath(directoryPath)
-            } catch ( err ) {
+            } catch (err) {
                 reject(err)
                 return
             }
 
-            fs.unlink(path.join(directoryPath, filename), (err) => {
-                if ( err ) {
+            fs.unlink(path.join(directoryPath, filename), err => {
+                if (err) {
                     reject(err)
                 } else {
                     resolve()
@@ -97,13 +105,13 @@ module.exports = class LocalFileSystemHandler {
         return new Promise((resolve, reject) => {
             try {
                 this.verifyPath(directoryPath)
-            } catch ( err ) {
+            } catch (err) {
                 reject(err)
                 return
             }
 
-            rimraf(path.join(this._uploadDirectory, directoryPath), (err) => {
-                if ( err ) { 
+            rimraf(path.join(this._uploadDirectory, directoryPath), err => {
+                if (err) {
                     reject(err)
                 } else {
                     resolve()
@@ -113,12 +121,11 @@ module.exports = class LocalFileSystemHandler {
     }
 
     verifyPath(directoryPath) {
-
         const fullPath = path.join(this._uploadDirectory, directoryPath)
         const normalized = path.normalize(fullPath)
 
         //Check that we're trying to use a path within/below the upload root
-        if ( normalized.indexOf(this._uploadDirectory) !== 0 ) {
+        if (normalized.indexOf(this._uploadDirectory) !== 0) {
             throw new Error('Invalid directory')
         }
     }

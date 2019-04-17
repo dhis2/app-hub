@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -18,47 +16,48 @@ module.exports = {
         response: {
             status: {
                 200: Joi.any(),
-                500: Joi.any()
+                500: Joi.any(),
             },
-            failAction: defaultFailHandler
-        }
+            failAction: defaultFailHandler,
+        },
     },
     handler: async (request, h) => {
-
         //request.logger.info('In handler %s', request.path)
 
-        if ( !canChangeAppStatus(request, h) ) {
-            throw Boom.unauthorized();
+        if (!canChangeAppStatus(request, h)) {
+            throw Boom.unauthorized()
         }
 
         const { status } = request.query
         //todo: validate
         //todo: auth/permission
-        if ( !status ) {
+        if (!status) {
             return Boom.badRequest()
         }
 
-        const knex = h.context.db;
+        const knex = h.context.db
 
-
-        const row = await knex.select(['app.id', 'name'])
+        const row = await knex
+            .select(['app.id', 'name'])
             .from('app')
             .innerJoin('app_version', { 'app.id': 'app_version.app_id' })
-            .innerJoin('app_version_localised', { 'app_version_localised.app_version_id': 'app_version.id' })
-            .where({ 'app.uuid': request.params.appUuid, 'language_code': 'en' })
+            .innerJoin('app_version_localised', {
+                'app_version_localised.app_version_id': 'app_version.id',
+            })
+            .where({ 'app.uuid': request.params.appUuid, language_code: 'en' })
 
-        if ( row.length > 0 ) {
+        if (row.length > 0) {
             const updated = await knex('app_status')
-                .where({ 'app_id': row[0].id })
+                .where({ app_id: row[0].id })
                 .update({ status })
 
             return {
-                'message': `Status changed for app: ${row[0].name}`,
-                'httpStatus': 'OK',
-                'httpStatusCode': 200
+                message: `Status changed for app: ${row[0].name}`,
+                httpStatus: 'OK',
+                httpStatusCode: 200,
             }
         }
 
         return Boom.badImplementation()
-    }
+    },
 }

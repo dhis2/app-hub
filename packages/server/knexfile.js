@@ -1,4 +1,6 @@
-const config = require('dotenv').config({ path: `${require('os').homedir()}/.dhis2/appstore/vars` })
+const config = require('dotenv').config({
+    path: `${require('os').homedir()}/.dhis2/appstore/vars`,
+})
 
 module.exports = {
     test: {
@@ -37,7 +39,7 @@ module.exports = {
             host: process.env.RDS_HOSTNAME,
             user: process.env.RDS_USERNAME,
             password: process.env.RDS_PASSWORD,
-            database: process.env.RDS_DB_NAME
+            database: process.env.RDS_DB_NAME,
         },
         searchPath: ['knex', 'public', 'postgres', 'appstore'],
         pool: {
@@ -48,5 +50,4 @@ module.exports = {
             tableName: 'knex_migrations',
         },
     },
-
 }

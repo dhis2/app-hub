@@ -19,7 +19,6 @@ const slugify = require('slugify')
  * @param {Promise<{id}>}
  */
 const createLocalizedAppVersion = async (params, knex, transaction) => {
-
     //TODO: add validation of params with joi
 
     const { userId, appVersionId, description, name, languageCode } = params
@@ -29,22 +28,24 @@ const createLocalizedAppVersion = async (params, knex, transaction) => {
             .insert({
                 app_version_id: appVersionId,
                 created_at: knex.fn.now(),
-                created_by_user_id: userId,  //todo: change to real id
+                created_by_user_id: userId, //todo: change to real id
                 description,
                 name,
-                slug: slugify(name, { lower:true }),
-                language_code: languageCode
-            }).returning('id')
+                slug: slugify(name, { lower: true }),
+                language_code: languageCode,
+            })
+            .returning('id')
 
-        if ( id < 0 ) {
+        if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
         return { id }
-    } catch ( err ) {
-        throw new Error(`Could not create localized appversion for: ${appVersionId}, ${userId}, ${description}, ${name}, ${languageCode}`)
+    } catch (err) {
+        throw new Error(
+            `Could not create localized appversion for: ${appVersionId}, ${userId}, ${description}, ${name}, ${languageCode}`
+        )
     }
-
 }
 
 module.exports = createLocalizedAppVersion

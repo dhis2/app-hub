@@ -1,7 +1,5 @@
-exports.up = async (knex) => {
-
-    await knex.schema.createTable('organisation', (table) => {
-
+exports.up = async knex => {
+    await knex.schema.createTable('organisation', table => {
         table
             .increments('id')
             .unsigned()
@@ -35,7 +33,6 @@ exports.up = async (knex) => {
     })
 }
 
-exports.down = async (knex) => {
-
+exports.down = async knex => {
     await knex.schema.dropTable('organisation')
 }

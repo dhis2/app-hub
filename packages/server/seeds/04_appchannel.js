@@ -1,14 +1,17 @@
 const uuid = require('uuid/v4')
 const appVersions = require('./mock/appversions')
 
-const [dhis2AppVersions, whoAppVersions, pendingAppVersions, rejectedAppVersions] = appVersions;
+const [
+    dhis2AppVersions,
+    whoAppVersions,
+    pendingAppVersions,
+    rejectedAppVersions,
+] = appVersions
 
-exports.seed = async (knex) => {
-
+exports.seed = async knex => {
     console.log('Seeding channels')
 
     await knex('app_channel').del()
-
 
     await knex('channel').del()
     await knex('channel').insert([

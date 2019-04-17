@@ -1,16 +1,33 @@
-
 const joi = require('joi')
 const uuid = require('uuid/v4')
 
 const { ImageTypes } = require('@enums')
 
-const paramSchema = joi.object().keys({
-    appVersionId: joi.number().required().min(1),
-    userId: joi.number().required().min(1),
-    imageType: joi.number().required().valid(ImageTypes),
-    fileName: joi.string().required().max(255),
-    mime: joi.string().required().max(255)
-}).options({ allowUnknown: true })
+const paramSchema = joi
+    .object()
+    .keys({
+        appVersionId: joi
+            .number()
+            .required()
+            .min(1),
+        userId: joi
+            .number()
+            .required()
+            .min(1),
+        imageType: joi
+            .number()
+            .required()
+            .valid(ImageTypes),
+        fileName: joi
+            .string()
+            .required()
+            .max(255),
+        mime: joi
+            .string()
+            .required()
+            .max(255),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * @typedef {object} AppVersionMediaResult
@@ -32,10 +49,9 @@ const paramSchema = joi.object().keys({
  * @returns {Promise<AppVersionMediaResult>}
  */
 const addAppVersionMedia = async (params, knex, transaction) => {
-
     const validation = paramSchema.validate(params)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
@@ -44,24 +60,29 @@ const addAppVersionMedia = async (params, knex, transaction) => {
 
     try {
         let mediaTypeId = null
-        const mediaTypes = await knex('media_type').select('id').where('mime', mime)
-        if ( !mediaTypes || mediaTypes.length === 0 ) {
+        const mediaTypes = await knex('media_type')
+            .select('id')
+            .where('mime', mime)
+        if (!mediaTypes || mediaTypes.length === 0) {
             const [id] = await knex('media_type')
                 .transacting(transaction)
                 .insert({
-                    mime
-                }).returning('id')
+                    mime,
+                })
+                .returning('id')
 
             mediaTypeId = id
         } else {
             mediaTypeId = mediaTypes[0].id
         }
 
-        if ( mediaTypeId === null ) {
-            throw new Error(`Something went wrong when trying to get mediaTypeId for ${mime}`)
+        if (mediaTypeId === null) {
+            throw new Error(
+                `Something went wrong when trying to get mediaTypeId for ${mime}`
+            )
         }
 
-        const mediaUuid = uuid();
+        const mediaUuid = uuid()
 
         insertData = {
             uuid: mediaUuid,
@@ -70,7 +91,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             created_at: knex.fn.now(),
             created_by_user_id: userId,
             media_type_id: mediaTypeId,
-            app_version_id: appVersionId
+            app_version_id: appVersionId,
         }
 
         const [id] = await knex('app_version_media')
@@ -79,9 +100,12 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             .returning('id')
 
         return { id, uuid: mediaUuid }
-
-    } catch ( err ) {
-        throw new Error(`Could not add media to app version: ${JSON.stringify(insertData)}. ` + err.message)
+    } catch (err) {
+        throw new Error(
+            `Could not add media to app version: ${JSON.stringify(
+                insertData
+            )}. ` + err.message
+        )
     }
 }
 

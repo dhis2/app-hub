@@ -1,10 +1,16 @@
 const uuid = require('uuid/v4')
 const joi = require('joi')
 
-const paramsSchema = joi.object().keys({
-    email: joi.string().email().required(),
-    name: joi.string()
-}).options({ allowUnknown: true })
+const paramsSchema = joi
+    .object()
+    .keys({
+        email: joi
+            .string()
+            .email()
+            .required(),
+        name: joi.string(),
+    })
+    .options({ allowUnknown: true })
 
 /**
  * @typedef CreateUserResult
@@ -25,18 +31,17 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise<CreateUserResult>}
  */
 const createUser = async (params, knex, transaction) => {
-
     const validation = joi.validate(params, paramsSchema)
 
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
-    if ( !knex ) {
+    if (!knex) {
         throw new Error('Missing parameter: knex')
     }
 
-    if ( !transaction ) {
+    if (!transaction) {
         throw new Error('Missing parameter: transaction')
     }
 
@@ -50,15 +55,16 @@ const createUser = async (params, knex, transaction) => {
                 email,
                 name,
                 uuid: newUuid,
-                created_at: knex.fn.now()
+                created_at: knex.fn.now(),
             })
             .into('users')
             .returning('id')
 
         return { id, email, uuid: newUuid, name }
-
-    } catch ( err ) {
-        throw new Error(`Could not create user: ${params.email}. ${err.message}`)
+    } catch (err) {
+        throw new Error(
+            `Could not create user: ${params.email}. ${err.message}`
+        )
     }
 }
 

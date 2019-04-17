@@ -1,5 +1,3 @@
-
-
 /**
  * Fetches apps with a specified uuid, status and translations with a specific language
  *
@@ -10,7 +8,6 @@
  * @returns {Promise<Array>}
  */
 const getAppsByUuidAndStatus = (uuid, status, languageCode, knex) => {
-
     //TODO: add validation for parameters
 
     return knex('apps_view')
@@ -18,7 +15,7 @@ const getAppsByUuidAndStatus = (uuid, status, languageCode, knex) => {
         .where({
             uuid,
             status,
-            'language_code': languageCode
+            language_code: languageCode,
         })
 }
 

@@ -8,23 +8,25 @@ const joi = require('joi')
  * @returns {Array<Organisation>} The organisations found by name or empty array if no matches
  */
 const getOrganisationsByName = async (name, knex) => {
-
-    if ( !knex ) {
+    if (!knex) {
         throw new Error(`Missing knex instance passed as parameter.`)
     }
 
     const validation = joi.validate({ name }, { name: joi.string().required() })
-    if ( validation.error !== null ) {
+    if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
     try {
-        const organisations = await knex('organisation').select().where('name', name)
+        const organisations = await knex('organisation')
+            .select()
+            .where('name', name)
         return organisations || []
-    } catch ( err ) {
-        throw new Error(`Could not fetch organisation by name ${name}, ${err.message}.`)
+    } catch (err) {
+        throw new Error(
+            `Could not fetch organisation by name ${name}, ${err.message}.`
+        )
     }
 }
 
 module.exports = getOrganisationsByName
-

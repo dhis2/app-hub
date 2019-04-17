@@ -20,24 +20,23 @@ module.exports = {
         response: {
             status: {
                 200: Joi.array().items(AppModel.def),
-                500: Joi.string()
+                500: Joi.string(),
             },
-          //  failAction: defaultFailHandler
-        }
+            //  failAction: defaultFailHandler
+        },
     },
     handler: async (request, h) => {
-
-        if ( !canSeeAllApps(request, h) ) {
-            throw Boom.unauthorized();
+        if (!canSeeAllApps(request, h)) {
+            throw Boom.unauthorized()
         }
 
         try {
             const apps = await getAllAppsByLanguage('en', h.context.db)
             return convertAppsToApiV1Format(apps, request)
-        } catch  ( err ) {
+        } catch (err) {
             console.log(err)
         }
 
-        return [];
-    }
+        return []
+    },
 }

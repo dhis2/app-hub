@@ -29,9 +29,7 @@ const def = joi.object().keys({
 
     status: joi.string().valid(AppStatuses),
 
-    type: joi
-        .string()
-        .valid(AppTypes),
+    type: joi.string().valid(AppTypes),
 
     source_url: joi
         .string()
@@ -45,5 +43,5 @@ const def = joi.object().keys({
 
 module.exports = {
     def,
-    validate: (obj) => def.validate(obj),
+    validate: obj => def.validate(obj),
 }

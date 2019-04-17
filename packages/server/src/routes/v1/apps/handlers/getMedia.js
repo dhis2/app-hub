@@ -1,5 +1,3 @@
-
-
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -15,11 +13,10 @@ module.exports = {
         auth: false,
         tags: ['api', 'v1'],
         response: {
-            failAction: defaultFailHandler
-        }
+            failAction: defaultFailHandler,
+        },
     },
     handler: async (request, h) => {
-
         //request.logger.info('In handler %s', request.path)
 
         const { organisation_slug, version_uuid, filename } = request.params
@@ -31,7 +28,7 @@ module.exports = {
             .from('apps_view')
             .where({
                 organisation_slug,
-                version_uuid
+                version_uuid,
             })
 
         const [item] = appversions
@@ -44,29 +41,36 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        console.log(`Fetching file ${item.uuid}/${item.version_uuid}/${filename}`)
+        console.log(
+            `Fetching file ${item.uuid}/${item.version_uuid}/${filename}`
+        )
 
         try {
+            const file = await getFile(
+                `${item.uuid}/${item.version_uuid}`,
+                filename
+            )
 
-            const file =  await getFile(`${item.uuid}/${item.version_uuid}`, filename)
-
-            if ( file && file.Body ) {
-                return h.response(file.Body)
+            if (file && file.Body) {
+                return h
+                    .response(file.Body)
                     .type(media.mime)
                     .header('Content-length', file.ContentLength)
             }
 
-            return Boom.internal(`Was not able to fetch file: ${item.uuid}/${item.version_uuid}/${filename}`)
-
-        } catch ( err ) {
-
+            return Boom.internal(
+                `Was not able to fetch file: ${item.uuid}/${
+                    item.version_uuid
+                }/${filename}`
+            )
+        } catch (err) {
             //AWS S3 error code if object is missing
-            if ( err.code === 'NoSuchKey' ) {
+            if (err.code === 'NoSuchKey') {
                 //The file does not exist in the file storage
                 return Boom.notFound()
             }
         }
 
         return Boom.notFound()
-    }
+    },
 }

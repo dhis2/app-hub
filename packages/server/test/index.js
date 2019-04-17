@@ -6,7 +6,7 @@ const { server, db } = require('../src/main.js')
 module.exports = {
     lab: Lab.script(),
     server,
-    db
+    db,
 }
 
 console.log('Tests are running in env: ' + process.env.NODE_ENV)
