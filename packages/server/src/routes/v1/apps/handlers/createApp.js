@@ -104,11 +104,12 @@ module.exports = {
                 }, knex, trx)
 
             } else {
-                //TODO: only allow this if
-                if ( currentUserId !== organisation.created_by_user_id ) {
 
+                organisation = organisations[0]
+                if ( currentUserId !== organisation.created_by_user_id ) {
+                    //should we allow anyone to create an app for an existing organisation?
+                    //throw Boom.unauthorized()
                 }
-                //organisation = organisations[0]
             }
 
 
@@ -162,9 +163,9 @@ module.exports = {
 
             //Add the texts as english language, only supported for now
             await createLocalizedAppVersion({
-                userId: requestUserId, 
+                userId: requestUserId,
                 appVersionId: appVersion.id,
-                description: appJsonPayload.description,
+                description: appJsonPayload.description || '',
                 name: appJsonPayload.name,
                 languageCode: 'en'
             }, knex, trx)

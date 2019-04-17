@@ -7,7 +7,7 @@ const paramsSchema = joi.object().keys({
     uuid: joi.string().uuid().required(),
     userId: joi.number(),
     name: joi.string().max(100),
-    description: joi.string(),
+    description: joi.string().allow(''),
     appType: joi.string().valid(AppTypes),
     sourceUrl: joi.string().allow('').max(500),
     languageCode: joi.string().max(2).required()
