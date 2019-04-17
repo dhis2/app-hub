@@ -119,21 +119,25 @@ const EditForm = props => {
                 name="developerName"
                 component={formUtils.renderTextField}
                 label="Developer Name"
+                disabled={true}
             />
             <Field
                 name="developerEmail"
                 component={formUtils.renderTextField}
                 label="Developer Email"
+                disabled={true}
             />
             <Field
                 name="developerAddress"
                 component={formUtils.renderTextField}
                 label="Developer Address"
+                disabled={true}
             />
             <Field
                 name="developerOrg"
                 component={formUtils.renderTextField}
                 label="Organisation"
+                disabled={true}
             />
         </Form>
     );
