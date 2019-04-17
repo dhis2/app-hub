@@ -15,7 +15,8 @@
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest",
         "seed-db": "npx knex seed:run",
         "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
-        "zip": "rm -rf ./build && mkdir build && zip -r build/server.zip . --exclude=node_modules*"
+        "zip": "rm -rf ./build && mkdir build && zip -r build/server.zip . --exclude=node_modules*",
+        "format": "d2-style js apply"
     },
     "dependencies": {
         "aws-sdk": "^2.401.0",
@@ -35,6 +36,7 @@
         "vision": "^5.4.4"
     },
     "devDependencies": {
+        "@dhis2/cli-style": "^3.0.1",
         "code": "^5.2.4",
         "eslint-config-hapi": "^12.0.0",
         "eslint-plugin-hapi": "^4.1.0",
