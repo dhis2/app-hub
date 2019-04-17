@@ -59,7 +59,7 @@ module.exports = {
             const transaction = await createTransaction(db)
 
             try {
-                const { name, description, appType, developer, sourceUrl } = request.payload
+                const { name, description, appType, sourceUrl } = request.payload
 
                 await updateApp({
                     uuid: request.params.appUuid,
@@ -67,6 +67,7 @@ module.exports = {
                     name,
                     description,
                     sourceUrl,
+                    appType,
                     languageCode: 'en'
                 }, db, transaction)
 

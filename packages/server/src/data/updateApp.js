@@ -1,11 +1,14 @@
 const slugify = require('slugify')
 const joi = require('joi')
 
+const { AppTypes } = require('@enums')
+
 const paramsSchema = joi.object().keys({
     uuid: joi.string().uuid().required(),
     userId: joi.number(),
     name: joi.string().max(100),
     description: joi.string(),
+    appType: joi.string().valid(AppTypes),
     sourceUrl: joi.string().allow('').max(500),
     languageCode: joi.string().max(2).required()
 }).options({ allowUnknown: true })
@@ -51,7 +54,7 @@ const updateApp = async (params, knex, transaction) => {
         throw new Error('Missing parameter: transaction')
     }
 
-    const { uuid, userId, name, sourceUrl, demoUrl, description, languageCode } = params
+    const { uuid, userId, name, sourceUrl, appType, description, languageCode } = params
 
     try {
 
@@ -62,7 +65,9 @@ const updateApp = async (params, knex, transaction) => {
             .pluck('app_version.id')
 
         await knex('app')
+            .transacting(transaction)
             .update({
+                type: appType,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId
             })
