@@ -1,60 +1,60 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import AppCardItem from "./AppCardItem";
-import Grid from "../../material/Grid/Grid";
-import Col from "../../material/Grid/Col";
-import { loadAllApps, loadApprovedApps } from "../../actions/actionCreators";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import AppCardItem from './AppCardItem'
+import Grid from '../../material/Grid/Grid'
+import Col from '../../material/Grid/Col'
+import { loadAllApps, loadApprovedApps } from '../../actions/actionCreators'
 import {
     TextFilter,
     filterApp,
     SelectFilter,
-    filterAppType
-} from "../utils/Filters";
-import { ToolbarGroup } from "material-ui/Toolbar";
+    filterAppType,
+} from '../utils/Filters'
+import { ToolbarGroup } from 'material-ui/Toolbar'
 //import {values, sortBy} from 'lodash';
-import sortBy from "lodash/sortBy";
+import sortBy from 'lodash/sortBy'
 //import values from 'lodash/values';
-import SubHeader from "../header/SubHeader";
-import ErrorOrLoading from "../utils/ErrorOrLoading";
-import { FadeAnimation, FadeAnimationList } from "../utils/Animate";
-import "../../styles/utils/animations.scss";
-import Theme from "../../styles/theme";
+import SubHeader from '../header/SubHeader'
+import ErrorOrLoading from '../utils/ErrorOrLoading'
+import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
+import '../../styles/utils/animations.scss'
+import Theme from '../../styles/theme'
 class AppCards extends Component {
     componentDidMount() {
-        this.props.loadApps();
+        this.props.loadApps()
     }
 
     render() {
         const styles = {
             grid: {
-                padding: 0
+                padding: 0,
             },
             filters: {
-                display: "flex",
-                alignItems: "center",
-                flexWrap: "wrap",
-                width: "auto",
-                margin: "0 auto 0 auto"
+                display: 'flex',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                width: 'auto',
+                margin: '0 auto 0 auto',
             },
             filterElem: {
-                display: "inline-flex",
-                margin: "10px",
-                width: "auto"
+                display: 'inline-flex',
+                margin: '10px',
+                width: 'auto',
             },
             appItem: {},
 
             emptyApps: {
-                textAlign: "center"
-            }
-        };
-        const { loading, loaded, error, byId: cards } = this.props.appList;
-        const loadOrErr = loading || error;
+                textAlign: 'center',
+            },
+        }
+        const { loading, loaded, error, byId: cards } = this.props.appList
+        const loadOrErr = loading || error
         const searchFilter = this.props.appSearchFilter
             ? this.props.appSearchFilter.values.searchFilter
-            : "";
+            : ''
 
         //filter and construct appcards
-        const apps = sortBy(cards, ["name"])
+        const apps = sortBy(cards, ['name'])
             .filter(
                 app =>
                     filterApp(app, searchFilter) &&
@@ -64,7 +64,7 @@ class AppCards extends Component {
                 <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app} />
                 </Col>
-            ));
+            ))
 
         const emptyApps = (
             <FadeAnimation appear>
@@ -72,7 +72,7 @@ class AppCards extends Component {
                     <p>We couldn't find any apps.</p>
                 </Col>
             </FadeAnimation>
-        );
+        )
         return (
             <Grid>
                 <Col span={12} style={{}}>
@@ -85,23 +85,23 @@ class AppCards extends Component {
                                 form="appTypeFilter"
                                 style={styles.filters}
                                 elementStyle={styles.filterElem}
-                                labelStyle={{ width: "auto" }}
+                                labelStyle={{ width: 'auto' }}
                                 filters={[
                                     {
-                                        label: "Standard app",
+                                        label: 'Standard app',
                                         toggled: true,
-                                        value: "APP"
+                                        value: 'APP',
                                     },
                                     {
-                                        label: "Dashboard app",
+                                        label: 'Dashboard app',
                                         toggled: true,
-                                        value: "DASHBOARD_WIDGET"
+                                        value: 'DASHBOARD_WIDGET',
                                     },
                                     {
-                                        label: "Tracker widget",
+                                        label: 'Tracker widget',
                                         toggled: true,
-                                        value: "TRACKER_DASHBOARD_WIDGET"
-                                    }
+                                        value: 'TRACKER_DASHBOARD_WIDGET',
+                                    },
                                 ]}
                             />
                         </ToolbarGroup>
@@ -127,20 +127,23 @@ class AppCards extends Component {
                     {loaded && apps.length < 1 && emptyApps}
                 </Col>
             </Grid>
-        );
+        )
     }
 }
 
 const mapStateToProps = state => ({
     appList: state.appsList,
     filters: state.form.appTypeFilter,
-    appSearchFilter: state.form.searchFilter
-});
+    appSearchFilter: state.form.searchFilter,
+})
 
 const mapDispatchToProps = dispatch => ({
     loadApps() {
-        dispatch(loadApprovedApps());
-    }
-});
+        dispatch(loadApprovedApps())
+    },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppCards);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppCards)

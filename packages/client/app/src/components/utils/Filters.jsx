@@ -1,13 +1,13 @@
-import React, { Component, PropTypes } from "react";
-import { connect } from "react-redux";
-import TextField from "material-ui/TextField";
-import Toggle from "material-ui/Toggle";
-import { Field, reduxForm } from "redux-form";
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import TextField from 'material-ui/TextField'
+import Toggle from 'material-ui/Toggle'
+import { Field, reduxForm } from 'redux-form'
 import {
     renderTextField,
     renderTextFieldWithClearButton,
-    renderToggle
-} from "../form/ReduxFormUtils";
+    renderToggle,
+} from '../form/ReduxFormUtils'
 
 /**
  * Filters an app according to properties defined in valsToFilter.
@@ -16,26 +16,26 @@ import {
  * @returns {boolean} true if any of the properties matches the filter.
  */
 export const filterApp = (app, filterVal) => {
-    if (!filterVal) return true;
-    const filter = filterVal.toLowerCase();
-    const valsToFilter = ["name", "appType", "organisation"];
+    if (!filterVal) return true
+    const filter = filterVal.toLowerCase()
+    const valsToFilter = ['name', 'appType', 'organisation']
     for (let i = 0; i < valsToFilter.length; i++) {
-        const val = valsToFilter[i];
-        const prop = app[val];
+        const val = valsToFilter[i]
+        const prop = app[val]
         if (prop) {
             if (prop.toLowerCase().includes(filter)) {
-                return true;
+                return true
             }
         }
-        const devProp = app.developer[val];
+        const devProp = app.developer[val]
         if (devProp) {
             if (devProp.toLowerCase().includes(filter)) {
-                return true;
+                return true
             }
         }
     }
-    return false;
-};
+    return false
+}
 
 /**
  *
@@ -45,38 +45,38 @@ export const filterApp = (app, filterVal) => {
  * @returns {boolean} true if app has an apptype in filter, otherwise false.
  */
 export const filterAppType = (app, filters) => {
-    if (!filters) return true;
-    const filterVal = filters.values;
+    if (!filters) return true
+    const filterVal = filters.values
     for (let key in filterVal) {
         if (filterVal.hasOwnProperty(key)) {
             if (key == app.appType && filterVal[key] === true) {
-                return true;
+                return true
             }
         }
     }
-    return filterVal.length < 1 ? true : false;
-};
+    return filterVal.length < 1 ? true : false
+}
 
 export const filterAppStatus = (app, filters) => {
-    if (!filters) return true;
-    const filterVal = filters.values;
+    if (!filters) return true
+    const filterVal = filters.values
     for (let key in filterVal) {
         if (filterVal.hasOwnProperty(key)) {
             if (key == app.status && filterVal[key] === true) {
-                return true;
+                return true
             }
         }
     }
-    return filterVal.length < 1 ? true : false;
-};
+    return filterVal.length < 1 ? true : false
+}
 
 class Textfilter extends Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     render() {
-        const { style, hintText, clearButton, ...props } = this.props;
+        const { style, hintText, clearButton, ...props } = this.props
 
         return (
             <Field
@@ -89,7 +89,7 @@ class Textfilter extends Component {
                         : renderTextField
                 }
             />
-        );
+        )
     }
 }
 
@@ -97,23 +97,23 @@ Textfilter.propTypes = {
     style: PropTypes.object,
     hintText: PropTypes.string,
     form: PropTypes.string,
-    clearButton: PropTypes.bool
-};
+    clearButton: PropTypes.bool,
+}
 
 Textfilter.defaultProps = {
-    form: "searchFilter",
+    form: 'searchFilter',
     clearButton: true,
     destroyOnUnmount: false,
-    initialValues: { searchFilter: "" }
-};
+    initialValues: { searchFilter: '' },
+}
 
 export const TextFilter = reduxForm({
-    ...Textfilter.defaultProps
-})(Textfilter);
+    ...Textfilter.defaultProps,
+})(Textfilter)
 
 /**
  * Renders a list of toggle buttons, with props.filters as base.
- * 
+ *
  * A redux-form connected component. Connected to the store at state.<mountedReduxForm>.<props.form>
  *     Where mountedReduxForm is the value where redux-form is connected at app-start.
  *     And props.form is a prop to this component (default: filters).
@@ -123,16 +123,16 @@ export const TextFilter = reduxForm({
  */
 class Selectfilter extends Component {
     constructor(props) {
-        super(props);
+        super(props)
     }
 
     toggleAll(toggled) {
         //props.form holds the name of the form, where the values exists
-        Object.keys(
-            this.props.filterState[this.props.form].values
-        ).map((key, i) => {
-            this.props.change(key, toggled);
-        });
+        Object.keys(this.props.filterState[this.props.form].values).map(
+            (key, i) => {
+                this.props.change(key, toggled)
+            }
+        )
     }
 
     render() {
@@ -143,8 +143,8 @@ class Selectfilter extends Component {
             filters,
             onFilterChange,
             ...props
-        } = this.props;
-        const toggles = filters.map(filter =>
+        } = this.props
+        const toggles = filters.map(filter => (
             <Field
                 key={filter.value}
                 name={filter.value}
@@ -153,23 +153,23 @@ class Selectfilter extends Component {
                 style={elementStyle}
                 labelStyle={labelStyle}
             />
-        );
+        ))
         return (
             <div style={style}>
                 {toggles}
-                {this.props.renderAllToggle
-                    ? <Field
-                          name="all"
-                          component={renderToggle}
-                          label={"All"}
-                          onToggle={this.toggleAll.bind(this)}
-                          labelStyle={labelStyle}
-                          value={true}
-                          style={elementStyle}
-                      />
-                    : null}
+                {this.props.renderAllToggle ? (
+                    <Field
+                        name="all"
+                        component={renderToggle}
+                        label={'All'}
+                        onToggle={this.toggleAll.bind(this)}
+                        labelStyle={labelStyle}
+                        value={true}
+                        style={elementStyle}
+                    />
+                ) : null}
             </div>
-        );
+        )
     }
 }
 Selectfilter.propTypes = {
@@ -189,35 +189,38 @@ Selectfilter.propTypes = {
             //default toggled?
             toggled: PropTypes.bool.isRequired,
             //The name of the filter-field. State will be fieldValue: toggled
-            value: PropTypes.string.isRequired
+            value: PropTypes.string.isRequired,
         })
     ),
     //Renders a component which toggles all buttons in this group.
-    renderAllToggle: PropTypes.bool
-};
+    renderAllToggle: PropTypes.bool,
+}
 Selectfilter.defaultProps = {
-    form: "filters",
-    destroyOnUnmount: false
-};
+    form: 'filters',
+    destroyOnUnmount: false,
+}
 //handle default with connect
 export const SelectedFilterForm = reduxForm({
-    ...Selectfilter.defaultProps
-})(Selectfilter);
+    ...Selectfilter.defaultProps,
+})(Selectfilter)
 
 //Convert filter props to initialValues to reduxForm
 const mapStateToProps = (state, ownProps) => {
-    const init = {};
+    const init = {}
     ownProps.filters.map((elem, i) => {
-        return (init[elem.value] = elem.toggled);
-    });
+        return (init[elem.value] = elem.toggled)
+    })
     if (ownProps.renderAllToggle) {
         //default toggle all
-        init["all"] = true;
+        init['all'] = true
     }
     return {
         initialValues: init,
-        filterState: state.form
-    };
-};
+        filterState: state.form,
+    }
+}
 
-export const SelectFilter = connect(mapStateToProps, null)(SelectedFilterForm);
+export const SelectFilter = connect(
+    mapStateToProps,
+    null
+)(SelectedFilterForm)

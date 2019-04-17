@@ -1,22 +1,22 @@
-import * as actionTypes from "../constants/actionTypes";
+import * as actionTypes from '../constants/actionTypes'
 
 const initialState = {
     loaded: false,
     loading: true,
     error: false,
-    byId: {}
-};
+    byId: {},
+}
 
 const loadedState = {
     loaded: true,
     loading: false,
-    error: false
-};
+    error: false,
+}
 const errorState = {
     loaded: false,
     loading: false,
-    error: true
-};
+    error: true,
+}
 
 function appsListReducer(state = { ...initialState }, action) {
     switch (action.type) {
@@ -24,37 +24,37 @@ function appsListReducer(state = { ...initialState }, action) {
         case actionTypes.APPS_ALL_ERROR: {
             return {
                 ...state,
-                ...errorState
-            };
+                ...errorState,
+            }
         }
 
         case actionTypes.APPS_APPROVED_LOADED: {
-            const byId = {};
+            const byId = {}
             action.payload.map((app, i) => {
-                byId[app.id] = app;
-            });
+                byId[app.id] = app
+            })
             return {
                 ...state,
                 ...loadedState,
-                byId
-            };
+                byId,
+            }
         }
         case actionTypes.APP_LOADED: {
             //do not load userApps in this reducer
-            if (action.payload.status !== "APPROVED") {
-                return state;
+            if (action.payload.status !== 'APPROVED') {
+                return state
             }
-            const appId = action.payload.id;
+            const appId = action.payload.id
             return {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [appId]: action.payload
-                }
-            };
+                    [appId]: action.payload,
+                },
+            }
         }
     }
-    return state;
+    return state
 }
 
-export default appsListReducer;
+export default appsListReducer

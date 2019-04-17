@@ -1,69 +1,69 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { List } from "material-ui/List";
-import { Card, CardText } from "material-ui/Card";
-import TextField from "material-ui/TextField";
-import AppListItem from "./AppListItem";
-import Popover from "material-ui/Popover";
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { List } from 'material-ui/List'
+import { Card, CardText } from 'material-ui/Card'
+import TextField from 'material-ui/TextField'
+import AppListItem from './AppListItem'
+import Popover from 'material-ui/Popover'
 import {
     TextFilter,
     filterApp,
     SelectFilter,
     filterAppType,
-    filterAppStatus
-} from "../../utils/Filters";
+    filterAppStatus,
+} from '../../utils/Filters'
 import {
     Toolbar,
     ToolbarGroup,
     ToolbarSeparator,
-    ToolbarTitle
-} from "material-ui/Toolbar";
-import Button from "material-ui/FlatButton";
-import IconButton from "material-ui/IconButton";
-import FontIcon from "material-ui/FontIcon";
-import SubHeader from "../../header/SubHeader";
+    ToolbarTitle,
+} from 'material-ui/Toolbar'
+import Button from 'material-ui/FlatButton'
+import IconButton from 'material-ui/IconButton'
+import FontIcon from 'material-ui/FontIcon'
+import SubHeader from '../../header/SubHeader'
 import {
     approveApp,
     loadAllApps,
     setAppApproval,
     userAppsLoad,
-    openDialog
-} from "../../../actions/actionCreators";
-import * as dialogTypes from "../../../constants/dialogTypes";
-import sortBy from "lodash/sortBy";
-import ErrorOrLoading from "../../utils/ErrorOrLoading";
-import * as selectors from "../../../selectors/userSelectors";
+    openDialog,
+} from '../../../actions/actionCreators'
+import * as dialogTypes from '../../../constants/dialogTypes'
+import sortBy from 'lodash/sortBy'
+import ErrorOrLoading from '../../utils/ErrorOrLoading'
+import * as selectors from '../../../selectors/userSelectors'
 import {
     APP_STATUS_APPROVED,
     APP_STATUS_PENDING,
-    APP_STATUS_REJECTED
-} from "../../../constants/apiConstants";
+    APP_STATUS_REJECTED,
+} from '../../../constants/apiConstants'
 
 class AppList extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.state = {
-            open: false
-        };
+            open: false,
+        }
     }
 
     componentDidMount() {
-        const user = this.props.user;
+        const user = this.props.user
         if (user) {
-            user.manager ? this.props.loadAllApps() : this.props.loadMyApps();
+            user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
         }
     }
 
     handleApproval(app, type) {
         switch (type) {
-            case "APPROVE": {
-                this.props.setAppApproval(app, APP_STATUS_APPROVED);
-                break;
+            case 'APPROVE': {
+                this.props.setAppApproval(app, APP_STATUS_APPROVED)
+                break
             }
-            case "REJECT": {
-                this.props.setAppApproval(app, APP_STATUS_REJECTED);
-                break;
+            case 'REJECT': {
+                this.props.setAppApproval(app, APP_STATUS_REJECTED)
+                break
             }
         }
     }
@@ -72,12 +72,12 @@ class AppList extends Component {
         this.setState({
             ...this.state,
             open: !this.state.open,
-            anchorEl: e.currentTarget
-        });
+            anchorEl: e.currentTarget,
+        })
     }
 
     openDeleteDialog(app) {
-        this.props.openDeleteDialog({ app });
+        this.props.openDeleteDialog({ app })
     }
 
     renderStatusFilters() {
@@ -89,34 +89,38 @@ class AppList extends Component {
                     form="appStatusFilter"
                     filters={[
                         {
-                            label: "Approved",
+                            label: 'Approved',
                             toggled: true,
-                            value: APP_STATUS_APPROVED
+                            value: APP_STATUS_APPROVED,
                         },
                         {
-                            label: "Pending",
+                            label: 'Pending',
                             toggled: true,
-                            value: APP_STATUS_PENDING
+                            value: APP_STATUS_PENDING,
                         },
                         {
-                            label: "Rejected",
+                            label: 'Rejected',
                             toggled: true,
-                            value: APP_STATUS_REJECTED
-                        }
+                            value: APP_STATUS_REJECTED,
+                        },
                     ]}
                 />
             </div>
-        );
+        )
     }
 
     render() {
-        const { loading, loaded, error, byId: appList } = this.props.appList;
-        const loadOrErr = loading || error;
-        let { user: { manager }, match, appSearchFilter } = this.props;
+        const { loading, loaded, error, byId: appList } = this.props.appList
+        const loadOrErr = loading || error
+        let {
+            user: { manager },
+            match,
+            appSearchFilter,
+        } = this.props
         const searchFilter = appSearchFilter
             ? appSearchFilter.values.searchFilter
-            : "";
-        const apps = sortBy(appList, ["name"])
+            : ''
+        const apps = sortBy(appList, ['name'])
             .filter(
                 app =>
                     filterApp(app, searchFilter) &&
@@ -135,15 +139,15 @@ class AppList extends Component {
                     handleApprove={this.handleApproval.bind(
                         this,
                         app,
-                        "APPROVE"
+                        'APPROVE'
                     )}
-                    handleReject={this.handleApproval.bind(this, app, "REJECT")}
+                    handleReject={this.handleApproval.bind(this, app, 'REJECT')}
                 />
-            ));
+            ))
         const emptyAppsText = manager
             ? "We couldn't find any apps"
-            : "You have not uploaded any apps";
-        const title = manager ? "All apps" : "Your apps";
+            : 'You have not uploaded any apps'
+        const title = manager ? 'All apps' : 'Your apps'
 
         return (
             <div>
@@ -157,30 +161,30 @@ class AppList extends Component {
                     <Popover
                         open={this.state.open}
                         anchorEl={this.state.anchorEl}
-                        style={{ width: "200px" }}
+                        style={{ width: '200px' }}
                         onRequestClose={r => this.setState({ open: false })}
                     >
-                        <div style={{ padding: "10px" }}>
+                        <div style={{ padding: '10px' }}>
                             <h3>App type</h3>
                             <SelectFilter
                                 renderAllToggle
                                 form="appTypeFilterUser"
                                 filters={[
                                     {
-                                        label: "Standard",
+                                        label: 'Standard',
                                         toggled: true,
-                                        value: "APP"
+                                        value: 'APP',
                                     },
                                     {
-                                        label: "Dashboard",
+                                        label: 'Dashboard',
                                         toggled: true,
-                                        value: "DASHBOARD_WIDGET"
+                                        value: 'DASHBOARD_WIDGET',
                                     },
                                     {
-                                        label: "Tracker",
+                                        label: 'Tracker',
                                         toggled: true,
-                                        value: "TRACKER_DASHBOARD_WIDGET"
-                                    }
+                                        value: 'TRACKER_DASHBOARD_WIDGET',
+                                    },
                                 ]}
                             />
                             {manager ? this.renderStatusFilters() : null}
@@ -199,7 +203,7 @@ class AppList extends Component {
                     </CardText>
                 </Card>
             </div>
-        );
+        )
     }
 }
 
@@ -208,25 +212,28 @@ const mapStateToProps = state => ({
     user: selectors.getUserProfile(state),
     appTypeFilter: state.form.appTypeFilterUser,
     appStatusFilter: state.form.appStatusFilter,
-    appSearchFilter: state.form.searchFilter
-});
+    appSearchFilter: state.form.searchFilter,
+})
 
 const mapDispatchToProps = dispatch => ({
     setAppApproval(app, status) {
-        dispatch(setAppApproval(app, status));
+        dispatch(setAppApproval(app, status))
     },
 
     openDeleteDialog(app) {
-        dispatch(openDialog(dialogTypes.CONFIRM_DELETE_APP, app));
+        dispatch(openDialog(dialogTypes.CONFIRM_DELETE_APP, app))
     },
 
     loadAllApps() {
-        dispatch(loadAllApps());
+        dispatch(loadAllApps())
     },
 
     loadMyApps() {
-        dispatch(userAppsLoad());
-    }
-});
+        dispatch(userAppsLoad())
+    },
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppList);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AppList)

@@ -1,14 +1,14 @@
-import React, { PropTypes, Component } from "react";
-import "../../styles/utils/loaders.scss";
+import React, { PropTypes, Component } from 'react'
+import '../../styles/utils/loaders.scss'
 
-const SizeType = PropTypes.oneOf(["small", "medium", "large"]);
+const SizeType = PropTypes.oneOf(['small', 'medium', 'large'])
 export class Spinner extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        this.renderSmall = this.renderSmall.bind(this);
-        this.renderMedium = this.renderMedium.bind(this);
-        this.renderLarge = this.renderLarge.bind(this);
+        this.renderSmall = this.renderSmall.bind(this)
+        this.renderMedium = this.renderMedium.bind(this)
+        this.renderLarge = this.renderLarge.bind(this)
     }
 
     renderSmall() {
@@ -20,7 +20,7 @@ export class Spinner extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     renderMedium() {
@@ -32,7 +32,7 @@ export class Spinner extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     renderLarge() {
@@ -44,22 +44,22 @@ export class Spinner extends Component {
                     </div>
                 </div>
             </div>
-        );
+        )
     }
 
     render() {
         switch (this.props.size) {
-            case "small": {
-                return this.renderSmall();
+            case 'small': {
+                return this.renderSmall()
             }
-            case "medium": {
-                return this.renderMedium();
+            case 'medium': {
+                return this.renderMedium()
             }
-            case "large": {
-                return this.renderLarge();
+            case 'large': {
+                return this.renderLarge()
             }
             default: {
-                return this.renderSmall();
+                return this.renderSmall()
             }
         }
     }
@@ -67,5 +67,5 @@ export class Spinner extends Component {
 
 Spinner.propTypes = {
     size: SizeType,
-    style: PropTypes.object
-};
+    style: PropTypes.object,
+}

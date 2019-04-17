@@ -1,16 +1,16 @@
-import React, { Component, PropTypes } from "react";
+import React, { Component, PropTypes } from 'react'
 import {
     Table,
     TableBody,
     TableHeader,
     TableHeaderColumn,
     TableRow,
-    TableRowColumn
-} from "material-ui/Table";
-import FontIcon from "material-ui/FontIcon";
-import IconMenu from "material-ui/IconMenu";
-import IconButton from "material-ui/IconButton";
-import MenuItem from "material-ui/MenuItem";
+    TableRowColumn,
+} from 'material-ui/Table'
+import FontIcon from 'material-ui/FontIcon'
+import IconMenu from 'material-ui/IconMenu'
+import IconButton from 'material-ui/IconButton'
+import MenuItem from 'material-ui/MenuItem'
 
 const VersionList = props => {
     //Max 3 versions before "more button"
@@ -32,7 +32,7 @@ const VersionList = props => {
                         primaryText="Delete"
                     />
                 </IconMenu>
-            );
+            )
 
             return (
                 <TableRow key={version.id}>
@@ -55,8 +55,8 @@ const VersionList = props => {
                         <TableRowColumn>{editMenu}</TableRowColumn>
                     ) : null}
                 </TableRow>
-            );
-        });
+            )
+        })
 
     return (
         <Table selectable={false}>
@@ -76,16 +76,16 @@ const VersionList = props => {
             </TableHeader>
             <TableBody displayRowCheckbox={false}>{versions}</TableBody>
         </Table>
-    );
-};
+    )
+}
 
 VersionList.propTypes = {
     versionList: PropTypes.array.isRequired,
     editable: PropTypes.bool,
-    handleDelete: PropTypes.func
-};
+    handleDelete: PropTypes.func,
+}
 VersionList.defaultProps = {
-    editable: false
-};
+    editable: false,
+}
 
-export default VersionList;
+export default VersionList

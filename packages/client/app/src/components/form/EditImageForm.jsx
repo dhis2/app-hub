@@ -1,26 +1,26 @@
-import React, { Component, PropTypes } from "react";
-import { Card, CardText } from "material-ui/Card";
-import Button from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import FontIcon from "material-ui/FontIcon";
-import UploadFileField from "../form/UploadFileField";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import * as formUtils from "./ReduxFormUtils";
-import { Field, reduxForm, Form } from "redux-form";
+import React, { Component, PropTypes } from 'react'
+import { Card, CardText } from 'material-ui/Card'
+import Button from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
+import FontIcon from 'material-ui/FontIcon'
+import UploadFileField from '../form/UploadFileField'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import * as formUtils from './ReduxFormUtils'
+import { Field, reduxForm, Form } from 'redux-form'
 
 const validate = values => {
-    const errors = {};
-    const maxLenCaption = 60;
-    if (values["caption"] && values["caption"].length > maxLenCaption) {
-        errors["caption"] = `Max ${maxLenCaption} characters`;
+    const errors = {}
+    const maxLenCaption = 60
+    if (values['caption'] && values['caption'].length > maxLenCaption) {
+        errors['caption'] = `Max ${maxLenCaption} characters`
     }
 
-    return errors;
-};
+    return errors
+}
 
 const EditImageForm = props => {
-    const { handleSubmit, pristine, submitting } = props;
+    const { handleSubmit, pristine, submitting } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -28,11 +28,11 @@ const EditImageForm = props => {
         const data = {
             caption: values.caption,
             description: values.description,
-            logo: values.logo ? values.logo : false
-        };
+            logo: values.logo ? values.logo : false,
+        }
 
-        return props.submitted(data);
-    };
+        return props.submitted(data)
+    }
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
@@ -41,7 +41,7 @@ const EditImageForm = props => {
                 component={formUtils.renderTextField}
                 autoFocus
                 label="Image Caption"
-            />{" "}
+            />{' '}
             <br />
             <Field
                 name="description"
@@ -56,7 +56,7 @@ const EditImageForm = props => {
                 label="Set as logo for app"
             />
         </Form>
-    );
-};
-EditImageForm.propTypes = {};
-export default reduxForm({ form: "editImageForm", validate })(EditImageForm);
+    )
+}
+EditImageForm.propTypes = {}
+export default reduxForm({ form: 'editImageForm', validate })(EditImageForm)

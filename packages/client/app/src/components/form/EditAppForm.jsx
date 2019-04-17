@@ -1,56 +1,56 @@
-import React, { Component, PropTypes } from "react";
-import { Card, CardText } from "material-ui/Card";
-import Button from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import FontIcon from "material-ui/FontIcon";
-import UploadFileField from "../form/UploadFileField";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import * as formUtils from "./ReduxFormUtils";
-import { Field, reduxForm, Form } from "redux-form";
-import { validateURL } from "./ReduxFormUtils";
-import config from "../../config";
+import React, { Component, PropTypes } from 'react'
+import { Card, CardText } from 'material-ui/Card'
+import Button from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
+import FontIcon from 'material-ui/FontIcon'
+import UploadFileField from '../form/UploadFileField'
+import SelectField from 'material-ui/SelectField'
+import MenuItem from 'material-ui/MenuItem'
+import * as formUtils from './ReduxFormUtils'
+import { Field, reduxForm, Form } from 'redux-form'
+import { validateURL } from './ReduxFormUtils'
+import config from '../../config'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
-    label: config.ui.appTypeToDisplayName[key]
-}));
+    label: config.ui.appTypeToDisplayName[key],
+}))
 
 const validate = values => {
-    const errors = {};
+    const errors = {}
     const requiredFields = [
-        "appName",
-        "appType",
-        "file",
-        "developerName",
-        "developerEmail",
-        "developerOrg",
-        "version"
-    ];
+        'appName',
+        'appType',
+        'file',
+        'developerName',
+        'developerEmail',
+        'developerOrg',
+        'version',
+    ]
     const varCharFields = [
-        "appName",
-        "sourceUrl",
-        "appType",
-        "developerName",
-        "developerEmail",
-        "developerOrg"
-    ];
+        'appName',
+        'sourceUrl',
+        'appType',
+        'developerName',
+        'developerEmail',
+        'developerOrg',
+    ]
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = "Field is required.";
+            errors[field] = 'Field is required.'
         }
-    });
+    })
     varCharFields.forEach(field => {
         if (values[field] && values[field].length > 255) {
-            errors[field] = "Max 255 characters";
+            errors[field] = 'Max 255 characters'
         }
-    });
+    })
 
-    return errors;
-};
+    return errors
+}
 
 const EditForm = props => {
-    const { handleSubmit, pristine, submitting } = props;
+    const { handleSubmit, pristine, submitting } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -64,12 +64,12 @@ const EditForm = props => {
                 name: values.developerName,
                 email: values.developerEmail,
                 address: values.developerAddress,
-                organisation: values.developerOrg
-            }
-        };
+                organisation: values.developerOrg,
+            },
+        }
 
-        return props.submitted({ data });
-    };
+        return props.submitted({ data })
+    }
 
     const menuItems = appTypes.map((type, i) => (
         <MenuItem
@@ -77,7 +77,7 @@ const EditForm = props => {
             value={type.value}
             primaryText={type.label}
         />
-    ));
+    ))
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
@@ -87,7 +87,7 @@ const EditForm = props => {
                 autoFocus
                 fullWidth
                 label="App Name"
-            />{" "}
+            />{' '}
             <br />
             <Field
                 name="description"
@@ -112,7 +112,7 @@ const EditForm = props => {
                 label="App Type"
             >
                 {menuItems}
-            </Field>{" "}
+            </Field>{' '}
             <br />
             <h3>Developer</h3>
             <Field
@@ -140,12 +140,12 @@ const EditForm = props => {
                 disabled={true}
             />
         </Form>
-    );
-};
+    )
+}
 EditForm.propTypes = {
     //Callback for the values when the form has been submitted.
     submitted: PropTypes.func,
     //Submits the form, given by Redux-form "Form"-component.
-    submit: PropTypes.func
-};
-export default reduxForm({ form: "editAppForm", validate })(EditForm);
+    submit: PropTypes.func,
+}
+export default reduxForm({ form: 'editAppForm', validate })(EditForm)

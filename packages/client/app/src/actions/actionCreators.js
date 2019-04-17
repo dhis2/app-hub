@@ -1,5 +1,5 @@
-import * as actions from "../constants/actionTypes";
-import { REVERT, COMMIT } from "redux-optimistic-ui";
+import * as actions from '../constants/actionTypes'
+import { REVERT, COMMIT } from 'redux-optimistic-ui'
 
 //OPTIMISTIC-ACTION HANDLERS
 
@@ -10,8 +10,8 @@ import { REVERT, COMMIT } from "redux-optimistic-ui";
  */
 const optimisticActionCreator = action => ({
     ...action,
-    meta: { ...action.meta, isOptimistic: true }
-});
+    meta: { ...action.meta, isOptimistic: true },
+})
 
 /**
  * Commit or revert an optimistic action that has been handled by the server
@@ -26,7 +26,7 @@ export const commitOrRevertOptimisticAction = (
     error = false
 ) => {
     if (action.error) {
-        error = true;
+        error = true
     }
     return {
         ...action,
@@ -34,121 +34,121 @@ export const commitOrRevertOptimisticAction = (
             ...action.meta,
             optimistic: error
                 ? { type: REVERT, id: transactionID }
-                : { type: COMMIT, id: transactionID }
-        }
-    };
-};
+                : { type: COMMIT, id: transactionID },
+        },
+    }
+}
 
 export const commitOptimisticAction = (action, transactionID) => {
     return {
         ...action,
         meta: {
             ...action.meta,
-            optimistic: { type: COMMIT, id: transactionID }
-        }
-    };
-};
+            optimistic: { type: COMMIT, id: transactionID },
+        },
+    }
+}
 
 export const revertOptimisticAction = (action, transactionID) => {
     return {
         ...action,
         meta: {
             ...action.meta,
-            optimistic: { type: REVERT, id: transactionID }
-        }
-    };
-};
+            optimistic: { type: REVERT, id: transactionID },
+        },
+    }
+}
 
 //ACTION-CREATORS
 
-export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD);
+export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD)
 
-export const appsAllLoaded = actionCreator(actions.APPS_ALL_LOADED);
+export const appsAllLoaded = actionCreator(actions.APPS_ALL_LOADED)
 
-export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD);
+export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD)
 
-export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED);
+export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED)
 
 export const setAppApproval = (app, status) =>
     optimisticActionCreator(
         actionCreator(actions.SET_APPROVAL_APP)({
             app,
-            status
+            status,
         })
-    );
+    )
 
 export const setAppApprovalSuccess = payload =>
     actionCreator(actions.SET_APPROVAL_APP_SUCCESS)({
-        ...payload
-    });
+        ...payload,
+    })
 
-export const userLoad = actionCreator(actions.USER_LOAD);
+export const userLoad = actionCreator(actions.USER_LOAD)
 
 export const addAppVersion = (version, file, appId) =>
     actionCreator(actions.APP_VERSION_ADD)({
         version,
         file,
-        appId
-    });
+        appId,
+    })
 
 export const addApp = (app, file, image) =>
     actionCreator(actions.APP_ADD)({
         app,
         file,
-        image
-    });
+        image,
+    })
 
 export const editApp = (app, data) =>
     optimisticActionCreator(
         actionCreator(actions.APP_EDIT)({
             app,
-            data
+            data,
         })
-    );
+    )
 
 export const editImage = (appId, imageId, data) =>
     optimisticActionCreator(
         actionCreator(actions.APP_IMAGE_EDIT)({
             appId,
             imageId,
-            data
+            data,
         })
-    );
+    )
 
 export const editImageSuccess = (appId, imageId, data) =>
     actionCreator(actions.APP_IMAGE_EDIT_SUCCESS)({
         appId,
         imageId,
-        data
-    });
+        data,
+    })
 
 export const editImageLogo = (appId, imageId, logo) =>
     actionCreator(actions.APP_IMAGE_EDIT)({
         appId,
         imageId,
         data: {
-            logo
-        }
-    });
+            logo,
+        },
+    })
 
 export const editAppVersion = (appId, version) =>
     optimisticActionCreator(
         actionCreator(actions.APP_VERSION_EDIT)({
             appId,
-            version
+            version,
         })
-    );
+    )
 
 export const editAppVersionSuccess = (appId, version) =>
     actionCreator(actions.APP_VERSION_EDIT_SUCCESS)({
         appId,
-        version
-    });
+        version,
+    })
 
 export const addAppSuccess = app =>
     actionCreator(actions.APP_ADD_SUCCESS)({
-        app
-    });
+        app,
+    })
 
 /**
  *
@@ -166,100 +166,100 @@ export const addAppSuccess = app =>
 export const addImageToApp = (appId, image) =>
     actionCreator(actions.APP_IMAGE_ADD)({
         appId,
-        image
-    });
+        image,
+    })
 
 export const addMultipleImagesToApp = (appId, images) =>
     actionCreator(actions.APP_IMAGES_ADD)({
         appId,
-        images
-    });
+        images,
+    })
 
 export const addMultipleImagesToAppSuccess = (appId, images) =>
     actionCreator(actions.APP_IMAGES_ADD_SUCCESS)({
         appId,
-        images
-    });
+        images,
+    })
 
 export const addImageToAppSuccess = (appId, image) =>
     actionCreator(actions.APP_IMAGE_ADD_SUCCESS)({
         appId,
-        image
-    });
+        image,
+    })
 
 export const deleteImageFromApp = (appId, imageId) =>
     optimisticActionCreator(
         actionCreator(actions.APP_IMAGE_DELETE)({
             appId,
-            imageId
+            imageId,
         })
-    );
+    )
 
 export const deleteImageFromAppSuccess = (appId, imageId) =>
     actionCreator(actions.APP_IMAGE_DELETE_SUCCESS)({
         appId,
-        imageId
-    });
+        imageId,
+    })
 
 export const deleteAppVersion = (version, appId) =>
     optimisticActionCreator(
         actionCreator(actions.APP_VERSION_DELETE)({
             version,
-            appId
+            appId,
         })
-    );
+    )
 
 export const deleteAppVersionSuccess = (version, appId) =>
     actionCreator(actions.APP_VERSION_DELETE_SUCCESS)({
         version,
-        appId
-    });
+        appId,
+    })
 
 export const addAppVersionSuccess = (version, appId) =>
     actionCreator(actions.APP_VERSION_ADD_SUCCESS)({
         version,
-        appId
-    });
+        appId,
+    })
 
 export const editAppSuccess = (app, data) =>
     actionCreator(actions.APP_EDIT_SUCCESS)({
         app,
-        data
-    });
+        data,
+    })
 
 export const deleteApp = app =>
     optimisticActionCreator(
         actionCreator(actions.APP_DELETE)({
-            app
+            app,
         })
-    );
+    )
 
 export const deleteAppSuccess = app =>
     actionCreator(actions.APP_DELETE_SUCCESS)({
-        app
-    });
+        app,
+    })
 
 export const userLoaded = profile =>
     actionCreator(actions.USER_LOADED)({
-        profile
-    });
+        profile,
+    })
 
-export const userError = actionCreator(actions.USER_ERROR);
-export const userAppsLoad = actionCreator(actions.USER_APPS_LOAD);
-export const userAppsLoaded = actionCreator(actions.USER_APPS_LOADED);
+export const userError = actionCreator(actions.USER_ERROR)
+export const userAppsLoad = actionCreator(actions.USER_APPS_LOAD)
+export const userAppsLoaded = actionCreator(actions.USER_APPS_LOADED)
 
-export const userAuthenticated = actionCreator(actions.USER_AUTHENTICATED);
-export const userLogout = actionCreator(actions.USER_LOGOUT);
+export const userAuthenticated = actionCreator(actions.USER_AUTHENTICATED)
+export const userLogout = actionCreator(actions.USER_LOGOUT)
 
 export const loadUserApp = appId =>
     actionCreator(actions.APP_LOAD)({
         ...appId,
-        useAuth: true
-    });
+        useAuth: true,
+    })
 
-export const loadApp = actionCreator(actions.APP_LOAD);
-export const loadAppSuccess = actionCreator(actions.APP_LOADED);
-export const appError = actionCreator(actions.APP_ERROR);
+export const loadApp = actionCreator(actions.APP_LOAD)
+export const loadAppSuccess = actionCreator(actions.APP_LOADED)
+export const appError = actionCreator(actions.APP_ERROR)
 
 /**
  *
@@ -270,8 +270,7 @@ export const appError = actionCreator(actions.APP_ERROR);
  * @returns {action}
  */
 export const actionErrorCreator = (type, error, meta) =>
-    actionCreator(type)(error, meta, true);
-
+    actionCreator(type)(error, meta, true)
 
 /**
  * Generic action-creator
@@ -281,18 +280,18 @@ export const actionErrorCreator = (type, error, meta) =>
 function actionCreator(type) {
     return (payload, meta, error) => {
         if (payload == null) {
-            payload = {};
+            payload = {}
         }
         return {
             type,
             payload,
             meta,
-            error
-        };
-    };
+            error,
+        }
+    }
 }
 
-export const emptySnackbar = actionCreator(actions.SNACKBAR_EMPTY);
+export const emptySnackbar = actionCreator(actions.SNACKBAR_EMPTY)
 
 /**
  * openDialog - Action creator helper method for creating dialogs
@@ -304,8 +303,8 @@ export const emptySnackbar = actionCreator(actions.SNACKBAR_EMPTY);
 export const openDialog = (dialogType, dialogprops) =>
     actionCreator(actions.OPEN_DIALOG)({
         dialogprops: { ...dialogprops },
-        dialogType
-    });
+        dialogType,
+    })
 
 /**
  * closeDialog - Action creator helper method for handling dialogs
@@ -313,4 +312,4 @@ export const openDialog = (dialogType, dialogprops) =>
  * @param  {string} dialogType  The type of dialog to close
  * @return {object}             Dialog action
  */
-export const closeDialog = actionCreator(actions.CLOSE_DIALOG);
+export const closeDialog = actionCreator(actions.CLOSE_DIALOG)
