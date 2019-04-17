@@ -110,7 +110,7 @@ const init = async () => {
             directory: {
                 path: path.join(
                     __dirname,
-                    '../../client/target/classes/static/'
+                    process.env.NODE_ENV === 'development' ? './build/static/' : './static/'
                 ),
             },
         },

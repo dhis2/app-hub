@@ -1,0 +1,135 @@
+@mixin spinner($size) {
+  .spinner {
+    position: relative;
+    margin: 0 auto 0 auto;
+    left: 1px;
+    top: 1px;
+    width: $size;
+    height: $size;
+    animation: spin 1s infinite linear;
+  }
+}
+
+@mixin maskedCircle($size, $border, $borderRadius) {
+  .maskedCircle {
+    width: $size;
+    height: $size;
+    border: $border solid black;
+    border-radius: $borderRadius;
+  }
+}
+
+@mixin mask($size) {
+  .mask {
+    width: $size;
+    height: $size;
+    overflow: hidden;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-small {
+  position: relative;
+  margin: 0 auto 0 auto;
+  width: 28px;
+  height: 28px;
+  margin-left: -55px;
+
+  @include maskedCircle(20px, 3px, 12px);
+  @include mask(12px);
+  @include spinner(26px);
+}
+
+.loading-medium {
+  position: relative;
+  margin: 0 auto 0 auto;
+  width: 56px;
+  height: 56px;
+
+  @include maskedCircle(40px, 3px, 24px);
+  @include mask(24px);
+  @include spinner(52px);
+}
+
+.loading-large {
+  position: relative;
+  margin: 0 auto 0 auto;
+  width: 112px;
+  height: 112px;
+
+  @include maskedCircle(80px, 6px, 48px);
+  @include mask(48px);
+  @include spinner(104px);
+}
+
+// Here is where the magic happens
+
+$offset: 187;
+$duration: 1.4s;
+
+.spinner {
+  animation: rotator $duration linear infinite;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+.path {
+  stroke-dasharray: $offset;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash $duration ease-in-out infinite,
+  colors ($duration*4) ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {
+    stroke: #4285F4;
+  }
+  25% {
+    stroke: #DE3E35;
+  }
+  50% {
+    stroke: #F7C223;
+  }
+  75% {
+    stroke: #1B9A59;
+  }
+  100% {
+    stroke: #4285F4;
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: $offset;
+  }
+  50% {
+    stroke-dashoffset: $offset/4;
+    transform: rotate(135deg);
+  }
+  100% {
+    stroke-dashoffset: $offset;
+    transform: rotate(450deg);
+  }
+}
