@@ -44,7 +44,7 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        console.log(`Fetching file from ${item.uuid}/${item.version_uuid}/${filename}`)
+        console.log(`Fetching file ${item.uuid}/${item.version_uuid}/${filename}`)
 
         try {
 
@@ -66,5 +66,7 @@ module.exports = {
                 return Boom.notFound()
             }
         }
+
+        return Boom.notFound()
     }
 }
