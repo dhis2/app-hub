@@ -1,7 +1,3 @@
-const config = require('dotenv').config({
-    path: `${require('os').homedir()}/.dhis2/appstore/vars`,
-})
-
 module.exports = {
     test: {
         client: 'sqlite3',
