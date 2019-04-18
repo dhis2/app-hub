@@ -1,7 +1,6 @@
 module.exports = {
     api: {
-        baseURL: 'http://localhost:3000/v1/',
-        redirectURL: 'http://localhost:9000/user',
+        baseURL: 'http://localhost:3000/api/v1/',
     },
     auth0: {
         clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',

@@ -119,9 +119,7 @@ describe('ConfigResolver', () => {
             expect(conf.routes.baseAppName).to.equal('baseAppName')
             //should deep merge
             expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
-            expect(conf.api)
-                .to.have.property('redirectURL')
-                .that.equals(DirectDefaultConfig.api.redirectURL)
+
             expect(DirectDefaultConfig).to.not.have.property('another')
             expect(conf)
                 .to.be.an('object')

@@ -1,7 +1,6 @@
 module.exports = {
     api: {
-        baseURL: 'https://play.dhis2.org/appstore/api/',
-        redirectURL: 'https://play.dhis2.org/appstore/user',
+        baseURL: '/api/v1/',
     },
     auth0: {
         clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',

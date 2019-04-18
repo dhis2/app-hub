@@ -8,14 +8,14 @@
     "scripts": {
         "preinstall": "link-module-alias clean",
         "postinstall": "link-module-alias",
-        "production": "NODE_ENV=production node main.js",
-        "start": "NODE_ENV=development && yarn run build --cwd ../client/ && NODE_ENV=development nodemon --inspect src/main.js",
+        "production": "NODE_ENV=production node ./src/main.js",
+        "start": "NODE_ENV=development nodemon --inspect src/main.js",
         "test": "NODE_ENV=test npm run reset-and-seed-db && lab -a code -t 80 -v -I 'core,__core-js_shared__' test/index.js",
         "test-coverage": "NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html test/index.js",
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest",
         "seed-db": "npx knex seed:run",
         "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
-        "build": "rm -rf ./build && mkdir build && yarn --cwd ../client/ run build  && cp knexfile.js ./build && cp package.json ./build && cp -r ./src/* ./build/ && cd build; zip -r ./bundle.zip .",
+        "build": "rm -rf ./build && mkdir build && yarn --cwd ../client/ run build",
         "format": "d2-style js apply"
     },
     "dependencies": {

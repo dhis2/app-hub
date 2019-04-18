@@ -11,12 +11,14 @@ const Blipp = require('blipp')
 
 const HapiSwagger = require('hapi-swagger')
 
-const config = require('dotenv').config({
-    path: `${require('os').homedir()}/.dhis2/appstore/vars`,
-})
+if (process.env.NODE_ENV !== 'production') {
+    const config = require('dotenv').config({
+        path: `${require('os').homedir()}/.dhis2/appstore/vars`,
+    })
+    console.log('Injecting config vars into process.env: ', config)
+}
 
 console.log('Using env: ', process.env.NODE_ENV)
-console.log('Injecting config vars into process.env: ', config)
 
 const routes = require('./routes')
 
@@ -103,19 +105,35 @@ const init = async () => {
     }
 
     //Temporary route to serve frontend static build until we've flattened the project structure
-    server.route({
-        method: 'GET',
-        path: '/appstore/{param*}',
-        handler: {
-            directory: {
-                path: path.join(
-                    __dirname,
-                    process.env.NODE_ENV === 'development' ? './build/static/' : './static/'
-                ),
+    server.route([
+        {
+            method: 'GET',
+            path: '/appstore/assets/{param*}',
+            handler: {
+                directory: {
+                    path: path.join(__dirname, '../build/static/assets/'),
+                },
             },
         },
-    })
+        {
+            method: 'GET',
+            path: '/appstore/js/{param*}',
+            handler: {
+                directory: {
+                    path: path.join(__dirname, '../build/static/js/'),
+                },
+            },
+        },
+        {
+            method: 'GET',
+            path: '/appstore/{param*}',
+            handler: {
+                file: path.join(__dirname, '../build/static/index.html'),
+            },
+        },
+    ])
 
+    server.realm.modifiers.route.prefix = '/api'
     server.route(routes)
 
     await server.start()

@@ -10,7 +10,7 @@ describe('Get all published apps [v1]', () => {
     it('should return some test-apps from seeded db', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/v1/apps',
+            url: '/api/v1/apps',
         }
 
         const response = await server.inject(injectOptions)
@@ -50,7 +50,7 @@ describe('Get all published apps [v2]', () => {
     it('should just return a 501 not implemented for the moment being', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/v2/apps',
+            url: '/api/v2/apps',
         }
 
         const response = await server.inject(injectOptions)
@@ -62,7 +62,7 @@ describe('Test auth', () => {
     it('Should deny access without a valid authorisation token', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/v1/apps/all',
+            url: '/api/v1/apps/all',
         }
 
         const response = await server.inject(injectOptions)
