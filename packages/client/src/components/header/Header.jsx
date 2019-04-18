@@ -9,7 +9,7 @@ import { getAuth } from '../../utils/AuthService'
 import { Link } from 'react-router-dom'
 import Theme from '../../styles/theme'
 import Avatar from 'material-ui/Avatar'
-import Logo from '../../assets/img/dhis2_logo_reversed.js.js'
+import Logo from '../../assets/img/dhis2_logo_reversed'
 import { getUserInfo, getUserProfile } from '../../selectors/userSelectors'
 
 const styles = {
