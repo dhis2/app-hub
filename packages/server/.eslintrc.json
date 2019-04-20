@@ -1,7 +1,5 @@
 {
     "extends": [
-        "eslint:recommended",
-        "hapi"
     ],
     "env": {
         "node": true,

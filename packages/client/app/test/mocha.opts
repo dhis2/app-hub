@@ -1,3 +1,0 @@
---require app/test/setup.js
---compilers js:babel-core/register
---recursive app/test/**/*.spec.js
