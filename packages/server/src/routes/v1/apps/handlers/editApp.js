@@ -8,16 +8,11 @@ const {
     currentUserIsManager,
 } = require('@security')
 
-const { createTransaction, updateApp, getAppsByUuid } = require('@data')
-
-const userIsDeveloperOfAppWithUuid = async (params, db) => {
-    try {
-        const [firstApp] = await getAppsByUuid(params.uuid, 'en', db)
-        return firstApp.developer_id === params.userId
-    } catch (err) {
-        return false
-    }
-}
+const {
+    createTransaction,
+    updateApp,
+    userIsDeveloperOfAppWithUuid,
+} = require('@data')
 
 module.exports = {
     method: 'PUT',
