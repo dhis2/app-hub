@@ -17,3 +17,4 @@ app/*config.js
 packages/server/yarn-error.log
 packages/server/appstore_dev.sqlite
 
+packages/server/bundle.zip
