@@ -76,7 +76,7 @@ const updateAppVersion = async (params, knex, transaction) => {
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
             })
-            .whereIn('id', appVersionIdsToUpdate)
+            .where('uuid', uuid)
 
         await knex('app_channel')
             .transacting(transaction)
