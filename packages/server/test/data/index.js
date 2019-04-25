@@ -227,3 +227,67 @@ describe('@data::updateApp', () => {
         })
     })
 })
+
+describe('@data::updateAppVersion', () => {
+    const { updateAppVersion, createTransaction, getAppById } = require('@data')
+
+    it('should update the app version', async () => {
+        let transaction = await createTransaction(db)
+
+        //See seeds/mock/apps.js
+        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+
+        //First check that we fetch the correct object to change
+        const [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.version).to.equal('0.1')
+        expect(app.max_dhis2_version).to.equal(null)
+        expect(app.min_dhis2_version).to.equal('2.28')
+        expect(app.demo_url).to.equal(null)
+
+        await updateAppVersion(
+            {
+                uuid: appVersionUuidToUpdate,
+                userId: app.developer_id,
+                minDhisVersion: '123',
+                maxDhisVersion: '456',
+                version: '789',
+                demoUrl: 'https://www.google.com',
+            },
+            db,
+            transaction
+        )
+
+        await transaction.commit()
+
+        const [updatedApp] = (await getAppsByUuid(
+            mockAppUuid,
+            'en',
+            db
+        )).filter(app => app.version_uuid === appVersionUuidToUpdate)
+        expect(updatedApp.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(updatedApp.min_dhis2_version).to.equal('123')
+        expect(updatedApp.max_dhis2_version).to.equal('456')
+        expect(updatedApp.version).to.equal('789')
+        expect(updatedApp.demo_url).to.equal('https://www.google.com')
+
+        //Set back if other tests use the original data
+        transaction = await createTransaction(db)
+        await updateAppVersion(
+            {
+                uuid: appVersionUuidToUpdate,
+                userId: app.developer_id,
+                minDhisVersion: app.minDhisVersion,
+                maxDhisVersion: app.maxDhisVersion,
+                version: app.version,
+                demoUrl: app.demoUrl,
+            },
+            db,
+            transaction
+        )
+        transaction.commit()
+    })
+})

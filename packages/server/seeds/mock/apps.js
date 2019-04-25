@@ -3,7 +3,7 @@ const { AppType } = require('@enums')
 
 const dhis2App = {
     id: 1,
-    uuid: uuid(),
+    uuid: '2621d406-a908-476a-bcd2-e55abe3445b4',
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.APP,
