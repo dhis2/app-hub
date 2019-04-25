@@ -16,4 +16,6 @@ module.exports = {
     addUserToOrganisation: require('./addUserToOrganisation'),
     createTransaction: require('./createTransaction'),
     updateApp: require('./updateApp'),
+    getAppDeveloperId: require('./getAppDeveloperId'),
+    updateAppVersion: require('./updateAppVersion'),
 }
