@@ -55,6 +55,18 @@ exports.up = async knex => {
             .foreign('channel_id')
             .references('id')
             .inTable('channel')
+
+        table
+            .timestamp('updated_at', true)
+            .defaultTo(knex.fn.now())
+            .notNullable()
+
+        table.integer('updated_by_user_id').unsigned()
+
+        table
+            .foreign('updated_by_user_id')
+            .references('id')
+            .inTable('users')
     })
 }
 
