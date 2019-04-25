@@ -18,4 +18,5 @@ module.exports = {
     updateApp: require('./updateApp'),
     getAppDeveloperId: require('./getAppDeveloperId'),
     updateAppVersion: require('./updateAppVersion'),
+    getAppById: require('./getAppById'),
 }
