@@ -378,7 +378,6 @@ const editVersion = action$ =>
             const { appId, version } = action.payload
             const versionObj = {
                 demoUrl: version.demoUrl,
-                id: version.id,
                 maxDhisVersion: version.maxDhisVersion,
                 minDhisVersion: version.minDhisVersion,
                 version: version.version,
@@ -386,7 +385,7 @@ const editVersion = action$ =>
 
             const { id } = action.meta.optimistic
             return api
-                .updateVersion(appId, versionObj.id, versionObj)
+                .updateVersion(appId, version.id, versionObj)
                 .then(response =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.editAppVersionSuccess(appId, versionObj),
