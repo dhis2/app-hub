@@ -376,13 +376,20 @@ const editVersion = action$ =>
         ofType(actions.APP_VERSION_EDIT),
         concatMap(action => {
             const { appId, version } = action.payload
+            const versionObj = {
+                demoUrl: version.demoUrl,
+                id: version.id,
+                maxDhisVersion: version.maxDhisVersion,
+                minDhisVersion: version.minDhisVersion,
+                version: version.version,
+            }
+
             const { id } = action.meta.optimistic
-            const versionId = version.id
             return api
-                .updateVersion(appId, versionId, version)
+                .updateVersion(appId, versionObj.id, versionObj)
                 .then(response =>
                     actionCreators.commitOrRevertOptimisticAction(
-                        actionCreators.editAppVersionSuccess(appId, version),
+                        actionCreators.editAppVersionSuccess(appId, versionObj),
                         id
                     )
                 )
