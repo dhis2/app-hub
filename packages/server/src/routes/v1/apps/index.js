@@ -9,4 +9,5 @@ module.exports = [
     require('./handlers/deleteApp'),
     require('./handlers/getMedia'),
     require('./handlers/editApp'),
+    require('./handlers/editAppVersion'),
 ]

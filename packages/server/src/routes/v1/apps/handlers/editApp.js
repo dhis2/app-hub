@@ -8,16 +8,7 @@ const {
     currentUserIsManager,
 } = require('@security')
 
-const { createTransaction, updateApp, getAppsByUuid } = require('@data')
-
-const userIsDeveloperOfAppWithUuid = async (params, db) => {
-    try {
-        const [firstApp] = await getAppsByUuid(params.uuid, 'en', db)
-        return firstApp.developer_id === params.userId
-    } catch (err) {
-        return false
-    }
-}
+const { createTransaction, updateApp, getAppDeveloperId } = require('@data')
 
 module.exports = {
     method: 'PUT',
@@ -49,12 +40,15 @@ module.exports = {
         const db = h.context.db
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const currentUserIsAppDeveloper = await userIsDeveloperOfAppWithUuid(
-            { userId: currentUser.id, uuid: request.params.appUuid },
+        const appDeveloperId = await getAppDeveloperId(
+            request.params.appUuid,
             db
         )
 
-        if (currentUserIsManager(request) || currentUserIsAppDeveloper) {
+        if (
+            currentUserIsManager(request) ||
+            appDeveloperId === currentUser.id
+        ) {
             //can edit app
             const transaction = await createTransaction(db)
 

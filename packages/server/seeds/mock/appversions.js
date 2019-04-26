@@ -6,21 +6,21 @@ const [dhis2App, whoApp, pendingApp, rejectedApp] = apps
 const dhis2AppVersions = [
     {
         id: 1,
-        uuid: uuid(),
+        uuid: '792aa26c-5595-4ae5-a2f8-028439060e2e',
         app_id: dhis2App.id,
         created_by_user_id: dhis2App.created_by_user_id,
         version: '0.1',
     },
     {
         id: 2,
-        uuid: uuid(),
+        uuid: '966f8602-5a99-4354-9730-9409431d6bda',
         app_id: dhis2App.id,
         created_by_user_id: dhis2App.created_by_user_id,
         version: '0.2-beta',
     },
     {
         id: 3,
-        uuid: uuid(),
+        uuid: 'a06b6758-ae2f-4d56-afe9-69582ea8cabb',
         app_id: dhis2App.id,
         created_by_user_id: dhis2App.created_by_user_id,
         version: '0.3-dev',
