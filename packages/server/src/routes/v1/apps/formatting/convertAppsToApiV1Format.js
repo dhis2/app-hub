@@ -70,7 +70,9 @@ module.exports = (apps, request) => {
         throw new Error('Missing parameter: request')
     }
 
-    const serverUrl = `${request.server.info.protocol}://${request.info.host}`
+    const serverUrl = `${request.server.info.protocol}://${
+        request.info.host
+    }/api`
 
     console.log(`Using serverUrl: ${serverUrl}`)
 
