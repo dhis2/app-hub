@@ -102,6 +102,7 @@ const createUserValidationFunc = (db, audience) => {
                     returnObj.credentials.userId = apiUser.id
                     returnObj.credentials.uuid = apiUser.uuid
                 } catch (err) {
+                    //Could probably not find a user with the mapped external id, make sure there is one in database for the audience@clients external id mapped to a user
                     throw Boom.internal(err)
                 }
             }
