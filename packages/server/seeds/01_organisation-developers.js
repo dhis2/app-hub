@@ -39,13 +39,19 @@ exports.seed = async knex => {
     ])
 
     console.log('Inserting user_external_id')
-    await knex('user_external_id').insert([
-        {
-            id: 1,
-            user_id: 1,
-            external_id: `${process.env.auth0_audience}@clients`,
-        },
-    ])
+    if (!process.env.AUTH0_AUDIENCE) {
+        console.warn(
+            'WARNING: process.env.AUTH0_AUDIENCE is not set. Will not insert external id for M2M Api access (this requires manual setup)'
+        )
+    } else {
+        await knex('user_external_id').insert([
+            {
+                id: 1,
+                user_id: 1,
+                external_id: `${process.env.AUTH0_AUDIENCE}@clients`,
+            },
+        ])
+    }
 
     console.log('Inserting organisations')
 
