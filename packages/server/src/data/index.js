@@ -21,4 +21,6 @@ module.exports = {
     getAppById: require('./getAppById'),
     setImageAsLogoForApp: require('./setImageAsLogoForApp'),
     updateImageMeta: require('./updateImageMeta'),
+    deleteMedia: require('./deleteMedia'),
+    getMedia: require('./getMedia'),
 }
