@@ -10,7 +10,7 @@ const {
 
 const {
     createTransaction,
-    updateApp,
+    updateImageMeta,
     getAppDeveloperId,
     setImageAsLogoForApp,
 } = require('@data')
@@ -37,6 +37,8 @@ module.exports = {
 
         const { mediaUuid, appUuid } = request.params
 
+        const jsonPayload = JSON.parse(request.payload)
+
         const currentUser = await getCurrentUserFromRequest(request, db)
         const appDeveloperId = await getAppDeveloperId(
             request.params.appUuid,
@@ -50,7 +52,30 @@ module.exports = {
             const transaction = await createTransaction(db)
 
             try {
-                await setImageAsLogoForApp(appUuid, mediaUuid, db, transaction)
+                //if just clicking the star symbol in the frontend, the jsonPayload will only contain logo = true
+                if (jsonPayload.logo) {
+                    await setImageAsLogoForApp(
+                        {
+                            appUuid,
+                            mediaUuid,
+                        },
+                        db,
+                        transaction
+                    )
+                }
+
+                //if editing the caption/desc it will also contain this on top of the logo boolean
+                if (jsonPayload.caption || jsonPayload.description) {
+                    await updateImageMeta(
+                        {
+                            uuid: mediaUuid,
+                            caption: jsonPayload.caption,
+                            description: jsonPayload.description,
+                        },
+                        db,
+                        transaction
+                    )
+                }
 
                 transaction.commit()
             } catch (err) {

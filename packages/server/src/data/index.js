@@ -20,4 +20,5 @@ module.exports = {
     updateAppVersion: require('./updateAppVersion'),
     getAppById: require('./getAppById'),
     setImageAsLogoForApp: require('./setImageAsLogoForApp'),
+    updateImageMeta: require('./updateImageMeta'),
 }

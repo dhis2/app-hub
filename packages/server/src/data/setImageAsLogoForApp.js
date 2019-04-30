@@ -1,21 +1,26 @@
+const joi = require('joi')
 const { ImageType } = require('@enums')
+
+const paramsSchema = joi.object().keys({
+    appUuid: joi.string().uuid(),
+    mediaUuid: joi.string().uuid(),
+})
 
 /**
  * Changes which media that is used as Logo for an app
  *
- * @param {string} appUuid UUID of the app to set the logo for
- * @param {string} mediaUuid Media UUID to use as logo
+ * @param {object} params
+ * @param {string} params.appUuid UUID of the app to set the logo for
+ * @param {string} params.mediaUuid Media UUID to use as logo
  * @param {*} knex
  * @param {*} transaction
  * @returns {Promise}
  */
-const setImageAsLogoForApp = async (appUuid, mediaUuid, knex, transaction) => {
-    if (!appUuid) {
-        throw new Error('Missing parameter: appUuid')
-    }
+const setImageAsLogoForApp = async (params, knex, transaction) => {
+    const validation = joi.validate(params, paramsSchema)
 
-    if (!mediaUuid) {
-        throw new Error('Missing parameter: mediaUuid')
+    if (validation.error !== null) {
+        throw new Error(validation.error)
     }
 
     if (!knex) {
@@ -25,6 +30,8 @@ const setImageAsLogoForApp = async (appUuid, mediaUuid, knex, transaction) => {
     if (!transaction) {
         throw new Error('Missing parameter: transaction')
     }
+
+    const { appUuid, mediaUuid } = params
 
     try {
         const appVersionIds = await knex('app_version')

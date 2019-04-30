@@ -13,7 +13,6 @@ const {
     createTransaction,
     getAppsByUuid,
     addAppVersionMedia,
-    updateApp,
     getAppDeveloperId,
 } = require('@data')
 
@@ -45,17 +44,19 @@ module.exports = {
 
         const knex = h.context.db
 
-        const currentUser = await getCurrentUserFromRequest(request, db)
+        const currentUser = await getCurrentUserFromRequest(request, knex)
         const appDeveloperId = await getAppDeveloperId(
             request.params.appUuid,
-            db
+            knex
         )
 
         if (
-            !currentUserIsManager(request) ||
+            !currentUserIsManager(request) &&
             appDeveloperId !== currentUser.id
         ) {
-            throw Boom.unauthorized(`You don't have access to edit that app`)
+            return h
+                .response({ message: `You don't have access to edit that app` })
+                .code(401)
         }
 
         const appVersions = await getAppsByUuid(
@@ -69,7 +70,8 @@ module.exports = {
 
         const trx = await createTransaction(knex)
 
-        //Save the image to all versions (previously the appstore stored media per app, and not version, so we keep them per version now but distinct them, if one version is deleted we still want to keep the screenshot for that version.) In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
+        //Save the image to all versions? (previously the appstore stored media per app, and not version, so we keep them per version for now.
+        //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
         const promises = appVersions.map(async appVersion => {
             const { id, uuid } = await addAppVersionMedia(
                 {

@@ -4,7 +4,7 @@ exports.up = async knex => {
             SELECT  app.id AS app_id, 
                     app.uuid, app.type,
                     appver.version, appver.id AS version_id, appver.uuid AS version_uuid, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
-                    media.id AS media_id, media.original_filename, media.uuid AS media_uuid, media.created_at AS media_created_at, media.image_type, 
+                    media.id AS media_id, media.original_filename, media.uuid AS media_uuid, media.created_at AS media_created_at, media.image_type,
                     localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
