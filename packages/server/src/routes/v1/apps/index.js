@@ -10,4 +10,6 @@ module.exports = [
     require('./handlers/getMedia'),
     require('./handlers/editApp'),
     require('./handlers/editAppVersion'),
+    require('./handlers/setImageAsLogo'),
+    require('./handlers/uploadImageToApp'),
 ]
