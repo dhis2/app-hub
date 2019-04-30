@@ -1,3 +1,11 @@
+/* To use your external env-vars from ~/.dhis2/appstore/vars with knex CLI uncomment this to load them */
+/*
+const config = require('dotenv').config({
+    path: `${require('os').homedir()}/.dhis2/appstore/vars`,
+})
+console.log('Injecting config vars into process.env: ', config)
+*/
+
 module.exports = {
     test: {
         client: 'sqlite3',
