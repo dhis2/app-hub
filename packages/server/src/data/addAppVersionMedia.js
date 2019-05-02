@@ -63,6 +63,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
         const mediaTypes = await knex('media_type')
             .select('id')
             .where('mime', mime)
+
         if (!mediaTypes || mediaTypes.length === 0) {
             const [id] = await knex('media_type')
                 .transacting(transaction)
@@ -101,10 +102,12 @@ const addAppVersionMedia = async (params, knex, transaction) => {
 
         return { id, uuid: mediaUuid }
     } catch (err) {
+        // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
         throw new Error(
-            `Could not add media to app version: ${JSON.stringify(
-                insertData
-            )}. ` + err.message
+            `Could not add media to app version: ${JSON.stringify({
+                ...insertData,
+                created_at: null,
+            })}. ${err.message}`
         )
     }
 }

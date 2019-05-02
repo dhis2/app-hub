@@ -18,7 +18,7 @@ const getUserByEmail = async (email, knex) => {
         console.log(err)
     }
 
-    return user
+    return user ? user : null
 }
 
 module.exports = getUserByEmail

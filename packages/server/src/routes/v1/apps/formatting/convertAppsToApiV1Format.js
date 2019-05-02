@@ -36,9 +36,9 @@ const convertAppToV1Media = (app, serverUrl) => {
         imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${
             app.version_uuid
         }/${app.media_uuid}`,
-        caption: '',
+        caption: app.media_caption,
         created: +new Date(app.media_created_at),
-        description: '',
+        description: app.media_description,
         id: app.media_uuid,
         lastUpdated: +new Date(app.media_created_at),
         logo: app.image_type === ImageType.Logo,
@@ -70,7 +70,9 @@ module.exports = (apps, request) => {
         throw new Error('Missing parameter: request')
     }
 
-    const serverUrl = `${request.server.info.protocol}://${request.info.host}`
+    const serverUrl = `${request.server.info.protocol}://${
+        request.info.host
+    }/api`
 
     console.log(`Using serverUrl: ${serverUrl}`)
 
@@ -87,6 +89,11 @@ module.exports = (apps, request) => {
 
         if (app.media_uuid !== null) {
             currentApp.images.push(convertAppToV1Media(app, serverUrl))
+
+            //sort images making the logo the first image
+            currentApp.images.sort((a, b) => {
+                return a.logo ? -1 : b.logo ? 1 : 0
+            })
         }
 
         currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))

@@ -91,13 +91,16 @@ module.exports = class LocalFileSystemHandler {
                 return
             }
 
-            fs.unlink(path.join(directoryPath, filename), err => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve()
+            fs.unlink(
+                path.join(this._uploadDirectory, directoryPath, filename),
+                err => {
+                    if (err) {
+                        reject(err)
+                    } else {
+                        resolve()
+                    }
                 }
-            })
+            )
         })
     }
 
