@@ -12,8 +12,8 @@
     "husky": "^2.5.0"
   },
   "scripts": {
-    "build": "cd packages/server && npm install && npm run build",
-    "start": "cd packages/server && npm run start"
+    "build": "cd packages/server && yarn install && yarn build",
+    "start": "cd packages/server && yarn start"
   },
   "husky": {
     "hooks": {
