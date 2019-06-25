@@ -11,3 +11,5 @@ deploy:
   env: Production
   on:
     repo: dhis2/app-store
+    tags: false
+    branch: master
