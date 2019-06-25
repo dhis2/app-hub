@@ -8,8 +8,11 @@
   "license": "BSD-3-Clause",
   "private": true,
   "devDependencies": {
-    "@dhis2/cli-style": "^3.0.1",
-    "husky": "^1.3.1"
+    "@dhis2/cli-style": "^3.3.4",
+    "husky": "^2.5.0"
+  },
+  "scripts": {
+    "build": "cd packages/server && yarn install && yarn build"
   },
   "husky": {
     "hooks": {

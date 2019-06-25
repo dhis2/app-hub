@@ -1,0 +1,17 @@
+language: node_js
+node_js:
+- lts/*
+script:
+- yarn build
+deploy:
+  provider: elasticbeanstalk
+  access_key_id: AKIA3FIRG253ONY7VFXG
+  secret_access_key:
+    secure: v4hpJkk7XcUbF0P1XmaH+xtK82TLc5Kg4AyL+orpC0fwprCBt1CBMbsAe0wSzS7g8hncvvEnF3XYJ1wNcMcLGrj/BhRx29UCi3N+ATa5O1bGjO25mxTVma9zj8B9RS0nx9RhP6LsmgCCpCDrT3xxU/pVQFkzVHMIwsnnhqH4Rb4duNnTZ5luVEHAf3JxED8CH6Lwy4VNtVwIGflww4NLEsoxx0/ah7bGG8dQ7TRL+AoI8TxW9S1rSSubFnl6DKL8sacy2iHnWb+iM2vY4A7kFTiaAxvdXt+F/HxjVEM2x3zGcIQqozjzKg6g0rO+T0p1vg/jxA3lhQchoJRHZo6TbVa7DlWirD87eUvPsPd4TsIFvDAfhxTjurjoNFQSi4cGFF/TNW8GgvGMQd7lih+KsCsBPB5EtJfzTuvZOAjJugUxO4WGwe8+12SysTaX9GYfMRYjKwjgd9X+zzNGnKyJhj9/Qwo/0gh/qps4NWFv/MWHUIIHiwerNlGuGGL6gbSfWHz/sZRSiucRSzpNHkaOAgrutdM78u8skHAU+h9+Lv8W2fMS7rUh/kiWH5YOkUAyMxGPinMiPXgCs3hc9/FnUNopf1nsMNUgPf7XLg7+K6Sdlqfjupb/2yxWOAhXjoEa3z2A87jW3voYwF+sxdh9xsyRk09mBt6Rm8j5UyrLEWk=
+  region: eu-west-1
+  app: dhis2-app-store
+  env: Production
+  on:
+    repo: dhis2/app-store
+    tags: false
+    branch: master
