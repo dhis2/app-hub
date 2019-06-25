@@ -146,6 +146,7 @@ process.on('unhandledRejection', err => {
     process.exit(1)
 })
 
-init()
+// run migrations before booting server
+db.migrate.latest().then(() => init())
 
 module.exports = { server, db }
