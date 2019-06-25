@@ -12,7 +12,8 @@
     "husky": "^2.5.0"
   },
   "scripts": {
-    "build": "cd packages/server && yarn install && yarn build"
+    "build": "cd packages/server && yarn install && yarn build",
+    "start": "yarn --cwd packages/server run start"
   },
   "husky": {
     "hooks": {
