@@ -2,7 +2,7 @@ language: node_js
 node_js:
 - lts/*
 script:
-- yarn build
+- echo "nothing atm"
 deploy:
   skip_cleanup: true
   provider: elasticbeanstalk
