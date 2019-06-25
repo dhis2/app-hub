@@ -7,13 +7,16 @@
   "author": "Viktor Varland <viktor@dhis2.org>",
   "license": "BSD-3-Clause",
   "private": true,
+  "workspaces": [
+    "server", "client"
+  ],
   "devDependencies": {
     "@dhis2/cli-style": "^3.3.4",
     "husky": "^2.5.0"
   },
   "scripts": {
-    "build": "cd packages/server && yarn install && yarn build",
-    "start": "cd packages/server && yarn start"
+    "build:client": "cd client && yarn build",
+    "start": "yarn build:client && cd server && yarn start"
   },
   "husky": {
     "hooks": {
