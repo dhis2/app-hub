@@ -6,7 +6,6 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
-        "preinstall": "link-module-alias clean",
         "postinstall": "link-module-alias",
         "start": "NODE_ENV=production node ./src/main.js",
         "dev": "DEBUG=knex:tx NODE_ENV=development nodemon --inspect src/main.js",
@@ -15,7 +14,7 @@
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest",
         "seed-db": "npx knex seed:run",
         "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
-        "build": "rm -rf ./build && mkdir build && yarn --cwd ../client/ run build",
+        "build": "rm -rf ./build && mkdir build && yarn --cwd ../client install && yarn --cwd ../client/ run build",
         "format": "d2-style js apply"
     },
     "dependencies": {

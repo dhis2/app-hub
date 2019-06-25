@@ -11,6 +11,9 @@
     "@dhis2/cli-style": "^3.3.4",
     "husky": "^2.5.0"
   },
+  "scripts": {
+    "build": "cd packages/server && yarn install && yarn build"
+  },
   "husky": {
     "hooks": {
       "commit-msg": "d2-style commit check",

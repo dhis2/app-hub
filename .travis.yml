@@ -1,6 +1,8 @@
 language: node_js
 node_js:
 - lts/*
+script:
+- yarn build
 deploy:
   provider: elasticbeanstalk
   access_key_id: AKIA3FIRG253ONY7VFXG
