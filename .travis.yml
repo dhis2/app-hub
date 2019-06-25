@@ -4,6 +4,7 @@ node_js:
 script:
 - yarn build
 deploy:
+  skip_cleanup: true
   provider: elasticbeanstalk
   access_key_id: AKIA3FIRG253ONY7VFXG
   secret_access_key:
