@@ -78,7 +78,7 @@ const init = async () => {
     ) {
         await server.register(jwt)
 
-        const registerAuth0 = require('./registerAuth0')
+        const registerAuth0 = require('./security/registerAuth0')
 
         registerAuth0(server, knex, {
             key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
