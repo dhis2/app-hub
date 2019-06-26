@@ -5,3 +5,4 @@ files
 coverage
 .vscode
 appstore_dev.sqlite
+node_modules/
