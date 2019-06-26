@@ -7,7 +7,7 @@ module.exports = {
         domain: 'dhis2.eu.auth0.com',
     },
     routes: {
-        baseAppName: '/appstore',
+        baseAppName: '/',
     },
     ui: {
         dhisVersions: [

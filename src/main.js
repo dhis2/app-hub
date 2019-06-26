@@ -128,7 +128,7 @@ const init = async () => {
         },
         {
             method: 'GET',
-            path: '/{param*}',
+            path: '/',
             handler: {
                 file: path.join(__dirname, '../static/index.html'),
             },
