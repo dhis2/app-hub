@@ -12,8 +12,7 @@
         "test-coverage": "NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html test/index.js",
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest",
         "seed-db": "npx knex seed:run",
-        "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
-        "format": "d2-style js apply"
+        "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run"
     },
     "dependencies": {
         "@babel/core": "^7.4.5",

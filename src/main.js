@@ -151,11 +151,26 @@ process.on('unhandledRejection', err => {
 
 const compile = () => new Promise((resolve, reject) => {
     webpack(require('../webpack.config.js'), (err, stats) => {
-        if (err || stats.hasErrors()) {
-            reject({ err, stats })
-        } else {
-            resolve(stats)
+        if (err) {
+            console.error(err.stack || err);
+            if (err.details) {
+                console.error(err.details);
+            }
+            return reject(err)
         }
+
+        const info = stats.toJson();
+
+        if (stats.hasErrors()) {
+            console.error(info.errors);
+            return reject(err)
+        }
+
+        if (stats.hasWarnings()) {
+            console.warn(info.warnings);
+        }
+
+        return resolve(stats)
     })
 })
 
@@ -165,9 +180,6 @@ compile()
     .then(init)
     .catch(err => {
         console.error('Boostrap error:', err)
-        if (err.stats && err.stats.hasErrors()) {
-            console.error(err.stats.compilation.errors)
-        }
         process.exit(1)
     })
 
