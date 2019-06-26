@@ -4,7 +4,7 @@ if (typeof __APP_CONFIG__ !== 'undefined') {
     conf = __APP_CONFIG__
 } else {
     //Not in webpack, ie in tests and webpack.config - provide default
-    conf = require('../../default.config')
+    conf = require('../default.config')
 }
 
 export default conf
