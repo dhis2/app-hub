@@ -1,38 +1,39 @@
+const os = require('os')
 const path = require('path')
 
-const Hapi = require('hapi')
-const Pino = require('hapi-pino')
-
-const jwt = require('hapi-auth-jwt2')
-
-const Inert = require('inert')
-const Vision = require('vision')
 const Blipp = require('blipp')
+const Hapi = require('hapi')
+const HapiSwagger = require('hapi-swagger')
+const Inert = require('inert')
+const Knex = require('knex')
+const Pino = require('hapi-pino')
+const Vision = require('vision')
 
+const dotenv = require('dotenv')
+const jwt = require('hapi-auth-jwt2')
 const webpack = require('webpack')
 
-const HapiSwagger = require('hapi-swagger')
+const knexConfig = require('../knexfile.js')
+const webpackConfig = require('../webpack.config.js')
+
+const routes = require('./routes/index.js')
+const options = require('./options/index.js')
+const registerAuth0 = require('./security/registerAuth0.js')
+
+console.log('Using env: ', process.env.NODE_ENV)
+
+const knex = Knex(knexConfig[process.env.NODE_ENV])
 
 if (process.env.NODE_ENV !== 'production') {
-    const config = require('dotenv').config({
-        path: `${require('os').homedir()}/.dhis2/appstore/vars`,
+    const config = dotenv.config({
+        path: `${os.homedir()}/.dhis2/appstore/vars`,
     })
     console.log('Injecting config vars into process.env: ', config)
 }
 
-console.log('Using env: ', process.env.NODE_ENV)
-
-const routes = require('./routes')
-
-const knexConfig = require('../knexfile')
-
-const knex = require('knex')(knexConfig[process.env.NODE_ENV])
-
-console.log(knexConfig[process.env.NODE_ENV])
-
 const server = Hapi.server({
     port: process.env.PORT || 3000,
-    host: 'localhost',
+    host: process.env.HOST || 'localhost',
     routes: {
         cors: {
             //TODO: load the URLs from database or something, so we can dynamically manage these
@@ -45,8 +46,9 @@ server.bind({
     db: knex,
 })
 
-// kick it
 const init = async () => {
+    console.info('Starting server...')
+
     //Add pino, logging lib
     await server.register({
         plugin: Pino,
@@ -64,7 +66,7 @@ const init = async () => {
         Blipp,
         {
             plugin: HapiSwagger,
-            options: require('./options').swaggerOptions,
+            options: options.swaggerOptions,
         },
     ])
 
@@ -77,8 +79,6 @@ const init = async () => {
         process.env.AUTH0_ALG
     ) {
         await server.register(jwt)
-
-        const registerAuth0 = require('./security/registerAuth0')
 
         registerAuth0(server, knex, {
             key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
@@ -149,7 +149,8 @@ process.on('unhandledRejection', err => {
 })
 
 const compile = () => new Promise((resolve, reject) => {
-    webpack(require('../webpack.config.js'), (err, stats) => {
+    console.info('Compiling web application...')
+    webpack(webpackConfig, (err, stats) => {
         if (err) {
             console.error(err.stack || err);
             if (err.details) {
@@ -173,15 +174,28 @@ const compile = () => new Promise((resolve, reject) => {
     })
 })
 
-// kick it off
-compile()
-    .then(_ => knex.migrate.latest({
+const migrate = () => {
+    console.info('Running database migrations...')
+    return knex.migrate.latest({
         directory: './migrations',
         tableName: 'knex_migrations',
-    }))
-    .then(_ => init())
+    })
+}
+
+// Start the madness.
+compile()
     .catch(err => {
-        console.error('Boostrap error:', err)
+        console.error('The web app failed to compile.\n', err)
+        process.exit(1)
+    })
+    .then(migrate)
+    .catch(err => {
+        console.error('The database migrations failed to apply.\n', err)
+        process.exit(1)
+    })
+    .then(init)
+    .catch(err => {
+        console.error('The server failed to start.\n', err)
         process.exit(1)
     })
 
