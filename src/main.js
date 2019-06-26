@@ -111,7 +111,7 @@ const init = async () => {
     server.route([
         {
             method: 'GET',
-            path: '/appstore/assets/{param*}',
+            path: '/assets/{param*}',
             handler: {
                 directory: {
                     path: path.join(__dirname, '../static/assets/'),
@@ -120,7 +120,7 @@ const init = async () => {
         },
         {
             method: 'GET',
-            path: '/appstore/js/{param*}',
+            path: '/js/{param*}',
             handler: {
                 directory: {
                     path: path.join(__dirname, '../static/js/'),
@@ -129,7 +129,7 @@ const init = async () => {
         },
         {
             method: 'GET',
-            path: '/appstore/{param*}',
+            path: '/{param*}',
             handler: {
                 file: path.join(__dirname, '../static/index.html'),
             },
