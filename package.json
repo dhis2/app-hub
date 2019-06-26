@@ -7,16 +7,14 @@
   "author": "Viktor Varland <viktor@dhis2.org>",
   "license": "BSD-3-Clause",
   "private": true,
-  "workspaces": [
-    "server", "client"
-  ],
   "devDependencies": {
     "@dhis2/cli-style": "^3.3.4",
     "husky": "^2.5.0"
   },
   "scripts": {
-    "build:client": "cd client && yarn build",
-    "start": "yarn build:client && cd server && yarn start"
+    "postinstall": "cd client && npm install && cd .. && cd server && npm install",
+    "build:client": "cd client && npm run build",
+    "start": "npm run build:client && cd server && npm run start"
   },
   "husky": {
     "hooks": {
