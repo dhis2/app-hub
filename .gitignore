@@ -3,3 +3,4 @@ bundle.zip
 # Elastic Beanstalk Files
 .elasticbeanstalk
 node_modules/
+static/
