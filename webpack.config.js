@@ -7,16 +7,16 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 
 const isDevBuild = process.argv.indexOf('-p') === -1
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
-const config = require('./src/config/configResolver.js').default
+const config = require('./config/configResolver.js').default
 
-const appEntry = path.join(__dirname, 'src/app-store.js')
+const appEntry = path.join(__dirname, 'client/src/app-store.js')
 
 const prod = {
     entry: {
-        app: ['babel-polyfill', 'whatwg-fetch', appEntry],
+        app: ['whatwg-fetch', appEntry],
     },
     output: {
-        path: path.join(__dirname, '../server', 'build', 'static'),
+        path: path.join(__dirname, 'static'),
         filename: path.join('js', `[name]_${packageJSON.version}.js`),
         //this is where the files are served from
         publicPath: config.routes.baseAppName + '/',
@@ -70,7 +70,7 @@ const prod = {
         new webpack.optimize.ModuleConcatenationPlugin(),
         new CopyWebpackPlugin([
             {
-                from: path.join(__dirname, 'src/assets'),
+                from: path.join(__dirname, 'client/src/assets'),
                 to: 'assets',
             },
         ]),

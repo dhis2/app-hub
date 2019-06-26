@@ -1,6 +1,6 @@
 const merge = require('lodash/merge')
 const isDevBuild = process.argv.indexOf('-p') === -1
-const relPath = '../..'
+const relPath = '..'
 
 const defaultConfigs = ['default.config.js', 'config.js']
 
@@ -12,8 +12,10 @@ const envConfigNames = {
 function loadFile(filename) {
     try {
         const path = [relPath, filename].join('/')
+        console.log(path)
         return require(path)
     } catch (e) {
+        console.error('failed to load', e)
         return null
     }
 }

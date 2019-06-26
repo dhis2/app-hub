@@ -1,20 +1,5 @@
-*.class
-*.jar
-*.war
-*.ear
-*.iml
-hs_err_pid*
-target
-.idea
-.classpath
-.project
-.settings
-.vscode
-node_modules
-build
-app/build
-app/*config.js
-packages/server/yarn-error.log
-packages/server/appstore_dev.sqlite
-
-packages/server/bundle.zip
+upload/
+bundle.zip
+# Elastic Beanstalk Files
+.elasticbeanstalk
+node_modules/

@@ -1,13 +1,16 @@
+const path = require('path')
+
 const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
-const path = require('path')
 
 const jwt = require('hapi-auth-jwt2')
 
 const Inert = require('inert')
 const Vision = require('vision')
 const Blipp = require('blipp')
+
+const webpack = require('webpack')
 
 const HapiSwagger = require('hapi-swagger')
 
@@ -111,7 +114,7 @@ const init = async () => {
             path: '/appstore/assets/{param*}',
             handler: {
                 directory: {
-                    path: path.join(__dirname, '../build/static/assets/'),
+                    path: path.join(__dirname, '../static/assets/'),
                 },
             },
         },
@@ -120,7 +123,7 @@ const init = async () => {
             path: '/appstore/js/{param*}',
             handler: {
                 directory: {
-                    path: path.join(__dirname, '../build/static/js/'),
+                    path: path.join(__dirname, '../static/js/'),
                 },
             },
         },
@@ -128,7 +131,7 @@ const init = async () => {
             method: 'GET',
             path: '/appstore/{param*}',
             handler: {
-                file: path.join(__dirname, '../build/static/index.html'),
+                file: path.join(__dirname, '../static/index.html'),
             },
         },
     ])
@@ -146,7 +149,26 @@ process.on('unhandledRejection', err => {
     process.exit(1)
 })
 
-// run migrations before booting server
-db.migrate.latest().then(() => init())
+const compile = () => new Promise((resolve, reject) => {
+    webpack(require('../webpack.config.js'), (err, stats) => {
+        if (err || stats.hasErrors()) {
+            reject({ err, stats })
+        } else {
+            resolve(stats)
+        }
+    })
+})
+
+// kick it off
+compile()
+    .then(db.migrate.latest)
+    .then(init)
+    .catch(err => {
+        console.error('Boostrap error:', err)
+        if (err.stats.hasErrors()) {
+            console.error(err.stats.compilation.errors)
+        }
+        process.exit(1)
+    })
 
 module.exports = { server, db }
