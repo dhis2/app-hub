@@ -1,6 +1,5 @@
 const path = require('path')
 
-const Knex = require('knex')
 const Hapi = require('hapi')
 const Pino = require('hapi-pino')
 
@@ -27,8 +26,8 @@ const routes = require('./routes')
 
 const knexConfig = require('../knexfile')
 
-// server things before start
-const db = new Knex(knexConfig[process.env.NODE_ENV])
+const knex = require('knex')(knexConfig[process.env.NODE_ENV])
+
 console.log(knexConfig[process.env.NODE_ENV])
 
 const server = Hapi.server({
@@ -43,7 +42,7 @@ const server = Hapi.server({
 })
 
 server.bind({
-    db,
+    db: knex,
 })
 
 // kick it
@@ -81,7 +80,7 @@ const init = async () => {
 
         const registerAuth0 = require('./registerAuth0')
 
-        registerAuth0(server, db, {
+        registerAuth0(server, knex, {
             key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
             verifyOptions: {
                 audience: process.env.AUTH0_AUDIENCE,
@@ -176,11 +175,14 @@ const compile = () => new Promise((resolve, reject) => {
 
 // kick it off
 compile()
-    .then(db.migrate.latest)
-    .then(init)
+    .then(_ => knex.migrate.latest({
+        directory: './migrations',
+        tableName: 'knex_migrations',
+    }))
+    .then(_ => init())
     .catch(err => {
         console.error('Boostrap error:', err)
         process.exit(1)
     })
 
-module.exports = { server, db }
+module.exports = { server, db: knex }

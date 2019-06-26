@@ -39,7 +39,7 @@
         "inert": "^5.1.2",
         "joi": "^14.3.1",
         "jwt-decode": "^2.1.0",
-        "knex": "^0.16.3",
+        "knex": "^0.17.3",
         "lodash": "^4.17.4",
         "material-components-web": "^0.16.0",
         "material-design-icons": "^3.0.1",
