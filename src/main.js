@@ -165,7 +165,7 @@ compile()
     .then(init)
     .catch(err => {
         console.error('Boostrap error:', err)
-        if (err.stats.hasErrors()) {
+        if (err.stats && err.stats.hasErrors()) {
             console.error(err.stats.compilation.errors)
         }
         process.exit(1)

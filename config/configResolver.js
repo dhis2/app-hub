@@ -12,10 +12,8 @@ const envConfigNames = {
 function loadFile(filename) {
     try {
         const path = [relPath, filename].join('/')
-        console.log(path)
         return require(path)
     } catch (e) {
-        console.error('failed to load', e)
         return null
     }
 }
