@@ -14,7 +14,7 @@ deploy:
     secure: "PMy2lpXcnoMIL08ZDQJWHBqregcqsVXB4Axt47NkyxzcLuBp8TUyBMIkIHantycXlkO/HVOYbeIEJwa44m0cGcKYqBxI5JLkXnlBGwXhVR+ErP/0fl9+N3DH1sf2wNZ8nP2KXuB7HA7r3fDy1f4Ys2+5mNID6VuSDTs34wP7BhIFLfQiLeEtLNg4KnreSsaLwcF9fAAplROoqHcqfVxApnwytW5/vlA1fLbjtKrrTBNiL9c96KKIOiR4B+bXAhws6CUhZZbwqK5R9tfOGrZkYIxTMTfCRQdc2leZDqJ7vyIwhYLBkGbAzlJEG2b534IlQHm/Nj47PvciOW/Py+3QMTDANZ4sxx9DVSlFnt9x3/7bU16bqVHV+2K654IcKnMQfsw9hO5w6DIFvWCVwj7yp4gM9TIaFe1dGSYO6jEGl0T6L6S3PVlPtTx+JJZdVxW0pdhW1MHl4mFsAs7gM1ZS1rLkDGnX7jYG6ld9dUqBJBfiEEVNR3xd6xhHio7irAsvH+ocEAHJYzkNrQ4XVB0EEBfxusgKt0vfwBfV2uYqPEcA+rhaLcjepHKv+8MG2beZXcKFPQpJGER3WlAHIyziXye8h34PbLe5HMNtYOWJzLXgjFT3vF6PZmCCh/psl9/oliIAwITivXS/MOGDKqOsoDzW75fqhVQArLGenNjmk/o="
   region: eu-west-1
   app: dhis2-app-store
-  env: Production
+  env: app-store-prod
   on:
     repo: dhis2/app-store
     tags: false
