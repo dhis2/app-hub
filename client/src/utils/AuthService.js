@@ -14,7 +14,7 @@ export default class AuthService {
             auth: {
                 redirectUrl: `${window.location.protocol}//${
                     window.location.host
-                }/appstore/user`,
+                }/user`,
                 responseType: 'token',
                 params: {
                     scope: 'openid roles user_id email profile',
