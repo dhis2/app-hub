@@ -85,10 +85,10 @@ const prod = {
 
 const dev = Object.assign({}, prod, {
     entry: {
-        app: ['babel-polyfill', 'whatwg-fetch', appEntry],
+        app: ['whatwg-fetch', appEntry],
     },
     output: {
-        path: path.join(__dirname, 'build'),
+        path: path.join(__dirname, 'static'),
         filename: '[name].js',
         publicPath: '/',
     },
