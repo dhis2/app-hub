@@ -22,6 +22,8 @@ exports.init = async (knex) => {
         routes: {
             cors: {
                 origin: ['*'],
+                headers: ['Accept', 'Content-Type'],
+                additionalHeaders: ['X-Requested-With'],
             },
         },
     })
@@ -94,7 +96,7 @@ exports.init = async (knex) => {
             path: '/assets/{param*}',
             handler: {
                 directory: {
-                    path: path.join(__dirname, '../static/assets/'),
+                    path: path.join(__dirname, '../../static/assets/'),
                 },
             },
         },
@@ -103,7 +105,7 @@ exports.init = async (knex) => {
             path: '/js/{param*}',
             handler: {
                 directory: {
-                    path: path.join(__dirname, '../static/js/'),
+                    path: path.join(__dirname, '../../static/js/'),
                 },
             },
         },
@@ -111,7 +113,7 @@ exports.init = async (knex) => {
             method: 'GET',
             path: '/{param*}',
             handler: {
-                file: path.join(__dirname, '../static/index.html'),
+                file: path.join(__dirname, '../../static/index.html'),
             },
         },
     ])
@@ -122,5 +124,6 @@ exports.init = async (knex) => {
     await server.start()
 
     console.log(`Server running at: ${server.info.uri}`)
+
     return server
 }

@@ -5,6 +5,17 @@ Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
 Note: The master branch currently holds the version 2 of the unreleased App Store. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
 
 
+# TO DO
+
+- [ ] Update the README to the changes the after merging the
+  sub-packages
+- [ ] Fix tests after merge
+- [ ] Split up the deployment work so that Travis builds the frontend,
+  and runs the test against the backend, if both pass, deploy the
+  _built_ frontend with the backend to EBS. Remove on-server build
+  delay. Allow webapp to be a CRA app.
+
+
 # Setup
 
 ## Clone the repo
