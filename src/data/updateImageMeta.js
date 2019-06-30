@@ -13,10 +13,9 @@ const paramsSchema = joi.object().keys({
  * @param {string} params.caption Caption of the image
  * @param {string} params.description Description of the image
  * @param {*} knex
- * @param {*} transaction
  * @returns {Promise}
  */
-const updateImageMeta = async (params, knex, transaction) => {
+const updateImageMeta = async (params, knex) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -27,12 +26,9 @@ const updateImageMeta = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    if (!transaction) {
-        throw new Error('Missing parameter: transaction')
-    }
-
     const { uuid, caption, description } = params
 
+    const transaction = await knex.transaction()
     try {
         await knex('app_version_media')
             .transacting(transaction)
@@ -41,7 +37,10 @@ const updateImageMeta = async (params, knex, transaction) => {
                 caption,
                 description,
             })
+
+        await transaction.commit()
     } catch (err) {
+        await transaction.rollback()
         throw new Error(`Could not update media meta: ${uuid}. ${err.message}`)
     }
 }

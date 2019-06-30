@@ -35,10 +35,9 @@ const paramsSchema = joi
  * @param {string} params.version The version number of the appversion provided by the developer, for example v1.0, v1.2
  * @param {string} params.demoUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
  * @param {*} knex
- * @param {*} transaction
  * @returns {Promise<CreateUserResult>}
  */
-const updateAppVersion = async (params, knex, transaction) => {
+const updateAppVersion = async (params, knex) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -47,10 +46,6 @@ const updateAppVersion = async (params, knex, transaction) => {
 
     if (!knex) {
         throw new Error('Missing parameter: knex')
-    }
-
-    if (!transaction) {
-        throw new Error('Missing parameter: transaction')
     }
 
     const {
@@ -62,6 +57,7 @@ const updateAppVersion = async (params, knex, transaction) => {
         demoUrl,
     } = params
 
+    const transaction = await knex.transaction()
     try {
         const appVersionIdsToUpdate = await knex('app_version')
             .select('id')
@@ -87,7 +83,10 @@ const updateAppVersion = async (params, knex, transaction) => {
                 updated_by_user_id: userId,
             })
             .whereIn('app_version_id', appVersionIdsToUpdate)
+
+        await transaction.commit()
     } catch (err) {
+        await transaction.rollback()
         throw new Error(`Could not update appversion: ${uuid}. ${err.message}`)
     }
 }

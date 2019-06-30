@@ -14,7 +14,6 @@ module.exports = {
     getUserByEmail: require('./getUserByEmail'),
     createUser: require('./createUser'),
     addUserToOrganisation: require('./addUserToOrganisation'),
-    createTransaction: require('./createTransaction'),
     updateApp: require('./updateApp'),
     getAppDeveloperId: require('./getAppDeveloperId'),
     updateAppVersion: require('./updateAppVersion'),

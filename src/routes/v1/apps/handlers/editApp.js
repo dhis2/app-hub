@@ -9,7 +9,6 @@ const {
 } = require('../../../../security')
 
 const {
-    createTransaction,
     updateApp,
     getAppDeveloperId,
 } = require('../../../../data')
@@ -54,7 +53,7 @@ module.exports = {
             appDeveloperId === currentUser.id
         ) {
             //can edit app
-            const transaction = await createTransaction(db)
+            const transaction = await db.transaction()
 
             try {
                 const {
@@ -75,7 +74,6 @@ module.exports = {
                         languageCode: 'en',
                     },
                     db,
-                    transaction
                 )
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?

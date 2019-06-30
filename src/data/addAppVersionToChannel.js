@@ -38,10 +38,9 @@ const paramSchema = joi
  * @param {string} params.minDhisVersion Minimum dhis2 version supported for example 2.29
  * @param {string} params.maxDhisVersion Maximum dhis2 version supported for example 2.31
  * @param {object} knex DB instance of knex
- * @param {object} trx The transaction to operate on
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
-const addAppVersionToChannel = async (params, knex, transaction) => {
+const addAppVersionToChannel = async (params, knex) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== null) {
@@ -55,6 +54,7 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
         minDhisVersion,
         maxDhisVersion,
     } = params
+    const transaction = await knex.transaction()
     try {
         const [channel] = await knex('channel')
             .select('id')
@@ -71,13 +71,16 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
                 max_dhis2_version: maxDhisVersion,
             })
             .returning('id')
-
+        
         if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
+        await transaction.commit()
+
         return { id }
     } catch (err) {
+        await transaction.rollback()
         throw new Error(
             `Could not add app version with id ${appVersionId} to channel ${channelName}. ${
                 err.message

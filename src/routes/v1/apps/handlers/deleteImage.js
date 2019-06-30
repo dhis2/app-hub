@@ -7,7 +7,6 @@ const {
 } = require('../../../../security')
 
 const {
-    createTransaction,
     getAppDeveloperId,
     getMedia,
     deleteMedia,
@@ -44,7 +43,7 @@ module.exports = {
 
         if (isManager || appDeveloperId === currentUser.id) {
             //can edit app
-            const transaction = await createTransaction(db)
+            const transaction = await db.transaction()
 
             try {
                 const { media_uuid, version_uuid } = await getMedia(

@@ -1,7 +1,6 @@
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
 
 const Knex = require('knex')
-const knexConfig = require('../knexfile.js')
 
 const { migrate } = require('./server/migrate-database.js')
 const { compile } = require('./server/compile-webapp.js')
@@ -9,12 +8,23 @@ const { init } = require('./server/init-server.js')
 
 console.log('Using env: ', process.env.NODE_ENV)
 
-const knex = Knex(knexConfig[process.env.NODE_ENV])
-
-if (process.env.NODE_ENV !== 'production') {
-    const config = dotenv.config()
-    console.log('Injecting config vars into process.env: ', config)
-}
+const knex = Knex({
+    client: 'pg',
+    connection: {
+        host: process.env.RDS_HOSTNAME,
+        user: process.env.RDS_USERNAME,
+        password: process.env.RDS_PASSWORD,
+        database: process.env.RDS_DB_NAME,
+    },
+    searchPath: ['knex', 'public', 'postgres', 'appstore'],
+    pool: {
+        min: 2,
+        max: 10,
+    },
+    migrations: {
+        tableName: 'knex_migrations',
+    },
+})
 
 process.on('unhandledRejection', err => {
     console.log(err)

@@ -10,7 +10,6 @@ const {
 } = require('../../../../security')
 
 const {
-    createTransaction,
     getAppsByUuid,
     addAppVersionMedia,
     getAppDeveloperId,
@@ -68,7 +67,7 @@ module.exports = {
         const imageFile = request.payload.file
         const imageFileMetadata = imageFile.hapi
 
-        const trx = await createTransaction(knex)
+        const trx = await knex.transaction()
 
         //Save the image to all versions? (previously the appstore stored media per app, and not version, so we keep them per version for now.
         //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features

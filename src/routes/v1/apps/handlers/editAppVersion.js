@@ -7,7 +7,6 @@ const {
 } = require('../../../../security')
 
 const {
-    createTransaction,
     updateAppVersion,
     getAppDeveloperId,
 } = require('../../../../data')
@@ -50,7 +49,7 @@ module.exports = {
 
         if (currentUserIsManager(request) || currentUserIsAppDeveloper) {
             //can edit appversion
-            const transaction = await createTransaction(db)
+            const transaction = await db.transaction()
 
             try {
                 const {
@@ -68,7 +67,6 @@ module.exports = {
                         demoUrl,
                         version,
                     },
-                    transaction,
                     db
                 )
 
