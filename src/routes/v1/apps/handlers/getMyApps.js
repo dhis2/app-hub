@@ -1,11 +1,14 @@
 const Boom = require('boom')
 const Joi = require('joi')
 
+const { getAllAppsByDeveloperUuid } = require('../../../../data')
+const { convertAppsToApiV1Format } = require('../formatting')
+
 const AppModel = require('../../../../models/v1/out/App')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const { getCurrentAuthStrategy } = require('../../../../security')
+const { getCurrentAuthStrategy, getCurrentUserFromRequest } = require('../../../../security')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
@@ -22,11 +25,19 @@ module.exports = {
             failAction: defaultFailHandler,
         },
     },
-    handler: (request, h) => {
+    handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
         //TODO: implement fetching of apps for which the current user has access to, E.G. the organisations it belongs to
 
-        return Boom.notImplemented()
+        try {
+            const user = await getCurrentUserFromRequest(request, h.context.db)
+            const apps = await getAllAppsByDeveloperUuid(user.uuid, h.context.db)
+            return convertAppsToApiV1Format(apps, request)
+        } catch (err) {
+            console.log(err)
+        }
+
+        return []
     },
 }
