@@ -36,10 +36,9 @@ const paramsSchema = joi
  * @param {string} params.sourceUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
  * @param {string} params.languageCode The 2 char language code for which language to update
  * @param {*} knex
- * @param {*} transaction
  * @returns {Promise<CreateUserResult>}
  */
-const updateApp = async (params, knex, transaction) => {
+const updateApp = async (params, knex) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -59,9 +58,7 @@ const updateApp = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    if (!transaction) {
-        throw new Error('Missing parameter: transaction')
-    }
+    const transaction = await knex.transaction()
 
     const {
         uuid,
@@ -111,7 +108,10 @@ const updateApp = async (params, knex, transaction) => {
             })
             .whereIn('app_version_id', appVersionIdsToUpdate)
             .where('language_code', languageCode)
+
+        await transaction.commit()
     } catch (err) {
+        await transaction.rollback()
         throw new Error(`Could not update app: ${uuid}. ${err.message}`)
     }
 }

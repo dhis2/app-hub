@@ -1,7 +1,7 @@
 const Boom = require('boom')
 const uuid = require('uuid/v4')
 
-const { createUser, createTransaction } = require('../data')
+const { createUser } = require('../data')
 
 const createUserValidationFunc = (db, audience) => {
     return async (decoded, request) => {
@@ -47,9 +47,9 @@ const createUserValidationFunc = (db, audience) => {
                         .where('email', email)
                         .first('id', 'email')
 
-                    if (user === null) {
+                    if (!user) {
                         //create the user if it doesn't exist
-                        const transaction = createTransaction()
+                        const transaction = await db.transaction()
                         try {
                             user = await createUser(
                                 {
@@ -57,7 +57,6 @@ const createUserValidationFunc = (db, audience) => {
                                     name,
                                 },
                                 db,
-                                transaction
                             )
                             transaction.commit()
                         } catch (err) {
@@ -66,6 +65,7 @@ const createUserValidationFunc = (db, audience) => {
                         }
                     }
 
+                    console.log('USER:', user)
                     console.log(
                         `created user with id ${user.id} for email ${
                             user.email

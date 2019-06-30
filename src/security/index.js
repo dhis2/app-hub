@@ -114,7 +114,9 @@ const getCurrentUserFromRequest = async (request, knex) => {
         ) {
             user = {
                 id: request.auth.credentials.userId,
+                uuid: request.auth.credentials.uuid,
             }
+            console.log(request.auth.credentials)
         } else {
             reject()
             return

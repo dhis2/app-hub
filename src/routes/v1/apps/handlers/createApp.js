@@ -27,7 +27,6 @@ const {
     getUserByEmail,
     createUser,
     addUserToOrganisation,
-    createTransaction,
 } = require('../../../../data')
 
 module.exports = {
@@ -93,7 +92,7 @@ module.exports = {
         let versionUuid = null
         let iconUUid = null
 
-        const trx = await createTransaction(knex)
+        const trx = await knex.transaction()
 
         try {
             let organisation = null

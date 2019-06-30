@@ -9,7 +9,6 @@ const {
 } = require('../../../../security')
 
 const {
-    createTransaction,
     updateImageMeta,
     getAppDeveloperId,
     setImageAsLogoForApp,
@@ -49,7 +48,7 @@ module.exports = {
 
         if (isManager || appDeveloperId === currentUser.id) {
             //can edit app
-            const transaction = await createTransaction(db)
+            const transaction = await db.transaction()
 
             try {
                 //if just clicking the star symbol in the frontend, the jsonPayload will only contain logo = true
@@ -60,7 +59,6 @@ module.exports = {
                             mediaUuid,
                         },
                         db,
-                        transaction
                     )
                 }
 
@@ -73,7 +71,6 @@ module.exports = {
                             description: jsonPayload.description,
                         },
                         db,
-                        transaction
                     )
                 }
 

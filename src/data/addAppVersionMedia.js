@@ -45,10 +45,9 @@ const paramSchema = joi
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
  * @param {object} knex DB instance of knex
- * @param {object} trx The transaction to operate on
  * @returns {Promise<AppVersionMediaResult>}
  */
-const addAppVersionMedia = async (params, knex, transaction) => {
+const addAppVersionMedia = async (params, knex) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== null) {
@@ -58,6 +57,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
     const { appVersionId, userId, imageType, fileName, mime } = params
     let insertData = null
 
+    const transaction = await knex.transaction()
     try {
         let mediaTypeId = null
         const mediaTypes = await knex('media_type')
@@ -100,9 +100,11 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             .insert(insertData)
             .returning('id')
 
+        await transaction.commit()
         return { id, uuid: mediaUuid }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
+        await transaction.rollback()
         throw new Error(
             `Could not add media to app version: ${JSON.stringify({
                 ...insertData,

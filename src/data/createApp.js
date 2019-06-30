@@ -32,10 +32,9 @@ const paramsSchema = joi
  * @param {number} params.orgId Organisation id for the organisation owning this app
  * @param {string} params.appType Type of the app
  * @param {object} knex
- * @param {object} transaction
  * @returns {Promise<CreateAppResult>}
  */
-const createApp = async (params, knex, transaction) => {
+const createApp = async (params, knex) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -47,6 +46,7 @@ const createApp = async (params, knex, transaction) => {
     //generate a new uuid to insert
     const appUuid = uuid()
 
+    const transaction = await knex.transaction()
     try {
         const [id] = await knex('app')
             .transacting(transaction)
@@ -64,8 +64,10 @@ const createApp = async (params, knex, transaction) => {
             throw new Error('Inserted id was < 0')
         }
 
+        await transaction.commit()
         return { id, uuid: appUuid }
     } catch (err) {
+        await transaction.rollback()
         throw new Error(`Could not insert app to database. ${err.message}`)
     }
 }

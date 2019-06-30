@@ -1,20 +1,29 @@
-const dotenv = require('dotenv')
+const dotenv = require('dotenv').config()
+const knex = require('knex')({
+    client: 'pg',
+    connection: {
+        host: process.env.RDS_HOSTNAME,
+        user: process.env.RDS_USERNAME,
+        password: process.env.RDS_PASSWORD,
+        database: process.env.RDS_DB_NAME,
+    },
+    searchPath: ['knex', 'public', 'postgres', 'appstore'],
+    pool: {
+        min: 2,
+        max: 10,
+    },
+    migrations: {
+        tableName: 'knex_migrations',
+    },
+})
 
-const Knex = require('knex')
-const knexConfig = require('../knexfile.js')
+const { createChannel } = require('./data/index.js')
 
 const { migrate } = require('./server/migrate-database.js')
 const { compile } = require('./server/compile-webapp.js')
 const { init } = require('./server/init-server.js')
 
 console.log('Using env: ', process.env.NODE_ENV)
-
-const knex = Knex(knexConfig[process.env.NODE_ENV])
-
-if (process.env.NODE_ENV !== 'production') {
-    const config = dotenv.config()
-    console.log('Injecting config vars into process.env: ', config)
-}
 
 process.on('unhandledRejection', err => {
     console.log(err)
@@ -28,6 +37,7 @@ compile()
         process.exit(1)
     })
     .then(() => migrate(knex))
+    .then(() => createChannel({name: 'Stable'}, knex))
     .catch(err => {
         console.error('The database migrations failed to apply.\n', err)
         process.exit(1)

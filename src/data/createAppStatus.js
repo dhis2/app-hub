@@ -10,11 +10,11 @@
  * @param {number} params.userId
  * @param {number} params.appId
  * @param {object} knex
- * @param {object} transaction
  * @returns {Promise<CreateAppStatusResult>} inserted id
  */
-const createAppStatus = async (params, knex, transaction) => {
+const createAppStatus = async (params, knex) => {
     const { userId, appId, status } = params
+    const transaction = await knex.transaction()
     try {
         const [id] = await knex('app_status')
             .transacting(transaction)
@@ -30,8 +30,10 @@ const createAppStatus = async (params, knex, transaction) => {
             throw new Error('Inserted id was < 0')
         }
 
+        await transaction.commit()
         return { id }
     } catch (err) {
+        await transaction.rollback()
         throw new Error(
             `Could not save app status: ${status} for appId: ${appId}. ${
                 err.message
