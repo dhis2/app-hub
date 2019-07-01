@@ -43,8 +43,9 @@ compile()
         console.error('The database migrations failed to apply.\n', err)
         process.exit(1)
     })
+
+    // We assume that the Stable channel exists already
     .then(() => createChannel({name: 'Stable'}, knex))
-    .then(channel => console.log('Created channel:', channel))
     .catch(err => console.log('Did not create the channel, it probably exists so we can continue.\n', err))
 
     // Start the server
