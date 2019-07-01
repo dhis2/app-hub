@@ -57,7 +57,6 @@ module.exports = {
 
                 transaction.commit()
             } catch (err) {
-                transaction.rollback()
                 throw Boom.internal(err)
             }
         } else {

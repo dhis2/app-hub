@@ -50,7 +50,6 @@ const setImageAsLogoForApp = async (params, knex) => {
 
         await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not update logo for app: ${appUuid}.  Media uuid: ${mediaUuid}. ${
                 err.message

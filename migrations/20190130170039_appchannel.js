@@ -10,7 +10,10 @@ exports.up = async knex => {
             .unique()
             .notNullable()
 
-        table.string('name', 50).notNullable()
+        table
+            .string('name', 50)
+            .unique()
+            .notNullable()
     })
 
     await knex.schema.createTable('app_channel', table => {

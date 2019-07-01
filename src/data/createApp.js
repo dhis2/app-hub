@@ -67,7 +67,6 @@ const createApp = async (params, knex) => {
         await transaction.commit()
         return { id, uuid: appUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not insert app to database. ${err.message}`)
     }
 }

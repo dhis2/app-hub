@@ -111,7 +111,6 @@ const updateApp = async (params, knex) => {
 
         await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not update app: ${uuid}. ${err.message}`)
     }
 }

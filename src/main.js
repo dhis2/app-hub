@@ -30,18 +30,24 @@ process.on('unhandledRejection', err => {
     process.exit(1)
 })
 
-// Start the madness.
+// Compile the app
 compile()
     .catch(err => {
         console.error('The web app failed to compile.\n', err)
         process.exit(1)
     })
+    
+    // Setup the database
     .then(() => migrate(knex))
-    .then(() => createChannel({name: 'Stable'}, knex))
     .catch(err => {
         console.error('The database migrations failed to apply.\n', err)
         process.exit(1)
     })
+    .then(() => createChannel({name: 'Stable'}, knex))
+    .then(channel => console.log('Created channel:', channel))
+    .catch(err => console.log('Did not create the channel, it probably exists so we can continue.\n', err))
+
+    // Start the server
     .then(() => init(knex))
     .catch(err => {
         console.error('The server failed to start.\n', err)

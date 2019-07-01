@@ -86,7 +86,6 @@ const updateAppVersion = async (params, knex) => {
 
         await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not update appversion: ${uuid}. ${err.message}`)
     }
 }

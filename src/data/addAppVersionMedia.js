@@ -104,7 +104,6 @@ const addAppVersionMedia = async (params, knex) => {
         return { id, uuid: mediaUuid }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
-        await transaction.rollback()
         throw new Error(
             `Could not add media to app version: ${JSON.stringify({
                 ...insertData,

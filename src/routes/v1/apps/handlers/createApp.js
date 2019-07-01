@@ -242,12 +242,10 @@ module.exports = {
         } catch (err) {
             console.log('ROLLING BACK TRANSACTION')
             console.log(err)
-            await trx.rollback()
             throw Boom.badRequest(err.message, err)
         }
 
         if (appUuid === null || versionUuid === null) {
-            await trx.rollback()
             throw Boom.internal('Could not create app')
         }
 

@@ -59,8 +59,6 @@ const createUser = async (params, knex) => {
         await transaction.commit()
         return { id, email, uuid: newUuid, name }
     } catch (err) {
-        await transaction.rollback()
-
         throw new Error(
             `Could not create user: ${params.email}. ${err.message}`
         )

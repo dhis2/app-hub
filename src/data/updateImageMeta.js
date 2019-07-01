@@ -40,7 +40,6 @@ const updateImageMeta = async (params, knex) => {
 
         await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not update media meta: ${uuid}. ${err.message}`)
     }
 }

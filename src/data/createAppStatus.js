@@ -33,7 +33,6 @@ const createAppStatus = async (params, knex) => {
         await transaction.commit()
         return { id }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not save app status: ${status} for appId: ${appId}. ${
                 err.message

@@ -80,7 +80,6 @@ const addAppVersionToChannel = async (params, knex) => {
 
         return { id }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not add app version with id ${appVersionId} to channel ${channelName}. ${
                 err.message

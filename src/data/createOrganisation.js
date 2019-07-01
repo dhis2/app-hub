@@ -75,7 +75,6 @@ const createOrganisation = async (params, knex) => {
         await transaction.commit()
         return { id, name, slug, uuid: orgUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }

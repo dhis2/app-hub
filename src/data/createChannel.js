@@ -53,7 +53,6 @@ const createChannel = async (params, knex) => {
         await transaction.commit()
         return { id, uuid: channelUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not insert channel to database. ${err.message}`)
     }
 }

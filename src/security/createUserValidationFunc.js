@@ -58,27 +58,24 @@ const createUserValidationFunc = (db, audience) => {
                                 },
                                 db,
                             )
+                            console.log(
+                                `created user with id ${user.id} for email ${
+                                    user.email
+                                }`
+                            )
+                            await db('user_external_id').insert({
+                                user_id: user.id,
+                                external_id: decoded.sub,
+                            })
                             transaction.commit()
+
+                            returnObj.credentials.userId = user.id
+                            returnObj.credentials.uuid = user.uuid
                         } catch (err) {
-                            transaction.rollback()
                             throw Boom.internal()
                         }
                     }
-
-                    console.log('USER:', user)
-                    console.log(
-                        `created user with id ${user.id} for email ${
-                            user.email
-                        }`
-                    )
-                    await db('user_external_id').insert({
-                        user_id: user.id,
-                        external_id: decoded.sub,
-                    })
                 }
-
-                returnObj.credentials.userId = user.id
-                returnObj.credentials.uuid = user.uuid
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
                 try {

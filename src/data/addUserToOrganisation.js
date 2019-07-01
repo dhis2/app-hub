@@ -48,7 +48,6 @@ const addUserToOrganisation = async (params, knex) => {
         
         await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not add developer to organisation: ${userId} => ${organisationId}. ${
                 err.message

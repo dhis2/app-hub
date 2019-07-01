@@ -61,7 +61,6 @@ const createAppVersion = async (params, knex) => {
         await transaction.commit()
         return { id, uuid: versionUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${
                 err.message

@@ -33,7 +33,6 @@ const deleteOrganisation = async (params, knex) => {
         await transaction.commit()
         return deletedRows > 0
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }

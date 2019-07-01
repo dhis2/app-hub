@@ -44,7 +44,6 @@ const createLocalizedAppVersion = async (params, knex) => {
 
         return { id }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not create localized appversion for: ${appVersionId}, ${userId}, ${description}, ${name}, ${languageCode}`
         )
