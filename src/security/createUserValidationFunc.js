@@ -57,24 +57,28 @@ const createUserValidationFunc = (db, audience) => {
                                     name,
                                 },
                                 db,
+                                transaction,
                             )
+
+                            console.log(
+                                `created user with id ${user.id} for email ${
+                                    user.email
+                                }`
+                            )
+
+                            await db('user_external_id')
+                                .transacting(transaction)
+                                .insert({
+                                    user_id: user.id,
+                                    external_id: decoded.sub,
+                                })
+
                             transaction.commit()
+
                         } catch (err) {
-                            transaction.rollback()
-                            throw Boom.internal()
+                            throw Boom.internal(err)
                         }
                     }
-
-                    console.log('USER:', user)
-                    console.log(
-                        `created user with id ${user.id} for email ${
-                            user.email
-                        }`
-                    )
-                    await db('user_external_id').insert({
-                        user_id: user.id,
-                        external_id: decoded.sub,
-                    })
                 }
 
                 returnObj.credentials.userId = user.id

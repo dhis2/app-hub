@@ -74,13 +74,13 @@ module.exports = {
                         languageCode: 'en',
                     },
                     db,
+                    transaction,
                 )
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?
 
                 transaction.commit()
             } catch (err) {
-                transaction.rollback()
                 throw Boom.internal(err)
             }
         } else {

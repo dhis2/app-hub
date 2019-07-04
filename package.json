@@ -6,6 +6,7 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
+        "build": "webpack -p --config ./webpack.config.js",
         "start": "NODE_ENV=production node ./src/main.js",
         "dev": "DEBUG=knex:tx NODE_ENV=development nodemon --inspect src/main.js",
         "test": "NODE_ENV=test npm run reset-and-seed-db && lab -a code -t 80 -v -I 'core,__core-js_shared__' test/index.js",
@@ -81,7 +82,8 @@
         "lab": "^18.0.2",
         "mock-knex": "^0.4.4",
         "nodemon": "^1.18.10",
-        "sqlite3": "^4.0.6"
+        "sqlite3": "^4.0.6",
+        "webpack-cli": "^3.3.5"
     },
     "husky": {
         "hooks": {

@@ -37,7 +37,7 @@ const paramsSchema = joi
  * @param {*} knex
  * @returns {Promise<CreateUserResult>}
  */
-const updateAppVersion = async (params, knex) => {
+const updateAppVersion = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -57,7 +57,6 @@ const updateAppVersion = async (params, knex) => {
         demoUrl,
     } = params
 
-    const transaction = await knex.transaction()
     try {
         const appVersionIdsToUpdate = await knex('app_version')
             .select('id')
@@ -84,9 +83,7 @@ const updateAppVersion = async (params, knex) => {
             })
             .whereIn('app_version_id', appVersionIdsToUpdate)
 
-        await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not update appversion: ${uuid}. ${err.message}`)
     }
 }

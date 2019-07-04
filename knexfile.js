@@ -1,6 +1,4 @@
-const dotenv = require('dotenv')
-const config = dotenv.config()
-console.log('Injecting config vars into process.env: ', config)
+const dotenv = require('dotenv').config()
 
 module.exports = {
     client: 'pg',

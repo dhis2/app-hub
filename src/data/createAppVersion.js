@@ -30,16 +30,20 @@ const paramsSchema = joi
  * @param {*} knex
  * @property {Promise<CreateAppVersionResult>}
  */
-const createAppVersion = async (params, knex) => {
+const createAppVersion = async (params, knex, transaction) => {
     const paramsValidation = paramsSchema.validate(params)
+
     if (paramsValidation.error !== null) {
         throw new Error(paramsValidation.error)
+    }
+
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
     }
 
     const { userId, appId, demoUrl, sourceUrl, version } = params
     const versionUuid = uuid()
 
-    const transaction = await knex.transaction()
     try {
         const [id] = await knex('app_version')
             .transacting(transaction)
@@ -58,10 +62,8 @@ const createAppVersion = async (params, knex) => {
             throw new Error('Inserted id was < 0')
         }
 
-        await transaction.commit()
         return { id, uuid: versionUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${
                 err.message

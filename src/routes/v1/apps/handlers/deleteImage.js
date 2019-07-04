@@ -51,13 +51,12 @@ module.exports = {
                     db
                 )
 
-                await deleteMedia(media_uuid, db, transaction)
+                await deleteMedia(media_uuid, db)
 
                 await deleteFile(`${appUuid}/${version_uuid}`, media_uuid)
 
                 transaction.commit()
             } catch (err) {
-                transaction.rollback()
                 throw Boom.internal(err)
             }
         } else {

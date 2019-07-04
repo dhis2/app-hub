@@ -28,11 +28,15 @@ const paramsSchema = joi.object().keys({
  * @param {*} knex
  * @returns {Promise<Organisation>} The created organisation
  */
-const createOrganisation = async (params, knex) => {
+const createOrganisation = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
         throw new Error(validation.error)
+    }
+
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
     }
 
     if (!knex) {
@@ -45,7 +49,6 @@ const createOrganisation = async (params, knex) => {
 
     const orgUuid = uuid()
 
-    const transaction = await knex.transaction()
     try {
         let slugUniqueness = 2
         let foundUniqueSlug = false
@@ -72,10 +75,8 @@ const createOrganisation = async (params, knex) => {
             })
             .returning('id')
 
-        await transaction.commit()
         return { id, name, slug, uuid: orgUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not create organisation: ${err.message}`)
     }
 }

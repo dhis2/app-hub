@@ -38,7 +38,7 @@ const paramsSchema = joi
  * @param {*} knex
  * @returns {Promise<CreateUserResult>}
  */
-const updateApp = async (params, knex) => {
+const updateApp = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -57,8 +57,6 @@ const updateApp = async (params, knex) => {
     if (!knex) {
         throw new Error('Missing parameter: knex')
     }
-
-    const transaction = await knex.transaction()
 
     const {
         uuid,
@@ -108,10 +106,7 @@ const updateApp = async (params, knex) => {
             })
             .whereIn('app_version_id', appVersionIdsToUpdate)
             .where('language_code', languageCode)
-
-        await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not update app: ${uuid}. ${err.message}`)
     }
 }

@@ -23,7 +23,7 @@ const paramsSchema = joi
  * @param {object} knex
  * @returns {Promise<CreateChannelResult>}
  */
-const createChannel = async (params, knex) => {
+const createChannel = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -31,12 +31,15 @@ const createChannel = async (params, knex) => {
         throw new Error(validation.error)
     }
 
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
+    }
+
     const { name } = params
 
     //generate a new uuid to insert
     const channelUuid = uuid()
 
-    const transaction = await knex.transaction()
     try {
         const [id] = await knex('channel')
             .transacting(transaction)
@@ -50,10 +53,8 @@ const createChannel = async (params, knex) => {
             throw new Error('Inserted id was < 0')
         }
 
-        await transaction.commit()
         return { id, uuid: channelUuid }
     } catch (err) {
-        await transaction.rollback()
         throw new Error(`Could not insert channel to database. ${err.message}`)
     }
 }

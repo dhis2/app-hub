@@ -23,7 +23,7 @@ const paramsSchema = joi
  * @param {*} knex db instance
  * @returns {Promise}
  */
-const addUserToOrganisation = async (params, knex) => {
+const addUserToOrganisation = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -34,9 +34,12 @@ const addUserToOrganisation = async (params, knex) => {
         throw new Error('Missing parameter: knex')
     }
 
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
+    }
+
     const { userId, organisationId } = params
 
-    const transaction = await knex.transaction()
     try {
         await knex
             .transacting(transaction)
@@ -45,10 +48,7 @@ const addUserToOrganisation = async (params, knex) => {
                 organisation_id: organisationId,
             })
             .into('user_organisation')
-        
-        await transaction.commit()
     } catch (err) {
-        await transaction.rollback()
         throw new Error(
             `Could not add developer to organisation: ${userId} => ${organisationId}. ${
                 err.message
