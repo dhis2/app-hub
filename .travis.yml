@@ -2,7 +2,8 @@ language: node_js
 node_js:
 - lts/*
 script:
-- echo "nothing atm"
+- npm run build
+- echo "eventually run backend tests too"
 deploy:
   skip_cleanup: true
   provider: elasticbeanstalk

@@ -17,11 +17,14 @@ const slugify = require('slugify')
  * @param {object} knex
  * @param {Promise<{id}>}
  */
-const createLocalizedAppVersion = async (params, knex) => {
+const createLocalizedAppVersion = async (params, knex, transaction) => {
     //TODO: add validation of params with joi
 
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
+    }
+
     const { userId, appVersionId, description, name, languageCode } = params
-    const transaction = await knex.transaction()
     try {
         const [id] = await knex('app_version_localised')
             .transacting(transaction)
@@ -39,8 +42,6 @@ const createLocalizedAppVersion = async (params, knex) => {
         if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
-
-        await transaction.commit()
 
         return { id }
     } catch (err) {

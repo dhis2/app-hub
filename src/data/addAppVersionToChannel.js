@@ -40,11 +40,15 @@ const paramSchema = joi
  * @param {object} knex DB instance of knex
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
-const addAppVersionToChannel = async (params, knex) => {
+const addAppVersionToChannel = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== null) {
         throw new Error(validation.error)
+    }
+
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
     }
 
     const {
@@ -54,7 +58,6 @@ const addAppVersionToChannel = async (params, knex) => {
         minDhisVersion,
         maxDhisVersion,
     } = params
-    const transaction = await knex.transaction()
     try {
         const [channel] = await knex('channel')
             .select('id')
@@ -75,8 +78,6 @@ const addAppVersionToChannel = async (params, knex) => {
         if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
-
-        await transaction.commit()
 
         return { id }
     } catch (err) {

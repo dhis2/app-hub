@@ -59,6 +59,7 @@ module.exports = {
                             mediaUuid,
                         },
                         db,
+                        transaction,
                     )
                 }
 

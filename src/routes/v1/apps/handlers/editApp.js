@@ -74,6 +74,7 @@ module.exports = {
                         languageCode: 'en',
                     },
                     db,
+                    transaction,
                 )
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?

@@ -12,7 +12,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} knex
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */
-const deleteOrganisation = async (params, knex) => {
+const deleteOrganisation = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -23,14 +23,16 @@ const deleteOrganisation = async (params, knex) => {
         throw new Error('Missing parameter: knex')
     }
 
-    const transaction = await knex.transaction()
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
+    }
+
     try {
         const deletedRows = await knex('organisation')
             .transacting(transaction)
             .where(params)
             .delete()
 
-        await transaction.commit()
         return deletedRows > 0
     } catch (err) {
         throw new Error(`Could not create organisation: ${err.message}`)

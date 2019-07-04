@@ -67,7 +67,8 @@ module.exports = {
                         demoUrl,
                         version,
                     },
-                    db
+                    db,
+                    transaction,
                 )
 
                 transaction.commit()

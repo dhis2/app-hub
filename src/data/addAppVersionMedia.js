@@ -47,17 +47,20 @@ const paramSchema = joi
  * @param {object} knex DB instance of knex
  * @returns {Promise<AppVersionMediaResult>}
  */
-const addAppVersionMedia = async (params, knex) => {
+const addAppVersionMedia = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== null) {
         throw new Error(validation.error)
     }
 
+    if (!transaction) {
+        throw new Error('No transaction passed to function')
+    }
+
     const { appVersionId, userId, imageType, fileName, mime } = params
     let insertData = null
 
-    const transaction = await knex.transaction()
     try {
         let mediaTypeId = null
         const mediaTypes = await knex('media_type')
@@ -100,7 +103,6 @@ const addAppVersionMedia = async (params, knex) => {
             .insert(insertData)
             .returning('id')
 
-        await transaction.commit()
         return { id, uuid: mediaUuid }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation

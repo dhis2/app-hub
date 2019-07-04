@@ -51,7 +51,7 @@ module.exports = {
                     db
                 )
 
-                await deleteMedia(media_uuid, db, transaction)
+                await deleteMedia(media_uuid, db)
 
                 await deleteFile(`${appUuid}/${version_uuid}`, media_uuid)
 

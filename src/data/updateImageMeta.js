@@ -15,7 +15,7 @@ const paramsSchema = joi.object().keys({
  * @param {*} knex
  * @returns {Promise}
  */
-const updateImageMeta = async (params, knex) => {
+const updateImageMeta = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
@@ -28,7 +28,6 @@ const updateImageMeta = async (params, knex) => {
 
     const { uuid, caption, description } = params
 
-    const transaction = await knex.transaction()
     try {
         await knex('app_version_media')
             .transacting(transaction)
@@ -37,8 +36,6 @@ const updateImageMeta = async (params, knex) => {
                 caption,
                 description,
             })
-
-        await transaction.commit()
     } catch (err) {
         throw new Error(`Could not update media meta: ${uuid}. ${err.message}`)
     }
