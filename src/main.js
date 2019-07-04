@@ -31,25 +31,30 @@ process.on('unhandledRejection', err => {
 })
 
 // Compile the app
-compile()
-    .catch(err => {
-        console.error('The web app failed to compile.\n', err)
-        process.exit(1)
-    })
+if (process.env.USE_PREBUILT_APP) {
+    console.info('Using prebuilt web app')
+} else {
+    compile()
+        .catch(err => {
+            console.error('The web app failed to compile.\n', err)
+            process.exit(1)
+        })
+}
+
     
-    // Setup the database
-    .then(() => migrate(knex))
+// Setup the database
+migrate(knex)
     .catch(err => {
         console.error('The database migrations failed to apply.\n', err)
         process.exit(1)
     })
 
-    // We assume that the Stable channel exists already
-    .then(() => createChannel({name: 'Stable'}, knex))
+// We assume that the Stable channel exists already
+createChannel({name: 'Stable'}, knex)
     .catch(err => console.log('Did not create the channel, it probably exists so we can continue.\n', err))
 
-    // Start the server
-    .then(() => init(knex))
+// Start the server
+init(knex)
     .catch(err => {
         console.error('The server failed to start.\n', err)
         process.exit(1)
