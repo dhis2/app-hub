@@ -22,7 +22,7 @@ module.exports = {
                 200: Joi.array().items(AppModel.def),
                 500: Joi.string(),
             },
-            //  failAction: defaultFailHandler
+            failAction: defaultFailHandler
         },
     },
     handler: async (request, h) => {
