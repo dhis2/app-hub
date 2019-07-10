@@ -5,8 +5,9 @@
  * @param {object} knex db instance
  * @returns {Promise}
  */
-const deleteMedia = async (uuid, knex) => {
+const deleteMedia = async (uuid, knex, transaction) => {
     return knex('app_version_media')
+        .transacting(transaction)
         .where('uuid', uuid)
         .del()
 }
