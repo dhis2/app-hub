@@ -7,7 +7,7 @@
  */
 const deleteMedia = async (uuid, knex, transaction) => {
     try {
-        knex('app_version_media')
+        await knex('app_version_media')
             .transacting(transaction)
             .where('uuid', uuid)
             .del()
