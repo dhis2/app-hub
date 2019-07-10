@@ -6,10 +6,15 @@
  * @returns {Promise}
  */
 const deleteMedia = async (uuid, knex, transaction) => {
-    return knex('app_version_media')
-        .transacting(transaction)
-        .where('uuid', uuid)
-        .del()
+    try {
+        knex('app_version_media')
+            .transacting(transaction)
+            .where('uuid', uuid)
+            .del()
+    } catch (err) {
+        console.error(err)
+        throw new Error(`Could not delete app media for: ${uuid}`)
+    }
 }
 
 module.exports = deleteMedia
