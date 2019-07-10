@@ -39,7 +39,7 @@ module.exports = {
         const appRows = await getAppsByUuid(appUuid, 'en', knex)
         const item = appRows[0]
 
-        const trx = knex.transaction()
+        const trx = await knex.transaction()
         try {
             await deleteApp(appUuid, knex, trx)
             trx.commit()
