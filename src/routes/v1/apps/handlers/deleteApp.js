@@ -36,27 +36,22 @@ module.exports = {
         const knex = h.context.db
 
         const appUuid = request.params.appUuid
-
         const appRows = await getAppsByUuid(appUuid, 'en', knex)
-
         const item = appRows[0]
 
+        const trx = await knex.transaction()
         try {
+            await deleteApp(appUuid, knex, trx)
+            trx.commit()
             await deleteDir(item.uuid)
-            const result = await deleteApp(appUuid, knex)
-            console.log(result)
-
-            return {
-                message: 'Successfully deleted app',
-                httpStatus: 'OK',
-                httpStatusCode: 200,
-            }
         } catch (err) {
-            return {
-                message: 'An error occurred',
-                httpStatus: 'Internal Server Error',
-                httpStatusCode: 500,
-            }
+            throw Boom.internal(err)
+        }
+
+        return {
+            message: 'Successfully deleted app',
+            httpStatus: 'OK',
+            httpStatusCode: 200,
         }
     },
 }

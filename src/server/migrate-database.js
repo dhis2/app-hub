@@ -1,4 +1,4 @@
-exports.migrate = (knex) => {
+exports.migrate = async knex => {
     console.info('Running database migrations...')
     return knex.migrate.latest()
 }
