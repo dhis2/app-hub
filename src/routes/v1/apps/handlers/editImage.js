@@ -59,7 +59,7 @@ module.exports = {
                             mediaUuid,
                         },
                         db,
-                        transaction,
+                        transaction
                     )
                 }
 
@@ -72,6 +72,7 @@ module.exports = {
                             description: jsonPayload.description,
                         },
                         db,
+                        transaction
                     )
                 }
 

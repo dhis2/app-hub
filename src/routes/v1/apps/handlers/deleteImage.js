@@ -47,7 +47,7 @@ module.exports = {
                     db
                 )
 
-                await deleteMedia(media_uuid, db)
+                await deleteMedia(media_uuid, db, transaction)
 
                 transaction.commit()
 
