@@ -50,12 +50,9 @@ const setImageAsLogoForApp = async (params, knex, transaction) => {
             .transacting(transaction)
             .where('uuid', mediaUuid)
             .update('image_type', ImageType.Logo)
-
     } catch (err) {
         throw new Error(
-            `Could not update logo for app: ${appUuid}.  Media uuid: ${mediaUuid}. ${
-                err.message
-            }`
+            `Could not update logo for app: ${appUuid}.  Media uuid: ${mediaUuid}. ${err.message}`
         )
     }
 }

@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:data:getMedia')
 /**
  * Gets information about an image/media
  *
@@ -25,7 +26,7 @@ const getMedia = (uuid, knex) => {
             .first()
     } catch (err) {
         //TODO: log, re-throw or something other than silent fail?
-        console.log(err)
+        debug(err)
         throw err
     }
 }

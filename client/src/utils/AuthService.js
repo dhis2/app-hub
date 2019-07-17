@@ -12,9 +12,7 @@ export default class AuthService {
         // Configure Auth0
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
-                redirectUrl: `${window.location.protocol}//${
-                    window.location.host
-                }/user`,
+                redirectUrl: `${window.location.protocol}//${window.location.host}/user`,
                 responseType: 'token',
                 params: {
                     scope: 'openid roles user_id email profile',

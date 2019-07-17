@@ -82,7 +82,6 @@ const updateAppVersion = async (params, knex, transaction) => {
                 updated_by_user_id: userId,
             })
             .whereIn('app_version_id', appVersionIdsToUpdate)
-
     } catch (err) {
         throw new Error(`Could not update appversion: ${uuid}. ${err.message}`)
     }

@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:utils:AWSFileHandler')
 const AWS = require('aws-sdk')
 
 /**
@@ -26,9 +27,7 @@ module.exports = class AWSFileHandler {
     }
 
     saveFile(path, filename, buffer) {
-        console.log(
-            `Uploading file to ${this.bucketName} :: ${path}/${filename}`
-        )
+        debug(`Uploading file to ${this.bucketName} :: ${path}/${filename}`)
         const objectParams = {
             Bucket: this.bucketName,
             Key: this.generateKey(path, filename),
@@ -86,14 +85,14 @@ module.exports = class AWSFileHandler {
             }
 
             objectsInPath.Contents.forEach(obj => {
-                console.log('Will try to delete: ', obj.Key)
+                debug('Will try to delete: ', obj.Key)
                 deleteParams.Delete.Objects.push({ Key: obj.Key })
             })
 
             await this.api.deleteObjects(deleteParams).promise()
 
             if (objectsInPath.IsTruncated) {
-                console.log('Did not get all objects first time, call it again')
+                debug('Did not get all objects first time, call it again')
                 await this.deleteDir(path)
             }
         }

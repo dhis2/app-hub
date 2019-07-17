@@ -52,9 +52,7 @@ const snackbarReducer = (state = initialState, action) => {
         case actionTypes.APP_VERSION_DELETE_SUCCESS: {
             return {
                 ...state,
-                message: `Version ${
-                    action.payload.version.version
-                } has been deleted`,
+                message: `Version ${action.payload.version.version} has been deleted`,
             }
         }
 

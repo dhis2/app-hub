@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:routes:handlers:v1:getMyApps')
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -8,7 +9,10 @@ const AppModel = require('../../../../models/v1/out/App')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const { getCurrentAuthStrategy, getCurrentUserFromRequest } = require('../../../../security')
+const {
+    getCurrentAuthStrategy,
+    getCurrentUserFromRequest,
+} = require('../../../../security')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
@@ -32,10 +36,13 @@ module.exports = {
 
         try {
             const user = await getCurrentUserFromRequest(request, h.context.db)
-            const apps = await getAllAppsByDeveloperUuid(user.uuid, h.context.db)
+            const apps = await getAllAppsByDeveloperUuid(
+                user.uuid,
+                h.context.db
+            )
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
-            console.log(err)
+            debug(err)
         }
 
         return []

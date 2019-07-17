@@ -65,9 +65,7 @@ const createAppVersion = async (params, knex, transaction) => {
         return { id, uuid: versionUuid }
     } catch (err) {
         throw new Error(
-            `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${
-                err.message
-            }`
+            `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${err.message}`
         )
     }
 }

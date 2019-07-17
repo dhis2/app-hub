@@ -7,8 +7,8 @@
  * @param {object} knex db instance (knex)
  * @returns {Promise<Array>}
  */
+//eslint-disable-next-line max-params
 const getAppsByUuidAndStatus = (uuid, status, languageCode, knex) => {
-    //eslint-disable-line max-params
     //TODO: add validation for parameters
 
     return knex('apps_view')

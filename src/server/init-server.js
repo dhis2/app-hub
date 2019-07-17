@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:boot:api')
 const path = require('path')
 
 const Blipp = require('blipp')
@@ -13,8 +14,8 @@ const routes = require('../routes/index.js')
 const options = require('../options/index.js')
 const registerAuth0 = require('../security/registerAuth0.js')
 
-exports.init = async (knex) => {
-    console.info('Starting server...')
+exports.init = async knex => {
+    debug('Starting server...')
 
     const server = Hapi.server({
         port: process.env.PORT || 3000,
@@ -73,13 +74,13 @@ exports.init = async (knex) => {
         })
     } else {
         //Warn with red background
-        console.warn(
+        debug(
             '\x1b[41m',
             'No authentication method configured, all endpoints are running unprotected',
             '\x1b[0m'
         )
         if (!process.env.NO_AUTH_MAPPED_USER_ID) {
-            console.error(
+            debug(
                 '\x1b[41m',
                 'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.NO_AUTH_MAPPED_USER_ID',
                 '\x1b[m'
@@ -123,7 +124,7 @@ exports.init = async (knex) => {
 
     await server.start()
 
-    console.log(`Server running at: ${server.info.uri}`)
+    debug(`Server running at: ${server.info.uri}`)
 
     return server
 }

@@ -1,3 +1,6 @@
+const debug = require('debug')(
+    'appstore:server:routes:formatting:v1:defaultFailHandler'
+)
 const path = require('path')
 const { ImageType } = require('../../../../enums')
 
@@ -33,9 +36,7 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 
 const convertAppToV1Media = (app, serverUrl) => {
     return {
-        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${
-            app.version_uuid
-        }/${app.media_uuid}`,
+        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.version_uuid}/${app.media_uuid}`,
         caption: app.media_caption,
         created: +new Date(app.media_created_at),
         description: app.media_description,
@@ -54,9 +55,7 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
         created: +new Date(app.version_created_at),
 
         demoUrl: app.demo_url || '',
-        downloadUrl: `${serverUrl}/v1/apps/download/${app.organisation_slug}/${
-            app.appver_slug
-        }/${app.version}/app.zip`,
+        downloadUrl: `${serverUrl}/v1/apps/download/${app.organisation_slug}/${app.appver_slug}/${app.version}/app.zip`,
         id: app.version_uuid,
         lastUpdated: +new Date(app.version_created_at),
         maxDhisVersion: app.max_dhis2_version,
@@ -70,11 +69,9 @@ module.exports = (apps, request) => {
         throw new Error('Missing parameter: request')
     }
 
-    const serverUrl = `${request.server.info.protocol}://${
-        request.info.host
-    }/api`
+    const serverUrl = `${request.server.info.protocol}://${request.info.host}/api`
 
-    console.log(`Using serverUrl: ${serverUrl}`)
+    debug(`Using serverUrl: ${serverUrl}`)
 
     const formattedApps = {}
 

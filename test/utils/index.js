@@ -90,9 +90,7 @@ describe('@utils::LocalFileSystemHandler', () => {
             )
         } catch (err) {
             fail(
-                `should not get an error saving file to disk, got error: ${
-                    err.message
-                }`
+                `should not get an error saving file to disk, got error: ${err.message}`
             )
         }
     })

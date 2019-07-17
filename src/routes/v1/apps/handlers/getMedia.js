@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:routes:handlers:v1:getAllApps')
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -41,9 +42,7 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        console.log(
-            `Fetching file ${item.uuid}/${item.version_uuid}/${filename}`
-        )
+        debug(`Fetching file ${item.uuid}/${item.version_uuid}/${filename}`)
 
         try {
             const file = await getFile(
@@ -59,9 +58,7 @@ module.exports = {
             }
 
             return Boom.internal(
-                `Was not able to fetch file: ${item.uuid}/${
-                    item.version_uuid
-                }/${filename}`
+                `Was not able to fetch file: ${item.uuid}/${item.version_uuid}/${filename}`
             )
         } catch (err) {
             //AWS S3 error code if object is missing

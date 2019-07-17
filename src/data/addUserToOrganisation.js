@@ -50,9 +50,7 @@ const addUserToOrganisation = async (params, knex, transaction) => {
             .into('user_organisation')
     } catch (err) {
         throw new Error(
-            `Could not add developer to organisation: ${userId} => ${organisationId}. ${
-                err.message
-            }`
+            `Could not add developer to organisation: ${userId} => ${organisationId}. ${err.message}`
         )
     }
 }

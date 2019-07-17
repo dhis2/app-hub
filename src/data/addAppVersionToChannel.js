@@ -74,7 +74,7 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
                 max_dhis2_version: maxDhisVersion,
             })
             .returning('id')
-        
+
         if (id < 0) {
             throw new Error('Inserted id was < 0')
         }
@@ -82,9 +82,7 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
         return { id }
     } catch (err) {
         throw new Error(
-            `Could not add app version with id ${appVersionId} to channel ${channelName}. ${
-                err.message
-            }`
+            `Could not add app version with id ${appVersionId} to channel ${channelName}. ${err.message}`
         )
     }
 }

@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:data:getUserByEmail')
 /**
  * Load a user from db for the specified email
  *
@@ -13,9 +14,10 @@ const getUserByEmail = async (email, knex) => {
             .select()
             .where('email', email)
             .first()
+        debug('found user', user)
     } catch (err) {
         //TODO: log, re-throw or something other than silent fail?
-        console.log(err)
+        debug(err)
     }
 
     return user ? user : null

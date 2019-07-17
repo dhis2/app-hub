@@ -8,10 +8,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const {
-    updateApp,
-    getAppDeveloperId,
-} = require('../../../../data')
+const { updateApp, getAppDeveloperId } = require('../../../../data')
 
 module.exports = {
     method: 'PUT',
@@ -74,7 +71,7 @@ module.exports = {
                         languageCode: 'en',
                     },
                     db,
-                    transaction,
+                    transaction
                 )
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?

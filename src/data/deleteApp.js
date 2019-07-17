@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:data:deleteApp')
 /**
  * Deletes an app with the specified uuid
  *
@@ -10,8 +11,9 @@ const deleteApp = async (uuid, knex, transaction) => {
             .transacting(transaction)
             .where('uuid', uuid)
             .del()
+        debug('deleted app', uuid)
     } catch (err) {
-        console.error(err)
+        debug(err)
         throw new Error(`Could not delete app ${uuid}`)
     }
 }

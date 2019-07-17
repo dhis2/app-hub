@@ -111,8 +111,8 @@ class VersionListEdit extends Component {
      * @param e event fired from TextField
      * @param newValue from TextField
      */
+    //eslint-disable-next-line max-params
     handleValueChange(versionId, fieldName, e, newValue) {
-        //eslint-disable-line max-params
         const editedValues = this.state.editedValues
         this.setState({
             ...this.state,
