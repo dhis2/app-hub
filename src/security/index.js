@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:security')
 /**
  * This returns true if the request is authenticated (e.g. contains a valid token)
  * @param {*} request
@@ -116,7 +117,7 @@ const getCurrentUserFromRequest = async (request, knex) => {
                 id: request.auth.credentials.userId,
                 uuid: request.auth.credentials.uuid,
             }
-            console.log('Auth credentials', request.auth.credentials)
+            debug('Auth credentials', request.auth.credentials)
         } else {
             reject()
             return

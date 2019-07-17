@@ -1,3 +1,5 @@
+const debug = require('debug')('appstore:server:boot')
+
 const dotenv = require('dotenv').config()
 const knex = require('knex')({
     client: 'pg',
@@ -23,30 +25,30 @@ const { migrate } = require('./server/migrate-database.js')
 const { compile } = require('./server/compile-webapp.js')
 const { init } = require('./server/init-server.js')
 
-console.log('Using env: ', process.env.NODE_ENV)
+debug('Using env: ', process.env.NODE_ENV)
 
 process.on('unhandledRejection', err => {
-    console.log(err)
+    debug(err)
     process.exit(1)
 })
 
 compile()
     .catch(err => {
-        console.error('The web app failed to compile.\n', err)
+        debug('The web app failed to compile.\n', err)
         process.exit(1)
     })
     .then(() => migrate(knex))
     .catch(err => {
-        console.error('The database migrations failed to apply.\n', err)
+        debug('The database migrations failed to apply.\n', err)
         process.exit(1)
     })
     .then(() =>
         knex.transaction(trx => createChannel({ name: 'Stable' }, knex, trx))
     )
-    .then(r => console.log('Channel was created', r))
-    .catch(r => console.error('Channel probably exists, skipping', r))
+    .then(r => debug('Channel was created', r))
+    .catch(r => debug('Channel probably exists, skipping', r))
     .then(() => init(knex))
     .catch(err => {
-        console.error('The server failed to start.\n', err)
+        debug('The server failed to start.\n', err)
         process.exit(1)
     })

@@ -1,19 +1,21 @@
+const debug = require('debug')('appstore:server:boot:webapp')
+
 const webpack = require('webpack')
 const webpackConfig = require('../../webpack.config.js')
 
 exports.compile = () =>
     new Promise((resolve, reject) => {
         if (process.env.USE_PREBUILT_APP) {
-            console.info('Using prebuilt web app')
+            debug('Using prebuilt web app')
             return resolve(null)
         }
 
-        console.info('Compiling web application...')
+        debug('Compiling web application...')
         webpack(webpackConfig, (err, stats) => {
             if (err) {
-                console.error(err.stack || err)
+                debug(err.stack || err)
                 if (err.details) {
-                    console.error(err.details)
+                    debug(err.details)
                 }
                 return reject(err)
             }
@@ -21,12 +23,12 @@ exports.compile = () =>
             const info = stats.toJson()
 
             if (stats.hasErrors()) {
-                console.error(info.errors)
+                debug(info.errors)
                 return reject(err)
             }
 
             if (stats.hasWarnings()) {
-                console.warn(info.warnings)
+                debug(info.warnings)
             }
 
             return resolve(stats)

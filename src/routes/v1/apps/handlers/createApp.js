@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:routes:handlers:v1:createApp')
 const path = require('path')
 
 const Boom = require('boom')
@@ -219,7 +220,7 @@ module.exports = {
             )
 
             if (imageFile) {
-                console.log(
+                debug(
                     'Inserting logo metadata to db and link it to the appVersion'
                 )
                 const imageFileMetadata = imageFile.hapi
@@ -236,12 +237,12 @@ module.exports = {
                     trx
                 )
 
-                console.log(`Logo inserted with id '${id}' and uuid '${uuid}'`)
+                debug(`Logo inserted with id '${id}' and uuid '${uuid}'`)
                 iconUUid = uuid
             }
         } catch (err) {
-            console.log('ROLLING BACK TRANSACTION')
-            console.log(err)
+            debug('ROLLING BACK TRANSACTION')
+            debug(err)
             throw Boom.badRequest(err.message, err)
         }
 
@@ -268,7 +269,7 @@ module.exports = {
                 await appUpload
             }
         } catch (ex) {
-            console.log(ex)
+            debug(ex)
             throw Boom.internal(ex)
         }
 

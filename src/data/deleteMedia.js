@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:data:deleteMedia')
 /**
  * Deletes a media with the specified uuid
  *
@@ -11,8 +12,9 @@ const deleteMedia = async (uuid, knex, transaction) => {
             .transacting(transaction)
             .where('uuid', uuid)
             .del()
+        debug('deleted media', uuid)
     } catch (err) {
-        console.error(err)
+        debug(err)
         throw new Error(`Could not delete app media for: ${uuid}`)
     }
 }

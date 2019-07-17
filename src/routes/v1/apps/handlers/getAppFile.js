@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:routes:handlers:v1:getAppFile')
 const { AppStatus } = require('../../../../enums')
 const { getFile } = require('../../../../utils')
 
@@ -32,7 +33,7 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        //console.log(`Fetching file from ${item.uuid}/${item.version_uuid}`)
+        debug(`Fetching file from ${item.uuid}/${item.version_uuid}`)
         const file = await getFile(
             `${item.uuid}/${item.version_uuid}`,
             'app.zip'

@@ -1,3 +1,6 @@
+const debug = require('debug')(
+    'appstore:server:routes:formatting:v1:defaultFailHandler'
+)
 const path = require('path')
 const { ImageType } = require('../../../../enums')
 
@@ -68,7 +71,7 @@ module.exports = (apps, request) => {
 
     const serverUrl = `${request.server.info.protocol}://${request.info.host}/api`
 
-    console.log(`Using serverUrl: ${serverUrl}`)
+    debug(`Using serverUrl: ${serverUrl}`)
 
     const formattedApps = {}
 

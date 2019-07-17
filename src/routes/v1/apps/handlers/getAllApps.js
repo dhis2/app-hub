@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:routes:handlers:v1:getAllApps')
 const Boom = require('boom')
 const Joi = require('joi')
 
@@ -34,7 +35,7 @@ module.exports = {
             const apps = await getAllAppsByLanguage('en', h.context.db)
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
-            console.log(err)
+            debug(err)
         }
 
         return []

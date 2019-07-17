@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:data:createChannel')
 const uuid = require('uuid/v4')
 
 const joi = require('joi')
@@ -27,7 +28,7 @@ const createChannel = async (params, knex, transaction) => {
     const validation = joi.validate(params, paramsSchema)
 
     if (validation.error !== null) {
-        console.error(validation.error)
+        debug('validation error', validation.error)
         throw new Error(validation.error)
     }
 

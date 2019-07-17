@@ -1,3 +1,4 @@
+const debug = require('debug')('appstore:server:security:createUserValidation')
 const Boom = require('boom')
 const uuid = require('uuid/v4')
 
@@ -5,16 +6,15 @@ const { createUser } = require('../data')
 
 const createUserValidationFunc = (db, audience) => {
     return async (decoded, request) => {
-        console.log('ValidateUser')
         if (decoded && decoded.sub) {
-            console.log(`Valid user with external userId: ${decoded.sub}`)
-            console.log(decoded)
+            debug(`Valid user with external userId: ${decoded.sub}`, decoded)
 
             const { email, email_verified, name } = decoded
 
             const returnObj = { isValid: true, credentials: decoded }
 
             if (email_verified) {
+                debug('email verified')
                 let user = null
                 try {
                     const users = await db('users')
@@ -31,16 +31,14 @@ const createUserValidationFunc = (db, audience) => {
 
                     if (users && users.length === 1) {
                         user = users[0]
-                        console.log(
-                            `Found user: ${user.email} with id ${user.id}`
-                        )
+                        debug(`Found user: ${user.email} with id ${user.id}`)
                     }
                 } catch (err) {
-                    console.log(err)
+                    debug(err)
                 }
 
                 if (user === null) {
-                    console.log('user does not exist in db, create it')
+                    debug('user does not exist in db, create it')
 
                     //check if the user exists without checking external id
                     user = await db('users')
@@ -60,7 +58,7 @@ const createUserValidationFunc = (db, audience) => {
                                 transaction
                             )
 
-                            console.log(
+                            debug(
                                 `created user with id ${user.id} for email ${user.email}`
                             )
 
@@ -73,6 +71,7 @@ const createUserValidationFunc = (db, audience) => {
 
                             transaction.commit()
                         } catch (err) {
+                            debug('error creating user', err)
                             throw Boom.internal(err)
                         }
                     }
@@ -111,7 +110,7 @@ const createUserValidationFunc = (db, audience) => {
             return returnObj
         }
 
-        console.log('Invalid user')
+        debug('Invalid user', decoded)
         return { isValid: false }
     }
 }
