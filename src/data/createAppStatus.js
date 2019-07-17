@@ -35,9 +35,7 @@ const createAppStatus = async (params, knex, transaction) => {
         return { id }
     } catch (err) {
         throw new Error(
-            `Could not save app status: ${status} for appId: ${appId}. ${
-                err.message
-            }`
+            `Could not save app status: ${status} for appId: ${appId}. ${err.message}`
         )
     }
 }

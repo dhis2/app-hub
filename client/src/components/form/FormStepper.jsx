@@ -101,9 +101,7 @@ class FormStepper extends Component {
     goToStep(index) {
         if (index > this.state.lastStep && index > -1) {
             throw new Error(
-                `Index must be between 0 and ${
-                    this.state.lastStep
-                } (including).`
+                `Index must be between 0 and ${this.state.lastStep} (including).`
             )
         }
 
@@ -159,10 +157,10 @@ class FormStepper extends Component {
                       >
                           <StepButton
                               onClick={() => this.goToStep(i)}
-                              {...section.props.icon && {
+                              {...(section.props.icon && {
                                   icon: sections.props.icon,
-                              }}
-                              {...showError && { icon: sectionErrorIcon }}
+                              })}
+                              {...(showError && { icon: sectionErrorIcon })}
                           >
                               {sectionDisplayName}
                           </StepButton>

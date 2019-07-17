@@ -57,13 +57,11 @@ const createUserValidationFunc = (db, audience) => {
                                     name,
                                 },
                                 db,
-                                transaction,
+                                transaction
                             )
 
                             console.log(
-                                `created user with id ${user.id} for email ${
-                                    user.email
-                                }`
+                                `created user with id ${user.id} for email ${user.email}`
                             )
 
                             await db('user_external_id')
@@ -74,7 +72,6 @@ const createUserValidationFunc = (db, audience) => {
                                 })
 
                             transaction.commit()
-
                         } catch (err) {
                             throw Boom.internal(err)
                         }

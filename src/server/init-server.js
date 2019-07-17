@@ -13,7 +13,7 @@ const routes = require('../routes/index.js')
 const options = require('../options/index.js')
 const registerAuth0 = require('../security/registerAuth0.js')
 
-exports.init = async (knex) => {
+exports.init = async knex => {
     console.info('Starting server...')
 
     const server = Hapi.server({

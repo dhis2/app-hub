@@ -6,10 +6,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const {
-    updateAppVersion,
-    getAppDeveloperId,
-} = require('../../../../data')
+const { updateAppVersion, getAppDeveloperId } = require('../../../../data')
 
 const EditAppVersionModel = require('../../../../models/v1/in/EditAppVersionModel')
 
@@ -68,7 +65,7 @@ module.exports = {
                         version,
                     },
                     db,
-                    transaction,
+                    transaction
                 )
 
                 transaction.commit()

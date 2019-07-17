@@ -59,9 +59,7 @@ module.exports = {
             }
 
             return Boom.internal(
-                `Was not able to fetch file: ${item.uuid}/${
-                    item.version_uuid
-                }/${filename}`
+                `Was not able to fetch file: ${item.uuid}/${item.version_uuid}/${filename}`
             )
         } catch (err) {
             //AWS S3 error code if object is missing
