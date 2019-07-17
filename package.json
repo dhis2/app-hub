@@ -72,7 +72,7 @@
         "transform-imports": "^2.0.0",
         "uuid": "^3.3.2",
         "vision": "^5.4.4",
-        "webpack": "^4.35.0",
+        "webpack": "^4.35.3",
         "whatwg-fetch": "^2.0.3"
     },
     "devDependencies": {
