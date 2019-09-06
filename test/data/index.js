@@ -1,10 +1,17 @@
 const { expect } = require('code')
 
-const { lab, db } = require('../index')
+const { lab } = require('../index')
+
+const knexConfig = require('../../knexfile')
+const db = require('knex')(knexConfig)
 
 const { it, describe } = lab
 
-const { addAppVersionMedia, getAppsByUuid, createApp } = require('@data')
+const {
+    addAppVersionMedia,
+    getAppsByUuid,
+    createApp,
+} = require('../../src/data')
 
 describe('@data::addAppVersionMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
@@ -59,13 +66,17 @@ describe('@data::createApp', () => {
 })
 
 describe('@data::getOrganisation', () => {
-    const { getOrganisationByUuid, getOrganisationsByName } = require('@data')
+    const {
+        getOrganisationByUuid,
+        getOrganisationsByName,
+    } = require('../../src/data')
 
     it('should throw an error passing invalid uuid', async () => {
         await expect(getOrganisationByUuid('asdf', db)).to.reject(Error)
     })
 
     it('get the organisation with the specified uuid', async () => {
+        console.log('db:', db)
         const [dhis2Org] = await getOrganisationsByName('DHIS2', db)
         expect(dhis2Org).to.not.be.null()
 
@@ -88,11 +99,10 @@ describe('@data::createOrganisation', () => {
         deleteOrganisation,
         createOrganisation,
         getOrganisationsByName,
-        createTransaction,
-    } = require('@data')
+    } = require('../../src/data')
 
     it('should create an organisation and then delete it', async () => {
-        let transaction = await createTransaction(db)
+        let transaction = await db.transaction()
 
         const org = await createOrganisation(
             {
@@ -120,7 +130,7 @@ describe('@data::createOrganisation', () => {
         expect(shouldExist.slug).to.be.equal(org.slug)
 
         //Delete then try to fetch again.
-        transaction = await createTransaction(db)
+        transaction = await db.transaction()
         const successfullyDeleted = await deleteOrganisation(
             { uuid: org.uuid },
             db,
@@ -136,10 +146,10 @@ describe('@data::createOrganisation', () => {
 })
 
 describe('@data::createUser', () => {
-    const { createUser, createTransaction } = require('@data')
+    const { createUser } = require('../../src/data')
 
     it('should create a new user', async () => {
-        const transaction = await createTransaction(db)
+        const transaction = await db.transaction()
 
         const { id } = await createUser(
             {
@@ -160,13 +170,12 @@ describe('@data::createUser', () => {
 describe('@data::addUserToOrganisation', () => {
     const {
         addUserToOrganisation,
-        createTransaction,
         getOrganisationsByName,
         createOrganisation,
-    } = require('@data')
+    } = require('../../src/data')
 
     it('should add a user to an organisation without throwing', async () => {
-        const transaction = await createTransaction(db)
+        const transaction = await db.transaction()
 
         const org = await createOrganisation(
             { userId: 1, name: 'A new organisation' },
@@ -185,14 +194,10 @@ describe('@data::addUserToOrganisation', () => {
 })
 
 describe('@data::updateApp', () => {
-    const {
-        updateApp,
-        createTransaction,
-        getAllAppsByLanguage,
-    } = require('@data')
+    const { updateApp, getAllAppsByLanguage } = require('../../src/data')
 
     it('should update the app', async () => {
-        const transaction = await createTransaction(db)
+        const transaction = await db.transaction()
 
         const allApps = await getAllAppsByLanguage('en', db)
 
@@ -229,10 +234,10 @@ describe('@data::updateApp', () => {
 })
 
 describe('@data::updateAppVersion', () => {
-    const { updateAppVersion, createTransaction, getAppById } = require('@data')
+    const { updateAppVersion, getAppById } = require('../../src/data')
 
     it('should update the app version', async () => {
-        let transaction = await createTransaction(db)
+        let transaction = await db.transaction()
 
         //See seeds/mock/apps.js
         const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
@@ -275,7 +280,7 @@ describe('@data::updateAppVersion', () => {
         expect(updatedApp.demo_url).to.equal('https://www.google.com')
 
         //Set back if other tests use the original data
-        transaction = await createTransaction(db)
+        transaction = await db.transaction()
         await updateAppVersion(
             {
                 uuid: appVersionUuidToUpdate,

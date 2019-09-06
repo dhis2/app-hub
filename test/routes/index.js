@@ -1,12 +1,18 @@
 const { expect } = require('code')
 
-const { lab, server } = require('../index')
+const { lab } = require('../index')
+
+const knexConfig = require('../../knexfile')
+const db = require('knex')(knexConfig)
+const { init } = require('../../src/server/init-server')
 
 const { it, describe } = lab
 
 exports.lab = lab
 
-describe('Get all published apps [v1]', () => {
+describe('Get all published apps [v1]', async () => {
+    const server = await init(db)
+
     it('should return some test-apps from seeded db', async () => {
         const injectOptions = {
             method: 'GET',
@@ -44,9 +50,13 @@ describe('Get all published apps [v1]', () => {
             'https://github.com/dhis2/who-immunization-analysis-app/'
         )
     })
+
+    await server.stop()
 })
 
-describe('Get all published apps [v2]', () => {
+describe('Get all published apps [v2]', async () => {
+    const server = await init(db)
+
     it('should just return a 501 not implemented for the moment being', async () => {
         const injectOptions = {
             method: 'GET',
@@ -56,9 +66,13 @@ describe('Get all published apps [v2]', () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(501)
     })
+
+    await server.stop()
 })
 
-describe('Test auth', () => {
+describe('Test auth', async () => {
+    const server = await init(db)
+
     it('Should deny access without a valid authorisation token', async () => {
         const injectOptions = {
             method: 'GET',
@@ -69,4 +83,6 @@ describe('Test auth', () => {
 
         expect(response.statusCode).to.be.equal(401)
     })
+
+    await server.stop()
 })
