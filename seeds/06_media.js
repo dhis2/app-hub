@@ -1,7 +1,7 @@
 const appVersions = require('./mock/appversions')
 const uuid = require('uuid/v4')
-const { ImageType } = require('@enums')
-const { flatten } = require('@utils')
+const { ImageType } = require('../src/enums')
+const { flatten } = require('../src/utils')
 
 exports.seed = async knex => {
     console.log('Seeding media')

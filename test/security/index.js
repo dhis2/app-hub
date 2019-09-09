@@ -4,7 +4,11 @@ const { lab } = (exports.lab = require('../index'))
 
 const { it, describe } = lab
 
-const { canDeleteApp, canChangeAppStatus, canSeeAllApps } = require('@security')
+const {
+    canDeleteApp,
+    canChangeAppStatus,
+    canSeeAllApps,
+} = require('../../src/security')
 
 describe('@security::canDeleteApp', () => {
     it('Should return true if request is authenticated and has the role ROLE_MANAGER', () => {

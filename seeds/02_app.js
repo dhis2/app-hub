@@ -4,7 +4,7 @@ const apps = require('./mock/apps')
 const appVersions = require('./mock/appversions')
 const appVersionsLocalised = require('./mock/appversions_localized')
 
-const { flatten } = require('@utils')
+const { flatten } = require('../src/utils')
 
 exports.seed = async knex => {
     console.log('Seeding apps')

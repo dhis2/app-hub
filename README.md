@@ -7,8 +7,6 @@ Note: The master branch currently holds the version 2 of the unreleased App Stor
 
 # TO DO
 
-- [ ] Update the README to the changes the after merging the
-  sub-packages
 - [ ] Fix tests after merge
 - [ ] Split up the deployment work so that Travis builds the frontend,
   and runs the test against the backend, if both pass, deploy the
@@ -24,20 +22,15 @@ git clone https://github.com/dhis2/dhis2-appstore.git
 ```
 
 ## Create & seed test-database
-Create a database `appstore` in postgres with user/login appstore/appstore123 (or change credentials in `packages/server/src/knexfile.js`)
-
-If you want to use a local sqllite3 database instead of setting up a new postgres-database, use NODE_ENV=test (this will also be used for unit/integration tests)
+Create a database `appstore` in postgres
 
 ### Migrate/create tables
 ```bash
-cd packages/server
-yarn install
 npx knex migrate:latest
 ```
 
 ### Seed testdata
 ```bash
-cd packages/server
 npx knex seed:run
 ```
 
@@ -51,7 +44,7 @@ npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run
 
 The back-end config file contain credentials for database, AWS S3 bucket and Auth0.
 
-Env vars (~/.dhis2/appstore/vars)
+Env vars (.env), see .env.template
 ```bash
 
 #Set auth strategy used in backend, to use auth0 for example set this to 'jwt' and fill in the other auth0 vars
@@ -74,19 +67,19 @@ AUTH0_DOMAIN
 #algorithm used for signing the jwt-tokens for example HS256
 AUTH0_ALG
 
-#For the S3 storage where application files will be stored.
+#For the S3 storage where application files will be stored, if using S3.
 AWS_REGION
 AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 AWS_BUCKET_NAME
 
-#EBS will inject these so no need to set them manually in EBS Environments
+#EBS will inject these so no need to set them manually in EBS Environments, in local/other environments set these to the database to use for the app-store backend.
 RDS_HOSTNAME
 RDS_USERNAME
 RDS_PASSWORD
 RDS_DB_NAME
 ```
-See /packages/server/knexfile.js to change database connections/credentials or server which will be used depending on process.env.NODE_ENV
+See knexfile.js to change database connections/credentials or server which will be used depending on process.env.NODE_ENV
 
 ## Frontend config
 The frontend needs to know some basic information about the server to configure routes and API endpoints.
@@ -113,7 +106,7 @@ Note that the exported objects from each config file are merged with the previou
 module.exports = {
     api: {
         baseURL: "http://localhost:3000/api/v1/",
-        redirectURL: "http://localhost:9000/user"
+        redirectURL: "http://localhost:3000/user"
     },
     routes: {
         baseAppName: ""
@@ -123,51 +116,29 @@ module.exports = {
 
 
 ##### Base app name
-This is the basename of where the app is located, used by routes. If it's hosted at `http://localhost:8080/appstore` this should be `/appstore`.
+This is the basename of where the app is located, used by routes. If it's hosted at `http://localhost:3000/someUrl` this should be `someUrl` otherwise leave empty.
 ```javascript
-routes.baseAppName: '/appstore'
+routes.baseAppName: ''
 ```
 ##### API BaseURL
 The endpoint of the backend API to be used. 
 ```javascript
-api.baseURL: 'http://localhost:8080/api/v1',
+api.baseURL: 'http://localhost:3000/api/v1',
 ```
 
 ##### API Redirect URL
 The URL to be used when auth0 has successfully logged in a user, and is redirected back to the page. Note that this URL needs to be whitelisted on the auth0 side aswell.
 ```javascript
- api.redirectURL: 'http://localhost:8080/appstore/user/'
+ api.redirectURL: 'http://localhost:3000/user/'
 ```
 
 # Run the project
 
 ### Start the backend and frontend
 
-Web API available at `localhost:3000/`.
+Web API available at `localhost:3000/api/v1`.
 
 Swagger UI available at `localhost:3000/documentation`
 Swagger specs available at `localhost:3000/swagger.json`
 
-Frontend at `localhost:9000/appstore/`.
-
-#### Start the Web API backend independently
-
-```bash
-cd packages/server
-yarn install
-yarn start
-```
-Will be available at `localhost:9000/`.
-This will skip the webpack-bundling, and the frontend will not be available.
-
-### Start the front-end app independently (dev)
-
-```bash
-cd packages/client
-yarn install
-yarn start
-```
-Will be available at `localhost:9000`. Using webpack-dev-server. 
-
-Note that to use all the features of the app, you will need to run a back-end server. This can be done in frontend-development by running the back-end server as shown in the previous section, and changing the appropriate config settings (most likely just api.baseURL, api.redirectURL and routes.baseAppName).
-
+Frontend at `localhost:3000/`.

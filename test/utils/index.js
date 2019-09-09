@@ -4,13 +4,13 @@ const { lab } = (exports.lab = require('../index'))
 
 const { it, describe } = lab
 
-const { flatten } = require('@utils')
+const { flatten } = require('../../src/utils')
 
 describe('@utils::AWSFileHandler', () => {
     const region = 'my-region'
     const bucket = 'a-bucket'
 
-    const AWSFileHandler = require('@utils/AWSFileHandler')
+    const AWSFileHandler = require('../../src/utils/AWSFileHandler')
     const fileHandler = new AWSFileHandler(region, bucket)
 
     it('should generate a key combined with a /', () => {
@@ -55,7 +55,7 @@ describe('@utils::flatten', () => {
 })
 
 describe('@utils::LocalFileSystemHandler', () => {
-    const LocalFileSystemHandler = require('@utils/LocalFileSystemHandler')
+    const LocalFileSystemHandler = require('../../src/utils/LocalFileSystemHandler')
 
     it('should contain the same contents on disk after upload as the original', async () => {
         const path = require('path')
