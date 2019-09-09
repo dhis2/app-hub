@@ -8,7 +8,7 @@ const paramsSchema = joi.object().keys({
  * Create a new organisation with the specified name
  *
  * @param {object} params
- * @param {number} params.uuid the UUID of the organisation to delete
+ * @param {string} params.uuid the UUID of the organisation to delete
  * @param {*} knex
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */
