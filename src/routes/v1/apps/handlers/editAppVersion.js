@@ -39,12 +39,15 @@ module.exports = {
         const { appUuid, versionUuid } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const currentUserIsAppDeveloper = await getAppDeveloperId(
+        const appDeveloperId = await getAppDeveloperId(
             request.params.appUuid,
             db
         )
 
-        if (currentUserIsManager(request) || currentUserIsAppDeveloper) {
+        if (
+            currentUserIsManager(request) ||
+            appDeveloperId === currentUser.id
+        ) {
             //can edit appversion
             const transaction = await db.transaction()
 
