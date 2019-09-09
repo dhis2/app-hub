@@ -136,7 +136,7 @@ describe('@data::createOrganisation', () => {
             db,
             transaction
         )
-        transaction.commit()
+        await transaction.commit()
 
         expect(successfullyDeleted).to.be.true()
 
