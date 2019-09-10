@@ -8,3 +8,6 @@ static/
 # ignore all env files, except the template
 .env*
 !.env.template
+
+# ignore local vscode settings/files
+.vscode/
