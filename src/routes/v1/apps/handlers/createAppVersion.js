@@ -124,7 +124,8 @@ module.exports = {
                 maxDhisVersion,
             } = appVersionJson
 
-            debug(`Adding version to app ${dbAppRows[0].name}`)
+            const [dbApp] = dbAppRows
+            debug(`Adding version to app ${dbApp.name}`)
 
             const appVersion = await createAppVersion(
                 {
@@ -140,33 +141,56 @@ module.exports = {
             versionUuid = appVersion.uuid
 
             //Add the texts as english language, only supported for now
-            await createLocalizedAppVersion(
-                {
-                    userId: currentUserId,
-                    appVersionId: appVersion.id,
-                    description: dbApp.description || '',
-                    name: dbApp.name,
-                    languageCode: languageCode,
-                },
-                db,
-                transaction
-            )
+            try {
+                await createLocalizedAppVersion(
+                    {
+                        userId: currentUserId,
+                        appVersionId: appVersion.id,
+                        description: dbApp.description || '',
+                        name: dbApp.name,
+                        languageCode: languageCode,
+                    },
+                    db,
+                    transaction
+                )
+            } catch (err) {
+                transaction.rollback()
+                throw Boom.internal('Could not save localized appversion', err)
+            }
 
-            await addAppVersionToChannel(
-                {
-                    appVersionId: appVersion.id,
-                    createdByUserId: currentUserId,
-                    channelName: 'Stable',
-                    minDhisVersion,
-                    maxDhisVersion,
-                },
-                db,
-                transaction
-            )
+            const publishChannel = 'Stable'
+            try {
+                await addAppVersionToChannel(
+                    {
+                        appVersionId: appVersion.id,
+                        createdByUserId: currentUserId,
+                        channelName: publishChannel,
+                        minDhisVersion,
+                        maxDhisVersion,
+                    },
+                    db,
+                    transaction
+                )
+            } catch (err) {
+                transaction.rollback()
+                throw Boom.internal(
+                    `Could not publish appversion to channel ${publishChannel}`,
+                    err
+                )
+            }
+
+            try {
+                await saveFile(
+                    `${appUuid}/${versionUuid}`,
+                    'app.zip',
+                    file._data
+                )
+            } catch (err) {
+                transaction.rollback()
+                throw Boom.internal(`Could not save app file to storage`, err)
+            }
 
             await transaction.commit()
-
-            await saveFile(`${appUuid}/${versionUuid}`, 'app.zip', file._data)
         } else {
             throw Boom.unauthorized()
         }
