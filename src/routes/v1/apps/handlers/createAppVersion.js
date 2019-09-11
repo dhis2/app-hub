@@ -87,12 +87,22 @@ module.exports = {
         const db = h.context.db
         const { appUuid } = request.params
 
-        //TODO: make langCode dynamic, legacy v1 endpoint supports english only
+        //TODO: make langCode dynamic? legacy v1 endpoint supports english only
         const languageCode = 'en'
 
-        const apps = getAppsByUuid(appUuid, languageCode, db)
-        if (!apps || apps.length === 0) {
+        let dbAppRows = await getAppsByUuid(appUuid, languageCode, db)
+        if (!dbAppRows || dbAppRows.length === 0) {
             throw Boom.badRequest('An app with that uuid does not exist')
+        }
+
+        //check if that version already exists on this app
+        const existingAppVersions = dbAppRows.filter(
+            row => row.version === appVersionJson.version
+        )
+        if (existingAppVersions.length > 0) {
+            throw Boom.badRequest(
+                'An appversion with that identifier already exists'
+            )
         }
 
         const appDeveloperId = await getAppDeveloperId(appUuid, db)
@@ -114,10 +124,8 @@ module.exports = {
                 maxDhisVersion,
             } = appVersionJson
 
-            const [dbApp] = await getAppsByUuid(appUuid, languageCode, db)
-            debug(`Adding version to app ${JSON.stringify(dbApp)}`)
+            debug(`Adding version to app ${dbAppRows[0].name}`)
 
-            //TODO: check if the version already exist, or handle duplicate constraint errors from db
             const appVersion = await createAppVersion(
                 {
                     userId: currentUserId,
@@ -163,7 +171,8 @@ module.exports = {
             throw Boom.unauthorized()
         }
 
-        const dbAppRows = await getAppsByUuid(appUuid, languageCode, db)
+        //fetch the new version rows and filter out the one we've just created data for
+        dbAppRows = await getAppsByUuid(appUuid, languageCode, db)
         const [appWithVersion] = dbAppRows.filter(
             app => app.version === appVersionJson.version
         )
