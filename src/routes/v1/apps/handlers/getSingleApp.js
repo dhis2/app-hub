@@ -9,7 +9,7 @@ const defaultFailHandler = require('../../defaultFailHandler')
 const getAppsByUuid = require('../../../../data/getAppsByUuid')
 const getAppsByUuidAndStatus = require('../../../../data/getAppsByUuidAndStatus')
 
-const convertAppsToApiV1Format = require('../formatting/convertAppsToApiV1Format')
+const { convertAppsToApiV1Format } = require('../formatting')
 
 const { canSeeAllApps } = require('../../../../security')
 

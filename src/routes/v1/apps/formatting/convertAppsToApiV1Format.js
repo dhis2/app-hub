@@ -64,7 +64,7 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
     }
 }
 
-module.exports = (apps, request) => {
+const convertAll = (apps, request) => {
     if (request === null || typeof request === 'undefined') {
         throw new Error('Missing parameter: request')
     }
@@ -97,4 +97,9 @@ module.exports = (apps, request) => {
     })
 
     return Object.keys(formattedApps).map(x => formattedApps[x])
+}
+
+module.exports = {
+    convertAppsToApiV1Format: convertAll,
+    convertAppToV1AppVersion,
 }

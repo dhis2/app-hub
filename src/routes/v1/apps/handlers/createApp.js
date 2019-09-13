@@ -178,7 +178,6 @@ module.exports = {
             const appVersion = await createAppVersion(
                 {
                     userId: requestUserId,
-                    orgId: organisationId,
                     appId: dbApp.id,
                     demoUrl,
                     sourceUrl,
