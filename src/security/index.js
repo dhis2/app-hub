@@ -77,7 +77,10 @@ const currentUserIsManager = (request, hapi) =>
  * Returns the current auth strategy, for example 'jwt' if using auth0, false if no strategy
  */
 const getCurrentAuthStrategy = () => {
-    if (process.env.AUTH_STRATEGY !== undefined) {
+    if (
+        process.env.AUTH_STRATEGY !== undefined &&
+        process.env.AUTH_STRATEGY !== ''
+    ) {
         return process.env.AUTH_STRATEGY
     }
 
@@ -88,7 +91,10 @@ const getCurrentAuthStrategy = () => {
  * Returns the auth strategy config in optional mode
  */
 const getCurrentAuthStrategyOptional = () => {
-    if (process.env.AUTH_STRATEGY === 'jwt') {
+    if (
+        process.env.AUTH_STRATEGY === 'jwt' &&
+        process.env.AUTH_STRATEGY !== ''
+    ) {
         return {
             strategy: process.env.AUTH_STRATEGY,
             mode: 'try',
