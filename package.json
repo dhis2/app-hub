@@ -17,7 +17,7 @@
         "cypress:open": "cypress open"
     },
     "dependencies": {
-        "@babel/core": "^7.4.5",
+        "@babel/core": "^7.6.2",
         "@babel/preset-env": "^7.4.5",
         "@babel/preset-react": "^7.0.0",
         "auth0-lock": "^10.18.0",
