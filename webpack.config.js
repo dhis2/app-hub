@@ -5,16 +5,16 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const nodeEnv = process.env.NODE_ENV || 'development'
 
-const isDevBuild = process.argv.indexOf('-p') === -1
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const config = require('./config/configResolver.js').default
 
 const appEntry = path.join(__dirname, 'client/src/app-store.js')
 
-const prod = {
+const webpackConfig = {
     entry: {
         app: ['whatwg-fetch', appEntry],
     },
+    mode: nodeEnv,
     output: {
         path: path.join(__dirname, 'static'),
         filename: path.join('js', `[name]_${packageJSON.version}.js`),
@@ -63,18 +63,16 @@ const prod = {
     plugins: [
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify('production'),
+                NODE_ENV: JSON.stringify(nodeEnv),
             },
             __APP_CONFIG__: JSON.stringify(config),
         }),
-        new webpack.optimize.ModuleConcatenationPlugin(),
         new CopyWebpackPlugin([
             {
                 from: path.join(__dirname, 'client/src/assets'),
                 to: 'assets',
             },
         ]),
-
         new HtmlWebpackPlugin({
             title: 'DHIS2 Appstore',
             filename: 'index.html',
@@ -83,42 +81,4 @@ const prod = {
     ],
 }
 
-const dev = Object.assign({}, prod, {
-    entry: {
-        app: ['whatwg-fetch', appEntry],
-    },
-    output: {
-        path: path.join(__dirname, 'static'),
-        filename: '[name].js',
-        publicPath: '/',
-    },
-
-    devServer: {
-        port: 9000,
-        inline: true,
-        contentBase: './app',
-        historyApiFallback: true,
-    },
-    devtool: 'eval',
-    plugins: [
-        new CopyWebpackPlugin([
-            {
-                from: path.join(__dirname, 'src/assets'),
-                to: 'assets',
-            },
-        ]),
-        new HtmlWebpackPlugin({
-            title: 'DHIS2 Appstore',
-            filename: 'index.html',
-            template: 'indexbuild.html',
-        }),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify('development'),
-            },
-            __APP_CONFIG__: JSON.stringify(config),
-        }),
-    ],
-})
-
-module.exports = process.env.NODE_ENV === 'development' ? dev : prod
+module.exports = webpackConfig
