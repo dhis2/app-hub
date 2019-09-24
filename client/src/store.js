@@ -1,7 +1,7 @@
 import Epics from './actions/epics'
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { createEpicMiddleware } from 'redux-observable'
-import createLogger from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import userReducer from './reducers/userReducer'
 import appListReducer from './reducers/appListReducer'
 import dialogReducer from './reducers/dialogReducer'
