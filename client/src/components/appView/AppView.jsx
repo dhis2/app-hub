@@ -70,12 +70,14 @@ class AppView extends Component {
                 <Col span={12} phone={4}>
                     <Subheader title="App overview" backLink="/" />
                     <Card>
-                        <CardHeader
-                            title={app.name}
-                            avatar={<AppLogo logo={logo} />}
-                            subtitle={subtitle}
-                            titleStyle={{ fontSize: '2em' }}
-                        />
+                        <div data-test-id="app-card-header">
+                            <CardHeader
+                                title={app.name}
+                                avatar={<AppLogo logo={logo} />}
+                                subtitle={subtitle}
+                                titleStyle={{ fontSize: '2em' }}
+                            />
+                        </div>
                         {app.images.length > 0 ? (
                             <CardText
                                 style={{ paddingLeft: 0, paddingRight: 0 }}
