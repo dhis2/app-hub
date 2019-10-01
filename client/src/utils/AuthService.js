@@ -10,6 +10,7 @@ import logo from '../assets/img/dhis2.svg'
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
+        console.log('LOGO', logo)
         this.lock = new Auth0Lock(clientId, domain, {
             auth: {
                 redirectUrl: `${window.location.protocol}//${window.location.host}/user`,
