@@ -18,7 +18,7 @@ const webpackConfig = {
         path: path.join(__dirname, 'static'),
         filename: path.join('js', `[name]_${packageJSON.version}.js`),
         //this is where the files are served from
-        publicPath: `${config.routes.baseAppName}/`,
+        publicPath: `${config.routes.baseAppName}`,
     },
 
     module: {
@@ -47,7 +47,6 @@ const webpackConfig = {
                         loader: 'file-loader',
                         options: {
                             name: `[name]_${packageJSON.version}.[ext]`,
-                            publicPath: `${config.routes.baseAppName}`,
                             outputPath: 'assets/',
                         },
                     },
