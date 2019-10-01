@@ -13,4 +13,4 @@ static/
 .vscode/
 
 # ignore cypress env
-.cypress.env*
+cypress.env.json
