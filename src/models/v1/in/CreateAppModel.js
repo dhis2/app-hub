@@ -21,6 +21,7 @@ const CreateModelAppData = Joi.object().keys({
             minDhisVersion: Joi.string(),
             maxDhisVersion: Joi.string().allow(''),
             demoUrl: Joi.string().allow(''),
+            channel: Joi.string(),
         })
     ),
     images: Joi.array(),

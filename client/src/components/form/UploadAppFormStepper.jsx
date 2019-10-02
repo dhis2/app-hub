@@ -18,7 +18,7 @@ const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
 
 const requiredFields = {
     general: ['appName', 'appType'],
-    version: ['file', 'version'],
+    version: ['file', 'version', 'channel'],
     developer: ['developerName', 'developerEmail', 'developerOrg'],
     image: [],
 }
@@ -66,6 +66,13 @@ const validate = values => {
     ) {
         errors.version.minVer = 'Cannot be higher than maximum version'
         errors.version.maxVer = 'Cannot be lower than minimum version'
+    } else if (values.version) {
+        if (!values.version.minVer) {
+            errors.version.minVer = 'Required'
+        }
+        if (!values.version.maxVer) {
+            errors.version.maxVer = 'Required'
+        }
     }
     //Check if any subsection has error
     if (hasError(errors)) {
@@ -79,6 +86,10 @@ const appTypesItems = appTypes.map((type, i) => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
 ))
 const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
+    <MenuItem key={version} value={version} primaryText={version} />
+))
+
+const DHISReleaseChannels = config.ui.releaseChannels.map((version, i) => (
     <MenuItem key={version} value={version} primaryText={version} />
 ))
 
@@ -139,7 +150,7 @@ const AppVersionSection = props => {
             <Field
                 name="minVer"
                 component={formUtils.renderSelectField}
-                label="Minimum DHIS version"
+                label="Minimum DHIS version *"
             >
                 {DHISVersionItems}
             </Field>
@@ -147,9 +158,17 @@ const AppVersionSection = props => {
             <Field
                 name="maxVer"
                 component={formUtils.renderSelectField}
-                label="Maximum DHIS version"
+                label="Maximum DHIS version *"
             >
                 {DHISVersionItems}
+            </Field>
+            <br />
+            <Field
+                name="channel"
+                component={formUtils.renderSelectField}
+                label="Release channel *"
+            >
+                {DHISReleaseChannels}
             </Field>
             <br />
             <Field

@@ -10,6 +10,7 @@ const CreateAppVersionModel = Joi.object().keys({
     maxDhisVersion: Joi.string().allow(''),
     demoUrl: Joi.string().allow(''),
     images: Joi.array(),
+    channel: Joi.string(),
 })
 
 const payloadSchema = {

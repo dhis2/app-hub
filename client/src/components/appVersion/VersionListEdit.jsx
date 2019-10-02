@@ -14,6 +14,9 @@ import MenuItem from 'material-ui/MenuItem'
 import Popover from 'material-ui/Popover'
 import TextField from 'material-ui/TextField'
 import Theme from '../../styles/theme'
+import SelectField from 'material-ui/SelectField'
+
+import config from '../../../../config'
 
 const styles = {
     tableHeaderColumn: {
@@ -41,6 +44,10 @@ const TableIcon = ({ children }) => (
         {children}
     </FontIcon>
 )
+
+const DHISReleaseChannels = config.ui.releaseChannels.map((version, i) => (
+    <MenuItem key={version} value={version} primaryText={version} />
+))
 
 class VersionListEdit extends Component {
     constructor(props) {
@@ -243,6 +250,23 @@ class VersionListEdit extends Component {
                         version.maxDhisVersion
                     )}
                 </TableRowColumn>
+                <TableRowColumn>
+                    {edit ? (
+                        <SelectField
+                            value={version.channel}
+                            onChange={this.handleValueChange.bind(
+                                this,
+                                version.id,
+                                'channel'
+                            )}
+                            name="channel"
+                        >
+                            {DHISReleaseChannels}
+                        </SelectField>
+                    ) : (
+                        version.channel
+                    )}
+                </TableRowColumn>
                 <TableRowColumn
                     title={new Date(version.created).toLocaleString()}
                 >
@@ -306,6 +330,12 @@ class VersionListEdit extends Component {
                             <div style={styles.columnText}>
                                 Max DHIS version
                             </div>
+                        </TableHeaderColumn>
+                        <TableHeaderColumn
+                            style={styles.tableHeaderColumn}
+                            tooltip="Release channel to publish this app to"
+                        >
+                            <div style={styles.columnText}>Channel</div>
                         </TableHeaderColumn>
                         <TableHeaderColumn
                             style={styles.tableHeaderColumn}
