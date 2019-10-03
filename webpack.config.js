@@ -2,7 +2,6 @@ const webpack = require('webpack')
 const path = require('path')
 const packageJSON = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const nodeEnv = process.env.NODE_ENV || 'development'
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
@@ -19,7 +18,7 @@ const webpackConfig = {
         path: path.join(__dirname, 'static'),
         filename: path.join('js', `[name]_${packageJSON.version}.js`),
         //this is where the files are served from
-        publicPath: '/',
+        publicPath: `${config.routes.baseAppName}`,
     },
 
     module: {
@@ -48,7 +47,6 @@ const webpackConfig = {
                         loader: 'file-loader',
                         options: {
                             name: `[name]_${packageJSON.version}.[ext]`,
-                            publicPath: `${config.routes.baseAppName}`,
                             outputPath: 'assets/',
                         },
                     },
@@ -67,12 +65,6 @@ const webpackConfig = {
             },
             __APP_CONFIG__: JSON.stringify(config),
         }),
-        new CopyWebpackPlugin([
-            {
-                from: path.join(__dirname, 'client/src/assets'),
-                to: 'assets',
-            },
-        ]),
         new HtmlWebpackPlugin({
             title: 'DHIS2 Appstore',
             filename: 'index.html',
