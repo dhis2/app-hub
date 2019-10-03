@@ -21,7 +21,6 @@ const webpackConfig = {
         //this is where the files are served from
         publicPath: '/',
     },
-
     module: {
         rules: [
             {
@@ -57,6 +56,9 @@ const webpackConfig = {
         ],
     },
     devtool: shouldUseSourceMap ? 'source-map' : false,
+    devServer: {
+        historyApiFallback: true,
+    },
     resolve: {
         extensions: ['.js', '.jsx'],
     },
