@@ -242,6 +242,7 @@ module.exports = {
         } catch (err) {
             debug('ROLLING BACK TRANSACTION')
             debug(err)
+            trx.rollback()
             throw Boom.badRequest(err.message, err)
         }
 
