@@ -123,13 +123,14 @@ export const editImageSuccess = (appId, imageId, data) =>
     });
 
 export const editImageLogo = (appId, imageId, logo) =>
-    actionCreator(actions.APP_IMAGE_EDIT)({
-        appId,
-        imageId,
-        data: {
-            logo
-        }
-    });
+    optimisticActionCreator(
+        actionCreator(actions.APP_IMAGE_EDIT)({
+            appId,
+            imageId,
+            data: {
+                logo
+            }
+    }));
 
 export const editAppVersion = (appId, version) =>
     optimisticActionCreator(
