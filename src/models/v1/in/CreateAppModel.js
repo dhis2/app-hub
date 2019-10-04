@@ -24,7 +24,12 @@ const CreateModelAppData = Joi.object().keys({
             channel: Joi.string(),
         })
     ),
-    images: Joi.array(),
+    images: Joi.array().items(
+        Joi.object({
+            caption: Joi.string().allow('', null),
+            description: Joi.string().allow('', null),
+        })
+    ),
 })
 
 const payloadSchema = Joi.object({

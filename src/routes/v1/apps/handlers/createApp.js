@@ -224,7 +224,11 @@ module.exports = {
                     'Inserting logo metadata to db and link it to the appVersion'
                 )
                 const imageFileMetadata = imageFile.hapi
-
+                const [imageInfo] = appJsonPayload.images
+                let caption, description
+                if (imageInfo) {
+                    ;({ caption, description } = imageInfo)
+                }
                 const { id, uuid } = await addAppVersionMedia(
                     {
                         userId: requestUserId,
@@ -232,6 +236,8 @@ module.exports = {
                         imageType: ImageType.Logo,
                         fileName: imageFileMetadata.filename,
                         mime: imageFileMetadata.headers['content-type'],
+                        caption: caption,
+                        description: description,
                     },
                     knex,
                     trx

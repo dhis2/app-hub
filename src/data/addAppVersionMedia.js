@@ -26,6 +26,8 @@ const paramSchema = joi
             .string()
             .required()
             .max(255),
+        caption: joi.string().allow(['', null]),
+        description: joi.string().allow(['', null]),
     })
     .options({ allowUnknown: true })
 
@@ -96,6 +98,8 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             created_by_user_id: userId,
             media_type_id: mediaTypeId,
             app_version_id: appVersionId,
+            caption: params.caption,
+            description: params.description,
         }
 
         const [id] = await knex('app_version_media')
