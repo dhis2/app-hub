@@ -137,7 +137,7 @@ export function createAppUploadOptions(data) {
     })
     form.append('file', fileInput, fileInput.name)
     form.append('app', jsonPart)
-    if (imageInput) {
+    if (imageInput && imageInput.name) {
         form.append('imageFile', imageInput, imageInput.name)
     }
 
