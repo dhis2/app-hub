@@ -8,7 +8,7 @@
     "scripts": {
         "build": "webpack -p --config ./webpack.config.js",
         "start": "NODE_ENV=production node ./src/main.js",
-        "dev": "concurrently --kill-others npm:dev:*",
+        "dev": "USE_PREBUILT_APP=1 concurrently --kill-others npm:dev:*",
         "dev:server": "DEBUG=knex:tx,appstore* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
         "dev:client": "NODE_ENV=development webpack-dev-server",
         "test": "NODE_ENV=test npm run reset-and-seed-db && lab -a code -t 80 -v -I 'core,__core-js_shared__' test/index.js",
