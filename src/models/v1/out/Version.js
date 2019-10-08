@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi')
 module.exports = Joi.object().keys({
     version: Joi.string().required(),
     minDhisVersion: Joi.string().required(),
-    maxDhisVersion: Joi.string().allow([null, '']),
+    maxDhisVersion: Joi.string().allow(null, ''),
     lastUpdated: Joi.number(),
     created: Joi.number(),
     id: Joi.string()

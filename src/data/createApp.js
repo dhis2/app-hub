@@ -13,7 +13,7 @@ const paramsSchema = joi
         appType: joi
             .string()
             .required()
-            .valid(AppTypes),
+            .valid(...AppTypes),
     })
     .options({ allowUnknown: true })
 

@@ -13,7 +13,7 @@ const paramsSchema = joi
         userId: joi.number(),
         name: joi.string().max(100),
         description: joi.string().allow(''),
-        appType: joi.string().valid(AppTypes),
+        appType: joi.string().valid(...AppTypes),
         sourceUrl: joi
             .string()
             .allow('')

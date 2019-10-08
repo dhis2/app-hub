@@ -10,11 +10,11 @@ const paramsSchema = joi
         userId: joi.number(),
         minDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         maxDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         version: joi.string(),
         demoUrl: joi

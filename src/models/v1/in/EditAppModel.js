@@ -3,7 +3,7 @@ const joi = require('@hapi/joi')
 const { AppTypes } = require('../../../enums')
 
 const payloadSchema = {
-    appType: joi.string().valid(AppTypes),
+    appType: joi.string().valid(...AppTypes),
     description: joi.string().allow(''),
     developer: joi.object().keys({
         address: joi.string().allow(''),

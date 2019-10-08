@@ -5,7 +5,7 @@ const { AppTypes } = require('../../../enums')
 const CreateModelAppData = Joi.object().keys({
     name: Joi.string(),
     description: Joi.string().allow(''),
-    appType: Joi.string().valid(AppTypes),
+    appType: Joi.string().valid(...AppTypes),
     sourceUrl: Joi.string()
         .uri()
         .allow(''),

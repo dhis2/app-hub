@@ -17,7 +17,7 @@ const paramSchema = joi
         imageType: joi
             .number()
             .required()
-            .valid(ImageTypes),
+            .valid(...ImageTypes),
         fileName: joi
             .string()
             .required()

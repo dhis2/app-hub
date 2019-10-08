@@ -6,7 +6,7 @@ const { AppTypes } = require('../../../enums')
 const def = Joi.object().keys({
     appType: Joi.string()
         .required()
-        .valid(AppTypes),
+        .valid(...AppTypes),
 
     id: Joi.string()
         .guid({ version: 'uuidv4' })

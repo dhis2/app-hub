@@ -6,11 +6,11 @@ const payloadSchema = {
     minDhisVersion: joi
         .string()
         .required()
-        .allow([null, '']),
+        .allow(null, ''),
     maxDhisVersion: joi
         .string()
         .required()
-        .allow([null, '']),
+        .allow(null, ''),
 }
 
 const EditAppVersionModel = joi.object().keys(payloadSchema)
