@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const payloadSchema = {
     demoUrl: joi.string().allow(''),

@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 /**
  * Finds an organisation by one of the optional parameters. If passing multiple they will be evaluated in the following order: id, uuid, name

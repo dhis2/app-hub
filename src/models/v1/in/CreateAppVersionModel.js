@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 /**
  * For client implementation see /client/src/api/api.js - createUploadVersionOptions

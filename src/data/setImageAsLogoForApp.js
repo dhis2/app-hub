@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 const { ImageType } = require('../enums')
 
 const paramsSchema = joi.object().keys({

@@ -1,7 +1,7 @@
 const debug = require('debug')('appstore:server:data:createChannel')
 const uuid = require('uuid/v4')
 
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi
     .object()

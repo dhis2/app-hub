@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 const uuid = require('uuid/v4')
 
 const { ImageTypes } = require('../enums')

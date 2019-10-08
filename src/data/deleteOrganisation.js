@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi.object().keys({
     uuid: joi.string().uuid(),
