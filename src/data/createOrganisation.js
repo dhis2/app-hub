@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 const slugify = require('slugify')
 const uuid = require('uuid/v4')
 
@@ -29,9 +29,9 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise<Organisation>} The created organisation
  */
 const createOrganisation = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 
@@ -63,7 +63,6 @@ const createOrganisation = async (params, knex, transaction) => {
                 foundUniqueSlug = true
             }
         }
-
         const [id] = await knex('organisation')
             .transacting(transaction)
             .insert({
@@ -74,7 +73,6 @@ const createOrganisation = async (params, knex, transaction) => {
                 uuid: orgUuid,
             })
             .returning('id')
-
         return { id, name, slug, uuid: orgUuid }
     } catch (err) {
         throw new Error(`Could not create organisation: ${err.message}`)

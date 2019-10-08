@@ -50,7 +50,7 @@ const paramSchema = joi
 const addAppVersionMedia = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

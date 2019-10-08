@@ -1,4 +1,4 @@
-const { expect } = require('code')
+const { expect } = require('@hapi/code')
 
 const { lab } = require('../index')
 
@@ -17,7 +17,7 @@ describe('@data::addAppVersionMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
         await expect(addAppVersionMedia({}, null, null)).to.reject(
             Error,
-            'ValidationError: child "appVersionId" fails because ["appVersionId" is required]'
+            'ValidationError: "appVersionId" is required'
         )
     })
 })

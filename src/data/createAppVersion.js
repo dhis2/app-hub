@@ -33,7 +33,7 @@ const paramsSchema = joi
 const createAppVersion = async (params, knex, transaction) => {
     const paramsValidation = paramsSchema.validate(params)
 
-    if (paramsValidation.error !== null) {
+    if (paramsValidation.error !== undefined) {
         throw new Error(paramsValidation.error)
     }
 

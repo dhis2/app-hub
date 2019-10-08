@@ -1,4 +1,4 @@
-const { expect } = require('code')
+const { expect } = require('@hapi/code')
 
 const { lab } = (exports.lab = require('../index'))
 

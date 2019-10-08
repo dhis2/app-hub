@@ -1,5 +1,9 @@
 const joi = require('@hapi/joi')
 
+const paramsSchema = joi.object({
+    name: joi.string().required(),
+})
+
 /**
  * Finds an organisation by one of the optional parameters. If passing multiple they will be evaluated in the following order: id, uuid, name
  *
@@ -12,8 +16,9 @@ const getOrganisationsByName = async (name, knex) => {
         throw new Error(`Missing knex instance passed as parameter.`)
     }
 
-    const validation = joi.validate({ name }, { name: joi.string().required() })
-    if (validation.error !== null) {
+    const validation = paramsSchema.validate({ name })
+
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

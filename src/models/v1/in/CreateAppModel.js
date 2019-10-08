@@ -26,15 +26,15 @@ const CreateModelAppData = Joi.object().keys({
     images: Joi.array(),
 })
 
-const payloadSchema = {
+const payloadSchema = Joi.object({
     //multipart gets parsed as streams so we have to allow any and manually validate in the handler.
     app: Joi.any(),
     imageFile: Joi.any(),
     file: Joi.any(),
-}
+})
 
 module.exports = {
     payloadSchema,
     def: CreateModelAppData,
-    validate: obj => Joi.validate(obj, CreateModelAppData),
+    validate: obj => CreateModelAppData.validate(obj),
 }

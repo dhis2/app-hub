@@ -24,9 +24,9 @@ const paramsSchema = joi
  * @returns {Promise}
  */
 const addUserToOrganisation = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

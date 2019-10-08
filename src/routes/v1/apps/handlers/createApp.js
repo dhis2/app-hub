@@ -74,7 +74,7 @@ module.exports = {
             appJsonPayload
         )
 
-        if (appJsonValidationResult.error !== null) {
+        if (appJsonValidationResult.error !== undefined) {
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
