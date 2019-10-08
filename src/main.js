@@ -16,12 +16,12 @@ process.on('unhandledRejection', err => {
     process.exit(1)
 })
 
-compile()
-    .catch(err => {
-        debug('The web app failed to compile.\n', err)
-        process.exit(1)
-    })
-    .then(() => migrate(knex))
+compile().catch(err => {
+    debug('The web app failed to compile.\n', err)
+    process.exit(1)
+})
+
+migrate(knex)
     .catch(err => {
         debug('The database migrations failed to apply.\n', err)
         process.exit(1)
