@@ -13,7 +13,6 @@ const payloadSchema = {
     }),
     name: joi.string().max(100),
     sourceUrl: joi.string().allow(''),
-    channel: joi.string(),
 }
 
 const EditAppModel = joi.object().keys(payloadSchema)

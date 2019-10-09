@@ -16,6 +16,8 @@ import TextField from 'material-ui/TextField'
 import Theme from '../../styles/theme'
 import SelectField from 'material-ui/SelectField'
 
+import merge from 'lodash/fp/merge'
+
 import config from '../../../../config'
 
 const styles = {
@@ -45,8 +47,12 @@ const TableIcon = ({ children }) => (
     </FontIcon>
 )
 
-const DHISReleaseChannels = config.ui.releaseChannels.map((version, i) => (
-    <MenuItem key={version} value={version} primaryText={version} />
+const DHISReleaseChannels = config.ui.releaseChannels.map((channel, i) => (
+    <MenuItem
+        key={'channel_' + channel}
+        value={channel}
+        primaryText={channel}
+    />
 ))
 
 class VersionListEdit extends Component {
@@ -122,13 +128,20 @@ class VersionListEdit extends Component {
     handleValueChange(versionId, fieldName, e, newValue) {
         const editedValues = this.state.editedValues
         this.setState({
-            ...this.state,
-            editedValues: {
-                ...editedValues,
+            editedValues: merge(editedValues, {
+                [versionId]: { [fieldName]: newValue },
+            }),
+        })
+    }
+
+    handleChannelChange(versionId, e, selectedIndex) {
+        const editedValues = this.state.editedValues
+        this.setState({
+            editedValues: merge(editedValues, {
                 [versionId]: {
-                    [fieldName]: newValue,
+                    channel: config.ui.releaseChannels[selectedIndex],
                 },
-            },
+            }),
         })
     }
 
@@ -175,10 +188,12 @@ class VersionListEdit extends Component {
         const editingIcons = [submitIcon, cancelIcon]
         const normalIcons = [editIcon, deleteIcon]
 
+        const values = merge(version, this.state.editedValues[version.id])
+
         return (
             <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
-                    <a href={version.downloadUrl} title="Download">
+                    <a href={values.downloadUrl} title="Download">
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
@@ -193,9 +208,9 @@ class VersionListEdit extends Component {
                             )}
                             name="demoUrl"
                         />
-                    ) : version.demoUrl ? (
+                    ) : values.demoUrl ? (
                         <a
-                            href={`${version.demoUrl}`}
+                            href={`${values.demoUrl}`}
                             target="_blank"
                             style={{ color: Theme.palette.primary1Color }}
                         >
@@ -208,7 +223,7 @@ class VersionListEdit extends Component {
                 <TableRowColumn>
                     {edit ? (
                         <TextField
-                            defaultValue={version.version}
+                            defaultValue={values.version}
                             onChange={this.handleValueChange.bind(
                                 this,
                                 version.id,
@@ -217,13 +232,13 @@ class VersionListEdit extends Component {
                             name="version"
                         />
                     ) : (
-                        version.version
+                        values.version
                     )}
                 </TableRowColumn>
                 <TableRowColumn>
                     {edit ? (
                         <TextField
-                            defaultValue={version.minDhisVersion}
+                            defaultValue={values.minDhisVersion}
                             onChange={this.handleValueChange.bind(
                                 this,
                                 version.id,
@@ -232,13 +247,13 @@ class VersionListEdit extends Component {
                             name="minDhisVersion"
                         />
                     ) : (
-                        version.minDhisVersion
+                        values.minDhisVersion
                     )}
                 </TableRowColumn>
                 <TableRowColumn>
                     {edit ? (
                         <TextField
-                            defaultValue={version.maxDhisVersion}
+                            defaultValue={values.maxDhisVersion}
                             onChange={this.handleValueChange.bind(
                                 this,
                                 version.id,
@@ -247,17 +262,16 @@ class VersionListEdit extends Component {
                             name="maxDhisVersion"
                         />
                     ) : (
-                        version.maxDhisVersion
+                        values.maxDhisVersion
                     )}
                 </TableRowColumn>
                 <TableRowColumn>
                     {edit ? (
                         <SelectField
-                            value={version.channel}
-                            onChange={this.handleValueChange.bind(
+                            value={values.channel}
+                            onChange={this.handleChannelChange.bind(
                                 this,
-                                version.id,
-                                'channel'
+                                version.id
                             )}
                             name="channel"
                         >

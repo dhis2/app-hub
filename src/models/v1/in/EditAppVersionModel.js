@@ -2,7 +2,7 @@ const joi = require('joi')
 
 const payloadSchema = {
     demoUrl: joi.string().allow(''),
-    version: joi.string().allow(''),
+    version: joi.string(),
     minDhisVersion: joi
         .string()
         .required()
@@ -11,6 +11,7 @@ const payloadSchema = {
         .string()
         .required()
         .allow([null, '']),
+    channel: joi.string(),
 }
 
 const EditAppVersionModel = joi.object().keys(payloadSchema)

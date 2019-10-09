@@ -305,6 +305,7 @@ class UploadAppFormStepper extends Component {
                     minDhisVersion: values.version.minVer,
                     maxDhisVersion: values.version.maxVer,
                     demoUrl: values.version.demoUrl,
+                    channel: values.version.channel,
                 },
             ],
             images: [

@@ -205,12 +205,13 @@ module.exports = {
             const {
                 minDhisVersion,
                 maxDhisVersion,
+                channel,
             } = appJsonPayload.versions[0]
             await addAppVersionToChannel(
                 {
                     appVersionId: appVersion.id,
                     createdByUserId: currentUserId,
-                    channelName: 'Stable',
+                    channelName: channel,
                     minDhisVersion,
                     maxDhisVersion,
                 },
