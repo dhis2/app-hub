@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 /**
  * For client implementation see /client/src/api/api.js - createUploadVersionOptions
@@ -12,14 +12,14 @@ const CreateAppVersionModel = Joi.object().keys({
     images: Joi.array(),
 })
 
-const payloadSchema = {
+const payloadSchema = Joi.object({
     //multipart gets parsed as streams so we have to allow any and manually validate in the handler.
     version: Joi.any(),
     file: Joi.any(),
-}
+})
 
 module.exports = {
     payloadSchema,
     def: CreateAppVersionModel,
-    validate: obj => Joi.validate(obj, CreateAppVersionModel),
+    validate: obj => CreateAppVersionModel.validate(obj),
 }

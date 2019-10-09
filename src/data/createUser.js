@@ -1,5 +1,5 @@
 const uuid = require('uuid/v4')
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi
     .object()
@@ -30,9 +30,9 @@ const paramsSchema = joi
  * @returns {Promise<CreateUserResult>}
  */
 const createUser = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

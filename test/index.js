@@ -1,4 +1,4 @@
-const Lab = require('lab')
+const Lab = require('@hapi/lab')
 
 // prepare environment
 module.exports = {

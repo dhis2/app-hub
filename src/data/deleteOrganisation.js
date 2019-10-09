@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi.object().keys({
     uuid: joi.string().uuid(),
@@ -13,9 +13,9 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */
 const deleteOrganisation = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

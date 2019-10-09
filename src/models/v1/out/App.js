@@ -1,4 +1,4 @@
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const { AppStatuses, AppTypes } = require('../../../enums')
 
@@ -10,7 +10,7 @@ const Image = require('./Image')
 const def = Joi.object().keys({
     appType: Joi.string()
         .required()
-        .valid(AppTypes),
+        .valid(...AppTypes),
 
     created: Joi.number(),
 
@@ -44,7 +44,7 @@ const def = Joi.object().keys({
 
     status: Joi.string()
         .required()
-        .valid(AppStatuses),
+        .valid(...AppStatuses),
 
     versions: Joi.array()
         .items(Version)

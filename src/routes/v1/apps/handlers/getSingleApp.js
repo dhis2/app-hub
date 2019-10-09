@@ -1,5 +1,5 @@
 const Boom = require('boom')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const AppModel = require('../../../../models/v1/out/App')
 const { AppStatus } = require('../../../../enums')

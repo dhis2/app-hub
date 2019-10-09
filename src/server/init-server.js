@@ -2,7 +2,7 @@ const debug = require('debug')('appstore:server:boot:api')
 const path = require('path')
 
 const Blipp = require('blipp')
-const Hapi = require('hapi')
+const Hapi = require('@hapi/hapi')
 const HapiSwagger = require('hapi-swagger')
 const Inert = require('inert')
 const Pino = require('hapi-pino')
