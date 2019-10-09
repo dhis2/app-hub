@@ -8,9 +8,11 @@
     "scripts": {
         "build": "webpack -p --config ./webpack.config.js",
         "start": "cross-env NODE_ENV=production node ./src/main.js",
-        "dev": "cross-env DEBUG=knex:tx,appstore* NODE_ENV=development nodemon --watch ./src --watch ./client/ --ext js,jsx -V --inspect src/main.js",
-        "test": "cross-env NODE_ENV=test AUTH_STRATEGY=jwt lab -a code -t 80 -v -I 'core,__core-js_shared__' test/index.js",
-        "test-coverage": "cross-env NODE_ENV=test AUTH_STRATEGY=jwt lab -c -a code -r html -o coverage/coverage.html test/index.js",
+        "dev": "cross-env USE_PREBUILT_APP=1 concurrently --kill-others npm:dev:*",
+        "dev:server": "cross-env DEBUG=knex:tx,appstore* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
+        "dev:client": "cross-env NODE_ENV=development webpack-dev-server",
+        "test": "cross-env NODE_ENV=test npm run reset-and-seed-db && lab -a code -t 80 -v -I 'core,__core-js_shared__' test/index.js",
+        "test-coverage": "cross-env NODE_ENV=test lab -c -a code -r html -o coverage/coverage.html test/index.js",
         "reset-db": "npx knex migrate:rollback && npx knex migrate:latest",
         "seed-db": "npx knex seed:run",
         "reset-and-seed-db": "npx knex migrate:rollback && npx knex migrate:latest && npx knex seed:run",
@@ -27,6 +29,7 @@
         "blipp": "^3.1.2",
         "boom": "^7.3.0",
         "classnames": "^2.2.5",
+        "concurrently": "^4.1.2",
         "copy-webpack-plugin": "^5.0.3",
         "core-js": "^3.1.4",
         "css-loader": "^0.26.1",
@@ -74,6 +77,7 @@
         "uuid": "^3.3.2",
         "vision": "^5.4.4",
         "webpack": "^4.41.0",
+        "webpack-dev-server": "^3.8.2",
         "whatwg-fetch": "^2.0.3"
     },
     "devDependencies": {
