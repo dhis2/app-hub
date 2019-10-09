@@ -86,9 +86,7 @@ const updateAppVersion = async (params, knex, transaction) => {
                 .first('id')
 
             if (!channel) {
-                throw new Error(
-                    `Channel ${channel} does not exist. ${err.message}`
-                )
+                throw new Error(`Channel ${channel} does not exist.`)
             }
 
             channelQuery.channel_id = channel.id
