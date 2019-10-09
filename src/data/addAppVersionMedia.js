@@ -26,8 +26,8 @@ const paramSchema = joi
             .string()
             .required()
             .max(255),
-        caption: joi.string().allow(['', null]),
-        description: joi.string().allow(['', null]),
+        caption: joi.string().allow('', null),
+        description: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
@@ -46,6 +46,8 @@ const paramSchema = joi
  * @param {number} params.imageType ImageType enum that determines if this is a logotype or image/screenshot
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
+ * @param {string} caption.mime caption/title of the media
+ * @param {string} description.mime description of the media
  * @param {object} knex DB instance of knex
  * @returns {Promise<AppVersionMediaResult>}
  */
