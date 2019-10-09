@@ -137,10 +137,8 @@ export function createAppUploadOptions(data) {
     })
     form.append('file', fileInput, fileInput.name)
     form.append('app', jsonPart)
-    if (imageInput) {
-        try {
-            form.append('imageFile', imageInput, imageInput.name)
-        } catch (err) {}
+    if (imageInput && imageInput.name) {
+        form.append('imageFile', imageInput, imageInput.name)
     }
 
     const fetchOptions = {

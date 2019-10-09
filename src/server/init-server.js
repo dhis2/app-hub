@@ -23,7 +23,7 @@ exports.init = async knex => {
         routes: {
             cors: {
                 origin: ['*'],
-                headers: ['Accept', 'Content-Type'],
+                headers: ['Accept', 'Content-Type', 'authorization'],
                 additionalHeaders: ['X-Requested-With'],
             },
         },
@@ -41,7 +41,6 @@ exports.init = async knex => {
             //redact: ['req.headers.authorization']
         },
     })
-
     //Swagger + deps to render swaggerui
     //served from the url /documentation
     await server.register([
