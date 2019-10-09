@@ -1,5 +1,5 @@
 const Boom = require('boom')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 const { canChangeAppStatus } = require('../../../../security')

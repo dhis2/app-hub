@@ -1,9 +1,9 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const { AppTypes } = require('../../../enums')
 
-const payloadSchema = {
-    appType: joi.string().valid(AppTypes),
+const payloadSchema = joi.object({
+    appType: joi.string().valid(...AppTypes),
     description: joi.string().allow(''),
     developer: joi.object().keys({
         address: joi.string().allow(''),
@@ -13,12 +13,12 @@ const payloadSchema = {
     }),
     name: joi.string().max(100),
     sourceUrl: joi.string().allow(''),
-}
+})
 
-const EditAppModel = joi.object().keys(payloadSchema)
+const EditAppModel = payloadSchema
 
 module.exports = {
     payloadSchema,
     def: EditAppModel,
-    validate: objectToValidate => joi.validate(objectToValidate, EditAppModel),
+    validate: objectToValidate => EditAppModel.validate(objectToValidate),
 }

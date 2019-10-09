@@ -1,9 +1,9 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi.object().keys({
     uuid: joi.string().uuid(),
-    caption: joi.string().allow(['', null]),
-    description: joi.string().allow(['', null]),
+    caption: joi.string().allow('', null),
+    description: joi.string().allow('', null),
 })
 
 /**
@@ -16,9 +16,9 @@ const paramsSchema = joi.object().keys({
  * @returns {Promise}
  */
 const updateImageMeta = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

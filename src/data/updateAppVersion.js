@@ -1,5 +1,5 @@
-const joi = require('joi')
 const debug = require('debug')('appstore:data:updateAppVersion')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi
     .object()
@@ -11,11 +11,11 @@ const paramsSchema = joi
         userId: joi.number(),
         minDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         maxDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         version: joi.string(),
         demoUrl: joi
@@ -41,9 +41,9 @@ const paramsSchema = joi
  * @returns {Promise<CreateUserResult>}
  */
 const updateAppVersion = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

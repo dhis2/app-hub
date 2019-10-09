@@ -1,5 +1,5 @@
 const Boom = require('boom')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const { deleteDir } = require('../../../../utils')
 const defaultFailHandler = require('../../defaultFailHandler')
