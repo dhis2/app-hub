@@ -36,7 +36,7 @@ module.exports = {
 
         const { mediaUuid, appUuid } = request.params
 
-        const jsonPayload = request.payload
+        const jsonPayload = JSON.parse(request.payload)
 
         const currentUser = await getCurrentUserFromRequest(request, db)
         const appDeveloperId = await getAppDeveloperId(

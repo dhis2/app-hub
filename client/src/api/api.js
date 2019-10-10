@@ -16,9 +16,6 @@ const deleteOpts = {
 
 const updateOpts = {
     method: 'PUT',
-    headers: {
-        'content-type': 'application/json',
-    },
 }
 
 export function getAllApps() {
@@ -90,7 +87,7 @@ export function deleteImage(appId, imageId) {
 export function updateApp(appId, payload) {
     return fromApi('apps/' + appId, true, {
         ...baseOptions,
-        ...updateOpts,
+        method: 'PUT',
         body: JSON.stringify(payload),
     })
 }
