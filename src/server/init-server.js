@@ -26,6 +26,9 @@ exports.init = async knex => {
                 headers: ['Accept', 'Content-Type', 'authorization'],
                 additionalHeaders: ['X-Requested-With'],
             },
+            payload: {
+                allow: 'application/json',
+            },
         },
     })
 
