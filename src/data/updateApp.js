@@ -1,5 +1,5 @@
 const slugify = require('slugify')
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const { AppTypes } = require('../enums')
 
@@ -13,7 +13,7 @@ const paramsSchema = joi
         userId: joi.number(),
         name: joi.string().max(100),
         description: joi.string().allow(''),
-        appType: joi.string().valid(AppTypes),
+        appType: joi.string().valid(...AppTypes),
         sourceUrl: joi
             .string()
             .allow('')
@@ -39,9 +39,9 @@ const paramsSchema = joi
  * @returns {Promise<CreateUserResult>}
  */
 const updateApp = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

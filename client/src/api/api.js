@@ -16,6 +16,9 @@ const deleteOpts = {
 
 const updateOpts = {
     method: 'PUT',
+    headers: {
+        'content-type': 'application/json',
+    },
 }
 
 export function getAllApps() {
@@ -87,7 +90,7 @@ export function deleteImage(appId, imageId) {
 export function updateApp(appId, payload) {
     return fromApi('apps/' + appId, true, {
         ...baseOptions,
-        method: 'PUT',
+        ...updateOpts,
         body: JSON.stringify(payload),
     })
 }
@@ -137,7 +140,7 @@ export function createAppUploadOptions(data) {
     })
     form.append('file', fileInput, fileInput.name)
     form.append('app', jsonPart)
-    if (imageInput) {
+    if (imageInput && imageInput.name) {
         form.append('imageFile', imageInput, imageInput.name)
     }
 

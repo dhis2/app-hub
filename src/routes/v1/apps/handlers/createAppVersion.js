@@ -72,7 +72,7 @@ module.exports = {
         )
         const file = request.payload.file
 
-        if (validationResult.error !== null) {
+        if (validationResult.error !== undefined) {
             debug('Version did not pass validation: ', validationResult.error)
             throw Boom.badRequest(validationResult.error)
         }

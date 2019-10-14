@@ -381,6 +381,7 @@ const editVersion = action$ =>
                 maxDhisVersion: version.maxDhisVersion,
                 minDhisVersion: version.minDhisVersion,
                 version: version.version,
+                channel: version.channel,
             }
 
             const { id } = action.meta.optimistic

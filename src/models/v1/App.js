@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 const { AppStatuses, AppTypes } = require('../../enums')
 
@@ -27,9 +27,9 @@ const def = joi.object().keys({
 
     description: joi.string().allow(''),
 
-    status: joi.string().valid(AppStatuses),
+    status: joi.string().valid(...AppStatuses),
 
-    type: joi.string().valid(AppTypes),
+    type: joi.string().valid(...AppTypes),
 
     source_url: joi
         .string()

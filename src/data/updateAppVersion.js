@@ -1,4 +1,5 @@
-const joi = require('joi')
+const debug = require('debug')('appstore:data:updateAppVersion')
+const joi = require('@hapi/joi')
 
 const paramsSchema = joi
     .object()
@@ -10,17 +11,18 @@ const paramsSchema = joi
         userId: joi.number(),
         minDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         maxDhisVersion: joi
             .string()
-            .allow([null, ''])
+            .allow(null, '')
             .max(10),
         version: joi.string(),
         demoUrl: joi
             .string()
             .allow('')
             .max(500),
+        channel: joi.string().allow(null),
     })
     .options({ allowUnknown: true })
 
@@ -34,13 +36,14 @@ const paramsSchema = joi
  * @param {string} params.maxDhisVersion Minimum inclusive required version of DHIS2 this version is compatible with
  * @param {string} params.version The version number of the appversion provided by the developer, for example v1.0, v1.2
  * @param {string} params.demoUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
+ * @param {string} params.channel Name of the release channel to publish the app version to
  * @param {*} knex
  * @returns {Promise<CreateUserResult>}
  */
 const updateAppVersion = async (params, knex, transaction) => {
-    const validation = joi.validate(params, paramsSchema)
+    const validation = paramsSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 
@@ -73,9 +76,27 @@ const updateAppVersion = async (params, knex, transaction) => {
             })
             .where('uuid', uuid)
 
+        const channelQuery = {}
+
+        if (params.channel) {
+            //Update channel id only if channel was passed
+            const channel = await knex('channel')
+                .select('id')
+                .where('name', params.channel)
+                .first('id')
+
+            if (!channel) {
+                throw new Error(`Channel ${params.channel} does not exist.`)
+            }
+
+            channelQuery.channel_id = channel.id
+        }
+        debug('channelQuery:', channelQuery)
+
         await knex('app_channel')
             .transacting(transaction)
             .update({
+                ...channelQuery,
                 max_dhis2_version: maxDhisVersion,
                 min_dhis2_version: minDhisVersion,
                 updated_at: knex.fn.now(),

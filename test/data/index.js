@@ -1,4 +1,4 @@
-const { expect } = require('code')
+const { expect } = require('@hapi/code')
 
 const { lab } = require('../index')
 
@@ -17,7 +17,7 @@ describe('@data::addAppVersionMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
         await expect(addAppVersionMedia({}, null, null)).to.reject(
             Error,
-            'ValidationError: child "appVersionId" fails because ["appVersionId" is required]'
+            'ValidationError: "appVersionId" is required'
         )
     })
 })
@@ -294,5 +294,83 @@ describe('@data::updateAppVersion', () => {
             transaction
         )
         transaction.commit()
+    })
+
+    it('should be able to switch to another release channel', async () => {
+        let transaction = await db.transaction()
+
+        //See seeds/mock/apps.js
+        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+
+        //First check that we fetch the correct object to change
+        let [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.channel_name).to.equal('Stable')
+
+        await updateAppVersion(
+            {
+                uuid: appVersionUuidToUpdate,
+                channel: 'Development',
+            },
+            db,
+            transaction
+        )
+
+        await transaction.commit()
+        ;[app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.channel_name).to.equal('Development')
+
+        //Change back channel to not break following tests
+        transaction = await db.transaction()
+        await updateAppVersion(
+            {
+                uuid: appVersionUuidToUpdate,
+                channel: 'Stable',
+            },
+            db,
+            transaction
+        )
+        await transaction.commit()
+
+        //Check that the switch back to Stable worked
+        ;[app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.channel_name).to.equal('Stable')
+    })
+
+    it('shouldnt be able to switch to a release channel that doesnt exist', async () => {
+        //See seeds/mock/apps.js
+        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+
+        //First check that we fetch the correct object to change
+        const [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.channel_name).to.equal('Stable')
+
+        const transaction = await db.transaction()
+
+        //Try to change to a channel that doesn't exist
+        await expect(
+            updateAppVersion(
+                {
+                    uuid: appVersionUuidToUpdate,
+                    channel: 'Foobar',
+                },
+                db,
+                transaction
+            )
+        ).to.reject(
+            Error,
+            'Could not update appversion: 792aa26c-5595-4ae5-a2f8-028439060e2e. Channel Foobar does not exist.'
+        )
     })
 })

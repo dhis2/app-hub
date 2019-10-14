@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 
 module.exports = joi.object().keys({
     uuid: joi.string().guid({ version: 'uuidv4' }),

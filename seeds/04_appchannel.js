@@ -16,7 +16,7 @@ exports.seed = async knex => {
     await knex('channel').del()
     await knex('channel').insert([
         { id: 1, name: 'Stable', uuid: uuid() },
-        { id: 2, name: 'Beta', uuid: uuid() },
+        { id: 2, name: 'Development', uuid: uuid() },
         { id: 3, name: 'Canary', uuid: uuid() },
     ])
 

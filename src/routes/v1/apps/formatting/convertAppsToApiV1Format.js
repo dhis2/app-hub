@@ -61,6 +61,7 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
         maxDhisVersion: app.max_dhis2_version,
         minDhisVersion: app.min_dhis2_version,
         version: app.version,
+        channel: app.channel_name,
     }
 }
 

@@ -1,4 +1,4 @@
-const joi = require('joi')
+const joi = require('@hapi/joi')
 const uuid = require('uuid/v4')
 
 const { ImageTypes } = require('../enums')
@@ -17,7 +17,7 @@ const paramSchema = joi
         imageType: joi
             .number()
             .required()
-            .valid(ImageTypes),
+            .valid(...ImageTypes),
         fileName: joi
             .string()
             .required()
@@ -50,7 +50,7 @@ const paramSchema = joi
 const addAppVersionMedia = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
-    if (validation.error !== null) {
+    if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 

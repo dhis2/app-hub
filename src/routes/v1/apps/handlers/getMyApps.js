@@ -1,6 +1,6 @@
 const debug = require('debug')('appstore:server:routes:handlers:v1:getMyApps')
 const Boom = require('boom')
-const Joi = require('joi')
+const Joi = require('@hapi/joi')
 
 const { getAllAppsByDeveloperUuid } = require('../../../../data')
 const { convertAppsToApiV1Format } = require('../formatting')

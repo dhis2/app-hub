@@ -2,7 +2,7 @@ const debug = require('debug')('appstore:server:boot:api')
 const path = require('path')
 
 const Blipp = require('blipp')
-const Hapi = require('hapi')
+const Hapi = require('@hapi/hapi')
 const HapiSwagger = require('hapi-swagger')
 const Inert = require('inert')
 const Pino = require('hapi-pino')
@@ -23,8 +23,11 @@ exports.init = async knex => {
         routes: {
             cors: {
                 origin: ['*'],
-                headers: ['Accept', 'Content-Type'],
+                headers: ['Accept', 'Content-Type', 'authorization'],
                 additionalHeaders: ['X-Requested-With'],
+            },
+            payload: {
+                allow: 'application/json',
             },
         },
     })
@@ -41,7 +44,6 @@ exports.init = async knex => {
             //redact: ['req.headers.authorization']
         },
     })
-
     //Swagger + deps to render swaggerui
     //served from the url /documentation
     await server.register([
