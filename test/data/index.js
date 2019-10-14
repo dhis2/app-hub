@@ -325,8 +325,40 @@ describe('@data::updateAppVersion', () => {
         )
         expect(app.channel_name).to.equal('Development')
 
-        //Try to change to a channel that doesn't exist
+        //Change back channel to not break following tests
         transaction = await db.transaction()
+        await updateAppVersion(
+            {
+                uuid: appVersionUuidToUpdate,
+                channel: 'Stable',
+            },
+            db,
+            transaction
+        )
+        await transaction.commit()
+
+        //Check that the switch back to Stable worked
+        ;[app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.channel_name).to.equal('Stable')
+    })
+
+    it('shouldnt be able to switch to a release channel that doesnt exist', async () => {
+        //See seeds/mock/apps.js
+        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+
+        //First check that we fetch the correct object to change
+        const [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
+            app => app.version_uuid === appVersionUuidToUpdate
+        )
+        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.channel_name).to.equal('Stable')
+
+        const transaction = await db.transaction()
+
+        //Try to change to a channel that doesn't exist
         await expect(
             updateAppVersion(
                 {
