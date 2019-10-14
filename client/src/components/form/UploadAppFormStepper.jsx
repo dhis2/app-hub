@@ -18,14 +18,14 @@ const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
 
 const requiredFields = {
     general: ['appName', 'appType'],
-    version: ['file', 'version', 'channel'],
+    version: ['file', 'version', 'channel', 'minVer', 'maxVer'],
     developer: ['developerName', 'developerEmail', 'developerOrg'],
     image: [],
 }
 
 const varCharFields = {
     general: ['appName', 'appType', 'sourceUrl'],
-    version: ['version', 'minVer', 'maxVer'],
+    version: ['version'],
     developer: ['developerName', 'developerEmail', 'developerOrg'],
     image: ['imageCaption', 'imageDescription'],
 }
@@ -66,14 +66,8 @@ const validate = values => {
     ) {
         errors.version.minVer = 'Cannot be higher than maximum version'
         errors.version.maxVer = 'Cannot be lower than minimum version'
-    } else if (values.version) {
-        if (!values.version.minVer) {
-            errors.version.minVer = 'Required'
-        }
-        if (!values.version.maxVer) {
-            errors.version.maxVer = 'Required'
-        }
     }
+
     //Check if any subsection has error
     if (hasError(errors)) {
         errors._error =
