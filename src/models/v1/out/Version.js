@@ -15,4 +15,5 @@ module.exports = Joi.object().keys({
     demoUrl: Joi.string()
         .uri()
         .allow(''),
+    channel: Joi.string().required(),
 })

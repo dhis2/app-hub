@@ -7,6 +7,7 @@ import config from '../../../../config'
 import { validateZipFile, validateURL } from './ReduxFormUtils'
 
 const DHISVersions = config.ui.dhisVersions
+const DHISReleaseChannels = config.ui.releaseChannels
 
 const validate = values => {
     const errors = {}
@@ -31,6 +32,7 @@ const NewAppVersionForm = props => {
             version: values.version,
             minDhisVersion: values.minVer,
             maxDhisVersion: values.maxVer,
+            channel: values.channel,
             demoUrl: values.demoUrl,
         }
         const file = values.file[0]
@@ -59,6 +61,12 @@ const NewAppVersionForm = props => {
                 component={formUtils.renderAutoCompleteField}
                 label="Maximum DHIS version"
                 dataSource={DHISVersions}
+            />
+            <Field
+                name="channel"
+                component={formUtils.renderAutoCompleteField}
+                label="Release channel"
+                dataSource={DHISReleaseChannels}
             />
             <Field
                 name="demoUrl"

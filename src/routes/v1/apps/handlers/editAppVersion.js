@@ -57,6 +57,7 @@ module.exports = {
                     minDhisVersion,
                     demoUrl,
                     version,
+                    channel,
                 } = request.payload
 
                 await updateAppVersion(
@@ -66,6 +67,7 @@ module.exports = {
                         minDhisVersion,
                         demoUrl,
                         version,
+                        channel,
                     },
                     db,
                     transaction
