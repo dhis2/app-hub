@@ -34,7 +34,7 @@ describe('@data::addAppVersionMedia', () => {
         }
         const trx = await db.transaction()
         const { id, uuid } = await addAppVersionMedia(appMedia, db, trx)
-        trx.commit()
+        await trx.commit()
         expect(id)
             .to.be.number()
             .min(1)
