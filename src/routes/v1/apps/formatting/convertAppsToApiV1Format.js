@@ -94,7 +94,14 @@ const convertAll = (apps, request) => {
             })
         }
 
-        currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
+        //Prevent duplicate versions
+        if (
+            !currentApp.versions.find(
+                version => version.id === app.version_uuid
+            )
+        ) {
+            currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
+        }
     })
 
     return Object.keys(formattedApps).map(x => formattedApps[x])

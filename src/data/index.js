@@ -13,7 +13,7 @@ module.exports = {
     getAllAppsByDeveloperUuid: require('./getAllAppsByDeveloperUuid'),
     getAppById: require('./getAppById'),
     getAppDeveloperId: require('./getAppDeveloperId'),
-    getAppsByStatusAndLanguage: require('./getAppsByStatusAndLanguage'),
+    getApps: require('./getApps'),
     getAppsByUuidAndStatus: require('./getAppsByUuidAndStatus'),
     getAppsByUuid: require('./getAppsByUuid'),
     getMedia: require('./getMedia'),
