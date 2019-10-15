@@ -4,21 +4,21 @@ env:
   variables:
     NODE_ENV: "production"
 
-phases:
-  install:
-    runtime-versions:
-      nodejs: 10
+  phases:
+    install:
+      runtime-versions:
+        nodejs: 10
 
-pre_build:
-  commands:
-    - echo Installing NPM dependencies
-    - npm ci
+    pre_build:
+      commands:
+        - echo Installing NPM dependencies
+        - npm ci
 
-build:
-  commands:
-    - echo Entered build phase
-    - npm run build
+    build:
+      commands:
+        - echo Entered build phase
+        - npm run build
 
-post_build:
-  commands:
-    - echo Build completed on $(date)
+    post_build:
+      commands:
+        - echo Build completed on $(date)
