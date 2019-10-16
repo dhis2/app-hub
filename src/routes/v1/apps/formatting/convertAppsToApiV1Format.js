@@ -1,5 +1,5 @@
 const debug = require('debug')(
-    'appstore:server:routes:formatting:v1:defaultFailHandler'
+    'appstore:server:routes:v1:apps:formatting:convertAppsToApiV1Format'
 )
 const path = require('path')
 const { ImageType } = require('../../../../enums')
