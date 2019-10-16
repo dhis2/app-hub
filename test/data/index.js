@@ -12,6 +12,7 @@ const {
     getAppsByUuid,
     createApp,
     getAppById,
+    Organisation,
 } = require('../../src/data')
 
 describe('@data::addAppVersionMedia', () => {
@@ -401,5 +402,24 @@ describe('@data::updateAppVersion', () => {
             Error,
             'Could not update appversion: 792aa26c-5595-4ae5-a2f8-028439060e2e. Channel Foobar does not exist.'
         )
+    })
+})
+
+describe('@data::getOrganisationsByUserId', () => {
+    it('should throw an error passing invalid id', async () => {
+        await expect(
+            Organisation.getOrganisationsByUserId('asdf', db)
+        ).to.reject(Error)
+    })
+
+    it('should return a list of organisations with users the user is part of', async () => {
+        const userId = 1
+        const notPartOf = ''
+        const orgs = await Organisation.getOrganisationsByUserId(userId, db)
+        const orgNames = orgs.map(o => o.organisation_name)
+        const users = orgs.map(o => o.userId)
+        expect(users.includes(userId)).to.be.true
+        expect(orgNames.includes('DHIS2')).to.be.true
+        expect(orgNames.includes('World Health Organization')).to.be.false
     })
 })
