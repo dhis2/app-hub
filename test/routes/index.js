@@ -129,3 +129,23 @@ describe('Make sure the unversioned api fallback to v1', () => {
         )
     })
 })
+
+describe('Test that swagger endpoints work', () => {
+    let server
+    beforeEach(async () => {
+        server = await init(db)
+    })
+
+    afterEach(async () => {
+        await server.stop()
+    })
+
+    it('should return 200 on /swagger.json', async () => {
+        const response = await server.inject({
+            method: 'GET',
+            url: '/swagger.json',
+        })
+
+        expect(response.statusCode).to.equal(200)
+    })
+})
