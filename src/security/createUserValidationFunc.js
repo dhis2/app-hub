@@ -1,5 +1,5 @@
 const debug = require('debug')('appstore:server:security:createUserValidation')
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 const uuid = require('uuid/v4')
 
 const { createUser } = require('../data')

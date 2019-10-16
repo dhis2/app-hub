@@ -3,7 +3,7 @@ const debug = require('debug')(
 )
 const path = require('path')
 
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 
 const CreateAppVersionModel = require('../../../../models/v1/in/CreateAppVersionModel')
 

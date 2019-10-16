@@ -1,7 +1,7 @@
 const debug = require('debug')(
     'appstore:server:routes:handlers:v1:defaultFailHandler'
 )
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 
 module.exports = (request, h, err) => {
     if (err.isJoi) {
