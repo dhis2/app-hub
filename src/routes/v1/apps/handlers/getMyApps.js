@@ -1,5 +1,5 @@
 const debug = require('debug')('appstore:server:routes:handlers:v1:getMyApps')
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
 const { getAllAppsByDeveloperUuid } = require('../../../../data')

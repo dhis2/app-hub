@@ -2,7 +2,7 @@ version: 0.2
 
 env:
   variables:
-    NODE_ENV: "production"
+    NODE_ENV: "development"
 
 phases:
   install:
@@ -12,7 +12,7 @@ phases:
   pre_build:
     commands:
       - echo Installing NPM dependencies
-      - npm ci
+      - npm install
 
   build:
     commands:
