@@ -1,7 +1,7 @@
 const debug = require('debug')('appstore:server:routes:handlers:v1:createApp')
 const path = require('path')
 
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 
 const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
 const { AppStatus, ImageType } = require('../../../../enums')

@@ -1,4 +1,4 @@
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 
 const EditAppModel = require('../../../../models/v1/in/EditAppModel')
 

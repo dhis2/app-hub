@@ -3,10 +3,11 @@ const path = require('path')
 
 const Blipp = require('blipp')
 const Hapi = require('@hapi/hapi')
+const Inert = require('@hapi/inert')
+const Vision = require('@hapi/vision')
+
 const HapiSwagger = require('hapi-swagger')
-const Inert = require('inert')
 const Pino = require('hapi-pino')
-const Vision = require('vision')
 
 const jwt = require('hapi-auth-jwt2')
 

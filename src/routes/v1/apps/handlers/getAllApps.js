@@ -1,5 +1,5 @@
 const debug = require('debug')('appstore:server:routes:handlers:v1:getAllApps')
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
 const AppModel = require('../../../../models/v1/out/App')
