@@ -69,7 +69,7 @@ const createUserValidationFunc = (db, audience) => {
                                     external_id: decoded.sub,
                                 })
 
-                            transaction.commit()
+                            await transaction.commit()
                         } catch (err) {
                             debug('error creating user', err)
                             throw Boom.internal(err)

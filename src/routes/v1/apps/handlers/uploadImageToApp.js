@@ -93,7 +93,7 @@ module.exports = {
 
         await Promise.all(promises)
 
-        trx.commit()
+        await trx.commit()
 
         return {
             httpStatus: 'OK',

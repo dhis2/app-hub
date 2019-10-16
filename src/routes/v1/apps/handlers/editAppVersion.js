@@ -73,7 +73,7 @@ module.exports = {
                     transaction
                 )
 
-                transaction.commit()
+                await transaction.commit()
                 //Legacy return format
                 //{"message":"Version with id xxxxxxxx updated","httpStatus":"OK","httpStatusCode":200}
                 return {

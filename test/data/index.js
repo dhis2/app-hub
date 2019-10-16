@@ -159,7 +159,7 @@ describe('@data::createUser', () => {
             transaction
         )
 
-        transaction.commit()
+        await transaction.commit()
 
         expect(id)
             .to.be.number()
@@ -189,7 +189,7 @@ describe('@data::addUserToOrganisation', () => {
             transaction
         )
 
-        transaction.commit()
+        await transaction.commit()
     })
 })
 
@@ -293,7 +293,7 @@ describe('@data::updateAppVersion', () => {
             db,
             transaction
         )
-        transaction.commit()
+        await transaction.commit()
     })
 
     it('should be able to switch to another release channel', async () => {
