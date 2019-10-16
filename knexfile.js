@@ -1,6 +1,6 @@
 const dotenv = require('dotenv').config()
 
-const debug = require('debug')('appstore:knexconfig')
+const debug = require('debug')('appstore:server:knexconfig')
 
 debug(`process.env.RDS_HOSTNAME: ${process.env.RDS_HOSTNAME}`)
 debug(`process.env.RDS_USERNAME: ${process.env.RDS_USERNAME}`)
