@@ -76,7 +76,7 @@ module.exports = {
 
                 //TODO: update developer/organisation. Create new developer if e-mail & name changed or update old?
 
-                transaction.commit()
+                await transaction.commit()
             } catch (err) {
                 throw Boom.internal(err)
             }
