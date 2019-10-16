@@ -1,4 +1,4 @@
-const Boom = require('boom')
+const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
 const defaultFailHandler = require('../../defaultFailHandler')
