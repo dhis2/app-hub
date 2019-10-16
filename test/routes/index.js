@@ -1,17 +1,22 @@
 const { expect } = require('@hapi/code')
 
-const { lab } = require('../index')
+const { lab } = (exports.lab = require('../index'))
+const { it, describe, afterEach, beforeEach } = lab
 
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
+
 const { init } = require('../../src/server/init-server')
 
-const { it, describe } = lab
-
-exports.lab = lab
-
 describe('Get all published apps [v1]', async () => {
-    const server = await init(db)
+    let server
+    beforeEach(async () => {
+        server = await init(db)
+    })
+
+    afterEach(async () => {
+        await server.stop()
+    })
 
     it('should return some test-apps from seeded db', async () => {
         const injectOptions = {
@@ -43,19 +48,24 @@ describe('Get all published apps [v1]', async () => {
             'https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report'
         )
         expect(whoApp[0].versions[0].downloadUrl).to.be.equal(
-            'http://localhost:3000/v1/apps/download/world-health-organization/a-nice-app-by-who/1.0/app.zip'
+            'http://localhost:3000/api/v1/apps/download/world-health-organization/a-nice-app-by-who/1.0/app.zip'
         )
 
         expect(whoApp[0].sourceUrl).to.be.equal(
             'https://github.com/dhis2/who-immunization-analysis-app/'
         )
     })
-
-    await server.stop()
 })
 
-describe('Get all published apps [v2]', async () => {
-    const server = await init(db)
+describe('Get all published apps [v2]', () => {
+    let server
+    beforeEach(async () => {
+        server = await init(db)
+    })
+
+    afterEach(async () => {
+        await server.stop()
+    })
 
     it('should just return a 501 not implemented for the moment being', async () => {
         const injectOptions = {
@@ -66,12 +76,17 @@ describe('Get all published apps [v2]', async () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(501)
     })
-
-    await server.stop()
 })
 
-describe('Test auth', async () => {
-    const server = await init(db)
+describe('Test auth', () => {
+    let server
+    beforeEach(async () => {
+        server = await init(db)
+    })
+
+    afterEach(async () => {
+        await server.stop()
+    })
 
     it('Should deny access without a valid authorisation token', async () => {
         const injectOptions = {
@@ -83,6 +98,34 @@ describe('Test auth', async () => {
 
         expect(response.statusCode).to.be.equal(401)
     })
+})
 
-    await server.stop()
+describe('Make sure the unversioned api fallback to v1', () => {
+    let server
+    beforeEach(async () => {
+        server = await init(db)
+    })
+
+    afterEach(async () => {
+        await server.stop()
+    })
+
+    it('should return the same json on /api/v1/apps and /api/apps', async () => {
+        const unversionedResponse = await server.inject({
+            method: 'GET',
+            url: '/api/apps',
+        })
+
+        const versionedResponse = await server.inject({
+            method: 'GET',
+            url: '/api/v1/apps',
+        })
+
+        expect(unversionedResponse.statusCode).to.equal(200)
+        expect(versionedResponse.statusCode).to.equal(200)
+
+        expect(unversionedResponse.payload).to.be.equal(
+            versionedResponse.payload
+        )
+    })
 })

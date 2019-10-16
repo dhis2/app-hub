@@ -1,5 +1,7 @@
 const joi = require('@hapi/joi')
 
+const debug = require('debug')('appstore:server:routes:apps:getAllApprovedApps')
+
 const AppModel = require('../../../../models/v1/out/App')
 
 const { AppStatus } = require('../../../../enums')
@@ -26,6 +28,7 @@ module.exports = {
 
         //default to Stable if not specified
         const channel = request.query.channel || 'Stable'
+        debug(`Using channel: '${channel}'`)
 
         const apps = await getApps(
             {
@@ -35,6 +38,8 @@ module.exports = {
             },
             h.context.db
         )
+
+        debug('Got apps', apps)
 
         return convertAppsToApiV1Format(apps, request)
     },

@@ -40,6 +40,7 @@
         "debug": "^4.1.1",
         "dotenv": "^6.2.0",
         "file-loader": "^3.0.1",
+        "hapi-api-version": "^2.3.1",
         "hapi-auth-jwt2": "^8.7.0",
         "hapi-pino": "^6.1.0",
         "hapi-swagger": "^10.1.2",

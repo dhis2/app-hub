@@ -1,5 +1,11 @@
 const dotenv = require('dotenv').config()
 
+const debug = require('debug')('appstore:server:knexconfig')
+
+debug(`process.env.RDS_HOSTNAME: ${process.env.RDS_HOSTNAME}`)
+debug(`process.env.RDS_USERNAME: ${process.env.RDS_USERNAME}`)
+debug(`process.env.RDS_DB_NAME: ${process.env.RDS_DB_NAME}`)
+
 module.exports = {
     client: 'pg',
     connection: {

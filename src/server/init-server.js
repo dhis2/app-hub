@@ -37,6 +37,31 @@ exports.init = async knex => {
         db: knex,
     })
 
+    await server.register({
+        plugin: require('hapi-api-version'),
+        options: {
+            validVersions: [1, 2],
+            defaultVersion: 1,
+            vendorName: 'dhis2-app-store-api',
+            basePath: '/api/',
+        },
+    })
+
+    //Swagger + deps to render swaggerui
+    //served from the url /documentation
+    await server.register([
+        Inert,
+        Vision,
+        {
+            plugin: HapiSwagger,
+            options: options.swaggerOptions,
+        },
+    ])
+
+    if (process.env.NODE_ENV !== 'test') {
+        await server.register(Blipp)
+    }
+
     //Add pino, logging lib
     await server.register({
         plugin: Pino,
@@ -45,17 +70,6 @@ exports.init = async knex => {
             //redact: ['req.headers.authorization']
         },
     })
-    //Swagger + deps to render swaggerui
-    //served from the url /documentation
-    await server.register([
-        Inert,
-        Vision,
-        Blipp,
-        {
-            plugin: HapiSwagger,
-            options: options.swaggerOptions,
-        },
-    ])
 
     if (
         process.env.AUTH_STRATEGY === 'jwt' &&
