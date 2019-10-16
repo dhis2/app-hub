@@ -140,10 +140,19 @@ describe('Test that swagger endpoints work', () => {
         await server.stop()
     })
 
-    it('should return 200 on /swagger.json', async () => {
+    it('should return status 200 when requesting /swagger.json', async () => {
         const response = await server.inject({
             method: 'GET',
             url: '/swagger.json',
+        })
+
+        expect(response.statusCode).to.equal(200)
+    })
+
+    it('should return status 200 when requesting /documentation', async () => {
+        const response = await server.inject({
+            method: 'GET',
+            url: '/documentation',
         })
 
         expect(response.statusCode).to.equal(200)
