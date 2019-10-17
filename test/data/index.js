@@ -5,12 +5,13 @@ const { lab } = require('../index')
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
-const { it, describe } = lab
-
+const { it, describe, beforeEach, afterEach } = lab
+const { ImageType } = require('../../src/enums')
 const {
     addAppVersionMedia,
     getAppsByUuid,
     createApp,
+    getAppById,
 } = require('../../src/data')
 
 describe('@data::addAppVersionMedia', () => {
@@ -19,6 +20,34 @@ describe('@data::addAppVersionMedia', () => {
             Error,
             'ValidationError: "appVersionId" is required'
         )
+    })
+
+    it('should add appmedia successfully', async () => {
+        const appMedia = {
+            appVersionId: 1, //DHIS2 app
+            userId: 1, //travis user
+            imageType: ImageType.Screenshot,
+            fileName: 'screenshot.jpg',
+            mime: 'image/jpeg',
+            caption: 'Test caption',
+            description: 'a description',
+        }
+        const trx = await db.transaction()
+        const { id, uuid } = await addAppVersionMedia(appMedia, db, trx)
+        await trx.commit()
+        expect(id)
+            .to.be.number()
+            .min(1)
+        expect(uuid.length).to.be.equal(36)
+
+        const appWithVersion = await getAppById(1, 'en', db)
+        const mediaApp = appWithVersion.find(
+            a => a.version_id === 1 && a.media_id === id
+        )
+        expect(mediaApp).to.not.be.null()
+
+        expect(mediaApp.media_caption).to.be.equal(appMedia.caption)
+        expect(mediaApp.media_description).to.be.equal(appMedia.description)
     })
 })
 
