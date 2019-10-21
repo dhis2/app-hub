@@ -27,7 +27,7 @@ const getOrganisationsByUserId = async (id, knex) => {
             .where('user_id', id)
         const organsations = await knex('users_with_organisations')
             .select()
-            .whereIn('user_id', userOrganisations)
+            .whereIn('organisation_id', userOrganisations)
         return organsations
     } catch (err) {
         throw new Error(

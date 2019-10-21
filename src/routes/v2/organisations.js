@@ -2,7 +2,6 @@ const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
 const OrgModel = require('../../models/v2/out/Organisation')
-
 module.exports = [
     {
         method: 'GET',
@@ -18,6 +17,8 @@ module.exports = [
             },
         },
         handler: (request, h) => {
+            console.log(request.query)
+            //if(request.param)
             throw Boom.notImplemented()
         },
     },
