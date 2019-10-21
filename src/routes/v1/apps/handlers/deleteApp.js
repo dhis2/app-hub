@@ -45,6 +45,7 @@ module.exports = {
             await trx.commit()
             await deleteDir(item.uuid)
         } catch (err) {
+            await trx.rollback()
             throw Boom.internal(err)
         }
 

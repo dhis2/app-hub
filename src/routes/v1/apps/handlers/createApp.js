@@ -249,16 +249,18 @@ module.exports = {
         } catch (err) {
             debug('ROLLING BACK TRANSACTION')
             debug(err)
+
+            await trx.rollback()
             throw Boom.badRequest(err.message, err)
         }
 
         if (appUuid === null || versionUuid === null) {
+            await trx.rollback()
             throw Boom.internal('Could not create app')
         }
 
-        await trx.commit()
-
         try {
+            await trx.commit()
             const appUpload = saveFile(
                 `${appUuid}/${versionUuid}`,
                 'app.zip',
@@ -276,6 +278,7 @@ module.exports = {
             }
         } catch (ex) {
             debug(ex)
+            await trx.rollback()
             throw Boom.internal(ex)
         }
 

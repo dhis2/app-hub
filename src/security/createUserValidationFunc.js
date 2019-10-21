@@ -72,6 +72,7 @@ const createUserValidationFunc = (db, audience) => {
                             await transaction.commit()
                         } catch (err) {
                             debug('error creating user', err)
+                            await transaction.rollback()
                             throw Boom.internal(err)
                         }
                     }

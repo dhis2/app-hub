@@ -82,6 +82,7 @@ module.exports = {
                     httpStatusCode: 200,
                 }
             } catch (err) {
+                await transaction.rollback()
                 throw Boom.internal(
                     `Could not update appversion: ${err.message}`
                 )

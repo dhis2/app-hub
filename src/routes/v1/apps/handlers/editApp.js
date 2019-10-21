@@ -78,6 +78,7 @@ module.exports = {
 
                 await transaction.commit()
             } catch (err) {
+                await transaction.rollback()
                 throw Boom.internal(err)
             }
         } else {
