@@ -127,18 +127,23 @@ module.exports = {
             const [dbApp] = dbAppRows
             debug(`Adding version to app ${dbApp.name}`)
 
-            const appVersion = await createAppVersion(
-                {
-                    userId: currentUserId,
-                    appId: dbApp.app_id,
-                    demoUrl,
-                    sourceUrl,
-                    version,
-                },
-                db,
-                transaction
-            )
-            versionUuid = appVersion.uuid
+            try {
+                const appVersion = await createAppVersion(
+                    {
+                        userId: currentUserId,
+                        appId: dbApp.app_id,
+                        demoUrl,
+                        sourceUrl,
+                        version,
+                    },
+                    db,
+                    transaction
+                )
+                versionUuid = appVersion.uuid
+            } catch (err) {
+                await transaction.rollback()
+                throw Boom.internal('Could not create app version', err)
+            }
 
             //Add the texts as english language, only supported for now
             try {
@@ -154,7 +159,7 @@ module.exports = {
                     transaction
                 )
             } catch (err) {
-                transaction.rollback()
+                await transaction.rollback()
                 throw Boom.internal('Could not save localized appversion', err)
             }
 
@@ -172,7 +177,7 @@ module.exports = {
                     transaction
                 )
             } catch (err) {
-                transaction.rollback()
+                await transaction.rollback()
                 throw Boom.internal(
                     `Could not publish appversion to channel ${publishChannel}`,
                     err
@@ -186,7 +191,7 @@ module.exports = {
                     file._data
                 )
             } catch (err) {
-                transaction.rollback()
+                await transaction.rollback()
                 throw Boom.internal(`Could not save app file to storage`, err)
             }
 

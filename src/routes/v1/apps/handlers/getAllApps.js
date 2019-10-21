@@ -36,8 +36,7 @@ module.exports = {
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
             debug(err)
+            throw Boom.internal('Could not get all apps', err)
         }
-
-        return []
     },
 }

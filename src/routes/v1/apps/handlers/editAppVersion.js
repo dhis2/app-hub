@@ -73,7 +73,7 @@ module.exports = {
                     transaction
                 )
 
-                transaction.commit()
+                await transaction.commit()
                 //Legacy return format
                 //{"message":"Version with id xxxxxxxx updated","httpStatus":"OK","httpStatusCode":200}
                 return {
@@ -82,6 +82,7 @@ module.exports = {
                     httpStatusCode: 200,
                 }
             } catch (err) {
+                await transaction.rollback()
                 throw Boom.internal(
                     `Could not update appversion: ${err.message}`
                 )

@@ -42,9 +42,10 @@ module.exports = {
         const trx = await knex.transaction()
         try {
             await deleteApp(appUuid, knex, trx)
-            trx.commit()
+            await trx.commit()
             await deleteDir(item.uuid)
         } catch (err) {
+            await trx.rollback()
             throw Boom.internal(err)
         }
 
