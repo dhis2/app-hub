@@ -17,6 +17,8 @@ exports.seed = async knex => {
                 image_type: ImageType.Logo,
                 media_type_id: 2,
                 created_by_user_id: version.created_by_user_id,
+                caption: 'Logo',
+                description: 'A really cool logo',
             },
             {
                 app_version_id: version.id,
@@ -25,6 +27,8 @@ exports.seed = async knex => {
                 image_type: ImageType.Screenshot,
                 media_type_id: 1,
                 created_by_user_id: version.created_by_user_id,
+                caption: 'A Screenshot',
+                description: 'A screenshot of the app',
             },
         ]
     })

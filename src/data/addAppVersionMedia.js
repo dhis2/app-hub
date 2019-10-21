@@ -26,6 +26,8 @@ const paramSchema = joi
             .string()
             .required()
             .max(255),
+        caption: joi.string().allow('', null),
+        description: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
@@ -44,6 +46,8 @@ const paramSchema = joi
  * @param {number} params.imageType ImageType enum that determines if this is a logotype or image/screenshot
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
+ * @param {string} params.caption caption/title of the media
+ * @param {string} params.description description of the media
  * @param {object} knex DB instance of knex
  * @returns {Promise<AppVersionMediaResult>}
  */
@@ -58,7 +62,15 @@ const addAppVersionMedia = async (params, knex, transaction) => {
         throw new Error('No transaction passed to function')
     }
 
-    const { appVersionId, userId, imageType, fileName, mime } = params
+    const {
+        appVersionId,
+        userId,
+        imageType,
+        fileName,
+        mime,
+        caption,
+        description,
+    } = params
     let insertData = null
 
     try {
@@ -96,6 +108,8 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             created_by_user_id: userId,
             media_type_id: mediaTypeId,
             app_version_id: appVersionId,
+            caption: caption,
+            description: description,
         }
 
         const [id] = await knex('app_version_media')
