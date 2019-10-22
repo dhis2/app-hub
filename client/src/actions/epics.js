@@ -406,6 +406,20 @@ const editVersion = action$ =>
         })
     )
 
+const loadChannels = action$ =>
+    action$.pipe(
+        ofType(actions.CHANNELS_LOAD),
+        concatMap(action => {
+            return api
+                .getAllChannels()
+                .then(channels => actionCreators.loadChannelsSuccess(channels))
+                .catch(error => ({
+                    type: actions.CHANNELS_ERROR,
+                    payload: error,
+                }))
+        })
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -422,5 +436,6 @@ export default combineEpics(
     editImage,
     deleteImage,
     editVersion,
-    addMultipleImages
+    addMultipleImages,
+    loadChannels
 )
