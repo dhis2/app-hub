@@ -117,12 +117,14 @@ export function deleteReview(appId, reviewId) {
 
 export function fromApi(url, auth = false, extraOpts) {
     const headers = getAuthHeaders()
-    if (auth && extraOpts) {
-        extraOpts.headers = { ...headers, ...extraOpts.headers }
-    } else if (auth) {
-        extraOpts = { headers }
-    }
+
     const opts = { ...baseOptions, ...extraOpts }
+    if (auth && opts.headers) {
+        opts.headers = { ...headers, ...opts.headers }
+    } else if (auth) {
+        opts.headers = headers
+    }
+
     return fetch(baseURL + url, opts)
         .then(response => (response.ok ? response : Promise.reject(response)))
         .then(response => response.json())
