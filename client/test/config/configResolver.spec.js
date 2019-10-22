@@ -1,8 +1,8 @@
-import ConfigImport, { getConfig } from '../../src/config/configResolver.js'
-import DirectDefaultConfig from '../../default.config.js'
+import ConfigImport, { getConfig } from '../../../config/configResolver'
+import DirectDefaultConfig from '../../../default.config.js'
 import fs from 'fs'
 import merge from 'lodash/merge'
-const defaultConfigPath = '../../src/config/'
+const defaultConfigPath = '../../../config/'
 const Config = ConfigImport.default
 
 describe('ConfigResolver', () => {
