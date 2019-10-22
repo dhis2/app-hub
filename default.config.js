@@ -1,6 +1,6 @@
 module.exports = {
     api: {
-        baseURL: '/api/v1/',
+        baseURL: '/api/',
     },
     auth0: {
         clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',

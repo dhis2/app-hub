@@ -22,40 +22,40 @@ const updateOpts = {
 }
 
 export function getAllApps() {
-    return fromApi('apps/all', true)
+    return fromApi('v1/apps/all', true)
 }
 
 export function getApprovedApps() {
-    return fromApi('apps')
+    return fromApi('v1/apps')
 }
 
 export function getApp(appId, auth) {
-    return fromApi('apps/' + appId, auth || false)
+    return fromApi('v1/apps/' + appId, auth || false)
 }
 
 export function getUser() {
-    return fromApi('users/me', true)
+    return fromApi('v1/users/me', true)
 }
 
 export function getUserApps() {
-    return fromApi('apps/myapps', true)
+    return fromApi('v1/apps/myapps', true)
 }
 
 export function setAppApproval(appId, status) {
     return fromApi(
-        'apps/' + appId + '/approval?status=' + status,
+        'v1/apps/' + appId + '/approval?status=' + status,
         true,
         postOpts
     )
 }
 
 export function createApp(payload) {
-    return fromApi('apps', true, createAppUploadOptions(payload))
+    return fromApi('v1/apps', true, createAppUploadOptions(payload))
 }
 
 export function createNewVersion(appId, payload) {
     return fromApi(
-        'apps/' + appId + '/versions',
+        'v1/apps/' + appId + '/versions',
         true,
         createUploadVersionOptions(payload)
     )
@@ -63,16 +63,20 @@ export function createNewVersion(appId, payload) {
 
 export function createNewImage(appId, payload) {
     return fromApi(
-        'apps/' + appId + '/images',
+        'v1/apps/' + appId + '/images',
         true,
         createUploadImageOptions(payload)
     )
 }
 export function deleteVersion(appId, versionId) {
-    return fromApi('apps/' + appId + '/versions/' + versionId, true, deleteOpts)
+    return fromApi(
+        'v1/apps/' + appId + '/versions/' + versionId,
+        true,
+        deleteOpts
+    )
 }
 export function updateVersion(appId, versionId, payload) {
-    return fromApi(`apps/${appId}/versions/${versionId}`, true, {
+    return fromApi(`v1/apps/${appId}/versions/${versionId}`, true, {
         ...baseOptions,
         ...updateOpts,
         body: JSON.stringify(payload),
@@ -80,15 +84,15 @@ export function updateVersion(appId, versionId, payload) {
 }
 
 export function deleteApp(appId) {
-    return fromApi('apps/' + appId, true, deleteOpts)
+    return fromApi('v1/apps/' + appId, true, deleteOpts)
 }
 
 export function deleteImage(appId, imageId) {
-    return fromApi('apps/' + appId + '/images/' + imageId, true, deleteOpts)
+    return fromApi('v1/apps/' + appId + '/images/' + imageId, true, deleteOpts)
 }
 
 export function updateApp(appId, payload) {
-    return fromApi('apps/' + appId, true, {
+    return fromApi('v1/apps/' + appId, true, {
         ...baseOptions,
         ...updateOpts,
         body: JSON.stringify(payload),
@@ -96,7 +100,7 @@ export function updateApp(appId, payload) {
 }
 
 export function updateImage(appId, imageId, payload) {
-    return fromApi('apps/' + appId + '/images/' + imageId, true, {
+    return fromApi('v1/apps/' + appId + '/images/' + imageId, true, {
         ...baseOptions,
         ...updateOpts,
         body: JSON.stringify(payload),
@@ -104,7 +108,7 @@ export function updateImage(appId, imageId, payload) {
 }
 
 export function createReview(appId, payload) {
-    return fromApi(`apps/${appId}/reviews`, true, {
+    return fromApi(`v1/apps/${appId}/reviews`, true, {
         ...baseOptions,
         ...postOpts,
         body: JSON.stringify(payload),
@@ -112,7 +116,7 @@ export function createReview(appId, payload) {
 }
 
 export function deleteReview(appId, reviewId) {
-    return fromApi(`apps/${appId}/reviews/${reviewId}`, true, deleteOpts)
+    return fromApi(`v1/apps/${appId}/reviews/${reviewId}`, true, deleteOpts)
 }
 
 export function fromApi(url, auth = false, extraOpts) {
