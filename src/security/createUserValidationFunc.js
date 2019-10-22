@@ -75,6 +75,8 @@ const createUserValidationFunc = (db, audience) => {
                             await transaction.rollback()
                             throw Boom.internal(err)
                         }
+                    } else {
+                        debug('user exists via e-mail: ', user)
                     }
                 }
 
