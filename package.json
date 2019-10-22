@@ -87,6 +87,7 @@
         "@dhis2/cli-style": "^4.1.1",
         "@hapi/code": "^6.0.0",
         "@hapi/lab": "^20.4.0",
+        "babel-plugin-rewire": "^1.2.0",
         "chai-as-promised": "^7.1.1",
         "cross-env": "^6.0.3",
         "cypress": "^3.4.1",
