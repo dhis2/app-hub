@@ -214,3 +214,7 @@ export function createUploadImageOptions(data) {
     }
     return fetchOptions
 }
+
+export function getAllChannels() {
+    return fromApi('v2/channels')
+}

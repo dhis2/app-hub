@@ -263,6 +263,9 @@ export const loadApp = actionCreator(actions.APP_LOAD)
 export const loadAppSuccess = actionCreator(actions.APP_LOADED)
 export const appError = actionCreator(actions.APP_ERROR)
 
+export const loadChannels = actionCreator(actions.CHANNELS_LOAD)
+export const loadChannelsSuccess = actionCreator(actions.CHANNELS_LOADED)
+
 /**
  *
  * @param type of action

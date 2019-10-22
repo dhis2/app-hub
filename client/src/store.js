@@ -7,6 +7,7 @@ import appListReducer from './reducers/appListReducer'
 import dialogReducer from './reducers/dialogReducer'
 import snackbarReducer from './reducers/snackbarReducer'
 import formReducer from './reducers/formReducer'
+import channelReducer from './reducers/channelReducer'
 import optimisticMiddleware from './store/ReduxOptimisticMiddleware'
 
 const epicMiddleware = createEpicMiddleware()
@@ -27,6 +28,7 @@ const reducer = combineReducers({
     dialog: dialogReducer,
     snackbar: snackbarReducer,
     form: formReducer,
+    channels: channelReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
