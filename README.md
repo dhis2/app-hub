@@ -105,7 +105,7 @@ Note that the exported objects from each config file are merged with the previou
 ```javascript
 module.exports = {
     api: {
-        baseURL: "http://localhost:3000/api/v1/",
+        baseURL: "http://localhost:3000/api/",
         redirectURL: "http://localhost:3000/user"
     },
     routes: {
@@ -123,7 +123,7 @@ routes.baseAppName: ''
 ##### API BaseURL
 The endpoint of the backend API to be used. 
 ```javascript
-api.baseURL: 'http://localhost:3000/api/v1',
+api.baseURL: 'http://localhost:3000/api/',
 ```
 
 ##### API Redirect URL
