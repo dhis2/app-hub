@@ -265,6 +265,7 @@ export const appError = actionCreator(actions.APP_ERROR)
 
 export const loadChannels = actionCreator(actions.CHANNELS_LOAD)
 export const loadChannelsSuccess = actionCreator(actions.CHANNELS_LOADED)
+export const channelError = actionCreator(actions.CHANNELS_ERROR)
 
 /**
  *
