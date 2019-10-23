@@ -21,12 +21,17 @@ import {
 import { ToolbarGroup } from 'material-ui/Toolbar'
 //import {values, sortBy} from 'lodash';
 import sortBy from 'lodash/sortBy'
+import Debug from 'debug'
+
 //import values from 'lodash/values';
 import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.scss'
 import Theme from '../../styles/theme'
+
+const debug = Debug('appstore:frontend:components:appcards')
+
 class AppCards extends Component {
     constructor(props) {
         super(props)
@@ -72,28 +77,20 @@ class AppCards extends Component {
                 textAlign: 'center',
             },
         }
-        const { loaded, error, byId: cards } = this.props.appList
+        const { error, byId: cards } = this.props.appList
         const loading =
             this.props.appList.loading || this.props.channels.loading
+
+        const loaded = this.props.appList.loaded && this.props.channels.loaded
 
         const loadOrErr = loading || error
         const searchFilter = this.props.appSearchFilter
             ? this.props.appSearchFilter.values.searchFilter
             : ''
 
-        //filter and construct appcards
-        const apps = sortBy(cards, ['name'])
-            .filter(
-                app =>
-                    filterApp(app, searchFilter) &&
-                    filterAppType(app, this.props.appTypeFilter) &&
-                    filterAppChannel(app, this.props.appChannelFilter)
-            )
-            .map((app, i) => (
-                <Col key={app.id} span={3} phone={4} style={styles.appItem}>
-                    <AppCardItem key={app.id} app={app} />
-                </Col>
-            ))
+        debug('apps:', apps)
+        debug('appcard render with channels', this.props.channels)
+        debug('appChannelFilter', this.props.appChannelFilter)
 
         const channelFilters = this.props.channels.channels.map(c => ({
             label: c.name,
@@ -101,7 +98,42 @@ class AppCards extends Component {
             value: c.name,
             key: c.uuid,
         }))
-        //debugger
+
+        const appTypeFilters = [
+            {
+                label: 'Standard app',
+                toggled: true,
+                value: 'APP',
+            },
+            {
+                label: 'Dashboard app',
+                toggled: true,
+                value: 'DASHBOARD_WIDGET',
+            },
+            {
+                label: 'Tracker widget',
+                toggled: true,
+                value: 'TRACKER_DASHBOARD_WIDGET',
+            },
+        ]
+
+        //filter and construct appcards
+        const apps = sortBy(cards, ['name'])
+            .filter(app => {
+                debug('filtering app', app)
+                const filterResult =
+                    filterApp(app, searchFilter) &&
+                    filterAppType(app, this.props.appTypeFilter) &&
+                    filterAppChannel(app, this.props.appChannelFilter)
+
+                debug('app filter result', filterResult)
+                return filterResult
+            })
+            .map((app, i) => (
+                <Col key={app.id} span={3} phone={4} style={styles.appItem}>
+                    <AppCardItem key={app.id} app={app} />
+                </Col>
+            ))
 
         const emptyApps = (
             <FadeAnimation appear>
@@ -137,24 +169,7 @@ class AppCards extends Component {
                                     <h3>App type</h3>
                                     <SelectFilter
                                         form="appTypeFilter"
-                                        filters={[
-                                            {
-                                                label: 'Standard app',
-                                                toggled: true,
-                                                value: 'APP',
-                                            },
-                                            {
-                                                label: 'Dashboard app',
-                                                toggled: true,
-                                                value: 'DASHBOARD_WIDGET',
-                                            },
-                                            {
-                                                label: 'Tracker widget',
-                                                toggled: true,
-                                                value:
-                                                    'TRACKER_DASHBOARD_WIDGET',
-                                            },
-                                        ]}
+                                        filters={appTypeFilters}
                                     />
                                 </div>
                                 <div style={{ padding: '10px' }}>
