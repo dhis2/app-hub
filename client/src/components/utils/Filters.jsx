@@ -70,6 +70,32 @@ export const filterAppStatus = (app, filters) => {
     return filterVal.length < 1 ? true : false
 }
 
+export const filterAppChannel = (app, filters) => {
+    if (!filters) return true
+
+    const filterVal = filters.values
+    let foundAnyVersionWithMatchingChannel = false
+
+    for (const versionIndex in app.versions) {
+        const channel = app.versions[versionIndex].channel
+        for (const key in filterVal) {
+            if (
+                filterVal.hasOwnProperty(key) &&
+                key === channel &&
+                filterVal[key] === true
+            ) {
+                foundAnyVersionWithMatchingChannel = true
+                break
+            }
+        }
+        if (foundAnyVersionWithMatchingChannel) {
+            break
+        }
+    }
+
+    return foundAnyVersionWithMatchingChannel
+}
+
 class Textfilter extends Component {
     constructor(props) {
         super(props)

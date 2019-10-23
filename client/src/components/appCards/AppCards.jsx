@@ -16,6 +16,7 @@ import {
     filterApp,
     SelectFilter,
     filterAppType,
+    filterAppChannel,
 } from '../utils/Filters'
 import { ToolbarGroup } from 'material-ui/Toolbar'
 //import {values, sortBy} from 'lodash';
@@ -30,8 +31,8 @@ class AppCards extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            channelFilterOpen: false,
-            channelFilterAnchorEl: null,
+            filterOpen: false,
+            filterAnchorEl: null,
         }
     }
 
@@ -43,8 +44,8 @@ class AppCards extends Component {
     handleOpenFilters(e) {
         this.setState({
             ...this.state,
-            channelFilterOpen: !this.state.channelFilterOpen,
-            channelFilterAnchorEl: e.currentTarget,
+            filterOpen: !this.state.filterOpen,
+            filterAnchorEl: e.currentTarget,
         })
     }
 
@@ -85,13 +86,22 @@ class AppCards extends Component {
             .filter(
                 app =>
                     filterApp(app, searchFilter) &&
-                    filterAppType(app, this.props.filters)
+                    filterAppType(app, this.props.appTypeFilter) &&
+                    filterAppChannel(app, this.props.appChannelFilter)
             )
             .map((app, i) => (
                 <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app} />
                 </Col>
             ))
+
+        const channelFilters = this.props.channels.channels.map(c => ({
+            label: c.name,
+            toggled: c.name === 'Stable',
+            value: c.name,
+            key: c.uuid,
+        }))
+        //debugger
 
         const emptyApps = (
             <FadeAnimation appear>
@@ -108,31 +118,6 @@ class AppCards extends Component {
                             <TextFilter hintText="Search" />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <SelectFilter
-                                form="appTypeFilter"
-                                style={styles.filters}
-                                elementStyle={styles.filterElem}
-                                labelStyle={{ width: 'auto' }}
-                                filters={[
-                                    {
-                                        label: 'Standard app',
-                                        toggled: true,
-                                        value: 'APP',
-                                    },
-                                    {
-                                        label: 'Dashboard app',
-                                        toggled: true,
-                                        value: 'DASHBOARD_WIDGET',
-                                    },
-                                    {
-                                        label: 'Tracker widget',
-                                        toggled: true,
-                                        value: 'TRACKER_DASHBOARD_WIDGET',
-                                    },
-                                ]}
-                            />
-                        </ToolbarGroup>
-                        <ToolbarGroup>
                             <IconButton
                                 onClick={this.handleOpenFilters.bind(this)}
                             >
@@ -141,25 +126,42 @@ class AppCards extends Component {
                                 </FontIcon>
                             </IconButton>
                             <Popover
-                                open={this.state.channelFilterOpen}
-                                anchorEl={this.state.channelFilterAnchorEl}
+                                open={this.state.filterOpen}
+                                anchorEl={this.state.filterAnchorEl}
                                 style={{ width: '200px' }}
                                 onRequestClose={r =>
-                                    this.setState({ channelFilterOpen: false })
+                                    this.setState({ filterOpen: false })
                                 }
                             >
                                 <div style={{ padding: '10px' }}>
+                                    <h3>App type</h3>
+                                    <SelectFilter
+                                        form="appTypeFilter"
+                                        filters={[
+                                            {
+                                                label: 'Standard app',
+                                                toggled: true,
+                                                value: 'APP',
+                                            },
+                                            {
+                                                label: 'Dashboard app',
+                                                toggled: true,
+                                                value: 'DASHBOARD_WIDGET',
+                                            },
+                                            {
+                                                label: 'Tracker widget',
+                                                toggled: true,
+                                                value:
+                                                    'TRACKER_DASHBOARD_WIDGET',
+                                            },
+                                        ]}
+                                    />
+                                </div>
+                                <div style={{ padding: '10px' }}>
                                     <h3>Channel</h3>
                                     <SelectFilter
-                                        renderAllToggle
-                                        form="releaseChannel"
-                                        filters={this.props.channels.channels.map(
-                                            c => ({
-                                                label: c.name,
-                                                toggled: false,
-                                                value: c.id,
-                                            })
-                                        )}
+                                        form="appChannelFilter"
+                                        filters={channelFilters}
                                     />
                                 </div>
                             </Popover>
@@ -192,7 +194,8 @@ class AppCards extends Component {
 
 const mapStateToProps = state => ({
     appList: state.appsList,
-    filters: state.form.appTypeFilter,
+    appTypeFilter: state.form.appTypeFilter,
+    appChannelFilter: state.form.appChannelFilter,
     appSearchFilter: state.form.searchFilter,
     channels: state.channels,
 })
