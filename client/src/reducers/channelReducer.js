@@ -1,22 +1,35 @@
-import * as actions from '../constants/actionTypes'
+import * as actionTypes from '../constants/actionTypes'
 
 const initialState = {
     loading: false,
+    loaded: false,
     channels: [],
 }
 
 const channelReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.CHANNELS_LOAD: {
+        case actionTypes.CHANNEL_ERROR: {
+            return {
+                ...state,
+                error: {
+                    loaded: false,
+                    loading: false,
+                    error: action.payload,
+                },
+            }
+        }
+
+        case actionTypes.CHANNELS_LOAD: {
             return {
                 ...state,
                 loading: true,
             }
         }
-        case actions.CHANNELS_LOADED: {
+        case actionTypes.CHANNELS_LOADED: {
             return {
                 ...state,
                 loading: false,
+                loaded: true,
                 channels: action.payload,
             }
         }
@@ -25,8 +38,6 @@ const channelReducer = (state = initialState, action) => {
             return state
         }
     }
-
-    return state
 }
 
 export default channelReducer

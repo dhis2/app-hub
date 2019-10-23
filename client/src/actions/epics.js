@@ -413,10 +413,7 @@ const loadChannels = action$ =>
             return api
                 .getAllChannels()
                 .then(channels => actionCreators.loadChannelsSuccess(channels))
-                .catch(error => ({
-                    type: actions.CHANNELS_ERROR,
-                    payload: error,
-                }))
+                .catch(error => actionCreators.channelError(error))
         })
     )
 
