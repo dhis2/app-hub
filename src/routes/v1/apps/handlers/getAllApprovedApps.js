@@ -26,8 +26,11 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        //default to Stable if not specified
-        const channel = request.query.channel || 'Stable'
+        //default to Stable if not specified. Or undefined if we want to fetch all channels
+        const channel =
+            request.query.channel === 'All'
+                ? undefined
+                : request.query.channel || 'Stable'
         debug(`Using channel: '${channel}'`)
 
         const apps = await getApps(
