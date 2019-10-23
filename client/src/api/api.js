@@ -26,7 +26,7 @@ export function getAllApps() {
 }
 
 export function getApprovedApps() {
-    return fromApi('v1/apps')
+    return fromApi('v1/apps?channel=All')
 }
 
 export function getApp(appId, auth) {
