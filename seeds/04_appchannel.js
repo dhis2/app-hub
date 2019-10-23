@@ -76,14 +76,14 @@ exports.seed = async knex => {
 
         {
             app_version_id: betaOnlyTrackerWidgetVersions[0].id,
-            channel_id: 1,
+            channel_id: 2,
             min_dhis2_version: '2.30',
             created_by_user_id:
                 betaOnlyTrackerWidgetVersions[0].created_by_user_id,
         },
         {
             app_version_id: canaryOnlyDashboardWidgetVersions[0].id,
-            channel_id: 1,
+            channel_id: 3,
             min_dhis2_version: '2.30',
             created_by_user_id:
                 canaryOnlyDashboardWidgetVersions[0].created_by_user_id,
