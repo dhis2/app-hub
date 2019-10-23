@@ -12,10 +12,7 @@ exports.seed = async knex => {
     await knex('app').del()
     await knex('app').insert(apps)
 
-    console.log('Seeding app statuses')
-
-    await knex('app_status').del()
-    await knex('app_status').insert([
+    const statuses = [
         {
             app_id: 1,
             status: AppStatus.APPROVED,
@@ -28,22 +25,39 @@ exports.seed = async knex => {
         },
         {
             app_id: 3,
-            status: AppStatus.PENDING,
+            status: AppStatus.NOT_APPROVED,
             created_by_user_id: 1,
         },
         {
             app_id: 4,
-            status: AppStatus.NOT_APPROVED,
+            status: AppStatus.PENDING,
             created_by_user_id: 1,
         },
-    ])
+        {
+            app_id: 5, //beta/dev only app
+            status: AppStatus.APPROVED,
+            created_by_user_id: 1,
+        },
+        {
+            app_id: 6, //canary only app
+            status: AppStatus.APPROVED,
+            created_by_user_id: 1,
+        },
+    ]
+
+    console.log('Seeding app statuses:'.statuses)
+
+    await knex('app_status').del()
+    await knex('app_status').insert(statuses)
 
     await knex('app_version_localised').del()
     await knex('app_version').del()
 
     console.log('Seeding appversions')
 
+    console.log(appVersions)
     await knex('app_version').insert(flatten(appVersions))
 
+    console.log(appVersionsLocalised)
     await knex('app_version_localised').insert(flatten(appVersionsLocalised))
 }

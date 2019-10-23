@@ -5,6 +5,8 @@ const [
     whoAppVersions,
     pendingAppVersions,
     rejectedAppVersions,
+    betaOnlyTrackerWidgetVersions,
+    canaryOnlyDashboardWidgetVersions,
 ] = appVersions
 const slugify = require('slugify')
 
@@ -135,9 +137,34 @@ const rejectedAppVersionsLocalized = [
     },
 ]
 
+const betaOnlyTrackerWidgetLocalized = [
+    {
+        app_version_id: betaOnlyTrackerWidgetVersions[0].id,
+        language_code: 'en',
+        created_by_user_id: betaOnlyTrackerWidgetVersions[0].created_by_user_id,
+        name: 'Development only app',
+        description: 'This app only got a version in the development channel',
+        slug: slugify('Development only app', { lower: true }),
+    },
+]
+
+const canaryOnlyDashboardWidgetLocalized = [
+    {
+        app_version_id: canaryOnlyDashboardWidgetVersions[0].id,
+        language_code: 'en',
+        created_by_user_id:
+            canaryOnlyDashboardWidgetVersions[0].created_by_user_id,
+        name: 'Canary only app',
+        description: 'This app only got a version in canary channel',
+        slug: slugify('Canary only app', { lower: true }),
+    },
+]
+
 module.exports = [
     dhis2AppVersionsLocalized,
     whoAppVersionsLocalized,
     pendingAppVersionsLocalized,
     rejectedAppVersionsLocalized,
+    betaOnlyTrackerWidgetLocalized,
+    canaryOnlyDashboardWidgetLocalized,
 ]

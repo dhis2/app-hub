@@ -1,7 +1,14 @@
 const apps = require('./apps')
 const uuid = require('uuid/v4')
 
-const [dhis2App, whoApp, pendingApp, rejectedApp] = apps
+const [
+    dhis2App,
+    whoApp,
+    pendingApp,
+    rejectedApp,
+    betaOnlyTrackerWidget,
+    canaryOnlyDashboardWidget,
+] = apps
 
 const dhis2AppVersions = [
     {
@@ -79,9 +86,31 @@ const rejectedAppVersions = [
     },
 ]
 
+const betaOnlyTrackerWidgetVersions = [
+    {
+        id: 9,
+        uuid: uuid(),
+        app_id: betaOnlyTrackerWidget.id,
+        created_by_user_id: betaOnlyTrackerWidget.created_by_user_id,
+        version: '1.0-beta',
+    },
+]
+
+const canaryOnlyDashboardWidgetVersions = [
+    {
+        id: 10,
+        uuid: uuid(),
+        app_id: canaryOnlyDashboardWidget.id,
+        created_by_user_id: canaryOnlyDashboardWidget.created_by_user_id,
+        version: '0.1-dev',
+    },
+]
+
 module.exports = [
     dhis2AppVersions,
     whoAppVersions,
     pendingAppVersions,
     rejectedAppVersions,
+    betaOnlyTrackerWidgetVersions,
+    canaryOnlyDashboardWidgetVersions,
 ]
