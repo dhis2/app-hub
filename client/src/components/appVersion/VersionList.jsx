@@ -46,6 +46,7 @@ const VersionList = props => {
                     <TableRowColumn>{version.version}</TableRowColumn>
                     <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                     <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
+                    <TableRowColumn>{version.channel}</TableRowColumn>
                     <TableRowColumn
                         title={new Date(version.created).toLocaleString()}
                     >
@@ -68,6 +69,7 @@ const VersionList = props => {
                     <TableHeaderColumn>Version</TableHeaderColumn>
                     <TableHeaderColumn>Min DHIS version</TableHeaderColumn>
                     <TableHeaderColumn>Max DHIS version</TableHeaderColumn>
+                    <TableHeaderColumn>Channel</TableHeaderColumn>
                     <TableHeaderColumn>Uploaded</TableHeaderColumn>
                     {props.editable ? (
                         <TableHeaderColumn>Edit</TableHeaderColumn>
