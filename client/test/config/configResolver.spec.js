@@ -1,8 +1,8 @@
-import ConfigImport, { getConfig } from '../../src/config/configResolver.js'
-import DirectDefaultConfig from '../../default.config.js'
+import ConfigImport, { getConfig } from '../../../config/configResolver'
+import DirectDefaultConfig from '../../../default.config.js'
 import fs from 'fs'
 import merge from 'lodash/merge'
-const defaultConfigPath = '../../src/config/'
+const defaultConfigPath = '../../../config/'
 const Config = ConfigImport.default
 
 describe('ConfigResolver', () => {
@@ -27,7 +27,7 @@ describe('ConfigResolver', () => {
     describe('getConfig()', () => {
         const override = {
             routes: { baseAppName: 'baseAppName' },
-            ui: { dhisVersions: ['2.28'] },
+            ui: { dhisVersions: ['2.32'] },
         }
         const addition = {
             another: 'setting',
@@ -113,9 +113,7 @@ describe('ConfigResolver', () => {
             const conf = getConfig()
 
             expect(conf).to.not.deep.equal(DirectDefaultConfig)
-            expect(DirectDefaultConfig.routes.baseAppName).to.be.equal(
-                '/appstore'
-            )
+            expect(DirectDefaultConfig.routes.baseAppName).to.be.equal('/')
             expect(conf.routes.baseAppName).to.equal('baseAppName')
             //should deep merge
             expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
