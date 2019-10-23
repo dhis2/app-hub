@@ -33,5 +33,28 @@ const pendingApp = {
     type: AppType.APP,
     developer_user_id: 3,
 }
+const betaOnlyTrackerWidget = {
+    id: 5,
+    uuid: uuid(),
+    organisation_id: 1,
+    created_by_user_id: 1,
+    type: AppType.TRACKER_DASHBOARD_WIDGET,
+    developer_user_id: 2,
+}
+const canaryOnlyDashboardWidget = {
+    id: 6,
+    uuid: uuid(),
+    organisation_id: 1,
+    created_by_user_id: 1,
+    type: AppType.DASHBOARD_WIDGET,
+    developer_user_id: 2,
+}
 
-module.exports = [dhis2App, whoApp, rejectedApp, pendingApp]
+module.exports = [
+    dhis2App,
+    whoApp,
+    rejectedApp,
+    pendingApp,
+    betaOnlyTrackerWidget,
+    canaryOnlyDashboardWidget,
+]
