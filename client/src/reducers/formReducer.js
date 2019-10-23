@@ -93,6 +93,27 @@ const form = formReducer.plugin({
             }
         }
     },
+
+    appChannelFilter: (state, action) => {
+        switch (action.type) {
+            case actions.CHANNELS_LOADED: {
+                const channels = action.payload
+                const filterValues = channels.reduce((acc, c) => {
+                    acc[c.name] = c.name === 'Stable'
+                    return acc
+                }, {})
+                return {
+                    ...state,
+                    values: {
+                        ...filterValues,
+                    },
+                }
+            }
+            default: {
+                return state
+            }
+        }
+    },
 })
 
 export default form
