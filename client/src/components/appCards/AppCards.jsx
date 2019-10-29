@@ -168,6 +168,7 @@ class AppCards extends Component {
                                 <div style={{ padding: '10px' }}>
                                     <h3>App type</h3>
                                     <SelectFilter
+                                        renderAllToggle={false}
                                         form="appTypeFilter"
                                         filters={appTypeFilters}
                                     />
@@ -175,6 +176,7 @@ class AppCards extends Component {
                                 <div style={{ padding: '10px' }}>
                                     <h3>Channel</h3>
                                     <SelectFilter
+                                        renderAllToggle={false}
                                         form="appChannelFilter"
                                         filters={channelFilters}
                                     />

@@ -85,7 +85,7 @@ class AppList extends Component {
             <div>
                 <h4>App status</h4>
                 <SelectFilter
-                    renderAllToggle
+                    renderAllToggle={false}
                     form="appStatusFilter"
                     filters={[
                         {
@@ -167,7 +167,7 @@ class AppList extends Component {
                         <div style={{ padding: '10px' }}>
                             <h3>App type</h3>
                             <SelectFilter
-                                renderAllToggle
+                                renderAllToggle={false}
                                 form="appTypeFilterUser"
                                 filters={[
                                     {
