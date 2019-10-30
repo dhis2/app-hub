@@ -51,7 +51,7 @@
         "jwt-decode": "^2.1.0",
         "knex": "^0.19.5",
         "lodash": "^4.17.15",
-        "material-components-web": "^0.16.0",
+        "material-components-web": "^3.2.0",
         "material-design-icons": "^3.0.1",
         "material-ui": "^0.18.7",
         "node-sass": "^4.5.3",
