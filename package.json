@@ -6,7 +6,7 @@
     "license": "BSD-3-Clause",
     "private": true,
     "scripts": {
-        "build": "webpack -p --config ./webpack.config.js",
+        "build": "NODE_ENV=production webpack -p --config ./webpack.config.js",
         "start": "NODE_ENV=production node ./src/main.js",
         "dev": "cross-env USE_PREBUILT_APP=1 concurrently --kill-others npm:dev:*",
         "dev:server": "cross-env DEBUG=knex:tx,appstore* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
