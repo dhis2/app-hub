@@ -1,24 +1,31 @@
 version: 0.2
 
 env:
-  variables:
-    NODE_ENV: "development"
+    variables:
+        NODE_ENV: "development"
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 10
+    install:
+        runtime-versions:
+            nodejs: 10
 
-  pre_build:
-    commands:
-      - echo Installing NPM dependencies
-      - npm install
+    pre_build:
+        commands:
+            - echo Installing NPM dependencies
+            - npm install
 
-  build:
-    commands:
-      - echo Entered build phase
-      - npm run build
+    build:
+        commands:
+            - echo Entered build phase
+            - npm run build
 
-  post_build:
-    commands:
-      - echo Build completed on $(date)
+    post_build:
+        commands:
+            - echo "Remove files we do not want to deploy"
+            - rm -rf node_modules .git
+            - echo Build completed on $(date)
+
+artifacts:
+    files:
+        - '**/*'
+    name: app-bazaar-$(date +%Y-%m-%d)

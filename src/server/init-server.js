@@ -1,5 +1,4 @@
 const debug = require('debug')('appstore:server:boot:api')
-const path = require('path')
 
 const Blipp = require('blipp')
 const Hapi = require('@hapi/hapi')
@@ -9,11 +8,10 @@ const Vision = require('@hapi/vision')
 const HapiSwagger = require('hapi-swagger')
 const Pino = require('hapi-pino')
 
-const jwt = require('hapi-auth-jwt2')
-
-const routes = require('../routes/index.js')
 const options = require('../options/index.js')
-const registerAuth0 = require('../security/registerAuth0.js')
+
+const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
+const apiRoutes = require('../plugins/apiRoutes')
 
 exports.init = async knex => {
     debug('Starting server...')
@@ -31,10 +29,6 @@ exports.init = async knex => {
                 allow: 'application/json',
             },
         },
-    })
-
-    server.bind({
-        db: knex,
     })
 
     await server.register({
@@ -71,73 +65,16 @@ exports.init = async knex => {
         },
     })
 
-    if (
-        process.env.AUTH_STRATEGY === 'jwt' &&
-        process.env.AUTH0_SECRET &&
-        process.env.AUTH0_M2M_SECRET &&
-        process.env.AUTH0_AUDIENCE &&
-        process.env.AUTH0_DOMAIN &&
-        process.env.AUTH0_ALG
-    ) {
-        await server.register(jwt)
+    await server.register({
+        plugin: staticFrontendRoutes,
+    })
 
-        registerAuth0(server, knex, {
-            key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
-            verifyOptions: {
-                audience: process.env.AUTH0_AUDIENCE,
-                issuer: process.env.AUTH0_DOMAIN,
-                algorithms: [process.env.AUTH0_ALG],
-            },
-        })
-    } else {
-        //Warn with red background
-        debug(
-            '\x1b[41m',
-            'No authentication method configured, all endpoints are running unprotected',
-            '\x1b[0m'
-        )
-        if (!process.env.NO_AUTH_MAPPED_USER_ID) {
-            debug(
-                '\x1b[41m',
-                'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.NO_AUTH_MAPPED_USER_ID',
-                '\x1b[m'
-            )
-            process.exit(1)
-            return
-        }
-    }
-
-    //Temporary route to serve frontend static build until we've flattened the project structure
-    server.route([
-        {
-            method: 'GET',
-            path: '/assets/{param*}',
-            handler: {
-                directory: {
-                    path: path.join(__dirname, '../../static/assets/'),
-                },
-            },
+    await server.register({
+        plugin: apiRoutes,
+        options: {
+            knex,
         },
-        {
-            method: 'GET',
-            path: '/js/{param*}',
-            handler: {
-                directory: {
-                    path: path.join(__dirname, '../../static/js/'),
-                },
-            },
-        },
-        {
-            method: 'GET',
-            path: '/{param*}',
-            handler: {
-                file: path.join(__dirname, '../../static/index.html'),
-            },
-        },
-    ])
-
-    server.realm.modifiers.route.prefix = '/api'
-    server.route(routes)
+    })
 
     await server.start()
 
