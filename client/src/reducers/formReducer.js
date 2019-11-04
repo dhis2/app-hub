@@ -96,7 +96,7 @@ const form = formReducer.plugin({
 
     appChannelFilter: (state, action) => {
         switch (action.type) {
-            case actions.CHANNELS_LOADED: {
+            case actions.CHANNELS_LOAD_SUCCESS: {
                 const channels = action.payload
                 const filterValues = channels.reduce((acc, c) => {
                     acc[c.name] = c.name === 'Stable'
@@ -104,9 +104,7 @@ const form = formReducer.plugin({
                 }, {})
                 return {
                     ...state,
-                    values: {
-                        ...filterValues,
-                    },
+                    values: filterValues,
                 }
             }
             default: {
