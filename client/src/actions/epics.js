@@ -408,7 +408,7 @@ const editVersion = action$ =>
 
 const loadChannels = action$ =>
     action$.pipe(
-        ofType(actions.CHANNELS_LOAD),
+        ofType(actions.CHANNELS_LOAD_BEGIN),
         concatMap(action => {
             return api
                 .getAllChannels()
