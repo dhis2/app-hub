@@ -185,7 +185,7 @@ describe('utils::getServerUrl', () => {
             },
             headers: {
                 'x-forwarded-proto': 'https',
-                'x-forwarded-port': 1234,
+                'x-forwarded-port': '1234',
             },
         }
 
@@ -207,7 +207,7 @@ describe('utils::getServerUrl', () => {
             },
             headers: {
                 'x-forwarded-proto': 'https',
-                'x-forwarded-port': 1234,
+                'x-forwarded-port': '1234',
                 'x-forwarded-host': 'foobar.com',
             },
         }
