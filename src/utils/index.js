@@ -1,3 +1,5 @@
+const getServerUrl = require('./getServerUrl')
+
 function flatten(arr, result = []) {
     for (let i = 0, length = arr.length; i < length; i++) {
         const value = arr[i]
@@ -28,4 +30,5 @@ module.exports = {
     getFile,
     deleteFile,
     deleteDir,
+    getServerUrl,
 }
