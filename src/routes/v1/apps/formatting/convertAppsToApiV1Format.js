@@ -1,7 +1,9 @@
 const debug = require('debug')(
     'appstore:server:routes:v1:apps:formatting:convertAppsToApiV1Format'
 )
-const path = require('path')
+
+const getServerUrl = require('../../../../utils/getServerUrl')
+
 const { ImageType } = require('../../../../enums')
 
 const convertDbAppViewRowToAppApiV1Object = app => ({
@@ -70,7 +72,7 @@ const convertAll = (apps, request) => {
         throw new Error('Missing parameter: request')
     }
 
-    const serverUrl = `${request.server.info.protocol}://${request.info.host}/api`
+    const serverUrl = getServerUrl(request)
 
     debug(`Using serverUrl: ${serverUrl}`)
 

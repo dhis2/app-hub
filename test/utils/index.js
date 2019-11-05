@@ -109,3 +109,112 @@ describe('@utils::LocalFileSystemHandler', () => {
         await expect(handler.getFile('/etc', 'passwd')).to.reject(Error)
     })
 })
+
+describe('utils::getServerUrl', () => {
+    const getServerUrl = require('../../src/utils/getServerUrl')
+
+    it('should return a full url including protocol', () => {
+        const mockRequest = {
+            server: {
+                info: {
+                    protocol: 'http',
+                },
+            },
+            info: {
+                hostname: 'mydomain.com',
+            },
+            headers: {},
+        }
+
+        const expected = 'http://mydomain.com/api'
+        const actual = getServerUrl(mockRequest)
+
+        expect(actual).to.equal(expected)
+    })
+
+    it('should override forwarded protocol if behind a proxy', () => {
+        const mockRequest = {
+            server: {
+                info: {
+                    protocol: 'http',
+                },
+            },
+            info: {
+                hostname: 'mydomain.com',
+            },
+            headers: {
+                'x-forwarded-proto': 'https',
+            },
+        }
+
+        const expected = 'https://mydomain.com/api'
+        const actual = getServerUrl(mockRequest)
+
+        expect(actual).to.equal(expected)
+    })
+
+    it('should override port if not a standard port for the specified protocol', () => {
+        const mockRequest = {
+            server: {
+                info: {
+                    protocol: 'http',
+                    port: 1234,
+                },
+            },
+            info: {
+                hostname: 'mydomain.com',
+            },
+            headers: {},
+        }
+
+        const expected = 'http://mydomain.com:1234/api'
+        const actual = getServerUrl(mockRequest)
+
+        expect(actual).to.equal(expected)
+    })
+
+    it('should override both protocol and port if behind a proxy on a non standard port', () => {
+        const mockRequest = {
+            server: {
+                info: {
+                    protocol: 'http',
+                },
+            },
+            info: {
+                hostname: 'mydomain.com',
+            },
+            headers: {
+                'x-forwarded-proto': 'https',
+                'x-forwarded-port': 1234,
+            },
+        }
+
+        const expected = 'https://mydomain.com:1234/api'
+        const actual = getServerUrl(mockRequest)
+
+        expect(actual).to.equal(expected)
+    })
+
+    it('should override both protocol, port and domain if behind a proxy on a non standard port', () => {
+        const mockRequest = {
+            server: {
+                info: {
+                    protocol: 'http',
+                },
+            },
+            info: {
+                hostname: 'mydomain.com',
+            },
+            headers: {
+                'x-forwarded-proto': 'https',
+                'x-forwarded-port': 1234,
+                'x-forwarded-host': 'foobar.com',
+            },
+        }
+
+        const expected = 'https://foobar.com:1234/api'
+        const actual = getServerUrl(mockRequest)
+
+        expect(actual).to.equal(expected)
+    })
+})
