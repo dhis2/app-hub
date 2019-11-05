@@ -1,5 +1,7 @@
 const jwt = require('hapi-auth-jwt2')
 
+const debug = require('debug')('appstore:server:plugins:apiRoutes')
+
 const registerAuth0 = require('../security/registerAuth0.js')
 
 const routes = require('../routes/index.js')
