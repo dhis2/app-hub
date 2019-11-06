@@ -84,16 +84,22 @@ const createUserValidationFunc = (db, audience) => {
                 returnObj.credentials.uuid = user.uuid
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
-                try {
-                    const [apiUser] = await db('users')
-                        .select()
-                        .innerJoin(
-                            'user_external_id',
-                            'user_external_id.user_id',
-                            'users.id'
-                        )
-                        .where('external_id', `${audience}@clients`)
+                const [apiUser] = await db('users')
+                    .select()
+                    .innerJoin(
+                        'user_external_id',
+                        'user_external_id.user_id',
+                        'users.id'
+                    )
+                    .where('external_id', `${audience}@clients`)
 
+                debug('apiUser:', apiUser)
+
+                if (!apiUser) {
+                    throw Boom.internal('No M2M user mapped in database.')
+                }
+
+                try {
                     //Add the mapped user email to enable it to work through the rest of the permission system
                     returnObj.credentials.email = apiUser.email
                     returnObj.credentials.roles = [
@@ -105,7 +111,6 @@ const createUserValidationFunc = (db, audience) => {
                     returnObj.credentials.userId = apiUser.id
                     returnObj.credentials.uuid = apiUser.uuid
                 } catch (err) {
-                    //Could probably not find a user with the mapped external id, make sure there is one in database for the audience@clients external id mapped to a user
                     throw Boom.internal(err)
                 }
             }
