@@ -105,7 +105,7 @@ const getCurrentAuthStrategyOptional = () => {
 }
 
 const getCurrentUserFromRequest = async (request, knex) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let user = null
 
         if (getCurrentAuthStrategy() === false) {
@@ -113,6 +113,15 @@ const getCurrentUserFromRequest = async (request, knex) => {
             //only to be used for test/dev and not in production where authentication should be used.
             user = {
                 id: process.env.NO_AUTH_MAPPED_USER_ID,
+            }
+            const dbUser = await knex('users')
+                .where('id', user.id)
+                .first()
+            if (!dbUser) {
+                reject(
+                    `Trying to use auth mapped to a user that doesnt exist with id: ${process.env.NO_AUTH_MAPPED_USER_ID}`
+                )
+                return
             }
         } else if (
             request !== null &&

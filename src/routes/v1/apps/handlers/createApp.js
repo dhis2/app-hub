@@ -75,18 +75,29 @@ module.exports = {
         )
 
         if (appJsonValidationResult.error !== undefined) {
+            debug(
+                'received json did not pass validation: ',
+                appJsonValidationResult
+            )
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
-        request.logger.info(`Received json: ${appJsonPayload}`)
+        debug(`Received json:`, appJsonPayload)
 
         const knex = h.context.db
 
         const imageFile = request.payload.imageFile
         const file = request.payload.file
 
-        const currentUser = await getCurrentUserFromRequest(request, knex)
-        const currentUserId = currentUser.id
+        let currentUser = null
+        let currentUserId = -1
+        try {
+            currentUser = await getCurrentUserFromRequest(request, knex)
+            currentUserId = currentUser.id
+        } catch (err) {
+            throw Boom.unauthorized('No user found for the request')
+        }
+        debug('currentUser:', currentUser)
 
         //Load the organisation, or create it if it doesnt exist.
         let appUuid = null
@@ -102,6 +113,7 @@ module.exports = {
                 knex
             )
             if (organisations.length === 0) {
+                debug('organization not found, proceed to create it')
                 //Create organisation
                 organisation = await createOrganisation(
                     {
@@ -223,6 +235,12 @@ module.exports = {
                 debug(
                     'Inserting logo metadata to db and link it to the appVersion'
                 )
+                if (!appJsonPayload.images || !appJsonPayload.images.length) {
+                    throw Boom.badRequest(
+                        'Missing metadata about logo imagefile'
+                    )
+                }
+
                 const imageFileMetadata = imageFile.hapi
                 const [imageInfo] = appJsonPayload.images
                 let caption, description
