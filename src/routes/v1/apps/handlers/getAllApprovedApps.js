@@ -1,4 +1,5 @@
 const joi = require('@hapi/joi')
+const semver = require('semver')
 
 const debug = require('debug')('appstore:server:routes:apps:getAllApprovedApps')
 
@@ -31,9 +32,13 @@ module.exports = {
             request.query.channel === 'All'
                 ? undefined
                 : request.query.channel || 'Stable'
-        debug(`Using channel: '${channel}'`)
 
-        const apps = await getApps(
+        const dhis2Version = request.query.dhis2Version || null
+
+        debug(`Using channel: '${channel}'`)
+        debug(`Using dhis2Version: '${dhis2Version}'`)
+
+        const appsQuery = getApps(
             {
                 status: AppStatus.APPROVED,
                 languageCode: 'en',
@@ -42,8 +47,48 @@ module.exports = {
             h.context.db
         )
 
-        debug('Got apps', apps)
+        debug(appsQuery.toString())
 
-        return convertAppsToApiV1Format(apps, request)
+        const apps = await appsQuery
+        let filteredApps = null
+
+        if (dhis2Version) {
+            filteredApps = []
+
+            const dhis2Semver = semver.coerce(dhis2Version)
+            debug('dhis2Semver', dhis2Semver)
+
+            for (let i = 0, n = apps.length; i < n; ++i) {
+                const appRow = apps[i]
+
+                const maxVersion = semver.coerce(appRow.max_dhis2_version)
+                debug('maxVersion', maxVersion)
+
+                const maxVersionValid = semver.valid(maxVersion)
+                debug('maxVersionValid', maxVersionValid)
+
+                const minVersion = semver.coerce(appRow.min_dhis2_version)
+                debug('minVersion', minVersion)
+
+                if (
+                    (maxVersionValid &&
+                        semver.satisfies(
+                            dhis2Semver.version,
+                            `${minVersion.version} - ${maxVersion.version}`
+                        )) ||
+                    (!maxVersionValid &&
+                        semver.satisfies(
+                            dhis2Semver.version,
+                            `>= ${minVersion.version}`
+                        ))
+                ) {
+                    filteredApps.push(appRow)
+                }
+            }
+        } else {
+            filteredApps = apps
+        }
+
+        return convertAppsToApiV1Format(filteredApps, request)
     },
 }
