@@ -7,6 +7,7 @@ const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
 const { init } = require('../../src/server/init-server')
+const { flatten } = require('../../src/utils')
 
 describe('Get all published apps [v1]', async () => {
     let server
@@ -54,6 +55,66 @@ describe('Get all published apps [v1]', async () => {
         expect(whoApp[0].sourceUrl).to.be.equal(
             'https://github.com/dhis2/who-immunization-analysis-app/'
         )
+    })
+
+    it('should only return apps from the Stable channel', async () => {
+        const injectOptions = {
+            method: 'GET',
+            url: '/api/v1/apps?channel=Stable',
+        }
+
+        const response = await server.inject(injectOptions)
+
+        const apps = JSON.parse(response.payload)
+        expect(apps).to.not.be.empty()
+
+        const versions = flatten(apps.map(app => app.versions))
+        const filteredVersions = versions.filter(
+            version => version.channel === 'Stable'
+        )
+        expect(filteredVersions.length).to.equal(versions.length)
+    })
+
+    it('should only return apps from the Stable channel supporting version 2.27', async () => {
+        const injectOptions = {
+            method: 'GET',
+            url: '/api/v1/apps?channel=Stable&dhis2Version=2.27',
+        }
+
+        const response = await server.inject(injectOptions)
+
+        const apps = JSON.parse(response.payload)
+        expect(apps).to.not.be.empty()
+
+        const versions = flatten(apps.map(app => app.versions))
+
+        const filteredVersions = versions.filter(
+            version => version.channel === 'Stable'
+        )
+        expect(filteredVersions.length).to.equal(versions.length)
+
+        //the 'a nice app by who' version 1.0 with support for 2.27
+        expect(filteredVersions[0].maxDhisVersion).to.equal(null)
+        expect(filteredVersions[0].minDhisVersion).to.equal('2.27')
+    })
+
+    it('should only return apps supporting version 2.27', async () => {
+        const injectOptions = {
+            method: 'GET',
+            url: '/api/v1/apps?channel=All&dhis2Version=2.27',
+        }
+
+        const response = await server.inject(injectOptions)
+
+        const apps = JSON.parse(response.payload)
+        expect(apps).to.not.be.empty()
+
+        const versions = flatten(apps.map(app => app.versions))
+        expect(versions.length).to.equal(1)
+
+        //the 'a nice app by who' version 1.0 with support for 2.27
+        expect(versions[0].maxDhisVersion).to.equal(null)
+        expect(versions[0].minDhisVersion).to.equal('2.27')
     })
 })
 
