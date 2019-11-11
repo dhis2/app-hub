@@ -1,3 +1,5 @@
+const debug = require('debug')('appstore:server:data:getApps')
+
 /**
  * Returns all apps based on specified filter params such as status, languageCode and channel
  * @param {object} params
@@ -8,19 +10,20 @@
  *
  */
 const getApps = ({ status, languageCode, channel } = params, knex) => {
-    const filter = {
-        status,
-        language_code: languageCode,
-    }
-
-    //optional channel
-    if (channel) {
-        filter.channel_name = channel
-    }
+    debug('status:', status)
+    debug('languageCode:', languageCode)
+    debug('channel:', channel)
 
     return knex('apps_view')
         .select()
-        .where(filter)
+        .where(builder => {
+            builder.where('status', status)
+            builder.where('language_code', languageCode)
+
+            if (channel) {
+                builder.where('channel_name', channel)
+            }
+        })
 }
 
 module.exports = getApps
