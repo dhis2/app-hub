@@ -52,9 +52,9 @@ const createAppVersion = async (params, knex, transaction) => {
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,
                 uuid: versionUuid,
-                demo_url: demoUrl,
-                source_url: sourceUrl,
-                version,
+                demo_url: demoUrl || '',
+                source_url: sourceUrl || '',
+                version: version || '',
             })
             .returning('id')
 
