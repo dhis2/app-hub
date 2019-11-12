@@ -1,3 +1,5 @@
+const appExists = require('./appExists')
+
 /**
  * @typedef CreateAppStatusResult
  * @property {number} id Database id for the inserted status
@@ -20,10 +22,7 @@ const createAppStatus = async (params, knex, transaction) => {
     const { userId, appId, status } = params
     try {
         //Make sure the app exist
-        const app = await knex('app')
-            .select()
-            .where('id', appId)
-        if (!app || app.length === 0) {
+        if (!(await appExists(appId, knex))) {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
