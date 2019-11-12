@@ -7,7 +7,7 @@ const paramsSchema = joi
         userId: joi.number().required(),
         appId: joi.number().required(),
         demoUrl: joi.string().allow(''),
-        sourceUrl: joi.string().allow(),
+        sourceUrl: joi.string().allow(''),
         version: joi.string().allow(''),
     })
     .options({ allowUnknown: true })
