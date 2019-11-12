@@ -436,8 +436,6 @@ describe('@data::createAppStatus', () => {
     it('should create an app status PENDING for app with id 1', async () => {
         const transaction = await db.transaction()
 
-        const app = await db('app_status').where('id', 1)
-        console.log('app:', app)
         const { id } = await createAppStatus(
             {
                 userId: 1,
