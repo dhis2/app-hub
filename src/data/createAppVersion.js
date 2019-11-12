@@ -1,6 +1,8 @@
 const uuid = require('uuid/v4')
 const joi = require('@hapi/joi')
 
+const appExists = require('./appExists')
+
 const paramsSchema = joi
     .object()
     .keys({
@@ -45,6 +47,10 @@ const createAppVersion = async (params, knex, transaction) => {
     const versionUuid = uuid()
 
     try {
+        if (!(await appExists(appId, knex))) {
+            throw new Error(`Invalid appId, app does not exist.`)
+        }
+
         const [id] = await knex('app_version')
             .transacting(transaction)
             .insert({
@@ -62,7 +68,15 @@ const createAppVersion = async (params, knex, transaction) => {
             throw new Error('Inserted id was < 0')
         }
 
-        return { id, uuid: versionUuid }
+        return {
+            id,
+            uuid: versionUuid,
+            userId,
+            appId,
+            demoUrl,
+            sourceUrl,
+            version,
+        }
     } catch (err) {
         throw new Error(
             `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${err.message}`
