@@ -586,3 +586,58 @@ describe('@data::createAppVersion', () => {
         expect(dbAppVersion.app_id).to.equal(version.appId)
     })
 })
+
+describe('@data::createChannel', () => {
+    const createChannel = require('../../src/data/createChannel')
+
+    it('should create a channel named Test', async () => {
+        const transaction = await db.transaction()
+
+        const channel = await createChannel({ name: 'Test' }, db, transaction)
+
+        expect(channel).to.not.be.null()
+        expect(channel.uuid).to.exist()
+        expect(channel.id).to.exist()
+
+        expect(channel.uuid).to.have.length(36) //uuid
+        expect(channel.id)
+            .to.be.a.number()
+            .greaterThan(0)
+    })
+
+    it('should require the parameter name to be passed', async () => {
+        const transaction = await db.transaction()
+
+        await expect(createChannel({}, db, transaction)).to.reject(
+            Error,
+            'ValidationError: "name" is required'
+        )
+    })
+
+    it('should require a transaction to be passed in', async () => {
+        await expect(createChannel({ name: 'Test' }, db)).to.reject(
+            Error,
+            'No transaction passed to function'
+        )
+    })
+})
+
+describe('@data::getAppDeveloperId', () => {
+    const getAppDeveloperId = require('../../src/data/getAppDeveloperId')
+
+    it('should return the correct developer id of an app', async () => {
+        const { uuid } = await db('app')
+            .select('uuid')
+            .where('id', 1)
+            .first()
+        const devId = await getAppDeveloperId(uuid, db)
+
+        //first app in the seed/test db has developer_user_id = 2
+        expect(devId).to.equal(2)
+    })
+
+    it('should return false if no app/dev is found', async () => {
+        const devId = await getAppDeveloperId('boo', db)
+        expect(devId).to.be.false()
+    })
+})
