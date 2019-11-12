@@ -1,5 +1,4 @@
 const joi = require('@hapi/joi')
-const semver = require('semver')
 
 const debug = require('debug')('appstore:server:routes:apps:getAllApprovedApps')
 
@@ -9,6 +8,10 @@ const { AppStatus } = require('../../../../enums')
 
 const { getApps } = require('../../../../data')
 const { convertAppsToApiV1Format } = require('../formatting')
+
+const {
+    filterAppsBySpecificDhis2Version,
+} = require('../../../../utils/filters')
 
 module.exports = {
     //unauthenticated endpoint returning all approved apps
@@ -35,8 +38,8 @@ module.exports = {
 
         const dhis2Version = request.query.dhis2Version || null
 
-        debug(`Using channel: '${channel}'`)
-        debug(`Using dhis2Version: '${dhis2Version}'`)
+        debug(`Filtering by channel: '${channel}'`)
+        debug(`Filtering by dhis2Version: '${dhis2Version}'`)
 
         const appsQuery = getApps(
             {
@@ -48,46 +51,12 @@ module.exports = {
         )
 
         debug(appsQuery.toString())
-
         const apps = await appsQuery
-        let filteredApps = null
 
-        if (dhis2Version) {
-            filteredApps = []
-
-            const dhis2Semver = semver.coerce(dhis2Version)
-            debug('dhis2Semver', dhis2Semver)
-
-            for (let i = 0, n = apps.length; i < n; ++i) {
-                const appRow = apps[i]
-
-                const maxVersion = semver.coerce(appRow.max_dhis2_version)
-                debug('maxVersion', maxVersion)
-
-                const maxVersionValid = semver.valid(maxVersion)
-                debug('maxVersionValid', maxVersionValid)
-
-                const minVersion = semver.coerce(appRow.min_dhis2_version)
-                debug('minVersion', minVersion)
-
-                if (
-                    (maxVersionValid &&
-                        semver.satisfies(
-                            dhis2Semver.version,
-                            `${minVersion.version} - ${maxVersion.version}`
-                        )) ||
-                    (!maxVersionValid &&
-                        semver.satisfies(
-                            dhis2Semver.version,
-                            `>= ${minVersion.version}`
-                        ))
-                ) {
-                    filteredApps.push(appRow)
-                }
-            }
-        } else {
-            filteredApps = apps
-        }
+        const filteredApps = filterAppsBySpecificDhis2Version(
+            apps,
+            dhis2Version
+        )
 
         return convertAppsToApiV1Format(filteredApps, request)
     },
