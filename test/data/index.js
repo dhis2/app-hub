@@ -403,3 +403,53 @@ describe('@data::updateAppVersion', () => {
         )
     })
 })
+
+describe('@data::createAppStatus', () => {
+    const createAppStatus = require('../../src/data/createAppStatus')
+
+    it('should throw an error if no transaction is passed', async () => {
+        await expect(createAppStatus({}, db)).to.reject(
+            Error,
+            'No transaction passed to function'
+        )
+    })
+
+    it('should throw an error if trying to save an app status for an app that doesnt exist', async () => {
+        const transaction = await db.transaction()
+
+        await expect(
+            createAppStatus(
+                {
+                    userId: 1,
+                    appId: 999999, //something that doesnt exist in our test database
+                    status: 'PENDING',
+                },
+                db,
+                transaction
+            )
+        ).to.reject(
+            Error,
+            `Could not save app status: PENDING for appId: 999999. Invalid appId, app does not exist.`
+        )
+    })
+
+    it('should create an app status PENDING for app with id 1', async () => {
+        const transaction = await db.transaction()
+
+        const app = await db('app_status').where('id', 1)
+        console.log('app:', app)
+        const { id } = await createAppStatus(
+            {
+                userId: 1,
+                appId: 1, //something that doesnt exist in our test database
+                status: 'PENDING',
+            },
+            db,
+            transaction
+        )
+
+        expect(id)
+            .to.be.a.number()
+            .greaterThan(0)
+    })
+})
