@@ -11,7 +11,7 @@
  * @param {number} params.appId
  * @param {number} params.status A value (string) from the AppStatus enum, APPROVED|PENDING|NOT_APPROVED
  * @param {object} knex
- * @returns {Promise<CreateAppStatusResult>} inserted id
+ * @returns {Promise<CreateAppStatusResult>} result object with database id for inserted app_status row
  */
 const createAppStatus = async (params, knex, transaction) => {
     if (!transaction) {
@@ -19,6 +19,14 @@ const createAppStatus = async (params, knex, transaction) => {
     }
     const { userId, appId, status } = params
     try {
+        //Make sure the app exist
+        const app = await knex('app')
+            .select()
+            .where('id', appId)
+        if (!app || app.length === 0) {
+            throw new Error(`Invalid appId, app does not exist.`)
+        }
+
         const [id] = await knex('app_status')
             .transacting(transaction)
             .insert({
