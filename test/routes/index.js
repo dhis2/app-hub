@@ -1,7 +1,9 @@
-const { expect } = require('@hapi/code')
+const Lab = require('@hapi/lab')
 
-const { lab } = (exports.lab = require('../index'))
-const { it, describe, afterEach, beforeEach } = lab
+// prepare environment
+const { it, describe, beforeEach, afterEach } = (exports.lab = Lab.script())
+
+const { expect } = require('@hapi/code')
 
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)

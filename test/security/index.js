@@ -1,8 +1,9 @@
+const Lab = require('@hapi/lab')
+
+// prepare environment
+const { it, describe } = (exports.lab = Lab.script())
+
 const { expect } = require('@hapi/code')
-
-const { lab } = (exports.lab = require('../index'))
-
-const { it, describe } = lab
 
 const {
     canDeleteApp,

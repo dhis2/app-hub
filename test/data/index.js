@@ -1,11 +1,13 @@
-const { expect } = require('@hapi/code')
+const Lab = require('@hapi/lab')
 
-const { lab } = require('../index')
+// prepare environment
+const { it, describe } = (exports.lab = Lab.script())
+
+const { expect } = require('@hapi/code')
 
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
-const { it, describe, beforeEach, afterEach } = lab
 const { ImageType } = require('../../src/enums')
 const {
     addAppVersionMedia,
@@ -584,124 +586,5 @@ describe('@data::createAppVersion', () => {
         expect(dbAppVersion.version).to.be.empty()
         expect(dbAppVersion.created_by_user_id).to.equal(version.userId)
         expect(dbAppVersion.app_id).to.equal(version.appId)
-    })
-})
-
-describe('@data::createChannel', () => {
-    const createChannel = require('../../src/data/createChannel')
-
-    it('should create a channel named Test', async () => {
-        const transaction = await db.transaction()
-
-        const channel = await createChannel({ name: 'Test' }, db, transaction)
-
-        expect(channel).to.not.be.null()
-        expect(channel.uuid).to.exist()
-        expect(channel.id).to.exist()
-
-        expect(channel.uuid).to.have.length(36) //uuid
-        expect(channel.id)
-            .to.be.a.number()
-            .greaterThan(0)
-    })
-
-    it('should require the parameter name to be passed', async () => {
-        const transaction = await db.transaction()
-
-        await expect(createChannel({}, db, transaction)).to.reject(
-            Error,
-            'ValidationError: "name" is required'
-        )
-    })
-
-    it('should require a transaction to be passed in', async () => {
-        await expect(createChannel({ name: 'Test' }, db)).to.reject(
-            Error,
-            'No transaction passed to function'
-        )
-    })
-})
-
-describe('@data::getAppDeveloperId', () => {
-    const getAppDeveloperId = require('../../src/data/getAppDeveloperId')
-
-    it('should return the correct developer id of an app', async () => {
-        const { uuid } = await db('app')
-            .select('uuid')
-            .where('id', 1)
-            .first()
-        const devId = await getAppDeveloperId(uuid, db)
-
-        //first app in the seed/test db has developer_user_id = 2
-        expect(devId).to.equal(2)
-    })
-
-    it('should return false if no app/dev is found', async () => {
-        const devId = await getAppDeveloperId('boo', db)
-        expect(devId).to.be.false()
-    })
-})
-
-describe('@data::getAppById', () => {
-    const getAppById = require('../../src/data/getAppById')
-
-    it('should require the appId parameter', async () => {
-        await expect(getAppById(undefined, 'en', db)).to.reject(
-            Error,
-            `Missing parameter 'appId'`
-        )
-    })
-
-    it('should require the languageCode parameter', async () => {
-        await expect(getAppById(1, undefined, db)).to.reject(
-            Error,
-            `Missing parameter 'languageCode'`
-        )
-    })
-
-    it('should require the db connection parameter knex', async () => {
-        await expect(getAppById(1, 'en', undefined)).to.reject(
-            Error,
-            `Missing parameter 'knex'`
-        )
-    })
-})
-
-describe('@data::getUserByEmail', () => {
-    const getUserByEmail = require('../../src/data/getUserByEmail')
-
-    it('should require the db connection parameter', async () => {
-        await expect(getUserByEmail('erik@dhis2.org')).to.reject(
-            Error,
-            `Missing parameter 'knex'`
-        )
-    })
-
-    it('should return null if email is null', async () => {
-        const user = await getUserByEmail(null, db)
-        expect(user).to.be.null()
-    })
-
-    it('should return null if email is empty', async () => {
-        const user = await getUserByEmail('', db)
-        expect(user).to.be.null()
-    })
-
-    it('should return null if email is undefined', async () => {
-        const user = await getUserByEmail(undefined, db)
-        expect(user).to.be.null()
-    })
-
-    it('should return the user if found', async () => {
-        const user = await getUserByEmail('erik@dhis2.org', db)
-
-        expect(user).to.not.be.null()
-        expect(user.email).to.equal('erik@dhis2.org')
-    })
-
-    it('should return null if not found', async () => {
-        const user = await getUserByEmail('fdsa@dhis2.org', db)
-
-        expect(user).to.be.null()
     })
 })
