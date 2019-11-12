@@ -9,6 +9,14 @@ const debug = require('debug')('appstore:server:data:getUserByEmail')
 const getUserByEmail = async (email, knex) => {
     let user = null
 
+    if (!email) {
+        return null
+    }
+
+    if (!knex) {
+        throw new Error(`Missing parameter 'knex'`)
+    }
+
     try {
         user = await knex('users')
             .select()
