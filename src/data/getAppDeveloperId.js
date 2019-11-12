@@ -7,7 +7,7 @@ const getAppsByUuid = require('./getAppsByUuid')
  */
 const getAppDeveloperId = async (appUuid, db) => {
     try {
-        const [firstApp] = await getAppsByUuid(params.uuid, 'en', db)
+        const [firstApp] = await getAppsByUuid(appUuid, 'en', db)
         return firstApp.developer_id
     } catch (err) {
         return false
