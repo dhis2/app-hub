@@ -9,6 +9,7 @@
  * @param {object} params
  * @param {number} params.userId
  * @param {number} params.appId
+ * @param {number} params.status A value (string) from the AppStatus enum, APPROVED|PENDING|NOT_APPROVED
  * @param {object} knex
  * @returns {Promise<CreateAppStatusResult>} inserted id
  */
