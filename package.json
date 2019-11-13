@@ -81,7 +81,8 @@
         "uuid": "^3.3.2",
         "webpack": "^4.41.2",
         "webpack-dev-server": "^3.8.2",
-        "whatwg-fetch": "^2.0.3"
+        "whatwg-fetch": "^2.0.3",
+        "semver": "^6.3.0"
     },
     "devDependencies": {
         "@babel/register": "^7.6.2",
@@ -100,7 +101,6 @@
         "mock-knex": "^0.4.4",
         "mock-local-storage": "^1.1.8",
         "nodemon": "^1.19.2",
-        "semver": "^6.3.0",
         "sinon": "^7.5.0",
         "sinon-chai": "^3.3.0",
         "sqlite3": "^4.0.6",
