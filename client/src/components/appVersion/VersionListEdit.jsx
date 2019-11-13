@@ -141,7 +141,7 @@ class VersionListEdit extends Component {
         this.setState({
             editedValues: merge(editedValues, {
                 [versionId]: {
-                    channel: this.props.channels.channels[selectedIndex],
+                    channel: this.props.channels.channels[selectedIndex].name,
                 },
             }),
         })
@@ -190,9 +190,9 @@ class VersionListEdit extends Component {
         const DHISReleaseChannels = this.props.channels.channels.map(
             (channel, i) => (
                 <MenuItem
-                    key={'channel_' + channel}
-                    value={channel}
-                    primaryText={channel}
+                    key={'channel_' + channel.name}
+                    value={channel.name}
+                    primaryText={channel.name}
                 />
             )
         )
