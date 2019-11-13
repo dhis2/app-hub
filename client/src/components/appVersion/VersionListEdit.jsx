@@ -202,6 +202,7 @@ class VersionListEdit extends Component {
 
         const values = merge(version, this.state.editedValues[version.id])
 
+        //TODO: add error instead of passing false to ErrorOrLoading
         return (
             <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
@@ -290,7 +291,10 @@ class VersionListEdit extends Component {
                             {DHISReleaseChannels}
                         </SelectField>
                     ) : edit && this.props.channels.loading ? (
-                        <ErrorOrLoading loading={this.props.channels.loading} />
+                        <ErrorOrLoading
+                            loading={this.props.channels.loading}
+                            error={false}
+                        />
                     ) : (
                         version.channel
                     )}

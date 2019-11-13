@@ -47,8 +47,9 @@ const NewAppVersionForm = props => {
 
     const DHISReleaseChannels = channels.channels.map(c => c.name)
 
+    //TODO: add error instead of passing false to ErrorOrLoading
     return loading ? (
-        <ErrorOrLoading loading={loading} />
+        <ErrorOrLoading loading={loading} error={false} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
             <Field
