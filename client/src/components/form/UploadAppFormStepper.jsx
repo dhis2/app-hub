@@ -81,10 +81,10 @@ const validate = values => {
     return errors
 }
 
-const appTypesItems = appTypes.map((type, i) => (
+const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
 ))
-const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
+const DHISVersionItems = config.ui.dhisVersions.map(version => (
     <MenuItem key={version} value={version} primaryText={version} />
 ))
 
@@ -133,7 +133,7 @@ AppGeneralSection.defaultProps = {
 }
 
 const AppVersionSection = props => {
-    const releaseChannels = props.channels.map((channel, i) => (
+    const releaseChannels = props.channels.map(channel => (
         <MenuItem
             key={channel.name}
             value={channel.name}

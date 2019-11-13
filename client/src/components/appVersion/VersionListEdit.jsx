@@ -188,7 +188,7 @@ class VersionListEdit extends Component {
         )
 
         const DHISReleaseChannels = this.props.channels.channels.map(
-            (channel, i) => (
+            channel => (
                 <MenuItem
                     key={'channel_' + channel.name}
                     value={channel.name}
