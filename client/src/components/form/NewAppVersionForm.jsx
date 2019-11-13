@@ -11,6 +11,8 @@ import { loadChannels } from '../../actions/actionCreators'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
+const DHISVersions = config.ui.dhisVersions
+
 const validate = values => {
     const errors = {}
     const requiredFields = ['version', 'file']
@@ -43,6 +45,8 @@ const NewAppVersionForm = props => {
 
     const loading = channels.loading
 
+    const DHISReleaseChannels = channels.channels.map(c => c.name)
+
     return loading ? (
         <ErrorOrLoading loading={loading} />
     ) : (
@@ -72,7 +76,7 @@ const NewAppVersionForm = props => {
                 name="channel"
                 component={formUtils.renderAutoCompleteField}
                 label="Release channel"
-                dataSource={this.props.channels.channels}
+                dataSource={DHISReleaseChannels}
             />
             <Field
                 name="demoUrl"
@@ -96,9 +100,6 @@ const NewAppVersionForm = props => {
 NewAppVersionForm.propTypes = {
     submitted: PropTypes.func.isRequired,
 }
-const ReduxFormComponent = reduxForm({ form: 'newAppVersionForm', validate })(
-    NewAppVersionForm
-)
 
 const mapStateToProps = state => ({
     channels: state.channels,
@@ -110,7 +111,11 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
+const ConnectedNewAppVersionForm = connect(
     mapStateToProps,
     mapDispatchToProps
-)(ReduxFormComponent)
+)(NewAppVersionForm)
+
+export default reduxForm({ form: 'newAppVersionForm', validate })(
+    ConnectedNewAppVersionForm
+)

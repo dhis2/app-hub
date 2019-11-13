@@ -122,13 +122,15 @@ module.exports = {
                 version,
                 minDhisVersion,
                 maxDhisVersion,
+                channel,
             } = appVersionJson
 
             const [dbApp] = dbAppRows
             debug(`Adding version to app ${dbApp.name}`)
+            let appVersion = null
 
             try {
-                const appVersion = await createAppVersion(
+                appVersion = await createAppVersion(
                     {
                         userId: currentUserId,
                         appId: dbApp.app_id,
@@ -163,13 +165,12 @@ module.exports = {
                 throw Boom.internal('Could not save localized appversion', err)
             }
 
-            const publishChannel = 'Stable'
             try {
                 await addAppVersionToChannel(
                     {
                         appVersionId: appVersion.id,
                         createdByUserId: currentUserId,
-                        channelName: publishChannel,
+                        channelName: channel,
                         minDhisVersion,
                         maxDhisVersion,
                     },
@@ -179,7 +180,7 @@ module.exports = {
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal(
-                    `Could not publish appversion to channel ${publishChannel}`,
+                    `Could not publish appversion to channel ${channel}`,
                     err
                 )
             }

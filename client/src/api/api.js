@@ -175,6 +175,7 @@ export function createUploadVersionOptions(data) {
         minDhisVersion: version.minDhisVersion || null,
         maxDhisVersion: version.maxDhisVersion || null,
         demoUrl: version.demoUrl || null,
+        channel: version.channel,
     }
     const dataFile = data.file
     const form = new FormData()
