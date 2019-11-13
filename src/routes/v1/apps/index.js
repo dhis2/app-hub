@@ -14,4 +14,5 @@ module.exports = [
     require('./handlers/uploadImageToApp'),
     require('./handlers/deleteImage'),
     require('./handlers/createAppVersion'),
+    require('./handlers/deleteAppVersion'),
 ]
