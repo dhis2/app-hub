@@ -334,9 +334,9 @@ class UploadAppFormStepper extends Component {
 
     render() {
         const loading = this.props.channels.loading
-
+        //TODO: add error instead of passing false to ErrorOrLoading
         return loading ? (
-            <ErrorOrLoading loading={loading} />
+            <ErrorOrLoading loading={loading} error={false} />
         ) : (
             <FormStepper
                 form="uploadAppForm"
