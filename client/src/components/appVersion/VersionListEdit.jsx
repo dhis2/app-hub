@@ -28,15 +28,25 @@ import { loadChannels } from '../../actions/actionCreators'
 
 const styles = {
     tableHeaderColumn: {
-        paddingLeft: '24px',
-        paddingRight: '24px',
+        paddingLeft: '12px',
+        paddingRight: '12px',
     },
     columnText: {
         overflow: 'hidden',
         textOverflow: 'ellipsis',
     },
-    editColumn: {},
-    firstColumn: {},
+    editColumn: {
+        paddingLeft: '12px',
+        paddingRight: '12px',
+    },
+    firstColumn: {
+        paddingLeft: '12px',
+        paddingRight: '12px',
+    },
+    tableRowColumn: {
+        paddingLeft: '12px',
+        paddingRight: '12px',
+    },
     iconButton: {
         padding: '8px',
         width: '36px',
@@ -208,7 +218,7 @@ class VersionListEdit extends Component {
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
-                <TableRowColumn>
+                <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
                         <TextField
                             defaultValue={version.demoUrl}
@@ -231,7 +241,7 @@ class VersionListEdit extends Component {
                         'N/A'
                     )}
                 </TableRowColumn>
-                <TableRowColumn>
+                <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
                         <TextField
                             defaultValue={values.version}
@@ -246,7 +256,7 @@ class VersionListEdit extends Component {
                         values.version
                     )}
                 </TableRowColumn>
-                <TableRowColumn>
+                <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
                         <TextField
                             defaultValue={values.minDhisVersion}
@@ -261,7 +271,7 @@ class VersionListEdit extends Component {
                         values.minDhisVersion
                     )}
                 </TableRowColumn>
-                <TableRowColumn>
+                <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
                         <TextField
                             defaultValue={values.maxDhisVersion}
@@ -276,7 +286,7 @@ class VersionListEdit extends Component {
                         values.maxDhisVersion
                     )}
                 </TableRowColumn>
-                <TableRowColumn>
+                <TableRowColumn style={styles.tableRowColumn}>
                     {edit && !this.props.channels.loading ? (
                         <SelectField
                             value={values.channel}
@@ -298,6 +308,7 @@ class VersionListEdit extends Component {
                     )}
                 </TableRowColumn>
                 <TableRowColumn
+                    style={styles.tableRowColumn}
                     title={new Date(version.created).toLocaleString()}
                 >
                     {new Date(version.created).toLocaleDateString()}
