@@ -3,7 +3,7 @@ import * as actionTypes from '../constants/actionTypes'
 const initialState = {
     loading: false,
     loaded: false,
-    channels: [],
+    list: [],
 }
 
 const channelReducer = (state = initialState, action) => {
@@ -30,7 +30,7 @@ const channelReducer = (state = initialState, action) => {
                 ...state,
                 loading: false,
                 loaded: true,
-                channels: action.payload,
+                list: action.payload,
             }
         }
 

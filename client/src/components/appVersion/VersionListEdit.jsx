@@ -141,7 +141,7 @@ class VersionListEdit extends Component {
         this.setState({
             editedValues: merge(editedValues, {
                 [versionId]: {
-                    channel: this.props.channels.channels[selectedIndex].name,
+                    channel: this.props.channels.list[selectedIndex].name,
                 },
             }),
         })
@@ -187,15 +187,13 @@ class VersionListEdit extends Component {
             </IconButton>
         )
 
-        const DHISReleaseChannels = this.props.channels.channels.map(
-            channel => (
-                <MenuItem
-                    key={'channel_' + channel.name}
-                    value={channel.name}
-                    primaryText={channel.name}
-                />
-            )
-        )
+        const DHISReleaseChannels = this.props.channels.list.map(channel => (
+            <MenuItem
+                key={'channel_' + channel.name}
+                value={channel.name}
+                primaryText={channel.name}
+            />
+        ))
 
         const editingIcons = [submitIcon, cancelIcon]
         const normalIcons = [editIcon, deleteIcon]

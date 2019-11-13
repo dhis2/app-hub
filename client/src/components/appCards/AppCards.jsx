@@ -92,7 +92,7 @@ class AppCards extends Component {
         debug('appcard render with channels', this.props.channels)
         debug('appChannelFilter', this.props.appChannelFilter)
 
-        const channelFilters = this.props.channels.channels.map(c => ({
+        const channelFilters = this.props.channels.list.map(c => ({
             label: c.name,
             toggled: c.name === 'Stable',
             value: c.name,

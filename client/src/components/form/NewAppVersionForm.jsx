@@ -45,7 +45,7 @@ const NewAppVersionForm = props => {
 
     const loading = channels.loading
 
-    const DHISReleaseChannels = channels.channels.map(c => c.name)
+    const DHISReleaseChannels = channels.list.map(c => c.name)
 
     //TODO: add error instead of passing false to ErrorOrLoading
     return loading ? (

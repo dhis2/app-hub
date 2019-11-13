@@ -346,7 +346,7 @@ class UploadAppFormStepper extends Component {
                     <AppGeneralSection name="general" />,
                     <AppVersionSection
                         name="version"
-                        channels={this.props.channels.channels}
+                        channels={this.props.channels.list}
                     />,
                     <AppDeveloperSection name="developer" />,
                     <AppImageSection name="image" />,
