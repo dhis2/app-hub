@@ -47,7 +47,7 @@ const createAppVersion = async (params, knex, transaction) => {
     const versionUuid = uuid()
 
     try {
-        if (!(await appExists(appId, knex))) {
+        if (!(await appExists(appId, knex, transaction))) {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
