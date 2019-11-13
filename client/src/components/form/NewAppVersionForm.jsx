@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Card, CardText } from 'material-ui/Card'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
@@ -6,8 +7,9 @@ import { Field, Form, reduxForm } from 'redux-form'
 import config from '../../../../config'
 import { validateZipFile, validateURL } from './ReduxFormUtils'
 
-const DHISVersions = config.ui.dhisVersions
-const DHISReleaseChannels = config.ui.releaseChannels
+import { loadChannels } from '../../actions/actionCreators'
+
+import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 const validate = values => {
     const errors = {}
@@ -22,7 +24,7 @@ const validate = values => {
 }
 
 const NewAppVersionForm = props => {
-    const { handleSubmit, pristine, submitting, submitFailed } = props
+    const { handleSubmit, pristine, submitting, submitFailed, channels } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -39,7 +41,11 @@ const NewAppVersionForm = props => {
         return props.submitted({ data, file: file })
     }
 
-    return (
+    const loading = channels.loading
+
+    return loading ? (
+        <ErrorOrLoading loading={loading} />
+    ) : (
         <Form onSubmit={handleSubmit(onSub)}>
             <Field
                 name="version"
@@ -66,7 +72,7 @@ const NewAppVersionForm = props => {
                 name="channel"
                 component={formUtils.renderAutoCompleteField}
                 label="Release channel"
-                dataSource={DHISReleaseChannels}
+                dataSource={this.props.channels.channels}
             />
             <Field
                 name="demoUrl"
@@ -90,6 +96,21 @@ const NewAppVersionForm = props => {
 NewAppVersionForm.propTypes = {
     submitted: PropTypes.func.isRequired,
 }
-export default reduxForm({ form: 'newAppVersionForm', validate })(
+const ReduxFormComponent = reduxForm({ form: 'newAppVersionForm', validate })(
     NewAppVersionForm
 )
+
+const mapStateToProps = state => ({
+    channels: state.channels,
+})
+
+const mapDispatchToProps = dispatch => ({
+    loadChannels() {
+        dispatch(loadChannels())
+    },
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(ReduxFormComponent)
