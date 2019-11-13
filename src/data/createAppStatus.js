@@ -22,7 +22,7 @@ const createAppStatus = async (params, knex, transaction) => {
     const { userId, appId, status } = params
     try {
         //Make sure the app exist
-        if (!(await appExists(appId, knex))) {
+        if (!(await appExists(appId, knex, transaction))) {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
