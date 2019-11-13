@@ -7,8 +7,8 @@ const Joi = require('@hapi/joi')
 const CreateAppVersionModel = Joi.object().keys({
     version: Joi.string(),
     minDhisVersion: Joi.string(),
-    maxDhisVersion: Joi.string().allow(''),
-    demoUrl: Joi.string().allow(''),
+    maxDhisVersion: Joi.string().allow('', null),
+    demoUrl: Joi.string().allow('', null),
     images: Joi.array(),
     channel: Joi.string(),
 })
