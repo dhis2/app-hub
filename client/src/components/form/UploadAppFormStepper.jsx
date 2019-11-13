@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import config from '../../../../config'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, FormSection } from 'redux-form'
@@ -10,6 +11,10 @@ import {
     hasError,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
+
+import { loadChannels } from '../../actions/actionCreators'
+
+import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
@@ -83,10 +88,6 @@ const DHISVersionItems = config.ui.dhisVersions.map((version, i) => (
     <MenuItem key={version} value={version} primaryText={version} />
 ))
 
-const DHISReleaseChannels = config.ui.releaseChannels.map((version, i) => (
-    <MenuItem key={version} value={version} primaryText={version} />
-))
-
 const AppGeneralSection = props => {
     return (
         <FormSection name={props.name}>
@@ -132,6 +133,13 @@ AppGeneralSection.defaultProps = {
 }
 
 const AppVersionSection = props => {
+    const releaseChannels = props.channels.map((channel, i) => (
+        <MenuItem
+            key={channel.name}
+            value={channel.name}
+            primaryText={channel.name}
+        />
+    ))
     return (
         <FormSection name={props.name}>
             <Field
@@ -162,7 +170,7 @@ const AppVersionSection = props => {
                 component={formUtils.renderSelectField}
                 label="Release channel *"
             >
-                {DHISReleaseChannels}
+                {releaseChannels}
             </Field>
             <br />
             <Field
@@ -188,6 +196,7 @@ const AppVersionSection = props => {
 AppVersionSection.propTypes = {
     name: PropTypes.string,
     formState: PropTypes.object,
+    channels: PropTypes.array,
 }
 
 AppVersionSection.defaultProps = {
@@ -272,6 +281,9 @@ class UploadAppFormStepper extends Component {
         super(props)
     }
 
+    componentDidMount() {
+        this.props.loadChannels()
+    }
     /**
      * Get the values from redux-form when submitted (after validation)
      * The values are structured according to the FormSection-names and their
@@ -321,14 +333,21 @@ class UploadAppFormStepper extends Component {
     }
 
     render() {
-        return (
+        const loading = this.props.channels.loading
+
+        return loading ? (
+            <ErrorOrLoading loading={loading} />
+        ) : (
             <FormStepper
                 form="uploadAppForm"
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[
                     <AppGeneralSection name="general" />,
-                    <AppVersionSection name="version" />,
+                    <AppVersionSection
+                        name="version"
+                        channels={this.props.channels.channels}
+                    />,
                     <AppDeveloperSection name="developer" />,
                     <AppImageSection name="image" />,
                 ]}
@@ -344,4 +363,17 @@ UploadAppFormStepper.propTypes = {
 
 UploadAppFormStepper.defaultProps = {}
 
-export default UploadAppFormStepper
+const mapStateToProps = state => ({
+    channels: state.channels,
+})
+
+const mapDispatchToProps = dispatch => ({
+    loadChannels() {
+        dispatch(loadChannels())
+    },
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UploadAppFormStepper)

@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+
 import {
     Table,
     TableBody,
@@ -19,6 +21,10 @@ import SelectField from 'material-ui/SelectField'
 import merge from 'lodash/fp/merge'
 
 import config from '../../../../config'
+
+import ErrorOrLoading from '../utils/ErrorOrLoading'
+
+import { loadChannels } from '../../actions/actionCreators'
 
 const styles = {
     tableHeaderColumn: {
@@ -47,14 +53,6 @@ const TableIcon = ({ children }) => (
     </FontIcon>
 )
 
-const DHISReleaseChannels = config.ui.releaseChannels.map((channel, i) => (
-    <MenuItem
-        key={'channel_' + channel}
-        value={channel}
-        primaryText={channel}
-    />
-))
-
 class VersionListEdit extends Component {
     constructor(props) {
         super(props)
@@ -68,6 +66,10 @@ class VersionListEdit extends Component {
 
         this.renderRow = this.renderRow.bind(this)
         this.handleCancelRow = this.handleCancelRow.bind(this)
+    }
+
+    componentDidMount() {
+        this.props.loadChannels()
     }
 
     handleOpenEditField(e) {
@@ -139,7 +141,7 @@ class VersionListEdit extends Component {
         this.setState({
             editedValues: merge(editedValues, {
                 [versionId]: {
-                    channel: config.ui.releaseChannels[selectedIndex],
+                    channel: this.props.channels.channels[selectedIndex],
                 },
             }),
         })
@@ -183,6 +185,16 @@ class VersionListEdit extends Component {
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>
+        )
+
+        const DHISReleaseChannels = this.props.channels.channels.map(
+            (channel, i) => (
+                <MenuItem
+                    key={'channel_' + channel}
+                    value={channel}
+                    primaryText={channel}
+                />
+            )
         )
 
         const editingIcons = [submitIcon, cancelIcon]
@@ -266,7 +278,7 @@ class VersionListEdit extends Component {
                     )}
                 </TableRowColumn>
                 <TableRowColumn>
-                    {edit ? (
+                    {edit && !this.props.channels.loading ? (
                         <SelectField
                             value={values.channel}
                             onChange={this.handleChannelChange.bind(
@@ -277,6 +289,8 @@ class VersionListEdit extends Component {
                         >
                             {DHISReleaseChannels}
                         </SelectField>
+                    ) : edit && this.props.channels.loading ? (
+                        <ErrorOrLoading loading={this.props.channels.loading} />
                     ) : (
                         version.channel
                     )}
@@ -295,6 +309,7 @@ class VersionListEdit extends Component {
 
     render() {
         const props = this.props
+
         const versions = props.versionList
             .sort((a, b) => b.created - a.created)
             .map((version, i) => {
@@ -378,4 +393,17 @@ VersionListEdit.propTypes = {
 }
 VersionListEdit.defaultProps = {}
 
-export default VersionListEdit
+const mapStateToProps = state => ({
+    channels: state.channels,
+})
+
+const mapDispatchToProps = dispatch => ({
+    loadChannels() {
+        dispatch(loadChannels())
+    },
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(VersionListEdit)
