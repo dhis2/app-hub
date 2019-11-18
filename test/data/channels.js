@@ -38,7 +38,11 @@ describe('@data::channels', () => {
         expect(channel.id).to.exist()
         expect(channel.name).to.equal('Foo')
 
-        const changedChannel = await renameChannel({ name: 'Foo', newName: 'Bar'}, db, transaction)
+        const changedChannel = await renameChannel(
+            { name: 'Bar', uuid: channel.uuid },
+            db,
+            transaction
+        )
 
         expect(changedChannel.id).to.equal(channel.id)
         expect(changedChannel.uuid).to.equal(channel.uuid)
