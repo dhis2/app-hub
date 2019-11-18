@@ -42,19 +42,21 @@ const createChannel = async (params, knex, transaction) => {
     const channelUuid = uuid()
 
     try {
-        const [id] = await knex('channel')
+        const [createdChannel] = await knex('channel')
             .transacting(transaction)
             .insert({
                 uuid: channelUuid,
                 name,
             })
-            .returning('id')
+            .returning(['id', 'uuid', 'name'])
 
-        if (id < 0) {
+        debug('Created channel: ', createdChannel)
+
+        if (createdChannel.id < 0) {
             throw new Error('Inserted id was < 0')
         }
 
-        return { id, uuid: channelUuid }
+        return createdChannel
     } catch (err) {
         throw new Error(`Could not insert channel to database. ${err.message}`)
     }
