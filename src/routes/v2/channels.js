@@ -1,5 +1,8 @@
 const Boom = require('@hapi/boom')
 const createChannel = require('../../data/createChannel')
+const renameChannel = require('../../data/renameChannel')
+
+const EditChannelModel = require('../../models/v2/in/EditChannelModel')
 
 const {
     getCurrentAuthStrategy,
@@ -50,6 +53,49 @@ module.exports = [
 
             if (!uuid) {
                 return Boom.internal(`Could not create channel`)
+            }
+
+            return uuid
+        },
+    },
+    {
+        method: 'PUT',
+        path: '/v2/channels/{uuid}',
+        config: {
+            validate: {
+                payload: EditChannelModel.payloadSchema,
+                failAction: (request, h, err) => {
+                    return err
+                },
+            },
+            auth: getCurrentAuthStrategy(),
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            request.logger.info('In handler %s', request.path)
+
+            if (!currentUserIsManager(request)) {
+                throw Boom.unauthorized()
+            }
+
+            const { name } = request.payload
+            let uuid = request.params.uuid
+
+            try {
+                const knex = h.context.db
+                const transaction = await knex.transaction()
+                ;({ uuid } = await renameChannel(
+                    { uuid, name },
+                    knex,
+                    transaction
+                ))
+                await transaction.commit()
+            } catch (err) {
+                return Boom.internal(`Could not update channel: ${err.message}`)
+            }
+
+            if (!uuid) {
+                return Boom.internal(`Could not update channel`)
             }
 
             return uuid
