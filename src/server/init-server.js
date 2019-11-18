@@ -13,6 +13,8 @@ const options = require('../options/index.js')
 const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
 
+const isTestEnv = process.env.NODE_ENV === 'test'
+
 exports.init = async knex => {
     debug('Starting server...')
 
@@ -60,8 +62,9 @@ exports.init = async knex => {
     await server.register({
         plugin: Pino,
         options: {
-            prettyPrint: process.env.NODE_ENV !== 'test',
-            //redact: ['req.headers.authorization']
+            prettyPrint: !isTestEnv,
+            redact: isTestEnv ? [] : ['req.headers.authorization'],
+            level: isTestEnv ? 'error' : 'info',
         },
     })
 
