@@ -4,15 +4,15 @@ const paramsSchema = joi
     .object()
     .keys({
         name: joi.string().required(),
-        newName: joi.string().required(),
+        uuid: joi.string().required(),
     })
     .options({ allowUnknown: true })
 
 /**
  * Edit the name of an release channel
  * @param {object} params
- * @param {string} params.name Name of the channel to edit
- * @param {string} params.newName New name of the channel
+ * @param {string} params.name Name of the channel
+ * @param {string} params.uuid UUID of the channel to edit
  * @param {object} knex
  * @param {object} transaction
  */
@@ -27,21 +27,21 @@ const renameChannel = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    const { name, newName } = params
+    const { name, uuid } = params
 
     try {
         const [result] = await knex('channel')
             .transacting(transaction)
-            .where('name', name)
+            .where('uuid', uuid)
             .update({
-                name: newName,
+                name,
             })
             .returning(['id', 'uuid', 'name'])
 
         return result
     } catch (error) {
         throw new Error(
-            `Could not update channel: ${params.name} to ${params.newName}. ${error.message}`
+            `Could not update channel: ${params.uuid}: ${params.name}. ${error.message}`
         )
     }
 }
