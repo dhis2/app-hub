@@ -8,6 +8,7 @@ const { createChannel } = require('./data/index.js')
 const { migrate } = require('./server/migrate-database.js')
 const { compile } = require('./server/compile-webapp.js')
 const { init } = require('./server/init-server.js')
+const { config } = require('./server/env-config.js')
 
 debug('Using env: ', process.env.NODE_ENV)
 
@@ -31,7 +32,7 @@ compile()
     )
     .then(r => debug('Channel was created', r))
     .catch(r => debug('Channel probably exists, skipping', r))
-    .then(() => init(knex))
+    .then(() => init(knex, config))
     .catch(err => {
         debug('The server failed to start.\n', err)
         process.exit(1)

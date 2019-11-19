@@ -13,14 +13,12 @@ const options = require('../options/index.js')
 const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
 
-const isTestEnv = process.env.NODE_ENV === 'test'
-
-exports.init = async knex => {
+exports.init = async (knex, config) => {
     debug('Starting server...')
 
     const server = Hapi.server({
-        port: process.env.PORT || 3000,
-        host: process.env.HOST || 'localhost',
+        port: config.server.port,
+        host: config.server.host,
         routes: {
             cors: {
                 origin: ['*'],
@@ -54,19 +52,23 @@ exports.init = async knex => {
         },
     ])
 
-    if (process.env.NODE_ENV !== 'test') {
+    if (config.displayRoutesTable) {
         await server.register(Blipp)
     }
 
     //Add pino, logging lib
-    await server.register({
-        plugin: Pino,
-        options: {
-            prettyPrint: !isTestEnv,
-            redact: isTestEnv ? [] : ['req.headers.authorization'],
-            level: isTestEnv ? 'error' : 'info',
-        },
-    })
+    if (config.logging.enabled) {
+        await server.register({
+            plugin: Pino,
+            options: {
+                prettyPrint: config.logging.prettyPrint,
+                redact: config.logging.redactAuthorization
+                    ? []
+                    : ['req.headers.authorization'],
+                level: config.logging.level,
+            },
+        })
+    }
 
     await server.register({
         plugin: staticFrontendRoutes,
@@ -76,6 +78,7 @@ exports.init = async knex => {
         plugin: apiRoutes,
         options: {
             knex,
+            auth: config.auth,
         },
     })
 

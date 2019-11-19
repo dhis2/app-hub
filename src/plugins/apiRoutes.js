@@ -9,28 +9,21 @@ const routes = require('../routes/index.js')
 const apiRoutesPlugin = {
     name: 'DHIS2 App Bazaar Backend',
     register: async (server, options) => {
-        const { knex } = options
+        const { knex, auth } = options
 
         server.bind({
             db: knex,
         })
 
-        if (
-            process.env.AUTH_STRATEGY === 'jwt' &&
-            process.env.AUTH0_SECRET &&
-            process.env.AUTH0_M2M_SECRET &&
-            process.env.AUTH0_AUDIENCE &&
-            process.env.AUTH0_DOMAIN &&
-            process.env.AUTH0_ALG
-        ) {
+        if (auth && auth.useAuth0()) {
             await server.register(jwt)
 
             registerAuth0(server, knex, {
-                key: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
+                key: auth.config.secrets,
                 verifyOptions: {
-                    audience: process.env.AUTH0_AUDIENCE,
-                    issuer: process.env.AUTH0_DOMAIN,
-                    algorithms: [process.env.AUTH0_ALG],
+                    audience: auth.config.audience,
+                    issuer: auth.config.issuer,
+                    algorithms: auth.config.algorithms,
                 },
             })
         } else {
@@ -40,7 +33,7 @@ const apiRoutesPlugin = {
                 'No authentication method configured, all endpoints are running unprotected',
                 '\x1b[0m'
             )
-            if (!process.env.NO_AUTH_MAPPED_USER_ID) {
+            if (!auth || !auth.config || !auth.config.noAuthUserIdMapping) {
                 debug(
                     '\x1b[41m',
                     'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.NO_AUTH_MAPPED_USER_ID',
