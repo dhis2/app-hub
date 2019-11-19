@@ -9,14 +9,12 @@ const { convertAppsToApiV1Format } = require('../formatting')
 
 const { canSeeAllApps } = require('../../../../security')
 
-const { getCurrentAuthStrategy } = require('../../../../security')
-
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'GET',
     path: '/v1/apps/all',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         response: {
             status: {

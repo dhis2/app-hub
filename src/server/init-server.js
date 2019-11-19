@@ -31,6 +31,10 @@ exports.init = async (knex, config) => {
         },
     })
 
+    server.bind({
+        config,
+    })
+
     await server.register({
         plugin: require('hapi-api-version'),
         options: {

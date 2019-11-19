@@ -1,9 +1,6 @@
 const Boom = require('@hapi/boom')
 
-const EditAppModel = require('../../../../models/v1/in/EditAppModel')
-
 const {
-    getCurrentAuthStrategy,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
@@ -18,7 +15,7 @@ module.exports = {
     method: 'PUT',
     path: '/v1/apps/{appUuid}/images/{mediaUuid}',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         plugins: {
             //TODO: set correct payloadType for 'hapi-swagger'

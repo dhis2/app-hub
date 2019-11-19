@@ -4,14 +4,12 @@ const Joi = require('@hapi/joi')
 const defaultFailHandler = require('../../defaultFailHandler')
 const { canChangeAppStatus } = require('../../../../security')
 
-const { getCurrentAuthStrategy } = require('../../../../security')
-
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'POST',
     path: '/v1/apps/{appUuid}/approval',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         response: {
             status: {

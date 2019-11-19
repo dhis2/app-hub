@@ -12,7 +12,6 @@ const { saveFile } = require('../../../../utils')
 
 const {
     canCreateApp,
-    getCurrentAuthStrategy,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
@@ -29,7 +28,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps/{appUuid}/versions',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         payload: {
             maxBytes: 20 * 1024 * 1024, //20MB
