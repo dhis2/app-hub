@@ -4,10 +4,7 @@ const renameChannel = require('../../data/renameChannel')
 
 const EditChannelModel = require('../../models/v2/in/EditChannelModel')
 
-const {
-    getCurrentAuthStrategy,
-    currentUserIsManager,
-} = require('../../security')
+const { currentUserIsManager } = require('../../security')
 
 module.exports = [
     {
@@ -28,7 +25,7 @@ module.exports = [
         method: 'POST',
         path: '/v2/channels',
         config: {
-            auth: getCurrentAuthStrategy(),
+            auth: 'required',
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {
@@ -39,23 +36,19 @@ module.exports = [
             }
 
             const { name } = request.payload
-            let uuid = null
+            let newChannel = null
 
             try {
                 //TODO: check if a channel already exists and respond with a 409 conflict
                 const knex = h.context.db
                 const transaction = await knex.transaction()
-                ;({ uuid } = await createChannel({ name }, knex, transaction))
+                newChannel = await createChannel({ name }, knex, transaction)
                 await transaction.commit()
             } catch (err) {
                 return Boom.internal(`Could not create channel: ${err.message}`)
             }
 
-            if (!uuid) {
-                return Boom.internal(`Could not create channel`)
-            }
-
-            return uuid
+            return newChannel
         },
     },
     {
@@ -68,37 +61,32 @@ module.exports = [
                     return err
                 },
             },
-            auth: getCurrentAuthStrategy(),
+            auth: 'required',
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
+
+            console.log(request.auth)
 
             if (!currentUserIsManager(request)) {
                 throw Boom.unauthorized()
             }
 
             const { name } = request.payload
-            let uuid = request.params.uuid
+            const uuid = request.params.uuid
+            let channel = null
 
             try {
                 const knex = h.context.db
                 const transaction = await knex.transaction()
-                ;({ uuid } = await renameChannel(
-                    { uuid, name },
-                    knex,
-                    transaction
-                ))
+                channel = await renameChannel({ uuid, name }, knex, transaction)
                 await transaction.commit()
             } catch (err) {
                 return Boom.internal(`Could not update channel: ${err.message}`)
             }
 
-            if (!uuid) {
-                return Boom.internal(`Could not update channel`)
-            }
-
-            return uuid
+            return channel
         },
     },
     {

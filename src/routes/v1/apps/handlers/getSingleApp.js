@@ -13,14 +13,12 @@ const { convertAppsToApiV1Format } = require('../formatting')
 
 const { canSeeAllApps } = require('../../../../security')
 
-const { getCurrentAuthStrategyOptional } = require('../../../../security')
-
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified uuid
     method: 'GET',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: getCurrentAuthStrategyOptional(),
+        auth: 'optional',
         tags: ['api', 'v1'],
         response: {
             status: {

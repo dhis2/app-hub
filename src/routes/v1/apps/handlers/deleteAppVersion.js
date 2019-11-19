@@ -1,7 +1,6 @@
 const Boom = require('@hapi/boom')
 
 const {
-    getCurrentAuthStrategy,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
@@ -14,7 +13,7 @@ module.exports = {
     method: 'DELETE',
     path: '/v1/apps/{appUuid}/versions/{versionUuid}',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         plugins: {
             //TODO: set correct payloadType for 'hapi-swagger'

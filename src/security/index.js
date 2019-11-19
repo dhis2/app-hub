@@ -5,10 +5,7 @@ const debug = require('debug')('appstore:server:security')
  */
 const isAuthenticated = request => {
     try {
-        return (
-            getCurrentAuthStrategy() === false ||
-            request.auth.isAuthenticated === true
-        )
+        return request.auth.isAuthenticated === true
     } catch (err) {
         return false
     }
@@ -20,11 +17,6 @@ const isAuthenticated = request => {
  * @param {string} role
  */
 const hasRole = (request, role) => {
-    //if no authentication is used assume all roles
-    if (getCurrentAuthStrategy() === false) {
-        return true
-    }
-
     try {
         return request.auth.credentials.roles.indexOf(role) !== -1
     } catch (err) {
@@ -73,72 +65,16 @@ const canSeeAllApps = (request, hapi) =>
 const currentUserIsManager = (request, hapi) =>
     isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
-/**
- * Returns the current auth strategy, for example 'jwt' if using auth0, false if no strategy
- */
-const getCurrentAuthStrategy = () => {
-    if (
-        process.env.AUTH_STRATEGY !== undefined &&
-        process.env.AUTH_STRATEGY !== ''
-    ) {
-        return process.env.AUTH_STRATEGY
-    }
-
-    return false
-}
-
-/**
- * Returns the auth strategy config in optional mode
- */
-const getCurrentAuthStrategyOptional = () => {
-    if (
-        process.env.AUTH_STRATEGY === 'jwt' &&
-        process.env.AUTH_STRATEGY !== ''
-    ) {
-        return {
-            strategy: process.env.AUTH_STRATEGY,
-            mode: 'try',
-        }
-    }
-
-    return false
-}
-
-const getCurrentUserFromRequest = async (request, knex) => {
+const getCurrentUserFromRequest = async request => {
     return new Promise(async (resolve, reject) => {
-        let user = null
-
-        if (getCurrentAuthStrategy() === false) {
-            //TODO: this might be done in a better way, but somehow we must know what to map to when we don't use any authentication
-            //only to be used for test/dev and not in production where authentication should be used.
-            user = {
-                id: process.env.NO_AUTH_MAPPED_USER_ID,
-            }
-            const dbUser = await knex('users')
-                .where('id', user.id)
-                .first()
-            if (!dbUser) {
-                reject(
-                    `Trying to use auth mapped to a user that doesnt exist with id: ${process.env.NO_AUTH_MAPPED_USER_ID}`
-                )
-                return
-            }
-        } else if (
-            request !== null &&
-            request.auth !== null &&
-            request.auth.credentials !== null
-        ) {
-            user = {
+        try {
+            const user = {
                 id: request.auth.credentials.userId,
-                uuid: request.auth.credentials.uuid,
             }
-            debug('Auth credentials', request.auth.credentials)
-        } else {
-            reject()
-            return
+            resolve(user)
+        } catch (err) {
+            reject(err)
         }
-
-        resolve(user)
     })
 }
 
@@ -149,8 +85,6 @@ module.exports = {
     canCreateAppVersion,
     canSeeAllApps,
     createUserValidationFunc: require('./createUserValidationFunc'),
-    getCurrentAuthStrategy,
-    getCurrentAuthStrategyOptional,
     getCurrentUserFromRequest,
     currentUserIsManager,
 }

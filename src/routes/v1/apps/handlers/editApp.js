@@ -3,7 +3,6 @@ const Boom = require('@hapi/boom')
 const EditAppModel = require('../../../../models/v1/in/EditAppModel')
 
 const {
-    getCurrentAuthStrategy,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
@@ -14,7 +13,7 @@ module.exports = {
     method: 'PUT',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: getCurrentAuthStrategy(),
+        auth: 'required',
         tags: ['api', 'v1'],
         validate: {
             payload: EditAppModel.payloadSchema,
