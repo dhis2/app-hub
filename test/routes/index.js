@@ -11,10 +11,12 @@ const db = require('knex')(knexConfig)
 const { init } = require('../../src/server/init-server')
 const { flatten } = require('../../src/utils')
 
+const { config } = require('../../src/server/env-config')
+
 describe('Get all published apps [v1]', async () => {
     let server
     beforeEach(async () => {
-        server = await init(db)
+        server = await init(db, config)
     })
 
     afterEach(async () => {
@@ -66,9 +68,11 @@ describe('Get all published apps [v1]', async () => {
         }
 
         const response = await server.inject(injectOptions)
+        expect(response.statusCode).to.equal(200)
 
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
+        expect(apps).to.be.array()
 
         const versions = flatten(apps.map(app => app.versions))
         const filteredVersions = versions.filter(
@@ -84,9 +88,11 @@ describe('Get all published apps [v1]', async () => {
         }
 
         const response = await server.inject(injectOptions)
+        expect(response.statusCode).to.equal(200)
 
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
+        expect(apps).to.be.array()
 
         const versions = flatten(apps.map(app => app.versions))
 
@@ -107,9 +113,11 @@ describe('Get all published apps [v1]', async () => {
         }
 
         const response = await server.inject(injectOptions)
+        expect(response.statusCode).to.equal(200)
 
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
+        expect(apps).to.be.array()
 
         const versions = flatten(apps.map(app => app.versions))
         expect(versions.length).to.equal(1)
@@ -123,7 +131,7 @@ describe('Get all published apps [v1]', async () => {
 describe('Get all published apps [v2]', () => {
     let server
     beforeEach(async () => {
-        server = await init(db)
+        server = await init(db, config)
     })
 
     afterEach(async () => {
@@ -144,7 +152,7 @@ describe('Get all published apps [v2]', () => {
 describe('Test auth', () => {
     let server
     beforeEach(async () => {
-        server = await init(db)
+        server = await init(db, config)
     })
 
     afterEach(async () => {
@@ -166,7 +174,7 @@ describe('Test auth', () => {
 describe('Make sure the unversioned api fallback to v1', () => {
     let server
     beforeEach(async () => {
-        server = await init(db)
+        server = await init(db, config)
     })
 
     afterEach(async () => {
@@ -196,7 +204,7 @@ describe('Make sure the unversioned api fallback to v1', () => {
 describe('Test that swagger endpoints work', () => {
     let server
     beforeEach(async () => {
-        server = await init(db)
+        server = await init(db, config)
     })
 
     afterEach(async () => {
