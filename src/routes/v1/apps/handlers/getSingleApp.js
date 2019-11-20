@@ -1,6 +1,8 @@
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
+const debug = require('debug')('appstore:server:routes:v1:apps:getSingleApp')
+
 const AppModel = require('../../../../models/v1/out/App')
 const { AppStatus } = require('../../../../enums')
 
@@ -34,23 +36,34 @@ module.exports = {
 
         const appUuid = request.params.appUuid
 
+        debug(`Getting app with uuid: ${appUuid}`)
+
         let apps = null
 
         if (canSeeAllApps(request)) {
+            debug('Can see all apps, fetch it no matter its status')
             apps = await getAppsByUuid(appUuid, 'en', h.context.db)
         } else {
+            debug('Can NOT see all apps, fetch it only if approved')
             apps = await getAppsByUuidAndStatus(
                 appUuid,
                 AppStatus.APPROVED,
                 'en',
                 h.context.db
             )
+            debug('Got apps:', apps)
+        }
+
+        if (!apps || apps.length === 0) {
+            debug('Not found! Apps array is empty')
+            throw Boom.notFound('No apps found')
         }
 
         const v1FormattedArray = convertAppsToApiV1Format(apps, request)
 
         if (v1FormattedArray.length === 0) {
-            throw Boom.notFound()
+            debug('Not found! Formatted array is empty')
+            throw Boom.notFound('No apps found')
         }
 
         return v1FormattedArray[0]
