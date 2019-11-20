@@ -25,8 +25,8 @@ module.exports = {
         response: {
             status: {
                 200: AppModel.def,
-                404: Joi.string(),
-                500: Joi.string(),
+                404: Joi.any(),
+                500: Joi.any(),
             },
             failAction: defaultFailHandler,
         },
