@@ -144,15 +144,12 @@ describe('Get all published apps [v1]', async () => {
         const mockedApps = require('../../seeds/mock/apps')
         const [pendingApp] = mockedApps.filter(apps => apps.id === 4)
 
-        console.log(pendingApp)
-
         const injectOptions = {
             method: 'GET',
             url: `/api/v1/apps/${pendingApp.uuid}`,
         }
 
         const response = await server.inject(injectOptions)
-        console.log(response.payload)
         expect(response.statusCode).to.equal(404)
     })
 })
