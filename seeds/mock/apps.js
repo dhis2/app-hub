@@ -11,7 +11,7 @@ const dhis2App = {
 }
 const whoApp = {
     id: 2,
-    uuid: uuid(),
+    uuid: '600c70ef-032e-4ea8-bb49-8a3bf7d166eb',
     organisation_id: 2,
     created_by_user_id: 1,
     type: AppType.APP,
@@ -19,7 +19,7 @@ const whoApp = {
 }
 const rejectedApp = {
     id: 3,
-    uuid: uuid(),
+    uuid: '384c41f8-b880-42c8-a360-02fc1d80e320',
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.APP,
@@ -27,7 +27,7 @@ const rejectedApp = {
 }
 const pendingApp = {
     id: 4,
-    uuid: uuid(),
+    uuid: '02cb663c-5112-400b-8a93-0353187d337b',
     organisation_id: 1,
     created_by_user_id: 2,
     type: AppType.APP,
@@ -35,7 +35,7 @@ const pendingApp = {
 }
 const betaOnlyTrackerWidget = {
     id: 5,
-    uuid: uuid(),
+    uuid: '6d755422-b4f0-4105-b325-3a908f4d4539',
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.TRACKER_DASHBOARD_WIDGET,
@@ -43,7 +43,7 @@ const betaOnlyTrackerWidget = {
 }
 const canaryOnlyDashboardWidget = {
     id: 6,
-    uuid: uuid(),
+    uuid: '7a09ad3c-e501-4adc-bffd-0900f7d5aa78',
     organisation_id: 1,
     created_by_user_id: 1,
     type: AppType.DASHBOARD_WIDGET,
