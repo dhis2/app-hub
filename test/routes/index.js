@@ -126,6 +126,35 @@ describe('Get all published apps [v1]', async () => {
         expect(versions[0].maxDhisVersion).to.equal(null)
         expect(versions[0].minDhisVersion).to.equal('2.27')
     })
+
+    it('should be able to load the details of an approved app', async () => {
+        const mockedApps = require('../../seeds/mock/apps')
+        const [firstMockedApp] = mockedApps
+
+        const injectOptions = {
+            method: 'GET',
+            url: `/api/v1/apps/${firstMockedApp.uuid}`,
+        }
+
+        const response = await server.inject(injectOptions)
+        expect(response.statusCode).to.equal(200)
+    })
+
+    it('should not able to load the details of a pending app when unauthenticated', async () => {
+        const mockedApps = require('../../seeds/mock/apps')
+        const [pendingApp] = mockedApps.filter(apps => apps.id === 4)
+
+        console.log(pendingApp)
+
+        const injectOptions = {
+            method: 'GET',
+            url: `/api/v1/apps/${pendingApp.uuid}`,
+        }
+
+        const response = await server.inject(injectOptions)
+        console.log(response.payload)
+        expect(response.statusCode).to.equal(404)
+    })
 })
 
 describe('Get all published apps [v2]', () => {
