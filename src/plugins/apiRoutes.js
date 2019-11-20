@@ -27,16 +27,6 @@ const apiRoutesPlugin = {
                 },
             }
 
-            server.auth.strategy('optional', 'jwt', {
-                ...authConfig,
-                mode: 'optional',
-                complete: true,
-                validate: createUserValidationFunc(
-                    knex,
-                    authConfig.verifyOptions.audience
-                ),
-            })
-
             server.auth.strategy('required', 'jwt', {
                 ...authConfig,
                 complete: true,
@@ -61,13 +51,9 @@ const apiRoutesPlugin = {
                 },
             }))
 
-            const noAuthCredentialsResponse = server.auth.strategy(
-                'optional',
-                'no-auth',
-                { mode: 'optional' }
-            )
-
+            //Map required authentication to no-auth
             server.auth.strategy('required', 'no-auth')
+
             //Warn with red background
             debug(
                 '\x1b[41m',
