@@ -25,7 +25,7 @@ module.exports = [
         method: 'POST',
         path: '/v2/channels',
         config: {
-            auth: 'required',
+            auth: 'token',
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {
@@ -61,7 +61,7 @@ module.exports = [
                     return err
                 },
             },
-            auth: 'required',
+            auth: 'token',
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {

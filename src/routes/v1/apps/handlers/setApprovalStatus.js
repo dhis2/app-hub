@@ -9,7 +9,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps/{appUuid}/approval',
     config: {
-        auth: 'required',
+        auth: 'token',
         tags: ['api', 'v1'],
         response: {
             status: {

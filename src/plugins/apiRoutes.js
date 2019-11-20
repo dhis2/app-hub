@@ -27,7 +27,7 @@ const apiRoutesPlugin = {
                 },
             }
 
-            server.auth.strategy('required', 'jwt', {
+            server.auth.strategy('token', 'jwt', {
                 ...authConfig,
                 complete: true,
                 validate: createUserValidationFunc(
@@ -52,7 +52,7 @@ const apiRoutesPlugin = {
             }))
 
             //Map required authentication to no-auth
-            server.auth.strategy('required', 'no-auth')
+            server.auth.strategy('token', 'no-auth')
 
             //Warn with red background
             debug(
