@@ -13,7 +13,7 @@ module.exports = {
     method: 'PUT',
     path: '/v1/apps/{appUuid}/versions/{versionUuid}',
     config: {
-        auth: 'required',
+        auth: 'token',
         tags: ['api', 'v1'],
         validate: {
             payload: EditAppVersionModel.payloadSchema,

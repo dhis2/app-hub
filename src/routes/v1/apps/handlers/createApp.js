@@ -33,7 +33,7 @@ module.exports = {
     method: 'POST',
     path: '/v1/apps',
     config: {
-        auth: 'required',
+        auth: 'token',
         tags: ['api', 'v1'],
         payload: {
             maxBytes: 20 * 1024 * 1024, //20MB

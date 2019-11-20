@@ -15,7 +15,7 @@ module.exports = {
     method: 'PUT',
     path: '/v1/apps/{appUuid}/images/{mediaUuid}',
     config: {
-        auth: 'required',
+        auth: 'token',
         tags: ['api', 'v1'],
         plugins: {
             //TODO: set correct payloadType for 'hapi-swagger'

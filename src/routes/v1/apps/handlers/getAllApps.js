@@ -14,7 +14,7 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps/all',
     config: {
-        auth: 'required',
+        auth: 'token',
         tags: ['api', 'v1'],
         response: {
             status: {
