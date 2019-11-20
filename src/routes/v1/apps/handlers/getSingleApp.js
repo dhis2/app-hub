@@ -18,7 +18,7 @@ module.exports = {
     method: 'GET',
     path: '/v1/apps/{appUuid}',
     config: {
-        auth: 'optional',
+        auth: { strategy: 'required', mode: 'try' },
         tags: ['api', 'v1'],
         response: {
             status: {
