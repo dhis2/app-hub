@@ -219,7 +219,7 @@ describe('@services::Organisation', () => {
     describe('create', () => {
         it('should create successfully', async () => {
             const userId = 1 // appstore
-            const name = 'A new organisation'
+            const name = 'Unicef'
             const org = await Organisation.create({ userId, name }, db)
             expect(org.id).to.a.number()
             expect(org.uuid).to.be.a.string()
