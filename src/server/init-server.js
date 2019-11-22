@@ -84,6 +84,10 @@ exports.init = async (knex, config) => {
             knex,
             auth: config.auth,
         },
+    }, {
+        routes: {
+            prefix: '/api'
+        }
     })
 
     await server.start()

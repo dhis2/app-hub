@@ -71,7 +71,6 @@ const apiRoutesPlugin = {
             }
         }
 
-        server.realm.modifiers.route.prefix = '/api'
         server.route(routes)
     },
 }
