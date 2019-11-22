@@ -66,8 +66,7 @@ const apiRoutesPlugin = {
                     'Running without authentication requires to setup mapping to a user to use for requests requiring a current user id (e.g. creating apps for example). Set process.env.NO_AUTH_MAPPED_USER_ID',
                     '\x1b[m'
                 )
-                process.exit(1)
-                return
+                throw new Error("No auth set up. Set process.env.NO_AUTH_MAPPED_USER_ID to a valid user ID.")
             }
         }
 
