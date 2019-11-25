@@ -63,9 +63,7 @@ module.exports = {
 
         //debug("payload:", request.payload)
         const versionPayload = request.payload.version
-        const appVersionJson = JSON.parse(
-            versionPayload._data.toString('utf8').trim()
-        )
+        const appVersionJson = JSON.parse(versionPayload)
         const validationResult = CreateAppVersionModel.def.validate(
             appVersionJson
         )

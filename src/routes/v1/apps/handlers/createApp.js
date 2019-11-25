@@ -68,7 +68,7 @@ module.exports = {
         }
 
         const app = request.payload.app
-        const appJsonPayload = JSON.parse(app._data.toString('utf8').trim())
+        const appJsonPayload = JSON.parse(app)
         const appJsonValidationResult = CreateAppModel.def.validate(
             appJsonPayload
         )
