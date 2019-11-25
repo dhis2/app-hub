@@ -2,14 +2,14 @@ const joi = require('@hapi/joi')
 const User = require('./User')
 const {
     definition: defaultDefinition,
-    createDefaultParseDatabaseJson,
+    createDefaultValidator,
 } = require('./Default')
 
 const definition = defaultDefinition
     .append({
         name: joi.string(),
         slug: joi.string(),
-        // createdByUser: joi.string(),
+        // createdByUser: joi.string(),   TODO: should we rename 'createdByUserUuid' to this and use that for internal and external models?
         createdByUserUuid: joi.string(),
         createdByUserId: joi.number().alter({
             external: s => s.strip(),
@@ -25,8 +25,6 @@ const definition = defaultDefinition
         ignoreUndefined: true,
     })
 
-const renamer = (to, from, opts) => s => s.rename(to, from, opts)
-
 const defWithUsers = definition.append({
     users: joi
         .array()
@@ -34,22 +32,13 @@ const defWithUsers = definition.append({
         .required(),
 })
 
-const filter = joi
-    .object({
-        uuid: joi.string().guid(),
-        name: joi.string(),
-        slug: joi.string(),
-        userUuid: joi.string().guid(),
-    })
-    .prefs({
-        stripUnknown: true,
-    })
-
 const dbDefinition = definition.tailor('db')
 
 const externalDefintion = definition.tailor('external')
 
-const parseDatabaseJson = createDefaultParseDatabaseJson(definition)
+const parseDatabaseJson = createDefaultValidator(definition)
+
+const formatDatabaseJson = createDefaultValidator(dbDefinition);
 
 module.exports = {
     def: definition,
@@ -58,5 +47,5 @@ module.exports = {
     externalDefintion,
     defWithUsers,
     parseDatabaseJson,
-    filter,
+    formatDatabaseJson
 }

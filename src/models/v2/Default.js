@@ -18,15 +18,14 @@ const definition = joi
     })
 
 /**
- * Creates a default function to parse database result to internal model. Validating
- * and transforming using the given definition (a joi schema).
+ * Creates a default function to validating
+ * and transform results the given definition (a joi schema).
  * @param {Joi.Schema} defintion - The joi schema to use
  *
- * @returns {function(dbResult): []} - A function taking the database result (may be an array or object) that validates and transforms
- * the results according to the joi-schema.
+ * @returns {function(dbResult): []} - A function taking some data (may be an array or object) to be validated by the schema.
  * The function throws a ValidationError if mapping fails
  */
-function createDefaultParseDatabaseJson(schema) {
+function createDefaultValidator(schema) {
     return function(dbResult) {
         return Array.isArray(dbResult) ? dbResult.map(v => joi.attempt(v, schema)) : joi.attempt(dbResult, schema)
     }
@@ -35,5 +34,5 @@ function createDefaultParseDatabaseJson(schema) {
 module.exports = {
     def: definition,
     definition,
-    createDefaultParseDatabaseJson,
+    createDefaultValidator,
 }

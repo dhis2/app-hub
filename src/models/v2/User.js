@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi')
 const {
     definition: defaultDefinition,
-    createDefaultParseDatabaseJson,
+    createDefaultValidator,
 } = require('./Default')
 
 const definition = defaultDefinition.append({
@@ -9,7 +9,7 @@ const definition = defaultDefinition.append({
     email: joi.string(),
 })
 
-const parseDatabaseJson = createDefaultParseDatabaseJson(definition)
+const parseDatabaseJson = createDefaultValidator(definition)
 
 module.exports = {
     def: definition,

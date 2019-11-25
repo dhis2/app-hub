@@ -31,7 +31,7 @@ async function create({ userId, name }, db) {
         slug,
         uuid: uuid(),
     }
-    const dbData = joi.attempt(obj, Organisation.dbDefinition)
+    const dbData = Organisation.formatDatabaseJson(obj)
     const [organisation] = await db('organisation')
         .insert(dbData)
         .returning(['id', 'uuid'])
