@@ -47,12 +47,15 @@ const filter = joi
 
 const dbDefinition = definition.tailor('db')
 
+const externalDefintion = definition.tailor('external')
+
 const parseDatabaseJson = createDefaultParseDatabaseJson(definition)
 
 module.exports = {
     def: definition,
     definition,
     dbDefinition,
+    externalDefintion,
     defWithUsers,
     parseDatabaseJson,
     filter,

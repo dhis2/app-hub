@@ -84,8 +84,10 @@ describe('@services::Organisation', () => {
             expect(orgByUuid).to.not.be.null()
             expect(orgByUuid.users).to.be.an.array()
             const members = ['Mr Jenkins', 'Viktor Varland']
-            orgByUuid.users.forEach(u => {
-                expect(members).to.include(u.name)
+            members.forEach(name => {
+                const member = orgByUuid.users.find(u => u.name === name)
+                expect(member).to.not.be.undefined()
+                expect(member.uuid).to.be.a.string()
             })
         })
     })

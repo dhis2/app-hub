@@ -1,3 +1,3 @@
 const { flatten } = require('../../utils')
 
-module.exports = [require('./apps.js'), require('./channels.js')]
+module.exports = [require('./apps.js'), require('./channels.js'), require('./organisations')]
