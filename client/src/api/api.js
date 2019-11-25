@@ -144,11 +144,8 @@ export function createAppUploadOptions(data) {
     const fileInput = data.file
     const imageInput = data.image
     const form = new FormData()
-    const jsonPart = new Blob([JSON.stringify(data.app)], {
-        type: 'application/json',
-    })
     form.append('file', fileInput, fileInput.name)
-    form.append('app', jsonPart)
+    form.append('app', JSON.stringify(data.app))
     if (imageInput && imageInput.name) {
         form.append('imageFile', imageInput, imageInput.name)
     }
@@ -179,12 +176,9 @@ export function createUploadVersionOptions(data) {
     }
     const dataFile = data.file
     const form = new FormData()
-    const jsonPart = new Blob([JSON.stringify(jsonData)], {
-        type: 'application/json',
-    })
 
     form.append('file', dataFile, dataFile.name)
-    form.append('version', jsonPart)
+    form.append('version', JSON.stringify(jsonData))
 
     const fetchOptions = {
         method: 'POST',
@@ -202,12 +196,9 @@ export function createUploadImageOptions(data) {
     }
     const dataFile = data.file
     const form = new FormData()
-    const jsonPart = new Blob([JSON.stringify(jsonData)], {
-        type: 'application/json',
-    })
 
     form.append('file', dataFile, dataFile.name)
-    form.append('image', jsonPart)
+    form.append('image', JSON.stringify(jsonData))
 
     const fetchOptions = {
         method: 'POST',
