@@ -171,6 +171,7 @@ class AppCards extends Component {
                                         renderAllToggle={false}
                                         form="appTypeFilter"
                                         filters={appTypeFilters}
+                                        destroyOnUnmount={false}
                                     />
                                 </div>
                                 <div style={{ padding: '10px' }}>
@@ -179,6 +180,7 @@ class AppCards extends Component {
                                         renderAllToggle={false}
                                         form="appChannelFilter"
                                         filters={channelFilters}
+                                        destroyOnUnmount={false}
                                     />
                                 </div>
                             </Popover>

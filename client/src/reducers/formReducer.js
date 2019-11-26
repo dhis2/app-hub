@@ -97,6 +97,10 @@ const form = formReducer.plugin({
     appChannelFilter: (state, action) => {
         switch (action.type) {
             case actions.CHANNELS_LOAD_SUCCESS: {
+                if (state && state.values) {
+                    //if we've got old selections in the channel filter, keep them and just return previous state
+                    return state
+                }
                 const channels = action.payload
                 const filterValues = channels.reduce((acc, c) => {
                     acc[c.name] = c.name === 'Stable'
