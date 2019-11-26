@@ -168,7 +168,7 @@ class Selectfilter extends Component {
             labelStyle,
             filters,
             onFilterChange,
-            ...props
+            destroyOnUnmount,
         } = this.props
         const toggles = filters.map(filter => (
             <Field
@@ -178,6 +178,11 @@ class Selectfilter extends Component {
                 label={filter.label}
                 style={elementStyle}
                 labelStyle={labelStyle}
+                destroyOnUnmount={
+                    typeof destroyOnUnmount !== 'undefined'
+                        ? destroyOnUnmount
+                        : true
+                }
             />
         ))
         return (
@@ -220,6 +225,7 @@ Selectfilter.propTypes = {
     ),
     //Renders a component which toggles all buttons in this group.
     renderAllToggle: PropTypes.bool,
+    destroyOnUnmount: PropTypes.bool,
 }
 Selectfilter.defaultProps = {
     form: 'filters',
