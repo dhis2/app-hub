@@ -1,16 +1,16 @@
 const { expect } = require('@hapi/code')
 const Lab = require('@hapi/lab')
-const { it, describe, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { it, describe, afterEach, beforeEach, before, after } = (exports.lab = Lab.script())
 
 const knexConfig = require('../../../knexfile')
 const db = require('knex')(knexConfig)
-
 const { init } = require('../../../src/server/init-server')
 const { config } = require('../../../src/server/env-config')
 const { Organisation } = require('../../../src/services')
 
 describe('v2/organisations', () => {
     let server
+
     beforeEach(async () => {
         server = await init(db, config)
     })
@@ -58,12 +58,23 @@ describe('v2/organisations', () => {
             expect(payload).to.include(['uuid'])
             expect(payload.id).to.be.undefined()
         })
+
+        it('should fail if no payload', async () => {
+            const opts = {
+                method: 'POST',
+                url: '/api/v2/organisations',
+                payload: {}
+            }
+
+            const res = await server.inject(opts)
+            expect(res.statusCode).to.equal(400)
+        })
     })
 
     describe('add user to organisation', () => {
         it('should add user successfully', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                { filter: { name: 'HISP Tanzania' } },
                 db
             )
 
