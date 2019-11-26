@@ -32,9 +32,7 @@ module.exports = [
             auth: 'token',
             validate: {
                 params: Joi.object({
-                    orgUuid: Joi.string()
-                        .guid()
-                        .required(),
+                    orgUuid: OrgModel.definition.extract('uuid').required(),
                 }),
             },
             tags: ['api', 'v2'],
@@ -74,10 +72,7 @@ module.exports = [
                 db
             )
             return h
-                .response({
-                    ...organisation,
-                    test: 'asf',
-                })
+                .response(organisation)
                 .created(`/v2/organisations/${organisation.uuid}`)
         },
     },
@@ -107,7 +102,7 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const { id: userId } = getCurrentUserFromRequest(request, db)
+            const { uuid: userUuid } = await getCurrentUserFromRequest(request, db)
             const userEmailToAdd = request.payload.email
 
             const addUserToOrganisation = async trx => {
@@ -116,11 +111,11 @@ module.exports = [
                     true,
                     trx
                 )
-                const isMember = org.users.findIndex(u => u.id === userId) > -1
-                const canAdd = org.createdByUserId === userId || isMember
+                const isMember = org.users.findIndex(u => u.id === userUuid) > -1
+                const canAdd = org.createdByUserUuid === userUuid || isMember
 
-                if (!canAdd) {
-                    throw Boom.unauthorized(
+                if (!canAdd) {qq
+                    throw Boom.forbidden(
                         'You do not have permission to add users'
                     )
                 }

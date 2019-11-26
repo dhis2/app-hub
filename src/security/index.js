@@ -70,6 +70,7 @@ const getCurrentUserFromRequest = async request => {
         try {
             const user = {
                 id: request.auth.credentials.userId,
+                uuid: request.auth.credentials.uuid,
             }
             resolve(user)
         } catch (err) {
