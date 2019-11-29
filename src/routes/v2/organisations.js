@@ -47,6 +47,7 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
+            const {orgUuid} = request.params;
             const organisation = await Organisation.findByUuid(orgUuid, true, db)
             return organisation
         },

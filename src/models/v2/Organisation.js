@@ -14,6 +14,7 @@ const definition = defaultDefinition
         createdByUserId: joi.number().alter({
             external: s => s.strip(),
         }),
+        users: joi.array().items(User.definition),
     })
     .alter({
         db: s =>
