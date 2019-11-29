@@ -83,7 +83,7 @@ describe('v2/organisations', () => {
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/add`,
+                url: `/api/v2/organisations/${dhis2Org.uuid}/addUser`,
                 payload: {
                     email: 'appstore-api@dhis2.org',
                 },
@@ -104,7 +104,7 @@ describe('v2/organisations', () => {
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/add`,
+                url: `/api/v2/organisations/${dhis2Org.uuid}/addUser`,
                 payload: {
                     email: 'example-fail@dhis2.org',
                 },

@@ -15,13 +15,17 @@ module.exports = [
         path: '/v2/organisations',
         config: {
             tags: ['api', 'v2'],
+            response: {
+                schema: Joi.array().items(OrgModel.externalDefintion),
+                modify: true
+            },
         },
         handler: async (request, h) => {
             const { db } = h.context
 
             //get all orgs, no filtering
+            //TODO: add filtering
             const orgs = await Organisation.find({}, h.context.db)
-
             return orgs
         },
     },
@@ -37,12 +41,13 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                //   schema: OrgModel.externalDefintion,
+                schema: OrgModel.externalDefintion,
+                modify: true
             },
         },
-        handler: (request, h) => {
+        handler: async (request, h) => {
             const { db } = h.context
-            const organisation = Organisation.findByUuid(orgUuid, true, db)
+            const organisation = await Organisation.findByUuid(orgUuid, true, db)
             return organisation
         },
     },
@@ -78,7 +83,7 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/v2/organisations/{orgUuid}/add',
+        path: '/v2/organisations/{orgUuid}/addUser',
         config: {
             auth: 'token',
             tags: ['api', 'v2'],
@@ -114,7 +119,7 @@ module.exports = [
                 const isMember = org.users.findIndex(u => u.id === userUuid) > -1
                 const canAdd = org.createdByUserUuid === userUuid || isMember
 
-                if (!canAdd) {qq
+                if (!canAdd) {
                     throw Boom.forbidden(
                         'You do not have permission to add users'
                     )
