@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:security')
+const debug = require('debug')('apphub:server:security')
 /**
  * This returns true if the request is authenticated (e.g. contains a valid token)
  * @param {*} request

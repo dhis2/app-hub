@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:getMedia')
+const debug = require('debug')('apphub:server:data:getMedia')
 /**
  * Gets information about an image/media
  *

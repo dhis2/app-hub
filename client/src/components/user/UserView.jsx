@@ -50,7 +50,7 @@ class UserView extends Component {
                     <List style={{ padding: 0 }}>
                         <Link to="/">
                             <ListItem
-                                primaryText="App Store"
+                                primaryText="App Hub"
                                 leftIcon={
                                     <FontIcon className="material-icons">
                                         home

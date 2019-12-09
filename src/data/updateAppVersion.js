@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:data:updateAppVersion')
+const debug = require('debug')('apphub:data:updateAppVersion')
 const joi = require('@hapi/joi')
 
 const paramsSchema = joi
@@ -35,7 +35,7 @@ const paramsSchema = joi
  * @param {string} params.minDhisVersion Minimum inclusive required version of DHIS2 this version is compatible with
  * @param {string} params.maxDhisVersion Minimum inclusive required version of DHIS2 this version is compatible with
  * @param {string} params.version The version number of the appversion provided by the developer, for example v1.0, v1.2
- * @param {string} params.demoUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
+ * @param {string} params.demoUrl The URL to the source code of the app, for example https://github.com/dhis2/app-hub
  * @param {string} params.channel Name of the release channel to publish the app version to
  * @param {*} knex
  * @returns {Promise<CreateUserResult>}

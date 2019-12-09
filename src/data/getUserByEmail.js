@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:getUserByEmail')
+const debug = require('debug')('apphub:server:data:getUserByEmail')
 /**
  * Load a user from db for the specified email
  *

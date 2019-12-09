@@ -1,5 +1,5 @@
 const debug = require('debug')(
-    'appstore:server:routes:handlers:v1:createAppVersion'
+    'apphub:server:routes:handlers:v1:createAppVersion'
 )
 const path = require('path')
 

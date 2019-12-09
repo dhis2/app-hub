@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:boot:webapp')
+const debug = require('debug')('apphub:server:boot:webapp')
 
 const webpack = require('webpack')
 const webpackConfig = require('../../webpack.config.js')

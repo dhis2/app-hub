@@ -2,7 +2,7 @@ module.exports = {
     pathPrefixSize: 2,
     basePath: '/',
     info: {
-        title: 'DHIS-2 App Store API Documentation',
+        title: 'DHIS-2 App Hub API Documentation',
         description: '.',
     },
     /*pathReplacements: [

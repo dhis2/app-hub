@@ -21,7 +21,7 @@ exports.seed = async knex => {
         {
             id: 1,
             uuid: '58262f57-4f38-45c5-a3c2-9e30ab3ba2da',
-            email: 'appstore-api@dhis2.org',
+            email: 'apphub-api@dhis2.org',
             name: 'Mr Jenkins',
         },
         {
@@ -85,6 +85,6 @@ exports.seed = async knex => {
     //to get another timestamp
     await sleep(500)
     await knex('user_organisation').insert([
-        { organisation_id: 1, user_id: 1 }, //appstore -> dhis2
+        { organisation_id: 1, user_id: 1 }, //apphub -> dhis2
     ])
 }

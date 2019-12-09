@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:boot')
+const debug = require('debug')('apphub:server:boot')
 
 const knexConfig = require('../knexfile')
 const knex = require('knex')(knexConfig)

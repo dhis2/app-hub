@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:deleteMedia')
+const debug = require('debug')('apphub:server:data:deleteMedia')
 /**
  * Deletes a media with the specified uuid
  *

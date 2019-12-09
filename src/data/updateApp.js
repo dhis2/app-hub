@@ -33,7 +33,7 @@ const paramsSchema = joi
  * @param {number} params.userId The user id of the user making the change
  * @param {string} params.name The name of the app
  * @param {string} params.description Description of the app
- * @param {string} params.sourceUrl The URL to the source code of the app, for example https://github.com/dhis2/app-store
+ * @param {string} params.sourceUrl The URL to the source code of the app, for example https://github.com/dhis2/app-hub
  * @param {string} params.languageCode The 2 char language code for which language to update
  * @param {*} knex
  * @returns {Promise<CreateUserResult>}

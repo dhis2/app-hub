@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:deleteAppVersion')
+const debug = require('debug')('apphub:server:data:deleteAppVersion')
 /**
  * Deletes an app version with the specified uuid
  *

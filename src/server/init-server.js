@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:boot:api')
+const debug = require('debug')('apphub:server:boot:api')
 
 const Blipp = require('blipp')
 const Hapi = require('@hapi/hapi')
@@ -40,7 +40,7 @@ exports.init = async (knex, config) => {
         options: {
             validVersions: [1, 2],
             defaultVersion: 1,
-            vendorName: 'dhis2-app-store-api',
+            vendorName: 'dhis2-app-hub-api',
             basePath: '/api/',
         },
     })
@@ -78,17 +78,20 @@ exports.init = async (knex, config) => {
         plugin: staticFrontendRoutes,
     })
 
-    await server.register({
-        plugin: apiRoutes,
-        options: {
-            knex,
-            auth: config.auth,
+    await server.register(
+        {
+            plugin: apiRoutes,
+            options: {
+                knex,
+                auth: config.auth,
+            },
         },
-    }, {
-        routes: {
-            prefix: '/api'
+        {
+            routes: {
+                prefix: '/api',
+            },
         }
-    })
+    )
 
     await server.start()
 

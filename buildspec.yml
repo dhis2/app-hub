@@ -28,4 +28,4 @@ phases:
 artifacts:
     files:
         - '**/*'
-    name: app-bazaar-$(date +%Y-%m-%d)
+    name: app-hub-$(date +%Y-%m-%d)

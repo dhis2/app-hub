@@ -9,7 +9,7 @@
         "build": "NODE_ENV=production webpack -p --config ./webpack.config.js",
         "start": "NODE_ENV=production node ./src/main.js",
         "dev": "cross-env USE_PREBUILT_APP=1 concurrently --kill-others npm:dev:*",
-        "dev:server": "cross-env DEBUG=knex:tx,appstore* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
+        "dev:server": "cross-env DEBUG=knex:tx,apphub* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
         "dev:client": "cross-env NODE_ENV=development webpack-dev-server",
         "test": "npm run test:server & npm run test:client",
         "test:server": "cross-env NODE_ENV=test npm run reset-and-seed-db && lab -a @hapi/code -t 80 -v -I 'core,__core-js_shared__'",

@@ -3,13 +3,13 @@ const path = require('path')
 const rimraf = require('rimraf')
 
 /**
- * Store files in local file system (app-store/upload)
+ * Store files in local file system (app-hub/upload)
  */
 module.exports = class LocalFileSystemHandler {
     constructor(uploadPath) {
         this._uploadDirectory = path.normalize(
             __dirname + (uploadPath || '/../../upload')
-        ) //app-store/upload if no other is provided
+        ) //app-hub/upload if no other is provided
         this.createDirectoryIfNotExists(this._uploadDirectory)
     }
 

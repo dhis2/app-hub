@@ -1,5 +1,5 @@
 const debug = require('debug')(
-    'appstore:server:routes:v1:apps:formatting:convertAppsToApiV1Format'
+    'apphub:server:routes:v1:apps:formatting:convertAppsToApiV1Format'
 )
 
 const getServerUrl = require('../../../../utils/getServerUrl')

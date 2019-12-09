@@ -1,5 +1,5 @@
 const debug = require('debug')(
-    'appstore:server:routes:handlers:v1:defaultFailHandler'
+    'apphub:server:routes:handlers:v1:defaultFailHandler'
 )
 const Boom = require('@hapi/boom')
 

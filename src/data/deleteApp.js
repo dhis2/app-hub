@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:deleteApp')
+const debug = require('debug')('apphub:server:data:deleteApp')
 /**
  * Deletes an app with the specified uuid
  *

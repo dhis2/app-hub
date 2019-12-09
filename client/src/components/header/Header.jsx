@@ -58,7 +58,7 @@ const Header = props => (
                 <img src={logo} style={styles.logo} />
             </Link>
             <ToolbarTitle align="center" titleStyle={{ margin: 0 }}>
-                <Link to="/">App Store</Link>
+                <Link to="/">App Hub</Link>
             </ToolbarTitle>
 
             {renderProfileButton(props)}
