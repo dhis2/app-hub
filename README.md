@@ -18,7 +18,7 @@ Note: The master branch currently holds the version 2 of the unreleased App Hub.
 
 ## Clone the repo
 ```bash
-git clone https://github.com/dhis2/dhis2-apphub.git
+git clone https://github.com/dhis2/app-hub.git
 ```
 
 ## Create & seed test-database
