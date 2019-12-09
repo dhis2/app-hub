@@ -1,6 +1,6 @@
 # App Hub for DHIS 2
 
-Visit the live [DHIS 2 app hub](https://play.dhis2.org/apphub/)
+Visit the live [DHIS 2 app hub](https://apps.dhis2.org/)
 
 Note: The master branch currently holds the version 2 of the unreleased App Hub. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
 
