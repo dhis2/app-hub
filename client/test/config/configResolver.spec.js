@@ -43,7 +43,7 @@ describe('ConfigResolver', () => {
             configOverride = merge({}, DirectDefaultConfig, override, addition)
             prodConfig = {
                 api: {
-                    baseURL: 'https://dhis2.org/apphub/api/',
+                    baseURL: 'https://apps.dhis2.org/api/',
                 },
             }
             devConfig = {
