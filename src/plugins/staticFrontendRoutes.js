@@ -1,7 +1,7 @@
 const path = require('path')
 
 const staticFrontendRoutes = {
-    name: 'DHIS2 App Bazaar Frontend',
+    name: 'DHIS2 App Hub Frontend',
     register: function(server, options) {
         //Temporary route to serve frontend static build until we've flattened the project structure
         server.route([

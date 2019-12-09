@@ -7,7 +7,7 @@ const nodeEnv = process.env.NODE_ENV || 'development'
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const config = require('./config/configResolver.js').default
 
-const appEntry = path.join(__dirname, 'client/src/app-store.js')
+const appEntry = path.join(__dirname, 'client/src/app-hub.js')
 
 const webpackConfig = {
     entry: {
@@ -68,7 +68,7 @@ const webpackConfig = {
             __APP_CONFIG__: JSON.stringify(config),
         }),
         new HtmlWebpackPlugin({
-            title: 'DHIS2 Appstore',
+            title: 'DHIS2 AppHub',
             filename: 'index.html',
             template: path.join(__dirname, 'indexbuild.html'),
         }),

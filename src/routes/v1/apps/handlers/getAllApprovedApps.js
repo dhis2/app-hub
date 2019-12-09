@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi')
 
-const debug = require('debug')('appstore:server:routes:apps:getAllApprovedApps')
+const debug = require('debug')('apphub:server:routes:apps:getAllApprovedApps')
 
 const AppModel = require('../../../../models/v1/out/App')
 

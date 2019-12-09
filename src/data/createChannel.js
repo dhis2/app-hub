@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:createChannel')
+const debug = require('debug')('apphub:server:data:createChannel')
 const uuid = require('uuid/v4')
 
 const joi = require('@hapi/joi')

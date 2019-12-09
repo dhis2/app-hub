@@ -1,8 +1,8 @@
-# App Store for DHIS 2
+# App Hub for DHIS 2
 
-Visit the live [DHIS 2 app store](https://play.dhis2.org/appstore/)
+Visit the live [DHIS 2 app hub](https://play.dhis2.org/apphub/)
 
-Note: The master branch currently holds the version 2 of the unreleased App Store. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
+Note: The master branch currently holds the version 2 of the unreleased App Hub. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
 
 
 # TO DO
@@ -18,11 +18,11 @@ Note: The master branch currently holds the version 2 of the unreleased App Stor
 
 ## Clone the repo
 ```bash
-git clone https://github.com/dhis2/dhis2-appstore.git
+git clone https://github.com/dhis2/dhis2-apphub.git
 ```
 
 ## Create & seed test-database
-Create a database `appstore` in postgres
+Create a database `apphub` in postgres
 
 ### Migrate/create tables
 ```bash

@@ -1,6 +1,6 @@
 const semver = require('semver')
 
-const debug = require('debug')('appstore:server:utils:filters')
+const debug = require('debug')('apphub:server:utils:filters')
 
 const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
     if (!dhis2Version) {

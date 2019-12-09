@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:data:getApps')
+const debug = require('debug')('apphub:server:data:getApps')
 
 /**
  * Returns all apps based on specified filter params such as status, languageCode and channel

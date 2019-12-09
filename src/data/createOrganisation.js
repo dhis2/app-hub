@@ -11,7 +11,7 @@ const paramsSchema = joi.object().keys({
 })
 
 /**
- * An organisation developing apps in the app store
+ * An organisation developing apps in the app hub
  * @typedef {object} Organisation
  * @property {number} id The internal database id
  * @property {string} uuid A unique "public" id

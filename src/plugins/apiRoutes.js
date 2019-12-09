@@ -1,13 +1,13 @@
 const jwt = require('hapi-auth-jwt2')
 
-const debug = require('debug')('appstore:server:plugins:apiRoutes')
+const debug = require('debug')('apphub:server:plugins:apiRoutes')
 
 const createUserValidationFunc = require('../security/createUserValidationFunc')
 
 const routes = require('../routes/index.js')
 
 const apiRoutesPlugin = {
-    name: 'DHIS2 App Bazaar Backend',
+    name: 'DHIS2 App Hub Backend',
     register: async (server, options) => {
         const { knex, auth } = options
 

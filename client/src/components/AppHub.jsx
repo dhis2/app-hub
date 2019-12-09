@@ -20,7 +20,7 @@ import { getAuth } from '../utils/AuthService'
 injectTapEventPlugin()
 
 const auth = getAuth()
-export default function AppStore() {
+export default function AppHub() {
     return (
         <Provider store={store}>
             <MuiThemeProvider muiTheme={theme}>

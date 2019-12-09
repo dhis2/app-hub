@@ -68,7 +68,7 @@ module.exports = {
 
         const trx = await knex.transaction()
 
-        //Save the image to all versions? (previously the appstore stored media per app, and not version, so we keep them per version for now.
+        //Save the image to all versions? (previously the apphub stored media per app, and not version, so we keep them per version for now.
         //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
         const promises = appVersions.map(async appVersion => {
             const { id, uuid } = await addAppVersionMedia(

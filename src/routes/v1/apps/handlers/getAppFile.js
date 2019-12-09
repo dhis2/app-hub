@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:routes:handlers:v1:getAppFile')
+const debug = require('debug')('apphub:server:routes:handlers:v1:getAppFile')
 const { AppStatus } = require('../../../../enums')
 const { getFile } = require('../../../../utils')
 

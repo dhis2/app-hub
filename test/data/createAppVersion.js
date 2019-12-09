@@ -76,7 +76,7 @@ describe('@data::createAppVersion', () => {
                 userId: 1,
                 appId: 1,
                 demoUrl: 'https://www.dhis2.org',
-                sourceUrl: 'https://github.com/dhis2/app-store/',
+                sourceUrl: 'https://github.com/dhis2/app-hub/',
                 version: '12345',
             },
             db,

@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:routes:handlers:v1:getAllApps')
+const debug = require('debug')('apphub:server:routes:handlers:v1:getAllApps')
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 

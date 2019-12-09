@@ -43,13 +43,13 @@ describe('ConfigResolver', () => {
             configOverride = merge({}, DirectDefaultConfig, override, addition)
             prodConfig = {
                 api: {
-                    baseURL: 'https://dhis2.org/appstore/api/',
+                    baseURL: 'https://dhis2.org/apphub/api/',
                 },
             }
             devConfig = {
                 api: {
-                    baseURL: 'https://localhost:8080/appstore/api/',
-                    redirectURL: 'https://localhost:8080/appstore/user/',
+                    baseURL: 'https://localhost:8080/apphub/api/',
+                    redirectURL: 'https://localhost:8080/apphub/user/',
                 },
             }
             //sanity check

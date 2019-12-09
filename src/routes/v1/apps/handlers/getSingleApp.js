@@ -1,7 +1,7 @@
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
-const debug = require('debug')('appstore:server:routes:v1:apps:getSingleApp')
+const debug = require('debug')('apphub:server:routes:v1:apps:getSingleApp')
 
 const AppModel = require('../../../../models/v1/out/App')
 const { AppStatus } = require('../../../../enums')

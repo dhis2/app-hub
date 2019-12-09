@@ -1,4 +1,4 @@
-const debug = require('debug')('appstore:server:utils:AWSFileHandler')
+const debug = require('debug')('apphub:server:utils:AWSFileHandler')
 const AWS = require('aws-sdk')
 
 /**

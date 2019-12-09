@@ -1,6 +1,6 @@
 const dotenv = require('dotenv').config()
 
-const debug = require('debug')('appstore:server:knexconfig')
+const debug = require('debug')('apphub:server:knexconfig')
 
 debug(`process.env.RDS_HOSTNAME: ${process.env.RDS_HOSTNAME}`)
 debug(`process.env.RDS_USERNAME: ${process.env.RDS_USERNAME}`)
@@ -14,7 +14,7 @@ module.exports = {
         password: process.env.RDS_PASSWORD,
         database: process.env.RDS_DB_NAME,
     },
-    searchPath: ['knex', 'public', 'postgres', 'appstore'],
+    searchPath: ['knex', 'public', 'postgres', 'apphub'],
     pool: {
         min: 2,
         max: 10,

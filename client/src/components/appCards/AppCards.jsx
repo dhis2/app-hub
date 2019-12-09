@@ -30,7 +30,7 @@ import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.scss'
 import Theme from '../../styles/theme'
 
-const debug = Debug('appstore:frontend:components:appcards')
+const debug = Debug('apphub:frontend:components:appcards')
 
 class AppCards extends Component {
     constructor(props) {
