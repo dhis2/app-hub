@@ -17,7 +17,7 @@ module.exports = [
             tags: ['api', 'v2'],
             response: {
                 schema: Joi.array().items(OrgModel.externalDefintion),
-                modify: true
+                modify: true,
             },
         },
         handler: async (request, h) => {
@@ -42,13 +42,17 @@ module.exports = [
             tags: ['api', 'v2'],
             response: {
                 schema: OrgModel.externalDefintion,
-                modify: true
+                modify: true,
             },
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const {orgUuid} = request.params;
-            const organisation = await Organisation.findByUuid(orgUuid, true, db)
+            const { orgUuid } = request.params
+            const organisation = await Organisation.findByUuid(
+                orgUuid,
+                true,
+                db
+            )
             return organisation
         },
     },
@@ -84,7 +88,7 @@ module.exports = [
     },
     {
         method: 'POST',
-        path: '/v2/organisations/{orgUuid}/addUser',
+        path: '/v2/organisations/{orgUuid}/user',
         config: {
             auth: 'token',
             tags: ['api', 'v2'],
@@ -108,7 +112,10 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const { uuid: userUuid } = await getCurrentUserFromRequest(request, db)
+            const { uuid: userUuid } = await getCurrentUserFromRequest(
+                request,
+                db
+            )
             const userEmailToAdd = request.payload.email
 
             const addUserToOrganisation = async trx => {
@@ -117,7 +124,8 @@ module.exports = [
                     true,
                     trx
                 )
-                const isMember = org.users.findIndex(u => u.id === userUuid) > -1
+                const isMember =
+                    org.users.findIndex(u => u.id === userUuid) > -1
                 const canAdd = org.createdByUserUuid === userUuid || isMember
 
                 if (!canAdd) {

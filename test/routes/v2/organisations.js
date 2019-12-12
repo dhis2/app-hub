@@ -1,6 +1,13 @@
 const { expect } = require('@hapi/code')
 const Lab = require('@hapi/lab')
-const { it, describe, afterEach, beforeEach, before, after } = (exports.lab = Lab.script())
+const {
+    it,
+    describe,
+    afterEach,
+    beforeEach,
+    before,
+    after,
+} = (exports.lab = Lab.script())
 
 const knexConfig = require('../../../knexfile')
 const db = require('knex')(knexConfig)
@@ -63,7 +70,7 @@ describe('v2/organisations', () => {
             const opts = {
                 method: 'POST',
                 url: '/api/v2/organisations',
-                payload: {}
+                payload: {},
             }
 
             const res = await server.inject(opts)
@@ -83,7 +90,7 @@ describe('v2/organisations', () => {
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/addUser`,
+                url: `/api/v2/organisations/${dhis2Org.uuid}/user`,
                 payload: {
                     email: 'appstore-api@dhis2.org',
                 },
@@ -104,7 +111,7 @@ describe('v2/organisations', () => {
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/addUser`,
+                url: `/api/v2/organisations/${dhis2Org.uuid}/user`,
                 payload: {
                     email: 'example-fail@dhis2.org',
                 },
