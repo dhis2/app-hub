@@ -124,6 +124,7 @@ module.exports = [
                     true,
                     trx
                 )
+
                 const isMember =
                     org.users.findIndex(u => u.id === userUuid) > -1
                 const canAdd = org.createdByUserUuid === userUuid || isMember

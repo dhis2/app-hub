@@ -3,7 +3,6 @@ const slugify = require('slugify')
 const uuid = require('uuid/v4')
 const { applyFiltersToQuery } = require('../../utils/databaseUtils')
 const { NotFoundError } = require('../../utils/errors')
-const Boom = require('@hapi/boom')
 const User = require('../../models/v2/User')
 const Organisation = require('../../models/v2/Organisation')
 
@@ -23,7 +22,7 @@ const getOrganisationQuery = db =>
             'u.id'
         )
 
-async function create({ userId, name }, db) {
+const create = async ({ userId, name }, db) => {
     const slug = await ensureUniqueSlug(slugify(name, { lower: true }), db)
     const obj = {
         createdByUserId: userId,
@@ -39,7 +38,7 @@ async function create({ userId, name }, db) {
     return Organisation.parseDatabaseJson(organisation)
 }
 
-async function ensureUniqueSlug(originalSlug, db) {
+const ensureUniqueSlug = async (originalSlug, db) => {
     let slug = originalSlug
     let slugUniqueness = 2
     let foundUniqueSlug = false
@@ -58,7 +57,7 @@ async function ensureUniqueSlug(originalSlug, db) {
     return slug
 }
 
-async function find({ filter, paging }, db) {
+const find = async ({ filter, paging }, db) => {
     const query = getOrganisationQuery(db)
 
     if (filter) {
@@ -80,7 +79,7 @@ async function find({ filter, paging }, db) {
     return parsed
 }
 
-async function findByUuid(uuid, includeUsers = false, db) {
+const findByUuid = async (uuid, includeUsers = false, db) => {
     const organisation = await getOrganisationQuery(db)
         .first()
         .where('organisation.uuid', uuid)
@@ -105,7 +104,7 @@ async function findByUuid(uuid, includeUsers = false, db) {
     return internalOrg
 }
 
-async function addUserById(uuid, userId, db) {
+const addUserById = async (uuid, userId, db) => {
     const org = await findByUuid(uuid, false, db)
 
     const query = await db('user_organisation').insert({
@@ -116,13 +115,13 @@ async function addUserById(uuid, userId, db) {
     return query
 }
 
-async function remove(uuid, db) {
+const remove = async (uuid, db) => {
     await db('organisation')
         .where({ uuid })
         .delete()
 }
 
-async function setCreatedByUserId(uuid, userId, db) {
+const setCreatedByUserId = async (uuid, userId, db) => {
     const dbData = joi.attempt(
         {
             createdByUserId: userId,
