@@ -7,6 +7,9 @@ const { expect } = require('@hapi/code')
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
+const users = require('../../seeds/mock/users')
+const apps = require('../../seeds/mock/apps')
+
 describe('@data::createAppVersion', () => {
     const createAppVersion = require('../../src/data/createAppVersion')
 
@@ -16,7 +19,7 @@ describe('@data::createAppVersion', () => {
         await expect(
             createAppVersion(
                 {
-                    appId: 1,
+                    appId: apps[0].id,
                 },
                 db,
                 transaction
@@ -30,7 +33,7 @@ describe('@data::createAppVersion', () => {
         await expect(
             createAppVersion(
                 {
-                    userId: 1,
+                    userId: users[0].id,
                 },
                 db,
                 transaction
@@ -42,8 +45,8 @@ describe('@data::createAppVersion', () => {
         await expect(
             createAppVersion(
                 {
-                    userId: 1,
-                    appId: 1,
+                    userId: users[0].id,
+                    appId: apps[0].id,
                 },
                 db
             )
@@ -56,15 +59,15 @@ describe('@data::createAppVersion', () => {
         await expect(
             createAppVersion(
                 {
-                    userId: 1,
-                    appId: 99999,
+                    userId: users[0].id,
+                    appId: '00000000-0000-0000-0000-000000000000',
                 },
                 db,
                 transaction
             )
         ).to.reject(
             Error,
-            'Could not create appversion for appid: 99999, 1, undefined, undefined, undefined. Invalid appId, app does not exist.'
+            `Could not create appversion for appid: 00000000-0000-0000-0000-000000000000, ${users[0].id}, undefined, undefined, undefined. Invalid appId, app does not exist.`
         )
     })
 
@@ -73,8 +76,8 @@ describe('@data::createAppVersion', () => {
 
         const version = await createAppVersion(
             {
-                userId: 1,
-                appId: 1,
+                userId: users[0].id,
+                appId: apps[0].id,
                 demoUrl: 'https://www.dhis2.org',
                 sourceUrl: 'https://github.com/dhis2/app-hub/',
                 version: '12345',
@@ -85,11 +88,8 @@ describe('@data::createAppVersion', () => {
         await transaction.commit()
 
         expect(version).to.not.be.null()
-        expect(version.uuid).to.exist()
         expect(version.id).to.exist()
-        expect(version.id)
-            .to.be.a.number()
-            .greaterThan(0)
+        expect(version.id.length).to.be.equal(36)
 
         const dbAppVersion = await db('app_version')
             .select()
@@ -97,7 +97,6 @@ describe('@data::createAppVersion', () => {
             .first()
 
         expect(dbAppVersion.id).to.equal(version.id)
-        expect(dbAppVersion.uuid).to.equal(version.uuid)
 
         expect(dbAppVersion.demo_url).to.equal(version.demoUrl)
         expect(dbAppVersion.source_url).to.equal(version.sourceUrl)
@@ -111,8 +110,8 @@ describe('@data::createAppVersion', () => {
 
         const version = await createAppVersion(
             {
-                userId: 1,
-                appId: 1,
+                userId: users[0].id,
+                appId: apps[0].id,
             },
             db,
             transaction
@@ -120,11 +119,8 @@ describe('@data::createAppVersion', () => {
         await transaction.commit()
 
         expect(version).to.not.be.null()
-        expect(version.uuid).to.exist()
         expect(version.id).to.exist()
-        expect(version.id)
-            .to.be.a.number()
-            .greaterThan(0)
+        expect(version.id.length).to.be.equal(36)
 
         const dbAppVersion = await db('app_version')
             .select()
@@ -132,7 +128,6 @@ describe('@data::createAppVersion', () => {
             .first()
 
         expect(dbAppVersion.id).to.equal(version.id)
-        expect(dbAppVersion.uuid).to.equal(version.uuid)
 
         expect(dbAppVersion.demo_url).to.be.empty()
         expect(dbAppVersion.source_url).to.be.empty()

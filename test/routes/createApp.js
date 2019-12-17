@@ -9,11 +9,13 @@ const db = require('knex')(knexConfig)
 
 const { init } = require('../../src/server/init-server')
 
+const users = require('../../seeds/mock/users')
+
 describe('test create app', () => {
     const { config } = require('../../src/server/noauth-config')
     let server
     beforeEach(async () => {
-        config.auth.noAuthUserIdMapping = 1
+        config.auth.noAuthUserIdMapping = users[0].id
         server = await init(db, config)
     })
 

@@ -10,6 +10,8 @@ const db = require('knex')(knexConfig)
 
 const { init } = require('../../../src/server/init-server')
 
+const users = require('../../../seeds/mock/users')
+
 describe('api/v2/channels', () => {
     const { config } = require('../../../src/server/env-config')
 
@@ -67,7 +69,7 @@ describe('api/v2/channels without configured auth', () => {
 
     let server
     before(async () => {
-        config.auth.noAuthUserIdMapping = 1
+        config.auth.noAuthUserIdMapping = users[0].id
 
         server = await init(db, config)
     })
@@ -88,8 +90,8 @@ describe('api/v2/channels without configured auth', () => {
         expect(response.statusCode).to.equal(200)
 
         const channel = JSON.parse(response.payload)
-        expect(channel.uuid).to.exist()
-        expect(channel.uuid).to.not.be.empty()
+        expect(channel.id).to.exist()
+        expect(channel.id).to.not.be.empty()
         expect(channel.name).to.exist()
         expect(channel.name).to.equal('Test')
     })
@@ -123,7 +125,7 @@ describe('api/v2/channels without configured auth', () => {
 
         const response = await server.inject({
             method: 'PUT',
-            url: '/api/v2/channels/' + channel.uuid,
+            url: '/api/v2/channels/' + channel.id,
             payload: {
                 name: 'NewName',
             },
@@ -132,7 +134,7 @@ describe('api/v2/channels without configured auth', () => {
         expect(response.statusCode).to.equal(200)
         const changedChannel = JSON.parse(response.payload)
 
-        expect(changedChannel.uuid).to.equal(channel.uuid)
+        expect(changedChannel.id).to.equal(channel.id)
         expect(changedChannel.name).to.equal('NewName')
     })
 })
