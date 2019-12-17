@@ -7,7 +7,7 @@ const { canChangeAppStatus } = require('../../../../security')
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'POST',
-    path: '/v1/apps/{appUuid}/approval',
+    path: '/v1/apps/{appId}/approval',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -42,7 +42,7 @@ module.exports = {
             .innerJoin('app_version_localised', {
                 'app_version_localised.app_version_id': 'app_version.id',
             })
-            .where({ 'app.uuid': request.params.appUuid, language_code: 'en' })
+            .where({ 'app.id': request.params.appId, language_code: 'en' })
 
         if (row.length > 0) {
             const updated = await knex('app_status')

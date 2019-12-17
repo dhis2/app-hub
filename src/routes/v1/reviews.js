@@ -12,14 +12,14 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/reviews/{uuid}',
+        path: '/reviews/{appId}',
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
 
             const reviews = await h.context
                 .db('reviews')
                 .innerJoin('apps', 'reviews.app', 'apps.app_id')
-                .where('apps.uuid', request.params.uuid)
+                .where('apps.id', request.params.appId)
 
             return reviews
         },

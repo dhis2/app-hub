@@ -13,7 +13,7 @@ const {
 
 module.exports = {
     method: 'PUT',
-    path: '/v1/apps/{appUuid}/images/{mediaUuid}',
+    path: '/v1/apps/{appId}/images/{mediaId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -31,15 +31,12 @@ module.exports = {
 
         const db = h.context.db
 
-        const { mediaUuid, appUuid } = request.params
+        const { mediaId, appId } = request.params
 
         const jsonPayload = request.payload
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(
-            request.params.appUuid,
-            db
-        )
+        const appDeveloperId = await getAppDeveloperId(appId, db)
 
         const isManager = currentUserIsManager(request)
 
@@ -52,8 +49,8 @@ module.exports = {
                 if (jsonPayload.logo) {
                     await setImageAsLogoForApp(
                         {
-                            appUuid,
-                            mediaUuid,
+                            appId,
+                            mediaId,
                         },
                         db,
                         transaction
@@ -64,7 +61,7 @@ module.exports = {
                 if (jsonPayload.caption || jsonPayload.description) {
                     await updateImageMeta(
                         {
-                            uuid: mediaUuid,
+                            id: mediaId,
                             caption: jsonPayload.caption,
                             description: jsonPayload.description,
                         },

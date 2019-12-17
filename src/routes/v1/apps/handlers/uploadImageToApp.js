@@ -16,7 +16,7 @@ const {
 
 module.exports = {
     method: 'POST',
-    path: '/v1/apps/{appUuid}/images',
+    path: '/v1/apps/{appId}/images',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -44,7 +44,7 @@ module.exports = {
 
         const currentUser = await getCurrentUserFromRequest(request, knex)
         const appDeveloperId = await getAppDeveloperId(
-            request.params.appUuid,
+            request.params.appId,
             knex
         )
 
@@ -57,11 +57,7 @@ module.exports = {
                 .code(401)
         }
 
-        const appVersions = await getAppsById(
-            request.params.appUuid,
-            'en',
-            knex
-        )
+        const appVersions = await getAppsById(request.params.appId, 'en', knex)
 
         const imageFile = request.payload.file
         const imageFileMetadata = imageFile.hapi

@@ -52,7 +52,7 @@ const setImageAsLogoForApp = async (params, knex, transaction) => {
             .update('image_type', ImageType.Logo)
     } catch (err) {
         throw new Error(
-            `Could not update logo for app: ${appId}.  Media uuid: ${mediaUuid}. ${err.message}`
+            `Could not update logo for app: ${appId}.  Media id: ${mediaId}. ${err.message}`
         )
     }
 }

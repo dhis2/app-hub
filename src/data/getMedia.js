@@ -2,11 +2,11 @@ const debug = require('debug')('apphub:server:data:getMedia')
 /**
  * Gets information about an image/media
  *
- * @param {string} id UUID for the media to retreive
+ * @param {string} id id for the media to retreive
  * @param {*} knex db instance
  * @param {Promise<object>}
  */
-const getMedia = (uuid, knex) => {
+const getMedia = (id, knex) => {
     try {
         return knex('app_version_media')
             .innerJoin(
