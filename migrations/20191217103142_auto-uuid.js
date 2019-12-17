@@ -10,15 +10,20 @@ const tables = [
     'review',
     'user_external_id',
     'users',
+    'organisation',
 ]
 
 exports.up = async knex => {
+    //await knex.raw(`create extension if not exists "uuid-ossp"`)
+
     //requires this to be run with correct privileges on the database: create extension if not exists "uuid-ossp"
     await Promise.all(tables.map(async table => setDefault(table, knex)))
 }
 
 exports.down = async knex => {
     await Promise.all(tables.map(async table => dropDefault(table, knex)))
+
+    //await knex.raw(`drop extension if exists "uuid-ossp"`)
 }
 
 const setDefault = (channel, knex) =>
