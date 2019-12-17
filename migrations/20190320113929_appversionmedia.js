@@ -1,18 +1,9 @@
 exports.up = async knex => {
     await knex.schema.createTable('app_version_media', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
+        table.uuid('id').primary()
 
         table
-            .uuid('uuid')
-            .unique()
-            .notNullable()
-
-        table
-            .integer('image_type')
-            .unsigned()
+            .integer('image_type') //enum/integer from code so no uuid here
             .notNullable()
 
         table.string('original_filename', 255).notNullable()
@@ -22,25 +13,16 @@ exports.up = async knex => {
             .defaultTo(knex.fn.now())
             .notNullable()
 
-        table
-            .integer('created_by_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('created_by_user_id').notNullable()
 
-        table
-            .integer('media_type_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('media_type_id').notNullable()
 
         table
             .foreign('media_type_id')
             .references('id')
             .inTable('media_type')
 
-        table
-            .integer('app_version_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('app_version_id').notNullable()
 
         table
             .foreign('app_version_id')

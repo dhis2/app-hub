@@ -2,20 +2,9 @@ const { AppStatus, AppType } = require('../src/enums')
 
 exports.up = async knex => {
     await knex.schema.createTable('app_version', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
+        table.uuid('id').primary()
 
-        table
-            .integer('app_id')
-            .unsigned()
-            .notNullable()
-
-        table
-            .uuid('uuid')
-            .unique()
-            .notNullable()
+        table.uuid('app_id').notNullable()
 
         table.string('version', 50).notNullable()
 
@@ -34,12 +23,9 @@ exports.up = async knex => {
             .inTable('app')
             .onDelete('CASCADE')
 
-        table
-            .integer('created_by_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('created_by_user_id').notNullable()
 
-        table.integer('updated_by_user_id').unsigned()
+        table.uuid('updated_by_user_id')
 
         table.string('source_url', 500)
 

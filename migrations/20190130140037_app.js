@@ -2,15 +2,7 @@ const { AppStatus, AppType } = require('../src/enums')
 
 exports.up = async knex => {
     await knex.schema.createTable('app', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
-
-        table
-            .uuid('uuid')
-            .unique()
-            .notNullable()
+        table.uuid('id').primary()
 
         table.enu('type', [
             AppType.APP,
@@ -25,22 +17,13 @@ exports.up = async knex => {
 
         table.timestamp('updated_at', true)
 
-        table
-            .integer('created_by_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('created_by_user_id').notNullable()
 
-        table
-            .integer('developer_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('developer_user_id').notNullable()
 
-        table.integer('updated_by_user_id').unsigned()
+        table.uuid('updated_by_user_id')
 
-        table
-            .integer('organisation_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('organisation_id').notNullable()
 
         table
             .foreign('organisation_id')

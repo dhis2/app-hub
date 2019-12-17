@@ -2,15 +2,9 @@ const { AppStatus } = require('../src/enums')
 
 exports.up = async knex => {
     await knex.schema.createTable('app_status', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
+        table.uuid('id').primary()
 
-        table
-            .integer('app_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('app_id').notNullable()
 
         table
             .timestamp('created_at', true)
@@ -18,10 +12,7 @@ exports.up = async knex => {
             .notNullable()
             .index()
 
-        table
-            .integer('created_by_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('created_by_user_id').notNullable()
 
         table.enu('status', [
             AppStatus.PENDING,

@@ -1,19 +1,8 @@
 exports.up = async knex => {
     await knex.schema.createTable('review', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
+        table.uuid('id').primary()
 
-        table
-            .uuid('uuid')
-            .unique()
-            .notNullable()
-
-        table
-            .integer('app_version_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('app_version_id').notNullable()
 
         table
             .foreign('app_version_id')
@@ -33,7 +22,7 @@ exports.up = async knex => {
 
     await knex.raw(`
         CREATE VIEW app_review AS 
-            SELECT app.uuid, appver.version, review.rating, review.reviewtext FROM app 
+            SELECT app.id, appver.version, review.rating, review.reviewtext FROM app 
                 INNER JOIN app_version AS appver
                     ON app.id = appver.app_id 
                 INNER JOIN review 

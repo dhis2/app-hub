@@ -1,5 +1,5 @@
-const uuid = require('uuid/v4')
-const slugify = require('slugify')
+const users = require('./mock/users')
+const organisations = require('./mock/organisations')
 
 const sleep = ms => {
     return new Promise(resolve => setTimeout(resolve, ms))
@@ -17,26 +17,7 @@ exports.seed = async knex => {
     console.log('Inserting users')
 
     //Developers
-    await knex('users').insert([
-        {
-            id: 1,
-            uuid: '58262f57-4f38-45c5-a3c2-9e30ab3ba2da',
-            email: 'apphub-api@dhis2.org',
-            name: 'Mr Jenkins',
-        },
-        {
-            id: 2,
-            uuid: 'd30bfdae-ac6e-4ed4-8b2c-3cd1787922f4',
-            email: 'erik@dhis2.org',
-            name: 'Erik Arenhill',
-        },
-        {
-            id: 3,
-            uuid: '71bced64-c7f7-4b70-aa09-9b8d1e59ed49',
-            email: 'viktor@dhis2.org',
-            name: 'Viktor Varland',
-        },
-    ])
+    await knex('users').insert(users)
 
     console.log('Inserting user_external_id')
     if (!process.env.AUTH0_AUDIENCE) {
@@ -46,8 +27,8 @@ exports.seed = async knex => {
     } else {
         await knex('user_external_id').insert([
             {
-                id: 1,
-                user_id: 1,
+                id: '46e00c3b-4668-4b93-bc6f-a46bc21f1e5d',
+                user_id: users[0].id,
                 external_id: `${process.env.AUTH0_AUDIENCE}@clients`,
             },
         ])
@@ -56,28 +37,13 @@ exports.seed = async knex => {
     console.log('Inserting organisations')
 
     //Organisations
-    await knex('organisation').insert([
-        {
-            id: 1,
-            uuid: uuid(),
-            name: 'DHIS2',
-            slug: slugify('DHIS2', { lower: true }),
-            created_by_user_id: 1,
-        },
-        {
-            id: 2,
-            uuid: uuid(),
-            name: 'World Health Organization',
-            slug: slugify('World Health Organization', { lower: true }),
-            created_by_user_id: 1,
-        },
-    ])
+    await knex('organisation').insert(organisations)
 
     console.log('Inserting user-organisations #01')
     //user-organisations
     await knex('user_organisation').insert([
-        { organisation_id: 1, user_id: 3 }, //viktor -> dhis2
-        { organisation_id: 2, user_id: 2 }, //erik -> who
+        { organisation_id: organisations[0].id, user_id: users[2].id }, //viktor -> dhis2
+        { organisation_id: organisations[1].id, user_id: users[1].id }, //erik -> who
     ])
 
     console.log('Inserting user-organisations #02')
@@ -85,6 +51,6 @@ exports.seed = async knex => {
     //to get another timestamp
     await sleep(500)
     await knex('user_organisation').insert([
-        { organisation_id: 1, user_id: 1 }, //apphub -> dhis2
+        { organisation_id: organisations[0].id, user_id: users[0].id }, //apphub-api -> dhis2
     ])
 }
