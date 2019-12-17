@@ -3,7 +3,7 @@ const { AppStatus } = require('../../../../enums')
 const { getFile } = require('../../../../utils')
 
 module.exports = {
-    //unauthenticated endpoint returning the approved app for the specified uuid
+    //unauthenticated endpoint returning the approved app for the specified id
     method: 'GET',
     path:
         '/v1/apps/download/{organisation_slug}/{appver_slug}/{app_version}/app.zip',
@@ -34,7 +34,7 @@ module.exports = {
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
         debug(`Fetching file from ${item.id}/${item.version_id}`)
-        const file = await getFile(`${item.uuid}/${item.version_id}`, 'app.zip')
+        const file = await getFile(`${item.id}/${item.version_id}`, 'app.zip')
 
         return h
             .response(file.Body)

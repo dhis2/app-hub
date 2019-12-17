@@ -11,7 +11,7 @@ const EditAppVersionModel = require('../../../../models/v1/in/EditAppVersionMode
 
 module.exports = {
     method: 'PUT',
-    path: '/v1/apps/{appUuid}/versions/{versionUuid}',
+    path: '/v1/apps/{appId}/versions/{versionId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -35,13 +35,10 @@ module.exports = {
 
         const db = h.context.db
 
-        const { appUuid, versionUuid } = request.params
+        const { appId, versionId } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(
-            request.params.appUuid,
-            db
-        )
+        const appDeveloperId = await getAppDeveloperId(appId, db)
 
         if (
             currentUserIsManager(request) ||
@@ -61,12 +58,13 @@ module.exports = {
 
                 await updateAppVersion(
                     {
-                        uuid: versionUuid,
+                        id: versionId,
                         maxDhisVersion,
                         minDhisVersion,
                         demoUrl,
                         version,
                         channel,
+                        userId: currentUser.id,
                     },
                     db,
                     transaction
@@ -76,7 +74,7 @@ module.exports = {
                 //Legacy return format
                 //{"message":"Version with id xxxxxxxx updated","httpStatus":"OK","httpStatusCode":200}
                 return {
-                    message: `Version with id ${versionUuid} updated`,
+                    message: `Version with id ${versionId} updated`,
                     httpStatus: 'OK',
                     httpStatusCode: 200,
                 }

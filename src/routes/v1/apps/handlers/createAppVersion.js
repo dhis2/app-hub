@@ -26,7 +26,7 @@ const { convertAppToV1AppVersion } = require('../formatting')
 
 module.exports = {
     method: 'POST',
-    path: '/v1/apps/{appUuid}/versions',
+    path: '/v1/apps/{appId}/versions',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -82,14 +82,14 @@ module.exports = {
         debug(`Received version:\n ${JSON.stringify(appVersionJson, null, 2)}`)
 
         const db = h.context.db
-        const { appUuid } = request.params
+        const { appId } = request.params
 
         //TODO: make langCode dynamic? legacy v1 endpoint supports english only
         const languageCode = 'en'
 
-        let dbAppRows = await getAppsById(appUuid, languageCode, db)
+        let dbAppRows = await getAppsById(appId, languageCode, db)
         if (!dbAppRows || dbAppRows.length === 0) {
-            throw Boom.badRequest('An app with that uuid does not exist')
+            throw Boom.badRequest('An app with that id does not exist')
         }
 
         //check if that version already exists on this app
@@ -102,13 +102,13 @@ module.exports = {
             )
         }
 
-        const appDeveloperId = await getAppDeveloperId(appUuid, db)
+        const appDeveloperId = await getAppDeveloperId(appId, db)
 
         //check permissions and update if we're owner of the app or a manager
         const currentUser = await getCurrentUserFromRequest(request, db)
         const currentUserId = currentUser.id
 
-        let versionUuid = null
+        let versionId = null
 
         if (currentUserIsManager(request) || currentUserId === appDeveloperId) {
             const transaction = await db.transaction()
@@ -138,7 +138,7 @@ module.exports = {
                     db,
                     transaction
                 )
-                versionUuid = appVersion.uuid
+                versionId = appVersion.id
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal('Could not create app version', err)
@@ -183,11 +183,7 @@ module.exports = {
             }
 
             try {
-                await saveFile(
-                    `${appUuid}/${versionUuid}`,
-                    'app.zip',
-                    file._data
-                )
+                await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal(`Could not save app file to storage`, err)
@@ -199,7 +195,7 @@ module.exports = {
         }
 
         //fetch the new version rows and filter out the one we've just created data for
-        dbAppRows = await getAppsById(appUuid, languageCode, db)
+        dbAppRows = await getAppsById(appId, languageCode, db)
         const [appWithVersion] = dbAppRows.filter(
             app => app.version === appVersionJson.version
         )

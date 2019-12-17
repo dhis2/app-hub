@@ -79,11 +79,11 @@ const convertAll = (apps, request) => {
     const formattedApps = {}
 
     apps.forEach(app => {
-        let currentApp = formattedApps[app.id]
+        let currentApp = formattedApps[app.app_id]
 
         if (!currentApp) {
             const v1App = convertDbAppViewRowToAppApiV1Object(app)
-            formattedApps[app.id] = v1App
+            formattedApps[app.app_id] = v1App
             currentApp = v1App
         }
 

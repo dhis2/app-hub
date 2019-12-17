@@ -11,7 +11,7 @@ const { deleteFile } = require('../../../../utils')
 
 module.exports = {
     method: 'DELETE',
-    path: '/v1/apps/{appUuid}/images/{mediaId}',
+    path: '/v1/apps/{appId}/images/{mediaId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -47,7 +47,7 @@ module.exports = {
 
                 await transaction.commit()
 
-                await deleteFile(`${appUuid}/${version_id}`, media_id)
+                await deleteFile(`${appId}/${version_id}`, media_id)
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal(err)

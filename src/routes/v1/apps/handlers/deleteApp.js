@@ -11,7 +11,7 @@ const deleteApp = require('../../../../data/deleteApp')
 module.exports = {
     //authenticated endpoint returning all apps no matter which status they have
     method: 'DELETE',
-    path: '/v1/apps/{appUuid}',
+    path: '/v1/apps/{appId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -33,15 +33,15 @@ module.exports = {
 
         const knex = h.context.db
 
-        const appUuid = request.params.appUuid
-        const appRows = await getAppsById(appUuid, 'en', knex)
+        const appId = request.params.appId
+        const appRows = await getAppsById(appId, 'en', knex)
         const item = appRows[0]
 
         const trx = await knex.transaction()
         try {
-            await deleteApp(appUuid, knex, trx)
+            await deleteApp(appId, knex, trx)
             await trx.commit()
-            await deleteDir(item.uuid)
+            await deleteDir(item.id)
         } catch (err) {
             await trx.rollback()
             throw Boom.internal(err)

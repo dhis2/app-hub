@@ -39,10 +39,7 @@ module.exports = {
         const db = h.context.db
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(
-            request.params.appUuid,
-            db
-        )
+        const appDeveloperId = await getAppDeveloperId(request.params.appId, db)
 
         if (
             currentUserIsManager(request) ||
