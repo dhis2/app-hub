@@ -1,24 +1,13 @@
 exports.up = async knex => {
     await knex.schema.createTable('organisation', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
-
-        table
-            .uuid('uuid')
-            .unique()
-            .notNullable()
+        table.uuid('id').primary()
 
         table
             .timestamp('created_at', true)
             .defaultTo(knex.fn.now())
             .notNullable()
 
-        table
-            .integer('created_by_user_id')
-            .unsigned()
-            .notNullable()
+        table.uuid('created_by_user_id').notNullable()
 
         table
             .foreign('created_by_user_id')

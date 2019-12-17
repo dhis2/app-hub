@@ -9,47 +9,41 @@ exports.seed = async knex => {
 
     const reviews = [
         {
-            id: 1,
+            id: uuid(),
             reviewtext: 'This is a really good app.',
             rating: 4,
             app_version_id: dhis2AppVersions[0].id,
-            uuid: uuid(),
         },
         {
-            id: 2,
+            id: uuid(),
             reviewtext: 'This version is quite buggy.',
             rating: 2,
             app_version_id: dhis2AppVersions[1].id,
-            uuid: uuid(),
         },
         {
-            id: 3,
+            id: uuid(),
             reviewtext: 'This version is working great again, good job team!',
             rating: 5,
             app_version_id: dhis2AppVersions[2].id,
-            uuid: uuid(),
         },
 
         {
-            id: 4,
+            id: uuid(),
             reviewtext: 'This is a really good app.',
             rating: 4,
             app_version_id: whoAppVersions[0].id,
-            uuid: uuid(),
         },
         {
-            id: 5,
+            id: uuid(),
             reviewtext: 'This version is VERY buggy.',
             rating: 2,
             app_version_id: whoAppVersions[1].id,
-            uuid: uuid(),
         },
         {
-            id: 6,
+            id: uuid(),
             reviewtext: 'This version is working ok',
             rating: 3,
             app_version_id: whoAppVersions[2].id,
-            uuid: uuid(),
         },
     ]
 

@@ -1,9 +1,6 @@
 exports.up = async knex => {
     await knex.schema.createTable('media_type', table => {
-        table
-            .increments('id')
-            .unsigned()
-            .primary()
+        table.uuid('id').primary()
 
         table.string('description', 100)
 
