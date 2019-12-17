@@ -11,10 +11,14 @@ const db = require('knex')(knexConfig)
 const { ImageType } = require('../../src/enums')
 const {
     addAppVersionMedia,
-    getAppsByUuid,
+    getAppsById,
     createApp,
     getAppById,
 } = require('../../src/data')
+
+const users = require('../../seeds/mock/users')
+const apps = require('../../seeds/mock/apps')
+const appVersions = require('../../seeds/mock/appversions')
 
 describe('@data::addAppVersionMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
@@ -26,8 +30,8 @@ describe('@data::addAppVersionMedia', () => {
 
     it('should add appmedia successfully', async () => {
         const appMedia = {
-            appVersionId: 1, //DHIS2 app
-            userId: 1, //travis user
+            appVersionId: appVersions[0][0].id, //DHIS2 app
+            userId: users[0].id, //travis user
             imageType: ImageType.Screenshot,
             fileName: 'screenshot.jpg',
             mime: 'image/jpeg',
@@ -35,16 +39,18 @@ describe('@data::addAppVersionMedia', () => {
             description: 'a description',
         }
         const trx = await db.transaction()
-        const { id, uuid } = await addAppVersionMedia(appMedia, db, trx)
+        const { id } = await addAppVersionMedia(appMedia, db, trx)
         await trx.commit()
-        expect(id)
-            .to.be.number()
-            .min(1)
-        expect(uuid.length).to.be.equal(36)
+        expect(id).to.be.string()
+        expect(id.length).to.be.equal(36)
 
-        const appWithVersion = await getAppById(1, 'en', db)
+        const appWithVersion = await getAppById(
+            appVersions[0][0].app_id,
+            'en',
+            db
+        )
         const mediaApp = appWithVersion.find(
-            a => a.version_id === 1 && a.media_id === id
+            a => a.version_id === appVersions[0][0].id && a.media_id === id
         )
         expect(mediaApp).to.not.be.null()
 
@@ -53,39 +59,37 @@ describe('@data::addAppVersionMedia', () => {
     })
 })
 
-describe('@data::getAppsByUuid', () => {
+describe('@data::getAppsById', () => {
     it('should require uuid parameter', async () => {
-        await expect(getAppsByUuid(null, 'sv', null)).to.reject(
+        await expect(getAppsById(null, 'sv', null)).to.reject(
             Error,
-            `Missing parameter 'uuid'`
+            `Missing parameter 'id'`
         )
     })
 
     it('should require languagecode parameter', async () => {
-        await expect(getAppsByUuid('1234', null, null)).to.reject(
-            Error,
-            `Missing parameter 'languageCode'`
-        )
+        await expect(
+            getAppsById('2621d406-a908-476a-bcd2-e55abe3445b4', null, null)
+        ).to.reject(Error, `Missing parameter 'languageCode'`)
     })
 
     it('should require knex parameter', async () => {
-        await expect(getAppsByUuid('1234', 'sv', null)).to.reject(
-            Error,
-            `Missing parameter 'knex'`
-        )
+        await expect(
+            getAppsById('2621d406-a908-476a-bcd2-e55abe3445b4', 'sv', null)
+        ).to.reject(Error, `Missing parameter 'knex'`)
     })
 })
 
 describe('@data::createApp', () => {
-    it('should require userId parameter and it to be a number', async () => {
+    it('should require userId parameter and it to be a uuid', async () => {
         await expect(createApp({}, null, null)).to.reject(Error)
 
         await expect(createApp({ userId: '' }, null, null)).to.reject(Error)
     })
 
-    it('should require orgId parameter and it to be a number', async () => {
+    it('should require orgId parameter and it to be a uuid', async () => {
         const config = {
-            userId: 1,
+            userId: users[0].id,
         }
 
         await expect(createApp(config, null, null)).to.reject(Error)
@@ -98,29 +102,30 @@ describe('@data::createApp', () => {
 
 describe('@data::getOrganisation', () => {
     const {
-        getOrganisationByUuid,
+        getOrganisationById,
         getOrganisationsByName,
     } = require('../../src/data')
 
-    it('should throw an error passing invalid uuid', async () => {
-        await expect(getOrganisationByUuid('asdf', db)).to.reject(Error)
+    it('should throw an error passing invalid id', async () => {
+        await expect(getOrganisationById('asdf', db)).to.reject(Error)
     })
 
-    it('get the organisation with the specified uuid', async () => {
+    it('get the organisation with the specified id', async () => {
         console.log('db:', db)
         const [dhis2Org] = await getOrganisationsByName('DHIS2', db)
         expect(dhis2Org).to.not.be.null()
 
-        const dhis2OrgByUuid = await getOrganisationByUuid(dhis2Org.uuid, db)
-        expect(dhis2OrgByUuid).to.not.be.null()
+        const dhis2OrgById = await getOrganisationById(dhis2Org.id, db)
+        expect(dhis2OrgById).to.not.be.null()
 
-        expect(dhis2Org.id).to.equal(dhis2OrgByUuid.id)
+        expect(dhis2Org.id).to.equal(dhis2OrgById.id)
     })
 
     it('get the organisation named DHIS2', async () => {
         const [dhis2Org] = await getOrganisationsByName('DHIS2', db)
 
         expect(dhis2Org).to.not.be.null()
+        expect(dhis2Org.id).to.be.a.string()
         expect(dhis2Org.name).to.equal('DHIS2')
     })
 })
@@ -137,7 +142,7 @@ describe('@data::createOrganisation', () => {
 
         const org = await createOrganisation(
             {
-                userId: 1,
+                userId: users[0].id,
                 name: 'Test create organisation åäöèé',
             },
             db,
@@ -146,24 +151,21 @@ describe('@data::createOrganisation', () => {
 
         await transaction.commit()
 
-        expect(org.id)
-            .to.be.a.number()
-            .min(1)
+        expect(org.id).to.be.a.string()
 
-        expect(org.uuid.length).to.be.equal(36)
+        expect(org.id.length).to.be.equal(36)
         expect(org.slug).to.equal('test-create-organisation-aaoee')
         expect(org.name).to.equal('Test create organisation åäöèé')
 
         const [shouldExist] = await getOrganisationsByName(org.name, db)
         expect(shouldExist.id).to.be.equal(org.id)
-        expect(shouldExist.uuid).to.be.equal(org.uuid)
         expect(shouldExist.name).to.be.equal(org.name)
         expect(shouldExist.slug).to.be.equal(org.slug)
 
         //Delete then try to fetch again.
         transaction = await db.transaction()
         const successfullyDeleted = await deleteOrganisation(
-            { uuid: org.uuid },
+            { id: org.id },
             db,
             transaction
         )
@@ -192,16 +194,13 @@ describe('@data::createUser', () => {
 
         await transaction.commit()
 
-        expect(id)
-            .to.be.number()
-            .min(1)
+        expect(id).to.be.a.string()
     })
 })
 
 describe('@data::addUserToOrganisation', () => {
     const {
         addUserToOrganisation,
-        getOrganisationsByName,
         createOrganisation,
     } = require('../../src/data')
 
@@ -209,13 +208,13 @@ describe('@data::addUserToOrganisation', () => {
         const transaction = await db.transaction()
 
         const org = await createOrganisation(
-            { userId: 1, name: 'A new organisation' },
+            { userId: users[0].id, name: 'A new organisation' },
             db,
             transaction
         )
 
         await addUserToOrganisation(
-            { userId: 1, organisationId: org.id },
+            { userId: users[0].id, organisationId: org.id },
             db,
             transaction
         )
@@ -234,12 +233,12 @@ describe('@data::updateApp', () => {
 
         const firstApp = allApps[0]
         expect(firstApp).to.not.be.null()
-        expect(firstApp.uuid).to.not.be.null()
+        expect(firstApp.id).to.not.be.null()
 
-        const { uuid } = firstApp
+        const { app_id } = firstApp
 
         const newData = {
-            uuid: firstApp.uuid,
+            id: app_id,
             userId: firstApp.developer_id,
             name: 'Changed name',
             sourceUrl: 'https://some/url',
@@ -252,7 +251,7 @@ describe('@data::updateApp', () => {
 
         await transaction.commit()
 
-        const allAppVersionsWithUuid = await getAppsByUuid(uuid, 'en', db)
+        const allAppVersionsWithUuid = await getAppsById(app_id, 'en', db)
 
         expect(allAppVersionsWithUuid.length).to.be.min(1)
 
@@ -271,14 +270,14 @@ describe('@data::updateAppVersion', () => {
         let transaction = await db.transaction()
 
         //See seeds/mock/apps.js
-        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
-        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+        const mockAppId = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionIdToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
 
         //First check that we fetch the correct object to change
-        const [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
-            app => app.version_uuid === appVersionUuidToUpdate
+        const [app] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
         )
-        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.version).to.equal('0.1')
         expect(app.max_dhis2_version).to.equal(null)
         expect(app.min_dhis2_version).to.equal('2.28')
@@ -286,7 +285,7 @@ describe('@data::updateAppVersion', () => {
 
         await updateAppVersion(
             {
-                uuid: appVersionUuidToUpdate,
+                id: appVersionIdToUpdate,
                 userId: app.developer_id,
                 minDhisVersion: '123',
                 maxDhisVersion: '456',
@@ -299,12 +298,10 @@ describe('@data::updateAppVersion', () => {
 
         await transaction.commit()
 
-        const [updatedApp] = (await getAppsByUuid(
-            mockAppUuid,
-            'en',
-            db
-        )).filter(app => app.version_uuid === appVersionUuidToUpdate)
-        expect(updatedApp.version_uuid).to.equal(appVersionUuidToUpdate)
+        const [updatedApp] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
+        )
+        expect(updatedApp.version_id).to.equal(appVersionIdToUpdate)
         expect(updatedApp.min_dhis2_version).to.equal('123')
         expect(updatedApp.max_dhis2_version).to.equal('456')
         expect(updatedApp.version).to.equal('789')
@@ -314,7 +311,7 @@ describe('@data::updateAppVersion', () => {
         transaction = await db.transaction()
         await updateAppVersion(
             {
-                uuid: appVersionUuidToUpdate,
+                id: appVersionIdToUpdate,
                 userId: app.developer_id,
                 minDhisVersion: app.minDhisVersion,
                 maxDhisVersion: app.maxDhisVersion,
@@ -331,28 +328,29 @@ describe('@data::updateAppVersion', () => {
         let transaction = await db.transaction()
 
         //See seeds/mock/apps.js
-        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
-        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+        const mockAppId = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionIdToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
 
         //First check that we fetch the correct object to change
-        let [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
-            app => app.version_uuid === appVersionUuidToUpdate
+        let [app] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
         )
-        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.channel_name).to.equal('Stable')
 
         await updateAppVersion(
             {
-                uuid: appVersionUuidToUpdate,
+                id: appVersionIdToUpdate,
                 channel: 'Development',
+                userId: users[0].id,
             },
             db,
             transaction
         )
 
         await transaction.commit()
-        ;[app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
-            app => app.version_uuid === appVersionUuidToUpdate
+        ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
         )
         expect(app.channel_name).to.equal('Development')
 
@@ -360,8 +358,9 @@ describe('@data::updateAppVersion', () => {
         transaction = await db.transaction()
         await updateAppVersion(
             {
-                uuid: appVersionUuidToUpdate,
+                id: appVersionIdToUpdate,
                 channel: 'Stable',
+                userId: users[0].id,
             },
             db,
             transaction
@@ -369,22 +368,22 @@ describe('@data::updateAppVersion', () => {
         await transaction.commit()
 
         //Check that the switch back to Stable worked
-        ;[app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
-            app => app.version_uuid === appVersionUuidToUpdate
+        ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
         )
         expect(app.channel_name).to.equal('Stable')
     })
 
     it('shouldnt be able to switch to a release channel that doesnt exist', async () => {
         //See seeds/mock/apps.js
-        const mockAppUuid = '2621d406-a908-476a-bcd2-e55abe3445b4'
-        const appVersionUuidToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
+        const mockAppId = '2621d406-a908-476a-bcd2-e55abe3445b4'
+        const appVersionIdToUpdate = '792aa26c-5595-4ae5-a2f8-028439060e2e'
 
         //First check that we fetch the correct object to change
-        const [app] = (await getAppsByUuid(mockAppUuid, 'en', db)).filter(
-            app => app.version_uuid === appVersionUuidToUpdate
+        const [app] = (await getAppsById(mockAppId, 'en', db)).filter(
+            app => app.version_id === appVersionIdToUpdate
         )
-        expect(app.version_uuid).to.equal(appVersionUuidToUpdate)
+        expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.channel_name).to.equal('Stable')
 
         const transaction = await db.transaction()
@@ -393,8 +392,9 @@ describe('@data::updateAppVersion', () => {
         await expect(
             updateAppVersion(
                 {
-                    uuid: appVersionUuidToUpdate,
+                    id: appVersionIdToUpdate,
                     channel: 'Foobar',
+                    userId: users[0].id,
                 },
                 db,
                 transaction
@@ -422,8 +422,8 @@ describe('@data::createAppStatus', () => {
         await expect(
             createAppStatus(
                 {
-                    userId: 1,
-                    appId: 999999, //something that doesnt exist in our test database
+                    userId: users[0].id,
+                    appId: '792aa26c-0000-0000-0000-028439060e2e', //something that doesnt exist in our test database
                     status: 'PENDING',
                 },
                 db,
@@ -431,7 +431,7 @@ describe('@data::createAppStatus', () => {
             )
         ).to.reject(
             Error,
-            `Could not save app status: PENDING for appId: 999999. Invalid appId, app does not exist.`
+            `Could not save app status: PENDING for appId: 792aa26c-0000-0000-0000-028439060e2e. Invalid appId, app does not exist.`
         )
     })
 
@@ -440,16 +440,14 @@ describe('@data::createAppStatus', () => {
 
         const { id } = await createAppStatus(
             {
-                userId: 1,
-                appId: 1, //something that doesnt exist in our test database
+                userId: users[0].id,
+                appId: apps[0].id,
                 status: 'PENDING',
             },
             db,
             transaction
         )
 
-        expect(id)
-            .to.be.a.number()
-            .greaterThan(0)
+        expect(id).to.be.a.string()
     })
 })

@@ -17,13 +17,9 @@ describe('@data::channels', () => {
         const channel = await createChannel({ name: 'Test' }, db, transaction)
 
         expect(channel).to.not.be.null()
-        expect(channel.uuid).to.exist()
         expect(channel.id).to.exist()
 
-        expect(channel.uuid).to.have.length(36) //uuid
-        expect(channel.id)
-            .to.be.a.number()
-            .greaterThan(0)
+        expect(channel.id).to.have.length(36) //uuid
 
         transaction.rollback()
     })
@@ -34,18 +30,16 @@ describe('@data::channels', () => {
         const channel = await createChannel({ name: 'Foo' }, db, transaction)
 
         expect(channel).to.not.be.null()
-        expect(channel.uuid).to.exist()
         expect(channel.id).to.exist()
         expect(channel.name).to.equal('Foo')
 
         const changedChannel = await renameChannel(
-            { name: 'Bar', uuid: channel.uuid },
+            { name: 'Bar', id: channel.id },
             db,
             transaction
         )
 
         expect(changedChannel.id).to.equal(channel.id)
-        expect(changedChannel.uuid).to.equal(channel.uuid)
         expect(changedChannel.name).to.equal('Bar')
 
         transaction.rollback()

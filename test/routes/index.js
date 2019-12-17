@@ -129,11 +129,11 @@ describe('Get all published apps [v1]', async () => {
 
     it('should be able to load the details of an approved app', async () => {
         const mockedApps = require('../../seeds/mock/apps')
-        const [firstMockedApp] = mockedApps
+        const firstMockedApp = mockedApps[0]
 
         const injectOptions = {
             method: 'GET',
-            url: `/api/v1/apps/${firstMockedApp.uuid}`,
+            url: `/api/v1/apps/${firstMockedApp.id}`,
         }
 
         const response = await server.inject(injectOptions)
@@ -142,11 +142,11 @@ describe('Get all published apps [v1]', async () => {
 
     it('should not able to load the details of a pending app when unauthenticated', async () => {
         const mockedApps = require('../../seeds/mock/apps')
-        const [pendingApp] = mockedApps.filter(apps => apps.id === 4)
+        const pendingApp = mockedApps[3]
 
         const injectOptions = {
             method: 'GET',
-            url: `/api/v1/apps/${pendingApp.uuid}`,
+            url: `/api/v1/apps/${pendingApp.id}`,
         }
 
         const response = await server.inject(injectOptions)

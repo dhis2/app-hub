@@ -8,18 +8,16 @@ const { expect } = require('@hapi/code')
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
+const users = require('../../seeds/mock/users')
+const apps = require('../../seeds/mock/apps')
+
 describe('@data::getAppDeveloperId', () => {
     const getAppDeveloperId = require('../../src/data/getAppDeveloperId')
 
     it('should return the correct developer id of an app', async () => {
-        const { uuid } = await db('app')
-            .select('uuid')
-            .where('id', 1)
-            .first()
-        const devId = await getAppDeveloperId(uuid, db)
+        const devId = await getAppDeveloperId(apps[0].id, db)
 
-        //first app in the seed/test db has developer_user_id = 2
-        expect(devId).to.equal(2)
+        expect(devId).to.equal(users[1].id)
     })
 
     it('should return false if no app/dev is found', async () => {
