@@ -3,7 +3,7 @@ const slugify = require('slugify')
 const uuid = require('uuid/v4')
 
 const paramsSchema = joi.object().keys({
-    userId: joi.number().required(),
+    userId: joi.string().uuid(),
     name: joi
         .string()
         .min(1)
@@ -13,8 +13,7 @@ const paramsSchema = joi.object().keys({
 /**
  * An organisation developing apps in the app hub
  * @typedef {object} Organisation
- * @property {number} id The internal database id
- * @property {string} uuid A unique "public" id
+ * @property {string} id The organisation id
  * @property {string} name Name of the organisation
  * @property {string} slug The slugified name in lowercase
  */
@@ -47,8 +46,6 @@ const createOrganisation = async (params, knex, transaction) => {
     const originalSlug = slugify(name, { lower: true })
     let slug = originalSlug
 
-    const orgUuid = uuid()
-
     try {
         let slugUniqueness = 2
         let foundUniqueSlug = false
@@ -70,10 +67,9 @@ const createOrganisation = async (params, knex, transaction) => {
                 created_by_user_id: userId,
                 name,
                 slug,
-                uuid: orgUuid,
             })
             .returning('id')
-        return { id, name, slug, uuid: orgUuid }
+        return { id, name, slug }
     } catch (err) {
         throw new Error(`Could not create organisation: ${err.message}`)
     }

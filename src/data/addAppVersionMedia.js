@@ -7,13 +7,13 @@ const paramSchema = joi
     .object()
     .keys({
         appVersionId: joi
-            .number()
-            .required()
-            .min(1),
+            .string()
+            .uuid()
+            .required(),
         userId: joi
-            .number()
-            .required()
-            .min(1),
+            .string()
+            .uuid()
+            .required(),
         imageType: joi
             .number()
             .required()
@@ -98,10 +98,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             )
         }
 
-        const mediaUuid = uuid()
-
         insertData = {
-            uuid: mediaUuid,
             image_type: imageType,
             original_filename: fileName,
             created_at: knex.fn.now(),
@@ -117,7 +114,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             .insert(insertData)
             .returning('id')
 
-        return { id, uuid: mediaUuid }
+        return { id }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
         throw new Error(

@@ -1,4 +1,3 @@
-const uuid = require('uuid/v4')
 const joi = require('@hapi/joi')
 
 const paramsSchema = joi
@@ -45,7 +44,6 @@ const createUser = async (params, knex, transaction) => {
     }
 
     const { email, name } = params
-    const newUuid = uuid()
 
     try {
         const [id] = await knex
@@ -53,13 +51,12 @@ const createUser = async (params, knex, transaction) => {
             .insert({
                 email,
                 name,
-                uuid: newUuid,
                 created_at: knex.fn.now(),
             })
             .into('users')
             .returning('id')
 
-        return { id, email, uuid: newUuid, name }
+        return { id, email, name }
     } catch (err) {
         throw new Error(
             `Could not create user: ${params.email}. ${err.message}`

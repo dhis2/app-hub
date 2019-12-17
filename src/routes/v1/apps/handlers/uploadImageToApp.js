@@ -9,7 +9,7 @@ const {
 } = require('../../../../security')
 
 const {
-    getAppsByUuid,
+    getAppsById,
     addAppVersionMedia,
     getAppDeveloperId,
 } = require('../../../../data')
@@ -57,7 +57,7 @@ module.exports = {
                 .code(401)
         }
 
-        const appVersions = await getAppsByUuid(
+        const appVersions = await getAppsById(
             request.params.appUuid,
             'en',
             knex
@@ -71,7 +71,7 @@ module.exports = {
         //Save the image to all versions? (previously the apphub stored media per app, and not version, so we keep them per version for now.
         //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
         const promises = appVersions.map(async appVersion => {
-            const { id, uuid } = await addAppVersionMedia(
+            const { id } = await addAppVersionMedia(
                 {
                     userId: currentUser.id,
                     appVersionId: appVersion.version_id,
@@ -84,8 +84,8 @@ module.exports = {
             )
 
             await saveFile(
-                `${appVersion.uuid}/${appVersion.version_uuid}`,
-                uuid,
+                `${appVersion.id}/${appVersion.version_id}`,
+                id,
                 imageFile._data
             )
         })

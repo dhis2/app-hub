@@ -23,7 +23,7 @@ const def = Joi.object().keys({
         .required(),
 
     id: Joi.string()
-        .guid({ version: 'uuidv4' })
+        .uuid()
         .required(),
 
     lastUpdated: Joi.number(),

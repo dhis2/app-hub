@@ -20,14 +20,12 @@ const getAppById = async (appId, languageCode, knex) => {
     }
 
     try {
-        const appRows = await knex('apps_view')
+        return await knex('apps_view')
             .select()
             .where({
                 app_id: appId,
                 language_code: languageCode,
             })
-
-        return appRows
     } catch (err) {
         throw new Error(`Could not get app with id: ${appId}. ${err.message}`)
     }

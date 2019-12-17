@@ -11,7 +11,7 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 
     status: app.status,
 
-    id: app.uuid,
+    id: app.app_id,
     created: +new Date(app.status_created_at),
     lastUpdated: +new Date(app.version_created_at),
 
@@ -38,11 +38,11 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 
 const convertAppToV1Media = (app, serverUrl) => {
     return {
-        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.version_uuid}/${app.media_uuid}`,
+        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.version_id}/${app.media_id}`,
         caption: app.media_caption,
         created: +new Date(app.media_created_at),
         description: app.media_description,
-        id: app.media_uuid,
+        id: app.media_id,
         lastUpdated: +new Date(app.media_created_at),
         logo: app.image_type === ImageType.Logo,
     }
@@ -58,7 +58,7 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
 
         demoUrl: app.demo_url || '',
         downloadUrl: `${serverUrl}/v1/apps/download/${app.organisation_slug}/${app.appver_slug}/${app.version}/app.zip`,
-        id: app.version_uuid,
+        id: app.version_id,
         lastUpdated: +new Date(app.version_created_at),
         maxDhisVersion: app.max_dhis2_version,
         minDhisVersion: app.min_dhis2_version,
@@ -79,15 +79,15 @@ const convertAll = (apps, request) => {
     const formattedApps = {}
 
     apps.forEach(app => {
-        let currentApp = formattedApps[app.uuid]
+        let currentApp = formattedApps[app.id]
 
         if (!currentApp) {
             const v1App = convertDbAppViewRowToAppApiV1Object(app)
-            formattedApps[app.uuid] = v1App
+            formattedApps[app.id] = v1App
             currentApp = v1App
         }
 
-        if (app.media_uuid !== null) {
+        if (app.media_id !== null) {
             currentApp.images.push(convertAppToV1Media(app, serverUrl))
 
             //sort images making the logo the first image
@@ -98,9 +98,7 @@ const convertAll = (apps, request) => {
 
         //Prevent duplicate versions
         if (
-            !currentApp.versions.find(
-                version => version.id === app.version_uuid
-            )
+            !currentApp.versions.find(version => version.id === app.version_id)
         ) {
             currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
         }

@@ -33,11 +33,8 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        debug(`Fetching file from ${item.uuid}/${item.version_uuid}`)
-        const file = await getFile(
-            `${item.uuid}/${item.version_uuid}`,
-            'app.zip'
-        )
+        debug(`Fetching file from ${item.id}/${item.version_id}`)
+        const file = await getFile(`${item.uuid}/${item.version_id}`, 'app.zip')
 
         return h
             .response(file.Body)

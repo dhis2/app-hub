@@ -5,7 +5,7 @@ const { deleteDir } = require('../../../../utils')
 const defaultFailHandler = require('../../defaultFailHandler')
 
 const { canDeleteApp } = require('../../../../security')
-const getAppsByUuid = require('../../../../data/getAppsByUuid')
+const getAppsById = require('../../../../data/getAppsById')
 const deleteApp = require('../../../../data/deleteApp')
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
         const knex = h.context.db
 
         const appUuid = request.params.appUuid
-        const appRows = await getAppsByUuid(appUuid, 'en', knex)
+        const appRows = await getAppsById(appUuid, 'en', knex)
         const item = appRows[0]
 
         const trx = await knex.transaction()

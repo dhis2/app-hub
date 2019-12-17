@@ -4,13 +4,13 @@ const paramsSchema = joi
     .object()
     .keys({
         userId: joi
-            .number()
-            .required()
-            .min(1),
+            .string()
+            .uuid()
+            .required(),
         organisationId: joi
-            .number()
-            .required()
-            .min(1),
+            .string()
+            .uuid()
+            .required(),
     })
     .options({ allowUnknown: true })
 

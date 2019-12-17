@@ -20,7 +20,7 @@ const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
-const { getAppDeveloperId, getAppsByUuid } = require('../../../../data')
+const { getAppDeveloperId, getAppsById } = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
 
@@ -87,7 +87,7 @@ module.exports = {
         //TODO: make langCode dynamic? legacy v1 endpoint supports english only
         const languageCode = 'en'
 
-        let dbAppRows = await getAppsByUuid(appUuid, languageCode, db)
+        let dbAppRows = await getAppsById(appUuid, languageCode, db)
         if (!dbAppRows || dbAppRows.length === 0) {
             throw Boom.badRequest('An app with that uuid does not exist')
         }
@@ -199,7 +199,7 @@ module.exports = {
         }
 
         //fetch the new version rows and filter out the one we've just created data for
-        dbAppRows = await getAppsByUuid(appUuid, languageCode, db)
+        dbAppRows = await getAppsById(appUuid, languageCode, db)
         const [appWithVersion] = dbAppRows.filter(
             app => app.version === appVersionJson.version
         )

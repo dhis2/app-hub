@@ -2,14 +2,25 @@ const uuid = require('uuid/v4')
 
 const joi = require('@hapi/joi')
 
+const debug = require('debug')('apphub:server:data:createApp')
+
 const { AppTypes } = require('../enums')
 
 const paramsSchema = joi
     .object()
     .keys({
-        userId: joi.number().required(),
-        developerUserId: joi.number().required(),
-        orgId: joi.number().required(),
+        userId: joi
+            .string()
+            .uuid()
+            .required(),
+        developerUserId: joi
+            .string()
+            .uuid()
+            .required(),
+        orgId: joi
+            .string()
+            .uuid()
+            .required(),
         appType: joi
             .string()
             .required()
@@ -20,7 +31,7 @@ const paramsSchema = joi
 /**
  * @typedef {object} CreateAppResult
  * @property {number} id Database id of the created app
- * @property {string} uuid The generated UUID for the created app
+ * @property {string} id The generated id for the created app
  */
 
 /**
@@ -48,7 +59,6 @@ const createApp = async (params, knex, transaction) => {
     const { userId, developerUserId, orgId, appType } = params
 
     //generate a new uuid to insert
-    const appUuid = uuid()
 
     try {
         const [id] = await knex('app')
@@ -59,15 +69,10 @@ const createApp = async (params, knex, transaction) => {
                 developer_user_id: developerUserId,
                 organisation_id: orgId,
                 type: appType,
-                uuid: appUuid,
             })
             .returning('id')
 
-        if (id < 0) {
-            throw new Error('Inserted id was < 0')
-        }
-
-        return { id, uuid: appUuid }
+        return { id }
     } catch (err) {
         throw new Error(`Could not insert app to database. ${err.message}`)
     }

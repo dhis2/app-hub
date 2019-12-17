@@ -3,11 +3,14 @@ const joi = require('@hapi/joi')
 const paramSchema = joi
     .object()
     .keys({
-        appVersionId: joi.number().required(),
+        appVersionId: joi
+            .string()
+            .uuid()
+            .required(),
         createdByUserId: joi
-            .number()
-            .required()
-            .min(1),
+            .string()
+            .uuid()
+            .required(),
         channelName: joi
             .string()
             .required()

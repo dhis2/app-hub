@@ -1,13 +1,13 @@
 /**
  * Returns all apps for a specific user
  *
- * @param {string} uuid User UUID to get apps for
+ * @param {string} id User id to get apps for
  * @param {object} dbConnection db instance
  * @returns {Promise<Array>}
  */
-const getAllAppsByDeveloperUuid = (uuid, knex) => {
-    if (!uuid) {
-        throw new Error('Missing/invalid paramter: uuid')
+const getAllAppsByDeveloperId = (id, knex) => {
+    if (!id) {
+        throw new Error('Missing/invalid paramter: id')
     }
 
     if (!knex) {
@@ -17,8 +17,8 @@ const getAllAppsByDeveloperUuid = (uuid, knex) => {
     return knex('apps_view')
         .select()
         .where({
-            developer_uuid: uuid,
+            developer_id: id,
         })
 }
 
-module.exports = getAllAppsByDeveloperUuid
+module.exports = getAllAppsByDeveloperId

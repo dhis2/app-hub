@@ -81,7 +81,6 @@ const createUserValidationFunc = (db, audience) => {
                 }
 
                 returnObj.credentials.userId = user.id
-                returnObj.credentials.uuid = user.uuid
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
                 const [apiUser] = await db('users')
@@ -109,7 +108,6 @@ const createUserValidationFunc = (db, audience) => {
                     ] //the M2M has full access (all roles)
                     returnObj.credentials.email_verified = true
                     returnObj.credentials.userId = apiUser.id
-                    returnObj.credentials.uuid = apiUser.uuid
                 } catch (err) {
                     throw Boom.internal(err)
                 }
