@@ -8,17 +8,17 @@ const { AppStatus } = require('../../../../enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const getAppsByUuid = require('../../../../data/getAppsByUuid')
-const getAppsByUuidAndStatus = require('../../../../data/getAppsByUuidAndStatus')
+const getAppsById = require('../../../../data/getAppsById')
+const getAppsByIdAndStatus = require('../../../../data/getAppsByIdAndStatus')
 
 const { convertAppsToApiV1Format } = require('../formatting')
 
 const { canSeeAllApps } = require('../../../../security')
 
 module.exports = {
-    //unauthenticated endpoint returning the approved app for the specified uuid
+    //unauthenticated endpoint returning the approved app for the specified appId
     method: 'GET',
-    path: '/v1/apps/{appUuid}',
+    path: '/v1/apps/{appId}',
     config: {
         auth: { strategy: 'token', mode: 'try' },
         tags: ['api', 'v1'],
@@ -34,19 +34,19 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        const appUuid = request.params.appUuid
+        const appId = request.params.appId
 
-        debug(`Getting app with uuid: ${appUuid}`)
+        debug(`Getting app with appId: ${appId}`)
 
         let apps = null
 
         if (canSeeAllApps(request)) {
             debug('Can see all apps, fetch it no matter its status')
-            apps = await getAppsByUuid(appUuid, 'en', h.context.db)
+            apps = await getAppsById(appId, 'en', h.context.db)
         } else {
             debug('Can NOT see all apps, fetch it only if approved')
-            apps = await getAppsByUuidAndStatus(
-                appUuid,
+            apps = await getAppsByIdAndStatus(
+                appId,
                 AppStatus.APPROVED,
                 'en',
                 h.context.db

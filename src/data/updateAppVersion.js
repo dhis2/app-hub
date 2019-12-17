@@ -4,11 +4,14 @@ const joi = require('@hapi/joi')
 const paramsSchema = joi
     .object()
     .keys({
-        uuid: joi
+        id: joi
             .string()
             .uuid()
             .required(),
-        userId: joi.number(),
+        userId: joi
+            .string()
+            .uuid()
+            .required(),
         minDhisVersion: joi
             .string()
             .allow(null, '')
@@ -30,7 +33,7 @@ const paramsSchema = joi
  * Updates an appversion and its min/max versions for existing channels it's published to
  *
  * @param {object} params
- * @param {string} params.uuid UUID of the version to update
+ * @param {string} params.id id of the version to update
  * @param {number} params.userId The user id of the user making the change
  * @param {string} params.minDhisVersion Minimum inclusive required version of DHIS2 this version is compatible with
  * @param {string} params.maxDhisVersion Minimum inclusive required version of DHIS2 this version is compatible with
@@ -52,7 +55,7 @@ const updateAppVersion = async (params, knex, transaction) => {
     }
 
     const {
-        uuid,
+        id,
         userId,
         minDhisVersion,
         maxDhisVersion,
@@ -61,11 +64,6 @@ const updateAppVersion = async (params, knex, transaction) => {
     } = params
 
     try {
-        const appVersionIdsToUpdate = await knex('app_version')
-            .select('id')
-            .where('uuid', uuid)
-            .pluck('id')
-
         await knex('app_version')
             .transacting(transaction)
             .update({
@@ -74,7 +72,7 @@ const updateAppVersion = async (params, knex, transaction) => {
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
             })
-            .where('uuid', uuid)
+            .where('id', id)
 
         const channelQuery = {}
 
@@ -102,9 +100,9 @@ const updateAppVersion = async (params, knex, transaction) => {
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
             })
-            .whereIn('app_version_id', appVersionIdsToUpdate)
+            .where('app_version_id', id)
     } catch (err) {
-        throw new Error(`Could not update appversion: ${uuid}. ${err.message}`)
+        throw new Error(`Could not update appversion: ${id}. ${err.message}`)
     }
 }
 

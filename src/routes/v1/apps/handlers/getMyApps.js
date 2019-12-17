@@ -2,7 +2,7 @@ const debug = require('debug')('apphub:server:routes:handlers:v1:getMyApps')
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
-const { getAllAppsByDeveloperUuid } = require('../../../../data')
+const { getAllAppsByDeveloperId } = require('../../../../data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
 const AppModel = require('../../../../models/v1/out/App')
@@ -33,10 +33,7 @@ module.exports = {
 
         try {
             const user = await getCurrentUserFromRequest(request, h.context.db)
-            const apps = await getAllAppsByDeveloperUuid(
-                user.uuid,
-                h.context.db
-            )
+            const apps = await getAllAppsByDeveloperId(user.id, h.context.db)
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
             debug(err)

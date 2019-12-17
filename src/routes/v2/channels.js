@@ -15,9 +15,9 @@ module.exports = [
             const channels = await h.context.db.select().from('channel')
 
             return channels.map(channel => ({
-                uuid: channel.uuid,
+                id: channel.id,
                 name: channel.name,
-                uri: `${request.path}/${channel.uuid}`,
+                uri: `${request.path}/${channel.id}`,
             }))
         },
     },
@@ -53,7 +53,7 @@ module.exports = [
     },
     {
         method: 'PUT',
-        path: '/v2/channels/{uuid}',
+        path: '/v2/channels/{id}',
         config: {
             validate: {
                 payload: EditChannelModel.payloadSchema,
@@ -74,13 +74,13 @@ module.exports = [
             }
 
             const { name } = request.payload
-            const uuid = request.params.uuid
+            const { id } = request.params
             let channel = null
 
             try {
                 const knex = h.context.db
                 const transaction = await knex.transaction()
-                channel = await renameChannel({ uuid, name }, knex, transaction)
+                channel = await renameChannel({ id, name }, knex, transaction)
                 await transaction.commit()
             } catch (err) {
                 return Boom.internal(`Could not update channel: ${err.message}`)
@@ -101,20 +101,20 @@ module.exports = [
             const channelApps = await h.context.db
                 .select()
                 .from('apps_view')
-                .where('channel_uuid', request.params.id)
+                .where('channel_id', request.params.id)
 
             const apps = {}
             channelApps.forEach(app => {
-                if (!apps[app.uuid]) {
-                    apps[app.uuid] = []
+                if (!apps[app.id]) {
+                    apps[app.id] = []
                 }
 
-                const version = apps[app.uuid].find(
+                const version = apps[app.id].find(
                     x => x.version === app.version
                 )
 
                 if (!version) {
-                    apps[app.uuid].push({
+                    apps[app.id].push({
                         version: app.version,
                         name: { [app.language_code]: app.name },
                     })

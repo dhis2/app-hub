@@ -43,7 +43,7 @@ module.exports = {
         },
         validate: {
             payload: CreateAppModel.payloadSchema,
-            failAction: defaultFailHandler,
+            //failAction: defaultFailHandler,
         },
         plugins: {
             'hapi-swagger': {
@@ -61,7 +61,6 @@ module.exports = {
     },
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
-        //request.logger.info(`app id: ${request.params.appUuid}`)
 
         if (!canCreateApp(request, h)) {
             throw Boom.unauthorized()
@@ -99,9 +98,9 @@ module.exports = {
         debug('currentUser:', currentUser)
 
         //Load the organisation, or create it if it doesnt exist.
-        let appUuid = null
-        let versionUuid = null
-        let iconUUid = null
+        let appId = null
+        let versionId = null
+        let iconId = null
 
         const trx = await knex.transaction()
 
@@ -172,7 +171,7 @@ module.exports = {
             )
 
             //Set newly uploaded apps as pending
-            appUuid = dbApp.uuid
+            appId = dbApp.id
             await createAppStatus(
                 {
                     userId: requestUserId, //the current user set the status
@@ -197,7 +196,7 @@ module.exports = {
                 knex,
                 trx
             )
-            versionUuid = appVersion.uuid
+            versionId = appVersion.id
 
             //Add the texts as english language, only supported for now
             await createLocalizedAppVersion(
@@ -246,7 +245,7 @@ module.exports = {
                 if (imageInfo) {
                     ;({ caption, description } = imageInfo)
                 }
-                const { id, uuid } = await addAppVersionMedia(
+                const { id } = await addAppVersionMedia(
                     {
                         userId: requestUserId,
                         appVersionId: appVersion.id,
@@ -260,8 +259,8 @@ module.exports = {
                     trx
                 )
 
-                debug(`Logo inserted with id '${id}' and uuid '${uuid}'`)
-                iconUUid = uuid
+                debug(`Logo inserted with id '${id}'`)
+                iconId = id
             }
         } catch (err) {
             debug('ROLLING BACK TRANSACTION')
@@ -271,7 +270,7 @@ module.exports = {
             throw Boom.badRequest(err.message, err)
         }
 
-        if (appUuid === null || versionUuid === null) {
+        if (appId === null || versionId === null) {
             await trx.rollback()
             throw Boom.internal('Could not create app')
         }
@@ -279,14 +278,14 @@ module.exports = {
         try {
             await trx.commit()
             const appUpload = saveFile(
-                `${appUuid}/${versionUuid}`,
+                `${appId}/${versionId}`,
                 'app.zip',
                 file._data
             )
             if (imageFile) {
                 const iconUpload = saveFile(
-                    `${appUuid}/${versionUuid}`,
-                    iconUUid,
+                    `${appId}/${versionId}`,
+                    iconId,
                     imageFile._data
                 )
                 await Promise.all([appUpload, iconUpload])
@@ -301,7 +300,7 @@ module.exports = {
 
         return {
             statusCode: 200,
-            uuid: appUuid,
+            uuid: appId,
         }
     },
 }

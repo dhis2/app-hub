@@ -1,14 +1,16 @@
-const getAppsByUuid = require('./getAppsByUuid')
+const getAppById = require('./getAppById')
 
+const debug = require('debug')('apphub:server:data:getAppDeveloperIp')
 /**
  * Returns the developer id for the app with specified UUID
- * @param {string} appUuid UUID of the app to fetch developer id for
+ * @param {string} id id of the app to fetch developer id for
  * @param {object} db Knex instance
  */
-const getAppDeveloperId = async (appUuid, db) => {
+const getAppDeveloperId = async (id, db) => {
     try {
-        const [firstApp] = await getAppsByUuid(appUuid, 'en', db)
-        return firstApp.developer_id
+        const apps = await getAppById(id, 'en', db)
+        debug(`got apps for id ${id}:`, apps)
+        return apps[0].developer_id
     } catch (err) {
         return false
     }

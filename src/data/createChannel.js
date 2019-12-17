@@ -13,14 +13,14 @@ const paramsSchema = joi
 /**
  * @typedef {object} CreateChannelResult
  * @property {number} id Database id of the created channel
- * @property {string} uuid The generated UUID for the created channel
+ * @property {string} name Name of the created channel
  */
 
 /**
  * Creates a channel and returns the database id
  *
  * @param {object} params
- * @param {string} params.name Name of the release channel
+ * @param {string} params.name Name of the channel to create
  * @param {object} knex
  * @returns {Promise<CreateChannelResult>}
  */
@@ -39,22 +39,16 @@ const createChannel = async (params, knex, transaction) => {
     const { name } = params
 
     //generate a new uuid to insert
-    const channelUuid = uuid()
 
     try {
         const [createdChannel] = await knex('channel')
             .transacting(transaction)
             .insert({
-                uuid: channelUuid,
                 name,
             })
-            .returning(['id', 'uuid', 'name'])
+            .returning(['id', 'name'])
 
         debug('Created channel: ', createdChannel)
-
-        if (createdChannel.id < 0) {
-            throw new Error('Inserted id was < 0')
-        }
 
         return createdChannel
     } catch (err) {

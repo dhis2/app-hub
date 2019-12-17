@@ -6,11 +6,14 @@ const { AppTypes } = require('../enums')
 const paramsSchema = joi
     .object()
     .keys({
-        uuid: joi
+        id: joi
             .string()
             .uuid()
             .required(),
-        userId: joi.number(),
+        userId: joi
+            .string()
+            .uuid()
+            .required(),
         name: joi.string().max(100),
         description: joi.string().allow(''),
         appType: joi.string().valid(...AppTypes),
@@ -29,7 +32,7 @@ const paramsSchema = joi
  * Updates an app
  *
  * @param {object} params
- * @param {string} params.uuid UUID of the app to update
+ * @param {string} params.id id of the app to update
  * @param {number} params.userId The user id of the user making the change
  * @param {string} params.name The name of the app
  * @param {string} params.description Description of the app
@@ -45,21 +48,12 @@ const updateApp = async (params, knex, transaction) => {
         throw new Error(validation.error)
     }
 
-    /*
-        uuid: firstApp.uuid,
-        userId: firstApp.developer_id,
-        name: 'Changed name',
-        sourceUrl: 'https://some/url',
-        demoUrl: 'http://some/other/url',
-        description: 'Changed description'
-    */
-
     if (!knex) {
         throw new Error('Missing parameter: knex')
     }
 
     const {
-        uuid,
+        id,
         userId,
         name,
         sourceUrl,
@@ -72,7 +66,7 @@ const updateApp = async (params, knex, transaction) => {
         const appVersionIdsToUpdate = await knex('app_version')
             .select('app_version.id')
             .innerJoin('app', 'app.id', 'app_version.app_id')
-            .where('app.uuid', uuid)
+            .where('app.id', id)
             .pluck('app_version.id')
 
         await knex('app')
@@ -83,7 +77,7 @@ const updateApp = async (params, knex, transaction) => {
                 updated_by_user_id: userId,
             })
             .where({
-                uuid,
+                id,
             })
 
         await knex('app_version')
@@ -107,7 +101,7 @@ const updateApp = async (params, knex, transaction) => {
             .whereIn('app_version_id', appVersionIdsToUpdate)
             .where('language_code', languageCode)
     } catch (err) {
-        throw new Error(`Could not update app: ${uuid}. ${err.message}`)
+        throw new Error(`Could not update app: ${id}. ${err.message}`)
     }
 }
 

@@ -1,14 +1,14 @@
 const joi = require('@hapi/joi')
 
 const paramsSchema = joi.object().keys({
-    uuid: joi.string().uuid(),
+    id: joi.string().uuid(),
 })
 
 /**
  * Create a new organisation with the specified name
  *
  * @param {object} params
- * @param {string} params.uuid the UUID of the organisation to delete
+ * @param {string} params.id the id of the organisation to delete
  * @param {*} knex
  * @returns {Promise<boolean>} Returns true if successfully deleted >= 1 row
  */

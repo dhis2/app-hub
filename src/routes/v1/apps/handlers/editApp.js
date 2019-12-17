@@ -11,7 +11,7 @@ const { updateApp, getAppDeveloperId } = require('../../../../data')
 
 module.exports = {
     method: 'PUT',
-    path: '/v1/apps/{appUuid}',
+    path: '/v1/apps/{appId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -61,7 +61,7 @@ module.exports = {
 
                 await updateApp(
                     {
-                        uuid: request.params.appUuid,
+                        id: request.params.appId,
                         userId: currentUser.id,
                         name,
                         description,

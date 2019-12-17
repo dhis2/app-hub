@@ -9,7 +9,7 @@ const defaultFailHandler = require('../../defaultFailHandler')
 module.exports = {
     //unauthenticated endpoint returning the icon for an app with the specified uuid
     method: 'GET',
-    path: '/v1/apps/media/{organisation_slug}/{version_uuid}/{filename}',
+    path: '/v1/apps/media/{organisation_slug}/{version_id}/{filename}',
     config: {
         auth: false,
         tags: ['api', 'v1'],
@@ -20,7 +20,7 @@ module.exports = {
     handler: async (request, h) => {
         //request.logger.info('In handler %s', request.path)
 
-        const { organisation_slug, version_uuid, filename } = request.params
+        const { organisation_slug, version_id, filename } = request.params
 
         const knex = h.context.db
 
@@ -29,7 +29,7 @@ module.exports = {
             .from('apps_view')
             .where({
                 organisation_slug,
-                version_uuid,
+                version_id,
             })
 
         const [item] = appversions
@@ -42,11 +42,11 @@ module.exports = {
 
         //TODO: improve by streaming instead of first downloading then responding with the zip?
         //or pass out the aws url directly
-        debug(`Fetching file ${item.uuid}/${item.version_uuid}/${filename}`)
+        debug(`Fetching file ${item.id}/${item.version_id}/${filename}`)
 
         try {
             const file = await getFile(
-                `${item.uuid}/${item.version_uuid}`,
+                `${item.id}/${item.version_id}`,
                 filename
             )
 
@@ -58,7 +58,7 @@ module.exports = {
             }
 
             return Boom.internal(
-                `Was not able to fetch file: ${item.uuid}/${item.version_uuid}/${filename}`
+                `Was not able to fetch file: ${item.id}/${item.version_id}/${filename}`
             )
         } catch (err) {
             //AWS S3 error code if object is missing

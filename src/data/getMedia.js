@@ -2,7 +2,7 @@ const debug = require('debug')('apphub:server:data:getMedia')
 /**
  * Gets information about an image/media
  *
- * @param {string} uuid UUID for the media to retreive
+ * @param {string} id UUID for the media to retreive
  * @param {*} knex db instance
  * @param {Promise<object>}
  */
@@ -15,14 +15,14 @@ const getMedia = (uuid, knex) => {
                 'app_version_media.app_version_id'
             )
             .select({
-                media_uuid: 'app_version_media.uuid',
-                version_uuid: 'app_version.uuid',
+                media_id: 'app_version_media.id',
+                version_id: 'app_version.id',
                 image_type: 'app_version_media.image_type',
                 original_filename: 'app_version_media.original_filename',
                 caption: 'app_version_media.caption',
                 description: 'app_version_media.description',
             })
-            .where('app_version_media.uuid', uuid)
+            .where('app_version_media.id', id)
             .first()
     } catch (err) {
         //TODO: log, re-throw or something other than silent fail?
