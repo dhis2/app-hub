@@ -31,12 +31,12 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/v2/organisations/{orgUuid}',
+        path: '/v2/organisations/{orgId}',
         config: {
             auth: 'token',
             validate: {
                 params: Joi.object({
-                    orgUuid: OrgModel.definition.extract('uuid').required(),
+                    orgId: OrgModel.definition.extract('id').required(),
                 }),
             },
             tags: ['api', 'v2'],
@@ -47,12 +47,8 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const { orgUuid } = request.params
-            const organisation = await Organisation.findByUuid(
-                orgUuid,
-                true,
-                db
-            )
+            const { orgId } = request.params
+            const organisation = await Organisation.findOne(orgId, true, db)
             return organisation
         },
     },
@@ -83,12 +79,12 @@ module.exports = [
             )
             return h
                 .response(organisation)
-                .created(`/v2/organisations/${organisation.uuid}`)
+                .created(`/v2/organisations/${organisation.id}`)
         },
     },
     {
         method: 'POST',
-        path: '/v2/organisations/{orgUuid}/user',
+        path: '/v2/organisations/{orgId}/user',
         config: {
             auth: 'token',
             tags: ['api', 'v2'],
@@ -99,9 +95,7 @@ module.exports = [
                         .required(),
                 }),
                 params: Joi.object({
-                    orgUuid: Joi.string()
-                        .guid()
-                        .required(),
+                    orgId: OrgModel.definition.extract('id').required(),
                 }),
             },
             // response: {
@@ -112,22 +106,18 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const { uuid: userUuid } = await getCurrentUserFromRequest(
-                request,
-                db
-            )
+            const { id } = await getCurrentUserFromRequest(request, db)
             const userEmailToAdd = request.payload.email
 
             const addUserToOrganisation = async trx => {
-                const org = await Organisation.findByUuid(
-                    request.params.orgUuid,
+                const org = await Organisation.findOne(
+                    request.params.orgId,
                     true,
                     trx
                 )
 
-                const isMember =
-                    org.users.findIndex(u => u.id === userUuid) > -1
-                const canAdd = org.createdByUserUuid === userUuid || isMember
+                const isMember = org.users.findIndex(u => u.id === id) > -1
+                const canAdd = org.createdByUser === id || isMember
 
                 if (!canAdd) {
                     throw Boom.forbidden(
@@ -140,7 +130,7 @@ module.exports = [
                     trx
                 )
                 if (userToAdd && userToAdd.id) {
-                    await Organisation.addUserById(org.uuid, userToAdd.id, trx)
+                    await Organisation.addUserById(org.id, userToAdd.id, trx)
                     return userToAdd
                 } else {
                     throw Boom.conflict(

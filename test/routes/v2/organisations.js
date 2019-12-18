@@ -39,13 +39,7 @@ describe('v2/organisations', () => {
 
             const orgs = JSON.parse(res.payload)
             expect(orgs).to.be.an.array()
-            expect(orgs[0]).to.include([
-                'uuid',
-                'name',
-                'slug',
-                'createdByUserUuid',
-            ])
-            expect(orgs[0]).to.not.include(['id', 'createdByUserId'])
+            expect(orgs[0]).to.include(['id', 'name', 'slug', 'createdByUser'])
         })
     })
 
@@ -62,8 +56,8 @@ describe('v2/organisations', () => {
             const res = await server.inject(opts)
             expect(res.statusCode).to.equal(201)
             const payload = JSON.parse(res.payload)
-            expect(payload).to.include(['uuid'])
-            expect(payload.id).to.be.undefined()
+            expect(payload).to.include(['id'])
+            expect(payload.id).to.be.string()
         })
 
         it('should fail if no payload', async () => {
@@ -86,13 +80,13 @@ describe('v2/organisations', () => {
             )
 
             expect(dhis2Org).to.not.be.undefined()
-            expect(dhis2Org.uuid).to.be.a.string()
+            expect(dhis2Org.id).to.be.a.string()
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/user`,
+                url: `/api/v2/organisations/${dhis2Org.id}/user`,
                 payload: {
-                    email: 'appstore-api@dhis2.org',
+                    email: 'apphub-api@dhis2.org',
                 },
             }
             const res = await server.inject(opts)
@@ -107,11 +101,11 @@ describe('v2/organisations', () => {
             )
 
             expect(dhis2Org).to.not.be.undefined()
-            expect(dhis2Org.uuid).to.be.a.string()
+            expect(dhis2Org.id).to.be.a.string()
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.uuid}/user`,
+                url: `/api/v2/organisations/${dhis2Org.id}/user`,
                 payload: {
                     email: 'example-fail@dhis2.org',
                 },

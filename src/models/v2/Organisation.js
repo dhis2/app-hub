@@ -9,20 +9,20 @@ const definition = defaultDefinition
     .append({
         name: joi.string(),
         slug: joi.string(),
-        // createdByUser: joi.string(),   TODO: should we rename 'createdByUserUuid' to this and use that for internal and external models?
-        createdByUserUuid: joi.string(),
-        createdByUserId: joi.number().alter({
-            external: s => s.strip(),
-        }),
+        createdByUser: joi.string().guid({ version: 'uuidv4' }),
         users: joi.array().items(User.definition),
     })
     .alter({
         db: s =>
             s
-                .append({ created_by_user_id: joi.number() })
-                .rename('createdByUserId', 'created_by_user_id'),
+                .append({
+                    created_by_user_id: joi
+                        .string()
+                        .guid({ version: 'uuidv4' }),
+                })
+                .rename('createdByUser', 'created_by_user_id'),
     })
-    .rename('created_by_user_uuid', 'createdByUserUuid', {
+    .rename('created_by_user_id', 'createdByUser', {
         ignoreUndefined: true,
     })
 
@@ -39,7 +39,7 @@ const externalDefintion = definition.tailor('external')
 
 const parseDatabaseJson = createDefaultValidator(definition)
 
-const formatDatabaseJson = createDefaultValidator(dbDefinition);
+const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
 module.exports = {
     def: definition,
@@ -48,5 +48,5 @@ module.exports = {
     externalDefintion,
     defWithUsers,
     parseDatabaseJson,
-    formatDatabaseJson
+    formatDatabaseJson,
 }

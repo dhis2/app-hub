@@ -1,6 +1,5 @@
 const joi = require('@hapi/joi')
 const slugify = require('slugify')
-const uuid = require('uuid/v4')
 const { applyFiltersToQuery } = require('../../utils/databaseUtils')
 const { NotFoundError } = require('../../utils/errors')
 const User = require('../../models/v2/User')
@@ -10,10 +9,8 @@ const getOrganisationQuery = db =>
     db('organisation')
         .select(
             'organisation.id',
-            'organisation.uuid',
             'organisation.name',
             'organisation.slug',
-            db.ref('u.uuid').as('created_by_user_uuid'),
             db.ref('u.id').as('created_by_user_id')
         )
         .innerJoin(
@@ -25,15 +22,14 @@ const getOrganisationQuery = db =>
 const create = async ({ userId, name }, db) => {
     const slug = await ensureUniqueSlug(slugify(name, { lower: true }), db)
     const obj = {
-        createdByUserId: userId,
+        createdByUser: userId,
         name,
         slug,
-        uuid: uuid(),
     }
     const dbData = Organisation.formatDatabaseJson(obj)
     const [organisation] = await db('organisation')
         .insert(dbData)
-        .returning(['id', 'uuid'])
+        .returning(['id'])
 
     return Organisation.parseDatabaseJson(organisation)
 }
@@ -62,14 +58,14 @@ const find = async ({ filter, paging }, db) => {
 
     if (filter) {
         // special filter for gettings orgs for a particular user
-        if (filter.userUuid) {
+        if (filter.user) {
             const userOrganisations = db('user_organisation')
                 .select('organisation_id')
                 .innerJoin('users', 'user_organisation.user_id', 'users.id')
-                .where('users.uuid', filter.userUuid)
+                .where('users.id', filter.user)
 
             query.whereIn('organisation.id', userOrganisations)
-            delete filter.userUuid
+            delete filter.user
         }
         applyFiltersToQuery(filter, query, { tableName: 'organisation' })
     }
@@ -79,19 +75,19 @@ const find = async ({ filter, paging }, db) => {
     return parsed
 }
 
-const findByUuid = async (uuid, includeUsers = false, db) => {
+const findOne = async (id, includeUsers = false, db) => {
     const organisation = await getOrganisationQuery(db)
         .first()
-        .where('organisation.uuid', uuid)
+        .where('organisation.id', id)
     if (!organisation) {
-        throw new NotFoundError(`Organisation with uuid ${uuid} not found.`)
+        throw new NotFoundError(`Organisation not found.`)
     }
 
     const internalOrg = Organisation.parseDatabaseJson(organisation)
 
     if (includeUsers) {
         const users = await db('users')
-            .select('users.uuid', 'users.email', 'users.name')
+            .select('users.id', 'users.email', 'users.name')
             .innerJoin(
                 'user_organisation',
                 'users.id',
@@ -104,41 +100,39 @@ const findByUuid = async (uuid, includeUsers = false, db) => {
     return internalOrg
 }
 
-const addUserById = async (uuid, userId, db) => {
-    const org = await findByUuid(uuid, false, db)
-
+const addUserById = async (id, userId, db) => {
     const query = await db('user_organisation').insert({
         user_id: userId,
-        organisation_id: org.id,
+        organisation_id: id,
     })
 
     return query
 }
 
-const remove = async (uuid, db) => {
+const remove = async (id, db) => {
     await db('organisation')
-        .where({ uuid })
+        .where({ id })
         .delete()
 }
 
-const setCreatedByUserId = async (uuid, userId, db) => {
+const setCreatedByUser = async (id, userId, db) => {
     const dbData = joi.attempt(
         {
-            createdByUserId: userId,
+            createdByUser: userId,
         },
         Organisation.dbDefinition
     )
 
     await db('organisation')
         .update(dbData)
-        .where({ uuid })
+        .where({ id })
 }
 
 module.exports = {
     find,
-    findByUuid,
+    findOne,
     addUserById,
     create,
     remove,
-    setCreatedByUserId,
+    setCreatedByUser,
 }

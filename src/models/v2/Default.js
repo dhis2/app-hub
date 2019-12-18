@@ -3,8 +3,7 @@ const joi = require('@hapi/joi')
 const definition = joi
     .object()
     .keys({
-        id: joi.number().alter({ external: s => s.strip()}),
-        uuid: joi.string().guid({ version: 'uuidv4' }),
+        id: joi.string().guid({ version: 'uuidv4' }),
         updatedAt: joi
             .date()
             .cast('number')
@@ -14,7 +13,7 @@ const definition = joi
     .rename('updated_at', 'updatedAt', { ignoreUndefined: true })
     .rename('created_at', 'createdAt', { ignoreUndefined: true })
     .prefs({
-       stripUnknown: true,
+        stripUnknown: true,
     })
 
 /**
@@ -27,7 +26,9 @@ const definition = joi
  */
 function createDefaultValidator(schema) {
     return function(dbResult) {
-        return Array.isArray(dbResult) ? dbResult.map(v => joi.attempt(v, schema)) : joi.attempt(dbResult, schema)
+        return Array.isArray(dbResult)
+            ? dbResult.map(v => joi.attempt(v, schema))
+            : joi.attempt(dbResult, schema)
     }
 }
 
