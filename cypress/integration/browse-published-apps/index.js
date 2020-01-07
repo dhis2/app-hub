@@ -5,7 +5,7 @@ Given('that I visit the start page', () => {
 })
 
 Then('I can see at least one available app', () => {
-    cy.get('[data-test-id="app-card"]')
+    cy.get('[data-test="app-card"]')
         .its('length')
         .should('be.gte', 1)
 })
