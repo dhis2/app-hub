@@ -25,4 +25,5 @@ module.exports = {
     updateAppVersion: require('./updateAppVersion'),
     updateImageMeta: require('./updateImageMeta'),
     deleteAppVersion: require('./deleteAppVersion'),
+    deleteChannel: require('./deleteChannel'),
 }
