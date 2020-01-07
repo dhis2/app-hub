@@ -4,9 +4,10 @@ const debug = require('debug')('appstore:server:data:deleteChannel')
  *
  * @param {string} uuid UUID for the channel to delete
  * @param {object} knex database connection
+ * @param {object} transaction database transaction
  * @returns {Promise} object
  */
-module.exports = async (uuid, knex) => {
+module.exports = async (uuid, knex, transaction) => {
     if (!uuid || !knex) {
         throw new Error('Invalid parameters, either uuid or knex is missing')
     }
@@ -25,6 +26,7 @@ module.exports = async (uuid, knex) => {
         }
 
         const deletedRows = await knex('channel')
+            .transacting(transaction)
             .where('id', uuid)
             .del()
         debug(`Deleted ${deletedRows} rows in table channel for uuid ${uuid}`)
