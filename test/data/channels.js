@@ -10,6 +10,7 @@ const db = require('knex')(knexConfig)
 describe('@data::channels', () => {
     const createChannel = require('../../src/data/createChannel')
     const renameChannel = require('../../src/data/renameChannel')
+    const deleteChannel = require('../../src/data/deleteChannel')
 
     it('should create a channel named Test', async () => {
         const transaction = await db.transaction()
@@ -59,5 +60,26 @@ describe('@data::channels', () => {
             Error,
             'No transaction passed to function'
         )
+    })
+
+    it('should create a channel named Foo and delete it', async () => {
+        let transaction = await db.transaction()
+
+        const channel = await createChannel({ name: 'Foo' }, db, transaction)
+        await transaction.commit()
+
+        expect(channel).to.not.be.null()
+        expect(channel.id).to.exist()
+        expect(channel.name).to.equal('Foo')
+
+        transaction = await db.transaction()
+        const deleteResult = await deleteChannel(
+            channel.id,
+            db,
+            channel.id,
+            transaction
+        )
+
+        expect(deleteResult.success).to.be.true()
     })
 })
