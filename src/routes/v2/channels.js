@@ -1,6 +1,7 @@
 const Boom = require('@hapi/boom')
 const createChannel = require('../../data/createChannel')
 const renameChannel = require('../../data/renameChannel')
+const deleteChannel = require('../../data/deleteChannel')
 
 const EditChannelModel = require('../../models/v2/in/EditChannelModel')
 
@@ -124,6 +125,40 @@ module.exports = [
             })
 
             return apps
+        },
+    },
+    {
+        method: 'DELETE',
+        path: '/v2/channels/{uuid}',
+        config: {
+            auth: 'token',
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            request.logger.info('In handler %s', request.path)
+
+            if (!currentUserIsManager(request)) {
+                throw Boom.unauthorized()
+            }
+
+            const { uuid } = request.params
+            const knex = h.context.db
+
+            try {
+                const result = await deleteChannel(uuid, knex)
+
+                if (result.success) {
+                    return h.response().code(204)
+                } else {
+                    return h
+                        .response({
+                            message: result.message,
+                        })
+                        .code(400)
+                }
+            } catch (err) {
+                return Boom.internal(err.message)
+            }
         },
     },
 ]
