@@ -145,11 +145,14 @@ module.exports = [
             const knex = h.context.db
 
             try {
-                const result = await deleteChannel(uuid, knex)
+                const trx = await knex.transaction()
+                const result = await deleteChannel(uuid, knex, trx)
 
                 if (result.success) {
+                    trx.commit()
                     return h.response().code(204)
                 } else {
+                    trx.rollback()
                     return h
                         .response({
                             message: result.message,
