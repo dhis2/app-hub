@@ -152,9 +152,9 @@ module.exports = [
 
             const { uuid } = request.params
             const knex = h.context.db
+            const trx = await knex.transaction()
 
             try {
-                const trx = await knex.transaction()
                 const result = await deleteChannel(uuid, knex, trx)
 
                 if (result.success) {
