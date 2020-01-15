@@ -272,10 +272,8 @@ describe('v2/organisations', () => {
         })
 
         it('should return 404: not found when organisation does not exist', async () => {
-            // TODO: this should be enabled only when errormapper-plugin is merged
-            return
             const orgId = '72bced64-c7f7-4b70-aa09-9b8d1e59ed49'
-            const userToDelete = UserMocks[0] //appphub
+            const userToDelete = UserMocks[0] //apphub
 
             const opts = {
                 method: 'DELETE',
@@ -285,8 +283,8 @@ describe('v2/organisations', () => {
                 },
             }
             const res = await server.inject(opts)
-            expect(res.statusCode).to.equal(409)
-            expect(res.result.message).to.be.equal('Organisation not found')
+            expect(res.statusCode).to.equal(404)
+            expect(res.result.message).to.be.equal('Not Found')
         })
     })
 })
