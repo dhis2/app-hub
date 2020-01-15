@@ -12,6 +12,7 @@ const options = require('../options/index.js')
 
 const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
+const errorMapper = require('../plugins/errorMapper')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -78,6 +79,12 @@ exports.init = async (knex, config) => {
         plugin: staticFrontendRoutes,
     })
 
+    await server.register({
+        plugin: errorMapper,
+        options: {
+            preserveMessage: process.env === 'development',
+        },
+    })
     await server.register(
         {
             plugin: apiRoutes,
