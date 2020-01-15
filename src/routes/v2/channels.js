@@ -39,13 +39,22 @@ module.exports = [
             const { name } = request.payload
             let newChannel = null
 
+            const knex = h.context.db
+            const transaction = await knex.transaction()
+
             try {
-                //TODO: check if a channel already exists and respond with a 409 conflict
-                const knex = h.context.db
-                const transaction = await knex.transaction()
+                const existingChannel = await knex('channel')
+                    .select('id')
+                    .where('name', name)
+                if (existingChannel && existingChannel.length > 0) {
+                    return Boom.badRequest(
+                        'A channel with that name already exists.'
+                    )
+                }
                 newChannel = await createChannel({ name }, knex, transaction)
                 await transaction.commit()
             } catch (err) {
+                await transaction.rollback()
                 return Boom.internal(`Could not create channel: ${err.message}`)
             }
 
@@ -149,10 +158,10 @@ module.exports = [
                 const result = await deleteChannel(uuid, knex, trx)
 
                 if (result.success) {
-                    trx.commit()
+                    await trx.commit()
                     return h.response().code(204)
                 } else {
-                    trx.rollback()
+                    await trx.rollback()
                     return h
                         .response({
                             message: result.message,
@@ -160,6 +169,7 @@ module.exports = [
                         .code(400)
                 }
             } catch (err) {
+                await trx.rollback()
                 return Boom.internal(err.message)
             }
         },
