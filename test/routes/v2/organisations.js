@@ -21,6 +21,7 @@ describe('v2/organisations', () => {
     let server
 
     before(async () => {
+        config.auth.config.strategy = 'none'
         config.auth.noAuthUserIdMapping = UserMocks[0].id
     })
 
