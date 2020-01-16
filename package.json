@@ -28,7 +28,7 @@
         "@hapi/hapi": "^18.4.0",
         "@hapi/inert": "^5.2.2",
         "@hapi/joi": "^16.1.7",
-        "@hapi/vision": "^5.5.4",
+        "@hapi/vision": "^6.0.0",
         "auth0-lock": "^10.18.0",
         "aws-sdk": "^2.600.0",
         "babel-loader": "^8.0.6",
