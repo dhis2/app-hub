@@ -1,3 +1,5 @@
+const debug = require('debug')('apphub:server:routes:channels')
+
 const Boom = require('@hapi/boom')
 const createChannel = require('../../data/createChannel')
 const renameChannel = require('../../data/renameChannel')
@@ -145,8 +147,10 @@ module.exports = [
         },
         handler: async (request, h) => {
             request.logger.info('In handler %s', request.path)
+            debug('delete channel')
 
             if (!currentUserIsManager(request)) {
+                debug('unauthorized')
                 throw Boom.unauthorized()
             }
 
@@ -154,23 +158,14 @@ module.exports = [
             const knex = h.context.db
             const trx = await knex.transaction()
 
-            try {
-                const result = await deleteChannel(uuid, knex, trx)
+            debug(`uuid: ${uuid}`)
 
-                if (result.success) {
-                    await trx.commit()
-                    return h.response().code(204)
-                } else {
-                    await trx.rollback()
-                    return h
-                        .response({
-                            message: result.message,
-                        })
-                        .code(400)
-                }
+            try {
+                await deleteChannel(uuid, knex, trx)
+                await trx.commit()
             } catch (err) {
-                await trx.rollback()
-                return Boom.internal(err.message)
+                trx.rollback()
+                throw err
             }
         },
     },
