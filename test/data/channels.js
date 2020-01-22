@@ -75,6 +75,6 @@ describe('@data::channels', () => {
         transaction = await db.transaction()
         const deleteResult = await deleteChannel(channel.id, db, transaction)
 
-        expect(deleteResult.success).to.be.true()
+        expect(deleteResult).to.be.true()
     })
 })
