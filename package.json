@@ -61,7 +61,7 @@
         "react-animate-height": "^0.9.9",
         "react-dom": "~15.4",
         "react-redux": "5",
-        "react-router": "4",
+        "react-router": "5",
         "react-router-dom": "4",
         "react-slick": "^0.14.11",
         "react-tap-event-plugin": "^2.0.1",
