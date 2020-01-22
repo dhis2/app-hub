@@ -137,4 +137,13 @@ describe('api/v2/channels without configured auth', () => {
         expect(changedChannel.id).to.equal(channel.id)
         expect(changedChannel.name).to.equal('NewName')
     })
+
+    it('should not be possible to delete the stable channel which has apps', async () => {
+        const deleteResponse = await server.inject({
+            method: 'DELETE',
+            url: '/api/v2/channels/1b47bbd6-fbcd-4694-af1c-2f1b23ff940c', //see 04_appchannel.js if looking for where this is come from
+        })
+
+        expect(deleteResponse.statusCode).to.equal(400) //bad request
+    })
 })
