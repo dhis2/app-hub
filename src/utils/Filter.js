@@ -1,4 +1,6 @@
 const Joi = require('@hapi/joi')
+const debug = require('debug')('apphub:server:utils:Filter')
+
 const SEPERATOR_CHAR = ':'
 
 const operatorMap = {
@@ -48,7 +50,8 @@ const parseFilterString = filterStr => {
 
 class Filter {
     constructor(field, value, operator = '=') {
-        this.field = field
+        this.originalField = field
+        this.column = field
         this.value = value
         this.operator = operator
     }
@@ -106,9 +109,9 @@ class Filters {
         this.originalFilters = filters
         this.validation = validation
         this.options = {}
-        this.filters = validate(validation, filters)
         this.renamedMap = {} //map of renames, from -> to
         this.marked = new Set()
+        this.filters = this.validate(validation, filters)
     }
 
     /**
@@ -140,7 +143,7 @@ class Filters {
         return this.filters[key]
     }
 
-    getFilterKey(field) {
+    getFilterColumn(field) {
         return renamedMap[field] || field
     }
 
@@ -155,8 +158,8 @@ class Filters {
             const validationFilters = Object.keys(filters).reduce(
                 (acc, curr) => {
                     const currFilter = filters[curr]
-                    acc[curr] = filters[curr].value
-                    operators[curr] = filters[curr].operator
+                    acc[curr] = currFilter.value
+                    operators[curr] = currFilter.operator
                     return acc
                 },
                 {}
@@ -168,7 +171,7 @@ class Filters {
             Object.keys(validated).forEach(key => {
                 const val = validated[key]
                 let operator = operators[key]
-                if (!operator[key]) {
+                if (!operator) {
                     //key renamed, find oldkey to get operator
                     if (!schemaDescription) {
                         schemaDescription = validation.describe()
@@ -180,7 +183,7 @@ class Filters {
                         throw new Error('Could not find renamed key!')
                     }
                     operator = operators[renamed.from]
-                    this.renamedMap[from] = to
+                    this.renamedMap[renamed.from] = renamed.to
                 }
                 validated[key] = {
                     value: val,
@@ -199,14 +202,14 @@ class Filters {
     toKeyValueMap() {}
 
     applyOneToQuery(query, field, options) {
-        const colName = this.getFilterKey(field)
-        const { value, operator } = this.filter[filterKey]
+        const colName = this.getFilterColumn(field)
+        const filter = this.filter[filterKey]
         if (filter) {
             this.markApplied(field)
             query.where(
                 options.tableName ? `${options.tableName}.${colName}` : colName,
-                operator,
-                value
+                filter.operator,
+                filter.value
             )
         } else {
             throw new Error(
@@ -216,7 +219,7 @@ class Filters {
     }
 
     markApplied(field) {
-        const key = this.getFilterKey(field)
+        const key = this.getFilterColumn(field)
         if (key) {
             this.marked.add(key)
         }
