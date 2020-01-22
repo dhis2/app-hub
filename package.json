@@ -63,7 +63,7 @@
         "react-redux": "5",
         "react-router": "4",
         "react-router-dom": "4",
-        "react-slick": "^0.14.11",
+        "react-slick": "^0.25.2",
         "react-tap-event-plugin": "^2.0.1",
         "react-transition-group": "^2.2.0",
         "recompose": "0.21",
