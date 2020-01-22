@@ -1,5 +1,5 @@
 {
-    "name": "@dhis2/app-store",
+    "name": "@dhis2/app-hub",
     "version": "1.0.0",
     "main": "src/main.js",
     "author": "Erik Arenhill <erik@dhis2.org>",
