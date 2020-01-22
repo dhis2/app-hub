@@ -13,5 +13,4 @@ module.exports = {
         }
     ],*/
     deReference: false,
-    jsonEditor: true,
 }
