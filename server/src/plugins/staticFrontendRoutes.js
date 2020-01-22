@@ -10,7 +10,13 @@ const staticFrontendRoutes = {
                 path: '/assets/{param*}',
                 handler: {
                     directory: {
-                        path: path.join(__dirname, '../../static/assets/'),
+                        path: path.join(
+                            __dirname,
+                            '..',
+                            '..',
+                            'static',
+                            'assets'
+                        ),
                     },
                 },
             },
@@ -19,7 +25,13 @@ const staticFrontendRoutes = {
                 path: '/js/{param*}',
                 handler: {
                     directory: {
-                        path: path.join(__dirname, '../../static/js/'),
+                        path: path.join(
+                            __dirname,
+                            '..',
+                            '..',
+                            'static',
+                            'js'
+                        ),
                     },
                 },
             },
@@ -27,7 +39,13 @@ const staticFrontendRoutes = {
                 method: 'GET',
                 path: '/{param*}',
                 handler: {
-                    file: path.join(__dirname, '../../static/index.html'),
+                    file: path.join(
+                        __dirname,
+                        '..',
+                        '..',
+                        'static',
+                        'index.html'
+                    ),
                 },
             },
         ])

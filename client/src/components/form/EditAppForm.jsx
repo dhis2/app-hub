@@ -9,7 +9,7 @@ import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
 import { validateURL } from './ReduxFormUtils'
-import config from '../../../../config'
+import config from '../../../config'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,

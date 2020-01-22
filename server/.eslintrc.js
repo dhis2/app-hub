@@ -3,8 +3,6 @@ const { config } = require('@dhis2/cli-style')
 module.exports = {
     extends: [config.eslint],
 
-    //parser: 'esprima',
-
     parserOptions: {
         ecmaFeatures: {
             globalReturn: true,

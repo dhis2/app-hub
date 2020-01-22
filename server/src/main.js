@@ -6,7 +6,6 @@ const knex = require('knex')(knexConfig)
 const { createChannel } = require('./data/index.js')
 
 const { migrate } = require('./server/migrate-database.js')
-const { compile } = require('./server/compile-webapp.js')
 const { init } = require('./server/init-server.js')
 const { config } = require('./server/env-config.js')
 
@@ -17,12 +16,7 @@ process.on('unhandledRejection', err => {
     process.exit(1)
 })
 
-compile()
-    .catch(err => {
-        debug('The web app failed to compile.\n', err)
-        process.exit(1)
-    })
-    .then(() => migrate(knex))
+migrate(knex)
     .catch(err => {
         debug('The database migrations failed to apply.\n', err)
         process.exit(1)
