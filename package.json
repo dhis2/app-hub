@@ -83,7 +83,7 @@
         "uuid": "^3.4.0",
         "webpack": "^4.41.2",
         "webpack-dev-server": "^3.8.2",
-        "whatwg-fetch": "^2.0.3"
+        "whatwg-fetch": "^3.0.0"
     },
     "devDependencies": {
         "@babel/register": "^7.6.2",
