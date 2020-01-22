@@ -4,6 +4,7 @@ bundle.zip
 .elasticbeanstalk
 node_modules/
 static/
+build/
 
 # ignore all env files, except the template
 .env*

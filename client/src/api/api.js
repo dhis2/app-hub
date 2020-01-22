@@ -1,4 +1,4 @@
-import config from '../../../config'
+import config from '../../config'
 import { getAuth } from '../utils/AuthService'
 
 const baseURL = config.api.baseURL

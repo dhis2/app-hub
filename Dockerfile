@@ -6,11 +6,12 @@ WORKDIR /src
 
 COPY . .
 
-RUN npm install
-RUN npm run build
-RUN npm pack
+RUN yarn install --frozen-lockfile
+RUN yarn workspace client build
+RUN yarn workspace client pack --filename app-hub-client.tgz
 
-RUN tar zxvf dhis2-app-hub-*.tgz
+RUN tar zxvf client/app-hub-client.tgz --directory server/
+RUN mv server/package/build server/static && rm -rf server/package
 
 FROM node:lts-slim
 
@@ -20,10 +21,10 @@ ENV HOST=0.0.0.0
 
 WORKDIR /srv
 
-COPY --from=build /src/package ./app-hub
+COPY --from=build /src/server ./app-hub
 
 WORKDIR app-hub
-RUN npm install
+RUN yarn install --frozen-lockfile
 
 EXPOSE 3000
 CMD ["node", "src/main.js"]

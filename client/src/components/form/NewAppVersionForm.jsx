@@ -4,7 +4,7 @@ import { Card, CardText } from 'material-ui/Card'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
-import config from '../../../../config'
+import config from '../../../config'
 import { validateZipFile, validateURL } from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'

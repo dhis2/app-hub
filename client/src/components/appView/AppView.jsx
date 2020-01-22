@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 import { Redirect, Route } from 'react-router-dom'
 import VersionList from '../appVersion/VersionList'
 import { loadApp } from '../../actions/actionCreators'
-import config from '../../../../config'
+import config from '../../../config'
 import AppLogo from './AppLogo'
 import Theme from '../../styles/theme'
 import { FadeAnimation } from '../utils/Animate'
@@ -132,7 +132,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AppView)
+export default connect(mapStateToProps, mapDispatchToProps)(AppView)

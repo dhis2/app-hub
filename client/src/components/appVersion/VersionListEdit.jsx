@@ -20,7 +20,7 @@ import SelectField from 'material-ui/SelectField'
 
 import merge from 'lodash/fp/merge'
 
-import config from '../../../../config'
+import config from '../../../config'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
@@ -416,7 +416,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(VersionListEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(VersionListEdit)

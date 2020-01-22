@@ -7,17 +7,17 @@ env:
 phases:
     install:
         runtime-versions:
-            nodejs: 10
+            nodejs: 12
 
     pre_build:
         commands:
-            - echo Installing NPM dependencies
-            - npm install
+            - echo Installing dependencies
+            - yarn install
 
     build:
         commands:
             - echo Entered build phase
-            - npm run build
+            - yarn build
 
     post_build:
         commands:

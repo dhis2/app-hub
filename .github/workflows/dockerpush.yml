@@ -1,103 +1,110 @@
 name: 'DHIS2: Docker'
 
 on:
-  push:
-    # Publish `master` as Docker `latest` image.
-    branches:
-      - master
+    push:
+        # Publish `master` as Docker `latest` image.
+        branches:
+            - master
 
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+        # Publish `v1.2.3` tags as releases.
+        tags:
+            - v*
 
-  # Run tests for any PRs.
-  pull_request:
-
+    # Run tests for any PRs.
+    pull_request:
 
 jobs:
-  # Run tests.
-  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-  build-docker:
-    runs-on: ubuntu-latest
+    # Run tests.
+    # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+    build-docker:
+        runs-on: ubuntu-latest
 
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    steps:
-      - uses: actions/checkout@v2
-      - name: Test that dockerfile builds
-        run: docker build . 
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+        steps:
+            - uses: actions/checkout@v2
+            - name: Test that dockerfile builds
+              run: docker build .
 
-  test:
-    runs-on: ubuntu-latest
+    test:
+        runs-on: ubuntu-latest
 
-    container:
-      image: node:lts-slim
+        container:
+            image: node:lts-slim
 
-    services:
-      postgres:
-        image: dhis2/postgres-contrib
-        env:
-          POSTGRES_USER: apphub
-          POSTGRES_PASSWORD: apphub
-          POSTGRES_DB: apphub
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5     
+        services:
+            postgres:
+                image: dhis2/postgres-contrib
+                env:
+                    POSTGRES_USER: apphub
+                    POSTGRES_PASSWORD: apphub
+                    POSTGRES_DB: apphub
+                ports:
+                    - 5432/tcp
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
 
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install deps for tests
-        run: npm install
-      - name: Build frontend/client
-        run: npm run build
-      - name: Run tests
-        run: npm run test 
-        env:
-          RDS_HOSTNAME: postgres
-          RDS_USERNAME: apphub
-          RDS_PASSWORD: apphub
-          RDS_DB_NAME: apphub
-          RDS_DB_PORT: 5432
-          AUTH_STRATEGY: jwt
-          AUTH0_M2M_SECRET: ${{ secrets.AUTH0_M2M_SECRET }}
-          AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
-          AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
-          AUTH0_DOMAIN: https://dhis2.eu.auth0.com/
-          AUTH0_ALG: HS256
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+        steps:
+            - uses: actions/checkout@v2
 
-  push:
-    # Ensure test job passes before pushing image.
-    needs:  [test, build-docker]
+            - name: Install deps for tests
+              run: yarn install --frozen-lockfile
 
-    runs-on: ubuntu-latest
+            - name: Build frontend/client
+              run: yarn build
 
-    if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')
-    steps:
-      - uses: actions/checkout@v2
+            - name: Run client tests
+              run: yarn test:client
 
-      - name: Build image
-        run: docker build . --file Dockerfile --tag image
+            - name: Run server tests
+              run: yarn test:server
+              env:
+                  RDS_HOSTNAME: postgres
+                  RDS_USERNAME: apphub
+                  RDS_PASSWORD: apphub
+                  RDS_DB_NAME: apphub
+                  RDS_DB_PORT: ${{ job.services.postgres.ports[5432] }}
+                  AUTH_STRATEGY: jwt
+                  AUTH0_M2M_SECRET: ${{ secrets.AUTH0_M2M_SECRET }}
+                  AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
+                  AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
+                  AUTH0_DOMAIN: https://dhis2.eu.auth0.com/
+                  AUTH0_ALG: HS256
 
-      - name: Log into DockerHub registry
-        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    push:
+        # Ensure test job passes before pushing image.
+        needs: [test, build-docker]
 
-      - name: Push image
-        run: |
-          IMAGE_ID=dhis2/app-hub
+        runs-on: ubuntu-latest
 
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+        if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')
+        steps:
+            - uses: actions/checkout@v2
 
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+            - name: Build image
+              run: docker build . --file Dockerfile --tag image
 
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+            - name: Log into DockerHub registry
+              run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
+            - name: Push image
+              run: |
+                  IMAGE_ID=dhis2/app-hub
 
-          docker tag image $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+                  # Strip git ref prefix from version
+                  VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+                  # Strip "v" prefix from tag name
+                  [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+                  # Use Docker `latest` tag convention
+                  [ "$VERSION" == "master" ] && VERSION=latest
+
+                  echo IMAGE_ID=$IMAGE_ID
+                  echo VERSION=$VERSION
+
+                  docker tag image $IMAGE_ID:$VERSION
+                  docker push $IMAGE_ID:$VERSION

@@ -88,7 +88,6 @@ class AppCards extends Component {
             ? this.props.appSearchFilter.values.searchFilter
             : ''
 
-        debug('apps:', apps)
         debug('appcard render with channels', this.props.channels)
         debug('appChannelFilter', this.props.appChannelFilter)
 
@@ -134,6 +133,8 @@ class AppCards extends Component {
                     <AppCardItem key={app.id} app={app} />
                 </Col>
             ))
+
+        debug('apps:', apps)
 
         const emptyApps = (
             <FadeAnimation appear>

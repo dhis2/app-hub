@@ -23,7 +23,7 @@ import Subheader from '../../header/SubHeader'
 import MenuItem from 'material-ui/MenuItem'
 import IconMenu from 'material-ui/IconMenu'
 import Theme from '../../../styles/theme'
-import config from '../../../../../config'
+import config from '../../../../config'
 import * as selectors from '../../../selectors/userSelectors'
 import MultipleUploadFileFields from '../../form/MultipleUploadFileFields'
 import ImageViewer from '../../appView/ImageViewer'
@@ -358,7 +358,4 @@ UserAppCardHeader.propTypes = {
     isManager: PropTypes.bool,
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UserAppView)
+export default connect(mapStateToProps, mapDispatchToProps)(UserAppView)

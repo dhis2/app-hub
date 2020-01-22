@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import config from '../../../../config'
+import config from '../../../config'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, FormSection } from 'redux-form'
 import * as formUtils from './ReduxFormUtils'
