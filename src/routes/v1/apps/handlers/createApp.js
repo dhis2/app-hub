@@ -40,10 +40,10 @@ module.exports = {
             allow: 'multipart/form-data',
             parse: true,
             output: 'stream',
+            multipart: true,
         },
         validate: {
             payload: CreateAppModel.payloadSchema,
-            //failAction: defaultFailHandler,
         },
         plugins: {
             'hapi-swagger': {
