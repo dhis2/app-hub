@@ -1,5 +1,6 @@
 const { Filter, Filters } = require('../utils/Filter')
 const Boom = require('@hapi/boom')
+const Bounce = require('@hapi/bounce')
 const debug = require('debug')('apphub:server:plugins:queryFilter')
 const Joi = require('@hapi/joi')
 
@@ -31,12 +32,18 @@ const onPreHandler = function(request, h) {
             delete request.query[curr]
         }
     }, {})
-    const filters = Filters.createFromQueryFilters(
-        queryFilters,
-        routeOptions.validation
-    )
 
-    request.query.filters = filters
+    try {
+        const filters = Filters.createFromQueryFilters(
+            queryFilters,
+            routeOptions.validation
+        )
+        request.query.filters = filters
+    } catch (e) {
+        Bounce.rethrow(e, 'system')
+        throw Boom.boomify(e, { statusCode: 400 })
+    }
+
     return h.continue
 }
 

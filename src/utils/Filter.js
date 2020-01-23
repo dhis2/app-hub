@@ -120,7 +120,7 @@ class Filters {
      * `eq:DHIS2`.
      *
      * @param {*} validation a joi validation object or a validation function with the signature `function(filters)`.
-     * If a function is passed the filters
+     * The function should return an object where the values should be of Filter-shape
      *
      * @returns An instance of Filters, where the filters are validated/transformed using `validation`.
      */
@@ -203,7 +203,7 @@ class Filters {
 
     applyOneToQuery(query, field, options) {
         const colName = this.getFilterColumn(field)
-        const filter = this.filter[filterKey]
+        const filter = this.filter[colName]
         if (filter) {
             this.markApplied(field)
             query.where(
@@ -213,7 +213,7 @@ class Filters {
             )
         } else {
             throw new Error(
-                `Failed to apply filter to query, ${field} is not a valid filter.`
+                `Failed to apply filter to query, ${colName} is not a valid filter.`
             )
         }
     }
