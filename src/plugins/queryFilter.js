@@ -18,8 +18,8 @@ const onPreHandler = function(request, h) {
     const options = {
         ...this.options,
         ...routeOptions,
-        ignoreKeys: this.options.ignoredKeys.concat(
-            routeOptions.ignoredKeys || []
+        ignoreKeys: this.options.ignoreKeys.concat(
+            routeOptions.ignoreKeys || []
         ),
     }
     if (!options.enabled) {
@@ -27,18 +27,17 @@ const onPreHandler = function(request, h) {
     }
 
     const queryFilters = Object.keys(request.query).reduce((acc, curr) => {
-        if (options.ignoreKeys.indexOf(key) === -1) {
+        if (options.ignoreKeys.indexOf(curr) === -1) {
             acc[curr] = request.query[curr]
-            delete request.query[curr]
         }
+        return acc
     }, {})
-
     try {
         const filters = Filters.createFromQueryFilters(
             queryFilters,
-            routeOptions.validation
+            routeOptions.validate
         )
-        request.query.filters = filters
+        request.plugins.queryFilter = filters
     } catch (e) {
         Bounce.rethrow(e, 'system')
         throw Boom.boomify(e, { statusCode: 400 })

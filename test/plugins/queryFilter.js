@@ -15,6 +15,7 @@ const { NotFoundError } = require('../../src/utils/errors')
 const QueryFilterPlugin = require('../../src/plugins/queryFilter')
 const Joi = require('@hapi/joi')
 const Hapi = require('@hapi/hapi')
+const { Filters } = require('../../src/utils/Filter')
 
 describe('QueryFilterPlugin', () => {
     let server
@@ -33,10 +34,22 @@ describe('QueryFilterPlugin', () => {
                 },
             },
             handler: (request, h) => {
-                const filters = request.query.filters
+                const filters = request.plugins.queryFilter
                 return filters
             },
         })
+    })
+
+    it('should ignore when no filters', async () => {
+        const res = await server.inject({
+            method: 'GET',
+            url: '/filter',
+        })
+        expect(res.statusCode).to.be.equal(200)
+        const filters = res.request.plugins.queryFilter
+        expect(filters).to.be.instanceOf(Filters)
+        expect(filters.filters).to.be.an.object()
+        expect(Object.keys(filters.filters)).to.have.length(0)
     })
 
     it('it should parse query-params into filters-object', async () => {
@@ -45,11 +58,11 @@ describe('QueryFilterPlugin', () => {
             url: '/filter?name=eq:DHIS2',
         })
         expect(res.statusCode).to.be.equal(200)
-        const query = res.request.query
-        expect(query.filters).to.be.an.object()
-        expect(query.filters.name).to.be.an.object()
-        expect(query.filters.name).to.include(['value', 'operator', 'field'])
-        expect(query.name).to.be.undefined()
+        const filters = res.request.plugins.queryFilter
+        expect(filters).to.be.instanceOf(Filters)
+
+        expect(filters.filters.name).to.be.an.object()
+        expect(filters.filters.name).to.include(['value', 'operator'])
     })
 
     it('should handle escaped characters', async () => {
@@ -59,10 +72,10 @@ describe('QueryFilterPlugin', () => {
         })
 
         expect(res.statusCode).to.be.equal(200)
-        const query = res.request.query
-        expect(query.filters).to.be.an.object()
-        expect(query.filters.name).to.be.an.object()
-        expect(query.filters.name.value).to.be.equal('%DHIS2%')
+        const filters = res.request.plugins.queryFilter.filters
+        expect(filters).to.be.an.object()
+        expect(filters.name).to.be.an.object()
+        expect(filters.name.value).to.be.equal('%DHIS2%')
     })
 
     it('should handle basic filter and fall back to "="', async () => {
@@ -72,11 +85,11 @@ describe('QueryFilterPlugin', () => {
         })
 
         expect(res.statusCode).to.be.equal(200)
-        const query = res.request.query
-        expect(query.filters).to.be.an.object()
-        expect(query.filters.name).to.be.an.object()
-        expect(query.filters.name.value).to.be.equal('DHIS2')
-        expect(query.filters.name.operator).to.be.equal('=')
+        const filters = res.request.plugins.queryFilter.filters
+        expect(filters).to.be.an.object()
+        expect(filters.name).to.be.an.object()
+        expect(filters.name.value).to.be.equal('DHIS2')
+        expect(filters.name.operator).to.be.equal('=')
     })
 
     it('should ignore when disabled on route-level', async () => {
@@ -99,10 +112,7 @@ describe('QueryFilterPlugin', () => {
             method: 'GET',
             url: '/noFilter?name=DHIS2',
         })
-
-        expect(res.request.filters).to.be.undefined()
-        expect(res.request.query).to.be.an.object()
-        expect(res.request.query.name).to.be.equal('DHIS2')
+        expect(res.request.plugins.queryFilter).to.be.undefined()
     })
 
     it('should ignore when disabled on server-level', async () => {
@@ -126,9 +136,7 @@ describe('QueryFilterPlugin', () => {
             url: '/noFilterServer?name=DHIS2',
         })
 
-        expect(res.request.filters).to.be.undefined()
-        expect(res.request.query).to.be.an.object()
-        expect(res.request.query.name).to.be.equal('DHIS2')
+        expect(res.request.plugins.queryFilter).to.be.undefined()
         serv.stop()
     })
 
@@ -161,12 +169,10 @@ describe('QueryFilterPlugin', () => {
         })
 
         expect(res.statusCode).to.be.equal(200)
-        const query = res.request.query
-        expect(query).to.be.an.object()
-        expect(query.filters).to.be.an.object()
-        expect(query.filters.name).to.be.an.object()
-        expect(query.filters.name).to.include(['value', 'operator', 'field'])
-        expect(query.name).to.be.undefined()
+        const filters = res.request.plugins.queryFilter.filters
+        expect(filters).to.be.an.object()
+        expect(filters.name).to.be.an.object()
+        expect(filters.name).to.include(['value', 'operator'])
         serv.stop()
     })
 
@@ -200,14 +206,13 @@ describe('QueryFilterPlugin', () => {
         })
 
         expect(res.statusCode).to.be.equal(200)
-        const query = res.request.query
-        expect(query.filters).to.be.an.object()
-        expect(query.filters.name).to.be.an.object()
-        expect(query.filters.name.value).to.be.equal('DHIS2')
-        expect(query.filters.name.operator).to.be.equal('=')
+        const filters = res.request.plugins.queryFilter
+        expect(filters).to.be.instanceOf(Filters)
+        expect(filters.filters.name).to.be.an.object()
+        expect(filters.filters.name.value).to.be.equal('DHIS2')
+        expect(filters.filters.name.operator).to.be.equal('=')
 
-        expect(query.filters).to.not.include('ignored')
-        expect(query.ignored).to.be.equals('eq:test')
+        expect(filters.filters).to.not.include('ignored')
     })
 
     describe('with validation', () => {
@@ -224,7 +229,8 @@ describe('QueryFilterPlugin', () => {
                             validate: Joi.object({
                                 name: Joi.string(),
                                 owner: Joi.string().guid(),
-                            }).rename('owner', 'created_by'),
+                                created_by_user_id: Joi.string().guid(),
+                            }).rename('owner', 'created_by_user_id'),
                         },
                     },
                 },
@@ -241,10 +247,12 @@ describe('QueryFilterPlugin', () => {
                     '/validationFilter?name=DHIS2&owner=eq:cedb4418-2417-4e72-bfcc-35ccd0dc3e41',
             })
 
-            console.log(res.result)
             expect(res.statusCode).to.be.equal(200)
-            console.log(res.request.query)
-            console.log(res.request.query.filters)
+
+            const filters = res.request.plugins.queryFilter
+            expect(filters).to.be.instanceof(Filters)
+            expect(filters.filters).to.be.an.object()
+            expect(filters.filters).to.include(['name', 'created_by_user_id'])
         })
     })
 })

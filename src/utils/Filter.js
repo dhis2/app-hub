@@ -199,8 +199,6 @@ class Filters {
         }
     }
 
-    toKeyValueMap() {}
-
     applyOneToQuery(query, field, options) {
         const colName = this.getFilterColumn(field)
         const filter = this.filter[colName]
