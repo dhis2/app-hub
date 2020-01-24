@@ -8,6 +8,7 @@ const {
 const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
+const debug = require('debug')('apphub:routes:handlers:organisations')
 
 module.exports = [
     {
@@ -31,9 +32,10 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const filters = request.plugins.queryFilter
+            debug(filters)
             //get all orgs, no filtering
             //TODO: add filtering
-            const orgs = await Organisation.find({}, h.context.db)
+            const orgs = await Organisation.find({ filters }, h.context.db)
             return orgs
         },
     },
