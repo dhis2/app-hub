@@ -10,9 +10,7 @@ const defaultOptions = {
     ignoreKeys: ['paging'],
 }
 
-const schemaCache = {}
 const onPreHandler = function(request, h) {
-    //  console.log(request.route)
     const routeOptions = request.route.settings.plugins.queryFilter || {}
 
     const options = {
@@ -32,6 +30,7 @@ const onPreHandler = function(request, h) {
         }
         return acc
     }, {})
+
     try {
         const filters = Filters.createFromQueryFilters(
             queryFilters,

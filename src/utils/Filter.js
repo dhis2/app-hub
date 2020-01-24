@@ -139,18 +139,24 @@ class Filters {
     }
 
     getFilter(field) {
-        const key = renamedMap[field] || field
+        const key = this.renamedMap[field] || field
         return this.filters[key]
     }
 
     getFilterColumn(field) {
-        return renamedMap[field] || field
+        return this.renamedMap[field] || field
+    }
+
+    isEmpty() {
+        return Object.keys(this.filters).length < 1
+    }
+
+    hasFilters() {
+        return !this.isEmpty()
     }
 
     validate(validation, filters = this.filters) {
         if (Joi.isSchema(validation)) {
-            const result = {}
-
             const operators = {}
             let schemaDescription = null // schema.describe() is expensive so we don't call it unless needed
 
@@ -234,11 +240,11 @@ class Filters {
             ...this.options,
             ...options,
         }
-        for (colName in this.filters) {
-            if (this.marked.has(k)) {
+        for (const colName in this.filters) {
+            if (this.marked.has(colName)) {
                 continue
             }
-            const { value, operator } = this.filter[colName]
+            const { value, operator } = this.filters[colName]
             query.where(
                 options.tableName ? `${options.tableName}.${colName}` : colName,
                 operator,

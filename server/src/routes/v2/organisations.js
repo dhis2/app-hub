@@ -19,10 +19,18 @@ module.exports = [
                 schema: Joi.array().items(OrgModel.externalDefintion),
                 modify: true,
             },
+            plugins: {
+                queryFilter: {
+                    validate: Joi.object({
+                        name: Joi.string(),
+                        user: Joi.string().guid(),
+                    }),
+                },
+            },
         },
         handler: async (request, h) => {
             const { db } = h.context
-
+            const filters = request.plugins.queryFilter
             //get all orgs, no filtering
             //TODO: add filtering
             const orgs = await Organisation.find({}, h.context.db)
@@ -192,7 +200,6 @@ module.exports = [
             }
 
             const transaction = await db.transaction(addUserToOrganisation)
-
             return {
                 statusCode: 200,
             }

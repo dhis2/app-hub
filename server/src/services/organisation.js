@@ -56,21 +56,20 @@ const ensureUniqueSlug = async (originalSlug, db) => {
     return slug
 }
 
-const find = async ({ filter, paging }, db) => {
+const find = async ({ filters, paging }, db) => {
     const query = getOrganisationQuery(db)
 
-    if (filter) {
+    if (filters) {
         // special filter for gettings orgs for a particular user
-        if (filter.user) {
+        const userFilter = filters.getFilter('user')
+        if (userFilter) {
             const userOrganisations = db('user_organisation')
                 .select('organisation_id')
-                .innerJoin('users', 'user_organisation.user_id', 'users.id')
-                .where('users.id', filter.user)
-
+                .where('user_id', userFilter.value)
+            filters.markApplied('user')
             query.whereIn('organisation.id', userOrganisations)
-            delete filter.user
         }
-        applyFiltersToQuery(filter, query, { tableName: 'organisation' })
+        filters.applyAllToQuery(query, { tableName: 'organisation' })
     }
     const res = await query
     const parsed = Organisation.parseDatabaseJson(res)
@@ -116,7 +115,6 @@ const addUserById = async (id, userId, db) => {
         user_id: userId,
         organisation_id: id,
     })
-
     return query
 }
 
