@@ -16,6 +16,7 @@ const { config } = require('../../../src/server/env-config')
 const { Organisation } = require('../../../src/services')
 const OrgMocks = require('../../../seeds/mock/organisations')
 const UserMocks = require('../../../seeds/mock/users')
+const { Filters } = require('../../../src/utils/Filter')
 
 describe('v2/organisations', () => {
     let server
@@ -160,29 +161,36 @@ describe('v2/organisations', () => {
 
     describe('add user to organisation', () => {
         it('should add user successfully', async () => {
-            const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'HISP Tanzania' } },
+            const [hispOrg] = await Organisation.find(
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:HISP Tanzania`,
+                    }),
+                },
                 db
             )
 
-            expect(dhis2Org).to.not.be.undefined()
-            expect(dhis2Org.id).to.be.a.string()
+            expect(hispOrg).to.not.be.undefined()
+            expect(hispOrg.id).to.be.a.string()
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.id}/user`,
+                url: `/api/v2/organisations/${hispOrg.id}/user`,
                 payload: {
                     email: 'viktor@dhis2.org',
                 },
             }
             const res = await server.inject(opts)
-
             expect(res.statusCode).to.equal(200)
         })
 
         it('should return 409 conflict if user does not exists', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -205,7 +213,11 @@ describe('v2/organisations', () => {
     describe('remove user from organisation', () => {
         it('should remove successfully', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -228,7 +240,11 @@ describe('v2/organisations', () => {
 
         it('should return conflict when user is the creator', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -254,7 +270,11 @@ describe('v2/organisations', () => {
         it('should return conflict when user does not exist', async () => {
             const userToDelete = '72bced64-c7f7-4b70-aa09-9b8d1e59ed49'
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
