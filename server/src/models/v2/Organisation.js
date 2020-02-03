@@ -1,15 +1,15 @@
 const joi = require('@hapi/joi')
 const User = require('./User')
-const {
-    definition: defaultDefinition,
-    createDefaultValidator,
-} = require('./Default')
-
+const { definition: defaultDefinition } = require('./Default')
+const { extractKeysWithTag, createDefaultValidator } = require('./helpers')
 const definition = defaultDefinition
     .append({
-        name: joi.string(),
+        name: joi.string().tag('filterable'),
         slug: joi.string(),
-        owner: joi.string().guid({ version: 'uuidv4' }),
+        owner: joi
+            .string()
+            .guid({ version: 'uuidv4' })
+            .tag('filterable'),
         users: joi.array().items(User.definition),
     })
     .alter({
@@ -26,11 +26,8 @@ const definition = defaultDefinition
         ignoreUndefined: true,
     })
 
-const defWithUsers = definition.append({
-    users: joi
-        .array()
-        .items(User.definition)
-        .required(),
+const filterDefinition = extractKeysWithTag(definition, 'filterable').append({
+    user: joi.string().guid(),
 })
 
 const dbDefinition = definition.tailor('db')
@@ -49,7 +46,7 @@ module.exports = {
     definition,
     dbDefinition,
     externalDefintion,
-    defWithUsers,
     parseDatabaseJson,
     formatDatabaseJson,
+    filterDefinition,
 }

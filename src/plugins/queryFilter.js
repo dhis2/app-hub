@@ -5,7 +5,7 @@ const debug = require('debug')('apphub:server:plugins:queryFilter')
 const Joi = require('@hapi/joi')
 
 const defaultOptions = {
-    enabled: true,
+    enabled: false, // default disabled for all routes
     method: ['GET'],
     ignoreKeys: ['paging'],
 }
@@ -20,7 +20,11 @@ const onPreHandler = function(request, h) {
             routeOptions.ignoreKeys || []
         ),
     }
-    if (!options.enabled) {
+
+    if (
+        !options.enabled ||
+        !options.method.includes(request.method.toUpperCase())
+    ) {
         return h.continue
     }
 

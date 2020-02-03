@@ -22,10 +22,8 @@ module.exports = [
             },
             plugins: {
                 queryFilter: {
-                    validate: Joi.object({
-                        name: Joi.string(),
-                        user: Joi.string().guid(),
-                    }),
+                    enabled: true,
+                    validate: OrgModel.filterDefinition,
                 },
             },
         },
