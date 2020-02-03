@@ -90,7 +90,7 @@ exports.init = async (knex, config) => {
     await server.register({
         plugin: errorMapper,
         options: {
-            preserveMessage: process.env === 'development',
+            preserveMessage: process.env.NODE_ENV === 'development',
         },
     })
     await server.register(
