@@ -83,7 +83,7 @@ const findOne = async (id, includeUsers = false, db) => {
         .first()
         .where('organisation.id', id)
     if (!organisation) {
-        throw new NotFoundError(`Organisation not found`)
+        throw new NotFoundError(`Organisation Not Found`)
     }
 
     const internalOrg = Organisation.parseDatabaseJson(organisation)

@@ -42,7 +42,14 @@ const mapError = (error, options) => {
             e => wrappedError.constructor.name === e.name
         )
         if (httpError) {
-            return Boom[key](options.preserveMessage ? error.message : null)
+            const boomError = Boom[key](
+                options.preserveMessage ? error.message : null
+            )
+            if (options.preserveMessage) {
+                // Needed to show 500-errors
+                boomError.reformat(true)
+            }
+            return boomError
         }
     }
     return error
