@@ -226,6 +226,7 @@ describe('QueryFilterPlugin', () => {
                 config: {
                     plugins: {
                         queryFilter: {
+                            enabled: true,
                             validate: Joi.object({
                                 name: Joi.string(),
                                 owner: Joi.string().guid(),

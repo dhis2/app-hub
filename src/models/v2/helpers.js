@@ -1,3 +1,5 @@
+const Joi = require('@hapi/joi')
+
 /**
  * Extracts keys with a certain tag from a Joi-schema.
  * The joi-schema is assumed to be an object.
@@ -12,7 +14,7 @@ const extractKeysWithTag = (schema, tag) => {
         const keyDesc = description.keys[k]
         return keyDesc.tags && keyDesc.tags.includes(tag)
     })
-    let schemaWithTags = joi.object()
+    let schemaWithTags = Joi.object()
     keysWithTags.forEach(k => {
         const s = schema.extract(k)
         schemaWithTags = schemaWithTags.append({ [k]: s })
@@ -42,8 +44,8 @@ const extractKeysWithTag = (schema, tag) => {
 const createDefaultValidator = schema => {
     return dbResult =>
         Array.isArray(dbResult)
-            ? dbResult.map(v => joi.attempt(v, schema))
-            : joi.attempt(dbResult, schema)
+            ? dbResult.map(v => Joi.attempt(v, schema))
+            : Joi.attempt(dbResult, schema)
 }
 
 module.exports = {
