@@ -1,7 +1,6 @@
 const debug = require('debug')('apphub:server:boot:webapp')
 
 const webpack = require('webpack')
-const webpackConfig = require('../../webpack.config.js')
 
 exports.compile = () =>
     new Promise((resolve, reject) => {
@@ -11,6 +10,7 @@ exports.compile = () =>
         }
 
         debug('Compiling web application...')
+        const webpackConfig = require('../../webpack.config.js')
         webpack(webpackConfig, (err, stats) => {
             if (err) {
                 debug(err.stack || err)
