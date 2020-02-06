@@ -7,7 +7,6 @@ COPY package.json .
 RUN npm install --only=prod
 RUN npm run build
 
-COPY webpack.config.js .
 COPY knexfile.js .
 COPY seeds ./seeds
 COPY migrations ./migrations
