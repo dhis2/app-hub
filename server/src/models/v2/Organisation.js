@@ -1,15 +1,14 @@
-const joi = require('@hapi/joi')
+const joi = require('../../utils/CustomJoi')
 const User = require('./User')
 const { definition: defaultDefinition } = require('./Default')
 const { extractKeysWithTag, createDefaultValidator } = require('./helpers')
+
 const definition = defaultDefinition
     .append({
-        name: joi.string().tag('filterable'),
+        name: joi.string(),
         slug: joi.string(),
-        owner: joi
-            .string()
-            .guid({ version: 'uuidv4' })
-            .tag('filterable'),
+        name: joi.string(),
+        owner: joi.string().guid({ version: 'uuidv4' }),
         users: joi.array().items(User.definition),
     })
     .alter({
@@ -26,10 +25,6 @@ const definition = defaultDefinition
         ignoreUndefined: true,
     })
 
-const filterDefinition = extractKeysWithTag(definition, 'filterable').append({
-    user: joi.string().guid(),
-})
-
 const dbDefinition = definition.tailor('db')
 
 // internal -> external
@@ -41,6 +36,9 @@ const parseDatabaseJson = createDefaultValidator(definition)
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
+// const filterDefinition = dbDefinition.fork(['name', 'owner'], s => joi.filter(s)).append({
+//     user: joi.filter(joi.string().guid({ version: 'uuidv4' }))
+// })
 module.exports = {
     def: definition,
     definition,
@@ -48,5 +46,5 @@ module.exports = {
     externalDefintion,
     parseDatabaseJson,
     formatDatabaseJson,
-    filterDefinition,
+    //   filterDefinition,
 }

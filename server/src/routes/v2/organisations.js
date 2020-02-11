@@ -22,10 +22,14 @@ module.exports = [
             },
             validate: {
                 query: Joi.object({
-                    name: Joi.filter().value(Joi.string()),
-                    owner: Joi.filter(),
-                    user: Joi.filter(Joi.string().guid()),
-                }), //.rename('owner', 'created_by_user_id'),
+                    name: Joi.filter(),
+                    owner: Joi.filter(Joi.string().guid()).operator(
+                        Joi.valid('eq')
+                    ),
+                    user: Joi.filter(Joi.string().guid()).operator(
+                        Joi.valid('eq')
+                    ),
+                }),
             },
             plugins: {
                 queryFilter: {
@@ -36,9 +40,7 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const filters = request.plugins.queryFilter
-            debug(filters)
-            //get all orgs, no filtering
-            //TODO: add filtering
+
             const orgs = await Organisation.find({ filters }, h.context.db)
             return orgs
         },
