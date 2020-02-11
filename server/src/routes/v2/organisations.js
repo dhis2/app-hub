@@ -1,5 +1,5 @@
 const Boom = require('@hapi/boom')
-const Joi = require('@hapi/joi')
+const Joi = require('../../utils/CustomJoi')
 const {
     canCreateApp,
     getCurrentAuthStrategy,
@@ -17,13 +17,19 @@ module.exports = [
         config: {
             tags: ['api', 'v2'],
             response: {
-                schema: Joi.array().items(OrgModel.externalDefintion),
-                modify: true,
+                //  schema: Joi.array().items(OrgModel.externalDefintion),
+                //modify: true,
+            },
+            validate: {
+                query: Joi.object({
+                    name: Joi.filter().value(Joi.string()),
+                    owner: Joi.filter(),
+                    user: Joi.filter(Joi.string().guid()),
+                }), //.rename('owner', 'created_by_user_id'),
             },
             plugins: {
                 queryFilter: {
                     enabled: true,
-                    validate: OrgModel.filterDefinition,
                 },
             },
         },

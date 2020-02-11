@@ -1,52 +1,6 @@
-const Joi = require('@hapi/joi')
+const Joi = require('./CustomJoi')
+const { parseFilterString } = require('./filterUtils')
 const debug = require('debug')('apphub:server:utils:Filter')
-
-const SEPERATOR_CHAR = ':'
-
-const operatorMap = {
-    eq: '=',
-    ilike: 'ilike',
-    like: 'like',
-}
-
-const toSQLOperator = operatorStr => {
-    const operator = operatorMap[operatorStr]
-    if (!operator) {
-        throw new Error('Operator ', operatorStr, ' not supported.')
-    }
-    return operator
-}
-
-const applyFiltersToQuery = (filters, query, { tableName, columnMap }) => {
-    for (k in filters) {
-        const colName = columnMap ? columnMap[k] : k
-        if (colName) {
-            query.where(
-                tableName ? `${tableName}.${colName}` : colName,
-                '=',
-                filters[k]
-            )
-        }
-    }
-    return
-}
-
-const parseFilterString = filterStr => {
-    let operator
-    const seperatorIdx = filterStr.indexOf(SEPERATOR_CHAR)
-    if (seperatorIdx < 0) {
-        operator = '='
-    } else {
-        const operatorStr = filterStr.substring(0, seperatorIdx)
-        operator = toSQLOperator(operatorStr)
-    }
-    const value = filterStr.substring(seperatorIdx + 1)
-
-    return {
-        value,
-        operator,
-    }
-}
 
 class Filter {
     constructor(field, value, operator = '=') {
@@ -101,17 +55,23 @@ class Filters {
      *  operator = the database-operator of the filter
      *
      * }
-     * @param {*} validation
+     * @param {*} validationObject - ValidationObj
      * @param {Object} options options object merged with the object passed to `applyToQuery`
      */
-    constructor(filters = {}, validation, options = {}) {
+    constructor(filters = {}, { description, validate }, options = {}) {
         // filters before validation
         this.originalFilters = filters
-        this.validation = validation
+        this.validation = validate
         this.options = {}
         this.renamedMap = {} //map of renames, from -> to
         this.marked = new Set()
-        this.filters = this.validate(validation, filters)
+        this.filters = filters //this.validate(validation, filters)
+
+        if (description && description.renames) {
+            description.renames.forEach(r => {
+                this.renamedMap[r.from] = r.to
+            })
+        }
     }
 
     /**
@@ -119,13 +79,13 @@ class Filters {
      * @param {*} filters an object with filters, where the key is the field name, value is a filter-string, like
      * `eq:DHIS2`.
      *
-     * @param {*} validation a joi validation object or a validation function with the signature `function(filters)`.
-     * The function should return an object where the values should be of Filter-shape
+     * @param {*} validate a joi validation schema
      *
      * @returns An instance of Filters, where the filters are validated/transformed using `validation`.
      */
-    static createFromQueryFilters(filters, validation, options) {
+    static createFromQueryFilters(filters, validate, options) {
         const result = {}
+
         Object.keys(filters).map(key => {
             try {
                 const filter = parseFilterString(filters[key])
@@ -135,7 +95,12 @@ class Filters {
                 throw Error(`Failed to parse filter for ${key}`)
             }
         })
-        return new Filters(result, validation, options)
+        const validated = Joi.attempt(result, validate, options)
+        return new Filters(
+            validated,
+            { validate, description: validate.describe() },
+            options
+        )
     }
 
     getFilter(field) {
@@ -153,56 +118,6 @@ class Filters {
 
     hasFilters() {
         return !this.isEmpty()
-    }
-
-    validate(validation, filters = this.filters) {
-        if (Joi.isSchema(validation)) {
-            const operators = {}
-            let schemaDescription = null // schema.describe() is expensive so we don't call it unless needed
-
-            // Transform to key: value to be able to validate with Joi
-            const validationFilters = Object.keys(filters).reduce(
-                (acc, curr) => {
-                    const currFilter = filters[curr]
-                    acc[curr] = currFilter.value
-                    operators[curr] = currFilter.operator
-                    return acc
-                },
-                {}
-            )
-
-            const validated = Joi.attempt(validationFilters, validation)
-
-            // Transform back to filter with operator
-            Object.keys(validated).forEach(key => {
-                const val = validated[key]
-                let operator = operators[key]
-                if (!operator) {
-                    //key renamed, find oldkey to get operator
-                    if (!schemaDescription) {
-                        schemaDescription = validation.describe()
-                    }
-                    const renamed = schemaDescription.renames.find(
-                        rename => rename.to === key
-                    )
-                    if (!renamed || !renamed.from || !operators[renamed.from]) {
-                        throw new Error('Could not find renamed key!')
-                    }
-                    operator = operators[renamed.from]
-                    this.renamedMap[renamed.from] = renamed.to
-                }
-                validated[key] = {
-                    value: val,
-                    operator,
-                }
-            })
-
-            return validated
-        } else if (typeof validation === 'function') {
-            return validation(filters)
-        } else {
-            return filters
-        }
     }
 
     applyOneToQuery(query, field, options) {
