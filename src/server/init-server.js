@@ -29,6 +29,14 @@ exports.init = async (knex, config) => {
             payload: {
                 allow: 'application/json',
             },
+            validate: {
+                failAction:
+                    process.env.NODE_ENV !== 'production'
+                        ? (request, h, err) => {
+                              throw err
+                          }
+                        : undefined,
+            },
         },
     })
 
