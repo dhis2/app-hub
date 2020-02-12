@@ -24,7 +24,6 @@ const config = {
         },
         useAuth0: () => {
             return (
-                !config.auth.noAuthUserIdMapping && //if noAuth mapping is set it gets prioritized
                 config.auth.config.strategy === 'jwt' &&
                 config.auth.config.secrets.length > 0 &&
                 config.auth.config.audience &&
