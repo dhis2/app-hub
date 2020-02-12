@@ -1,17 +1,13 @@
-FROM node:slim
+FROM node:lts
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY package.json .
-RUN npm install --only=prod
-RUN npm run build
+COPY package*.json ./
+RUN npm install
 
-COPY knexfile.js .
-COPY seeds ./seeds
-COPY migrations ./migrations
-COPY static ./static
-COPY src ./src
+COPY . .
+RUN npm run build
 
 EXPOSE 3000
 
