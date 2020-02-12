@@ -1,4 +1,4 @@
-name: Docker
+name: 'DHIS2: Docker'
 
 on:
   push:
