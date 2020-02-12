@@ -22,6 +22,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    container:
+      image: node:lts
+
+    services:
+      postgres:
+        image: ntboes/postgres-uuid
+        env:
+          POSTGRES_USER: apphub
+          POSTGRES_PASSWORD: apphub
+          POSTGRES_DB: apphub
+        ports:
+          - 5432/tcp
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5          
+
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v2
 
@@ -39,8 +58,8 @@ jobs:
     needs: test
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
 
+    if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')
     steps:
       - uses: actions/checkout@v2
 
