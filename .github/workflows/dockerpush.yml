@@ -14,7 +14,7 @@ on:
   pull_request:
 
 env:
-  IMAGE_NAME: dhis2/app-hub
+  IMAGE_NAME: app-hub
 
 jobs:
   # Run tests.
