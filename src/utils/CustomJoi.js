@@ -99,7 +99,6 @@ const CustomJoi = Joi.extend(joi => {
         rules: {
             value: {
                 method(value = Joi.string()) {
-                    console.log('valz23', value)
                     if (!Joi.isSchema(value)) {
                         return this.error(new Error('Value must be a schema'))
                     }

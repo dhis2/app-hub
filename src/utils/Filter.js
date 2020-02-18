@@ -1,5 +1,5 @@
 const Joi = require('./CustomJoi')
-const { parseFilterString } = require('./filterUtils')
+const { parseFilterString, toSQLOperator } = require('./filterUtils')
 const debug = require('debug')('apphub:server:utils:Filter')
 
 class Filter {
@@ -127,7 +127,7 @@ class Filters {
             this.markApplied(field)
             query.where(
                 options.tableName ? `${options.tableName}.${colName}` : colName,
-                filter.operator,
+                toSQLOperator(filter.operator),
                 filter.value
             )
         } else {
@@ -162,7 +162,7 @@ class Filters {
             const { value, operator } = this.filters[colName]
             query.where(
                 options.tableName ? `${options.tableName}.${colName}` : colName,
-                operator,
+                toSQLOperator(operator),
                 value
             )
         }
