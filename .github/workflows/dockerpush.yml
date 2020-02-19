@@ -87,7 +87,7 @@ jobs:
 
       - name: Push image
         run: |
-          IMAGE_ID=${{ github.repository }}
+          IMAGE_ID=dhis2/app-hub
 
           # Strip git ref prefix from version
           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
