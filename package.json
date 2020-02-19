@@ -110,5 +110,15 @@
     },
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
-    }
+    },
+    "files": [
+        "config",
+        "seeds",
+        "src",
+        "static",
+        "migrations",
+        "knexfile.js",
+        ".ebextensions",
+        ".ebignore"
+    ]
 }
