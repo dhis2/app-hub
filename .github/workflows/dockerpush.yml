@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: node:lts
+      image: node:lts-slim
 
     services:
       postgres:
