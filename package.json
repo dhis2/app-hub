@@ -30,7 +30,7 @@
         "@hapi/joi": "^17.1.0",
         "@hapi/vision": "^6.0.0",
         "auth0-lock": "^10.18.0",
-        "aws-sdk": "^2.606.0",
+        "aws-sdk": "^2.622.0",
         "babel-loader": "^8.0.6",
         "babel-plugin-transform-imports": "^2.0.0",
         "blipp": "^4.0.1",
