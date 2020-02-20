@@ -8,7 +8,7 @@ const {
 const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
-const debug = require('debug')('apphub:routes:handlers:organisations')
+const debug = require('debug')('apphub:server:routes:handlers:organisations')
 
 module.exports = [
     {
@@ -34,6 +34,7 @@ module.exports = [
             plugins: {
                 queryFilter: {
                     enabled: true,
+                    rename: OrgModel.dbDefinition,
                 },
             },
         },

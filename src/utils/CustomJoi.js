@@ -70,6 +70,7 @@ const CustomJoi = Joi.extend(joi => {
                     .label('value')
                     .$_validate(filter.value, helpers.state, helpers.prefs)
                 result.value = valueResult.value
+
                 if (valueResult.errors) {
                     const errs = valueResult.errors.map(e =>
                         helpers.error('filter.value', { err: e })
@@ -82,6 +83,7 @@ const CustomJoi = Joi.extend(joi => {
                     .label('operator')
                     .$_validate(filter.operator, helpers.state, helpers.prefs)
                 result.operator = opResult.value
+
                 if (opResult.errors) {
                     const errs = opResult.errors.map(e =>
                         helpers.error('filter.operator', { err: e })

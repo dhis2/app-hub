@@ -58,20 +58,13 @@ class Filters {
      * @param {*} validationObject - ValidationObj
      * @param {Object} options options object merged with the object passed to `applyToQuery`
      */
-    constructor(filters = {}, { description, validate }, options = {}) {
+    constructor(filters = {}, { renameMap } = {}, options = {}) {
         // filters before validation
         this.originalFilters = filters
-        this.validation = validate
         this.options = {}
-        this.renamedMap = {} //map of renames, from -> to
-        this.marked = new Set()
-        this.filters = filters //this.validate(validation, filters)
-
-        if (description && description.renames) {
-            description.renames.forEach(r => {
-                this.renamedMap[r.from] = r.to
-            })
-        }
+        this.renameMap = renameMap //map of renames, from -> to
+        this.appliedFilters = new Set()
+        this.filters = filters
     }
 
     /**
@@ -104,12 +97,11 @@ class Filters {
     }
 
     getFilter(field) {
-        const key = this.renamedMap[field] || field
-        return this.filters[key]
+        return this.filters[field]
     }
 
     getFilterColumn(field) {
-        return this.renamedMap[field] || field
+        return this.renameMap[field] || field
     }
 
     isEmpty() {
@@ -122,7 +114,7 @@ class Filters {
 
     applyOneToQuery(query, field, options) {
         const colName = this.getFilterColumn(field)
-        const filter = this.filter[colName]
+        const filter = this.filter[field]
         if (filter) {
             this.markApplied(field)
             query.where(
@@ -138,10 +130,7 @@ class Filters {
     }
 
     markApplied(field) {
-        const key = this.getFilterColumn(field)
-        if (key) {
-            this.marked.add(key)
-        }
+        this.appliedFilters.add(field)
     }
 
     /**
@@ -155,18 +144,22 @@ class Filters {
             ...this.options,
             ...options,
         }
-        for (const colName in this.filters) {
-            if (this.marked.has(colName)) {
+        for (const filterName in this.filters) {
+            const colName = this.getFilterColumn(filterName)
+            const { value, operator } = this.filters[filterName]
+
+            if (this.appliedFilters.has(filterName)) {
                 continue
             }
-            const { value, operator } = this.filters[colName]
             query.where(
-                options.tableName ? `${options.tableName}.${colName}` : colName,
+                settings.tableName
+                    ? `${settings.tableName}.${colName}`
+                    : colName,
                 toSQLOperator(operator),
                 value
             )
         }
-        this.marked.clear()
+        this.appliedFilters.clear()
     }
 }
 
