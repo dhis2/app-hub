@@ -21,7 +21,7 @@
         "cypress:open": "cypress open"
     },
     "dependencies": {
-        "@babel/core": "^7.6.2",
+        "@babel/core": "^7.8.4",
         "@babel/preset-env": "^7.4.5",
         "@babel/preset-react": "^7.0.0",
         "@hapi/boom": "^9.0.0",
