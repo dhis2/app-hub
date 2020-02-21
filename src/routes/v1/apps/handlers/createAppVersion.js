@@ -35,6 +35,7 @@ module.exports = {
             allow: 'multipart/form-data',
             parse: true,
             output: 'stream',
+            multipart: true,
         },
         validate: {
             payload: CreateAppVersionModel.payloadSchema,
