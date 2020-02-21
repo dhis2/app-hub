@@ -100,7 +100,7 @@
         "jsdom": "^15.2.0",
         "mocha": "^6.2.2",
         "mock-knex": "^0.4.4",
-        "mock-local-storage": "^1.1.8",
+        "mock-local-storage": "^1.1.11",
         "nodemon": "^1.19.2",
         "request-promise": "^4.2.5",
         "sinon": "^7.5.0",
