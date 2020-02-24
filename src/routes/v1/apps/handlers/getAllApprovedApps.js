@@ -36,7 +36,7 @@ module.exports = {
                 ? undefined
                 : request.query.channel || 'Stable'
 
-        const dhis2Version = request.query.dhis2Version || null
+        const dhis2Version = request.query.dhis_version || null
 
         debug(`Filtering by channel: '${channel}'`)
         debug(`Filtering by dhis2Version: '${dhis2Version}'`)
