@@ -8,9 +8,18 @@ const getServerUrl = request => {
     const host = request.headers['x-forwarded-host'] || request.info.hostname
 
     //port is of type string from headers but an integer from request.server.info.port
-    const port = +(
-        request.headers['x-forwarded-port'] || request.server.info.port
-    )
+    let port = +request.headers['x-forwarded-port']
+
+    if (!port) {
+        //If served through a proxy or other NAT, we would need to get the exposed port for creating links
+        //and not our internal port running on the web server
+        try {
+            //host can be for example 'localhost:3000'
+            port = +request.info.host.split(':')[1]
+        } catch (err) {
+            port = request.server.info.port
+        }
+    }
 
     let portToUseInUrl = ''
 
