@@ -34,7 +34,7 @@ jobs:
 
     services:
       postgres:
-        image: ntboes/postgres-uuid
+        image: dhis2/postgres-contrib
         env:
           POSTGRES_USER: apphub
           POSTGRES_PASSWORD: apphub
