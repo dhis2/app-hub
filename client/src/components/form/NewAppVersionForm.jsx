@@ -37,7 +37,7 @@ const NewAppVersionForm = props => {
             minDhisVersion: values.minVer,
             maxDhisVersion: values.maxVer,
             channel: values.channel,
-            demoUrl: values.demoUrl,
+            demoUrl: values.demoUrl || '',
         }
         const file = values.file[0]
         return props.submitted({ data, file: file })
