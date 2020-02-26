@@ -45,7 +45,13 @@ const NewAppVersionForm = props => {
 
     const loading = channels.loading
 
-    const DHISReleaseChannels = channels.list.map(c => c.name)
+    const releaseChannels = channels.list.map(channel => (
+        <MenuItem
+            key={channel.name}
+            value={channel.name}
+            primaryText={channel.name}
+        />
+    ))
 
     //TODO: add error instead of passing false to ErrorOrLoading
     return loading ? (
@@ -75,10 +81,11 @@ const NewAppVersionForm = props => {
             />
             <Field
                 name="channel"
-                component={formUtils.renderAutoCompleteField}
+                component={formUtils.renderSelectField}
                 label="Release channel"
-                dataSource={DHISReleaseChannels}
-            />
+            >
+                {releaseChannels}
+            </Field>
             <Field
                 name="demoUrl"
                 component={formUtils.renderTextField}
