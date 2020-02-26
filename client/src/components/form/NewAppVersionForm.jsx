@@ -15,7 +15,7 @@ const DHISVersions = config.ui.dhisVersions
 
 const validate = values => {
     const errors = {}
-    const requiredFields = ['version', 'file']
+    const requiredFields = ['version', 'file', 'channel']
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
