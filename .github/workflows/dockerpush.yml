@@ -109,7 +109,7 @@ jobs:
             - name: Push image
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  ECR_IMAGE_TAG: ${{ github.sha }}
+                  SHA_TAG: ${{ github.sha }}
               run: |
                   # Strip git ref prefix from version
                   VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
@@ -124,8 +124,12 @@ jobs:
 
                   # docker hub
                   docker tag $IMAGE $HUB_REPOSITORY:$VERSION
+                  docker tag $IMAGE $HUB_REPOSITORY:$SHA_TAG
                   docker push $HUB_REPOSITORY:$VERSION
+                  docker push $HUB_REPOSITORY:$SHA_TAG
 
                   # aws ecr
-                  docker tag $IMAGE $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
-                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
+                  docker tag $IMAGE $ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG
+                  docker tag $IMAGE $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
