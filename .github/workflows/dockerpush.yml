@@ -18,6 +18,7 @@ env:
     HUB_REPOSITORY: dhis2/app-hub
     AWS_REGION: eu-west-1
     IMAGE: apphub
+    DEBUG: apphub*
 
 jobs:
     # Run tests.
