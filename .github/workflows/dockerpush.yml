@@ -13,6 +13,12 @@ on:
     # Run tests for any PRs.
     pull_request:
 
+env:
+    ECR_REPOSITORY: dhis2/app-hub
+    HUB_REPOSITORY: dhis2/app-hub
+    AWS_REGION: eu-west-1
+    IMAGE: apphub
+
 jobs:
     # Run tests.
     # See also https://docs.docker.com/docker-hub/builds/automated-testing/
@@ -84,16 +90,28 @@ jobs:
         steps:
             - uses: actions/checkout@v2
 
-            - name: Build image
-              run: docker build . --file Dockerfile --tag image
+            - name: Configure AWS credentials
+              uses: aws-actions/configure-aws-credentials@v1
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: ${{ env.AWS_REGION }}
 
-            - name: Log into DockerHub registry
+            - name: Build image
+              run: docker build . --file Dockerfile --tag $IMAGE
+
+            - name: Login to Docker Hub
               run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-            - name: Push image
-              run: |
-                  IMAGE_ID=dhis2/app-hub
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v1
 
+            - name: Push image
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  ECR_IMAGE_TAG: ${{ github.sha }}
+              run: |
                   # Strip git ref prefix from version
                   VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
@@ -103,8 +121,12 @@ jobs:
                   # Use Docker `latest` tag convention
                   [ "$VERSION" == "master" ] && VERSION=latest
 
-                  echo IMAGE_ID=$IMAGE_ID
                   echo VERSION=$VERSION
 
-                  docker tag image $IMAGE_ID:$VERSION
-                  docker push $IMAGE_ID:$VERSION
+                  # docker hub
+                  docker tag $IMAGE $HUB_REPOSITORY:$VERSION
+                  docker push $HUB_REPOSITORY:$VERSION
+
+                  # aws ecr
+                  docker tag $IMAGE $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
+                  docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ECR_IMAGE_TAG
