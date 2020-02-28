@@ -1,4 +1,4 @@
-name: 'dhis2-docker app-hub'
+name: 'dhis2-docker ci'
 
 on:
     push:
@@ -151,7 +151,7 @@ jobs:
                   aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   application_name: app-hub
-                  environment_name: production
+                  environment_name: prod
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: Dockerrun.aws.json
