@@ -1,4 +1,4 @@
-name: 'DHIS2: Docker'
+name: 'dhis2-docker app-hub'
 
 on:
     push:
@@ -6,9 +6,8 @@ on:
         branches:
             - master
 
-        # Publish `v1.2.3` tags as releases.
-        tags:
-            - v*
+    release:
+        types: [published]
 
     # Run tests for any PRs.
     pull_request:
@@ -21,18 +20,8 @@ env:
     DEBUG: apphub*
 
 jobs:
-    # Run tests.
-    # See also https://docs.docker.com/docker-hub/builds/automated-testing/
-    build-docker:
-        runs-on: ubuntu-latest
-
-        if: "!contains(github.event.head_commit.message, '[skip ci]')"
-        steps:
-            - uses: actions/checkout@v2
-            - name: Test that dockerfile builds
-              run: docker build .
-
     test:
+        name: Verify test suite
         runs-on: ubuntu-latest
 
         container:
@@ -79,13 +68,15 @@ jobs:
                   AUTH0_DOMAIN: https://dhis2.eu.auth0.com/
                   AUTH0_ALG: HS256
 
-    push:
+    deploy:
+        name: Deploy
+
         # Ensure test job passes before pushing image.
-        needs: [test, build-docker]
+        needs: [test]
 
         runs-on: ubuntu-latest
 
-        if: github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]')
+        if: github.event_name != 'pull_request' && !contains(github.event.head_commit.message, '[skip ci]')
         steps:
             - uses: actions/checkout@v2
 
@@ -96,9 +87,6 @@ jobs:
                   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   aws-region: ${{ env.AWS_REGION }}
 
-            - name: Build image
-              run: docker build . --file Dockerfile --tag $IMAGE
-
             - name: Login to Docker Hub
               run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
@@ -106,11 +94,14 @@ jobs:
               id: login-ecr
               uses: aws-actions/amazon-ecr-login@v1
 
-            - name: Push image
+            - name: Build, tag, and push image
+              id: build-image
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
                   SHA_TAG: ${{ github.sha }}
               run: |
+                  docker build . --file Dockerfile --tag $IMAGE
+
                   # Strip git ref prefix from version
                   VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
@@ -133,3 +124,42 @@ jobs:
                   docker tag $IMAGE $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG
                   docker push $ECR_REGISTRY/$ECR_REPOSITORY:$VERSION
+
+                  # set the image name for task-def step
+                  echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG"
+
+            - name: Fill in the new image ID for Staging task definition
+              id: staging-task-def
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              if: github.event_name != 'release'
+              with:
+                  task-definition: task-def-staging.json
+                  container-name: app-hub-staging
+                  image: ${{ steps.build-image.outputs.image }}
+
+            - name: Deploy Staging task definition to ECS
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+              if: github.event_name == 'release'
+              with:
+                  task-definition: ${{ steps.staging-task-def.outputs.task-definition }}
+                  service: app-hub-staging-service
+                  cluster: app-hub-staging-cluster
+                  wait-for-service-stability: true
+
+            - name: Fill in the new image ID for Production task definition
+              id: prod-task-def
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              if: github.event_name == 'release'
+              with:
+                  task-definition: task-def-prod.json
+                  container-name: app-hub-prod
+                  image: ${{ steps.build-image.outputs.image }}
+
+            - name: Deploy Production task definition to ECS
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+              if: github.event_name == 'release'
+              with:
+                  task-definition: ${{ steps.prod-task-def.outputs.task-definition }}
+                  service: app-hub-prod-service
+                  cluster: app-hub-prod-cluster
+                  wait-for-service-stability: true
