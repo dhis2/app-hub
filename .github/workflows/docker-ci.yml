@@ -128,38 +128,30 @@ jobs:
                   # set the image name for task-def step
                   echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG"
 
-            - name: Fill in the new image ID for Staging task definition
-              id: staging-task-def
-              uses: aws-actions/amazon-ecs-render-task-definition@v1
-              if: github.event_name != 'release'
-              with:
-                  task-definition: task-def-staging.json
-                  container-name: app-hub-staging
-                  image: ${{ steps.build-image.outputs.image }}
+                  sed -i 's,AUTOINJECTED_GH_ACTIONS,$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG,g' Dockerrun.aws.json
+                  ls
+                  cat Dockerrun.aws.json
 
-            - name: Deploy Staging task definition to ECS
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-              if: github.event_name == 'release'
+            - name: Deploy to Staging
+              if: github.event_name == 'push'
+              uses: einaregilsson/beanstalk-deploy@v6
               with:
-                  task-definition: ${{ steps.staging-task-def.outputs.task-definition }}
-                  service: app-hub-staging-service
-                  cluster: app-hub-staging-cluster
-                  wait-for-service-stability: true
+                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  application_name: app-hub
+                  environment_name: staging
+                  version_label: 'app-hub-staging-${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}'
+                  region: $AWS_REGION
+                  deployment_package: Dockerrun.aws.json
 
-            - name: Fill in the new image ID for Production task definition
-              id: prod-task-def
-              uses: aws-actions/amazon-ecs-render-task-definition@v1
+            - name: Deploy to Production
               if: github.event_name == 'release'
+              uses: einaregilsson/beanstalk-deploy@v6
               with:
-                  task-definition: task-def-prod.json
-                  container-name: app-hub-prod
-                  image: ${{ steps.build-image.outputs.image }}
-
-            - name: Deploy Production task definition to ECS
-              uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-              if: github.event_name == 'release'
-              with:
-                  task-definition: ${{ steps.prod-task-def.outputs.task-definition }}
-                  service: app-hub-prod-service
-                  cluster: app-hub-prod-cluster
-                  wait-for-service-stability: true
+                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  application_name: app-hub
+                  environment_name: production
+                  version_label: 'app-hub-prod-${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}'
+                  region: $AWS_REGION
+                  deployment_package: Dockerrun.aws.json
