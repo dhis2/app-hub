@@ -13,7 +13,7 @@ const {
 } = require('db-errors')
 const { NotFoundError } = require('../../src/utils/errors')
 const QueryFilterPlugin = require('../../src/plugins/queryFilter')
-const Joi = require('@hapi/joi')
+const Joi = require('../../src/utils/CustomJoi')
 const Hapi = require('@hapi/hapi')
 const { Filters } = require('../../src/utils/Filter')
 

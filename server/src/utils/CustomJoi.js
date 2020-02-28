@@ -22,100 +22,96 @@ const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
  * CustomJoi.operator(operatorSchema)
  *  * operatorSchema - The Joi-schema that the operator part of the filter should be validated against
  */
-const CustomJoi = Joi.extend(() => {
-    return {
-        type: 'filter',
-        messages: {
-            'filter.base': '{{#label}} is not a valid filter',
-            'filter.string': '{{#label}} must be a string',
-            'filter.value': 'value in filter "{{#label}}" not valid: {{#err}}',
-            'filter.operator':
-                'operator in filter "{{#label}}" not valid: {{#err}}',
+const CustomJoi = Joi.extend({
+    type: 'filter',
+    messages: {
+        'filter.base': '{{#label}} is not a valid filter',
+        'filter.string': '{{#label}} must be a string',
+        'filter.value': 'value in filter "{{#label}}" not valid: {{#err}}',
+        'filter.operator':
+            'operator in filter "{{#label}}" not valid: {{#err}}',
+    },
+    args(schema, arg) {
+        return schema.value(arg)
+    },
+    coerce: {
+        method(value, helpers) {
+            if (typeof value !== 'string') {
+                return { value, errors: helpers.error('filter.string') }
+            }
+            try {
+                const parsed = parseFilterString(value)
+                return { value: parsed }
+            } catch (ignoreErr) {
+                Bounce.rethrow(ignoreErr, 'system')
+            }
         },
-        args(schema, arg) {
-            return schema.value(arg)
-        },
-        coerce: {
-            method(value, helpers) {
-                if (typeof value !== 'string') {
-                    return { value, errors: helpers.error('filter.string') }
+    },
+    validate(filter, helpers) {
+        if (!filter || !filter.value || !filter.operator) {
+            return { value: filter, errors: helpers.error('filter.base') }
+        }
+        const result = { ...filter }
+        const errors = []
+
+        const valueSchema = helpers.schema._flags.value || Joi.string()
+        const operatorSchema =
+            helpers.schema._flags.operator || stringOperatorSchema
+
+        if (valueSchema) {
+            // Internal validate needed to pass down the state, which is used to generate correct error-message
+            // eg. showing the correct key
+            const valueResult = valueSchema
+                .label('value')
+                .$_validate(filter.value, helpers.state, helpers.prefs)
+            result.value = valueResult.value
+
+            if (valueResult.errors) {
+                const errs = valueResult.errors.map(e =>
+                    helpers.error('filter.value', { err: e })
+                )
+                errors.push(...errs)
+            }
+        }
+        if (operatorSchema) {
+            const opResult = operatorSchema
+                .label('operator')
+                .$_validate(filter.operator, helpers.state, helpers.prefs)
+            result.operator = opResult.value
+            if (opResult.errors) {
+                const errs = opResult.errors.map(e =>
+                    helpers.error('filter.operator', { err: e })
+                )
+                errors.push(...errs)
+            }
+        }
+
+        return {
+            value: result,
+            errors,
+        }
+    },
+
+    rules: {
+        value: {
+            method(value = Joi.string()) {
+                if (!Joi.isSchema(value)) {
+                    return this.error(new Error('Value must be a schema'))
                 }
-                try {
-                    const parsed = parseFilterString(value)
-                    return { value: parsed }
-                } catch (ignoreErr) {
-                    Bounce.rethrow(ignoreErr, 'system')
-                }
+                const obj = this.$_setFlag('value', value)
+                return obj
             },
         },
-        validate(filter, helpers) {
-            if (!filter || !filter.value || !filter.operator) {
-                return { value: filter, errors: helpers.error('filter.base') }
-            }
-            const result = { ...filter }
-            const errors = []
 
-            const valueSchema = helpers.schema._flags.value || Joi.string()
-            const operatorSchema =
-                helpers.schema._flags.operator || stringOperatorSchema
-
-            if (valueSchema) {
-                // Internal validate needed to pass down the state, which is used to generate correct error-message
-                // eg. showing the correct key
-                const valueResult = valueSchema
-                    .label('value')
-                    .$_validate(filter.value, helpers.state, helpers.prefs)
-                result.value = valueResult.value
-
-                if (valueResult.errors) {
-                    const errs = valueResult.errors.map(e =>
-                        helpers.error('filter.value', { err: e })
-                    )
-                    errors.push(...errs)
+        operator: {
+            method(value) {
+                if (!Joi.isSchema(value)) {
+                    return this.error(new Error('Operator must be a schema'))
                 }
-            }
-            if (operatorSchema) {
-                const opResult = operatorSchema
-                    .label('operator')
-                    .$_validate(filter.operator, helpers.state, helpers.prefs)
-                result.operator = opResult.value
-                if (opResult.errors) {
-                    const errs = opResult.errors.map(e =>
-                        helpers.error('filter.operator', { err: e })
-                    )
-                    errors.push(...errs)
-                }
-            }
-
-            return {
-                value: result,
-                errors,
-            }
-        },
-
-        rules: {
-            value: {
-                method(value = Joi.string()) {
-                    if (!Joi.isSchema(value)) {
-                        return this.error(new Error('Value must be a schema'))
-                    }
-                    const obj = this.$_setFlag('value', value)
-                    return obj
-                },
-            },
-
-            operator: {
-                method(value) {
-                    if (!Joi.isSchema(value)) {
-                        return this.error(
-                            new Error('Operator must be a schema')
-                        )
-                    }
-                    return this.$_setFlag('operator', value)
-                },
+                return this.$_setFlag('operator', value)
             },
         },
-    }
+    },
 })
 
 module.exports = CustomJoi

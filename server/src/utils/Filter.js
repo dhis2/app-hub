@@ -33,8 +33,8 @@ class Filters {
      * @returns An instance of Filters, where the filters are validated/transformed using `validation`.
      */
     static createFromQueryFilters(filters, validate, options) {
-        const result = {}
-
+        let result = {}
+        let renameMap = null
         Object.keys(filters).map(key => {
             try {
                 const filter = parseFilterString(filters[key])
@@ -44,13 +44,16 @@ class Filters {
                 throw Error(`Failed to parse filter for ${key}`)
             }
         })
-        const validated = Joi.attempt(result, validate, options)
-        const renameMap = validated.renames.reduce((acc, curr) => {
-            const { from, to } = curr
-            acc[from] = to
-            return acc
-        }, {})
-        return new Filters(validated, { renameMap }, options)
+        if (validate) {
+            result = Joi.attempt(result, validate, options)
+            renameMap = result.renames.reduce((acc, curr) => {
+                const { from, to } = curr
+                acc[from] = to
+                return acc
+            }, {})
+        }
+
+        return new Filters(result, { renameMap }, options)
     }
 
     getFilter(field) {

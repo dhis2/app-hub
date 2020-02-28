@@ -8,7 +8,7 @@ const {
     before,
     after,
 } = (exports.lab = Lab.script())
-const Joi = require('@hapi/joi')
+const Joi = require('../../src/utils/CustomJoi')
 const { Filters } = require('../../src/utils/Filter')
 const { ValidationError } = require('@hapi/joi')
 
