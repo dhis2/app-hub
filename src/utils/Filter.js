@@ -89,11 +89,12 @@ class Filters {
             }
         })
         const validated = Joi.attempt(result, validate, options)
-        return new Filters(
-            validated,
-            { validate, description: validate.describe() },
-            options
-        )
+        const renameMap = validated.renames.reduce((acc, curr) => {
+            const { from, to } = curr
+            acc[from] = to
+            return acc
+        }, {})
+        return new Filters(validated, { renameMap }, options)
     }
 
     getFilter(field) {
