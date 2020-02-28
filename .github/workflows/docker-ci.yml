@@ -128,7 +128,7 @@ jobs:
                   # set the image name for task-def step
                   echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG"
 
-                  sed -i 's,AUTOINJECTED_GH_ACTIONS,$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG,g' Dockerrun.aws.json
+                  sed -i "s|AUTOINJECTED_GH_ACTIONS|$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG|g" Dockerrun.aws.json
                   ls
                   cat Dockerrun.aws.json
 
@@ -141,7 +141,7 @@ jobs:
                   application_name: app-hub
                   environment_name: staging
                   version_label: 'app-hub-staging-${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}'
-                  region: $AWS_REGION
+                  region: ${{ env.AWS_REGION }}
                   deployment_package: Dockerrun.aws.json
 
             - name: Deploy to Production
@@ -153,5 +153,5 @@ jobs:
                   application_name: app-hub
                   environment_name: production
                   version_label: 'app-hub-prod-${GITHUB_RUN_ID}_${GITHUB_RUN_NUMBER}'
-                  region: $AWS_REGION
+                  region: ${{ env.AWS_REGION }}
                   deployment_package: Dockerrun.aws.json
