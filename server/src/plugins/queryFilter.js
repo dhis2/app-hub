@@ -1,9 +1,7 @@
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
-const debug = require('debug')('apphub:server:plugins:queryFilter')
 const Joi = require('@hapi/joi')
-const { Filter, Filters } = require('../utils/Filter')
-const { toSQLOperator } = require('../utils/filterUtils')
+const { Filters } = require('../utils/Filter')
 const FILTER_TYPE = 'filter'
 
 const defaultOptions = {
@@ -73,6 +71,8 @@ const onPreHandler = function(request, h) {
                 queryFilterKeys.add(k)
             }
         })
+    } else {
+        queryFilterKeys.add(Object.keys(request.query))
     }
 
     const queryFilters = Object.keys(request.query).reduce((acc, curr) => {

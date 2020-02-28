@@ -1,10 +1,6 @@
 const Joi = require('@hapi/joi')
 const Bounce = require('@hapi/Bounce')
-const {
-    toSQLOperator,
-    parseFilterString,
-    allOperatorsMap,
-} = require('./filterUtils')
+const { parseFilterString, allOperatorsMap } = require('./filterUtils')
 
 const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
 
@@ -26,7 +22,7 @@ const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
  * CustomJoi.operator(operatorSchema)
  *  * operatorSchema - The Joi-schema that the operator part of the filter should be validated against
  */
-const CustomJoi = Joi.extend(joi => {
+const CustomJoi = Joi.extend(() => {
     return {
         type: 'filter',
         messages: {
@@ -83,7 +79,6 @@ const CustomJoi = Joi.extend(joi => {
                     .label('operator')
                     .$_validate(filter.operator, helpers.state, helpers.prefs)
                 result.operator = opResult.value
-
                 if (opResult.errors) {
                     const errs = opResult.errors.map(e =>
                         helpers.error('filter.operator', { err: e })

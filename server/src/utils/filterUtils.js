@@ -1,5 +1,5 @@
 // This cannot be in 'Filter.js'-file, as it results in a circular require
-//  between CutsomJoi and Filter
+//  between CustomJoi and Filter
 
 const SEPERATOR_CHAR = ':'
 

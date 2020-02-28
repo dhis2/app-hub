@@ -2,50 +2,6 @@ const Joi = require('./CustomJoi')
 const { parseFilterString, toSQLOperator } = require('./filterUtils')
 const debug = require('debug')('apphub:server:utils:Filter')
 
-class Filter {
-    constructor(field, value, operator = '=') {
-        this.originalField = field
-        this.column = field
-        this.value = value
-        this.operator = operator
-    }
-
-    static createFromFilterString(field, filterStr) {
-        const { value, operator } = this.parseFilterString(filterStr)
-        return new Filter(field, value, operator)
-    }
-
-    static parseFilterString(filterStr) {
-        let operator
-        const seperatorIdx = filterStr.indexOf(SEPERATOR_CHAR)
-        if (seperatorIdx < 0) {
-            operator = '='
-        } else {
-            const operatorStr = filterStr.substring(0, seperatorIdx)
-            operator = toSQLOperator(operatorStr)
-        }
-        const value = filterStr.substring(seperatorIdx + 1)
-        if (!value) {
-            throw new Error('Filter value cannot be empty')
-        }
-        return {
-            value,
-            operator,
-        }
-    }
-
-    applyToQuery(query, { tableName }) {
-        const colName = this.field
-        if (colName) {
-            query.where(
-                tableName ? `${tableName}.${colName}` : colName,
-                this.operator,
-                this.value
-            )
-        }
-    }
-}
-
 class Filters {
     /**
      *
@@ -61,7 +17,7 @@ class Filters {
     constructor(filters = {}, { renameMap } = {}, options = {}) {
         // filters before validation
         this.originalFilters = filters
-        this.options = {}
+        this.options = options
         this.renameMap = renameMap //map of renames, from -> to
         this.appliedFilters = new Set()
         this.filters = filters
@@ -165,6 +121,5 @@ class Filters {
 }
 
 module.exports = {
-    Filter,
     Filters,
 }
