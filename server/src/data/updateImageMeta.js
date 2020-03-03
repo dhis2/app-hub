@@ -1,7 +1,7 @@
 const joi = require('@hapi/joi')
 
 const paramsSchema = joi.object().keys({
-    uuid: joi.string().uuid(),
+    id: joi.string().uuid(),
     caption: joi.string().allow('', null),
     description: joi.string().allow('', null),
 })
@@ -9,7 +9,7 @@ const paramsSchema = joi.object().keys({
 /**
  * Update meta for an image
  * @param {object} params
- * @param {string} params.uuid UUID of the image to update
+ * @param {string} params.id UUID of the image to update
  * @param {string} params.caption Caption of the image
  * @param {string} params.description Description of the image
  * @param {*} knex
@@ -26,18 +26,18 @@ const updateImageMeta = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    const { uuid, caption, description } = params
+    const { id, caption, description } = params
 
     try {
         await knex('app_version_media')
             .transacting(transaction)
-            .where('uuid', uuid)
+            .where('id', id)
             .update({
                 caption,
                 description,
             })
     } catch (err) {
-        throw new Error(`Could not update media meta: ${uuid}. ${err.message}`)
+        throw new Error(`Could not update media meta: ${id}. ${err.message}`)
     }
 }
 
