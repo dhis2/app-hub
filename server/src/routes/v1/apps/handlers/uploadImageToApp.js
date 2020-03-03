@@ -1,5 +1,3 @@
-const Boom = require('@hapi/boom')
-
 const { ImageType } = require('../../../../enums')
 const { saveFile } = require('../../../../utils')
 
@@ -25,6 +23,7 @@ module.exports = {
             allow: 'multipart/form-data',
             parse: true,
             output: 'stream',
+            multipart: true,
         },
         plugins: {
             'hapi-swagger': {
