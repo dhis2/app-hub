@@ -63,6 +63,8 @@ module.exports = {
 
         const trx = await knex.transaction()
 
+        let imageId = null
+
         //Save the image to all versions? (previously the apphub stored media per app, and not version, so we keep them per version for now.
         //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
         const promises = appVersions.map(async appVersion => {
@@ -77,6 +79,7 @@ module.exports = {
                 knex,
                 trx
             )
+            imageId = id
 
             await saveFile(
                 `${appVersion.id}/${appVersion.version_id}`,
@@ -93,6 +96,7 @@ module.exports = {
             httpStatus: 'OK',
             httpStatusCode: 200,
             message: 'Image uploaded',
+            id: imageId,
         }
     },
 }
