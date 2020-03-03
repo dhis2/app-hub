@@ -5,7 +5,8 @@
     "private": true,
     "workspaces": [
         "client",
-        "server"
+        "server",
+        "tools"
     ],
     "scripts": {
         "build": "yarn workspace client build",
@@ -14,7 +15,8 @@
         "dev:client": "yarn workspace client start",
         "test": "yarn test:server && yarn test:client",
         "test:server": "yarn workspace server test",
-        "test:client": "yarn workspace client test"
+        "test:client": "yarn workspace client test",
+        "clone": "yarn workspace tools clone"
     },
     "devDependencies": {
         "@dhis2/cli-style": "^6.0.0",

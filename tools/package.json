@@ -1,0 +1,20 @@
+{
+    "name": "tools",
+    "version": "1.0.0",
+    "description": "",
+    "main": "clone.js",
+    "repository": "https://github.com/dhis2/app-hub",
+    "dependencies": {
+        "dotenv": "^8.2.0",
+        "request": "^2.88.2",
+        "request-promise-native": "^1.0.8",
+        "slugify": "^1.4.0"
+    },
+    "private": true,
+    "devDependencies": {},
+    "scripts": {
+        "clone": "node clone.js"
+    },
+    "author": "Erik Arenhill <erik@dhis2.org>",
+    "license": "BSD-3-Clause"
+}
