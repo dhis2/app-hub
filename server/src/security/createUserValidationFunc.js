@@ -1,11 +1,10 @@
 const debug = require('debug')('apphub:server:security:createUserValidation')
 const Boom = require('@hapi/boom')
-const uuid = require('uuid/v4')
 
 const { createUser } = require('../data')
 
 const createUserValidationFunc = (db, audience) => {
-    return async (decoded, request) => {
+    return async decoded => {
         if (decoded && decoded.sub) {
             debug(`Valid user with external userId: ${decoded.sub}`, decoded)
 
@@ -84,7 +83,7 @@ const createUserValidationFunc = (db, audience) => {
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
                 const [apiUser] = await db('users')
-                    .select()
+                    .select('users.*')
                     .innerJoin(
                         'user_external_id',
                         'user_external_id.user_id',
