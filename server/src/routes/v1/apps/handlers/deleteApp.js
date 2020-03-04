@@ -38,6 +38,12 @@ module.exports = {
         const appId = request.params.appId
         const appRows = await getAppsById(appId, 'en', knex)
 
+        if (appRows.length === 0) {
+            throw Boom.notFound(
+                'The app you are trying to delete does not exist.'
+            )
+        }
+
         const trx = await knex.transaction()
         try {
             await deleteApp(appId, knex, trx)
