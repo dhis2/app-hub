@@ -29,7 +29,10 @@ describe('@utils::AWSFileHandler', () => {
 
 describe('@utils::flatten', () => {
     it('should flatten 2-dimensional array', () => {
-        const arr = [[1, 2], [3, 4]]
+        const arr = [
+            [1, 2],
+            [3, 4],
+        ]
         const expected = [1, 2, 3, 4]
 
         const flat = flatten(arr)

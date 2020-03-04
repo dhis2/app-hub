@@ -25,13 +25,7 @@ const staticFrontendRoutes = {
                 path: '/js/{param*}',
                 handler: {
                     directory: {
-                        path: path.join(
-                            __dirname,
-                            '..',
-                            '..',
-                            'static',
-                            'js'
-                        ),
+                        path: path.join(__dirname, '..', '..', 'static', 'js'),
                     },
                 },
             },

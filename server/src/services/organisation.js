@@ -1,6 +1,4 @@
-const Joi = require('@hapi/joi')
 const slugify = require('slugify')
-const { applyFiltersToQuery } = require('../utils/databaseUtils')
 const { NotFoundError } = require('../utils/errors')
 const User = require('../models/v2/User')
 const Organisation = require('../models/v2/Organisation')
@@ -56,7 +54,7 @@ const ensureUniqueSlug = async (originalSlug, db) => {
     return slug
 }
 
-const find = async ({ filters, paging }, db) => {
+const find = async ({ filters }, db) => {
     const query = getOrganisationQuery(db)
 
     if (filters) {
