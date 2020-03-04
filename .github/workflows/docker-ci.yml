@@ -129,8 +129,8 @@ jobs:
                   echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG"
 
                   sed -i "s|AUTOINJECTED_GH_ACTIONS|$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG|g" Dockerrun.aws.json
-                  ls
                   cat Dockerrun.aws.json
+                  zip -r deploy.zip .ebextensions Dockerrun.aws.json
 
             - name: Deploy to Staging
               if: github.event_name == 'push'
@@ -142,7 +142,7 @@ jobs:
                   environment_name: staging
                   version_label: app-hub-staging-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
-                  deployment_package: Dockerrun.aws.json
+                  deployment_package: deploy.zip
 
             - name: Deploy to Production
               if: github.event_name == 'release'
@@ -154,4 +154,4 @@ jobs:
                   environment_name: prod
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
-                  deployment_package: Dockerrun.aws.json
+                  deployment_package: deploy.zip
