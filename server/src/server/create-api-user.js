@@ -1,4 +1,8 @@
 exports.createApiUser = async (knex, transaction) => {
+    if (!process.env.AUTH0_AUDIENCE) {
+        return
+    }
+
     let userId = '58262f57-4f38-45c5-a3c2-9e30ab3ba2da'
     let orgId = 'cedb4418-2417-4e72-bfcc-35ccd0dc3e41'
 
