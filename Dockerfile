@@ -16,7 +16,6 @@ RUN mv server/package/build server/static && rm -rf server/package
 FROM node:lts-slim
 
 ENV NODE_ENV=production
-ENV USE_PREBUILT_APP=1
 ENV HOST=0.0.0.0
 
 WORKDIR /srv
