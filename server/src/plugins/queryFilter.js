@@ -2,6 +2,7 @@ const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
 const Joi = require('@hapi/joi')
 const { Filters } = require('../utils/Filter')
+const { parseFilterString } = require('../utils/filterUtils')
 const FILTER_TYPE = 'filter'
 
 const defaultOptions = {
@@ -65,6 +66,7 @@ const onPreHandler = function(request, h) {
             ] = routeQueryValidation.describe()
         }
 
+        // only add validations with .filter()
         Object.keys(validateDescription.keys).forEach(k => {
             const keyDesc = validateDescription.keys[k]
             if (keyDesc.type === FILTER_TYPE) {
@@ -72,7 +74,13 @@ const onPreHandler = function(request, h) {
             }
         })
     } else {
-        queryFilterKeys.add(Object.keys(request.query))
+        // add all keys if no validation
+        Object.keys(request.query).forEach(key => {
+            const val = request.query[key]
+            const parsed = parseFilterString(val)
+            request.query[key] = parsed
+            queryFilterKeys.add(key)
+        })
     }
 
     const queryFilters = Object.keys(request.query).reduce((acc, curr) => {

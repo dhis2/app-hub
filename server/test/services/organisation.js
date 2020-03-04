@@ -2,13 +2,12 @@ const { expect } = require('@hapi/code')
 
 const Lab = require('@hapi/lab')
 
-const { it, describe, afterEach, beforeEach } = (exports.lab = Lab.script())
+const { it, describe } = (exports.lab = Lab.script())
 
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 const getUserByEmail = require('../../src/data/getUserByEmail')
 
-const { ImageType } = require('../../src/enums')
 const { Organisation } = require('../../src/services')
 const UserMocks = require('../../seeds/mock/users')
 const OrganisationMocks = require('../../seeds/mock/organisations')
@@ -112,7 +111,7 @@ describe('@services::Organisation', () => {
             expect(org.id).to.be.a.string()
             expect(org.name).to.be.equal('DHIS2')
 
-            const res = await Organisation.addUserById(org.id, userId, db)
+            await Organisation.addUserById(org.id, userId, db)
 
             const orgWithUsers = await Organisation.findOne(org.id, true, db)
             expect(orgWithUsers).to.include('name')
@@ -215,7 +214,7 @@ describe('@services::Organisation', () => {
             }
 
             try {
-                const res = await db.transaction(addUser)
+                await db.transaction(addUser)
             } catch (e) {
                 expect(e).to.be.an.error()
                 const orgWithUsers = await Organisation.findOne(
@@ -244,9 +243,7 @@ describe('@services::Organisation', () => {
         it('should fail to create when organisation is not unique', async () => {
             const userId = UserMocks[0].id // appstore
             const name = 'DHIS2'
-            const org = await expect(
-                Organisation.create({ userId, name }, db)
-            ).to.reject()
+            await expect(Organisation.create({ userId, name }, db)).to.reject()
         })
 
         it('should work within a transaction', async () => {

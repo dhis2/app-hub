@@ -18,7 +18,7 @@ class Filters {
         // filters before validation
         this.originalFilters = filters
         this.options = options
-        this.renameMap = renameMap //map of renames, from -> to
+        this.renameMap = renameMap || {} //map of renames, from -> to
         this.appliedFilters = new Set()
         this.filters = filters
     }
@@ -45,12 +45,18 @@ class Filters {
             }
         })
         if (validate) {
-            result = Joi.attempt(result, validate, options)
-            renameMap = result.renames.reduce((acc, curr) => {
-                const { from, to } = curr
-                acc[from] = to
-                return acc
-            }, {})
+            result = Joi.attempt(result, validate, {
+                convert: false,
+                ...options,
+            })
+            const renames = validate.describe().renames
+            if (renames) {
+                renameMap = renames.reduce((acc, curr) => {
+                    const { from, to } = curr
+                    acc[from] = to
+                    return acc
+                }, {})
+            }
         }
 
         return new Filters(result, { renameMap }, options)

@@ -1,17 +1,6 @@
 const Lab = require('@hapi/lab')
 const { it, describe, before } = (exports.lab = Lab.script())
-const { expect, fail } = require('@hapi/code')
-const { flatten } = require('../../src/utils')
-const {
-    UniqueViolationError,
-    ForeignKeyViolationError,
-    NotNullViolationError,
-    CheckViolationError,
-    DBError,
-    DataError,
-    ConstraintViolationError,
-} = require('db-errors')
-const { NotFoundError } = require('../../src/utils/errors')
+const { expect } = require('@hapi/code')
 const QueryFilterPlugin = require('../../src/plugins/queryFilter')
 const Joi = require('../../src/utils/CustomJoi')
 const Hapi = require('@hapi/hapi')
@@ -33,7 +22,7 @@ describe('QueryFilterPlugin', () => {
                     },
                 },
             },
-            handler: (request, h) => {
+            handler: request => {
                 const filters = request.plugins.queryFilter
                 return filters
             },
@@ -60,7 +49,7 @@ describe('QueryFilterPlugin', () => {
         expect(res.statusCode).to.be.equal(200)
         const filters = res.request.plugins.queryFilter
         expect(filters).to.be.instanceOf(Filters)
-
+        console.log(filters)
         expect(filters.filters.name).to.be.an.object()
         expect(filters.filters.name).to.include(['value', 'operator'])
     })
@@ -78,7 +67,7 @@ describe('QueryFilterPlugin', () => {
         expect(filters.name.value).to.be.equal('%DHIS2%')
     })
 
-    it('should handle basic filter and fall back to "="', async () => {
+    it('should handle basic filter and fall back to "eq"', async () => {
         const res = await server.inject({
             method: 'GET',
             url: '/filter?name=DHIS2',
@@ -89,7 +78,7 @@ describe('QueryFilterPlugin', () => {
         expect(filters).to.be.an.object()
         expect(filters.name).to.be.an.object()
         expect(filters.name.value).to.be.equal('DHIS2')
-        expect(filters.name.operator).to.be.equal('=')
+        expect(filters.name.operator).to.be.equal('eq')
     })
 
     it('should ignore when disabled on route-level', async () => {
@@ -210,7 +199,7 @@ describe('QueryFilterPlugin', () => {
         expect(filters).to.be.instanceOf(Filters)
         expect(filters.filters.name).to.be.an.object()
         expect(filters.filters.name.value).to.be.equal('DHIS2')
-        expect(filters.filters.name.operator).to.be.equal('=')
+        expect(filters.filters.name.operator).to.be.equal('eq')
 
         expect(filters.filters).to.not.include('ignored')
     })
@@ -224,14 +213,16 @@ describe('QueryFilterPlugin', () => {
                 method: 'GET',
                 path: '/validationFilter',
                 config: {
+                    validate: {
+                        query: Joi.object({
+                            name: Joi.filter(),
+                            owner: Joi.filter(Joi.string().guid()),
+                            created_by_user_id: Joi.filter(Joi.string().guid()),
+                        }).rename('owner', 'created_by_user_id'),
+                    },
                     plugins: {
                         queryFilter: {
                             enabled: true,
-                            validate: Joi.object({
-                                name: Joi.string(),
-                                owner: Joi.string().guid(),
-                                created_by_user_id: Joi.string().guid(),
-                            }).rename('owner', 'created_by_user_id'),
                         },
                     },
                 },
@@ -240,8 +231,30 @@ describe('QueryFilterPlugin', () => {
                 },
             })
         })
+        it('should validate successfully', async () => {
+            const res = await server.inject({
+                method: 'GET',
+                url: '/validationFilter?name=eq:DHIS2',
+            })
 
-        it('should transform the value', async () => {
+            expect(res.statusCode).to.be.equal(200)
+
+            const filters = res.request.plugins.queryFilter
+            expect(filters).to.be.instanceof(Filters)
+            expect(filters.filters).to.be.an.object()
+            expect(filters.filters.name).to.include(['value', 'operator'])
+        })
+
+        it('should return 400 if validation fails', async () => {
+            const res = await server.inject({
+                method: 'GET',
+                url: '/validationFilter?owner=eq:DHIS2',
+            })
+
+            expect(res.statusCode).to.be.equal(400)
+        })
+
+        it('should support rename of the key', async () => {
             const res = await server.inject({
                 method: 'GET',
                 url:
