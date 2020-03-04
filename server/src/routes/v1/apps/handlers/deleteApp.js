@@ -1,6 +1,8 @@
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
+const debug = require('debug')('apphub:server:routes:v1:handlers:deleteApp')
+
 const { deleteDir } = require('../../../../utils')
 const defaultFailHandler = require('../../defaultFailHandler')
 
@@ -24,7 +26,7 @@ module.exports = {
         },
     },
     handler: async (request, h) => {
-        //request.logger.info('In handler %s', request.path)
+        debug(`deleteApp : ${request.params.appId}`)
 
         if (!canDeleteApp(request, h)) {
             throw Boom.unauthorized()
@@ -35,13 +37,12 @@ module.exports = {
 
         const appId = request.params.appId
         const appRows = await getAppsById(appId, 'en', knex)
-        const item = appRows[0]
 
         const trx = await knex.transaction()
         try {
             await deleteApp(appId, knex, trx)
             await trx.commit()
-            await deleteDir(item.id)
+            await deleteDir(appId)
         } catch (err) {
             await trx.rollback()
             throw Boom.internal(err)
