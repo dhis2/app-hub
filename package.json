@@ -16,8 +16,7 @@
         "test": "yarn test:server && yarn test:client",
         "test:server": "yarn workspace server test",
         "test:client": "yarn workspace client test",
-        "clone": "yarn workspace tools clone",
-        "prepare-api": "yarn workspace tools insert-m2m-user"
+        "clone": "yarn workspace tools clone"
     },
     "devDependencies": {
         "@dhis2/cli-style": "^6.0.0",
