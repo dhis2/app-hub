@@ -39,9 +39,9 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 const convertAppToV1Media = (app, serverUrl) => {
     return {
         imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.version_id}/${app.media_id}`,
-        caption: app.media_caption,
+        caption: '',
         created: +new Date(app.media_created_at),
-        description: app.media_description || '',
+        description: '',
         id: app.media_id,
         lastUpdated: +new Date(app.media_created_at),
         logo: app.image_type === ImageType.Logo,

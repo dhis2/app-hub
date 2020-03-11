@@ -9,12 +9,7 @@ const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
 const { ImageType } = require('../../src/enums')
-const {
-    addAppVersionMedia,
-    getAppsById,
-    createApp,
-    getAppById,
-} = require('../../src/data')
+const { addAppVersionMedia, getAppsById, createApp } = require('../../src/data')
 
 const users = require('../../seeds/mock/users')
 const apps = require('../../seeds/mock/apps')
@@ -43,19 +38,6 @@ describe('@data::addAppVersionMedia', () => {
         await trx.commit()
         expect(id).to.be.string()
         expect(id.length).to.be.equal(36)
-
-        const appWithVersion = await getAppById(
-            appVersions[0][0].app_id,
-            'en',
-            db
-        )
-        const mediaApp = appWithVersion.find(
-            a => a.version_id === appVersions[0][0].id && a.media_id === id
-        )
-        expect(mediaApp).to.not.be.null()
-
-        expect(mediaApp.media_caption).to.be.equal(appMedia.caption)
-        expect(mediaApp.media_description).to.be.equal(appMedia.description)
     })
 })
 
@@ -264,7 +246,7 @@ describe('@data::updateApp', () => {
 })
 
 describe('@data::updateAppVersion', () => {
-    const { updateAppVersion, getAppById } = require('../../src/data')
+    const { updateAppVersion } = require('../../src/data')
 
     it('should update the app version', async () => {
         let transaction = await db.transaction()
