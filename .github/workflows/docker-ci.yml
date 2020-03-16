@@ -6,9 +6,6 @@ on:
             - master
             - next
 
-    # Run tests for any PRs.
-    pull_request:
-
 env:
     ECR_REPOSITORY: dhis2/app-hub
     HUB_REPOSITORY: dhis2/app-hub
