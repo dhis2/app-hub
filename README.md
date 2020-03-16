@@ -1,13 +1,13 @@
 # App Hub for DHIS 2
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-![app-hub production](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=master)
-![app-hub staging](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=next)
 
 # Environments
 
--   `master`: [Production](https://apps.dhis2.org/)
--   `next`: [Staging](https://staging.apps.dhis2.org/)
+| Branch                                                   | Environment | URL                             | Build status                                                                                                |
+| -------------------------------------------------------- | ----------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [`next`](https://github.com/dhis2/app-hub/tree/next)     | staging     | https://staging.apps.dhis2.org/ | ![app-hub staging](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=next)      |
+| [`master`](https://github.com/dhis2/app-hub/tree/master) | production  | https://apps.dhis2.org/         | ![app-hub production](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=master) |
 
 # Setup
 
