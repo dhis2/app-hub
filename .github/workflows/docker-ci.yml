@@ -153,9 +153,7 @@ jobs:
                   deployment_package: deploy.zip
 
             - name: Publish
-              run: |
-                  npx @dhis2/cli-utils --version
-                  npx @dhis2/cli-utils release
+              run: npx @dhis2/cli-utils release
               env:
                   GIT_AUTHOR_NAME: '@dhis2-bot'
                   GIT_AUTHOR_EMAIL: 'apps@dhis2.org'
