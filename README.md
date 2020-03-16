@@ -4,9 +4,10 @@
 ![app-hub production](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=master)
 ![app-hub staging](https://github.com/dhis2/app-hub/workflows/dhis2-docker%20ci/badge.svg?branch=next)
 
-Visit the live [DHIS 2 app hub](https://apps.dhis2.org/)
+# Environments
 
-Note: The master branch currently holds the version 2 of the unreleased App Hub. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
+-   `master`: [Production](https://apps.dhis2.org/)
+-   `next`: [Staging](https://staging.apps.dhis2.org/)
 
 # Setup
 
