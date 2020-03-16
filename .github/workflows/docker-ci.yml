@@ -66,8 +66,6 @@ jobs:
                   AUTH0_ALG: HS256
 
     deploy:
-        name: Deploy
-
         # Ensure test job passes before pushing image.
         needs: [test]
 
