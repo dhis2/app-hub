@@ -1,16 +1,10 @@
 # App Hub for DHIS 2
 
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
 Visit the live [DHIS 2 app hub](https://apps.dhis2.org/)
 
 Note: The master branch currently holds the version 2 of the unreleased App Hub. For the current version in production see https://github.com/dhis2/app-store/tree/app-store-v1
-
-# TO DO
-
--   [ ] Fix tests after merge
--   [ ] Split up the deployment work so that Travis builds the frontend,
-        and runs the test against the backend, if both pass, deploy the
-        _built_ frontend with the backend to EBS. Remove on-server build
-        delay. Allow webapp to be a CRA app.
 
 # Setup
 
@@ -20,23 +14,29 @@ Note: The master branch currently holds the version 2 of the unreleased App Hub.
 git clone https://github.com/dhis2/app-hub.git
 ```
 
-## Create & seed test-database
+## With Docker Compose
+
+-   See docs in [dhis2/docker-compose/app-hub](https://github.com/dhis2/docker-compose/blob/master/app-hub/README.md).
+
+## With Postgres
+
+### Create & seed test-database
 
 Create a database `apphub` in postgres
 
-### Migrate/create tables
+#### Migrate/create tables
 
 ```bash
 npx knex migrate:latest
 ```
 
-### Seed testdata
+#### Seed testdata
 
 ```bash
 npx knex seed:run
 ```
 
-### Reset & recreate database
+#### Reset & recreate database
 
 ```bash
 cd packages/server
@@ -168,3 +168,14 @@ and then in another terminal:
 ```bash
  yarn run clone
 ```
+
+# Release
+
+This application is automatically released when merging into controlled
+branches.
+
+-   The `next` branch is deployed to **staging**.
+-   The `master` branch is deployed to **production**.
+
+So: **all work should be merged to `next`, and then `next` is merged to
+`master` when we decide to cut a release**.
