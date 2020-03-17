@@ -3,9 +3,9 @@ version: 1
 update_configs:
     - package_manager: 'javascript'
       directory: '/'
-      update_schedule: 'daily'
+      update_schedule: 'weekly'
       version_requirement_updates: 'increase_versions'
-      target_branch: 'master'
+      target_branch: 'next'
       automerged_updates:
           - match:
                 dependency_name: '@dhis2/*'
@@ -13,4 +13,4 @@ update_configs:
                 update_type: 'semver:minor'
           - match:
                 dependency_type: 'all'
-                update_type: 'security:patch'
+                update_type: 'semver:minor'
