@@ -1,13 +1,12 @@
 const joi = require('../../utils/CustomJoi')
 const User = require('./User')
 const { definition: defaultDefinition } = require('./Default')
-const { extractKeysWithTag, createDefaultValidator } = require('./helpers')
+const { createDefaultValidator } = require('./helpers')
 
 const definition = defaultDefinition
     .append({
         name: joi.string(),
         slug: joi.string(),
-        name: joi.string(),
         owner: joi.string().guid({ version: 'uuidv4' }),
         users: joi.array().items(User.definition),
     })

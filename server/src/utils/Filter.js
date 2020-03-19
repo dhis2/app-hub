@@ -43,10 +43,12 @@ class Filters {
                 debug('Failed to parse filter', e)
                 throw Error(`Failed to parse filter for ${key}`)
             }
+            return result
         })
-        if (validate) {
+        if (validate && Joi.isSchema(validate)) {
             result = Joi.attempt(result, validate, {
                 convert: false,
+                stripUnnown: false,
                 ...options,
             })
             const renames = validate.describe().renames
@@ -57,6 +59,8 @@ class Filters {
                     return acc
                 }, {})
             }
+        } else {
+            renameMap = validate
         }
 
         return new Filters(result, { renameMap }, options)
