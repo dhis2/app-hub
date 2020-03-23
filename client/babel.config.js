@@ -8,6 +8,9 @@ module.exports = function(api) {
                 {
                     useBuiltIns: 'entry',
                     corejs: '3',
+                    targets: {
+                        node: 'current',
+                    },
                 },
             ],
             '@babel/preset-react',
@@ -23,6 +26,7 @@ module.exports = function(api) {
                     },
                 },
             ],
+            '@babel/plugin-proposal-class-properties',
         ],
     }
 }
