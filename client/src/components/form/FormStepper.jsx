@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardText } from 'material-ui/Card'
 import Button from 'material-ui/RaisedButton'
-import { reduxForm, getFormSyncErrors } from 'redux-form'
+import { reduxForm, getFormSyncErrors, getFormAsyncErrors } from 'redux-form'
 import Spinner from '../utils/Spinner'
 import Stepper from 'material-ui/Stepper/Stepper'
 import Step from 'material-ui/Stepper/Step'
@@ -74,12 +74,19 @@ class FormStepper extends Component {
     }
 
     nextStep() {
+        if (this.props.asyncValidating) {
+            return
+        }
+
         const currStep = this.state.stepIndex
         const currSection = this.getSectionName(currStep)
-        const errorFields = this.props.errorState[currSection]
-        const errorFieldNames = Object.keys(errorFields).map(
-            (field, i) => `${currSection}.${field}`
-        )
+        const syncErrorFields = this.props.errorState[currSection]
+        const asyncErrorFields = this.props.asyncErrorState[currSection] || {}
+
+        const errorFieldNames = Object.keys(syncErrorFields)
+            .concat(Object.keys(asyncErrorFields))
+            .map((field, i) => `${currSection}.${field}`)
+
         //Touch all fields that has an error, so that the fields are updated to show the error
         //and prevent transition
         if (errorFieldNames.length > 0) {
@@ -274,6 +281,9 @@ FormStepper.defaultProps = {
 
 const mapStateToProps = (state, ownProps) => ({
     errorState: getFormSyncErrors(ownProps.form)(state),
+    asyncErrorState: getFormAsyncErrors(ownProps.form)(state) || {},
 })
-const ReduxFormConnected = reduxForm({})(FormStepper)
+const ReduxFormConnected = reduxForm({
+    forceUnregisterOnUnmount: true,
+})(FormStepper)
 export default connect(mapStateToProps)(ReduxFormConnected)

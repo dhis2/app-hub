@@ -210,3 +210,11 @@ export function createUploadImageOptions(data) {
 export function getAllChannels() {
     return fromApi('v2/channels')
 }
+
+export function searchOrganisations(name) {
+    return fromApi(`v2/organisations?name=ilike:%${name}%`)
+}
+
+export function getMe() {
+    return fromApi('v2/me', true)
+}

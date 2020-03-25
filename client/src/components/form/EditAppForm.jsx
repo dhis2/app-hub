@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
 import { Card, CardText } from 'material-ui/Card'
 import Button from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
@@ -148,4 +149,8 @@ EditForm.propTypes = {
     //Submits the form, given by Redux-form "Form"-component.
     submit: PropTypes.func,
 }
-export default reduxForm({ form: 'editAppForm', validate })(EditForm)
+
+
+//const mapDispatch
+const reduxFormed = reduxForm({ form: 'editAppForm', validate })(EditForm)
+export default reduxFormed

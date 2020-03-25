@@ -4,7 +4,17 @@ import { combineEpics, ofType } from 'redux-observable'
 import { getAuth } from '../utils/AuthService'
 import { history } from '../utils/history'
 import * as api from '../api/api'
-import { concatMap, mergeAll } from 'rxjs/operators'
+import {
+    concatMap,
+    switchMap,
+    mergeAll,
+    debounceTime,
+    catchError,
+    filter,
+} from 'rxjs/operators'
+import { of, from, merge } from 'rxjs'
+import { startAsyncValidation, stopAsyncValidation } from 'redux-form'
+import { validateOrganisation } from '../components/form/UploadAppFormStepper'
 
 const loadAppsAll = action$ =>
     action$.pipe(
@@ -116,17 +126,23 @@ const user = action$ =>
         ofType(actions.USER_LOAD),
         concatMap(() => {
             const auth = getAuth()
-            return new Promise((resolve, reject) => {
-                auth.lock.getProfile(auth.getToken(), (error, profile) => {
-                    if (error) {
-                        reject(actionCreators.userError())
-                    } else {
-                        auth.setProfile(profile)
-                        resolve(actionCreators.userLoaded(profile))
-                    }
-                })
-            })
-        })
+            return [
+                new Promise((resolve, reject) => {
+                    auth.lock.getProfile(auth.getToken(), (error, profile) => {
+                        if (error) {
+                            reject(actionCreators.userError())
+                        } else {
+                            auth.setProfile(profile)
+                            resolve(actionCreators.userLoaded(profile))
+                        }
+                    })
+                }),
+                of({
+                    type: actions.ME_LOAD,
+                }),
+            ]
+        }),
+        mergeAll()
     )
 
 const userApps = action$ =>
@@ -429,6 +445,68 @@ const loadChannels = action$ =>
         })
     )
 
+/**
+ * Gets organisation by name
+ *
+ * Need to have validation here, as the validation is based upon the
+ * results and thus we cannot use regular promise validation.
+ */
+const searchOrganisation = (action$, state$) =>
+    action$.pipe(
+        ofType(actions.ORGANISATIONS_SEARCH),
+        filter(action => !!action.payload.name),
+        debounceTime(250),
+        switchMap(action => {
+            return merge(
+                of(startAsyncValidation('uploadAppForm')),
+                from(api.searchOrganisations(action.payload.name)).pipe(
+                    switchMap(orgs => {
+                        const memberOfOrgs =
+                            state$.value.user.organisations.list
+                        const validateError = validateOrganisation(
+                            action.payload.name,
+                            orgs,
+                            memberOfOrgs
+                        )
+                        const error = validateError
+                            ? { developer: { developerOrg: validateError } }
+                            : undefined
+                        return [
+                            {
+                                type: actions.ORGANISATIONS_SEARCH_SUCCESS,
+                                payload: {
+                                    list: orgs,
+                                },
+                            },
+                            stopAsyncValidation('uploadAppForm', error),
+                        ]
+                    }),
+                    catchError(e => {
+                        return [
+                            {
+                                type: actions.ORGANISATIONS_SEARCH_ERROR,
+                                payload: e,
+                            },
+                            stopAsyncValidation('uploadAppForm'),
+                        ]
+                    })
+                )
+            )
+        })
+    )
+
+const loadMe = action$ =>
+    action$.pipe(
+        ofType(actions.ME_LOAD),
+        switchMap(async () => {
+            const payload = await api.getMe()
+            return {
+                type: actions.ME_LOAD_SUCCESS,
+                payload,
+            }
+        })
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -446,5 +524,7 @@ export default combineEpics(
     deleteImage,
     editVersion,
     addMultipleImages,
-    loadChannels
+    loadChannels,
+    searchOrganisation,
+    loadMe
 )

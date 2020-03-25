@@ -319,3 +319,7 @@ export const openDialog = (dialogType, dialogprops) =>
  * @return {object}             Dialog action
  */
 export const closeDialog = actionCreator(actions.CLOSE_DIALOG)
+
+export const searchOrganisation = actionCreator(actions.ORGANISATIONS_SEARCH)
+
+export const getMe = actionCreator(actions.ME_LOAD)

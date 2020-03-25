@@ -270,6 +270,14 @@ function userInfoReducer(
                 },
             }
         }
+
+        case actionTypes.ME_LOAD_SUCCESS: {
+            return {
+                ...state,
+                userId: action.payload.userId,
+            }
+        }
+
         default: {
             if (action.type.endsWith('USER_ERROR')) {
                 return {
@@ -281,10 +289,25 @@ function userInfoReducer(
             }
         }
     }
-    return state
+}
+
+function organisationReducer(state = { ...initialState, list: {} }, action) {
+    switch (action.type) {
+        case actionTypes.ME_LOAD_SUCCESS: {
+            return {
+                ...state,
+                ...loadedState,
+                list: action.payload.organisations,
+            }
+        }
+        default: {
+            return state
+        }
+    }
 }
 
 export default combineReducers({
     appList: optimistic(appListReducer),
     userInfo: userInfoReducer,
+    organisations: organisationReducer,
 })

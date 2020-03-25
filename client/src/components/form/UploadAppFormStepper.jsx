@@ -11,7 +11,7 @@ import {
     hasError,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
-
+import OrganisationSearch from './helpers/OrganisationSearch'
 import { loadChannels } from '../../actions/actionCreators'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
@@ -56,7 +56,7 @@ const validateSection = (values, section) => {
     return errors
 }
 
-const validate = values => {
+const validate = (values, props) => {
     const errors = {}
     errors.general = validateSection(values.general, 'general')
     errors.version = validateSection(values.version, 'version')
@@ -79,6 +79,22 @@ const validate = values => {
             'Your submission contains an error. Please check previous steps and try again.'
     }
     return errors
+}
+
+export const validateOrganisation = (value, organisations, memberOfOrgs) => {
+    if (!value) return undefined
+
+    const existingOrganisation = organisations.find(
+        org => org.name.toLowerCase() === value.toLowerCase()
+    )
+
+    if (existingOrganisation) {
+        const isMember = memberOfOrgs.includes(existingOrganisation.id)
+        if (!isMember) {
+            return 'You are not a member of this organisation. Contact the owner to get access to upload apps.'
+        }
+    }
+    return undefined
 }
 
 const appTypesItems = appTypes.map(type => (
@@ -221,8 +237,11 @@ const AppDeveloperSection = props => {
             <br />
             <Field
                 name="developerOrg"
-                component={formUtils.renderTextField}
+                component={OrganisationSearch}
                 label="Organisation *"
+                organisations={props.organisations}
+                // validate={validateOrganisation}
+                normalize={val => val.trim()}
             />
         </FormSection>
     )
@@ -348,9 +367,14 @@ class UploadAppFormStepper extends Component {
                         name="version"
                         channels={this.props.channels.list}
                     />,
-                    <AppDeveloperSection name="developer" />,
+                    <AppDeveloperSection
+                        name="developer"
+                        organisations={this.props.organisations}
+                    />,
                     <AppImageSection name="image" />,
                 ]}
+                organisations={this.props.organisations}
+                memberOfOrgs={this.props.memberOfOrgs}
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
         )
@@ -365,6 +389,10 @@ UploadAppFormStepper.defaultProps = {}
 
 const mapStateToProps = state => ({
     channels: state.channels,
+    organisations: Object.keys(state.organisations.byId).map(
+        key => state.organisations.byId[key]
+    ),
+    memberOfOrgs: state.user.organisations.list,
 })
 
 const mapDispatchToProps = dispatch => ({
