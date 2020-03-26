@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card'
 import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar'

@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
@@ -66,7 +67,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(EditImageDialog)
+export default connect(null, mapDispatchToProps)(EditImageDialog)

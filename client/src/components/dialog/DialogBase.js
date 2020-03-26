@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
@@ -90,7 +91,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(DialogBase)
+export default connect(null, mapDispatchToProps)(DialogBase)

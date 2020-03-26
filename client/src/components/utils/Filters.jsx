@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import TextField from 'material-ui/TextField'
 import Toggle from 'material-ui/Toggle'
@@ -252,7 +253,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export const SelectFilter = connect(
-    mapStateToProps,
-    null
-)(SelectedFilterForm)
+export const SelectFilter = connect(mapStateToProps, null)(SelectedFilterForm)
