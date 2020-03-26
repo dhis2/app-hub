@@ -1,11 +1,4 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { Card, CardText } from 'material-ui/Card'
-import Button from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
-import FontIcon from 'material-ui/FontIcon'
-import UploadFileField from './UploadFileField'
-import SelectField from 'material-ui/SelectField'
+import React, { PropTypes } from 'react'
 import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
@@ -51,7 +44,7 @@ const validate = values => {
 }
 
 const EditForm = props => {
-    const { handleSubmit, pristine, submitting } = props
+    const { handleSubmit } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -72,7 +65,7 @@ const EditForm = props => {
         return props.submitted({ data })
     }
 
-    const menuItems = appTypes.map((type, i) => (
+    const menuItems = appTypes.map(type => (
         <MenuItem
             key={type.value}
             value={type.value}
@@ -146,10 +139,7 @@ const EditForm = props => {
 EditForm.propTypes = {
     //Callback for the values when the form has been submitted.
     submitted: PropTypes.func,
-    //Submits the form, given by Redux-form "Form"-component.
-    submit: PropTypes.func,
 }
-
 
 //const mapDispatch
 const reduxFormed = reduxForm({ form: 'editAppForm', validate })(EditForm)

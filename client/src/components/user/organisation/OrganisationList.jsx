@@ -114,7 +114,6 @@ class OrganisationList extends Component {
                         'APPROVE'
                     )}
                     handleReject={this.handleApproval.bind(this, app, 'REJECT')}
-
                 />
             ))
         const emptyAppsText = manager
@@ -206,7 +205,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(OrganisationList)
+export default connect(mapStateToProps, mapDispatchToProps)(OrganisationList)

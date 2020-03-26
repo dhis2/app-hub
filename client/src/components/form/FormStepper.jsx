@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Card, CardText } from 'material-ui/Card'
 import Button from 'material-ui/RaisedButton'
 import { reduxForm, getFormSyncErrors, getFormAsyncErrors } from 'redux-form'
 import Spinner from '../utils/Spinner'
@@ -45,7 +44,7 @@ class FormStepper extends Component {
         return this.props.sections[id].props.name
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate() {
         if (this.state.sectionHeight !== 'auto') {
             this.setState({
                 ...this.state,
@@ -85,7 +84,7 @@ class FormStepper extends Component {
 
         const errorFieldNames = Object.keys(syncErrorFields)
             .concat(Object.keys(asyncErrorFields))
-            .map((field, i) => `${currSection}.${field}`)
+            .map(field => `${currSection}.${field}`)
 
         //Touch all fields that has an error, so that the fields are updated to show the error
         //and prevent transition
@@ -116,18 +115,7 @@ class FormStepper extends Component {
     }
 
     render() {
-        const {
-            handleSubmit,
-            submitted,
-            submitFailed,
-            pristine,
-            error,
-            invalid,
-            valid,
-            reset,
-            dirty,
-            submitting,
-        } = this.props
+        const { handleSubmit, submitFailed, error, submitting } = this.props
         const { stepIndex } = this.state
         const styles = {
             nextButton: {
@@ -165,7 +153,7 @@ class FormStepper extends Component {
                           <StepButton
                               onClick={() => this.goToStep(i)}
                               {...(section.props.icon && {
-                                  icon: sections.props.icon,
+                                  icon: section.props.icon,
                               })}
                               {...(showError && { icon: sectionErrorIcon })}
                           >
@@ -239,8 +227,6 @@ class FormStepper extends Component {
 }
 FormStepper.propTypes = {
     form: PropTypes.string.isRequired,
-    stepperLinear: PropTypes.bool,
-
     /**
      * An array of sections, each section should be a react-node
      * Each section should render a FormSection, and MUST have a "name"-prop.
@@ -250,7 +236,6 @@ FormStepper.propTypes = {
      *    errors - the errorState of the section.
      */
     sections: PropTypes.arrayOf(PropTypes.node).isRequired,
-
     /**
      * Function called with values of the form when it's submitted.
      * onSubmit(values)
@@ -261,6 +246,7 @@ FormStepper.propTypes = {
      *  props: stepperState, stepperProps
      */
     content: PropTypes.node,
+    stepperLinear: PropTypes.bool,
 
     /**
      * Override the steps, a function which should return an array of Steps (react-nodes)

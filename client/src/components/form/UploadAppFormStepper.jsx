@@ -56,7 +56,7 @@ const validateSection = (values, section) => {
     return errors
 }
 
-const validate = (values, props) => {
+const validate = values => {
     const errors = {}
     errors.general = validateSection(values.general, 'general')
     errors.version = validateSection(values.version, 'version')
@@ -210,9 +210,8 @@ const AppVersionSection = props => {
 }
 
 AppVersionSection.propTypes = {
-    name: PropTypes.string,
-    formState: PropTypes.object,
     channels: PropTypes.array,
+    name: PropTypes.string,
 }
 
 AppVersionSection.defaultProps = {
@@ -358,20 +357,22 @@ class UploadAppFormStepper extends Component {
             <ErrorOrLoading loading={loading} error={false} />
         ) : (
             <FormStepper
-                form="uploadAppForm"
+                form={this.props.form}
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[
-                    <AppGeneralSection name="general" />,
+                    <AppGeneralSection key="general" name="general" />,
                     <AppVersionSection
+                        key="version"
                         name="version"
                         channels={this.props.channels.list}
                     />,
                     <AppDeveloperSection
+                        key="developer"
                         name="developer"
                         organisations={this.props.organisations}
                     />,
-                    <AppImageSection name="image" />,
+                    <AppImageSection key="image" name="image" />,
                 ]}
                 organisations={this.props.organisations}
                 memberOfOrgs={this.props.memberOfOrgs}
@@ -382,7 +383,6 @@ class UploadAppFormStepper extends Component {
 }
 UploadAppFormStepper.propTypes = {
     submitted: PropTypes.func.isRequired,
-    form: PropTypes.string.isRequired,
 }
 
 UploadAppFormStepper.defaultProps = {}

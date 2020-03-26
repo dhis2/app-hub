@@ -1,6 +1,6 @@
 import * as actionTypes from '../constants/actionTypes'
 import { combineReducers } from 'redux'
-import { optimistic, ensureState } from 'redux-optimistic-ui'
+import { optimistic } from 'redux-optimistic-ui'
 
 const localStorageProfile = localStorage.getItem('profile')
 const initialProfile = localStorageProfile
@@ -40,7 +40,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APPS_ALL_LOADED:
         case actionTypes.USER_APPS_LOADED: {
             const byId = {}
-            action.payload.map((app, i) => {
+            action.payload.map(app => {
                 byId[app.id] = app
             })
             return {
@@ -115,7 +115,6 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         }
 
         case actionTypes.APP_DELETE: {
-            const app = action.payload.app
             const list = { ...state.byId }
             delete list[action.payload.app.id]
             return {
@@ -139,7 +138,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         }
 
         case actionTypes.APP_IMAGE_ADD_SUCCESS: {
-            const { appId, imageId, image } = action.payload
+            const { appId, image } = action.payload
             const app = state.byId[appId]
             const list = app.images.concat(image)
             return {
@@ -157,7 +156,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_IMAGE_EDIT: {
             const { appId, imageId, data } = action.payload
             const app = state.byId[appId]
-            const list = app.images.map((elem, ind) => {
+            const list = app.images.map(elem => {
                 if (elem.id == imageId) {
                     return {
                         ...elem,
@@ -186,7 +185,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_IMAGE_DELETE: {
             const { appId, imageId } = action.payload
             const app = state.byId[appId]
-            const list = app.images.filter((elem, ind) => elem.id !== imageId)
+            const list = app.images.filter(elem => elem.id !== imageId)
             return {
                 ...state,
                 byId: {
@@ -202,7 +201,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_VERSION_EDIT: {
             const { appId, version } = action.payload
             const app = state.byId[appId]
-            const list = app.versions.map((elem, ind) => {
+            const list = app.versions.map(elem => {
                 if (elem.id == version.id) {
                     return {
                         ...elem,
@@ -235,7 +234,6 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
             }
         }
     }
-    return state
 }
 
 function userInfoReducer(

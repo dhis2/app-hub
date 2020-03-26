@@ -30,7 +30,7 @@ const reducer = combineReducers({
     snackbar: snackbarReducer,
     form: formReducer,
     channels: channelReducer,
-    organisations: organisationReducer
+    organisations: organisationReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

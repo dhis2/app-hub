@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import AutoComplete from 'material-ui/AutoComplete'
 import { connect } from 'react-redux'
 import { searchOrganisation, getMe } from '../../../actions/actionCreators'
-import debounce from 'lodash/debounce'
 
 class OrganisationSearchField extends Component {
     constructor(props) {
@@ -20,7 +19,7 @@ class OrganisationSearchField extends Component {
 
     renderIsNewOrgMessage = () => {
         const { organisations } = this.props
-        const { touched, visited, valid, active } = this.props.meta
+        const { touched, valid, active } = this.props.meta
         const { value } = this.props.input
 
         if (
@@ -55,10 +54,8 @@ class OrganisationSearchField extends Component {
             input,
             label,
             forceShowErrors,
-            meta: { touched, error, warning },
-            children,
+            meta: { touched, error },
             organisations,
-            ...props
         } = this.props
 
         const orgs = organisations.map(org => org.name)
@@ -101,15 +98,5 @@ const ConnectedSearchField = connect(
     mapStateToProps,
     mapDispatchToProps
 )(OrganisationSearchField)
-
-const renderFormField = ({
-    input,
-    label,
-    meta: { tocuhed, error, dirty },
-    children,
-    ...props
-}) => {
-    return <OrganisationSearchField></OrganisationSearchField>
-}
 
 export default ConnectedSearchField
