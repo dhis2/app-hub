@@ -1,5 +1,6 @@
 import config from '../../config'
-import { getAuth } from '../utils/AuthService'
+import AuthService from '../utils/AuthService'
+import AppHubAPI from './AppHubAPI'
 
 const baseURL = config.api.baseURL
 
@@ -20,6 +21,14 @@ const updateOpts = {
         'content-type': 'application/json',
     },
 }
+
+export const Auth = new AuthService(config.auth0.clientID, config.auth0.domain)
+
+const apiV2 = new AppHubAPI({
+    baseUrl: config.api.baseURL,
+    apiVersion: 'v2',
+    auth: Auth,
+})
 
 export function getAllApps() {
     return fromApi('v1/apps/all', true)
@@ -136,7 +145,7 @@ export function fromApi(url, auth = false, extraOpts) {
 
 export function getAuthHeaders() {
     const headers = {}
-    headers['Authorization'] = 'Bearer ' + getAuth().getToken()
+    headers['Authorization'] = 'Bearer ' + Auth.getToken()
     return headers
 }
 
@@ -217,4 +226,8 @@ export function searchOrganisations(name) {
 
 export function getMe() {
     return fromApi('v2/me', true)
+}
+
+export function getOrganisations(filters) {
+    return apiV2.request('organisations', { params: filters })
 }

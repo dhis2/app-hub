@@ -1,7 +1,7 @@
 import * as actions from '../constants/actionTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
-import { getAuth } from '../utils/AuthService'
+import { Auth } from '../api/api'
 import { history } from '../utils/history'
 import * as api from '../api/api'
 import {
@@ -125,14 +125,13 @@ const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
         concatMap(() => {
-            const auth = getAuth()
             return [
                 new Promise((resolve, reject) => {
-                    auth.lock.getProfile(auth.getToken(), (error, profile) => {
+                    Auth.lock.getProfile(Auth.getToken(), (error, profile) => {
                         if (error) {
                             reject(actionCreators.userError())
                         } else {
-                            auth.setProfile(profile)
+                            Auth.setProfile(profile)
                             resolve(actionCreators.userLoaded(profile))
                         }
                     })
@@ -483,10 +482,10 @@ const searchOrganisation = (action$, state$) =>
                     }),
                     catchError(e => {
                         return [
-                            {
-                                type: actions.ORGANISATIONS_SEARCH_ERROR,
-                                payload: e,
-                            },
+                            actions.actionErrorCreator(
+                                actions.ORGANISATIONS_SEARCH_ERROR,
+                                e
+                            ),
                             stopAsyncValidation('uploadAppForm'),
                         ]
                     })
@@ -498,12 +497,40 @@ const searchOrganisation = (action$, state$) =>
 const loadMe = action$ =>
     action$.pipe(
         ofType(actions.ME_LOAD),
-        switchMap(async () => {
-            const payload = await api.getMe()
-            return {
-                type: actions.ME_LOAD_SUCCESS,
-                payload,
+        switchMap(() =>
+            api
+                .getMe()
+                .then(response => ({
+                    type: actions.ME_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e => ({
+                    type: actions.ME_LOAD_ERROR,
+                    payload: e,
+                }))
+        )
+    )
+
+const loadOrganisations = (action$, state$) =>
+    action$.pipe(
+        ofType(actions.ORGANISATIONS_LOAD),
+        switchMap(action => {
+            const filters = action.payload.filters || {}
+            if (action.payload.currentUser) {
+                const currentUserId = state$.value.user.userInfo.userId
+                filters.user = currentUserId
             }
+
+            return api
+                .getOrganisations(filters)
+                .then(response => ({
+                    type: actions.ORGANISATIONS_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e => ({
+                    type: actions.ORGANISATIONS_LOAD_ERROR,
+                    payload: e,
+                }))
         })
     )
 
@@ -526,5 +553,6 @@ export default combineEpics(
     addMultipleImages,
     loadChannels,
     searchOrganisation,
-    loadMe
+    loadMe,
+    loadOrganisations
 )

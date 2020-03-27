@@ -323,3 +323,8 @@ export const closeDialog = actionCreator(actions.CLOSE_DIALOG)
 export const searchOrganisation = actionCreator(actions.ORGANISATIONS_SEARCH)
 
 export const getMe = actionCreator(actions.ME_LOAD)
+
+export const loadCurrentUserOrganisations = () =>
+    actionCreator(actions.ORGANISATIONS_LOAD)({
+        currentUser: true,
+    })
