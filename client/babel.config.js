@@ -16,7 +16,6 @@ module.exports = function(api) {
             '@babel/preset-react',
         ],
         plugins: [
-            'babel-plugin-rewire',
             [
                 'transform-imports',
                 {
@@ -28,5 +27,10 @@ module.exports = function(api) {
             ],
             '@babel/plugin-proposal-class-properties',
         ],
+        env: {
+            test: {
+                plugins: ['babel-plugin-rewire'],
+            },
+        },
     }
 }
