@@ -1,5 +1,4 @@
 const debug = require('debug')('apphub:server:routes:handlers:v1:createApp')
-const path = require('path')
 
 const Boom = require('@hapi/boom')
 
@@ -19,7 +18,7 @@ const createAppStatus = require('../../../../data/createAppStatus')
 const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
-const addAppVersionMedia = require('../../../../data/addAppVersionMedia')
+const addAppMedia = require('../../../../data/addAppMedia')
 
 const {
     getOrganisationsByName,
@@ -245,10 +244,10 @@ module.exports = {
                 if (imageInfo) {
                     ;({ caption, description } = imageInfo)
                 }
-                const { id } = await addAppVersionMedia(
+                const { id, media_id } = await addAppMedia(
                     {
                         userId: requestUserId,
-                        appVersionId: appVersion.id,
+                        appId: appId,
                         imageType: ImageType.Logo,
                         fileName: imageFileMetadata.filename,
                         mime: imageFileMetadata.headers['content-type'],
@@ -259,8 +258,10 @@ module.exports = {
                     trx
                 )
 
-                debug(`Logo inserted with id '${id}'`)
-                iconId = id
+                debug(
+                    `Logo inserted with app_media_id '${id}' and media_id: '${media_id}`
+                )
+                iconId = media_id
             }
         } catch (err) {
             debug('ROLLING BACK TRANSACTION')
@@ -283,11 +284,7 @@ module.exports = {
                 file._data
             )
             if (imageFile) {
-                const iconUpload = saveFile(
-                    `${appId}/${versionId}`,
-                    iconId,
-                    imageFile._data
-                )
+                const iconUpload = saveFile(appId, iconId, imageFile._data)
                 await Promise.all([appUpload, iconUpload])
             } else {
                 await appUpload

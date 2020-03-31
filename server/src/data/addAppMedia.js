@@ -5,7 +5,7 @@ const { ImageTypes } = require('../enums')
 const paramSchema = joi
     .object()
     .keys({
-        appVersionId: joi
+        appId: joi
             .string()
             .uuid()
             .required(),
@@ -29,24 +29,23 @@ const paramSchema = joi
     .options({ allowUnknown: true })
 
 /**
- * @typedef {object} AppVersionMediaResult
- * @property {number} id Database id for the inserted media
- * @property {string} uuid The generated uuid for the created media
+ * @typedef {object} AppMediaResult
+ * @property {string} id The generated uuid for the created media
  */
 
 /**
- * Publish an app version to a channel
+ * Save/connect a media item to an app
  *
  * @param {object} params The parameters used to publish an app version to a specific channel
- * @param {number} params.appVersionId The app version db id this media belongs to
+ * @param {number} params.appId The app version db id this media belongs to
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")
  * @param {number} params.imageType ImageType enum that determines if this is a logotype or image/screenshot
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
  * @param {object} knex DB instance of knex
- * @returns {Promise<AppVersionMediaResult>}
+ * @returns {Promise<AppMediaResult>}
  */
-const addAppVersionMedia = async (params, knex, transaction) => {
+const addAppMedia = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -57,7 +56,7 @@ const addAppVersionMedia = async (params, knex, transaction) => {
         throw new Error('No transaction passed to function')
     }
 
-    const { appVersionId, userId, imageType, fileName, mime } = params
+    const { appId, userId, imageType, fileName, mime } = params
     let insertData = null
 
     try {
@@ -101,16 +100,16 @@ const addAppVersionMedia = async (params, knex, transaction) => {
             image_type: imageType,
             created_at: knex.fn.now(),
             created_by_user_id: userId,
-            app_version_id: appVersionId,
+            app_id: appId,
             media_id: mediaId,
         }
 
-        const [id] = await knex('app_version_media')
+        const [id] = await knex('app_media')
             .transacting(transaction)
             .insert(insertData)
             .returning('id')
 
-        return { id }
+        return { id, media_id: mediaId }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
         throw new Error(
@@ -122,4 +121,4 @@ const addAppVersionMedia = async (params, knex, transaction) => {
     }
 }
 
-module.exports = addAppVersionMedia
+module.exports = addAppMedia

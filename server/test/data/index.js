@@ -9,23 +9,23 @@ const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
 const { ImageType } = require('../../src/enums')
-const { addAppVersionMedia, getAppsById, createApp } = require('../../src/data')
+const { addAppMedia, getAppsById, createApp } = require('../../src/data')
 
 const users = require('../../seeds/mock/users')
 const apps = require('../../seeds/mock/apps')
 const appVersions = require('../../seeds/mock/appversions')
 
-describe('@data::addAppVersionMedia', () => {
+describe('@data::addAppMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
-        await expect(addAppVersionMedia({}, null, null)).to.reject(
+        await expect(addAppMedia({}, null, null)).to.reject(
             Error,
-            'ValidationError: "appVersionId" is required'
+            'ValidationError: "appId" is required'
         )
     })
 
     it('should add appmedia successfully', async () => {
         const appMedia = {
-            appVersionId: appVersions[0][0].id, //DHIS2 app
+            appId: appVersions[0][0].app_id, //DHIS2 app
             userId: users[0].id, //travis user
             imageType: ImageType.Screenshot,
             fileName: 'screenshot.jpg',
@@ -34,7 +34,7 @@ describe('@data::addAppVersionMedia', () => {
             description: 'a description',
         }
         const trx = await db.transaction()
-        const { id } = await addAppVersionMedia(appMedia, db, trx)
+        const { id } = await addAppMedia(appMedia, db, trx)
         await trx.commit()
         expect(id).to.be.string()
         expect(id.length).to.be.equal(36)

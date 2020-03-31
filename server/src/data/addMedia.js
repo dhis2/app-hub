@@ -30,7 +30,7 @@ const paramSchema = joi
  */
 
 /**
- * Publish an app version to a channel
+ * Save information about a media-item
  *
  * @param {object} params The parameters used for saving a media
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")

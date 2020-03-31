@@ -33,20 +33,14 @@ const setImageAsLogoForApp = async (params, knex, transaction) => {
     const { appId, mediaId } = params
 
     try {
-        const appVersionIds = await knex('app_version')
-            .innerJoin('app', 'app.id', 'app_version.app_id')
-            .select('app_version.id')
-            .where('app.id', appId)
-            .pluck('app_version.id')
-
-        //Change all other media for this pap to screenshot
-        await knex('app_version_media')
+        //Change all other media for this app to screenshot
+        await knex('app_media')
             .transacting(transaction)
-            .whereIn('app_version_id', appVersionIds)
+            .where('app_id', appId)
             .update('image_type', ImageType.Screenshot)
 
         //Set the new as image_type logo
-        await knex('app_version_media')
+        await knex('app_media')
             .transacting(transaction)
             .where('id', mediaId)
             .update('image_type', ImageType.Logo)
