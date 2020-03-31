@@ -15,3 +15,6 @@ build/
 
 # ignore cypress env
 cypress.env.json
+
+# ignore tools download cache
+tools/apps
