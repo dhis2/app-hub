@@ -200,8 +200,8 @@ exports.down = async knex => {
         const {
             original_filename,
             media_id,
-            media_type_id,
-            app_media_type,
+            mime_type_id,
+            media_type,
             created_at,
             created_by_user_id,
         } = appMedia
@@ -210,8 +210,8 @@ exports.down = async knex => {
             id: media_id,
             app_version_id: latestAppVersion.id,
             original_filename,
-            media_type_id,
-            app_media_type,
+            media_type_id: mime_type_id,
+            image_type: media_type,
             created_at,
             created_by_user_id,
         })
@@ -230,7 +230,7 @@ exports.down = async knex => {
             SELECT  app.id AS app_id, 
                     app.type,
                     appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
-                    media.id AS media_id, media.original_filename, media.created_at AS media_created_at, media.media_type, media.caption AS media_caption, media.description AS media_description, 
+                    media.id AS media_id, media.original_filename, media.created_at AS media_created_at, media.image_type, media.caption AS media_caption, media.description AS media_description, 
                     localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
