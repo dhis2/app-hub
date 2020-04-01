@@ -3,6 +3,24 @@ const Bounce = require('@hapi/bounce')
 const Joi = require('@hapi/joi')
 const { Filters } = require('../utils/Filter')
 const { parseFilterString } = require('../utils/filterUtils')
+
+/**
+ * This plugin hooks into onPrehandler, processing all requests it's enabled for.
+ * It's designed to be used in conjunction with CustomJoi.js that extends Joi
+ * with a filter type. The filters are validated through Hapi's validate.query.
+ *
+ * The purpose of the plugin is to group all filters in `request.plugins.queryFilter.filters`.
+ * The value of this property is an object of Filters.
+ *
+ * All options can be overwritten by each route.
+ * Options:
+ *  enabled - enable the queryFilter
+ *  ignoreKeys - ignore the key. Note that only keys of type Joi.filter() in the validate.query object are used.
+ *  rename - A Joi-schema with .rename() functions that are used to get renames of the keys.
+ *           Can also be a plain Object with keys being the query-name, and the value being the database-name.
+ *      This is used to rename API-facing filter-names to database-column names.
+ */
+
 const FILTER_TYPE = 'filter'
 
 const defaultOptions = {

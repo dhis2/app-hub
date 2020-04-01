@@ -35,9 +35,6 @@ const parseDatabaseJson = createDefaultValidator(definition)
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
-// const filterDefinition = dbDefinition.fork(['name', 'owner'], s => joi.filter(s)).append({
-//     user: joi.filter(joi.string().guid({ version: 'uuidv4' }))
-// })
 module.exports = {
     def: definition,
     definition,
@@ -45,5 +42,4 @@ module.exports = {
     externalDefintion,
     parseDatabaseJson,
     formatDatabaseJson,
-    //   filterDefinition,
 }
