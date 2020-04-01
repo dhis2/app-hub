@@ -4,7 +4,7 @@ const debug = require('debug')(
 
 const getServerUrl = require('../../../../utils/getServerUrl')
 
-const { ImageType } = require('../../../../enums')
+const { MediaType } = require('../../../../enums')
 
 const convertDbAppViewRowToAppApiV1Object = app => ({
     appType: app.type,
@@ -44,7 +44,7 @@ const convertAppToV1Media = (app, serverUrl) => {
         description: '',
         id: app.media_id,
         lastUpdated: +new Date(app.media_created_at),
-        logo: app.image_type === ImageType.Logo,
+        logo: app.media_type === MediaType.Logo,
     }
 }
 

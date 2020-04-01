@@ -1,4 +1,4 @@
-const { ImageType } = require('../../../../enums')
+const { MediaType } = require('../../../../enums')
 const { saveFile } = require('../../../../utils')
 
 const {
@@ -65,7 +65,7 @@ module.exports = {
             {
                 userId: currentUser.id,
                 appId: appId,
-                imageType: ImageType.Screenshot,
+                mediaType: MediaType.Screenshot,
                 fileName: imageFileMetadata.filename,
                 mime: imageFileMetadata.headers['content-type'],
             },

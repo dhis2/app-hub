@@ -12,7 +12,7 @@ const getAppMedia = (id, knex) => {
             .select(
                 'media_id',
                 'app_id',
-                'image_type',
+                'media_type',
                 'original_filename',
                 'mime'
             )

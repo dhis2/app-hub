@@ -1,6 +1,6 @@
 const joi = require('@hapi/joi')
 
-const { ImageTypes } = require('../enums')
+const { MediaTypes } = require('../enums')
 
 const paramSchema = joi
     .object()
@@ -9,10 +9,10 @@ const paramSchema = joi
             .string()
             .uuid()
             .required(),
-        imageType: joi
+        mediaType: joi
             .number()
             .required()
-            .valid(...ImageTypes),
+            .valid(...MediaTypes),
         fileName: joi
             .string()
             .required()
@@ -30,7 +30,7 @@ const paramSchema = joi
  */
 
 /**
- * Save information about a media-item
+ * Publish an app version to a channel
  *
  * @param {object} params The parameters used for saving a media
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")

@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi')
-const { ImageType } = require('../enums')
+const { MediaType } = require('../enums')
 
 const paramsSchema = joi.object().keys({
     appId: joi.string().uuid(),
@@ -37,13 +37,13 @@ const setImageAsLogoForApp = async (params, knex, transaction) => {
         await knex('app_media')
             .transacting(transaction)
             .where('app_id', appId)
-            .update('image_type', ImageType.Screenshot)
+            .update('media_type', MediaType.Screenshot)
 
-        //Set the new as image_type logo
+        //Set the new as media_type logo
         await knex('app_media')
             .transacting(transaction)
             .where('id', mediaId)
-            .update('image_type', ImageType.Logo)
+            .update('media_type', MediaType.Logo)
     } catch (err) {
         throw new Error(
             `Could not update logo for app: ${appId}.  Media id: ${mediaId}. ${err.message}`

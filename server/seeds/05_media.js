@@ -1,10 +1,10 @@
 const appVersions = require('./mock/appversions')
-const { ImageType } = require('../src/enums')
+const { MediaType } = require('../src/enums')
 
-const mediaTypes = require('./mock/media_type')
+const mimeTypes = require('./mock/mime_type')
 const users = require('./mock/users')
 
-const mediaTypeSeedData = require('./mock/media_type')
+const mediaTypeSeedData = require('./mock/mime_type')
 
 exports.seed = async knex => {
     console.log('Seeding media')
@@ -17,32 +17,32 @@ exports.seed = async knex => {
     ]
 
     await knex('media').del()
-    await knex('media_type').del()
-    await knex('media_type').insert(mediaTypeSeedData)
+    await knex('mime_type').del()
+    await knex('mime_type').insert(mediaTypeSeedData)
 
     await knex('media').insert([
         {
             id: mediaIds[0],
             original_filename: `the_logo.png`,
-            media_type_id: mediaTypes[0].id,
+            mime_type_id: mimeTypes[0].id,
             created_by_user_id: users[0].id,
         },
         {
             id: mediaIds[1],
             original_filename: `a_screenshot.jpg`,
-            media_type_id: mediaTypes[1].id,
+            mime_type_id: mimeTypes[1].id,
             created_by_user_id: users[0].id,
         },
         {
             id: mediaIds[2],
             original_filename: `the_logo2.png`,
-            media_type_id: mediaTypes[0].id,
+            mime_type_id: mimeTypes[0].id,
             created_by_user_id: users[0].id,
         },
         {
             id: mediaIds[3],
             original_filename: `a_screenshot2.jpg`,
-            media_type_id: mediaTypes[1].id,
+            mime_type_id: mimeTypes[1].id,
             created_by_user_id: users[0].id,
         },
     ])
@@ -53,25 +53,25 @@ exports.seed = async knex => {
         {
             app_id: appVersions[0][0].app_id,
             media_id: mediaIds[0],
-            image_type: ImageType.Logo,
+            media_type: MediaType.Logo,
             created_by_user_id: appVersions[0][0].created_by_user_id,
         },
         {
             app_id: appVersions[0][0].app_id,
             media_id: mediaIds[1],
-            image_type: ImageType.Screenshot,
+            media_type: MediaType.Screenshot,
             created_by_user_id: appVersions[0][0].created_by_user_id,
         },
         {
             app_id: appVersions[1][0].app_id,
             media_id: mediaIds[2],
-            image_type: ImageType.Logo,
+            media_type: MediaType.Logo,
             created_by_user_id: appVersions[1][0].created_by_user_id,
         },
         {
             app_id: appVersions[1][0].app_id,
             media_id: mediaIds[3],
-            image_type: ImageType.Screenshot,
+            media_type: MediaType.Screenshot,
             created_by_user_id: appVersions[1][0].created_by_user_id,
         },
     ]

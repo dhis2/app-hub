@@ -3,7 +3,7 @@ const debug = require('debug')('apphub:server:routes:handlers:v1:createApp')
 const Boom = require('@hapi/boom')
 
 const CreateAppModel = require('../../../../models/v1/in/CreateAppModel')
-const { AppStatus, ImageType } = require('../../../../enums')
+const { AppStatus, MediaType } = require('../../../../enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 const { saveFile } = require('../../../../utils')
@@ -248,7 +248,7 @@ module.exports = {
                     {
                         userId: requestUserId,
                         appId: appId,
-                        imageType: ImageType.Logo,
+                        mediaType: MediaType.Logo,
                         fileName: imageFileMetadata.filename,
                         mime: imageFileMetadata.headers['content-type'],
                         caption: caption,

@@ -1,6 +1,8 @@
 exports.up = async knex => {
     await knex.raw('DROP VIEW apps_view')
 
+    await knex.raw('ALTER TABLE media_type RENAME TO mime_type')
+
     //Create the new separate media table
     await knex.schema.createTable('media', table => {
         table.uuid('id').primary()
@@ -14,12 +16,15 @@ exports.up = async knex => {
 
         table.uuid('created_by_user_id').notNullable()
 
-        table.uuid('media_type_id').notNullable()
+        table.uuid('mime_type_id').notNullable()
+
+        table.string('caption', 255)
+        table.string('description', 255)
 
         table
-            .foreign('media_type_id')
+            .foreign('mime_type_id')
             .references('id')
-            .inTable('media_type')
+            .inTable('mime_type')
     })
 
     //Link between app and media
@@ -34,7 +39,7 @@ exports.up = async knex => {
             .inTable('media')
 
         table
-            .integer('image_type') //enum/integer from code so no uuid here. Logo or Screenshot
+            .integer('media_type') //enum/integer from code so no uuid here. Logo or Screenshot
             .notNullable()
 
         table
@@ -61,14 +66,14 @@ exports.up = async knex => {
 
     //copy over media data from the old table to the new separate media table
     await knex.raw(
-        `INSERT INTO media(id, original_filename, media_type_id, created_by_user_id, created_at) 
+        `INSERT INTO media(id, original_filename, mime_type_id, created_by_user_id, created_at) 
          SELECT id, original_filename, media_type_id, created_by_user_id, created_at FROM app_version_media
         `
     )
 
     //link app and media and type (logo/screenshot)
     await knex.raw(
-        `INSERT INTO app_media(media_id, app_id, created_by_user_id, image_type)
+        `INSERT INTO app_media(media_id, app_id, created_by_user_id, media_type)
          SELECT oavm.id AS media_id, app_id, oavm.created_by_user_id, oavm.image_type FROM app_version_media AS oavm
          INNER JOIN app_version ON app_version.id = oavm.app_version_id `
     )
@@ -77,9 +82,9 @@ exports.up = async knex => {
     //Create a view to make it easier querying for media for a specific app
     await knex.raw(`
         CREATE VIEW app_media_view AS
-            SELECT app.id AS app_id, media.id AS media_id, app_media.image_type, app_media.id AS app_media_id, 
-            media.media_type_id, media.original_filename, media.created_at, media.created_by_user_id, 
-            media_type.mime 
+            SELECT app.id AS app_id, media.id AS media_id, app_media.media_type, app_media.id AS app_media_id, 
+            media.mime_type_id, media.original_filename, media.created_at, media.created_by_user_id, 
+            mime_type.mime 
 
             FROM media 
 
@@ -92,8 +97,8 @@ exports.up = async knex => {
                 ON app_media.app_id = app.id
 
             INNER JOIN
-                media_type
-                ON media.media_type_id = media_type.id
+                mime_type
+                ON media.mime_type_id = mime_type.id
     `)
 
     //Recreate the apps_view view using the media view above
@@ -102,7 +107,7 @@ exports.up = async knex => {
             SELECT  app.id AS app_id, 
                     app.type,
                     appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
-                    media.app_media_id AS media_id, media.original_filename, media.created_at AS media_created_at, media.image_type,  
+                    media.app_media_id AS media_id, media.original_filename, media.created_at AS media_created_at, media.media_type,  
                     localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 
@@ -140,6 +145,8 @@ exports.up = async knex => {
 }
 
 exports.down = async knex => {
+    await knex.raw('ALTER TABLE mime_type RENAME TO media_type')
+
     //create a new app_version_media table to match the previous version
     await knex.schema.createTable('app_version_media', table => {
         table.uuid('id').primary()
@@ -194,7 +201,7 @@ exports.down = async knex => {
             original_filename,
             media_id,
             media_type_id,
-            image_type,
+            app_media_type,
             created_at,
             created_by_user_id,
         } = appMedia
@@ -204,7 +211,7 @@ exports.down = async knex => {
             app_version_id: latestAppVersion.id,
             original_filename,
             media_type_id,
-            image_type,
+            app_media_type,
             created_at,
             created_by_user_id,
         })
@@ -223,7 +230,7 @@ exports.down = async knex => {
             SELECT  app.id AS app_id, 
                     app.type,
                     appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
-                    media.id AS media_id, media.original_filename, media.created_at AS media_created_at, media.image_type, media.caption AS media_caption, media.description AS media_description, 
+                    media.id AS media_id, media.original_filename, media.created_at AS media_created_at, media.media_type, media.caption AS media_caption, media.description AS media_description, 
                     localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug, 
                     s.status, s.created_at AS status_created_at, 
                     ac.min_dhis2_version, ac.max_dhis2_version, 

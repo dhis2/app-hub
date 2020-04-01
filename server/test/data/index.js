@@ -8,7 +8,7 @@ const { expect } = require('@hapi/code')
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
-const { ImageType } = require('../../src/enums')
+const { MediaType } = require('../../src/enums')
 const { addAppMedia, getAppsById, createApp } = require('../../src/data')
 
 const users = require('../../seeds/mock/users')
@@ -27,7 +27,7 @@ describe('@data::addAppMedia', () => {
         const appMedia = {
             appId: appVersions[0][0].app_id, //DHIS2 app
             userId: users[0].id, //travis user
-            imageType: ImageType.Screenshot,
+            mediaType: MediaType.Screenshot,
             fileName: 'screenshot.jpg',
             mime: 'image/jpeg',
             caption: 'Test caption',
