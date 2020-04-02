@@ -5,7 +5,11 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const { getAppDeveloperId, getMedia, deleteMedia } = require('../../../../data')
+const {
+    getAppDeveloperId,
+    getAppMedia,
+    deleteMedia,
+} = require('../../../../data')
 
 const { deleteFile } = require('../../../../utils')
 
@@ -41,13 +45,13 @@ module.exports = {
             const transaction = await db.transaction()
 
             try {
-                const { media_id, version_id } = await getMedia(mediaId, db)
+                const { media_id } = await getAppMedia(mediaId, db)
 
                 await deleteMedia(media_id, db, transaction)
 
                 await transaction.commit()
 
-                await deleteFile(`${appId}/${version_id}`, media_id)
+                await deleteFile(appId, media_id)
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal(err)

@@ -11,8 +11,10 @@ exports.seed = async knex => {
 
     await knex('user_organisation').del()
     await knex('user_external_id').del()
-    await knex('users').del()
+    await knex('app').del()
+    await knex('app_channel').del()
     await knex('organisation').del()
+    await knex('users').del()
 
     console.log('Inserting users')
 
