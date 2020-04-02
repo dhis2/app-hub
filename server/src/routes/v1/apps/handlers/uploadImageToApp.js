@@ -1,4 +1,4 @@
-const { ImageType } = require('../../../../enums')
+const { MediaType } = require('../../../../enums')
 const { saveFile } = require('../../../../utils')
 
 const {
@@ -6,11 +6,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const {
-    getAppsById,
-    addAppVersionMedia,
-    getAppDeveloperId,
-} = require('../../../../data')
+const { addAppMedia, getAppDeveloperId } = require('../../../../data')
 
 module.exports = {
     method: 'POST',
@@ -56,8 +52,6 @@ module.exports = {
                 .code(401)
         }
 
-        const appVersions = await getAppsById(request.params.appId, 'en', knex)
-
         const imageFile = request.payload.file
         const imageFileMetadata = imageFile.hapi
 
@@ -65,30 +59,22 @@ module.exports = {
 
         let imageId = null
 
-        //Save the image to all versions? (previously the apphub stored media per app, and not version, so we keep them per version for now.
-        //In the future we should be able to use separate screenshots for different versions to be able to show differences/new features
-        const promises = appVersions.map(async appVersion => {
-            const { id } = await addAppVersionMedia(
-                {
-                    userId: currentUser.id,
-                    appVersionId: appVersion.version_id,
-                    imageType: ImageType.Screenshot,
-                    fileName: imageFileMetadata.filename,
-                    mime: imageFileMetadata.headers['content-type'],
-                },
-                knex,
-                trx
-            )
-            imageId = id
+        const appId = request.params.appId
 
-            await saveFile(
-                `${appVersion.id}/${appVersion.version_id}`,
-                id,
-                imageFile._data
-            )
-        })
+        const { id } = await addAppMedia(
+            {
+                userId: currentUser.id,
+                appId: appId,
+                mediaType: MediaType.Screenshot,
+                fileName: imageFileMetadata.filename,
+                mime: imageFileMetadata.headers['content-type'],
+            },
+            knex,
+            trx
+        )
+        imageId = id
 
-        await Promise.all(promises)
+        await saveFile(appId, id, imageFile._data)
 
         await trx.commit()
 

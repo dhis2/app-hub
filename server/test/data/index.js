@@ -8,54 +8,36 @@ const { expect } = require('@hapi/code')
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
 
-const { ImageType } = require('../../src/enums')
-const {
-    addAppVersionMedia,
-    getAppsById,
-    createApp,
-    getAppById,
-} = require('../../src/data')
+const { MediaType } = require('../../src/enums')
+const { addAppMedia, getAppsById, createApp } = require('../../src/data')
 
 const users = require('../../seeds/mock/users')
 const apps = require('../../seeds/mock/apps')
 const appVersions = require('../../seeds/mock/appversions')
 
-describe('@data::addAppVersionMedia', () => {
+describe('@data::addAppMedia', () => {
     it('Should throw an error if config object does not pass validation', async () => {
-        await expect(addAppVersionMedia({}, null, null)).to.reject(
+        await expect(addAppMedia({}, null, null)).to.reject(
             Error,
-            'ValidationError: "appVersionId" is required'
+            'ValidationError: "appId" is required'
         )
     })
 
     it('should add appmedia successfully', async () => {
         const appMedia = {
-            appVersionId: appVersions[0][0].id, //DHIS2 app
+            appId: appVersions[0][0].app_id, //DHIS2 app
             userId: users[0].id, //travis user
-            imageType: ImageType.Screenshot,
+            mediaType: MediaType.Screenshot,
             fileName: 'screenshot.jpg',
             mime: 'image/jpeg',
             caption: 'Test caption',
             description: 'a description',
         }
         const trx = await db.transaction()
-        const { id } = await addAppVersionMedia(appMedia, db, trx)
+        const { id } = await addAppMedia(appMedia, db, trx)
         await trx.commit()
         expect(id).to.be.string()
         expect(id.length).to.be.equal(36)
-
-        const appWithVersion = await getAppById(
-            appVersions[0][0].app_id,
-            'en',
-            db
-        )
-        const mediaApp = appWithVersion.find(
-            a => a.version_id === appVersions[0][0].id && a.media_id === id
-        )
-        expect(mediaApp).to.not.be.null()
-
-        expect(mediaApp.media_caption).to.be.equal(appMedia.caption)
-        expect(mediaApp.media_description).to.be.equal(appMedia.description)
     })
 })
 
@@ -264,7 +246,7 @@ describe('@data::updateApp', () => {
 })
 
 describe('@data::updateAppVersion', () => {
-    const { updateAppVersion, getAppById } = require('../../src/data')
+    const { updateAppVersion } = require('../../src/data')
 
     it('should update the app version', async () => {
         let transaction = await db.transaction()

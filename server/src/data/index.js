@@ -1,5 +1,5 @@
 module.exports = {
-    addAppVersionMedia: require('./addAppVersionMedia'),
+    addAppMedia: require('./addAppMedia'),
     addAppVersionToChannel: require('./addAppVersionToChannel'),
     addUserToOrganisation: require('./addUserToOrganisation'),
     createApp: require('./createApp'),
@@ -16,7 +16,7 @@ module.exports = {
     getApps: require('./getApps'),
     getAppsByIdAndStatus: require('./getAppsByIdAndStatus'),
     getAppsById: require('./getAppsById'),
-    getMedia: require('./getMedia'),
+    getAppMedia: require('./getAppMedia'),
     getOrganisationById: require('./getOrganisationById'),
     getOrganisationsByName: require('./getOrganisationsByName'),
     getUserByEmail: require('./getUserByEmail'),

@@ -4,7 +4,7 @@ const debug = require('debug')(
 
 const getServerUrl = require('../../../../utils/getServerUrl')
 
-const { ImageType } = require('../../../../enums')
+const { MediaType } = require('../../../../enums')
 
 const convertDbAppViewRowToAppApiV1Object = app => ({
     appType: app.type,
@@ -38,13 +38,13 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 
 const convertAppToV1Media = (app, serverUrl) => {
     return {
-        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.version_id}/${app.media_id}`,
-        caption: app.media_caption,
+        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.app_id}/${app.media_id}`,
+        caption: '',
         created: +new Date(app.media_created_at),
-        description: app.media_description || '',
+        description: '',
         id: app.media_id,
         lastUpdated: +new Date(app.media_created_at),
-        logo: app.image_type === ImageType.Logo,
+        logo: app.media_type === MediaType.Logo,
     }
 }
 
@@ -88,7 +88,11 @@ const convertAll = (apps, request) => {
         }
 
         if (app.media_id !== null) {
-            currentApp.images.push(convertAppToV1Media(app, serverUrl))
+            const media = convertAppToV1Media(app, serverUrl)
+
+            if (!currentApp.images.find(img => img.id === media.id)) {
+                currentApp.images.push(media)
+            }
 
             //sort images making the logo the first image
             currentApp.images.sort((a, b) => {

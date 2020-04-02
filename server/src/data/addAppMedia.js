@@ -1,12 +1,11 @@
 const joi = require('@hapi/joi')
-const uuid = require('uuid/v4')
 
-const { ImageTypes } = require('../enums')
+const { MediaTypes } = require('../enums')
 
 const paramSchema = joi
     .object()
     .keys({
-        appVersionId: joi
+        appId: joi
             .string()
             .uuid()
             .required(),
@@ -14,10 +13,10 @@ const paramSchema = joi
             .string()
             .uuid()
             .required(),
-        imageType: joi
+        mediaType: joi
             .number()
             .required()
-            .valid(...ImageTypes),
+            .valid(...MediaTypes),
         fileName: joi
             .string()
             .required()
@@ -26,32 +25,27 @@ const paramSchema = joi
             .string()
             .required()
             .max(255),
-        caption: joi.string().allow('', null),
-        description: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
 /**
- * @typedef {object} AppVersionMediaResult
- * @property {number} id Database id for the inserted media
- * @property {string} uuid The generated uuid for the created media
+ * @typedef {object} AppMediaResult
+ * @property {string} id The generated uuid for the created media
  */
 
 /**
- * Publish an app version to a channel
+ * Save/connect a media item to an app
  *
  * @param {object} params The parameters used to publish an app version to a specific channel
- * @param {number} params.appVersionId The app version db id this media belongs to
+ * @param {number} params.appId The app version db id this media belongs to
  * @param {number} params.userId The id for the user which uploaded the media ("created by user id")
- * @param {number} params.imageType ImageType enum that determines if this is a logotype or image/screenshot
+ * @param {number} params.mediaType MediaType enum that determines if this is a logotype or image/screenshot
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
- * @param {string} params.caption caption/title of the media
- * @param {string} params.description description of the media
  * @param {object} knex DB instance of knex
- * @returns {Promise<AppVersionMediaResult>}
+ * @returns {Promise<AppMediaResult>}
  */
-const addAppVersionMedia = async (params, knex, transaction) => {
+const addAppMedia = async (params, knex, transaction) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -62,59 +56,60 @@ const addAppVersionMedia = async (params, knex, transaction) => {
         throw new Error('No transaction passed to function')
     }
 
-    const {
-        appVersionId,
-        userId,
-        imageType,
-        fileName,
-        mime,
-        caption,
-        description,
-    } = params
+    const { appId, userId, mediaType, fileName, mime } = params
     let insertData = null
 
     try {
-        let mediaTypeId = null
-        const mediaTypes = await knex('media_type')
+        let mimeTypeId = null
+        const mimeTypes = await knex('mime_type')
             .select('id')
             .where('mime', mime)
 
-        if (!mediaTypes || mediaTypes.length === 0) {
-            const [id] = await knex('media_type')
+        if (!mimeTypes || mimeTypes.length === 0) {
+            const [id] = await knex('mime_type')
                 .transacting(transaction)
                 .insert({
                     mime,
                 })
                 .returning('id')
 
-            mediaTypeId = id
+            mimeTypeId = id
         } else {
-            mediaTypeId = mediaTypes[0].id
+            mimeTypeId = mimeTypes[0].id
         }
 
-        if (mediaTypeId === null) {
+        if (mimeTypeId === null) {
             throw new Error(
                 `Something went wrong when trying to get mediaTypeId for ${mime}`
             )
         }
 
-        insertData = {
-            image_type: imageType,
+        const mediaToInsert = {
+            mime_type_id: mimeTypeId,
             original_filename: fileName,
             created_at: knex.fn.now(),
             created_by_user_id: userId,
-            media_type_id: mediaTypeId,
-            app_version_id: appVersionId,
-            caption: caption,
-            description: description,
         }
 
-        const [id] = await knex('app_version_media')
+        const [mediaId] = await knex('media')
+            .transacting(transaction)
+            .insert(mediaToInsert)
+            .returning('id')
+
+        insertData = {
+            media_type: mediaType,
+            created_at: knex.fn.now(),
+            created_by_user_id: userId,
+            app_id: appId,
+            media_id: mediaId,
+        }
+
+        const [id] = await knex('app_media')
             .transacting(transaction)
             .insert(insertData)
             .returning('id')
 
-        return { id }
+        return { id, media_id: mediaId }
     } catch (err) {
         // remove created_at otherwise we'll get a circular reference in the stringify-serialisation
         throw new Error(
@@ -126,4 +121,4 @@ const addAppVersionMedia = async (params, knex, transaction) => {
     }
 }
 
-module.exports = addAppVersionMedia
+module.exports = addAppMedia
