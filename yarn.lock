@@ -5623,12 +5623,12 @@ hapi-api-version@^2.3.1:
     "@hapi/joi" "^15.1.0"
     media-type "^0.3.1"
 
-hapi-auth-jwt2@^8.8.1:
-  version "8.8.1"
-  resolved "https://registry.yarnpkg.com/hapi-auth-jwt2/-/hapi-auth-jwt2-8.8.1.tgz#2c32c79ff42187a6c5fb4d156c39a6b821710417"
-  integrity sha512-+Jw5OaUZZGBCDxb3f/ax3WnZvqDzQFGQrz6/AuctywaIlW+ow+NH+Gw6ik/37OZGlYpxO/GNsfiyuDmlUQf9Tg==
+hapi-auth-jwt2@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/hapi-auth-jwt2/-/hapi-auth-jwt2-10.0.0.tgz#2fb9333400c483833e5155321e10a249ab6b0c51"
+  integrity sha512-Xax8xd3dz1vtVnJBrij/rAWb1lQVjlIQOkjIoj2nd0ZAGpsXWPyqCDd9HxMHVoezAjZAZ7JCwSfdDnjEnvrEmg==
   dependencies:
-    "@hapi/boom" "^8.0.1"
+    "@hapi/boom" "^9.0.0"
     cookie "^0.4.0"
     jsonwebtoken "^8.5.1"
 
