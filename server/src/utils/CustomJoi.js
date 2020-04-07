@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi')
-const Bounce = require('@hapi/Bounce')
+const Bounce = require('@hapi/bounce')
 const { parseFilterString, allOperatorsMap } = require('./filterUtils')
 
 const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
