@@ -5,8 +5,10 @@ const debug = require('debug')('apphub:server:security')
  */
 const isAuthenticated = request => {
     try {
+        debug('isAuthenticated:', request.auth.isAuthenticated)
         return request.auth.isAuthenticated === true
     } catch (err) {
+        debug('isAuthenticated error:', err)
         return false
     }
 }
@@ -18,6 +20,7 @@ const isAuthenticated = request => {
  */
 const hasRole = (request, role) => {
     try {
+        debug('hasRole:', request.auth.credentials.roles)
         return request.auth.credentials.roles.indexOf(role) !== -1
     } catch (err) {
         return false
@@ -27,9 +30,8 @@ const hasRole = (request, role) => {
 /**
  * Checks if the user on the request has permissions to delete an app
  * @param {*} request
- * @param {*} hapi
  */
-const canDeleteApp = (request, hapi) =>
+const canDeleteApp = request =>
     isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
 /**
@@ -37,36 +39,33 @@ const canDeleteApp = (request, hapi) =>
  * @param {*} request
  * @param {*} hapi
  */
-const canChangeAppStatus = (request, hapi) =>
+const canChangeAppStatus = request =>
     isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
 /**
  * Checks if the user on the request has permissions to create an app version
  * @param {*} request
- * @param {*} hapi
  */
-const canCreateAppVersion = (request, hapi) => isAuthenticated(request)
+const canCreateAppVersion = request => isAuthenticated(request)
 
 /**
  * Checks if the user on the request has permissions to create an app
  * @param {*} request
- * @param {*} hapi
  */
-const canCreateApp = (request, hapi) => isAuthenticated(request)
+const canCreateApp = request => isAuthenticated(request)
 
 /**
  * Checks if the user on the request has permissions to see all apps
  * @param {*} request
- * @param {*} hapi
  */
-const canSeeAllApps = (request, hapi) =>
+const canSeeAllApps = request =>
     isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
-const currentUserIsManager = (request, hapi) =>
+const currentUserIsManager = request =>
     isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
 
-const getCurrentUserFromRequest = async request => {
-    return new Promise(async (resolve, reject) => {
+const getCurrentUserFromRequest = request => {
+    return new Promise((resolve, reject) => {
         try {
             const user = {
                 id: request.auth.credentials.userId,
