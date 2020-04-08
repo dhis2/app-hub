@@ -28,8 +28,6 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        //TODO: implement fetching of apps for which the current user has access to, E.G. the organisations it belongs to
-
         try {
             const user = await getCurrentUserFromRequest(request, h.context.db)
             const apps = await getOrganisationAppsByUserId(
