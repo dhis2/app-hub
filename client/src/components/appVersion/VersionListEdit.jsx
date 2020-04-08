@@ -215,7 +215,7 @@ class VersionListEdit extends Component {
         const token = localStorage.getItem('id_token')
 
         //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
-        const downloadUrlWithToken = `${values.downloadUrl}?token=${token}}`
+        const downloadUrlWithToken = `${values.downloadUrl}?token=${token}`
 
         //TODO: add error instead of passing false to ErrorOrLoading
         return (
