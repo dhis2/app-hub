@@ -23,6 +23,8 @@ import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 import { loadChannels } from '../../actions/actionCreators'
 
+import { getAuth } from '../../utils/AuthService'
+
 const styles = {
     tableHeaderColumn: {
         paddingLeft: '12px',
@@ -212,7 +214,7 @@ class VersionListEdit extends Component {
 
         //auth0 stores the JWT token in localStorage
         //as only authenticated users can edit an app, just assume this exists in this component
-        const token = localStorage.getItem('id_token')
+        const token = getAuth().getToken()
 
         //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
         const downloadUrlWithToken = `${values.downloadUrl}?token=${token}`
