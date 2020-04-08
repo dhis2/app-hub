@@ -4,7 +4,11 @@ const debug = require('debug')('apphub:server:routes:handlers:v1:getAppFile')
 const { AppStatus } = require('../../../../enums')
 const { getFile } = require('../../../../utils')
 
-const { currentUserIsManager } = require('../../../../security')
+const { getOrganisationAppsByUserId } = require('../../../../data')
+const {
+    currentUserIsManager,
+    getCurrentUserFromRequest,
+} = require('../../../../security')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified id
@@ -22,26 +26,45 @@ module.exports = {
 
         const knex = h.context.db
 
-        const isAdmin = currentUserIsManager(request, h)
+        const isAdmin = currentUserIsManager(request)
+        const user = await getCurrentUserFromRequest(request)
+
+        debug('user:', user)
         debug('isAdmin:', isAdmin)
 
-        const filter = {
-            organisation_slug,
-            appver_slug,
-            version: app_version,
-            language_code: 'en',
+        let appRows = null
+
+        if (!user) {
+            //anonymous, only allow downloading approved apps
+            debug('anonymous')
+            appRows = await knex
+                .select()
+                .from('apps_view')
+                .where({
+                    organisation_slug,
+                    appver_slug,
+                    version: app_version,
+                    status: AppStatus.APPROVED,
+                    language_code: 'en',
+                })
+        } else if (isAdmin) {
+            //no filter on status if admin
+            debug('admin')
+            appRows = await knex
+                .select()
+                .from('apps_view')
+                .where({
+                    organisation_slug,
+                    appver_slug,
+                    version: app_version,
+                    language_code: 'en',
+                })
+        } else {
+            //show all apps that a user has access to through it organisation connections
+            debug('developer/user:', user)
+            appRows = await getOrganisationAppsByUserId(user.id, knex)
+            debug('appRows:', appRows)
         }
-
-        debug('filter:', filter)
-
-        if (!isAdmin) {
-            filter.status = AppStatus.APPROVED
-        }
-
-        const appRows = await knex
-            .select()
-            .from('apps_view')
-            .where(filter)
 
         const item = appRows[0]
 

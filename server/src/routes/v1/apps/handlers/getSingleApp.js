@@ -8,12 +8,18 @@ const { AppStatus } = require('../../../../enums')
 
 const defaultFailHandler = require('../../defaultFailHandler')
 
-const getAppsById = require('../../../../data/getAppsById')
-const getAppsByIdAndStatus = require('../../../../data/getAppsByIdAndStatus')
+const {
+    getAppsByIdAndStatus,
+    getAppsById,
+    getOrganisationAppsByUserId,
+} = require('../../../../data')
 
 const { convertAppsToApiV1Format } = require('../formatting')
 
-const { canSeeAllApps } = require('../../../../security')
+const {
+    canSeeAllApps,
+    getCurrentUserFromRequest,
+} = require('../../../../security')
 
 module.exports = {
     //unauthenticated endpoint returning the approved app for the specified appId
@@ -38,18 +44,37 @@ module.exports = {
 
         debug(`Getting app with appId: ${appId}`)
 
+        const { db } = h.context
         let apps = null
 
-        if (canSeeAllApps(request)) {
-            debug('Can see all apps, fetch it no matter its status')
-            apps = await getAppsById(appId, 'en', h.context.db)
+        let isDeveloper = false
+
+        try {
+            const currentUser = await getCurrentUserFromRequest(request, db)
+            const appsUserCanEdit = await getOrganisationAppsByUserId(
+                currentUser.id,
+                db
+            )
+            isDeveloper =
+                appsUserCanEdit.map(app => app.app_id).indexOf(appId) !== -1
+        } catch (err) {
+            //no user on request
+        }
+
+        if (canSeeAllApps(request) || isDeveloper) {
+            if (isDeveloper) {
+                debug('user is a developer with access to this app')
+            } else {
+                debug('Can see all apps, fetch it no matter its status')
+            }
+            apps = await getAppsById(appId, 'en', db)
         } else {
             debug('Can NOT see all apps, fetch it only if approved')
             apps = await getAppsByIdAndStatus(
                 appId,
                 AppStatus.APPROVED,
                 'en',
-                h.context.db
+                db
             )
             debug('Got apps:', apps)
         }

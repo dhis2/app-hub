@@ -5,7 +5,7 @@ const debug = require('debug')('apphub:server:security')
  */
 const isAuthenticated = request => {
     try {
-        debug('isAuthenticated:', request.auth.isAuthenticated)
+        debug('isAuthenticated:', request.auth)
         return request.auth.isAuthenticated === true
     } catch (err) {
         debug('isAuthenticated error:', err)

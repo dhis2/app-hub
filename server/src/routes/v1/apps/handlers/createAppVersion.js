@@ -1,7 +1,6 @@
 const debug = require('debug')(
     'apphub:server:routes:handlers:v1:createAppVersion'
 )
-const path = require('path')
 
 const Boom = require('@hapi/boom')
 
@@ -11,7 +10,6 @@ const defaultFailHandler = require('../../defaultFailHandler')
 const { saveFile } = require('../../../../utils')
 
 const {
-    canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
@@ -20,7 +18,7 @@ const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
-const { getAppDeveloperId, getAppsById } = require('../../../../data')
+const { getOrganisationAppsByUserId, getAppsById } = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
 
@@ -58,11 +56,21 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        if (!canCreateApp(request, h)) {
+        const db = h.context.db
+        const { appId } = request.params
+
+        //check permissions and update if we're owner of the app or a manager
+        const currentUser = await getCurrentUserFromRequest(request, db)
+        const currentUserId = currentUser.id
+
+        const userApps = await getOrganisationAppsByUserId(currentUserId, db)
+        const userCanEditApp =
+            userApps.map(app => app.app_id).indexOf(appId) !== -1
+
+        if (!userCanEditApp) {
             throw Boom.unauthorized()
         }
 
-        //debug("payload:", request.payload)
         const versionPayload = request.payload.version
         const appVersionJson = JSON.parse(versionPayload)
         const validationResult = CreateAppVersionModel.def.validate(
@@ -82,9 +90,6 @@ module.exports = {
         //we have passed all input validation, lets move on
         debug(`Received version:\n ${JSON.stringify(appVersionJson, null, 2)}`)
 
-        const db = h.context.db
-        const { appId } = request.params
-
         //TODO: make langCode dynamic? legacy v1 endpoint supports english only
         const languageCode = 'en'
 
@@ -103,15 +108,9 @@ module.exports = {
             )
         }
 
-        const appDeveloperId = await getAppDeveloperId(appId, db)
-
-        //check permissions and update if we're owner of the app or a manager
-        const currentUser = await getCurrentUserFromRequest(request, db)
-        const currentUserId = currentUser.id
-
         let versionId = null
 
-        if (currentUserIsManager(request) || currentUserId === appDeveloperId) {
+        if (currentUserIsManager(request) || userCanEditApp) {
             const transaction = await db.transaction()
 
             const {
