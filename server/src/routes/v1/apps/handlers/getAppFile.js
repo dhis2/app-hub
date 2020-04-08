@@ -11,7 +11,6 @@ const {
 } = require('../../../../security')
 
 module.exports = {
-    //unauthenticated endpoint returning the approved app for the specified id
     method: 'GET',
     path:
         '/v1/apps/download/{organisation_slug}/{appver_slug}/{app_version}/app.zip',
