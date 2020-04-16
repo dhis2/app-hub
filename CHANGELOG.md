@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/dhis2/app-hub/compare/v2.1.1...v2.1.2) (2020-04-16)
+
+
+### Bug Fixes
+
+* add migration to fix users with orgs-view ([4e67b74](https://github.com/dhis2/app-hub/commit/4e67b7456f9bdeb0098c9e088be290e39df1843d))
+
 ## [2.1.1](https://github.com/dhis2/app-hub/compare/v2.1.0...v2.1.1) (2020-04-02)
 
 
