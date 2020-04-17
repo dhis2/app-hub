@@ -10,7 +10,7 @@ const { parseFilterString } = require('../utils/filterUtils')
  * with a filter type. The filters are validated through Hapi's validate.query.
  *
  * The purpose of the plugin is to group all filters in `request.plugins.queryFilter.filters`.
- * The value of this property is an object of Filters.
+ * The value of this property is an instance of Filters.
  *
  * All options can be overwritten by each route.
  * Options:
@@ -62,19 +62,17 @@ const onPreHandler = function(request, h) {
     let validateDescription = validateDescriptions[request.path]
     let renameDescription = renameDescriptions[request.path]
 
-    if (rename) {
-        if (Joi.isSchema(rename)) {
-            if (!renameDescription) {
-                renameDescription = renameDescriptions[
-                    request.path
-                ] = rename.describe()
-            }
-            renameMap = renameDescription.renames.reduce((acc, curr) => {
-                const { from, to } = curr
-                acc[from] = to
-                return acc
-            }, {})
+    if (rename && Joi.isSchema(rename)) {
+        if (!renameDescription) {
+            renameDescription = renameDescriptions[
+                request.path
+            ] = rename.describe()
         }
+        renameMap = renameDescription.renames.reduce((acc, curr) => {
+            const { from, to } = curr
+            acc[from] = to
+            return acc
+        }, {})
     }
 
     if (Joi.isSchema(routeQueryValidation)) {
@@ -83,7 +81,6 @@ const onPreHandler = function(request, h) {
                 request.path
             ] = routeQueryValidation.describe()
         }
-
         // only add validations with .filter()
         Object.keys(validateDescription.keys).forEach(k => {
             const keyDesc = validateDescription.keys[k]

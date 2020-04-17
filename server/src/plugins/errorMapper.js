@@ -11,6 +11,12 @@ const {
     wrapError,
 } = require('db-errors')
 
+/**
+ * A plugin that parses database-errors thrown in handlers and maps them to the correct boom-error.
+ * This means that in many cases we do not need to handle or catch db-query errors
+ * unless we need to do something else with the error.
+ */
+
 const dbErrorMap = {
     badRequest: [
         CheckViolationError,
