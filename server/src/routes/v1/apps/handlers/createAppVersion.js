@@ -63,9 +63,10 @@ module.exports = {
         const currentUser = await getCurrentUserFromRequest(request, db)
         const currentUserId = currentUser.id
 
+        const isManager = currentUserIsManager(request)
         const userApps = await getOrganisationAppsByUserId(currentUserId, db)
         const userCanEditApp =
-            userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
 
         if (!userCanEditApp) {
             throw Boom.unauthorized()
@@ -110,7 +111,7 @@ module.exports = {
 
         let versionId = null
 
-        if (currentUserIsManager(request) || userCanEditApp) {
+        if (userCanEditApp) {
             const transaction = await db.transaction()
 
             const {
