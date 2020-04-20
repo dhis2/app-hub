@@ -2,7 +2,7 @@ module.exports = [
     {
         id: '58262f57-4f38-45c5-a3c2-9e30ab3ba2da',
         email: 'apphub-api@dhis2.org',
-        name: 'Mr Jenkins',
+        name: 'tapps-bot',
     },
     {
         id: 'd30bfdae-ac6e-4ed4-8b2c-3cd1787922f4',
