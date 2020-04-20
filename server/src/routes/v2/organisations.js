@@ -1,8 +1,7 @@
 const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 const {
-    canCreateApp,
-    getCurrentAuthStrategy,
+    currentUserIsManager,
     getCurrentUserFromRequest,
 } = require('../../security')
 const getUserByEmail = require('../../data/getUserByEmail')
@@ -21,8 +20,6 @@ module.exports = [
             },
         },
         handler: async (request, h) => {
-            const { db } = h.context
-
             //get all orgs, no filtering
             //TODO: add filtering
             const orgs = await Organisation.find({}, h.context.db)
@@ -73,17 +70,14 @@ module.exports = [
             const { db } = h.context
 
             const { id: userId } = await getCurrentUserFromRequest(request, db)
+            //TODO: should everyone be able to create new organisations?
 
             const createOrgAndAddUser = async trx => {
                 const organisation = await Organisation.create(
                     { userId, name: request.payload.name },
                     trx
                 )
-                const query = await Organisation.addUserById(
-                    organisation.id,
-                    userId,
-                    trx
-                )
+                await Organisation.addUserById(organisation.id, userId, trx)
                 return organisation
             }
 
@@ -113,6 +107,7 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { id: userId } = await getCurrentUserFromRequest(request, db)
+            const isManager = currentUserIsManager(request)
 
             const updateObj = request.payload
 
@@ -122,7 +117,7 @@ module.exports = [
                     false,
                     trx
                 )
-                if (organisation.owner !== userId) {
+                if (organisation.owner !== userId && !isManager) {
                     throw Boom.forbidden(
                         'You do not have permissions to update this organisation'
                     )
@@ -170,8 +165,9 @@ module.exports = [
                     trx
                 )
 
+                const isManager = currentUserIsManager(request)
                 const isMember = org.users.findIndex(u => u.id === id) > -1
-                const canAdd = org.owner === id || isMember
+                const canAdd = org.owner === id || isMember || isManager
 
                 if (!canAdd) {
                     throw Boom.forbidden(
@@ -191,7 +187,7 @@ module.exports = [
                 }
             }
 
-            const transaction = await db.transaction(addUserToOrganisation)
+            await db.transaction(addUserToOrganisation)
 
             return {
                 statusCode: 200,
@@ -230,8 +226,10 @@ module.exports = [
                     true,
                     trx
                 )
+
+                const isManager = currentUserIsManager(request)
                 const isMember = org.users.findIndex(u => u.id === id) > -1
-                const canRemove = org.owner === id || isMember
+                const canRemove = org.owner === id || isMember || isManager
 
                 if (org.owner === userIdToRemove) {
                     throw Boom.conflict(
@@ -255,7 +253,7 @@ module.exports = [
                 }
             }
 
-            const transaction = await db.transaction(removeUserFromOrganisation)
+            await db.transaction(removeUserFromOrganisation)
 
             return {
                 statusCode: 200,

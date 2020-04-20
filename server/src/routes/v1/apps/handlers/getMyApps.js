@@ -1,8 +1,7 @@
 const debug = require('debug')('apphub:server:routes:handlers:v1:getMyApps')
-const Boom = require('@hapi/boom')
 const Joi = require('@hapi/joi')
 
-const { getAllAppsByDeveloperId } = require('../../../../data')
+const { getOrganisationAppsByUserId } = require('../../../../data')
 const { convertAppsToApiV1Format } = require('../formatting')
 
 const AppModel = require('../../../../models/v1/out/App')
@@ -29,11 +28,12 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        //TODO: implement fetching of apps for which the current user has access to, E.G. the organisations it belongs to
-
         try {
             const user = await getCurrentUserFromRequest(request, h.context.db)
-            const apps = await getAllAppsByDeveloperId(user.id, h.context.db)
+            const apps = await getOrganisationAppsByUserId(
+                user.id,
+                h.context.db
+            )
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
             debug(err)

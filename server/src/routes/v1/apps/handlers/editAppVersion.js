@@ -5,7 +5,10 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const { updateAppVersion, getAppDeveloperId } = require('../../../../data')
+const {
+    updateAppVersion,
+    getOrganisationAppsByUserId,
+} = require('../../../../data')
 
 const EditAppVersionModel = require('../../../../models/v1/in/EditAppVersionModel')
 
@@ -38,12 +41,11 @@ module.exports = {
         const { appId, versionId } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(appId, db)
+        const apps = await getOrganisationAppsByUserId(currentUser.id, db)
 
-        if (
-            currentUserIsManager(request) ||
-            appDeveloperId === currentUser.id
-        ) {
+        const hasDeveloperAccessToApp = apps.map(app => app.id).indexOf(appId)
+
+        if (currentUserIsManager(request) || hasDeveloperAccessToApp) {
             //can edit appversion
             const transaction = await db.transaction()
 
