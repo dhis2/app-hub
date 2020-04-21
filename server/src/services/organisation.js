@@ -8,7 +8,9 @@ const getOrganisationQuery = db =>
         'organisation.id',
         'organisation.name',
         'organisation.slug',
-        'organisation.created_by_user_id'
+        'organisation.created_by_user_id',
+        'organisation.updated_at',
+        'organisation.created_at'
     )
 
 /**
@@ -83,8 +85,6 @@ const findOne = async (id, includeUsers = false, db) => {
         throw new NotFoundError(`Organisation Not Found`)
     }
 
-    const internalOrg = Organisation.parseDatabaseJson(organisation)
-
     if (includeUsers) {
         const users = await db('users')
             .select('users.id', 'users.email', 'users.name')
@@ -94,8 +94,9 @@ const findOne = async (id, includeUsers = false, db) => {
                 'user_organisation.user_id'
             )
             .where('user_organisation.organisation_id', organisation.id)
-        internalOrg.users = User.parseDatabaseJson(users)
+        organisation.users = users
     }
+    const internalOrg = Organisation.parseDatabaseJson(organisation)
 
     return internalOrg
 }
