@@ -23,6 +23,7 @@ const definition = defaultDefinition
     .rename('created_by_user_id', 'owner', {
         ignoreUndefined: true,
     })
+    .label('Organisation')
 
 const dbDefinition = definition.tailor('db')
 

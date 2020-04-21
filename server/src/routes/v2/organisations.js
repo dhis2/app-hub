@@ -1,8 +1,6 @@
 const Boom = require('@hapi/boom')
 const Joi = require('../../utils/CustomJoi')
 const {
-    canCreateApp,
-    getCurrentAuthStrategy,
     getCurrentUserFromRequest,
 } = require('../../security')
 const getUserByEmail = require('../../data/getUserByEmail')
@@ -17,18 +15,29 @@ module.exports = [
         config: {
             tags: ['api', 'v2'],
             response: {
-                //  schema: Joi.array().items(OrgModel.externalDefintion),
-                //modify: true,
+                schema: Joi.array()
+                    .items(
+                        OrgModel.externalDefintion.fork('users', s =>
+                            s.forbidden()
+                        )
+                    )
+                    .label('Organisations'),
             },
             validate: {
                 query: Joi.object({
-                    name: Joi.filter(),
-                    owner: Joi.filter(Joi.string().guid()).operator(
-                        Joi.valid('eq')
+                    name: Joi.filter().description(
+                        'The name of the organisation'
                     ),
-                    user: Joi.filter(Joi.string().guid()).operator(
-                        Joi.valid('eq')
-                    ),
+                    owner: Joi.filter(Joi.string().guid())
+                        .operator(Joi.valid('eq'))
+                        .description(
+                            'The uuid of the owner of the organisations'
+                        ),
+                    user: Joi.filter(Joi.string().guid())
+                        .operator(Joi.valid('eq'))
+                        .description(
+                            'The uuid of the user to get organisations for'
+                        ),
                 }),
             },
             plugins: {
@@ -58,8 +67,9 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                schema: OrgModel.externalDefintion,
-                modify: true,
+                schema: OrgModel.externalDefintion.label(
+                    'OrganisationWithUsers'
+                ),
             },
         },
         handler: async (request, h) => {
@@ -81,8 +91,9 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                schema: OrgModel.externalDefintion,
-                modify: true,
+                schema: Joi.object({
+                    id: Joi.string().uuid(),
+                }),
             },
         },
 
@@ -124,6 +135,11 @@ module.exports = [
                 }),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
+                }),
+            },
+            response: {
+                schema: Joi.object({
+                    id: Joi.string().uuid(),
                 }),
             },
         },
