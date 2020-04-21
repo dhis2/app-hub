@@ -27,7 +27,7 @@
         "blipp": "^4.0.1",
         "db-errors": "^0.2.3",
         "debug": "^4.1.1",
-        "dotenv": "^6.2.0",
+        "dotenv": "^8.2.0",
         "hapi-api-version": "^2.3.1",
         "hapi-auth-jwt2": "^8.8.1",
         "hapi-pino": "^6.3.0",
