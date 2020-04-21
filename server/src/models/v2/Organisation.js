@@ -28,7 +28,7 @@ const definition = defaultDefinition
 const dbDefinition = definition.tailor('db')
 
 // internal -> external
-const externalDefintion = definition.tailor('external')
+const externalDefinition = definition.tailor('external')
 
 // database -> internal
 const parseDatabaseJson = createDefaultValidator(definition)
@@ -40,7 +40,7 @@ module.exports = {
     def: definition,
     definition,
     dbDefinition,
-    externalDefintion,
+    externalDefinition,
     parseDatabaseJson,
     formatDatabaseJson,
 }

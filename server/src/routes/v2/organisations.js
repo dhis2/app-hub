@@ -18,7 +18,7 @@ module.exports = [
             response: {
                 schema: Joi.array()
                     .items(
-                        OrgModel.externalDefintion.fork('users', s =>
+                        OrgModel.externalDefinition.fork('users', s =>
                             s.forbidden()
                         )
                     )
@@ -68,7 +68,7 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                schema: OrgModel.externalDefintion.label(
+                schema: OrgModel.externalDefinition.label(
                     'OrganisationWithUsers'
                 ),
             },
