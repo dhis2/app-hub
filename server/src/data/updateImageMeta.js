@@ -29,7 +29,7 @@ const updateImageMeta = async (params, knex, transaction) => {
     const { id, caption, description } = params
 
     try {
-        await knex('app_version_media')
+        await knex('media')
             .transacting(transaction)
             .where('id', id)
             .update({

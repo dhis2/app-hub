@@ -1,6 +1,7 @@
 {
     "name": "root",
     "author": "Erik Arenhill <erik@dhis2.org>",
+    "repository": "https://github.com/dhis2/app-hub.git",
     "license": "BSD-3-Clause",
     "private": true,
     "workspaces": [
@@ -25,5 +26,6 @@
     },
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
-    }
+    },
+    "version": "2.2.0"
 }

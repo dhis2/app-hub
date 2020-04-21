@@ -1,6 +1,6 @@
 {
     "name": "tools",
-    "version": "1.0.0",
+    "version": "2.2.0",
     "description": "",
     "main": "clone.js",
     "repository": "https://github.com/dhis2/app-hub",

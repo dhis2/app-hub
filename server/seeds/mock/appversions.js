@@ -1,5 +1,4 @@
 const apps = require('./apps')
-const uuid = require('uuid/v4')
 
 const [
     dhis2App,

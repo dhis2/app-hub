@@ -11,8 +11,10 @@ exports.seed = async knex => {
 
     await knex('user_organisation').del()
     await knex('user_external_id').del()
-    await knex('users').del()
+    await knex('app').del()
+    await knex('app_channel').del()
     await knex('organisation').del()
+    await knex('users').del()
 
     console.log('Inserting users')
 
@@ -44,6 +46,7 @@ exports.seed = async knex => {
     await knex('user_organisation').insert([
         { organisation_id: organisations[0].id, user_id: users[2].id }, //viktor -> dhis2
         { organisation_id: organisations[1].id, user_id: users[1].id }, //erik -> who
+        { organisation_id: organisations[0].id, user_id: users[1].id }, //erik -> dhis2, we need a user with multiple organisations to test that this also works
     ])
 
     console.log('Inserting user-organisations #02')

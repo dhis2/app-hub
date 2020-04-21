@@ -1,5 +1,7 @@
 const Boom = require('@hapi/boom')
 
+const debug = require('debug')('apphub:server:routes:v1:handlers:editApp')
+
 const EditAppModel = require('../../../../models/v1/in/EditAppModel')
 
 const {
@@ -7,7 +9,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const { updateApp, getAppDeveloperId } = require('../../../../data')
+const { updateApp, getOrganisationAppsByUserId } = require('../../../../data')
 
 module.exports = {
     method: 'PUT',
@@ -39,12 +41,17 @@ module.exports = {
         const db = h.context.db
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(request.params.appId, db)
+        const appsUserCanEdit = await getOrganisationAppsByUserId(
+            currentUser.id,
+            db
+        )
+        const userCanEditApp =
+            appsUserCanEdit.filter(app => app.id === request.params.appId)
+                .length > 0
 
-        if (
-            currentUserIsManager(request) ||
-            appDeveloperId === currentUser.id
-        ) {
+        debug('appsUserCanEdit:', appsUserCanEdit)
+
+        if (currentUserIsManager(request) || userCanEditApp) {
             //can edit app
             const transaction = await db.transaction()
 

@@ -1,0 +1,52 @@
+name: 'dhis2-docker test'
+
+on: push
+
+jobs:
+    test:
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+        runs-on: ubuntu-latest
+
+        container:
+            image: node:lts-slim
+
+        services:
+            postgres:
+                image: dhis2/postgres-contrib
+                env:
+                    POSTGRES_USER: apphub
+                    POSTGRES_PASSWORD: apphub
+                    POSTGRES_DB: apphub
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install deps for tests
+              run: yarn install --frozen-lockfile
+
+            - name: Build frontend/client
+              run: yarn build
+
+            - name: Run client tests
+              run: yarn test:client
+
+            - name: Run server tests
+              run: yarn test:server
+              env:
+                  RDS_HOSTNAME: postgres
+                  RDS_USERNAME: apphub
+                  RDS_PASSWORD: apphub
+                  RDS_DB_NAME: apphub
+                  RDS_DB_PORT: 5432
+                  AUTH_STRATEGY: jwt
+                  AUTH0_M2M_SECRET: ${{ secrets.AUTH0_M2M_SECRET }}
+                  AUTH0_SECRET: ${{ secrets.AUTH0_SECRET }}
+                  AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
+                  AUTH0_DOMAIN: https://dhis2.eu.auth0.com/
+                  AUTH0_ALG: HS256

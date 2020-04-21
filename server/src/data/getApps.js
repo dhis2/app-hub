@@ -9,7 +9,7 @@ const debug = require('debug')('apphub:server:data:getApps')
  * @returns {Promise<Array>}
  *
  */
-const getApps = ({ status, languageCode, channel } = params, knex) => {
+const getApps = ({ status, languageCode, channel }, knex) => {
     debug('status:', status)
     debug('languageCode:', languageCode)
     debug('channel:', channel)
