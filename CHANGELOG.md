@@ -1,3 +1,29 @@
+# [2.3.0](https://github.com/dhis2/app-hub/compare/v2.2.0...v2.3.0) (2020-04-21)
+
+
+### Bug Fixes
+
+* add @hapi/bounce, lowercase imports ([dc90ef4](https://github.com/dhis2/app-hub/commit/dc90ef43335c94c5236a8811a28a57bdc594b77a))
+* add support for tags ([5b77fbb](https://github.com/dhis2/app-hub/commit/5b77fbba5ff35ea7603f21f7f7f6ba926e10ad19))
+* add tests ([064a84d](https://github.com/dhis2/app-hub/commit/064a84d0ccc4daa111049e7df7efc43ed4138d57))
+* boomify filter errors, rethrow system-errors ([724b52c](https://github.com/dhis2/app-hub/commit/724b52ca06b42804989817faec55e7dcc2ed47c6))
+* cleanup, map SQL operator ([804d7b3](https://github.com/dhis2/app-hub/commit/804d7b3d7e7b7e12771aa3189d45a6fccf11f578))
+* filter creation ([33cf418](https://github.com/dhis2/app-hub/commit/33cf4188bd4c225caa0ed924f0e408e4b9b22632))
+* improve swagger docs ([ee55200](https://github.com/dhis2/app-hub/commit/ee55200004f38b1dde1f0d944a6a19091ab3703d))
+* **filter:** filter creation with renames ([1327ee8](https://github.com/dhis2/app-hub/commit/1327ee89e29693fe053213ab86a44cd368bbaff8))
+* rename support, cleanup ([6fa6a83](https://github.com/dhis2/app-hub/commit/6fa6a834bb52208862262a890c2d418f4452eb8d))
+* support renames in createFromQueryFiltes ([36c662d](https://github.com/dhis2/app-hub/commit/36c662dddadfc04dcf90dc8799590361609d3aab))
+* update test ([5b379aa](https://github.com/dhis2/app-hub/commit/5b379aa6bc925d958fd9a2406b766fc1f4e30e36))
+* update usage of Filter ([4f84b77](https://github.com/dhis2/app-hub/commit/4f84b772680c01aa4fb7b41b3111a9d722de3955))
+* working filter ([0f23321](https://github.com/dhis2/app-hub/commit/0f2332165645c11e0fda27934194dd8c2f0d78b9))
+
+
+### Features
+
+* custom-joi filter-type ([6e675a8](https://github.com/dhis2/app-hub/commit/6e675a86f6798442b17cb9f7237ae1a7309fec65))
+* **queryfilter:** enable queryFilter-plugin ([a8574f7](https://github.com/dhis2/app-hub/commit/a8574f7b5eed8c39a19bdb1946ca202d0992a912))
+* filtering ([fa05623](https://github.com/dhis2/app-hub/commit/fa056237a13ac068e02a0c679b09f1fd30c81c72))
+
 # [2.2.0](https://github.com/dhis2/app-hub/compare/v2.1.2...v2.2.0) (2020-04-20)
 
 
