@@ -1,5 +1,5 @@
 const Boom = require('@hapi/boom')
-const Joi = require('@hapi/joi')
+const Joi = require('../../utils/CustomJoi')
 const {
     currentUserIsManager,
     getCurrentUserFromRequest,
@@ -7,6 +7,7 @@ const {
 const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
+const debug = require('debug')('apphub:server:routes:handlers:organisations')
 
 module.exports = [
     {
@@ -15,14 +16,43 @@ module.exports = [
         config: {
             tags: ['api', 'v2'],
             response: {
-                schema: Joi.array().items(OrgModel.externalDefintion),
-                modify: true,
+                schema: Joi.array()
+                    .items(
+                        OrgModel.externalDefinition.fork('users', s =>
+                            s.forbidden()
+                        )
+                    )
+                    .label('Organisations'),
+            },
+            validate: {
+                query: Joi.object({
+                    name: Joi.filter().description(
+                        'The name of the organisation'
+                    ),
+                    owner: Joi.filter(Joi.string().guid())
+                        .operator(Joi.valid('eq'))
+                        .description(
+                            'The uuid of the owner of the organisations'
+                        ),
+                    user: Joi.filter(Joi.string().guid())
+                        .operator(Joi.valid('eq'))
+                        .description(
+                            'The uuid of the user to get organisations for'
+                        ),
+                }),
+            },
+            plugins: {
+                queryFilter: {
+                    enabled: true,
+                    rename: OrgModel.dbDefinition,
+                },
             },
         },
         handler: async (request, h) => {
-            //get all orgs, no filtering
-            //TODO: add filtering
-            const orgs = await Organisation.find({}, h.context.db)
+            const { db } = h.context
+            const filters = request.plugins.queryFilter
+
+            const orgs = await Organisation.find({ filters }, db)
             return orgs
         },
     },
@@ -38,8 +68,9 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                schema: OrgModel.externalDefintion,
-                modify: true,
+                schema: OrgModel.externalDefinition.label(
+                    'OrganisationWithUsers'
+                ),
             },
         },
         handler: async (request, h) => {
@@ -61,8 +92,9 @@ module.exports = [
             },
             tags: ['api', 'v2'],
             response: {
-                schema: OrgModel.externalDefintion,
-                modify: true,
+                schema: Joi.object({
+                    id: Joi.string().uuid(),
+                }),
             },
         },
 
@@ -101,6 +133,11 @@ module.exports = [
                 }),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
+                }),
+            },
+            response: {
+                schema: Joi.object({
+                    id: Joi.string().uuid(),
                 }),
             },
         },
