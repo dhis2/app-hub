@@ -26,7 +26,13 @@ module.exports = {
         const knex = h.context.db
 
         const isAdmin = currentUserIsManager(request)
-        const user = await getCurrentUserFromRequest(request)
+        let user = null
+        try {
+            user = await getCurrentUserFromRequest(request)
+        } catch (err) {
+            //no user in request, anonymous
+            debug('no user in request')
+        }
 
         debug('user:', user)
         debug('isAdmin:', isAdmin)
