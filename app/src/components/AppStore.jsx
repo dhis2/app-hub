@@ -16,7 +16,7 @@ import { Provider, connect } from "react-redux";
 import store from "../store";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import { getAuth } from "../utils/AuthService";
-
+import DeprecatedBanner from './deprecated/DeprecatedBanner';
 injectTapEventPlugin();
 
 const auth = getAuth();
@@ -28,6 +28,7 @@ export default function AppStore() {
                     <div className="app">
                         <DialogRoot />
                         <Header />
+                        <DeprecatedBanner />
                         <div id="container" style={theme.container}>
                             <Switch>
                                 <Route exact path="/" component={AppCards} />
