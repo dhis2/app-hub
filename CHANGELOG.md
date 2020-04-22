@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/dhis2/app-hub/compare/v2.3.1...v2.3.2) (2020-04-22)
+
+
+### Bug Fixes
+
+* **createapp:** add user to organisation if org does note xist ([ffb0733](https://github.com/dhis2/app-hub/commit/ffb07331ed68384924142d2d8cb062afe0811290))
+
 ## [2.3.1](https://github.com/dhis2/app-hub/compare/v2.3.0...v2.3.1) (2020-04-22)
 
 
