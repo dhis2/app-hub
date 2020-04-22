@@ -9,7 +9,6 @@ const getM2MAuthToken = async () => {
         audience: process.env.AUTH0_AUDIENCE,
         grant_type: 'client_credentials',
     })
-    console.log(payload)
     const tokenResponse = await request.post({
         url,
         headers: {
