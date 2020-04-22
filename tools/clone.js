@@ -26,7 +26,7 @@ const findAppByName = (name, list) => {
 
 async function main() {
     const sourceUrl = 'https://play.dhis2.org/appstore/api/apps'
-    const targetUrl = 'https://staging.apps.dhis2.org/api'
+    const targetUrl = 'http://localhost:3000/api'
     const authToken = await getAuth0Token()
 
     const publishedApps = await request(sourceUrl)
@@ -36,7 +36,7 @@ async function main() {
     let existingAppsAtTarget = JSON.parse(targetApps)
 
     //TODO: make configurable
-    const cleanTarget = false
+    const cleanTarget = true
 
     if (cleanTarget) {
         for (let i = 0; i < existingAppsAtTarget.length; ++i) {
