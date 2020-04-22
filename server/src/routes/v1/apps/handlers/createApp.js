@@ -120,6 +120,14 @@ module.exports = {
                     knex,
                     trx
                 )
+                await addUserToOrganisation(
+                    {
+                        userId: currentUserId,
+                        organisationId: organisation.id,
+                    },
+                    knex,
+                    trx
+                )
             } else {
                 organisation = organisations[0]
                 if (currentUserId !== organisation.created_by_user_id) {
