@@ -22,7 +22,6 @@ const {
 } = require('../../../../security')
 
 module.exports = {
-    //unauthenticated endpoint returning the approved app for the specified appId
     method: 'GET',
     path: '/v1/apps/{appId}',
     config: {
@@ -59,6 +58,7 @@ module.exports = {
                 appsUserCanEdit.map(app => app.app_id).indexOf(appId) !== -1
         } catch (err) {
             //no user on request
+            debug('No user in request')
         }
 
         if (canSeeAllApps(request) || isDeveloper) {
