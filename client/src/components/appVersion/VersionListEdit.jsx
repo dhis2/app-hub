@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 
@@ -10,21 +11,19 @@ import {
     TableRowColumn,
 } from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
-import IconMenu from 'material-ui/IconMenu'
 import IconButton from 'material-ui/IconButton'
 import MenuItem from 'material-ui/MenuItem'
-import Popover from 'material-ui/Popover'
 import TextField from 'material-ui/TextField'
 import Theme from '../../styles/theme'
 import SelectField from 'material-ui/SelectField'
 
 import merge from 'lodash/fp/merge'
 
-import config from '../../../config'
-
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 import { loadChannels } from '../../actions/actionCreators'
+
+import { getAuth } from '../../utils/AuthService'
 
 const styles = {
     tableHeaderColumn: {
@@ -62,6 +61,9 @@ const TableIcon = ({ children }) => (
         {children}
     </FontIcon>
 )
+TableIcon.propTypes = {
+    children: PropTypes.array,
+}
 
 class VersionListEdit extends Component {
     constructor(props) {
@@ -90,7 +92,7 @@ class VersionListEdit extends Component {
         })
     }
 
-    handleCloseEditField(e) {
+    handleCloseEditField() {
         this.setState({
             ...this.state,
             open: !this.state.open,
@@ -210,11 +212,18 @@ class VersionListEdit extends Component {
 
         const values = merge(version, this.state.editedValues[version.id])
 
+        //auth0 stores the JWT token in localStorage
+        //as only authenticated users can edit an app, just assume this exists in this component
+        const token = getAuth().getToken()
+
+        //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
+        const downloadUrlWithToken = `${values.downloadUrl}?token=${token}`
+
         //TODO: add error instead of passing false to ErrorOrLoading
         return (
             <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
-                    <a href={values.downloadUrl} title="Download">
+                    <a href={downloadUrlWithToken} title="Download">
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
@@ -233,6 +242,7 @@ class VersionListEdit extends Component {
                         <a
                             href={`${values.demoUrl}`}
                             target="_blank"
+                            rel="noopener noreferrer"
                             style={{ color: Theme.palette.primary1Color }}
                         >
                             Demo
@@ -325,7 +335,7 @@ class VersionListEdit extends Component {
 
         const versions = props.versionList
             .sort((a, b) => b.created - a.created)
-            .map((version, i) => {
+            .map(version => {
                 const editingRow =
                     this.state.editingFields.indexOf(version.id) > -1
 
@@ -400,9 +410,11 @@ class VersionListEdit extends Component {
 }
 
 VersionListEdit.propTypes = {
+    handleDelete: PropTypes.func.isRequired,
+    handleEdit: PropTypes.func.isRequired,
+    loadChannels: PropTypes.func.isRequired,
     versionList: PropTypes.array.isRequired,
-    handleDelete: PropTypes.func,
-    handleEdit: PropTypes.func,
+    channels: PropTypes.array,
 }
 VersionListEdit.defaultProps = {}
 

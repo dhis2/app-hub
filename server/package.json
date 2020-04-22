@@ -1,6 +1,6 @@
 {
     "name": "server",
-    "version": "2.1.2",
+    "version": "2.3.0",
     "description": "The App Hub Server",
     "main": "src/main.js",
     "repository": "https://github.com/dhis2/app-hub",
@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "@hapi/boom": "^9.0.0",
+        "@hapi/bounce": "^2.0.0",
         "@hapi/hapi": "^19.0.5",
         "@hapi/inert": "^6.0.1",
         "@hapi/joi": "^17.1.1",

@@ -1,9 +1,7 @@
-const joi = require('@hapi/joi')
+const joi = require('../../utils/CustomJoi')
 const User = require('./User')
-const {
-    definition: defaultDefinition,
-    createDefaultValidator,
-} = require('./Default')
+const { definition: defaultDefinition } = require('./Default')
+const { createDefaultValidator } = require('./helpers')
 
 const definition = defaultDefinition
     .append({
@@ -25,18 +23,12 @@ const definition = defaultDefinition
     .rename('created_by_user_id', 'owner', {
         ignoreUndefined: true,
     })
-
-const defWithUsers = definition.append({
-    users: joi
-        .array()
-        .items(User.definition)
-        .required(),
-})
+    .label('Organisation')
 
 const dbDefinition = definition.tailor('db')
 
 // internal -> external
-const externalDefintion = definition.tailor('external')
+const externalDefinition = definition.tailor('external')
 
 // database -> internal
 const parseDatabaseJson = createDefaultValidator(definition)
@@ -48,8 +40,7 @@ module.exports = {
     def: definition,
     definition,
     dbDefinition,
-    externalDefintion,
-    defWithUsers,
+    externalDefinition,
     parseDatabaseJson,
     formatDatabaseJson,
 }

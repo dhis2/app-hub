@@ -6,31 +6,35 @@ const {
     afterEach,
     beforeEach,
     before,
-    after,
 } = (exports.lab = Lab.script())
 
 const knexConfig = require('../../../knexfile')
-const db = require('knex')(knexConfig)
+const dbInstance = require('knex')(knexConfig)
 const { init } = require('../../../src/server/init-server')
-const { config } = require('../../../src/server/env-config')
+const { config } = require('../../../src/server/noauth-config')
 const { Organisation } = require('../../../src/services')
 const OrgMocks = require('../../../seeds/mock/organisations')
 const UserMocks = require('../../../seeds/mock/users')
+const { Filters } = require('../../../src/utils/Filter')
 
 describe('v2/organisations', () => {
     let server
+    let db
 
     before(async () => {
-        config.auth.config.strategy = 'none'
         config.auth.noAuthUserIdMapping = UserMocks[0].id
     })
 
     beforeEach(async () => {
+        db = await dbInstance.transaction()
+
         server = await init(db, config)
     })
 
     afterEach(async () => {
         await server.stop()
+
+        await db.rollback()
     })
 
     describe('get organisation', () => {
@@ -160,29 +164,36 @@ describe('v2/organisations', () => {
 
     describe('add user to organisation', () => {
         it('should add user successfully', async () => {
-            const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'HISP Tanzania' } },
+            const [whoOrg] = await Organisation.find(
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:World Health Organization`,
+                    }),
+                },
                 db
             )
 
-            expect(dhis2Org).to.not.be.undefined()
-            expect(dhis2Org.id).to.be.a.string()
+            expect(whoOrg).to.not.be.undefined()
+            expect(whoOrg.id).to.be.a.string()
 
             const opts = {
                 method: 'POST',
-                url: `/api/v2/organisations/${dhis2Org.id}/user`,
+                url: `/api/v2/organisations/${whoOrg.id}/user`,
                 payload: {
                     email: 'viktor@dhis2.org',
                 },
             }
             const res = await server.inject(opts)
-
             expect(res.statusCode).to.equal(200)
         })
 
         it('should return 409 conflict if user does not exists', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -205,7 +216,11 @@ describe('v2/organisations', () => {
     describe('remove user from organisation', () => {
         it('should remove successfully', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -228,7 +243,11 @@ describe('v2/organisations', () => {
 
         it('should return conflict when user is the creator', async () => {
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
@@ -254,7 +273,11 @@ describe('v2/organisations', () => {
         it('should return conflict when user does not exist', async () => {
             const userToDelete = '72bced64-c7f7-4b70-aa09-9b8d1e59ed49'
             const [dhis2Org] = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
 
