@@ -2,23 +2,35 @@ const { expect } = require('@hapi/code')
 
 const Lab = require('@hapi/lab')
 
-const { it, describe } = (exports.lab = Lab.script())
+const { it, describe, beforeEach, afterEach } = (exports.lab = Lab.script())
 
 const knexConfig = require('../../knexfile')
-const db = require('knex')(knexConfig)
+const dbInstance = require('knex')(knexConfig)
 const getUserByEmail = require('../../src/data/getUserByEmail')
 
 const { Organisation } = require('../../src/services')
 const UserMocks = require('../../seeds/mock/users')
 const OrganisationMocks = require('../../seeds/mock/organisations')
+const { Filters } = require('../../src/utils/Filter')
 
 describe('@services::Organisation', () => {
+    let db
+
+    beforeEach(async () => {
+        db = await dbInstance.transaction()
+    })
+
+    afterEach(async () => {
+        await db.rollback()
+    })
+
     describe('find', () => {
         it('should find by name filter', async () => {
             const filter = {
-                name: 'DHIS2',
+                name: 'eq:DHIS2',
             }
-            const orgs = await Organisation.find({ filter }, db)
+            const filters = Filters.createFromQueryFilters(filter)
+            const orgs = await Organisation.find({ filters }, db)
             const DHIS2App = orgs.find(o => o.name === 'DHIS2')
             expect(orgs.length).to.be.equal(1)
             expect(DHIS2App).to.not.be.null()
@@ -67,7 +79,11 @@ describe('@services::Organisation', () => {
 
         it('should find organisations by id with users', async () => {
             const orgs = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:DHIS2`,
+                    }),
+                },
                 db
             )
             expect(orgs).to.have.length(1)
@@ -79,7 +95,10 @@ describe('@services::Organisation', () => {
             const orgById = await Organisation.findOne(dhis2Org.id, true, db)
             expect(orgById).to.not.be.null()
             expect(orgById.users).to.be.an.array()
-            const members = ['Mr Jenkins']
+            expect(orgById.users).to.have.length(3)
+            console.log(orgById.users)
+
+            const members = [UserMocks[1].name, UserMocks[2].name]
             members.forEach(name => {
                 const member = orgById.users.find(u => u.name === name)
                 expect(member).to.not.be.undefined()
@@ -90,34 +109,41 @@ describe('@services::Organisation', () => {
 
     describe('addUserById', async () => {
         it('should successfully add user to organisation', async () => {
-            const userId = UserMocks[1].id //Erik, in WHO
+            const userMock = UserMocks[2]
+            const userId = userMock.id //Viktor, in DHIS2
             const orgs = await Organisation.find(
-                { filter: { name: 'DHIS2' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:World Health Organization`,
+                    }),
+                },
                 db
             )
             expect(orgs.length).to.be.equal(1)
             const org = orgs[0]
 
             expect(org.id).to.be.a.string()
-            expect(org.name).to.be.equal('DHIS2')
+            expect(org.name).to.be.equal('World Health Organization')
 
             await Organisation.addUserById(org.id, userId, db)
 
             const orgWithUsers = await Organisation.findOne(org.id, true, db)
             expect(orgWithUsers).to.include('name')
-            expect(orgWithUsers.name).to.be.equal('DHIS2')
+            expect(orgWithUsers.name).to.be.equal('World Health Organization')
             expect(orgWithUsers.users).to.be.an.array()
-            const user = orgWithUsers.users.find(
-                u => u.name === 'Erik Arenhill'
-            )
+            const user = orgWithUsers.users.find(u => u.name === userMock.name)
             expect(user).to.not.be.undefined()
-            expect(user.email).to.be.equal('erik@dhis2.org')
+            expect(user.email).to.be.equal(userMock.email)
         })
 
         it('should throw if user already exists in organisation', async () => {
             const userId = UserMocks[1].id //Erik, in WHO
             const orgs = await Organisation.find(
-                { filter: { name: 'World Health Organization' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:World Health Organization`,
+                    }),
+                },
                 db
             )
             expect(orgs.length).to.be.equal(1)
@@ -131,9 +157,14 @@ describe('@services::Organisation', () => {
         })
 
         it('should work within a transaction', async () => {
-            const userId = UserMocks[2].id //Viktor, in DHIS2
+            const userMock = UserMocks[2]
+            const userId = userMock.id //Viktor, in DHIS2
             const orgs = await Organisation.find(
-                { filter: { name: 'World Health Organization' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:World Health Organization`,
+                    }),
+                },
                 db
             )
 
@@ -155,7 +186,7 @@ describe('@services::Organisation', () => {
 
             const orgWithUsers = await db.transaction(addUserAndGetOrg)
             const newlyAddedUser = orgWithUsers.users.find(
-                u => u.name === 'Viktor Varland'
+                u => u.name === userMock.name
             )
             expect(newlyAddedUser).to.not.be.undefined()
         })
@@ -164,7 +195,11 @@ describe('@services::Organisation', () => {
             const userId = UserMocks[1].id //Erik, in WHO
             const appstoreUserId = UserMocks[0].id // Appstore, in DHIS2
             const orgs = await Organisation.find(
-                { filter: { name: 'World Health Organization' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:World Health Organization`,
+                    }),
+                },
                 db
             )
             const whoOrg = orgs[0]
@@ -183,7 +218,7 @@ describe('@services::Organisation', () => {
                 )
                 expect(orgWithUsers.users).to.be.an.array()
                 const newUser = orgWithUsers.users.find(
-                    u => u.name === 'Mr Jenkins'
+                    u => u.name === UserMocks[0].name
                 )
                 expect(newUser).to.not.be.undefined()
                 // add Erik to WHO, should fail
@@ -202,7 +237,7 @@ describe('@services::Organisation', () => {
                 )
                 expect(orgWithUsers.users).to.be.an.array()
                 const newUser = orgWithUsers.users.find(
-                    u => u.name === 'Mr Jenkins'
+                    u => u.name === UserMocks[0].name
                 )
                 // should be rollbacked, so user should not have been added
                 expect(newUser).to.be.undefined()
@@ -245,7 +280,11 @@ describe('@services::Organisation', () => {
         it('should update name successfully', async () => {
             const orgName = 'World Health Organization'
             const orgs = await Organisation.find(
-                { filter: { name: orgName } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: `eq:${orgName}`,
+                    }),
+                },
                 db
             )
             expect(orgs).to.have.length(1)
@@ -268,7 +307,11 @@ describe('@services::Organisation', () => {
         it('should set owner successfully', async () => {
             const user = await getUserByEmail('viktor@dhis2.org', db)
             const orgs = await Organisation.find(
-                { filter: { name: 'WHO' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: 'eq:World Health Organization',
+                    }),
+                },
                 db
             )
             expect(orgs).to.have.length(1)
@@ -278,7 +321,11 @@ describe('@services::Organisation', () => {
             await Organisation.update(org.id, { owner: user.id }, db)
 
             const [updatedOrg] = await Organisation.find(
-                { filter: { name: 'WHO' } },
+                {
+                    filters: Filters.createFromQueryFilters({
+                        name: 'eq:World Health Organization',
+                    }),
+                },
                 db
             )
             expect(updatedOrg).to.not.be.undefined()

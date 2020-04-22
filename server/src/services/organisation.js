@@ -1,6 +1,4 @@
-const Joi = require('@hapi/joi')
 const slugify = require('slugify')
-const { applyFiltersToQuery } = require('../utils/databaseUtils')
 const { NotFoundError } = require('../utils/errors')
 const User = require('../models/v2/User')
 const Organisation = require('../models/v2/Organisation')
@@ -10,7 +8,9 @@ const getOrganisationQuery = db =>
         'organisation.id',
         'organisation.name',
         'organisation.slug',
-        'organisation.created_by_user_id'
+        'organisation.created_by_user_id',
+        'organisation.updated_at',
+        'organisation.created_at'
     )
 
 /**
@@ -56,21 +56,20 @@ const ensureUniqueSlug = async (originalSlug, db) => {
     return slug
 }
 
-const find = async ({ filter, paging }, db) => {
+const find = async ({ filters }, db) => {
     const query = getOrganisationQuery(db)
 
-    if (filter) {
+    if (filters) {
         // special filter for gettings orgs for a particular user
-        if (filter.user) {
+        const userFilter = filters.getFilter('user')
+        if (userFilter) {
             const userOrganisations = db('user_organisation')
                 .select('organisation_id')
-                .innerJoin('users', 'user_organisation.user_id', 'users.id')
-                .where('users.id', filter.user)
-
+                .where('user_id', userFilter.value)
+            filters.markApplied('user')
             query.whereIn('organisation.id', userOrganisations)
-            delete filter.user
         }
-        applyFiltersToQuery(filter, query, { tableName: 'organisation' })
+        filters.applyAllToQuery(query, { tableName: 'organisation' })
     }
     const res = await query
     const parsed = Organisation.parseDatabaseJson(res)
@@ -86,8 +85,6 @@ const findOne = async (id, includeUsers = false, db) => {
         throw new NotFoundError(`Organisation Not Found`)
     }
 
-    const internalOrg = Organisation.parseDatabaseJson(organisation)
-
     if (includeUsers) {
         const users = await db('users')
             .select('users.id', 'users.email', 'users.name')
@@ -97,8 +94,9 @@ const findOne = async (id, includeUsers = false, db) => {
                 'user_organisation.user_id'
             )
             .where('user_organisation.organisation_id', organisation.id)
-        internalOrg.users = User.parseDatabaseJson(users)
+        organisation.users = users
     }
+    const internalOrg = Organisation.parseDatabaseJson(organisation)
 
     return internalOrg
 }
@@ -116,7 +114,6 @@ const addUserById = async (id, userId, db) => {
         user_id: userId,
         organisation_id: id,
     })
-
     return query
 }
 
