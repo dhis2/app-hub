@@ -167,7 +167,7 @@ module.exports = {
 
             if (appJsonPayload.owner) {
                 const { email, name } = appJsonPayload.owner
-                let appOwner = await getUserByEmail(email, knex)
+                let appOwner = await getUserByEmail(email, trx)
 
                 if (appOwner === null) {
                     appOwner = await createUser(
