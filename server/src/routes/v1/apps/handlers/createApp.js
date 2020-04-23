@@ -19,7 +19,7 @@ const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 const addAppMedia = require('../../../../data/addAppMedia')
-
+const OrganisationService = require('../../../../services/organisation')
 const {
     getOrganisationsByName,
     createOrganisation,
@@ -162,15 +162,15 @@ module.exports = {
             }
 
             const organisationId = organisation.id
-            let ownerUserId = currentUserId
+            const requestUserId = currentUserId
             const developerUserId = appDeveloper.id
 
             if (appJsonPayload.owner) {
                 const { email, name } = appJsonPayload.owner
-                const appOwner = await getUserByEmail(email, knex)
+                let appOwner = await getUserByEmail(email, knex)
 
-                if (appOwner == null) {
-                    const ownerUser = await createUser(
+                if (appOwner === null) {
+                    appOwner = await createUser(
                         {
                             email,
                             name,
@@ -178,24 +178,37 @@ module.exports = {
                         knex,
                         trx
                     )
-                    ownerUserId = ownerUser.id
                     await addUserToOrganisation(
                         {
-                            userId: ownerUserId,
+                            userId: appOwner.id,
                             organisationId: organisation.id,
                         },
                         knex,
                         trx
                     )
                 } else {
-                    ownerUserId = appOwner.id
+                    const hasUser = await OrganisationService.hasUser(
+                        organisation.id,
+                        appOwner.id,
+                        trx
+                    )
+                    if (!hasUser) {
+                        await addUserToOrganisation(
+                            {
+                                userId: appOwner.id,
+                                organisationId: organisation.id,
+                            },
+                            knex,
+                            trx
+                        )
+                    }
                 }
             }
 
             //Create the basic app
             const dbApp = await createApp(
                 {
-                    userId: ownerUserId,
+                    userId: requestUserId,
                     developerUserId,
                     orgId: organisationId,
                     appType: appJsonPayload.appType,
@@ -208,7 +221,7 @@ module.exports = {
             appId = dbApp.id
             await createAppStatus(
                 {
-                    userId: ownerUserId, //the current user set the status
+                    userId: requestUserId, //the current user set the status
                     orgId: organisationId,
                     appId: dbApp.id,
                     status: AppStatus.PENDING,
@@ -221,7 +234,7 @@ module.exports = {
             const { demoUrl, sourceUrl, version } = appJsonPayload.versions[0]
             const appVersion = await createAppVersion(
                 {
-                    userId: ownerUserId,
+                    userId: requestUserId,
                     appId: dbApp.id,
                     demoUrl,
                     sourceUrl,
@@ -235,7 +248,7 @@ module.exports = {
             //Add the texts as english language, only supported for now
             await createLocalizedAppVersion(
                 {
-                    userId: ownerUserId,
+                    userId: requestUserId,
                     appVersionId: appVersion.id,
                     description: appJsonPayload.description || '',
                     name: appJsonPayload.name,
@@ -281,7 +294,7 @@ module.exports = {
                 }
                 const { id, media_id } = await addAppMedia(
                     {
-                        userId: ownerUserId,
+                        userId: requestUserId,
                         appId: appId,
                         mediaType: MediaType.Logo,
                         fileName: imageFileMetadata.filename,
