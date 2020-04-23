@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/dhis2/app-hub/compare/v2.3.2...v2.3.3) (2020-04-23)
+
+
+### Bug Fixes
+
+* move users-with-organisations view to correct folder ([22d31d4](https://github.com/dhis2/app-hub/commit/22d31d479fb712675c5039704433d699036d6be2))
+
 ## [2.3.2](https://github.com/dhis2/app-hub/compare/v2.3.1...v2.3.2) (2020-04-22)
 
 
