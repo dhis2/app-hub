@@ -4,7 +4,7 @@ import IconButton from "material-ui/IconButton";
 import FontIcon from "material-ui/FontIcon";
 
 const APPHUB_URL = "https://apps.dhis2.org";
-const MORE_INFO_URL = ""
+const MORE_INFO_URL = "https://developers.dhis2.org/2020/04/appstore-deprecation/"
 
 const styles = {
     root: {
@@ -34,9 +34,9 @@ export const DeprecatedBanner = (props) => {
                 .
                 <br />
                 Click{" "}
-                <Link to="/deprecated">
-                    <b>here</b>
-                </Link>{" "}
+                <a href={MORE_INFO_URL} target="_blank">
+                    <b>here </b>
+                </a>
                 for more information.
             </p>
             <IconButton style={styles.resetButton} onClick={props.onClose}>
