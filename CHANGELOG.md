@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/dhis2/app-hub/compare/v2.3.3...v2.3.4) (2020-04-24)
+
+
+### Bug Fixes
+
+* appcard height ([caf7a2f](https://github.com/dhis2/app-hub/commit/caf7a2f15b0864886c2aed06a4cb86a23da97c49))
+
 ## [2.3.3](https://github.com/dhis2/app-hub/compare/v2.3.2...v2.3.3) (2020-04-23)
 
 
