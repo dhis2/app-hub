@@ -73,7 +73,7 @@ async function main() {
 
         const dir = './apps/' + app.name.replace('/', '-')
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, '0777', true)
+            fs.mkdirSync(dir, { recursive: true, mode: '0755' })
         }
 
         console.log(`Downloading app: ${app.name} to ${dir}`)
