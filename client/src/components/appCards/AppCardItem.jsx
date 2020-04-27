@@ -1,26 +1,13 @@
-import React from 'react'
+// eslint-disable-next-line react/no-deprecated
+import React, { PropTypes } from 'react'
+
 import { Link } from 'react-router-dom'
 import config from '../../../config'
-import {
-    Card,
-    CardMedia,
-    CardTitle,
-    CardText,
-    CardActions,
-} from 'material-ui/Card'
-import Button from 'material-ui/FlatButton'
+import { Card, CardMedia, CardTitle } from 'material-ui/Card'
 import Theme from '../../styles/theme'
 
 const AppItem = props => {
-    const {
-        id,
-        name,
-        developer,
-        description,
-        appType,
-        images,
-        requiredDhisVersion,
-    } = props.app
+    const { id, name, developer, appType, images } = props.app
     const logo = images.find(elem => elem.logo)
     let backgroundImage = ''
     //svg-string for wallpaper
@@ -40,6 +27,11 @@ const AppItem = props => {
         height: '190px',
     }
 
+    let developerNameToShow = developer.organisation
+    if (!developerNameToShow) {
+        developerNameToShow = developer.name ? developer.name : 'Unspecified'
+    }
+
     return (
         <div data-test="app-card">
             <Card style={{ height: '100%' }}>
@@ -50,14 +42,28 @@ const AppItem = props => {
                     title={<Link to={`/app/${id}`}>{name}</Link>}
                     subtitle={
                         <span>
-                            {developer.name ? developer.name : 'Unspecified'}{' '}
-                            <br /> {config.ui.appTypeToDisplayName[appType]}{' '}
+                            {developerNameToShow}
+                            <br />
+                            {config.ui.appTypeToDisplayName[appType]}{' '}
                         </span>
                     }
                 />
             </Card>
         </div>
     )
+}
+
+AppItem.propTypes = {
+    app: PropTypes.shape({
+        appType: PropTypes.number,
+        developer: PropTypes.shape({
+            name: PropTypes.string,
+            organisation: PropTypes.string,
+        }),
+        id: PropTypes.string,
+        images: PropTypes.array,
+        name: PropTypes.string,
+    }),
 }
 
 export default AppItem
