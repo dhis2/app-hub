@@ -8,7 +8,10 @@ const rimraf = require('rimraf')
 
 const uploadVersions = require('./helpers/uploadVersions')
 const downloadVersions = require('./helpers/downloadVersions')
-const { getM2MAuthToken, getManagementAuthToken } = require('./helpers/getAuthToken')
+const {
+    getM2MAuthToken,
+    getManagementAuthToken,
+} = require('./helpers/getAuthToken')
 const downloadImages = require('./helpers/downloadImages')
 const uploadImages = require('./helpers/uploadImages')
 
@@ -25,7 +28,7 @@ const findAppByName = (name, list) => {
 }
 
 const getUserProfile = async (oauthId, authToken) => {
-    const targetUrl = "https://dhis2.eu.auth0.com/api/v2/users/".concat(oauthId)
+    const targetUrl = 'https://dhis2.eu.auth0.com/api/v2/users/'.concat(oauthId)
     const response = await request.get({
         url: targetUrl,
         headers: {
@@ -85,7 +88,7 @@ async function main() {
 
         const dir = './apps/' + app.name.replace('/', '-')
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, '0777', true)
+            fs.mkdirSync(dir, { recursive: true, mode: '0755' })
         }
 
         console.log(`Downloading app: ${app.name} to ${dir}`)

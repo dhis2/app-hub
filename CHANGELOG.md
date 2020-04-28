@@ -1,3 +1,18 @@
+## [2.3.5](https://github.com/dhis2/app-hub/compare/v2.3.4...v2.3.5) (2020-04-27)
+
+
+### Bug Fixes
+
+* avoid creating dupes when cloning ([2cd8fc0](https://github.com/dhis2/app-hub/commit/2cd8fc0729a91a8251597b9956104f5887e8c392))
+* correct mkdirSync params ([74aaa04](https://github.com/dhis2/app-hub/commit/74aaa04d67dbdc9632f7a409e7ed0d6025d2b50d))
+
+## [2.3.4](https://github.com/dhis2/app-hub/compare/v2.3.3...v2.3.4) (2020-04-24)
+
+
+### Bug Fixes
+
+* appcard height ([caf7a2f](https://github.com/dhis2/app-hub/commit/caf7a2f15b0864886c2aed06a4cb86a23da97c49))
+
 ## [2.3.3](https://github.com/dhis2/app-hub/compare/v2.3.2...v2.3.3) (2020-04-23)
 
 
