@@ -11,6 +11,7 @@ const { saveFile } = require('../../../../utils')
 const {
     canCreateApp,
     getCurrentUserFromRequest,
+    currentUserIsManager,
 } = require('../../../../security')
 
 const createApp = require('../../../../data/createApp')
@@ -88,9 +89,12 @@ module.exports = {
 
         let currentUser = null
         let currentUserId = -1
+        let isManager = false
         try {
             currentUser = await getCurrentUserFromRequest(request, knex)
             currentUserId = currentUser.id
+
+            isManager = currentUserIsManager(request)
         } catch (err) {
             throw Boom.unauthorized('No user found for the request')
         }
@@ -169,7 +173,13 @@ module.exports = {
                 const { email, name } = appJsonPayload.owner
                 let appOwner = await getUserByEmail(email, trx)
 
-                if (appOwner === null) {
+                //Only automatically add the user to the organisation if,
+                //1. either it's a manager uploading the app
+                //2. or the owner e-mail is the same as verified on the request
+                const shouldAddUserToOrg =
+                    isManager || appOwner.email === currentUser.email
+
+                if (shouldAddUserToOrg && appOwner === null) {
                     appOwner = await createUser(
                         {
                             email,
@@ -186,7 +196,7 @@ module.exports = {
                         knex,
                         trx
                     )
-                } else {
+                } else if (shouldAddUserToOrg) {
                     const hasUser = await OrganisationService.hasUser(
                         organisation.id,
                         appOwner.id,
