@@ -177,7 +177,7 @@ module.exports = {
                 //1. either it's a manager uploading the app
                 //2. or the owner e-mail is the same as verified on the request
                 const shouldAddUserToOrg =
-                    isManager || appOwner.email === currentUser.email
+                    isManager || email === currentUser.email
 
                 if (shouldAddUserToOrg && appOwner === null) {
                     appOwner = await createUser(
