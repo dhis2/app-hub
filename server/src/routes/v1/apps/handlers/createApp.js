@@ -14,20 +14,21 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const createApp = require('../../../../data/createApp')
-const createAppStatus = require('../../../../data/createAppStatus')
-const createAppVersion = require('../../../../data/createAppVersion')
-const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
-const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
-const addAppMedia = require('../../../../data/addAppMedia')
-const OrganisationService = require('../../../../services/organisation')
 const {
+    createApp,
+    createAppStatus,
+    createAppVersion,
+    createLocalizedAppVersion,
+    addAppVersionToChannel,
+    addAppMedia,
     getOrganisationsByName,
     createOrganisation,
     getUserByEmail,
     createUser,
     addUserToOrganisation,
 } = require('../../../../data')
+
+const OrganisationService = require('../../../../services/organisation')
 
 module.exports = {
     method: 'POST',
@@ -134,9 +135,20 @@ module.exports = {
                 )
             } else {
                 organisation = organisations[0]
-                if (currentUserId !== organisation.created_by_user_id) {
-                    //should we allow anyone to create an app for an existing organisation?
-                    //throw Boom.unauthorized()
+
+                const org = await OrganisationService.findOne(
+                    organisation.id,
+                    true,
+                    trx
+                )
+
+                const isMember =
+                    org.users.findIndex(u => u.id === currentUserId) > -1
+
+                if (!isMember && !isManager) {
+                    throw Boom.unauthorized(
+                        'You dont have permission to upload apps to that organisation'
+                    )
                 }
             }
 
@@ -178,6 +190,11 @@ module.exports = {
                 //2. or the owner e-mail is the same as verified on the request
                 const shouldAddUserToOrg =
                     isManager || email === currentUser.email
+
+                debug('shouldAddUserToOrg:', shouldAddUserToOrg)
+                debug('isManager:', isManager)
+                debug('owner email:', email)
+                debug('currentUser.email', currentUser.email)
 
                 if (shouldAddUserToOrg && appOwner === null) {
                     appOwner = await createUser(
