@@ -136,14 +136,11 @@ module.exports = {
             } else {
                 organisation = organisations[0]
 
-                const org = await OrganisationService.findOne(
+                const isMember = await OrganisationService.hasUser(
                     organisation.id,
-                    true,
+                    currentUserId,
                     trx
                 )
-
-                const isMember =
-                    org.users.findIndex(u => u.id === currentUserId) > -1
 
                 if (!isMember && !isManager) {
                     throw Boom.unauthorized(
