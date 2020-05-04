@@ -1,6 +1,6 @@
+/* eslint-disable no-undef */
 import ConfigImport, { getConfig } from '../../config/configResolver'
 import DirectDefaultConfig from '../../default.config.js'
-import fs from 'fs'
 import merge from 'lodash/merge'
 const defaultConfigPath = '../../config/'
 const Config = ConfigImport.default
@@ -27,7 +27,7 @@ describe('ConfigResolver', () => {
     describe('getConfig()', () => {
         const override = {
             routes: { baseAppName: 'baseAppName' },
-            ui: { dhisVersions: ['2.32'] },
+            ui: { dhisVersions: ['2.34'] },
         }
         const addition = {
             another: 'setting',

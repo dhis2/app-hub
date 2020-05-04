@@ -1,26 +1,12 @@
-import React from 'react'
+// eslint-disable-next-line react/no-deprecated
+import React, { PropTypes } from 'react'
 import { Link } from 'react-router-dom'
 import config from '../../../config'
-import {
-    Card,
-    CardMedia,
-    CardTitle,
-    CardText,
-    CardActions,
-} from 'material-ui/Card'
-import Button from 'material-ui/FlatButton'
+import { Card, CardMedia, CardTitle } from 'material-ui/Card'
 import Theme from '../../styles/theme'
 
 const AppItem = props => {
-    const {
-        id,
-        name,
-        developer,
-        description,
-        appType,
-        images,
-        requiredDhisVersion,
-    } = props.app
+    const { id, name, developer, appType, images } = props.app
     const logo = images.find(elem => elem.logo)
     let backgroundImage = ''
     //svg-string for wallpaper
@@ -58,6 +44,20 @@ const AppItem = props => {
             </Card>
         </div>
     )
+}
+
+AppItem.propTypes = {
+    app: PropTypes.shape({
+        appType: PropTypes.string,
+        description: PropTypes.string,
+        developer: PropTypes.shape({
+            name: PropTypes.string,
+        }),
+        id: PropTypes.string,
+        images: PropTypes.array,
+        name: PropTypes.string,
+        requiredDhisVersion: PropTypes.string,
+    }),
 }
 
 export default AppItem

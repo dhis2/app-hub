@@ -9,7 +9,7 @@ import { concatMap, mergeAll } from 'rxjs/operators'
 const loadAppsAll = action$ =>
     action$.pipe(
         ofType(actions.APPS_ALL_LOAD),
-        concatMap(action => {
+        concatMap(() => {
             return api
                 .getAllApps()
                 .then(apps => actionCreators.appsAllLoaded(apps))
@@ -25,7 +25,7 @@ const loadAppsAll = action$ =>
 const loadAppsApproved = action$ =>
     action$.pipe(
         ofType(actions.APPS_APPROVED_LOAD),
-        concatMap(action => {
+        concatMap(() => {
             return api
                 .getApprovedApps()
                 .then(apps => actionCreators.loadedApprovedApps(apps))
@@ -68,7 +68,7 @@ const setAppApproval = action$ =>
             const { id: transactionID } = action.meta.optimistic
             return api
                 .setAppApproval(id, status)
-                .then(resp =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.setAppApprovalSuccess(action.payload),
                         transactionID
@@ -93,7 +93,7 @@ const deleteApp = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .deleteApp(action.payload.app.id)
-                .then(resp =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.deleteAppSuccess(action.payload.app),
                         id
@@ -114,7 +114,7 @@ const deleteApp = action$ =>
 const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
-        concatMap(action => {
+        concatMap(() => {
             const auth = getAuth()
             return new Promise((resolve, reject) => {
                 auth.lock.getProfile(auth.getToken(), (error, profile) => {
@@ -132,7 +132,7 @@ const user = action$ =>
 const userApps = action$ =>
     action$.pipe(
         ofType(actions.USER_APPS_LOAD),
-        concatMap(action => {
+        concatMap(() => {
             return api
                 .getUserApps()
                 .then(apps => actionCreators.userAppsLoaded(apps))
@@ -168,14 +168,26 @@ const newApp = action$ =>
         concatMap(action => {
             return api
                 .createApp(action.payload)
-                .then(app => {
-                    history.push('/user')
-                    return actionCreators.addAppSuccess(app)
+                .catch(response => {
+                    if (response.status === 400) {
+                        return response.json()
+                    }
+                    return {
+                        type: actions.APP_ADD_ERROR,
+                        payload: response,
+                    }
                 })
-                .catch(error => ({
-                    type: actions.APP_ADD_ERROR,
-                    payload: error,
-                }))
+                .then(json => {
+                    if (json.statusCode && json.statusCode === 400) {
+                        return {
+                            type: actions.APP_ADD_ERROR,
+                            payload: { message: json.message },
+                        }
+                    } else {
+                        history.push('/user')
+                        return actionCreators.addAppSuccess(json)
+                    }
+                })
         })
     )
 
@@ -192,7 +204,7 @@ const editApp = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .updateApp(app.id, data)
-                .then(resp =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.editAppSuccess(app, data),
                         id
@@ -222,7 +234,7 @@ const deleteVersion = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .deleteVersion(appId, version.id)
-                .then(response =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.deleteAppVersionSuccess(
                             version,
@@ -316,7 +328,7 @@ const deleteImage = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .deleteImage(appId, imageId)
-                .then(response =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.deleteImageFromAppSuccess(
                             appId,
@@ -349,7 +361,7 @@ const editImage = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .updateImage(appId, imageId, data)
-                .then(response =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.editImageSuccess(appId, imageId, data),
                         id
@@ -387,7 +399,7 @@ const editVersion = action$ =>
             const { id } = action.meta.optimistic
             return api
                 .updateVersion(appId, version.id, versionObj)
-                .then(response =>
+                .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.editAppVersionSuccess(appId, versionObj),
                         id
@@ -409,7 +421,7 @@ const editVersion = action$ =>
 const loadChannels = action$ =>
     action$.pipe(
         ofType(actions.CHANNELS_LOAD_BEGIN),
-        concatMap(action => {
+        concatMap(() => {
             return api
                 .getAllChannels()
                 .then(channels => actionCreators.loadChannelsSuccess(channels))

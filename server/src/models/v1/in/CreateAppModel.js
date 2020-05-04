@@ -6,9 +6,7 @@ const CreateModelAppData = Joi.object().keys({
     name: Joi.string(),
     description: Joi.string().allow(''),
     appType: Joi.string().valid(...AppTypes),
-    sourceUrl: Joi.string()
-        .uri()
-        .allow(''),
+    sourceUrl: Joi.string().uri().allow(''),
     developer: Joi.object().keys({
         name: Joi.string(),
         email: Joi.string().email(),
@@ -30,6 +28,12 @@ const CreateModelAppData = Joi.object().keys({
             description: Joi.string().allow('', null),
         })
     ),
+    owner: Joi.object({
+        email: Joi.string()
+            .email()
+            .required(),
+        name: Joi.string().required(),
+    }),
 })
 
 const payloadSchema = Joi.object({
