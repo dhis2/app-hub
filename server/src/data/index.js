@@ -27,4 +27,7 @@ module.exports = {
     deleteAppVersion: require('./deleteAppVersion'),
     deleteChannel: require('./deleteChannel'),
     getOrganisationAppsByUserId: require('./getOrganisationAppsByUserId'),
+    createAppStatus: require('./createAppStatus'),
+    createAppVersion: require('./createAppVersion'),
+    createLocalizedAppVersion: require('./createLocalizedAppVersion'),
 }

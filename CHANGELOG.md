@@ -1,3 +1,62 @@
+## [2.4.1](https://github.com/dhis2/app-hub/compare/v2.4.0...v2.4.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* show org name instead of individual dev ([ddfe97d](https://github.com/dhis2/app-hub/commit/ddfe97da373cd801873d49bd2102cd5bf60d22fa))
+
+# [2.4.0](https://github.com/dhis2/app-hub/compare/v2.3.5...v2.4.0) (2020-05-04)
+
+
+### Bug Fixes
+
+* add owner to clone script to keep user access ([78eb336](https://github.com/dhis2/app-hub/commit/78eb336ac6f790d5ad28b4c6543ea450ffc08158))
+* add support for owner when creating app ([4c88334](https://github.com/dhis2/app-hub/commit/4c88334323b2467eaa64d4902ef86c64c0fa9710))
+* add user to org if not in org ([106161b](https://github.com/dhis2/app-hub/commit/106161be24872e42f288e38cc3871bdf8c145d1d))
+* avoid creating dupes when cloning ([c4ce579](https://github.com/dhis2/app-hub/commit/c4ce57975f274ede6f40f08739c494be0be3db5b))
+* check against correct app_id ([ebd9dd9](https://github.com/dhis2/app-hub/commit/ebd9dd9a8e2dff41976c84896c2415c62309c515))
+* only add to org if manager or same as currUser ([ea6ce0c](https://github.com/dhis2/app-hub/commit/ea6ce0c78e7b03bb337190e8db751287708e21ad))
+* remove < 2.28 versions and add 2.33, 2.34 ([16ffcf8](https://github.com/dhis2/app-hub/commit/16ffcf81aa352a53f9e858b6a1be2d5856483de0))
+* return 400 if trying to upload to other org ([db084e6](https://github.com/dhis2/app-hub/commit/db084e61e98ea6f6b90373db26a62945bafbcc24))
+* show errormessage from unauthorized response ([d768285](https://github.com/dhis2/app-hub/commit/d768285e71f15cc9c272faadb03a4ebe54e89d65))
+* update test to work with new versions ([ab8e141](https://github.com/dhis2/app-hub/commit/ab8e1417197c227aa53266c05f0e13d9e69ce66d))
+* use email from jsonpayload ([944f6c4](https://github.com/dhis2/app-hub/commit/944f6c441b6484d2bdd743badb03e1ffe040e613))
+* use transaction when getting user ([1536a44](https://github.com/dhis2/app-hub/commit/1536a446af73a8d04adbe787febe139a218f06bc))
+
+
+### Features
+
+* **organisationService:** add hasUser-function ([9b7a0eb](https://github.com/dhis2/app-hub/commit/9b7a0eb103bd2855043b4bf6b9d52edb0b853d5f))
+
+## [2.3.5](https://github.com/dhis2/app-hub/compare/v2.3.4...v2.3.5) (2020-04-27)
+
+
+### Bug Fixes
+
+* avoid creating dupes when cloning ([2cd8fc0](https://github.com/dhis2/app-hub/commit/2cd8fc0729a91a8251597b9956104f5887e8c392))
+* correct mkdirSync params ([74aaa04](https://github.com/dhis2/app-hub/commit/74aaa04d67dbdc9632f7a409e7ed0d6025d2b50d))
+
+## [2.3.4](https://github.com/dhis2/app-hub/compare/v2.3.3...v2.3.4) (2020-04-24)
+
+
+### Bug Fixes
+
+* appcard height ([caf7a2f](https://github.com/dhis2/app-hub/commit/caf7a2f15b0864886c2aed06a4cb86a23da97c49))
+
+## [2.3.3](https://github.com/dhis2/app-hub/compare/v2.3.2...v2.3.3) (2020-04-23)
+
+
+### Bug Fixes
+
+* move users-with-organisations view to correct folder ([22d31d4](https://github.com/dhis2/app-hub/commit/22d31d479fb712675c5039704433d699036d6be2))
+
+## [2.3.2](https://github.com/dhis2/app-hub/compare/v2.3.1...v2.3.2) (2020-04-22)
+
+
+### Bug Fixes
+
+* **createapp:** add user to organisation if org does note xist ([ffb0733](https://github.com/dhis2/app-hub/commit/ffb07331ed68384924142d2d8cb062afe0811290))
+
 ## [2.3.1](https://github.com/dhis2/app-hub/compare/v2.3.0...v2.3.1) (2020-04-22)
 
 

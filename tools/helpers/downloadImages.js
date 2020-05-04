@@ -11,12 +11,13 @@ module.exports = async (dir, app) => {
         const fileName = appImage.id + fileExtension
 
         return new Promise((resolve, reject) => {
-            const imageFile = fs.createWriteStream(path.join(dir, fileName))
+            const target = path.join(dir, fileName)
+            const imageFile = fs.createWriteStream(target)
             request(appImage.imageUrl)
                 .pipe(imageFile)
                 .on('finish', () => {
                     console.log(
-                        `Successfully downloaded image: ${appImage.imageUrl} => ${fileName}`
+                        `Successfully downloaded image: ${appImage.imageUrl} => ${target}`
                     )
                     resolve()
                 })

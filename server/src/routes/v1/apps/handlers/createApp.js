@@ -11,22 +11,24 @@ const { saveFile } = require('../../../../utils')
 const {
     canCreateApp,
     getCurrentUserFromRequest,
+    currentUserIsManager,
 } = require('../../../../security')
 
-const createApp = require('../../../../data/createApp')
-const createAppStatus = require('../../../../data/createAppStatus')
-const createAppVersion = require('../../../../data/createAppVersion')
-const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
-const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
-const addAppMedia = require('../../../../data/addAppMedia')
-
 const {
+    createApp,
+    createAppStatus,
+    createAppVersion,
+    createLocalizedAppVersion,
+    addAppVersionToChannel,
+    addAppMedia,
     getOrganisationsByName,
     createOrganisation,
     getUserByEmail,
     createUser,
     addUserToOrganisation,
 } = require('../../../../data')
+
+const OrganisationService = require('../../../../services/organisation')
 
 module.exports = {
     method: 'POST',
@@ -88,9 +90,12 @@ module.exports = {
 
         let currentUser = null
         let currentUserId = -1
+        let isManager = false
         try {
             currentUser = await getCurrentUserFromRequest(request, knex)
             currentUserId = currentUser.id
+
+            isManager = currentUserIsManager(request)
         } catch (err) {
             throw Boom.unauthorized('No user found for the request')
         }
@@ -120,11 +125,27 @@ module.exports = {
                     knex,
                     trx
                 )
+                await addUserToOrganisation(
+                    {
+                        userId: currentUserId,
+                        organisationId: organisation.id,
+                    },
+                    knex,
+                    trx
+                )
             } else {
                 organisation = organisations[0]
-                if (currentUserId !== organisation.created_by_user_id) {
-                    //should we allow anyone to create an app for an existing organisation?
-                    //throw Boom.unauthorized()
+
+                const isMember = await OrganisationService.hasUser(
+                    organisation.id,
+                    currentUserId,
+                    trx
+                )
+
+                if (!isMember && !isManager) {
+                    throw Boom.unauthorized(
+                        'You dont have permission to upload apps to that organisation'
+                    )
                 }
             }
 
@@ -156,6 +177,57 @@ module.exports = {
             const organisationId = organisation.id
             const requestUserId = currentUserId
             const developerUserId = appDeveloper.id
+
+            if (appJsonPayload.owner) {
+                const { email, name } = appJsonPayload.owner
+                let appOwner = await getUserByEmail(email, trx)
+
+                //Only automatically add the user to the organisation if,
+                //1. either it's a manager uploading the app
+                //2. or the owner e-mail is the same as verified on the request
+                const shouldAddUserToOrg =
+                    isManager || email === currentUser.email
+
+                debug('shouldAddUserToOrg:', shouldAddUserToOrg)
+                debug('isManager:', isManager)
+                debug('owner email:', email)
+                debug('currentUser.email', currentUser.email)
+
+                if (shouldAddUserToOrg && appOwner === null) {
+                    appOwner = await createUser(
+                        {
+                            email,
+                            name,
+                        },
+                        knex,
+                        trx
+                    )
+                    await addUserToOrganisation(
+                        {
+                            userId: appOwner.id,
+                            organisationId: organisation.id,
+                        },
+                        knex,
+                        trx
+                    )
+                } else if (shouldAddUserToOrg) {
+                    const hasUser = await OrganisationService.hasUser(
+                        organisation.id,
+                        appOwner.id,
+                        trx
+                    )
+                    if (!hasUser) {
+                        await addUserToOrganisation(
+                            {
+                                userId: appOwner.id,
+                                organisationId: organisation.id,
+                            },
+                            knex,
+                            trx
+                        )
+                    }
+                }
+            }
 
             //Create the basic app
             const dbApp = await createApp(

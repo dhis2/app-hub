@@ -1,24 +1,16 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import {
-    Card,
-    CardText,
-    CardTitle,
-    CardHeader,
-    CardMedia,
-} from 'material-ui/Card'
+import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card'
 import ImageViewer from './ImageViewer'
 import Subheader from '../header/SubHeader'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
-import { Link } from 'react-router-dom'
-import { Redirect, Route } from 'react-router-dom'
 import VersionList from '../appVersion/VersionList'
 import { loadApp } from '../../actions/actionCreators'
 import config from '../../../config'
 import AppLogo from './AppLogo'
 import Theme from '../../styles/theme'
-import { FadeAnimation } from '../utils/Animate'
 
 const styles = {
     appDescription: {
@@ -42,23 +34,11 @@ class AppView extends Component {
             return null
         }
 
-        const {
-            id,
-            appName,
-            developer,
-            description,
-            images,
-            appType,
-            requiredDhisVersion,
-            lastUpdated,
-        } = app
-        const versions = app.versions.sort(
-            (a, b) => a.lastUpdated - b.lastUpdated
-        )
+        const { description, images } = app
+
         const subtitle = (
             <div>
                 Type: {config.ui.appTypeToDisplayName[app.appType]} <br />
-                Author: {app.developer.name} <br />
                 Organisation: {app.developer.organisation}{' '}
             </div>
         )
@@ -119,7 +99,9 @@ class AppView extends Component {
 }
 
 AppView.propTypes = {
+    loadApp: PropTypes.func.isRequired,
     app: PropTypes.object,
+    match: PropTypes.object,
 }
 
 const mapStateToProps = (state, ownProps) => ({
