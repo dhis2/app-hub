@@ -1,6 +1,5 @@
 const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
-const User = require('../models/v2/User')
 const Organisation = require('../models/v2/Organisation')
 
 const getOrganisationQuery = db =>

@@ -26,6 +26,11 @@ const AppItem = props => {
         height: '190px',
     }
 
+    let developerNameToShow = developer.organisation
+    if (!developerNameToShow) {
+        developerNameToShow = developer.name ? developer.name : 'Unspecified'
+    }
+
     return (
         <div data-test="app-card" style={{ height: '100%' }}>
             <Card style={{ height: '100%' }}>
@@ -36,8 +41,9 @@ const AppItem = props => {
                     title={<Link to={`/app/${id}`}>{name}</Link>}
                     subtitle={
                         <span>
-                            {developer.name ? developer.name : 'Unspecified'}{' '}
-                            <br /> {config.ui.appTypeToDisplayName[appType]}{' '}
+                            {developerNameToShow}
+                            <br />
+                            {config.ui.appTypeToDisplayName[appType]}{' '}
                         </span>
                     }
                 />
@@ -52,6 +58,7 @@ AppItem.propTypes = {
         description: PropTypes.string,
         developer: PropTypes.shape({
             name: PropTypes.string,
+            organisation: PropTypes.string,
         }),
         id: PropTypes.string,
         images: PropTypes.array,
