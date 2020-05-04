@@ -1,3 +1,10 @@
+## [2.4.1](https://github.com/dhis2/app-hub/compare/v2.4.0...v2.4.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* show org name instead of individual dev ([ddfe97d](https://github.com/dhis2/app-hub/commit/ddfe97da373cd801873d49bd2102cd5bf60d22fa))
+
 # [2.4.0](https://github.com/dhis2/app-hub/compare/v2.3.5...v2.4.0) (2020-05-04)
 
 
