@@ -8,38 +8,99 @@ const rimraf = require('rimraf')
 
 const uploadVersions = require('./helpers/uploadVersions')
 const downloadVersions = require('./helpers/downloadVersions')
-const getAuth0Token = require('./helpers/getAuthToken')
+const {
+    getM2MAuthToken,
+    getManagementAuthToken,
+} = require('./helpers/getAuthToken')
 const downloadImages = require('./helpers/downloadImages')
 const uploadImages = require('./helpers/uploadImages')
 
 const errors = []
 
+const findAppByName = (name, list) => {
+    for (let i = 0; i < list.length; ++i) {
+        const app = list[i]
+        if (app.name === name) {
+            return app
+        }
+    }
+    return null
+}
+
+const getUserProfile = async (oauthId, authToken) => {
+    const targetUrl = 'https://dhis2.eu.auth0.com/api/v2/users/'.concat(oauthId)
+    const response = await request.get({
+        url: targetUrl,
+        headers: {
+            Authorization: 'Bearer ' + authToken,
+        },
+    })
+    return JSON.parse(response)
+}
+
 async function main() {
     const sourceUrl = 'https://play.dhis2.org/appstore/api/apps'
     const targetUrl = 'http://localhost:3000/api'
-    const authToken = await getAuth0Token()
+    const authToken = await getM2MAuthToken()
+    const managementToken = await getManagementAuthToken()
 
     const publishedApps = await request(sourceUrl)
     const appsJson = JSON.parse(publishedApps)
 
+    let targetApps = await request(`${targetUrl}/apps`)
+    let existingAppsAtTarget = JSON.parse(targetApps)
+
+    //TODO: make configurable
+    const cleanTarget = true
+
+    if (cleanTarget) {
+        for (let i = 0; i < existingAppsAtTarget.length; ++i) {
+            const app = existingAppsAtTarget[i]
+            console.log(`Deleting app '${app.name}'`)
+            await request.delete({
+                url: `${targetUrl}/apps/${app.id}`,
+                headers: {
+                    Authorization: 'Bearer ' + authToken,
+                },
+            })
+        }
+        //refresh existing apps
+        targetApps = await request(`${targetUrl}/apps`)
+        existingAppsAtTarget = JSON.parse(targetApps)
+    }
+
     for (let i = 0; i < appsJson.length; ++i) {
         const app = appsJson[i]
+
+        const existingApp = findAppByName(app.name, existingAppsAtTarget)
+
+        if (existingApp !== null) {
+            //app exists, but all versions?
+            console.log(
+                `App "${app.name}" already exists at target/destination, skipping it.`
+            )
+            continue
+        }
 
         if (!fs.existsSync('./apps')) {
             fs.mkdirSync('./apps')
         }
 
-        const dir = './apps/' + app.name
+        const dir = './apps/' + app.name.replace('/', '-')
         if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir)
+            fs.mkdirSync(dir, { recursive: true, mode: '0755' })
         }
 
-        console.log(`Downloading app: ${app.name}`)
+        console.log(`Downloading app: ${app.name} to ${dir}`)
 
         if (!app.developer.email || app.developer.email == '') {
+            console.log(`Skipping app because no developer email is set`)
+
+            //also store this in an array so we can summarize errors after the run has completed
             errors.push(`${app.name} | No developer email set. Skipping.`)
             continue
         }
+        const ownerProfile = await getUserProfile(app.owner, managementToken)
 
         app.developer.address = app.developer.address || ''
 
@@ -50,6 +111,10 @@ async function main() {
             sourceUrl: app.sourceUrl || '',
             appType: app.appType,
             versions: [],
+            owner: {
+                email: ownerProfile.email,
+                name: ownerProfile.name,
+            },
         }
 
         const v = app.versions[0]
@@ -66,6 +131,7 @@ async function main() {
         //create app with first version
         const appVersion = app.versions[0]
         const appVersionFile = path.join(dir, appVersion.version + '.zip')
+
         const form = {
             app: JSON.stringify(appBase),
             file: {

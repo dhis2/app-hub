@@ -30,6 +30,12 @@ const CreateModelAppData = Joi.object().keys({
             description: Joi.string().allow('', null),
         })
     ),
+    owner: Joi.object({
+        email: Joi.string()
+            .email()
+            .required(),
+        name: Joi.string().required(),
+    }),
 })
 
 const payloadSchema = Joi.object({

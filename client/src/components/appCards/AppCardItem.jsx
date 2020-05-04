@@ -1,6 +1,5 @@
 // eslint-disable-next-line react/no-deprecated
 import React, { PropTypes } from 'react'
-
 import { Link } from 'react-router-dom'
 import config from '../../../config'
 import { Card, CardMedia, CardTitle } from 'material-ui/Card'
@@ -33,7 +32,7 @@ const AppItem = props => {
     }
 
     return (
-        <div data-test="app-card">
+        <div data-test="app-card" style={{ height: '100%' }}>
             <Card style={{ height: '100%' }}>
                 <Link to={`/app/${id}`}>
                     <CardMedia style={mediaStyle} />
@@ -55,7 +54,8 @@ const AppItem = props => {
 
 AppItem.propTypes = {
     app: PropTypes.shape({
-        appType: PropTypes.number,
+        appType: PropTypes.string,
+        description: PropTypes.string,
         developer: PropTypes.shape({
             name: PropTypes.string,
             organisation: PropTypes.string,
@@ -63,6 +63,7 @@ AppItem.propTypes = {
         id: PropTypes.string,
         images: PropTypes.array,
         name: PropTypes.string,
+        requiredDhisVersion: PropTypes.string,
     }),
 }
 

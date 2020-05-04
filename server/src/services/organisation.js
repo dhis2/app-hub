@@ -1,6 +1,5 @@
 const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
-const User = require('../models/v2/User')
 const Organisation = require('../models/v2/Organisation')
 
 const getOrganisationQuery = db =>
@@ -133,6 +132,17 @@ const remove = async (id, db) => {
         .delete()
 }
 
+const hasUser = async (id, userId, knex) => {
+    const hasUser = await knex('user_organisation')
+        .select(1)
+        .where({
+            organisation_id: id,
+            user_id: userId,
+        })
+        .limit(1)
+    return hasUser.length > 0
+}
+
 module.exports = {
     find,
     findOne,
@@ -141,4 +151,5 @@ module.exports = {
     update,
     remove,
     removeUser,
+    hasUser,
 }
