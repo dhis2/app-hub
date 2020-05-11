@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/dhis2/app-hub/compare/v2.4.1...v2.4.2) (2020-05-11)
+
+
+### Bug Fixes
+
+* upload and deletion of logo ([#332](https://github.com/dhis2/app-hub/issues/332)) ([1ec35ba](https://github.com/dhis2/app-hub/commit/1ec35baa8418b94686fe07c92c42a1abb1de1f2b))
+
 ## [2.4.1](https://github.com/dhis2/app-hub/compare/v2.4.0...v2.4.1) (2020-05-04)
 
 
