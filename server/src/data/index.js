@@ -8,7 +8,6 @@ module.exports = {
     createUser: require('./createUser'),
     deleteApp: require('./deleteApp'),
     deleteMedia: require('./deleteMedia'),
-    deleteAppMedia: require('./deleteAppMedia'),
     deleteOrganisation: require('./deleteOrganisation'),
     getAllAppsByLanguage: require('./getAllAppsByLanguage'),
     getAllAppsByDeveloperId: require('./getAllAppsByDeveloperId'),

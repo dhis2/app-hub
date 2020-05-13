@@ -316,7 +316,7 @@ module.exports = {
                 if (imageInfo) {
                     ;({ caption, description } = imageInfo)
                 }
-                const { id: appMedia_id, media_id } = await addAppMedia(
+                const { id, media_id } = await addAppMedia(
                     {
                         userId: requestUserId,
                         appId: appId,
@@ -331,9 +331,9 @@ module.exports = {
                 )
 
                 debug(
-                    `Logo inserted with app_media_id '${appMedia_id}' and media_id: '${media_id}`
+                    `Logo inserted with app_media_id '${id}' and media_id: '${media_id}`
                 )
-                iconId = appMedia_id
+                iconId = media_id
             }
         } catch (err) {
             debug('ROLLING BACK TRANSACTION')

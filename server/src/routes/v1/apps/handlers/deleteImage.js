@@ -8,14 +8,14 @@ const {
 const {
     getAppDeveloperId,
     getAppMedia,
-    deleteAppMedia,
+    deleteMedia,
 } = require('../../../../data')
 
 const { deleteFile } = require('../../../../utils')
 
 module.exports = {
     method: 'DELETE',
-    path: '/v1/apps/{appId}/images/{appMediaId}',
+    path: '/v1/apps/{appId}/images/{mediaId}',
     config: {
         auth: 'token',
         tags: ['api', 'v1'],
@@ -33,7 +33,7 @@ module.exports = {
 
         const db = h.context.db
 
-        const { appMediaId, appId } = request.params
+        const { mediaId, appId } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
         const appDeveloperId = await getAppDeveloperId(appId, db)
@@ -45,11 +45,13 @@ module.exports = {
             const transaction = await db.transaction()
 
             try {
-                await deleteAppMedia(appMediaId, db, transaction)
+                const { media_id } = await getAppMedia(mediaId, db)
+
+                await deleteMedia(media_id, db, transaction)
 
                 await transaction.commit()
 
-                await deleteFile(appId, appMediaId)
+                await deleteFile(appId, media_id)
             } catch (err) {
                 await transaction.rollback()
                 throw Boom.internal(err)

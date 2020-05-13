@@ -66,10 +66,6 @@ const webpackConfig = {
                 NODE_ENV: JSON.stringify(nodeEnv),
             },
             __APP_CONFIG__: JSON.stringify(config),
-            __APP_INFO__: JSON.stringify({
-                version: packageJSON.version,
-                built: new Date().getTime(),
-            }),
         }),
         new HtmlWebpackPlugin({
             title: 'DHIS2 AppHub',
