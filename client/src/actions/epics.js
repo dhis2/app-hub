@@ -11,6 +11,7 @@ import {
     debounceTime,
     catchError,
     filter,
+    distinctUntilChanged,
 } from 'rxjs/operators'
 import { of, from, merge } from 'rxjs'
 import { startAsyncValidation, stopAsyncValidation } from 'redux-form'
@@ -449,11 +450,16 @@ const loadChannels = action$ =>
  *
  * Need to have validation here, as the validation is based upon the
  * results and thus we cannot use regular promise validation.
+ * Async validation is used to prevent form-submission and clicking continue
+ * We are also using synchronous validation for orgs that have been fetched earlier
  */
 const searchOrganisation = (action$, state$) =>
     action$.pipe(
         ofType(actions.ORGANISATIONS_SEARCH),
         filter(action => !!action.payload.name),
+        distinctUntilChanged(
+            (prev, curr) => prev.payload.name === curr.payload.name
+        ),
         debounceTime(250),
         switchMap(action => {
             return merge(

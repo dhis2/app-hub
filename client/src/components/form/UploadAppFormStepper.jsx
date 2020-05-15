@@ -98,6 +98,9 @@ export const validateOrganisation = (value, organisations, memberOfOrgs) => {
     return undefined
 }
 
+const syncValidateOrganisation = (value, allValues, props) =>
+    validateOrganisation(value, props.organisations, props.memberOfOrgs)
+
 const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
 ))
@@ -240,7 +243,7 @@ const AppDeveloperSection = props => {
                 component={OrganisationSearch}
                 label="Organisation *"
                 organisations={props.organisations}
-                // validate={validateOrganisation}
+                validate={syncValidateOrganisation}
                 normalize={val => val.trim()}
             />
         </FormSection>

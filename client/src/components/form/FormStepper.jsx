@@ -128,7 +128,6 @@ class FormStepper extends Component {
                 left: 0,
             },
         }
-
         const currStepErrors = this.props.errorState
             ? this.props.errorState[this.getSectionName(stepIndex)]
             : {}

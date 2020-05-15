@@ -2,14 +2,15 @@ import React, { Component } from 'react'
 import AutoComplete from 'material-ui/AutoComplete'
 import { connect } from 'react-redux'
 import { searchOrganisation, getMe } from '../../../actions/actionCreators'
-
+import { isAsyncValidating } from 'redux-form'
 class OrganisationSearchField extends Component {
     constructor(props) {
         super(props)
 
-        this.state = {
-            organisationMember: {},
-        }
+        // This is used to get the "open"-state of the autocomplete,
+        // so that we are not showing the "new org"-message.
+        // This is needed since the field is loosing focus when autocomplete-menu is open.
+        this.autoCompleteInput = null
     }
 
     componentDidMount() {
@@ -21,12 +22,17 @@ class OrganisationSearchField extends Component {
         const { organisations } = this.props
         const { touched, valid, active } = this.props.meta
         const { value } = this.props.input
+        const isOpen = this.autoCompleteInput
+            ? this.autoCompleteInput.state.open
+            : false
 
         if (
             value &&
             touched &&
             valid &&
             !active &&
+            (!isOpen || (isOpen && !active)) && // isOpen is not always updated onBlur, so we check for active as well
+            !this.props.isAsyncValidating &&
             !organisations.find(
                 org => org.name.toLowerCase() === value.toLowerCase()
             )
@@ -49,6 +55,10 @@ class OrganisationSearchField extends Component {
         }
     }
 
+    setAutoCompleteInputRef = element => {
+        this.autoCompleteInput = element
+    }
+
     render() {
         const {
             input,
@@ -57,12 +67,11 @@ class OrganisationSearchField extends Component {
             meta: { touched, error },
             organisations,
         } = this.props
-
         const orgs = organisations.map(org => org.name)
-        console.log(error)
         return (
             <div>
                 <AutoComplete
+                    ref={this.setAutoCompleteInputRef}
                     hintText={label}
                     dataSource={orgs}
                     onUpdateInput={this.handleOnChange}
@@ -84,6 +93,7 @@ class OrganisationSearchField extends Component {
 
 const mapStateToProps = state => ({
     memberOfOrgs: state.user.organisations,
+    isAsyncValidating: isAsyncValidating('uploadAppForm')(state),
 })
 
 const mapDispatchToProps = dispatch => ({
