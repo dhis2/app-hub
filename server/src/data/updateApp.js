@@ -38,10 +38,10 @@ const paramsSchema = joi
  * @param {string} params.description Description of the app
  * @param {string} params.sourceUrl The URL to the source code of the app, for example https://github.com/dhis2/app-hub
  * @param {string} params.languageCode The 2 char language code for which language to update
- * @param {*} knex
+ * @param {object} knex DB instance or transaction
  * @returns {Promise<CreateUserResult>}
  */
-const updateApp = async (params, knex, transaction) => {
+const updateApp = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -70,7 +70,6 @@ const updateApp = async (params, knex, transaction) => {
             .pluck('app_version.id')
 
         await knex('app')
-            .transacting(transaction)
             .update({
                 type: appType,
                 updated_at: knex.fn.now(),
@@ -81,7 +80,6 @@ const updateApp = async (params, knex, transaction) => {
             })
 
         await knex('app_version')
-            .transacting(transaction)
             .update({
                 source_url: sourceUrl,
                 updated_at: knex.fn.now(),
@@ -90,7 +88,6 @@ const updateApp = async (params, knex, transaction) => {
             .whereIn('id', appVersionIdsToUpdate)
 
         await knex('app_version_localised')
-            .transacting(transaction)
             .update({
                 name,
                 slug: slugify(name, { lower: true }),

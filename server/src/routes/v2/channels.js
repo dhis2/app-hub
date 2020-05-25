@@ -42,7 +42,6 @@ module.exports = [
             let newChannel = null
 
             const knex = h.context.db
-            const transaction = await knex.transaction()
 
             try {
                 const existingChannel = await knex('channel')
@@ -53,10 +52,8 @@ module.exports = [
                         'A channel with that name already exists.'
                     )
                 }
-                newChannel = await createChannel({ name }, knex, transaction)
-                await transaction.commit()
+                newChannel = await createChannel({ name }, knex)
             } catch (err) {
-                await transaction.rollback()
                 return Boom.internal(`Could not create channel: ${err.message}`)
             }
 
@@ -91,9 +88,7 @@ module.exports = [
 
             try {
                 const knex = h.context.db
-                const transaction = await knex.transaction()
-                channel = await renameChannel({ id, name }, knex, transaction)
-                await transaction.commit()
+                channel = await renameChannel({ id, name }, knex)
             } catch (err) {
                 return Boom.internal(`Could not update channel: ${err.message}`)
             }
@@ -155,18 +150,15 @@ module.exports = [
             }
 
             const { uuid } = request.params
-            const knex = h.context.db
-            const trx = await knex.transaction()
+            const db = h.context.db
 
             debug(`uuid: ${uuid}`)
 
-            try {
-                await deleteChannel(uuid, knex, trx)
-                await trx.commit()
-            } catch (err) {
-                trx.rollback()
-                throw err
+            const deleteChannelWorkUnit = async trx => {
+                await deleteChannel(uuid, trx)
             }
+
+            return db.transaction(deleteChannelWorkUnit)
         },
     },
 ]

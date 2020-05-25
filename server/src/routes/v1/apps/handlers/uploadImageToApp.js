@@ -69,7 +69,6 @@ module.exports = {
                 fileName: imageFileMetadata.filename,
                 mime: imageFileMetadata.headers['content-type'],
             },
-            knex,
             trx
         )
         imageId = id
