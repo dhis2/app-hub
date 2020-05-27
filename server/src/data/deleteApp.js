@@ -3,12 +3,12 @@ const debug = require('debug')('apphub:server:data:deleteApp')
  * Deletes an app with the specified uuid
  *
  * @param {string} id id for the app to delete
+ * @param {object} knex DB instance or transaction
  * @returns {Promise}
  */
-const deleteApp = async (id, knex, transaction) => {
+const deleteApp = async (id, knex) => {
     try {
         await knex('app')
-            .transacting(transaction)
             .where('id', id)
             .del()
         debug('deleted app', id)

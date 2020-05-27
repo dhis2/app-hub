@@ -1,5 +1,4 @@
 const debug = require('debug')('apphub:server:data:createChannel')
-const uuid = require('uuid/v4')
 
 const joi = require('@hapi/joi')
 
@@ -21,10 +20,10 @@ const paramsSchema = joi
  *
  * @param {object} params
  * @param {string} params.name Name of the channel to create
- * @param {object} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<CreateChannelResult>}
  */
-const createChannel = async (params, knex, transaction) => {
+const createChannel = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -32,17 +31,14 @@ const createChannel = async (params, knex, transaction) => {
         throw new Error(validation.error)
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
+    if (!knex) {
+        throw new Error('Missing parameter: knex')
     }
 
     const { name } = params
 
-    //generate a new uuid to insert
-
     try {
         const [createdChannel] = await knex('channel')
-            .transacting(transaction)
             .insert({
                 name,
             })

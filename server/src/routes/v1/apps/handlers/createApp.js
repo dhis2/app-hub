@@ -112,7 +112,7 @@ module.exports = {
             let organisation = null
             const organisations = await getOrganisationsByName(
                 appJsonPayload.developer.organisation,
-                knex
+                trx
             )
             if (organisations.length === 0) {
                 debug('organization not found, proceed to create it')
@@ -122,7 +122,6 @@ module.exports = {
                         userId: currentUserId,
                         name: appJsonPayload.developer.organisation,
                     },
-                    knex,
                     trx
                 )
                 await addUserToOrganisation(
@@ -130,7 +129,6 @@ module.exports = {
                         userId: currentUserId,
                         organisationId: organisation.id,
                     },
-                    knex,
                     trx
                 )
             } else {
@@ -156,17 +154,12 @@ module.exports = {
             )
             if (appDeveloper === null) {
                 //Create developer
-                appDeveloper = await createUser(
-                    appJsonPayload.developer,
-                    knex,
-                    trx
-                )
+                appDeveloper = await createUser(appJsonPayload.developer, trx)
                 await addUserToOrganisation(
                     {
                         userId: appDeveloper.id,
                         organisationId: organisation.id,
                     },
-                    knex,
                     trx
                 )
             } else {
@@ -199,7 +192,6 @@ module.exports = {
                             email,
                             name,
                         },
-                        knex,
                         trx
                     )
                     await addUserToOrganisation(
@@ -207,7 +199,6 @@ module.exports = {
                             userId: appOwner.id,
                             organisationId: organisation.id,
                         },
-                        knex,
                         trx
                     )
                 } else if (shouldAddUserToOrg) {
@@ -222,7 +213,6 @@ module.exports = {
                                 userId: appOwner.id,
                                 organisationId: organisation.id,
                             },
-                            knex,
                             trx
                         )
                     }
@@ -237,7 +227,6 @@ module.exports = {
                     orgId: organisationId,
                     appType: appJsonPayload.appType,
                 },
-                knex,
                 trx
             )
 
@@ -250,7 +239,6 @@ module.exports = {
                     appId: dbApp.id,
                     status: AppStatus.PENDING,
                 },
-                knex,
                 trx
             )
 
@@ -264,7 +252,6 @@ module.exports = {
                     sourceUrl,
                     version,
                 },
-                knex,
                 trx
             )
             versionId = appVersion.id
@@ -278,7 +265,6 @@ module.exports = {
                     name: appJsonPayload.name,
                     languageCode: 'en',
                 },
-                knex,
                 trx
             )
 
@@ -296,7 +282,6 @@ module.exports = {
                     minDhisVersion,
                     maxDhisVersion,
                 },
-                knex,
                 trx
             )
 
@@ -326,7 +311,6 @@ module.exports = {
                         caption: caption,
                         description: description,
                     },
-                    knex,
                     trx
                 )
 

@@ -34,7 +34,7 @@ describe('@data::addAppMedia', () => {
             description: 'a description',
         }
         const trx = await db.transaction()
-        const { id } = await addAppMedia(appMedia, db, trx)
+        const { id } = await addAppMedia(appMedia, trx)
         await trx.commit()
         expect(id).to.be.string()
         expect(id.length).to.be.equal(36)
@@ -191,13 +191,11 @@ describe('@data::addUserToOrganisation', () => {
 
         const org = await createOrganisation(
             { userId: users[0].id, name: 'A new organisation' },
-            db,
             transaction
         )
 
         await addUserToOrganisation(
             { userId: users[0].id, organisationId: org.id },
-            db,
             transaction
         )
 
@@ -229,7 +227,7 @@ describe('@data::updateApp', () => {
             languageCode: 'en',
         }
 
-        await updateApp(newData, db, transaction)
+        await updateApp(newData, transaction)
 
         await transaction.commit()
 
@@ -274,7 +272,6 @@ describe('@data::updateAppVersion', () => {
                 version: '789',
                 demoUrl: 'https://www.google.com',
             },
-            db,
             transaction
         )
 
@@ -300,7 +297,6 @@ describe('@data::updateAppVersion', () => {
                 version: app.version,
                 demoUrl: app.demoUrl,
             },
-            db,
             transaction
         )
         await transaction.commit()
@@ -326,7 +322,6 @@ describe('@data::updateAppVersion', () => {
                 channel: 'Development',
                 userId: users[0].id,
             },
-            db,
             transaction
         )
 
@@ -344,7 +339,6 @@ describe('@data::updateAppVersion', () => {
                 channel: 'Stable',
                 userId: users[0].id,
             },
-            db,
             transaction
         )
         await transaction.commit()
@@ -378,7 +372,6 @@ describe('@data::updateAppVersion', () => {
                     channel: 'Foobar',
                     userId: users[0].id,
                 },
-                db,
                 transaction
             )
         ).to.reject(
@@ -391,13 +384,6 @@ describe('@data::updateAppVersion', () => {
 describe('@data::createAppStatus', () => {
     const createAppStatus = require('../../src/data/createAppStatus')
 
-    it('should throw an error if no transaction is passed', async () => {
-        await expect(createAppStatus({}, db)).to.reject(
-            Error,
-            'No transaction passed to function'
-        )
-    })
-
     it('should throw an error if trying to save an app status for an app that doesnt exist', async () => {
         const transaction = await db.transaction()
 
@@ -408,7 +394,6 @@ describe('@data::createAppStatus', () => {
                     appId: '792aa26c-0000-0000-0000-028439060e2e', //something that doesnt exist in our test database
                     status: 'PENDING',
                 },
-                db,
                 transaction
             )
         ).to.reject(
@@ -426,7 +411,6 @@ describe('@data::createAppStatus', () => {
                 appId: apps[0].id,
                 status: 'PENDING',
             },
-            db,
             transaction
         )
 

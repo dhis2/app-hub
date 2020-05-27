@@ -15,7 +15,7 @@ describe('@data::channels', () => {
     it('should create a channel named Test', async () => {
         const transaction = await db.transaction()
 
-        const channel = await createChannel({ name: 'Test' }, db, transaction)
+        const channel = await createChannel({ name: 'Test' }, transaction)
 
         expect(channel).to.not.be.null()
         expect(channel.id).to.exist()
@@ -28,7 +28,7 @@ describe('@data::channels', () => {
     it('should create a channel named Foo and then change name of it to Bar', async () => {
         const transaction = await db.transaction()
 
-        const channel = await createChannel({ name: 'Foo' }, db, transaction)
+        const channel = await createChannel({ name: 'Foo' }, transaction)
 
         expect(channel).to.not.be.null()
         expect(channel.id).to.exist()
@@ -36,7 +36,6 @@ describe('@data::channels', () => {
 
         const changedChannel = await renameChannel(
             { name: 'Bar', id: channel.id },
-            db,
             transaction
         )
 
@@ -49,23 +48,16 @@ describe('@data::channels', () => {
     it('should require the parameter name to be passed', async () => {
         const transaction = await db.transaction()
 
-        await expect(createChannel({}, db, transaction)).to.reject(
+        await expect(createChannel({}, transaction)).to.reject(
             Error,
             'ValidationError: "name" is required'
-        )
-    })
-
-    it('should require a transaction to be passed in', async () => {
-        await expect(createChannel({ name: 'Test' }, db)).to.reject(
-            Error,
-            'No transaction passed to function'
         )
     })
 
     it('should create a channel named Foo and delete it', async () => {
         let transaction = await db.transaction()
 
-        const channel = await createChannel({ name: 'Foo' }, db, transaction)
+        const channel = await createChannel({ name: 'Foo' }, transaction)
         await transaction.commit()
 
         expect(channel).to.not.be.null()
@@ -73,7 +65,7 @@ describe('@data::channels', () => {
         expect(channel.name).to.equal('Foo')
 
         transaction = await db.transaction()
-        const deleteResult = await deleteChannel(channel.id, db, transaction)
+        const deleteResult = await deleteChannel(channel.id, transaction)
 
         expect(deleteResult).to.be.true()
     })

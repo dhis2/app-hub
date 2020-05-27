@@ -41,7 +41,7 @@ module.exports = {
             const transaction = await db.transaction()
 
             try {
-                await deleteAppVersion(versionId, db, transaction)
+                await deleteAppVersion(versionId, transaction)
                 await transaction.commit()
                 await deleteFile(`${appId}/${versionId}`, 'app.zip')
             } catch (err) {
