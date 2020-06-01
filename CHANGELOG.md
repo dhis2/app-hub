@@ -1,3 +1,12 @@
+## [2.5.1](https://github.com/dhis2/app-hub/compare/v2.5.0...v2.5.1) (2020-06-01)
+
+
+### Bug Fixes
+
+* edit app form tweaks ([6ce2387](https://github.com/dhis2/app-hub/commit/6ce23873b5de3b191981a12195e5d5169c8a6a05))
+* pre-fill sourceUrl field when editing ([b9ebf98](https://github.com/dhis2/app-hub/commit/b9ebf988bbfae57c8a9b45a4d95ae76cf21572ec))
+* save sourceUrl correctly when creating an app ([a3a4577](https://github.com/dhis2/app-hub/commit/a3a457769a046cd8a2e23bc52f788989ea77892f))
+
 # [2.5.0](https://github.com/dhis2/app-hub/compare/v2.4.2...v2.5.0) (2020-05-12)
 
 
