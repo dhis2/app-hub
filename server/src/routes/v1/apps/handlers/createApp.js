@@ -243,7 +243,8 @@ module.exports = {
             )
 
             //Create the version of the app
-            const { demoUrl, sourceUrl, version } = appJsonPayload.versions[0]
+            const { demoUrl, version } = appJsonPayload.versions[0]
+            const { sourceUrl } = appJsonPayload
             const appVersion = await createAppVersion(
                 {
                     userId: requestUserId,

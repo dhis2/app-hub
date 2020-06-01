@@ -1,5 +1,5 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { PropTypes, Component } from 'react'
-import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { editApp } from '../../actions/actionCreators'
@@ -25,10 +25,6 @@ export class EditAppDialog extends Component {
     }
 
     render() {
-        const fieldStyle = {
-            display: 'block',
-            width: '100%',
-        }
         const app = this.props.app
         return (
             <DialogBase
@@ -40,6 +36,7 @@ export class EditAppDialog extends Component {
                         appName: app.name,
                         description: app.description,
                         appType: app.appType,
+                        sourceUrl: app.sourceUrl,
                         developerName: app.developer.name,
                         developerEmail: app.developer.email,
                         developerAddress: app.developer.address,
@@ -57,8 +54,7 @@ export class EditAppDialog extends Component {
 
 EditAppDialog.propTypes = {
     app: PropTypes.object,
-    appId: PropTypes.string,
-    addVersion: PropTypes.func,
+    editApp: PropTypes.func.required,
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -67,7 +63,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(EditAppDialog)
+export default connect(null, mapDispatchToProps)(EditAppDialog)
