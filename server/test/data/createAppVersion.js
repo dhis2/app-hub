@@ -118,4 +118,36 @@ describe('@data::createAppVersion', () => {
         expect(dbAppVersion.created_by_user_id).to.equal(version.userId)
         expect(dbAppVersion.app_id).to.equal(version.appId)
     })
+
+    it('should break validation if trying to use a non URI value for demoUrl', async () => {
+        const knex = await db.transaction()
+
+        await expect(
+            createAppVersion(
+                {
+                    userId: users[0].id,
+                    appId: apps[0].id,
+                    demoUrl: 'bla bla bla',
+                    version: '7897879879',
+                },
+                knex
+            )
+        ).to.reject(Error, 'ValidationError: "demoUrl" must be a valid uri')
+    })
+
+    it('should break validation if trying to use a non URI value for sourceUrl', async () => {
+        const knex = await db.transaction()
+
+        await expect(
+            createAppVersion(
+                {
+                    userId: users[0].id,
+                    appId: apps[0].id,
+                    sourceUrl: 'bla bla bla',
+                    version: '7897879879',
+                },
+                knex
+            )
+        ).to.reject(Error, 'ValidationError: "sourceUrl" must be a valid uri')
+    })
 })
