@@ -15,8 +15,14 @@ const paramsSchema = joi
             .string()
             .uuid()
             .required(),
-        demoUrl: joi.string().allow('', null),
-        sourceUrl: joi.string().allow('', null),
+        demoUrl: joi
+            .string()
+            .uri()
+            .allow(''),
+        sourceUrl: joi
+            .string()
+            .uri()
+            .allow(''),
         version: joi.string().allow(''),
     })
     .options({ allowUnknown: true })

@@ -23,6 +23,7 @@ const paramsSchema = joi
         version: joi.string(),
         demoUrl: joi
             .string()
+            .uri()
             .allow('')
             .max(500),
         channel: joi.string().allow(null),
