@@ -1,3 +1,11 @@
+## [2.5.2](https://github.com/dhis2/app-hub/compare/v2.5.1...v2.5.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* add ui validation for demourl ([380b686](https://github.com/dhis2/app-hub/commit/380b68630d52387347ddbcc2c3615f0c720ad100))
+* validate demoUrl/sourceUrl as URI ([4950e77](https://github.com/dhis2/app-hub/commit/4950e77835a368e5fdc8c531674ffb3932b8f03f))
+
 ## [2.5.1](https://github.com/dhis2/app-hub/compare/v2.5.0...v2.5.1) (2020-06-01)
 
 
