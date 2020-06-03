@@ -1,7 +1,10 @@
 const joi = require('@hapi/joi')
 
 const payloadSchema = joi.object({
-    demoUrl: joi.string().allow(''),
+    demoUrl: joi
+        .string()
+        .uri()
+        .allow(''),
     version: joi.string(),
     minDhisVersion: joi
         .string()
@@ -19,5 +22,6 @@ const EditAppVersionModel = payloadSchema
 module.exports = {
     payloadSchema,
     def: EditAppVersionModel,
-    validate: objectToValidate => joi.validate(objectToValidate, EditApp),
+    validate: objectToValidate =>
+        joi.validate(objectToValidate, EditAppVersionModel),
 }
