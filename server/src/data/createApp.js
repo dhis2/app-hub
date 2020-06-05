@@ -1,5 +1,3 @@
-const uuid = require('uuid/v4')
-
 const joi = require('@hapi/joi')
 
 const debug = require('debug')('apphub:server:data:createApp')
@@ -42,27 +40,23 @@ const paramsSchema = joi
  * @param {number} params.developerUserId User id for the developer of the app
  * @param {number} params.orgId Organisation id for the organisation owning this app
  * @param {string} params.appType Type of the app
- * @param {object} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<CreateAppResult>}
  */
-const createApp = async (params, knex, transaction) => {
+const createApp = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
-    }
-
+    debug('params: ', params)
     const { userId, developerUserId, orgId, appType } = params
 
     //generate a new uuid to insert
 
     try {
         const [id] = await knex('app')
-            .transacting(transaction)
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,

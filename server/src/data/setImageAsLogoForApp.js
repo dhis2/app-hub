@@ -12,10 +12,10 @@ const paramsSchema = joi.object().keys({
  * @param {object} params
  * @param {string} params.appId id of the app to set the logo for
  * @param {string} params.mediaId Media id to use as logo
- * @param {*} knex
+ * @param {object} knex DB instance or transaction
  * @returns {Promise}
  */
-const setImageAsLogoForApp = async (params, knex, transaction) => {
+const setImageAsLogoForApp = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -26,22 +26,16 @@ const setImageAsLogoForApp = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
-    }
-
     const { appId, mediaId } = params
 
     try {
         //Change all other media for this app to screenshot
         await knex('app_media')
-            .transacting(transaction)
             .where('app_id', appId)
             .update('media_type', MediaType.Screenshot)
 
         //Set the new as media_type logo
         await knex('app_media')
-            .transacting(transaction)
             .where('id', mediaId)
             .update('media_type', MediaType.Logo)
     } catch (err) {

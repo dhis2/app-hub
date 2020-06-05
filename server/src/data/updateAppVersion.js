@@ -23,6 +23,7 @@ const paramsSchema = joi
         version: joi.string(),
         demoUrl: joi
             .string()
+            .uri()
             .allow('')
             .max(500),
         channel: joi.string().allow(null),
@@ -40,10 +41,10 @@ const paramsSchema = joi
  * @param {string} params.version The version number of the appversion provided by the developer, for example v1.0, v1.2
  * @param {string} params.demoUrl The URL to the source code of the app, for example https://github.com/dhis2/app-hub
  * @param {string} params.channel Name of the release channel to publish the app version to
- * @param {*} knex
+ * @param {object} knex DB instance or transaction
  * @returns {Promise<CreateUserResult>}
  */
-const updateAppVersion = async (params, knex, transaction) => {
+const updateAppVersion = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -65,7 +66,6 @@ const updateAppVersion = async (params, knex, transaction) => {
 
     try {
         await knex('app_version')
-            .transacting(transaction)
             .update({
                 demo_url: demoUrl,
                 version,
@@ -92,7 +92,6 @@ const updateAppVersion = async (params, knex, transaction) => {
         debug('channelQuery:', channelQuery)
 
         await knex('app_channel')
-            .transacting(transaction)
             .update({
                 ...channelQuery,
                 max_dhis2_version: maxDhisVersion,

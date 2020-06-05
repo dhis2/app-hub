@@ -16,10 +16,9 @@ const paramsSchema = joi
  * @param {object} params
  * @param {string} params.name Name of the channel
  * @param {string} params.id id of the channel to edit
- * @param {object} knex
- * @param {object} transaction
+ * @param {object} knex DB instance or transaction
  */
-const renameChannel = async (params, knex, transaction) => {
+const renameChannel = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -34,7 +33,6 @@ const renameChannel = async (params, knex, transaction) => {
 
     try {
         const [result] = await knex('channel')
-            .transacting(transaction)
             .where('id', id)
             .update({
                 name,
