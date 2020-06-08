@@ -16,6 +16,7 @@ import {
 import { of, from, merge } from 'rxjs'
 import { startAsyncValidation, stopAsyncValidation } from 'redux-form'
 import { validateOrganisation } from '../components/form/UploadAppFormStepper'
+import * as userSelectors from '../selectors/userSelectors'
 
 const loadAppsAll = action$ =>
     action$.pipe(
@@ -523,7 +524,7 @@ const loadOrganisations = (action$, state$) =>
         switchMap(action => {
             const filters = action.payload.filters || {}
             if (action.payload.currentUser) {
-                const currentUserId = state$.value.user.userInfo.userId
+                const currentUserId = userSelectors.getUserId(state$.value)
                 filters.user = currentUserId
             }
 
@@ -531,7 +532,9 @@ const loadOrganisations = (action$, state$) =>
                 .getOrganisations(filters)
                 .then(response => ({
                     type: actions.ORGANISATIONS_LOAD_SUCCESS,
-                    payload: response,
+                    payload: {
+                        list: response,
+                    },
                 }))
                 .catch(e => ({
                     type: actions.ORGANISATIONS_LOAD_ERROR,

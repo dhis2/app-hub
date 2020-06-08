@@ -1,44 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import { List } from 'material-ui/List'
 import { Card, CardText } from 'material-ui/Card'
-import TextField from 'material-ui/TextField'
-import AppListItem from './OrganisationListItem'
-import Popover from 'material-ui/Popover'
-import {
-    TextFilter,
-    filterApp,
-    SelectFilter,
-    filterAppType,
-    filterAppStatus,
-} from '../../utils/Filters'
-import {
-    Toolbar,
-    ToolbarGroup,
-    ToolbarSeparator,
-    ToolbarTitle,
-} from 'material-ui/Toolbar'
-import Button from 'material-ui/FlatButton'
+import OrganisationListItem from './OrganisationListItem'
+import { TextFilter } from '../../utils/Filters'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
-import { ListItem } from 'material-ui/List'
 import SubHeader from '../../header/SubHeader'
 import {
-    approveApp,
-    loadAllApps,
-    setAppApproval,
-    userAppsLoad,
-    openDialog,
+    loadCurrentUserOrganisations,
+    loadAllOrganisations,
 } from '../../../actions/actionCreators'
-import * as dialogTypes from '../../../constants/dialogTypes'
 import sortBy from 'lodash/sortBy'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
 import * as selectors from '../../../selectors/userSelectors'
-import {
-    APP_STATUS_APPROVED,
-    APP_STATUS_PENDING,
-    APP_STATUS_REJECTED,
-} from '../../../constants/apiConstants'
 
 class OrganisationList extends Component {
     constructor(props) {
@@ -50,22 +26,11 @@ class OrganisationList extends Component {
     }
 
     componentDidMount() {
-        const user = this.props.user
-        if (user) {
-            user.manager ? this.props.loadAllApps() : this.props.loadMyApps()
-        }
-    }
-
-    handleApproval(app, type) {
-        switch (type) {
-            case 'APPROVE': {
-                this.props.setAppApproval(app, APP_STATUS_APPROVED)
-                break
-            }
-            case 'REJECT': {
-                this.props.setAppApproval(app, APP_STATUS_REJECTED)
-                break
-            }
+        const userInfo = this.props.user
+        if (userInfo && userInfo.loaded) {
+            userInfo.profile.manager
+                ? this.props.loadAllOrganisations()
+                : this.props.loadCurrentUserOrganisations()
         }
     }
 
@@ -82,86 +47,53 @@ class OrganisationList extends Component {
     }
 
     render() {
-        const { loading, loaded, error, byId: appList } = this.props.appList
+        const {
+            loading,
+            loaded,
+            error,
+            byId: organisationList,
+        } = this.props.organisationList
         const loadOrErr = loading || error
         const {
             user: { manager },
             match,
-            appSearchFilter,
+            searchFilter,
         } = this.props
-        const searchFilter = appSearchFilter
-            ? appSearchFilter.values.searchFilter
+        const orgSearchFilter = searchFilter
+            ? searchFilter.values.orgSearchFilter
             : ''
-        const apps = sortBy(appList, ['name'])
-            .filter(
-                app =>
-                    filterApp(app, searchFilter) &&
-                    filterAppType(app, this.props.appTypeFilter) &&
-                    (manager
-                        ? filterAppStatus(app, this.props.appStatusFilter)
-                        : true)
+
+        const orgItems = sortBy(organisationList, ['name'])
+            .filter(org =>
+                !orgSearchFilter
+                    ? true
+                    : org.name
+                          .toLowerCase()
+                          .includes(orgSearchFilter.toLowerCase())
             )
-            .map((app, i) => (
-                <ListItem
-                    app={app}
-                    key={app.id}
+            .map(org => (
+                <OrganisationListItem
+                    organisation={org}
+                    key={org.id}
                     isManager={manager}
-                    match={this.props.match}
-                    handleDelete={this.openDeleteDialog.bind(this, app)}
-                    handleApprove={this.handleApproval.bind(
-                        this,
-                        app,
-                        'APPROVE'
-                    )}
-                    handleReject={this.handleApproval.bind(this, app, 'REJECT')}
+                    match={match}
                 />
             ))
-        const emptyAppsText = manager
-            ? "We couldn't find any apps"
-            : 'You have not uploaded any apps'
-        const title = manager ? 'All apps' : 'Your apps'
+
+        const emptyOrgsText = manager
+            ? "We couldn't find any organisations."
+            : 'You are not a member of any organisations.'
+        const title = 'Organisations'
 
         return (
             <div>
                 <SubHeader title={title}>
-                    <TextFilter hintText="Search" />
+                    <TextFilter hintText="Search" name={'orgSearchFilter'} />
                     <IconButton onClick={this.handleOpenFilters.bind(this)}>
                         <FontIcon className="material-icons">
                             filter_list
                         </FontIcon>
                     </IconButton>
-                    <Popover
-                        open={this.state.open}
-                        anchorEl={this.state.anchorEl}
-                        style={{ width: '200px' }}
-                        onRequestClose={r => this.setState({ open: false })}
-                    >
-                        <div style={{ padding: '10px' }}>
-                            <h3>App type</h3>
-                            <SelectFilter
-                                renderAllToggle={false}
-                                form="appTypeFilterUser"
-                                filters={[
-                                    {
-                                        label: 'Standard',
-                                        toggled: true,
-                                        value: 'APP',
-                                    },
-                                    {
-                                        label: 'Dashboard',
-                                        toggled: true,
-                                        value: 'DASHBOARD_WIDGET',
-                                    },
-                                    {
-                                        label: 'Tracker',
-                                        toggled: true,
-                                        value: 'TRACKER_DASHBOARD_WIDGET',
-                                    },
-                                ]}
-                            />
-                            {manager ? this.renderStatusFilters() : null}
-                        </div>
-                    </Popover>
                 </SubHeader>
                 <Card>
                     <CardText>
@@ -169,8 +101,10 @@ class OrganisationList extends Component {
                             <ErrorOrLoading loading={loading} error={error} />
                         ) : null}
                         <List>
-                            {loaded && apps.length > 0 ? apps : null}
-                            {loaded && apps.length < 1 ? emptyAppsText : null}
+                            {loaded && orgItems.length > 0 ? orgItems : null}
+                            {loaded && orgItems.length < 1
+                                ? emptyOrgsText
+                                : null}
                         </List>
                     </CardText>
                 </Card>
@@ -180,29 +114,15 @@ class OrganisationList extends Component {
 }
 
 const mapStateToProps = state => ({
-    appList: selectors.getUserAppList(state),
-    user: selectors.getUserProfile(state),
-    appTypeFilter: state.form.appTypeFilterUser,
-    appStatusFilter: state.form.appStatusFilter,
-    appSearchFilter: state.form.searchFilter,
+    organisationList: state.organisations,
+    user: selectors.getUserInfo(state),
+    searchFilter: state.form.searchFilter,
 })
 
-const mapDispatchToProps = dispatch => ({
-    setAppApproval(app, status) {
-        dispatch(setAppApproval(app, status))
-    },
-
-    openDeleteDialog(app) {
-        dispatch(openDialog(dialogTypes.CONFIRM_DELETE_APP, app))
-    },
-
-    loadAllApps() {
-        dispatch(loadAllApps())
-    },
-
-    loadMyApps() {
-        dispatch(userAppsLoad())
-    },
-})
+const mapDispatchToProps = dispatch =>
+    bindActionCreators(
+        { loadAllOrganisations, loadCurrentUserOrganisations },
+        dispatch
+    )
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganisationList)

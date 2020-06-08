@@ -328,3 +328,6 @@ export const loadCurrentUserOrganisations = () =>
     actionCreator(actions.ORGANISATIONS_LOAD)({
         currentUser: true,
     })
+
+export const loadAllOrganisations = () =>
+    actionCreator(actions.ORGANISATIONS_LOAD)()

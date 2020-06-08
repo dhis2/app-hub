@@ -107,7 +107,7 @@ class Textfilter extends Component {
 
         return (
             <Field
-                name={this.props.form}
+                name={this.props.name || this.props.form}
                 style={style}
                 hintText={hintText}
                 component={
@@ -131,7 +131,11 @@ Textfilter.defaultProps = {
     form: 'searchFilter',
     clearButton: true,
     destroyOnUnmount: false,
-    initialValues: { searchFilter: '' },
+    initialValues: {
+        searchFilter: '',
+        appSearchFilter: '',
+        orgSearchFilter: '',
+    },
 }
 
 export const TextFilter = reduxForm({

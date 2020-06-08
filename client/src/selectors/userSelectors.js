@@ -11,6 +11,8 @@ export const getUserProfile = state => getUserInfo(state).profile
 
 export const getUserAppList = state => ensureState(state)
 
+export const getUserId = state => getUserInfo(state).userId
+
 export const getAppLogo = (state, appId) => {
     const app = ensureState(state).byId[appId]
     if (!app) return null

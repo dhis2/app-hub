@@ -7,8 +7,15 @@ const initialState = {
     byId: {},
 }
 
+const loadedState = {
+    loaded: true,
+    error: false,
+    loading: false,
+}
+
 const organisations = (state = initialState, action) => {
     switch (action.type) {
+        case actions.ORGANISATIONS_LOAD_SUCCESS:
         case actions.ORGANISATIONS_SEARCH_SUCCESS: {
             const byIdList = action.payload.list.reduce((acc, org) => {
                 const id = org.id
@@ -17,6 +24,7 @@ const organisations = (state = initialState, action) => {
             }, {})
             return {
                 ...state,
+                ...loadedState,
                 byId: {
                     ...state.byId,
                     ...byIdList,

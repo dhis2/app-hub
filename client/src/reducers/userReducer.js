@@ -261,7 +261,6 @@ function userInfoReducer(
             )
             return {
                 ...state,
-                ...loadedState,
                 profile: {
                     ...action.payload.profile,
                     manager,
@@ -272,6 +271,7 @@ function userInfoReducer(
         case actionTypes.ME_LOAD_SUCCESS: {
             return {
                 ...state,
+                ...loadedState,
                 userId: action.payload.userId,
             }
         }

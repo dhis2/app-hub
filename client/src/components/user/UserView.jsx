@@ -7,7 +7,6 @@ import FontIcon from 'material-ui/FontIcon'
 import { Link, Route, Redirect, Switch } from 'react-router-dom'
 import UserAppView from './userAppView/UserAppView'
 import { List, ListItem } from 'material-ui/List'
-import AppUpload from './appUpload/AppUpload'
 import AppUploadStepper from './appUpload/AppUploadStepper'
 import AppList from './appList/AppList'
 import Divider from 'material-ui/Divider'
@@ -15,7 +14,7 @@ import { getUserInfo } from '../../selectors/userSelectors'
 import { userLoad } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import ActiveLink from '../utils/ActiveLink'
-
+import OrganisationList from './organisation/OrganisationList'
 class UserView extends Component {
     componentDidMount() {
         this.props.loadUser()
@@ -33,6 +32,10 @@ class UserView extends Component {
                     component={AppList}
                 />
                 <Route
+                    path={`${this.props.match.url}/organisations`}
+                    component={OrganisationList}
+                />
+                <Route
                     path={`${this.props.match.url}/upload`}
                     component={AppUploadStepper}
                 />
@@ -41,7 +44,7 @@ class UserView extends Component {
                     component={UserAppView}
                 />
                 {/* No-match route - redirect to index */}
-                <Route render={props => <Redirect to="/user" />} />
+                <Route render={() => <Redirect to="/user" />} />
             </Switch>
         )
 
@@ -71,6 +74,19 @@ class UserView extends Component {
                                 leftIcon={
                                     <FontIcon className="material-icons">
                                         list
+                                    </FontIcon>
+                                }
+                            />
+                        </ActiveLink>
+                        <ActiveLink
+                            to={`${this.props.match.url}/organisations`}
+                            activeOnlyWhenExact
+                        >
+                            <ListItem
+                                primaryText="Organisations"
+                                leftIcon={
+                                    <FontIcon className="material-icons">
+                                        people
                                     </FontIcon>
                                 }
                             />
