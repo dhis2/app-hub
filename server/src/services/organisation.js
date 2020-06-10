@@ -85,19 +85,20 @@ const findOne = async (id, includeUsers = false, db) => {
     }
 
     if (includeUsers) {
-        const users = await db('users')
-            .select('users.id', 'users.email', 'users.name')
-            .innerJoin(
-                'user_organisation',
-                'users.id',
-                'user_organisation.user_id'
-            )
-            .where('user_organisation.organisation_id', organisation.id)
+        const users = await getUsersInOrganisation(id, db)
         organisation.users = users
     }
     const internalOrg = Organisation.parseDatabaseJson(organisation)
 
     return internalOrg
+}
+
+const getUsersInOrganisation = async (orgId, knex) => {
+    const users = await knex('users')
+        .select('users.id', 'users.email', 'users.name')
+        .innerJoin('user_organisation', 'users.id', 'user_organisation.user_id')
+        .where('user_organisation.organisation_id', orgId)
+    return users || []
 }
 
 const update = async (id, updateData, db) => {
@@ -152,4 +153,5 @@ module.exports = {
     remove,
     removeUser,
     hasUser,
+    getUsersInOrganisation,
 }
