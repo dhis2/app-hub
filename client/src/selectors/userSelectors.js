@@ -18,3 +18,5 @@ export const getAppLogo = (state, appId) => {
     if (!app) return null
     return app.images.filter(image => image.logo)[0] || null
 }
+
+export const getUserOrganisationIds = state => state.user.organisations.list

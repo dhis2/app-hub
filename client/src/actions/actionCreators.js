@@ -331,3 +331,8 @@ export const loadCurrentUserOrganisations = () =>
 
 export const loadAllOrganisations = () =>
     actionCreator(actions.ORGANISATIONS_LOAD)()
+
+export const loadOrganisation = orgId =>
+    actionCreator(actions.ORGANISATION_LOAD)({
+        orgId,
+    })

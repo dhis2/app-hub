@@ -217,17 +217,23 @@ export function createUploadImageOptions(data) {
 }
 
 export function getAllChannels() {
-    return fromApi('v2/channels')
+    return apiV2.request('channels')
 }
 
 export function searchOrganisations(name) {
-    return fromApi(`v2/organisations?name=ilike:%${name}%`)
+    return apiV2.request('organisations', {
+        filters: `ilike:%${name}%`,
+    })
 }
 
 export function getMe() {
-    return fromApi('v2/me', true)
+    return apiV2.request('me', { useAuth: true })
 }
 
 export function getOrganisations(filters) {
     return apiV2.request('organisations', { params: filters })
+}
+
+export function getOrganisation(orgId) {
+    return apiV2.request(`organisations/${orgId}`, { useAuth: true })
 }

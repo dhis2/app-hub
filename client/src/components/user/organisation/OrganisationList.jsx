@@ -14,7 +14,8 @@ import {
 } from '../../../actions/actionCreators'
 import sortBy from 'lodash/sortBy'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
-import * as selectors from '../../../selectors/userSelectors'
+import * as userSelectors from '../../../selectors/userSelectors'
+import * as organisationSelectors from '../../../selectors/organisationSelectors'
 
 class OrganisationList extends Component {
     constructor(props) {
@@ -47,12 +48,8 @@ class OrganisationList extends Component {
     }
 
     render() {
-        const {
-            loading,
-            loaded,
-            error,
-            byId: organisationList,
-        } = this.props.organisationList
+        const { loading, loaded, error } = this.props.organisationState
+        const organisationList = this.props.organisationList
         const loadOrErr = loading || error
         const {
             user: { manager },
@@ -113,11 +110,18 @@ class OrganisationList extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    organisationList: state.organisations,
-    user: selectors.getUserInfo(state),
-    searchFilter: state.form.searchFilter,
-})
+const mapStateToProps = state => {
+    const userInfo = userSelectors.getUserInfo(state)
+    return {
+        organisationList:
+            userInfo.profile && userInfo.profile.manager
+                ? organisationSelectors.getOrganisationsList(state)
+                : organisationSelectors.getUserOrganisationsList(state),
+        organisationState: state.organisations,
+        user: userInfo,
+        searchFilter: state.form.searchFilter,
+    }
+}
 
 const mapDispatchToProps = dispatch =>
     bindActionCreators(
