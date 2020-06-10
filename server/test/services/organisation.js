@@ -107,6 +107,21 @@ describe('@services::Organisation', () => {
         })
     })
 
+    describe('findOneBySlug', () => {
+        it('should find organisation by slug', async () => {
+            const dhis2Org = OrganisationMocks[0]
+            const org = await Organisation.findOneBySlug(
+                dhis2Org.slug,
+                false,
+                db
+            )
+            expect(org).to.not.be.null()
+            expect(org.id).to.be.a.string()
+            expect(org.id).to.be.equal(dhis2Org.id)
+            expect(org.slug).to.be.equal(dhis2Org.slug)
+        })
+    })
+
     describe('addUserById', async () => {
         it('should successfully add user to organisation', async () => {
             const userMock = UserMocks[2]

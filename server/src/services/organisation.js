@@ -76,21 +76,32 @@ const find = async ({ filters }, db) => {
     return parsed
 }
 
-const findOne = async (id, includeUsers = false, db) => {
-    const organisation = await getOrganisationQuery(db)
+const findOneByColumn = async (
+    columnValue,
+    { columnName = 'id', includeUsers = false } = {},
+    knex
+) => {
+    const organisation = await getOrganisationQuery(knex)
         .first()
-        .where('organisation.id', id)
+        .where(`organisation.${columnName}`, columnValue)
     if (!organisation) {
         throw new NotFoundError(`Organisation Not Found`)
     }
-
     if (includeUsers) {
-        const users = await getUsersInOrganisation(id, db)
+        const users = await getUsersInOrganisation(organisation.id, knex)
         organisation.users = users
     }
     const internalOrg = Organisation.parseDatabaseJson(organisation)
 
     return internalOrg
+}
+
+const findOne = async (id, includeUsers = false, knex) => {
+    return findOneByColumn(id, { columnName: 'id', includeUsers }, knex)
+}
+
+const findOneBySlug = async (slug, includeUsers = false, knex) => {
+    return findOneByColumn(slug, { columnName: 'slug', includeUsers }, knex)
 }
 
 const getUsersInOrganisation = async (orgId, knex) => {
@@ -147,6 +158,7 @@ const hasUser = async (id, userId, knex) => {
 module.exports = {
     find,
     findOne,
+    findOneBySlug,
     addUserById,
     create,
     update,
