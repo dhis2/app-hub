@@ -65,6 +65,30 @@ describe('v2/organisations', () => {
             expect(payload).to.be.an.object()
             expect(payload).to.include(['id', 'name', 'slug', 'owner', 'users'])
         })
+
+        it('should get one organisation by slug', async () => {
+            const dhis2Org = OrgMocks[0]
+            const request = {
+                method: 'GET',
+                url: `/api/v2/organisations/${dhis2Org.slug}`,
+            }
+
+            const res = await server.inject(request)
+            const payload = JSON.parse(res.payload)
+            expect(payload).to.be.an.object()
+            expect(payload).to.include(['id', 'name', 'slug', 'owner', 'users'])
+        })
+
+        it('should return 404 not found if slug does not exist', async () => {
+            const request = {
+                method: 'GET',
+                url: `/api/v2/organisations/some-slug`,
+            }
+
+            const res = await server.inject(request)
+            expect(res.statusCode).to.be.equal(404)
+            expect(res.result.message).to.be.equal('Not Found')
+        })
     })
 
     describe('create organisation', async () => {

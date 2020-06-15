@@ -58,12 +58,12 @@ module.exports = [
     },
     {
         method: 'GET',
-        path: '/v2/organisations/{orgId}',
+        path: '/v2/organisations/{orgIdOrSlug}',
         config: {
             auth: 'token',
             validate: {
                 params: Joi.object({
-                    orgId: OrgModel.definition.extract('id').required(),
+                    orgIdOrSlug: Joi.string().required(),
                 }),
             },
             tags: ['api', 'v2'],
@@ -75,8 +75,24 @@ module.exports = [
         },
         handler: async (request, h) => {
             const { db } = h.context
-            const { orgId } = request.params
-            const organisation = await Organisation.findOne(orgId, true, db)
+            const { orgIdOrSlug } = request.params
+
+            const isUuid =
+                Joi.string()
+                    .uuid()
+                    .validate(orgIdOrSlug).error === undefined
+
+            let organisation
+            if (isUuid) {
+                organisation = await Organisation.findOne(orgIdOrSlug, true, db)
+            } else {
+                organisation = await Organisation.findOneBySlug(
+                    orgIdOrSlug,
+                    true,
+                    db
+                )
+            }
+
             return organisation
         },
     },
