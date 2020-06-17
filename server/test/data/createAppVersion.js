@@ -14,47 +14,33 @@ describe('@data::createAppVersion', () => {
     const createAppVersion = require('../../src/data/createAppVersion')
 
     it('should require userId', async () => {
-        const transaction = await db.transaction()
+        const knex = await db.transaction()
 
         await expect(
             createAppVersion(
                 {
                     appId: apps[0].id,
                 },
-                db,
-                transaction
+                knex
             )
         ).to.reject(Error, 'ValidationError: "userId" is required')
     })
 
     it('should require appId', async () => {
-        const transaction = await db.transaction()
+        const knex = await db.transaction()
 
         await expect(
             createAppVersion(
                 {
                     userId: users[0].id,
                 },
-                db,
-                transaction
+                knex
             )
         ).to.reject(Error, 'ValidationError: "appId" is required')
     })
 
-    it('should require a transaction', async () => {
-        await expect(
-            createAppVersion(
-                {
-                    userId: users[0].id,
-                    appId: apps[0].id,
-                },
-                db
-            )
-        ).to.reject(Error, 'No transaction passed to function')
-    })
-
     it('should require the specified app to exist', async () => {
-        const transaction = await db.transaction()
+        const knex = await db.transaction()
 
         await expect(
             createAppVersion(
@@ -62,8 +48,7 @@ describe('@data::createAppVersion', () => {
                     userId: users[0].id,
                     appId: '00000000-0000-0000-0000-000000000000',
                 },
-                db,
-                transaction
+                knex
             )
         ).to.reject(
             Error,
@@ -72,7 +57,7 @@ describe('@data::createAppVersion', () => {
     })
 
     it('should create a new app version', async () => {
-        const transaction = await db.transaction()
+        const knex = await db.transaction()
 
         const version = await createAppVersion(
             {
@@ -82,10 +67,9 @@ describe('@data::createAppVersion', () => {
                 sourceUrl: 'https://github.com/dhis2/app-hub/',
                 version: '12345',
             },
-            db,
-            transaction
+            knex
         )
-        await transaction.commit()
+        await knex.commit()
 
         expect(version).to.not.be.null()
         expect(version.id).to.exist()
@@ -106,17 +90,16 @@ describe('@data::createAppVersion', () => {
     })
 
     it('should create a new app version with default values for demoUrl, sourceUrl and version', async () => {
-        const transaction = await db.transaction()
+        const knex = await db.transaction()
 
         const version = await createAppVersion(
             {
                 userId: users[0].id,
                 appId: apps[0].id,
             },
-            db,
-            transaction
+            knex
         )
-        await transaction.commit()
+        await knex.commit()
 
         expect(version).to.not.be.null()
         expect(version.id).to.exist()
@@ -134,5 +117,37 @@ describe('@data::createAppVersion', () => {
         expect(dbAppVersion.version).to.be.empty()
         expect(dbAppVersion.created_by_user_id).to.equal(version.userId)
         expect(dbAppVersion.app_id).to.equal(version.appId)
+    })
+
+    it('should break validation if trying to use a non URI value for demoUrl', async () => {
+        const knex = await db.transaction()
+
+        await expect(
+            createAppVersion(
+                {
+                    userId: users[0].id,
+                    appId: apps[0].id,
+                    demoUrl: 'bla bla bla',
+                    version: '7897879879',
+                },
+                knex
+            )
+        ).to.reject(Error, 'ValidationError: "demoUrl" must be a valid uri')
+    })
+
+    it('should break validation if trying to use a non URI value for sourceUrl', async () => {
+        const knex = await db.transaction()
+
+        await expect(
+            createAppVersion(
+                {
+                    userId: users[0].id,
+                    appId: apps[0].id,
+                    sourceUrl: 'bla bla bla',
+                    version: '7897879879',
+                },
+                knex
+            )
+        ).to.reject(Error, 'ValidationError: "sourceUrl" must be a valid uri')
     })
 })

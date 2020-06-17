@@ -12,10 +12,10 @@ const paramsSchema = joi.object().keys({
  * @param {string} params.id UUID of the image to update
  * @param {string} params.caption Caption of the image
  * @param {string} params.description Description of the image
- * @param {*} knex
+ * @param {object} knex DB instance or transaction
  * @returns {Promise}
  */
-const updateImageMeta = async (params, knex, transaction) => {
+const updateImageMeta = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -30,7 +30,6 @@ const updateImageMeta = async (params, knex, transaction) => {
 
     try {
         await knex('media')
-            .transacting(transaction)
             .where('id', id)
             .update({
                 caption,

@@ -1,3 +1,29 @@
+# [2.6.0](https://github.com/dhis2/app-hub/compare/v2.5.2...v2.6.0) (2020-06-15)
+
+
+### Features
+
+* **routes:** support for getting org by slug ([a6d27e1](https://github.com/dhis2/app-hub/commit/a6d27e1d747b591607e2f345e8393939a627aaf7))
+* **services:** findOneBySlug ([16eeb8a](https://github.com/dhis2/app-hub/commit/16eeb8af99dbfe985809d6c78e2ff38cb0c2a529))
+* **services:** getUsersInOrganisation function ([ce06205](https://github.com/dhis2/app-hub/commit/ce062058b5fe8875f7f8e1e54da1f67740336cd0))
+
+## [2.5.2](https://github.com/dhis2/app-hub/compare/v2.5.1...v2.5.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* add ui validation for demourl ([380b686](https://github.com/dhis2/app-hub/commit/380b68630d52387347ddbcc2c3615f0c720ad100))
+* validate demoUrl/sourceUrl as URI ([4950e77](https://github.com/dhis2/app-hub/commit/4950e77835a368e5fdc8c531674ffb3932b8f03f))
+
+## [2.5.1](https://github.com/dhis2/app-hub/compare/v2.5.0...v2.5.1) (2020-06-01)
+
+
+### Bug Fixes
+
+* edit app form tweaks ([6ce2387](https://github.com/dhis2/app-hub/commit/6ce23873b5de3b191981a12195e5d5169c8a6a05))
+* pre-fill sourceUrl field when editing ([b9ebf98](https://github.com/dhis2/app-hub/commit/b9ebf988bbfae57c8a9b45a4d95ae76cf21572ec))
+* save sourceUrl correctly when creating an app ([a3a4577](https://github.com/dhis2/app-hub/commit/a3a457769a046cd8a2e23bc52f788989ea77892f))
+
 # [2.5.0](https://github.com/dhis2/app-hub/compare/v2.4.2...v2.5.0) (2020-05-12)
 
 

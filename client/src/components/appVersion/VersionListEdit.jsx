@@ -25,6 +25,24 @@ import { loadChannels } from '../../actions/actionCreators'
 
 import { Auth } from '../../api/api'
 
+import { validateURL } from '../form/ReduxFormUtils'
+
+const validate = values => {
+    const errors = {}
+    const uriFields = ['demoUrl']
+
+    uriFields.forEach(field => {
+        if (values[field]) {
+            const validationError = validateURL(values[field])
+            if (validationError) {
+                errors[field] = validationError
+            }
+        }
+    })
+
+    return errors
+}
+
 const styles = {
     tableHeaderColumn: {
         paddingLeft: '12px',
@@ -54,6 +72,9 @@ const styles = {
     fontIcon: {
         fontSize: '18px',
     },
+    hasError: {
+        color: '#f00',
+    },
 }
 
 const TableIcon = ({ children }) => (
@@ -74,6 +95,7 @@ class VersionListEdit extends Component {
             anchorEl: null,
             editingFields: [],
             editedValues: {},
+            errors: {},
         }
 
         this.renderRow = this.renderRow.bind(this)
@@ -110,6 +132,7 @@ class VersionListEdit extends Component {
     handleCancelRow(version) {
         this.setState({
             ...this.state,
+            errors: {},
             editingFields: this.state.editingFields.filter(
                 v => v !== version.id
             ),
@@ -117,6 +140,17 @@ class VersionListEdit extends Component {
     }
 
     handleSubmitRow(version) {
+        const errors = validate(this.state.editedValues[version.id])
+
+        if (Object.keys(errors).length > 0) {
+            //Validation errors
+            this.setState({
+                ...this.state,
+                errors,
+            })
+            return false
+        }
+
         this.setState({
             ...this.state,
             editingFields: this.state.editingFields.filter(
@@ -157,6 +191,21 @@ class VersionListEdit extends Component {
                 },
             }),
         })
+    }
+
+    hasError(fieldName) {
+        return !!this.state.errors[fieldName]
+    }
+
+    validationErrorMessage(fieldName) {
+        return this.state.errors[fieldName] || ''
+    }
+
+    versionRowHasError(version) {
+        return (
+            this.state.editedValues[version.id] &&
+            Object.keys(this.state.errors).length > 0
+        )
     }
 
     renderRow(version, edit) {
@@ -221,7 +270,10 @@ class VersionListEdit extends Component {
 
         //TODO: add error instead of passing false to ErrorOrLoading
         return (
-            <TableRow key={version.id}>
+            <TableRow
+                key={version.id}
+                className={this.versionRowHasError(version) ? 'hasError' : null}
+            >
                 <TableRowColumn style={styles.firstColumn}>
                     <a href={downloadUrlWithToken} title="Download">
                         <TableIcon>file_download</TableIcon>
@@ -229,15 +281,22 @@ class VersionListEdit extends Component {
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
-                        <TextField
-                            defaultValue={version.demoUrl}
-                            onChange={this.handleValueChange.bind(
-                                this,
-                                version.id,
-                                'demoUrl'
+                        <div>
+                            <TextField
+                                defaultValue={version.demoUrl}
+                                onChange={this.handleValueChange.bind(
+                                    this,
+                                    version.id,
+                                    'demoUrl'
+                                )}
+                                name="demoUrl"
+                            />
+                            {this.hasError('demoUrl') && (
+                                <span className="error">
+                                    {this.validationErrorMessage('demoUrl')}
+                                </span>
                             )}
-                            name="demoUrl"
-                        />
+                        </div>
                     ) : values.demoUrl ? (
                         <a
                             href={`${values.demoUrl}`}

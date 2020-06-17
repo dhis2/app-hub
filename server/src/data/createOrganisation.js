@@ -1,6 +1,5 @@
 const joi = require('@hapi/joi')
 const slugify = require('slugify')
-const uuid = require('uuid/v4')
 
 const paramsSchema = joi.object().keys({
     userId: joi.string().uuid(),
@@ -24,18 +23,14 @@ const paramsSchema = joi.object().keys({
  * @param {object} params
  * @param {number} params.userId The userId of the user thats creating the organisation
  * @param {string} params.name Name of the company to create (1-100 chars)
- * @param {*} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<Organisation>} The created organisation
  */
-const createOrganisation = async (params, knex, transaction) => {
+const createOrganisation = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
         throw new Error(validation.error)
-    }
-
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
     }
 
     if (!knex) {
@@ -61,7 +56,6 @@ const createOrganisation = async (params, knex, transaction) => {
             }
         }
         const [id] = await knex('organisation')
-            .transacting(transaction)
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,

@@ -25,10 +25,10 @@ const paramsSchema = joi
  * @param {object} params
  * @param {string} params.email The user email
  * @param {string} params.name The name of the user
- * @param {*} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<CreateUserResult>}
  */
-const createUser = async (params, knex, transaction) => {
+const createUser = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -39,15 +39,10 @@ const createUser = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
-    }
-
     const { email, name } = params
 
     try {
         const [id] = await knex
-            .transacting(transaction)
             .insert({
                 email,
                 name,

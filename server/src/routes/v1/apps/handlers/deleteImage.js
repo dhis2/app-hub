@@ -5,11 +5,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const {
-    getAppDeveloperId,
-    getAppMedia,
-    deleteAppMedia,
-} = require('../../../../data')
+const { getAppDeveloperId, deleteAppMedia } = require('../../../../data')
 
 const { deleteFile } = require('../../../../utils')
 
@@ -45,7 +41,7 @@ module.exports = {
             const transaction = await db.transaction()
 
             try {
-                await deleteAppMedia(appMediaId, db, transaction)
+                await deleteAppMedia(appMediaId, transaction)
 
                 await transaction.commit()
 

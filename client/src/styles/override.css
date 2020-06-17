@@ -157,6 +157,25 @@ h1, h2, h3, h4 {
     font-weight: inherit
 }
 
+span.error {
+    clear: both;
+    display: block;
+    color: #f00;
+}
+
+tr.hasError {
+    height: 80px !important;
+}
+
+tr.hasError td {
+    vertical-align: top;
+}
+
+tr.hasError td:nth-of-type(1),
+tr.hasError td:nth-of-type(7) {
+    padding-top: 18px;
+}
+
 /* Change toolbar-padding according to mdc-layout-grid-margins*/
 
 @media (min-width: 840px) {

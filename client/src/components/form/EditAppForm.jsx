@@ -45,7 +45,7 @@ const validate = values => {
 }
 
 const EditForm = props => {
-    const { handleSubmit } = props
+    const { handleSubmit, submitted } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -63,7 +63,7 @@ const EditForm = props => {
             },
         }
 
-        return props.submitted({ data })
+        return submitted({ data })
     }
 
     const menuItems = appTypes.map(type => (
@@ -98,6 +98,7 @@ const EditForm = props => {
                 component={formUtils.renderTextField}
                 label="Source Code URL"
                 validate={validateURL}
+                fullWidth
             />
             <br />
             <Field
@@ -115,31 +116,37 @@ const EditForm = props => {
                 component={formUtils.renderTextField}
                 label="Developer Name"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerEmail"
                 component={formUtils.renderTextField}
                 label="Developer Email"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerAddress"
                 component={formUtils.renderTextField}
                 label="Developer Address"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerOrg"
                 component={formUtils.renderTextField}
                 label="Organisation"
                 disabled={true}
+                fullWidth
             />
         </Form>
     )
 }
 EditForm.propTypes = {
+    //Submits the form, given by Redux-form "Form"-component.
+    handleSubmit: PropTypes.func.required,
     //Callback for the values when the form has been submitted.
-    submitted: PropTypes.func,
+    submitted: PropTypes.func.required,
 }
 
 //const mapDispatch

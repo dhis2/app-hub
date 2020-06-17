@@ -3,13 +3,12 @@ const debug = require('debug')('apphub:server:data:deleteMedia')
  * Deletes a media with the specified id
  *
  * @param {string} id id for the media to delete
- * @param {object} knex db instance
+ * @param {object} knex DB instance or transaction
  * @returns {Promise}
  */
-const deleteAppMedia = async (id, knex, transaction) => {
+const deleteAppMedia = async (id, knex) => {
     try {
         await knex('app_media')
-            .transacting(transaction)
             .where('id', id)
             .del()
         debug('deleted app_media', id)

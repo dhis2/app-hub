@@ -8,7 +8,9 @@ const CreateAppVersionModel = Joi.object().keys({
     version: Joi.string(),
     minDhisVersion: Joi.string(),
     maxDhisVersion: Joi.string().allow('', null),
-    demoUrl: Joi.string().allow('', null),
+    demoUrl: Joi.string()
+        .uri()
+        .allow('', null),
     images: Joi.array(),
     channel: Joi.string(),
 })
