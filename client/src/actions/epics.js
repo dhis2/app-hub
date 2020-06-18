@@ -8,6 +8,7 @@ import {
     concatMap,
     switchMap,
     mergeAll,
+    concatAll,
     debounceTime,
     catchError,
     filter,
@@ -143,7 +144,7 @@ const user = action$ =>
                 }),
             ]
         }),
-        mergeAll()
+        concatAll()
     )
 
 const userApps = action$ =>
