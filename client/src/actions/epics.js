@@ -490,7 +490,7 @@ const searchOrganisation = (action$, state$) =>
                     }),
                     catchError(e => {
                         return [
-                            actions.actionErrorCreator(
+                            actionCreators.actionErrorCreator(
                                 actions.ORGANISATIONS_SEARCH_ERROR,
                                 e
                             ),
@@ -537,11 +537,32 @@ const loadOrganisations = (action$, state$) =>
                         list: response,
                     },
                 }))
-                .catch(e => ({
-                    type: actions.ORGANISATIONS_LOAD_ERROR,
-                    payload: e,
-                }))
+                .catch(e =>
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATIONS_LOAD_ERROR,
+                        e
+                    )
+                )
         })
+    )
+
+const loadOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_LOAD),
+        switchMap(action =>
+            api
+                .getOrganisation(action.payload.orgId)
+                .then(response => ({
+                    type: actions.ORGANISATION_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e =>
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_LOAD_ERROR,
+                        e
+                    )
+                )
+        )
     )
 
 export default combineEpics(
@@ -564,5 +585,6 @@ export default combineEpics(
     loadChannels,
     searchOrganisation,
     loadMe,
-    loadOrganisations
+    loadOrganisations,
+    loadOrganisation
 )

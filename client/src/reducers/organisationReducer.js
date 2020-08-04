@@ -12,6 +12,11 @@ const loadedState = {
     error: false,
     loading: false,
 }
+const errorState = {
+    loaded: false,
+    loading: false,
+    error: true,
+}
 
 const organisations = (state = initialState, action) => {
     switch (action.type) {
@@ -32,8 +37,36 @@ const organisations = (state = initialState, action) => {
             }
         }
 
+        case actions.ORGANISATION_LOAD_SUCCESS: {
+            const response = action.payload;
+            
+            if(response.owner && response.users) {
+                const ownerUser = response.users.find(u => u.id === response.owner)
+                if(ownerUser) {
+                    response.owner = ownerUser
+                }
+            }
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.payload.id]: action.payload,
+                },
+            }
+        }
+
         default: {
-            return state
+            if (
+                action.type.startsWith('ORGANISATION') &&
+                action.type.endsWith('_ERROR')
+            ) {
+                return {
+                    ...state,
+                    ...errorState,
+                }
+            } else {
+                return state
+            }
         }
     }
 }

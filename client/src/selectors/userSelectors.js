@@ -20,3 +20,8 @@ export const getAppLogo = (state, appId) => {
 }
 
 export const getUserOrganisationIds = state => state.user.organisations.list
+
+export const isManager = state => {
+    const userInfo = getUserInfo(state)
+    return userInfo && userInfo.profile && userInfo.profile.manager
+}

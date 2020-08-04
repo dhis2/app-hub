@@ -15,6 +15,7 @@ import { userLoad } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import ActiveLink from '../utils/ActiveLink'
 import OrganisationList from './organisation/OrganisationList'
+import OrganisationView from './organisation/OrganisationView'
 class UserView extends Component {
     componentDidMount() {
         this.props.loadUser()
@@ -34,6 +35,7 @@ class UserView extends Component {
                 <Route
                     path={`${this.props.match.url}/organisations`}
                     component={OrganisationList}
+                    exact={true}
                 />
                 <Route
                     path={`${this.props.match.url}/upload`}
@@ -42,6 +44,10 @@ class UserView extends Component {
                 <Route
                     path={`${this.props.match.url}/app/:appId`}
                     component={UserAppView}
+                />
+                <Route
+                    path={`${this.props.match.url}/organisations/:slug`}
+                    component={OrganisationView}
                 />
                 {/* No-match route - redirect to index */}
                 <Route render={() => <Redirect to="/user" />} />

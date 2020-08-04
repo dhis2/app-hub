@@ -113,10 +113,9 @@ class OrganisationList extends Component {
 const mapStateToProps = state => {
     const userInfo = userSelectors.getUserInfo(state)
     return {
-        organisationList:
-            userInfo.profile && userInfo.profile.manager
-                ? organisationSelectors.getOrganisationsList(state)
-                : organisationSelectors.getUserOrganisationsList(state),
+        organisationList: organisationSelectors.getAuthorizedOrganisationsList(
+            state
+        ),
         organisationState: state.organisations,
         user: userInfo,
         searchFilter: state.form.searchFilter,

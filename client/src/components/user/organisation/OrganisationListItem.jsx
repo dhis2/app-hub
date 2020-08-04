@@ -4,7 +4,7 @@ import { ListItem } from 'material-ui/List'
 import { withRouter } from 'react-router'
 
 const AppListItem = props => {
-    const { id, name } = props.organisation
+    const { id, slug, name } = props.organisation
 
     const listItemProps = {
         primaryText: name,
@@ -23,7 +23,7 @@ const AppListItem = props => {
         // secondaryText: secondaryText,
         // secondaryTextLines: 2,
         //rightIconButton: props.isManager ? menu : null,
-        onTouchTap: () => props.history.push(`${props.match.url}/${id}`),
+        onTouchTap: () => props.history.push(`${props.match.url}/${slug}`),
     }
 
     return <ListItem {...listItemProps} />

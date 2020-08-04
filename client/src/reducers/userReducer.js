@@ -277,7 +277,10 @@ function userInfoReducer(
         }
 
         default: {
-            if (action.type.endsWith('USER_ERROR')) {
+            if (
+                action.type === actionTypes.ME_LOAD_ERROR ||
+                action.type.endsWith('USER_ERROR')
+            ) {
                 return {
                     ...state,
                     ...errorState,
