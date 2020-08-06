@@ -7,7 +7,8 @@ const {
 const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
-//const debug = require('debug')('apphub:server:routes:handlers:organisations')
+// const debug = require('debug')('apphub:server:routes:handlers:organisations')
+const { wrapError, UniqueViolationError } = require('db-errors')
 
 module.exports = [
     {
@@ -233,18 +234,25 @@ module.exports = [
                     trx
                 )
                 if (userToAdd && userToAdd.id) {
-                    await Organisation.addUserById(org.id, userToAdd.id, trx)
+                    try {
+                        await Organisation.addUserById(org.id, userToAdd.id, trx)
+
+                    } catch(e) {
+                        const wrapped = wrapError(e)
+                        if(wrapped instanceof UniqueViolationError) {
+                            throw Boom.conflict('User is already a member of that organisation.')
+                        }
+                        throw e
+                    }
                     return userToAdd
                 } else {
                     throw Boom.conflict(`User with email not found.`)
                 }
             }
 
-            await db.transaction(addUserToOrganisation)
+            return db.transaction(addUserToOrganisation)
 
-            return {
-                statusCode: 200,
-            }
+           
         },
     },
     {
