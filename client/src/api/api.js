@@ -237,3 +237,23 @@ export function getOrganisations(filters) {
 export function getOrganisation(orgId) {
     return apiV2.request(`organisations/${orgId}`, { useAuth: true })
 }
+
+export function addOrganisationMember(orgId, email) {
+    return apiV2.request(`organisations/${orgId}/user`, { useAuth: true}, {
+        method: 'POST',
+        body: JSON.stringify({email}),
+        headers: {
+            'content-type': 'application/json'
+        }
+    })
+}
+
+export function removeOrganisationMember(orgId, user) {
+    return apiV2.request(`organisations/${orgId}/user`, { useAuth: true}, {
+        method: 'DELETE',
+        body: JSON.stringify({user}),
+        headers: {
+            'content-type': 'application/json'
+        }
+    })
+}

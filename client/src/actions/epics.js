@@ -565,6 +565,68 @@ const loadOrganisation = action$ =>
         )
     )
 
+const addOrganisatioNMember = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_MEMBER_ADD),
+        concatMap(action => {
+            const { orgId, email } = action.payload
+            return api
+                .addOrganisationMember(orgId, email)
+                .then(response => {
+                    return [
+                        {
+                            type: actions.ORGANISATION_MEMBER_ADD_SUCCESS,
+                            payload: response,
+                        },
+                        {
+                            type: actions.ORGANISATION_LOAD,
+                            payload: {
+                                orgId: orgId,
+                            },
+                        },
+                    ]
+                })
+                .catch(e => {
+                    return [
+                        actionCreators.actionErrorCreator(
+                            actions.ORGANISATION_MEMBER_ADD_ERROR,
+                            e
+                        ),
+                    ]
+                })
+        }),
+        mergeAll()
+    )
+
+const removeOrganisationMember = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_MEMBER_REMOVE),
+        concatMap(action => {
+            const { orgId, userId } = action.payload
+            return api
+                .removeOrganisationMember(orgId, userId)
+                .then(response => [
+                    {
+                        type: actions.ORGANISATION_MEMBER_REMOVE_SUCCESS,
+                        payload: response,
+                    },
+                    {
+                        type: actions.ORGANISATION_LOAD,
+                        payload: {
+                            orgId: orgId,
+                        },
+                    },
+                ])
+                .catch(e => [
+                    {
+                        type: actions.ORGANISATION_MEMBER_REMOVE_ERROR,
+                        payload: e,
+                    },
+                ])
+        }),
+        mergeAll()
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -586,5 +648,7 @@ export default combineEpics(
     searchOrganisation,
     loadMe,
     loadOrganisations,
-    loadOrganisation
+    loadOrganisation,
+    addOrganisatioNMember,
+    removeOrganisationMember
 )

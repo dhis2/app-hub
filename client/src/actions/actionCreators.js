@@ -336,3 +336,9 @@ export const loadOrganisation = orgId =>
     actionCreator(actions.ORGANISATION_LOAD)({
         orgId,
     })
+
+export const addOrganisationMember = (orgId, email) =>
+    actionCreator(actions.ORGANISATION_MEMBER_ADD)({ orgId, email })
+
+export const removeOrganisationMember = (orgId, userId) =>
+    actionCreator(actions.ORGANISATION_MEMBER_REMOVE)({ orgId, userId })

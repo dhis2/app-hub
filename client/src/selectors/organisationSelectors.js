@@ -18,13 +18,14 @@ export const getUserOrganisationsList = state => {
     return allOrgs.filter(org => userOrgIds.includes(org.id))
 }
 
-// list of organisations that user have rights to edit
+// list of organisations that user have rights to view
 // eg. full list of orgs for managers
 export const getAuthorizedOrganisationsList = state => {
     return isManager(state)
         ? getOrganisationsList(state)
         : getUserOrganisationsList(state)
 }
+
 
 export const hasAccessToOrganisation = (state, orgId) => {
     return getAuthorizedOrganisationsList.findIndex(org => org.id === orgId)
@@ -38,3 +39,5 @@ export const isOwner = (state, orgId) => {
 export const isMember = (state, orgId) => {
     return getUserOrganisationIds(state).includes(orgId)
 }
+
+export const canEditOrganisation = (state, orgId) => isOwner(state, orgId) || isMember(state, orgId)

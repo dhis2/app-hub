@@ -54,15 +54,15 @@ export default class AppHubAPI {
         }
 
         return fetch(url, options)
-            .then(response =>
-                response.ok ? response : Promise.reject(response)
-            )
             .then(response => {
                 const contentType = response.headers.get('content-type')
+                let result
                 if (contentType.includes('application/json')) {
-                    return response.json()
+                    result = response.json()
+                } else {
+                    result = response.text()
                 }
-                return response.text()
+                return result.then(result => response.ok ? Promise.resolve(result) : Promise.reject(result))
             })
     }
 }

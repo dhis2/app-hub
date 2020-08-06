@@ -13,7 +13,11 @@ import Theme from '../../../styles/theme'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
 import * as userSelectors from '../../../selectors/userSelectors'
 import * as organisationSelectors from '../../../selectors/organisationSelectors'
-import { loadOrganisation } from '../../../actions/actionCreators'
+import { loadOrganisation, openDialog } from '../../../actions/actionCreators'
+import * as dialogTypes from '../../../constants/dialogTypes'
+import OrganisationMemberList from './OrganisationMemberList'
+import RaisedButton from 'material-ui/RaisedButton/RaisedButton'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
 
 const styles = {
     rightIconButtonStyle: {
@@ -23,8 +27,15 @@ const styles = {
     },
     paddedCard: {
         marginTop: '12px',
-       // position: 'relative'
-    }
+        position: 'relative',
+    },
+    floatingActionButton: {
+        margin: 0,
+        top: 0,
+        right: 10,
+        top: '-26px',
+        position: 'absolute',
+    },
 }
 class OrganisationView extends Component {
     componentDidMount() {
@@ -33,8 +44,8 @@ class OrganisationView extends Component {
 
     render() {
         const { organisation } = this.props
-        if(!organisation) return null
-
+        if (!organisation || !organisation.users) return null
+        console.log(organisation)
         const subtitle = (
             <div>
                 Owner: {organisation.owner.name} <br />
@@ -42,11 +53,14 @@ class OrganisationView extends Component {
         )
         return (
             <div>
-                <Subheader title="Organisation overview" backLink="/user" />
+                <Subheader
+                    title="Organisation overview"
+                    backLink="/user/organisations"
+                />
                 <Card>
                     <CardHeader
                         title={organisation.name}
-                        subtitle={subtitle}
+                        //subtitle={subtitle}
                         titleStyle={{ fontSize: '2em' }}
                     >
                         <IconButton
@@ -60,15 +74,36 @@ class OrganisationView extends Component {
                     <CardText
                         style={Theme.paddedCard}
                         className="multiline-content"
-                    ><h3>Members</h3></CardText>
+                    >
+                        All members of an organisation is allowed to upload apps on behalf of the organisation. 
+                        Members may add new members to the organisation. Only the owner of the organisation is allowed to rename it.
+                    </CardText>
                 </Card>
                 <Card style={styles.paddedCard}>
-                <CardTitle title="Members" actAsExpander={false} />
+                    <FloatingActionButton
+                    style={styles.floatingActionButton}
+                        mini={true}
+                        title="Add Member"
+                        onClick={() =>
+                            this.props.openAddMemberDialog(
+                                this.props.organisation
+                            )
+                        }
+                    >
+                        <FontIcon className="material-icons">add</FontIcon>
+                    </FloatingActionButton>
+                    <CardTitle title="Members" actAsExpander={false} />
 
                     <CardText
                         style={Theme.paddedCard}
                         className="multiline-content"
-                    ><h3>Members</h3></CardText>
+                    >
+                        <OrganisationMemberList
+                        organisation={organisation}
+                            members={organisation.users}
+                            owner={organisation.owner}
+                        />
+                    </CardText>
                 </Card>
             </div>
         )
@@ -77,13 +112,25 @@ class OrganisationView extends Component {
 
 const mapStateToProps = (state, ownProps) => {
     const slug = ownProps.match.params.slug
-    const userInfo = userSelectors.getUserInfo(state)
+    const organisation = organisationSelectors.getOrganisationBySlug(
+        state,
+        slug
+    )
+
     return {
-        organisation: organisationSelectors.getOrganisationBySlug(state, slug),
+        organisation,
+        canEdit:
+            organisation &&
+            organisationSelectors.canEditOrganisation(state, organisation.id),
     }
 }
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators({ loadOrganisation }, dispatch)
+const mapDispatchToProps = dispatch => ({
+    openAddMemberDialog: organisation =>
+        dispatch(
+            openDialog(dialogTypes.ADD_ORGANISATION_MEMBER, { organisation })
+        ),
+    ...bindActionCreators({ loadOrganisation }, dispatch),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganisationView)

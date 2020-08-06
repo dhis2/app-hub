@@ -63,6 +63,7 @@ const organisations = (state = initialState, action) => {
                 return {
                     ...state,
                     ...errorState,
+                    error: action.payload
                 }
             } else {
                 return state
