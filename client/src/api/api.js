@@ -222,7 +222,9 @@ export function getAllChannels() {
 
 export function searchOrganisations(name) {
     return apiV2.request('organisations', {
-        filters: `ilike:%${name}%`,
+        params: {
+            name: `ilike:%${name}%`,
+        }
     })
 }
 
