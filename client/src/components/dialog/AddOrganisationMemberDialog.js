@@ -7,6 +7,7 @@ import { addOrganisationMember } from '../../actions/actionCreators'
 import * as formUtils from '../form/ReduxFormUtils'
 import UploadFileField from '../form/UploadFileField'
 import AddOrganisationMemberForm from '../form/AddOrganisationMemberForm'
+import NoteBlock from '../utils/NoteBlock'
 
 export class AddOrganisationMemberDialog extends Component {
     constructor(props) {
@@ -25,8 +26,11 @@ export class AddOrganisationMemberDialog extends Component {
         }
     }
 
-    handleAddMember = (values) => {
-        this.props.addOrganisationMember(this.props.organisation.id, values.email)
+    handleAddMember = values => {
+        this.props.addOrganisationMember(
+            this.props.organisation.id,
+            values.email
+        )
     }
 
     render() {
@@ -36,11 +40,17 @@ export class AddOrganisationMemberDialog extends Component {
         }
         return (
             <DialogBase
-                title="Add new member"
-                approveLabel={'Upload'}
+                title="Add Member"
+                approveLabel={'Add'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
+                contentStyle={{maxWidth: '600px'}}
             >
+                <NoteBlock>
+                        The new member needs to have logged in with the
+                        email address at least once before being able to be
+                        added to an organisation.
+                </NoteBlock>
                 <AddOrganisationMemberForm
                     ref={ref => {
                         this.form = ref
@@ -60,11 +70,16 @@ AddOrganisationMemberDialog.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
     const slug = ownProps.match.params.slug
-    const organisation = organisationSelectors.getOrganisationBySlug(state, slug)
+    const organisation = organisationSelectors.getOrganisationBySlug(
+        state,
+        slug
+    )
 
     return {
         organisation,
-        canEdit: organisation && organisationSelectors.canEditOrganisation(state, organisation.id)
+        canEdit:
+            organisation &&
+            organisationSelectors.canEditOrganisation(state, organisation.id),
     }
 }
 
