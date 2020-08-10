@@ -31,13 +31,13 @@ const styles = {
     },
     floatingActionButton: {
         margin: 0,
-        top: 0,
         right: 10,
         top: '-26px',
         position: 'absolute',
     },
 }
 class OrganisationView extends Component {
+
     componentDidMount() {
         this.props.loadOrganisation(this.props.match.params.slug)
     }
@@ -45,7 +45,7 @@ class OrganisationView extends Component {
     render() {
         const { organisation } = this.props
         if (!organisation || !organisation.users) return null
-        console.log(organisation)
+        
         const subtitle = (
             <div>
                 Owner: {organisation.owner.name} <br />

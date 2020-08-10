@@ -3,7 +3,7 @@ import React from 'react'
 import { ListItem } from 'material-ui/List'
 import { withRouter } from 'react-router'
 
-const AppListItem = props => {
+const OrganisationListItem = props => {
     const { id, slug, name } = props.organisation
 
     const listItemProps = {
@@ -29,10 +29,8 @@ const AppListItem = props => {
     return <ListItem {...listItemProps} />
 }
 
-AppListItem.propTypes = {
-    app: PropTypes.object.isRequired,
-    handleApprove: PropTypes.func.isRequired,
-    handleReject: PropTypes.func,
+OrganisationListItem.propTypes = {
+    organisation: PropTypes.object,
     isManager: PropTypes.bool,
 }
-export default withRouter(AppListItem)
+export default withRouter(OrganisationListItem)

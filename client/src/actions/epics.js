@@ -567,7 +567,7 @@ const loadOrganisation = action$ =>
         )
     )
 
-const addOrganisatioNMember = action$ =>
+const addOrganisationMember = action$ =>
     action$.pipe(
         ofType(actions.ORGANISATION_MEMBER_ADD),
         concatMap(action => {
@@ -629,6 +629,31 @@ const removeOrganisationMember = action$ =>
         mergeAll()
     )
 
+const addOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_ADD),
+        concatMap(action => {
+            const { name } = action.payload
+            return api
+                .addOrganisation(name)
+                .then(response => [{
+                    type: actions.ORGANISATION_ADD_SUCCESS,
+                    payload: response,
+                },  {
+                    type: actions.ORGANISATIONS_LOAD,
+                    payload: {}
+                },
+            ])
+                .catch(e => [
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_ADD_ERROR,
+                        e
+                    )]
+                )
+        }),
+        mergeAll()
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -651,6 +676,7 @@ export default combineEpics(
     loadMe,
     loadOrganisations,
     loadOrganisation,
-    addOrganisatioNMember,
-    removeOrganisationMember
+    addOrganisationMember,
+    removeOrganisationMember,
+    addOrganisation
 )

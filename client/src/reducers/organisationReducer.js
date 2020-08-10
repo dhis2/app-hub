@@ -55,6 +55,11 @@ const organisations = (state = initialState, action) => {
             }
         }
 
+        // dont set error-state
+        case actions.ORGANISATION_ADD_ERROR: {
+            return state
+        }
+
         default: {
             if (
                 action.type.startsWith('ORGANISATION') &&

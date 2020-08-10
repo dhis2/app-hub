@@ -224,7 +224,7 @@ export function searchOrganisations(name) {
     return apiV2.request('organisations', {
         params: {
             name: `ilike:%${name}%`,
-        }
+        },
     })
 }
 
@@ -241,21 +241,43 @@ export function getOrganisation(orgId) {
 }
 
 export function addOrganisationMember(orgId, email) {
-    return apiV2.request(`organisations/${orgId}/user`, { useAuth: true}, {
-        method: 'POST',
-        body: JSON.stringify({email}),
-        headers: {
-            'content-type': 'application/json'
+    return apiV2.request(
+        `organisations/${orgId}/user`,
+        { useAuth: true },
+        {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            headers: {
+                'content-type': 'application/json',
+            },
         }
-    })
+    )
 }
 
 export function removeOrganisationMember(orgId, user) {
-    return apiV2.request(`organisations/${orgId}/user`, { useAuth: true}, {
-        method: 'DELETE',
-        body: JSON.stringify({user}),
-        headers: {
-            'content-type': 'application/json'
+    return apiV2.request(
+        `organisations/${orgId}/user`,
+        { useAuth: true },
+        {
+            method: 'DELETE',
+            body: JSON.stringify({ user }),
+            headers: {
+                'content-type': 'application/json',
+            },
         }
-    })
+    )
+}
+
+export function addOrganisation(name) {
+    return apiV2.request(
+        `organisations/`,
+        { useAuth: true },
+        {
+            method: 'POST',
+            body: JSON.stringify({ name }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        }
+    )
 }

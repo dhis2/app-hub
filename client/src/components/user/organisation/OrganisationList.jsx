@@ -3,19 +3,39 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { List } from 'material-ui/List'
 import { Card, CardText } from 'material-ui/Card'
-import OrganisationListItem from './OrganisationListItem'
 import { TextFilter } from '../../utils/Filters'
-import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import FloatingActionButton from 'material-ui/FloatingActionButton'
+
 import SubHeader from '../../header/SubHeader'
+import OrganisationListItem from './OrganisationListItem'
 import {
     loadCurrentUserOrganisations,
     loadAllOrganisations,
+    openDialog,
 } from '../../../actions/actionCreators'
 import sortBy from 'lodash/sortBy'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
 import * as userSelectors from '../../../selectors/userSelectors'
 import * as organisationSelectors from '../../../selectors/organisationSelectors'
+import * as dialogTypes from '../../../constants/dialogTypes'
+
+const styles = {
+    containerDiv: {
+        position: 'relative',
+    },
+    card: {
+        marginTop: '12px',
+        position: 'relative',
+        maxHeight: 750,
+        overflow: 'auto',
+    },
+    floatingActionButton: {
+        bottom: -20,
+        right: 10,
+        position: 'absolute',
+    },
+}
 
 class OrganisationList extends Component {
     constructor(props) {
@@ -41,10 +61,6 @@ class OrganisationList extends Component {
             open: !this.state.open,
             anchorEl: e.currentTarget,
         })
-    }
-
-    openDeleteDialog(app) {
-        this.props.openDeleteDialog({ app })
     }
 
     render() {
@@ -83,16 +99,11 @@ class OrganisationList extends Component {
         const title = 'Organisations'
 
         return (
-            <div>
+            <div style={styles.containerDiv}>
                 <SubHeader title={title}>
                     <TextFilter hintText="Search" name={'orgSearchFilter'} />
-                    <IconButton onClick={this.handleOpenFilters.bind(this)}>
-                        <FontIcon className="material-icons">
-                            filter_list
-                        </FontIcon>
-                    </IconButton>
                 </SubHeader>
-                <Card>
+                <Card style={styles.card}>
                     <CardText>
                         {loadOrErr ? (
                             <ErrorOrLoading loading={loading} error={error} />
@@ -105,6 +116,16 @@ class OrganisationList extends Component {
                         </List>
                     </CardText>
                 </Card>
+                <FloatingActionButton
+                    style={styles.floatingActionButton}
+                    mini={true}
+                    title="Add new Organisation"
+                    onClick={() =>
+                        this.props.openNewOrganisationDialog()
+                    }
+                >
+                    <FontIcon className="material-icons">add</FontIcon>
+                </FloatingActionButton>
             </div>
         )
     }
@@ -122,10 +143,13 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch =>
-    bindActionCreators(
+const mapDispatchToProps = dispatch => ({
+    openNewOrganisationDialog: () =>
+        dispatch(openDialog(dialogTypes.NEW_ORGANISATION_DIALOG)),
+    ...bindActionCreators(
         { loadAllOrganisations, loadCurrentUserOrganisations },
         dispatch
-    )
+    ),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganisationList)
