@@ -14,7 +14,8 @@ import {
 import FormStepper from './FormStepper'
 import OrganisationSearch from './helpers/OrganisationSearch'
 import { loadChannels } from '../../actions/actionCreators'
-
+import * as organisationSelectors from '../../selectors/organisationSelectors'
+import * as userSelectors from '../../selectors/userSelectors'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
@@ -82,14 +83,22 @@ const validate = values => {
     return errors
 }
 
-export const validateOrganisation = (value, organisations, memberOfOrgs) => {
-    if (!value) return undefined
 
+/**
+ * Checks that the user have permission to upload app for organisation
+ * @param {} value the value (name) of the organisation 
+ * @param {*} organisations all organisations
+ * @param {*} memberOfOrgs list of org-ids the user is member of
+ */
+export const validateOrganisation = (value, organisations, memberOfOrgs, isManager) => {
+    if (!value) return undefined
+    if(value.length >= 100) return 'Exceeds limit of maximum 100 characters.'
+    
     const existingOrganisation = organisations.find(
         org => org.name.toLowerCase() === value.toLowerCase()
     )
 
-    if (existingOrganisation) {
+    if (!isManager && existingOrganisation) {
         const isMember = memberOfOrgs.includes(existingOrganisation.id)
         if (!isMember) {
             return 'You are not a member of this organisation. Contact the owner to get access to upload apps.'
@@ -99,7 +108,7 @@ export const validateOrganisation = (value, organisations, memberOfOrgs) => {
 }
 
 const syncValidateOrganisation = (value, allValues, props) =>
-    validateOrganisation(value, props.organisations, props.memberOfOrgs)
+    validateOrganisation(value, props.organisations, props.memberOfOrgs, props.isManager)
 
 const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
@@ -380,6 +389,7 @@ class UploadAppFormStepper extends Component {
                 ]}
                 organisations={this.props.organisations}
                 memberOfOrgs={this.props.memberOfOrgs}
+                isManager={this.props.isManager}
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
         )
@@ -393,10 +403,9 @@ UploadAppFormStepper.defaultProps = {}
 
 const mapStateToProps = state => ({
     channels: state.channels,
-    organisations: Object.keys(state.organisations.byId).map(
-        key => state.organisations.byId[key]
-    ),
-    memberOfOrgs: state.user.organisations.list,
+    organisations: organisationSelectors.getOrganisationsList(state),
+    memberOfOrgs: userSelectors.getUserOrganisationIds(state),
+    isManager: userSelectors.isManager(state)
 })
 
 const mapDispatchToProps = dispatch => ({

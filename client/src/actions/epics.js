@@ -470,10 +470,12 @@ const searchOrganisation = (action$, state$) =>
                     switchMap(orgs => {
                         const memberOfOrgs =
                             state$.value.user.organisations.list
+                        const isManager = userSelectors.isManager(state$.value)
                         const validateError = validateOrganisation(
                             action.payload.name,
                             orgs,
-                            memberOfOrgs
+                            memberOfOrgs,
+                            isManager
                         )
                         const error = validateError
                             ? { developer: { developerOrg: validateError } }

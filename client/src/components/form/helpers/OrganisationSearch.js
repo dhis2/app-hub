@@ -11,6 +11,9 @@ class OrganisationSearchField extends Component {
         // so that we are not showing the "new org"-message.
         // This is needed since the field is loosing focus when autocomplete-menu is open.
         this.autoCompleteInput = null
+        this.state = {
+            open: false // tries to keep in sync with open autocomplete-menu, used to show message
+        }
     }
 
     componentDidMount() {
@@ -22,16 +25,16 @@ class OrganisationSearchField extends Component {
         const { organisations } = this.props
         const { touched, valid, active } = this.props.meta
         const { value } = this.props.input
-        const isOpen = this.autoCompleteInput
-            ? this.autoCompleteInput.state.open
-            : false
+        const isOpen =
+            (this.autoCompleteInput && this.autoCompleteInput.state.open) ||
+            false
 
         if (
             value &&
             touched &&
             valid &&
             !active &&
-            (!isOpen || (isOpen && !active)) && // isOpen is not always updated onBlur, so we check for active as well
+            !this.state.open &&
             !this.props.isAsyncValidating &&
             !organisations.find(
                 org => org.name.toLowerCase() === value.toLowerCase()
@@ -47,12 +50,12 @@ class OrganisationSearchField extends Component {
 
         return null
     }
-
     handleOnChange = val => {
         if (val !== this.props.input.value) {
             this.props.searchOrganisation(val)
             this.props.input.onChange(val)
         }
+        this.setState({open: true})
     }
 
     setAutoCompleteInputRef = element => {
@@ -71,11 +74,16 @@ class OrganisationSearchField extends Component {
         return (
             <div>
                 <AutoComplete
+                openOnFocus
                     ref={this.setAutoCompleteInputRef}
                     hintText={label}
                     dataSource={orgs}
                     onUpdateInput={this.handleOnChange}
                     onNewRequest={this.handleOnChange}
+                    onClose={() => {
+                        console.log('close!')
+                        this.setState({open: false})
+                    } }
                     filter={(searchText, key) =>
                         searchText !== '' &&
                         key.toLowerCase().indexOf(searchText.toLowerCase()) !==
@@ -83,6 +91,8 @@ class OrganisationSearchField extends Component {
                     }
                     errorText={(touched || forceShowErrors) && error}
                     searchText={input.value}
+                    onBlur={(...args) => this.props.onBlur(...args) && this.forceUpdate()}
+                    open={true}
                     {...input}
                 ></AutoComplete>
                 {this.renderIsNewOrgMessage()}
