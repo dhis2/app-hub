@@ -1,11 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { addOrganisationMember } from '../../actions/actionCreators'
-import * as formUtils from '../form/ReduxFormUtils'
-import UploadFileField from '../form/UploadFileField'
 import AddOrganisationMemberForm from '../form/AddOrganisationMemberForm'
 import NoteBlock from '../utils/NoteBlock'
 
@@ -17,8 +14,7 @@ export class AddOrganisationMemberDialog extends Component {
     submitForm() {
         //submit form manually as dialog actions work as submit button
         const res = this.form.submit()
-        console.log(res)
-        return res
+    
         if (this.form.valid) {
             return Promise.resolve(res)
         } else {
@@ -34,10 +30,6 @@ export class AddOrganisationMemberDialog extends Component {
     }
 
     render() {
-        const fieldStyle = {
-            display: 'block',
-            width: '100%',
-        }
         return (
             <DialogBase
                 title="Add Member"
@@ -47,9 +39,9 @@ export class AddOrganisationMemberDialog extends Component {
                 contentStyle={{maxWidth: '600px'}}
             >
                 <NoteBlock>
-                        The new member needs to have logged in with the
-                        email address at least once before being able to be
-                        added to an organisation.
+                        The new member must have logged in with the
+                        email address at least once before being able to be added
+                        to an organisation.
                 </NoteBlock>
                 <AddOrganisationMemberForm
                     ref={ref => {
@@ -63,24 +55,7 @@ export class AddOrganisationMemberDialog extends Component {
 }
 
 AddOrganisationMemberDialog.propTypes = {
-    app: PropTypes.object,
-    appId: PropTypes.string,
-    addVersion: PropTypes.func,
-}
-
-const mapStateToProps = (state, ownProps) => {
-    const slug = ownProps.match.params.slug
-    const organisation = organisationSelectors.getOrganisationBySlug(
-        state,
-        slug
-    )
-
-    return {
-        organisation,
-        canEdit:
-            organisation &&
-            organisationSelectors.canEditOrganisation(state, organisation.id),
-    }
+    organisation: PropTypes.object,
 }
 
 const mapDispatchToProps = dispatch => ({

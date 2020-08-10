@@ -12,9 +12,8 @@ import { Field, reduxForm, Form } from 'redux-form'
 
 const validate = values => {
     const errors = {}
-    const maxLenCaption = 60
-    if (values['caption'] && values['caption'].length > maxLenCaption) {
-        errors['caption'] = `Max ${maxLenCaption} characters`
+    if(!values.email) {
+        errors.email = 'Required'
     }
 
     return errors
@@ -22,6 +21,7 @@ const validate = values => {
 
 const AddOrganisationMemberForm = props => {
     const { handleSubmit, pristine, submitting } = props
+
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -44,5 +44,8 @@ const AddOrganisationMemberForm = props => {
         </Form>
     )
 }
+
 AddOrganisationMemberForm.propTypes = {}
-export default reduxForm({ form: 'addOrganisationMember', validate })(AddOrganisationMemberForm)
+export default reduxForm({ form: 'addOrganisationMember', validate })(
+    AddOrganisationMemberForm
+)
