@@ -22,7 +22,7 @@ const paramsSchema = joi
         sourceUrl: joi
             .string()
             .uri()
-            .allow(''),
+            .allow('', null),
         version: joi.string().allow(''),
     })
     .options({ allowUnknown: true })
@@ -50,7 +50,7 @@ const createAppVersion = async (params, knex) => {
 
     if (paramsValidation.error !== undefined) {
         debug(paramsValidation.error)
-        throw new Error(paramsValidation.error)
+        throw paramsValidation.error;
     }
 
     const { userId, appId, demoUrl, sourceUrl, version } = params
