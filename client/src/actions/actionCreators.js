@@ -343,5 +343,5 @@ export const addOrganisationMember = (orgId, email) =>
 export const removeOrganisationMember = (orgId, userId) =>
     actionCreator(actions.ORGANISATION_MEMBER_REMOVE)({ orgId, userId })
 
-export const addOrganisation = name => 
-    actionCreator(actions.ORGANISATION_ADD)({ name})
+export const addOrganisation = name =>
+    actionCreator(actions.ORGANISATION_ADD)({ name })

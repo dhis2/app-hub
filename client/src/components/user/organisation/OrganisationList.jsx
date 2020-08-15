@@ -13,6 +13,7 @@ import {
     loadCurrentUserOrganisations,
     loadAllOrganisations,
     openDialog,
+    getMe,
 } from '../../../actions/actionCreators'
 import sortBy from 'lodash/sortBy'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
@@ -48,6 +49,7 @@ class OrganisationList extends Component {
 
     componentDidMount() {
         const userInfo = this.props.user
+        this.props.getMe()
         if (userInfo && userInfo.loaded) {
             userInfo.profile.manager
                 ? this.props.loadAllOrganisations()
@@ -120,9 +122,7 @@ class OrganisationList extends Component {
                     style={styles.floatingActionButton}
                     mini={true}
                     title="Add new Organisation"
-                    onClick={() =>
-                        this.props.openNewOrganisationDialog()
-                    }
+                    onClick={() => this.props.openNewOrganisationDialog()}
                 >
                     <FontIcon className="material-icons">add</FontIcon>
                 </FloatingActionButton>
@@ -147,7 +147,7 @@ const mapDispatchToProps = dispatch => ({
     openNewOrganisationDialog: () =>
         dispatch(openDialog(dialogTypes.NEW_ORGANISATION_DIALOG)),
     ...bindActionCreators(
-        { loadAllOrganisations, loadCurrentUserOrganisations },
+        { loadAllOrganisations, loadCurrentUserOrganisations, getMe },
         dispatch
     ),
 })
