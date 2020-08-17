@@ -50,7 +50,7 @@ const createAppVersion = async (params, knex) => {
 
     if (paramsValidation.error !== undefined) {
         debug(paramsValidation.error)
-        throw paramsValidation.error;
+        throw paramsValidation.error
     }
 
     const { userId, appId, demoUrl, sourceUrl, version } = params
