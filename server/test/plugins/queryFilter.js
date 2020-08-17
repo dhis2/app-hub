@@ -49,7 +49,6 @@ describe('QueryFilterPlugin', () => {
         expect(res.statusCode).to.be.equal(200)
         const filters = res.request.plugins.queryFilter
         expect(filters).to.be.instanceOf(Filters)
-        console.log(filters)
         expect(filters.filters.name).to.be.an.object()
         expect(filters.filters.name).to.include(['value', 'operator'])
     })

@@ -23,7 +23,7 @@ describe('@data::createAppVersion', () => {
                 },
                 knex
             )
-        ).to.reject(Error, 'ValidationError: "userId" is required')
+        ).to.reject(Error, '"userId" is required')
     })
 
     it('should require appId', async () => {
@@ -36,7 +36,7 @@ describe('@data::createAppVersion', () => {
                 },
                 knex
             )
-        ).to.reject(Error, 'ValidationError: "appId" is required')
+        ).to.reject(Error, '"appId" is required')
     })
 
     it('should require the specified app to exist', async () => {
@@ -132,7 +132,7 @@ describe('@data::createAppVersion', () => {
                 },
                 knex
             )
-        ).to.reject(Error, 'ValidationError: "demoUrl" must be a valid uri')
+        ).to.reject(Error, '"demoUrl" must be a valid uri')
     })
 
     it('should break validation if trying to use a non URI value for sourceUrl', async () => {
@@ -148,6 +148,6 @@ describe('@data::createAppVersion', () => {
                 },
                 knex
             )
-        ).to.reject(Error, 'ValidationError: "sourceUrl" must be a valid uri')
+        ).to.reject(Error, '"sourceUrl" must be a valid uri')
     })
 })
