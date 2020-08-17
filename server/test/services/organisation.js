@@ -107,6 +107,21 @@ describe('@services::Organisation', () => {
         })
     })
 
+    describe('findOneBySlug', () => {
+        it('should find organisation by slug', async () => {
+            const dhis2Org = OrganisationMocks[0]
+            const org = await Organisation.findOneBySlug(
+                dhis2Org.slug,
+                false,
+                db
+            )
+            expect(org).to.not.be.null()
+            expect(org.id).to.be.a.string()
+            expect(org.id).to.be.equal(dhis2Org.id)
+            expect(org.slug).to.be.equal(dhis2Org.slug)
+        })
+    })
+
     describe('addUserById', async () => {
         it('should successfully add user to organisation', async () => {
             const userMock = UserMocks[2]
@@ -242,6 +257,43 @@ describe('@services::Organisation', () => {
                 // should be rollbacked, so user should not have been added
                 expect(newUser).to.be.undefined()
             }
+        })
+    })
+
+    describe('getUsersInOrganisation', () => {
+        it('should  return a list of users', async () => {
+            const org = OrganisationMocks[1] //WHO
+            const users = await Organisation.getUsersInOrganisation(org.id, db)
+
+            expect(users).to.be.an.array()
+            expect(
+                users.findIndex(u => u.email === 'erik@dhis2.org')
+            ).to.be.above(-1)
+        })
+
+        it('should return an empty array if no users in organisation', async () => {
+            const userId = UserMocks[0].id
+            const emptyOrg = await Organisation.create(
+                { userId, name: 'Empty Organisation' },
+                db
+            )
+
+            expect(emptyOrg.id).to.be.a.string()
+
+            const users = await Organisation.getUsersInOrganisation(
+                emptyOrg.id,
+                db
+            )
+            expect(users).to.be.an.array()
+            expect(users.length).to.be.equal(0)
+
+            await Organisation.remove(emptyOrg.id, db)
+        })
+
+        it('should return an error if orgId is invalid', async () => {
+            expect(
+                Organisation.getUsersInOrganisation('someid', db)
+            ).to.reject()
         })
     })
 
