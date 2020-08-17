@@ -73,7 +73,14 @@ module.exports = {
         }
 
         const versionPayload = request.payload.version
-        const appVersionJson = JSON.parse(versionPayload)
+
+        let appVersionJson
+        try {
+            appVersionJson = JSON.parse(versionPayload)
+        } catch (e) {
+            throw Boom.badRequest('Invalid JSON')
+        }
+
         const validationResult = CreateAppVersionModel.def.validate(
             appVersionJson
         )
