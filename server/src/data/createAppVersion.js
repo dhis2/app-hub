@@ -18,7 +18,7 @@ const paramsSchema = joi
         demoUrl: joi
             .string()
             .uri()
-            .allow(''),
+            .allow('', null),
         sourceUrl: joi
             .string()
             .uri()
