@@ -33,9 +33,12 @@ const dbErrorMap = {
 const onPreResponseHandler = function(request, h) {
     const { response: error } = request
     // not error or joi-error - ignore
-    // By default validation errors thrown in har are transformed to 500-error, as they are not Boom-errors.
-    // This makes sense, as internal validation errors (outside validation-handlers) are developer errors
-    if (!error.isBoom || error.isJoi) {
+    // Map Joi-errors to 400 bad-request errors
+
+    if (error.isJoi) {
+        return Boom.badRequest(error)
+    }
+    if (!error.isBoom) {
         return h.continue
     }
     throw mapError(error, this.options)

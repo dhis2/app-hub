@@ -1,3 +1,23 @@
+## [2.6.1](https://github.com/dhis2/app-hub/compare/v2.6.0...v2.6.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* **createversion:** add try-catch for parsing json ([0de1a50](https://github.com/dhis2/app-hub/commit/0de1a5049c47250dbab6a47d6035d0fa51d8542d))
+* fix tests ([b39bbc6](https://github.com/dhis2/app-hub/commit/b39bbc6163e47a103f2919791716c6d62dd5d0a8))
+* **createappversion:** allow null demoUrl ([45acd4a](https://github.com/dhis2/app-hub/commit/45acd4ad8842b1064c342ec0d6d1a6c9219a05b6))
+* **editversion:** actually allow null for demourl ([c9154e2](https://github.com/dhis2/app-hub/commit/c9154e23201803c977789403ac3c470201ae9bd4))
+* **errormapper:** map Joi-errors to 400-badrequest errors ([fad7757](https://github.com/dhis2/app-hub/commit/fad775734de4bc1fa7bd85ca64d9addd8fdce063))
+
+# [2.6.0](https://github.com/dhis2/app-hub/compare/v2.5.2...v2.6.0) (2020-06-15)
+
+
+### Features
+
+* **routes:** support for getting org by slug ([a6d27e1](https://github.com/dhis2/app-hub/commit/a6d27e1d747b591607e2f345e8393939a627aaf7))
+* **services:** findOneBySlug ([16eeb8a](https://github.com/dhis2/app-hub/commit/16eeb8af99dbfe985809d6c78e2ff38cb0c2a529))
+* **services:** getUsersInOrganisation function ([ce06205](https://github.com/dhis2/app-hub/commit/ce062058b5fe8875f7f8e1e54da1f67740336cd0))
+
 ## [2.5.2](https://github.com/dhis2/app-hub/compare/v2.5.1...v2.5.2) (2020-06-03)
 
 

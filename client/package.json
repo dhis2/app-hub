@@ -1,6 +1,6 @@
 {
     "name": "client",
-    "version": "2.5.2",
+    "version": "2.6.1",
     "description": "The App Hub Client",
     "main": "src/index.js",
     "repository": "https://github.com/dhis2/app-hub",
@@ -22,7 +22,7 @@
         "history": "^4.5.1",
         "html-webpack-plugin": "^3.2.0",
         "jwt-decode": "^2.1.0",
-        "lodash": "^4.17.15",
+        "lodash": "^4.17.19",
         "material-components-web": "^0.16.0",
         "material-design-icons": "^3.0.1",
         "material-ui": "^0.18.7",
