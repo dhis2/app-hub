@@ -1,3 +1,18 @@
+## [2.6.3](https://github.com/dhis2/app-hub/compare/v2.6.2...v2.6.3) (2020-08-25)
+
+
+### Bug Fixes
+
+* change filename in download url ([658b471](https://github.com/dhis2/app-hub/commit/658b471e37fe004a8b15b8bbb11cb7adcdc1ad2e))
+* use slug + version as filename on download ([23bbb04](https://github.com/dhis2/app-hub/commit/23bbb04c6f4cd6524a978adab08daa7c1d65c092))
+
+## [2.6.2](https://github.com/dhis2/app-hub/compare/v2.6.1...v2.6.2) (2020-08-25)
+
+
+### Bug Fixes
+
+* use wildcard for matching patch-versions ([4d96a7b](https://github.com/dhis2/app-hub/commit/4d96a7bcdd6727e2aea8bb7181066c2c32a5ae55))
+
 ## [2.6.1](https://github.com/dhis2/app-hub/compare/v2.6.0...v2.6.1) (2020-08-17)
 
 
