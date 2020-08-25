@@ -12,8 +12,6 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
 
     const filteredApps = []
 
-    //if ( )
-
     const dhis2Semver = semver.coerce(dhis2Version)
     debug('dhis2Semver', dhis2Semver)
 
