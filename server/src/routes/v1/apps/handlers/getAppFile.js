@@ -13,7 +13,7 @@ const {
 module.exports = {
     method: 'GET',
     path:
-        '/v1/apps/download/{organisation_slug}/{appver_slug}/{app_version}/app.zip',
+        '/v1/apps/download/{organisation_slug}/{appver_slug}_{app_version}.zip',
     config: {
         auth: { strategy: 'token', mode: 'try' },
         tags: ['api', 'v1'],
@@ -90,6 +90,10 @@ module.exports = {
         return h
             .response(file.Body)
             .type('application/zip')
+            .header(
+                'Content-Disposition',
+                `attachment; filename=${item.appver_slug}_${item.version}.zip;`
+            )
             .header('Content-length', file.ContentLength)
     },
 }
