@@ -19,6 +19,7 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
         const appRow = apps[i]
 
         const maxVersion = semver.coerce(appRow.max_dhis2_version)
+        debug('maxVersion', maxVersion)
 
         const maxVersionValid = semver.valid(maxVersion)
         debug('maxVersionValid', maxVersionValid)
