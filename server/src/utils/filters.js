@@ -12,6 +12,8 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
 
     const filteredApps = []
 
+    //if ( )
+
     const dhis2Semver = semver.coerce(dhis2Version)
     debug('dhis2Semver', dhis2Semver)
 
@@ -19,7 +21,6 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
         const appRow = apps[i]
 
         const maxVersion = semver.coerce(appRow.max_dhis2_version)
-        debug('maxVersion', maxVersion)
 
         const maxVersionValid = semver.valid(maxVersion)
         debug('maxVersionValid', maxVersionValid)
@@ -27,17 +28,21 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
         const minVersion = semver.coerce(appRow.min_dhis2_version)
         debug('minVersion', minVersion)
 
-        if (
-            (maxVersionValid &&
+        if (maxVersionValid) {
+            const maxPatch = maxVersion.patch === 0 ? '*' : maxVersion.patch
+            debug(
+                `Using maxVersion: ${maxVersion.major}.${maxVersionValid.minor}.${maxPatch}`
+            )
+            if (
                 semver.satisfies(
                     dhis2Semver.version,
-                    `${minVersion.version} - ${maxVersion.version}`
-                )) ||
-            (!maxVersionValid &&
-                semver.satisfies(
-                    dhis2Semver.version,
-                    `>= ${minVersion.version}`
-                ))
+                    `${minVersion.version} - ${maxVersion.major}.${maxVersion.minor}.${maxPatch}`
+                )
+            ) {
+                filteredApps.push(appRow)
+            }
+        } else if (
+            semver.satisfies(dhis2Semver.version, `>= ${minVersion.version}`)
         ) {
             filteredApps.push(appRow)
         }
