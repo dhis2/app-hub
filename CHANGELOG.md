@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/dhis2/app-hub/compare/v2.6.1...v2.6.2) (2020-08-25)
+
+
+### Bug Fixes
+
+* use wildcard for matching patch-versions ([4d96a7b](https://github.com/dhis2/app-hub/commit/4d96a7bcdd6727e2aea8bb7181066c2c32a5ae55))
+
 ## [2.6.1](https://github.com/dhis2/app-hub/compare/v2.6.0...v2.6.1) (2020-08-17)
 
 
