@@ -90,6 +90,10 @@ module.exports = {
         return h
             .response(file.Body)
             .type('application/zip')
+            .header(
+                'Content-Disposition',
+                `attachment; filename=${item.appver_slug}_${item.version}.zip;`
+            )
             .header('Content-length', file.ContentLength)
     },
 }
