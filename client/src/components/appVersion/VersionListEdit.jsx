@@ -26,6 +26,7 @@ import { loadChannels } from '../../actions/actionCreators'
 import { getAuth } from '../../utils/AuthService'
 
 import { validateURL } from '../form/ReduxFormUtils'
+import DHISVersionItems from './VersionItems'
 
 const validate = values => {
     const errors = {}
@@ -173,7 +174,11 @@ class VersionListEdit extends Component {
      * @param newValue from TextField
      */
     //eslint-disable-next-line max-params
-    handleValueChange(versionId, fieldName, e, newValue) {
+    handleValueChange(versionId, fieldName, e, newValue, selectValue) {
+        if (selectValue) {
+            // if selectField newValue contains index
+            newValue = selectValue
+        }
         const editedValues = this.state.editedValues
         this.setState({
             editedValues: merge(editedValues, {
@@ -327,30 +332,34 @@ class VersionListEdit extends Component {
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
-                        <TextField
-                            defaultValue={values.minDhisVersion}
+                        <SelectField
+                            value={values.minDhisVersion}
                             onChange={this.handleValueChange.bind(
                                 this,
                                 version.id,
                                 'minDhisVersion'
                             )}
                             name="minDhisVersion"
-                        />
+                        >
+                            {DHISVersionItems}
+                        </SelectField>
                     ) : (
                         values.minDhisVersion
                     )}
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
                     {edit ? (
-                        <TextField
-                            defaultValue={values.maxDhisVersion}
+                        <SelectField
+                            value={values.maxDhisVersion}
                             onChange={this.handleValueChange.bind(
                                 this,
                                 version.id,
                                 'maxDhisVersion'
                             )}
                             name="maxDhisVersion"
-                        />
+                        >
+                            {DHISVersionItems}
+                        </SelectField>
                     ) : (
                         values.maxDhisVersion
                     )}
