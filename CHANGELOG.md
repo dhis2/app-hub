@@ -1,3 +1,12 @@
+## [2.6.4](https://github.com/dhis2/app-hub/compare/v2.6.3...v2.6.4) (2020-08-26)
+
+
+### Bug Fixes
+
+* allow a developer to delete his own versions ([dfaf618](https://github.com/dhis2/app-hub/commit/dfaf61803525cd019ef6c534893d96d5a43711e2))
+* allow devs to delete images on own apps ([5987bd0](https://github.com/dhis2/app-hub/commit/5987bd0e41548001933f450cedc8d0d8db345958))
+* allow devs to upload media to own apps ([be87503](https://github.com/dhis2/app-hub/commit/be87503c44e2104622cb1d5e7c52c5c16aa8f9f9))
+
 ## [2.6.3](https://github.com/dhis2/app-hub/compare/v2.6.2...v2.6.3) (2020-08-25)
 
 

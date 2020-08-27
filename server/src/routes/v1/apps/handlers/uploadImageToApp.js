@@ -1,3 +1,7 @@
+const debug = require('debug')(
+    'apphub:server:routes:handlers:v1:uploadImageToApp'
+)
+
 const { MediaType } = require('../../../../enums')
 const { saveFile } = require('../../../../utils')
 
@@ -6,7 +10,7 @@ const {
     currentUserIsManager,
 } = require('../../../../security')
 
-const { addAppMedia, getAppDeveloperId } = require('../../../../data')
+const { addAppMedia, getOrganisationAppsByUserId } = require('../../../../data')
 
 module.exports = {
     method: 'POST',
@@ -36,17 +40,19 @@ module.exports = {
         request.logger.info('In handler %s', request.path)
 
         const knex = h.context.db
+        const appId = request.params.appId
 
         const currentUser = await getCurrentUserFromRequest(request, knex)
-        const appDeveloperId = await getAppDeveloperId(
-            request.params.appId,
-            knex
-        )
+        const isManager = currentUserIsManager(request)
 
-        if (
-            !currentUserIsManager(request) &&
-            appDeveloperId !== currentUser.id
-        ) {
+        const userApps = await getOrganisationAppsByUserId(currentUser.id, knex)
+        const canUploadMedia =
+            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+
+        debug('isManager:', isManager)
+        debug('canUploadMedia:', canUploadMedia)
+
+        if (!canUploadMedia) {
             return h
                 .response({ message: `You don't have access to edit that app` })
                 .code(401)
@@ -58,8 +64,6 @@ module.exports = {
         const trx = await knex.transaction()
 
         let imageId = null
-
-        const appId = request.params.appId
 
         const { id } = await addAppMedia(
             {
