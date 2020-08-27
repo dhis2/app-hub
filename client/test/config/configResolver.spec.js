@@ -27,7 +27,7 @@ describe('ConfigResolver', () => {
     describe('getConfig()', () => {
         const override = {
             routes: { baseAppName: 'baseAppName' },
-            ui: { dhisVersions: ['2.34'] },
+            ui: { dhisVersions: ['3.34'] },
         }
         const addition = {
             another: 'setting',
@@ -116,7 +116,21 @@ describe('ConfigResolver', () => {
             expect(DirectDefaultConfig.routes.baseAppName).to.be.equal('/')
             expect(conf.routes.baseAppName).to.equal('baseAppName')
             //should deep merge
-            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
+            expect(
+                Object.keys(conf.ui).every(k =>
+                    Object.prototype.hasOwnProperty.call(DirectDefaultConfig, k)
+                )
+            )
+            expect(
+                DirectDefaultConfig.ui.dhisVersions.every(v =>
+                    conf.ui.dhisVersions.includes(v)
+                )
+            )
+            expect(
+                conf.ui.dhisVersions.every(v =>
+                    override.ui.dhisVersions.includes(v)
+                )
+            )
 
             expect(DirectDefaultConfig).to.not.have.property('another')
             expect(conf)

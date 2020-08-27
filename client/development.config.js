@@ -10,7 +10,16 @@ module.exports = {
         baseAppName: '/',
     },
     ui: {
-        dhisVersions: ['2.34', '2.33', '2.32', '2.31', '2.30', '2.29', '2.28'],
+        dhisVersions: [
+            '2.35',
+            '2.34',
+            '2.33',
+            '2.32',
+            '2.31',
+            '2.30',
+            '2.29',
+            '2.28',
+        ],
         appStatusToDisplayName: {
             NOT_APPROVED: 'Rejected',
             PENDING: 'Pending',
