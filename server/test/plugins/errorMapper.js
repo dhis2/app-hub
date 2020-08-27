@@ -124,12 +124,12 @@ describe('ErrorMapperPlugin', () => {
             expect(res.statusCode).to.be.equal(400)
         })
 
-        it('joi validation-errors should be ignored in handler, so they should return 500', async () => {
+        it('joi validation-errors should return 400-errors when returned from handlers', async () => {
             const res = await server.inject({
                 method: 'POST',
                 url: '/validationInHandler',
             })
-            expect(res.statusCode).to.be.equal(500)
+            expect(res.statusCode).to.be.equal(400)
         })
         it('should ignore and rethrow internal errors', async () => {
             const res = await server.inject({

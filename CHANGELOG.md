@@ -1,3 +1,50 @@
+# [2.7.0](https://github.com/dhis2/app-hub/compare/v2.6.4...v2.7.0) (2020-08-27)
+
+
+### Bug Fixes
+
+* improve config tests ([ccacce7](https://github.com/dhis2/app-hub/commit/ccacce74109e4041ebd082868e3013854615f54d))
+
+
+### Features
+
+* add 2.35 as supported dhis2-version ([b41e802](https://github.com/dhis2/app-hub/commit/b41e802018a19afb610928653b8d08aa3aedee8e))
+
+## [2.6.4](https://github.com/dhis2/app-hub/compare/v2.6.3...v2.6.4) (2020-08-26)
+
+
+### Bug Fixes
+
+* allow a developer to delete his own versions ([dfaf618](https://github.com/dhis2/app-hub/commit/dfaf61803525cd019ef6c534893d96d5a43711e2))
+* allow devs to delete images on own apps ([5987bd0](https://github.com/dhis2/app-hub/commit/5987bd0e41548001933f450cedc8d0d8db345958))
+* allow devs to upload media to own apps ([be87503](https://github.com/dhis2/app-hub/commit/be87503c44e2104622cb1d5e7c52c5c16aa8f9f9))
+
+## [2.6.3](https://github.com/dhis2/app-hub/compare/v2.6.2...v2.6.3) (2020-08-25)
+
+
+### Bug Fixes
+
+* change filename in download url ([658b471](https://github.com/dhis2/app-hub/commit/658b471e37fe004a8b15b8bbb11cb7adcdc1ad2e))
+* use slug + version as filename on download ([23bbb04](https://github.com/dhis2/app-hub/commit/23bbb04c6f4cd6524a978adab08daa7c1d65c092))
+
+## [2.6.2](https://github.com/dhis2/app-hub/compare/v2.6.1...v2.6.2) (2020-08-25)
+
+
+### Bug Fixes
+
+* use wildcard for matching patch-versions ([4d96a7b](https://github.com/dhis2/app-hub/commit/4d96a7bcdd6727e2aea8bb7181066c2c32a5ae55))
+
+## [2.6.1](https://github.com/dhis2/app-hub/compare/v2.6.0...v2.6.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* **createversion:** add try-catch for parsing json ([0de1a50](https://github.com/dhis2/app-hub/commit/0de1a5049c47250dbab6a47d6035d0fa51d8542d))
+* fix tests ([b39bbc6](https://github.com/dhis2/app-hub/commit/b39bbc6163e47a103f2919791716c6d62dd5d0a8))
+* **createappversion:** allow null demoUrl ([45acd4a](https://github.com/dhis2/app-hub/commit/45acd4ad8842b1064c342ec0d6d1a6c9219a05b6))
+* **editversion:** actually allow null for demourl ([c9154e2](https://github.com/dhis2/app-hub/commit/c9154e23201803c977789403ac3c470201ae9bd4))
+* **errormapper:** map Joi-errors to 400-badrequest errors ([fad7757](https://github.com/dhis2/app-hub/commit/fad775734de4bc1fa7bd85ca64d9addd8fdce063))
+
 # [2.6.0](https://github.com/dhis2/app-hub/compare/v2.5.2...v2.6.0) (2020-06-15)
 
 
