@@ -1,3 +1,10 @@
+## [2.7.1](https://github.com/dhis2/app-hub/compare/v2.7.0...v2.7.1) (2020-09-01)
+
+
+### Bug Fixes
+
+* prevent error when saving unmodified version ([572cd2d](https://github.com/dhis2/app-hub/commit/572cd2d4ba56cbdb7e7eb9fd02d9a700e39ce350))
+
 # [2.7.0](https://github.com/dhis2/app-hub/compare/v2.6.4...v2.7.0) (2020-08-27)
 
 
