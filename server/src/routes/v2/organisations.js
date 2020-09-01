@@ -235,12 +235,17 @@ module.exports = [
                 )
                 if (userToAdd && userToAdd.id) {
                     try {
-                        await Organisation.addUserById(org.id, userToAdd.id, trx)
-
-                    } catch(e) {
+                        await Organisation.addUserById(
+                            org.id,
+                            userToAdd.id,
+                            trx
+                        )
+                    } catch (e) {
                         const wrapped = wrapError(e)
-                        if(wrapped instanceof UniqueViolationError) {
-                            throw Boom.conflict('User is already a member of that organisation.')
+                        if (wrapped instanceof UniqueViolationError) {
+                            throw Boom.conflict(
+                                'User is already a member of that organisation.'
+                            )
                         }
                         throw e
                     }
@@ -251,8 +256,6 @@ module.exports = [
             }
 
             return db.transaction(addUserToOrganisation)
-
-           
         },
     },
     {

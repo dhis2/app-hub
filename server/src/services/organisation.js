@@ -1,6 +1,7 @@
 const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
 const Organisation = require('../models/v2/Organisation')
+const Boom = require('@hapi/boom')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
@@ -11,6 +12,26 @@ const getOrganisationQuery = db =>
         'organisation.updated_at',
         'organisation.created_at'
     )
+const checkSlugExists = async (slug, knex) => {
+    const slugMatch = await knex('organisation')
+        .select('name')
+        .where('slug', slug)
+        .limit(1)
+    if (slugMatch.length > 0) {
+        return slugMatch[0].name
+    }
+    return false
+}
+
+const ensureUniqueSlug = async (slug, knex) => {
+    const matchedOrgName = await checkSlugExists(slug, knex)
+    if (matchedOrgName) {
+        throw Boom.conflict(
+            `Organisation already exists or is too similar to existing organisation (${matchedOrgName})`
+        )
+    }
+    return slug
+}
 
 /**
  * Creates an organisation.
@@ -34,25 +55,6 @@ const create = async ({ userId, name }, db) => {
         .returning(['id'])
 
     return Organisation.parseDatabaseJson(organisation)
-}
-
-const ensureUniqueSlug = async (originalSlug, db) => {
-    let slug = originalSlug
-    let slugUniqueness = 2
-    let foundUniqueSlug = false
-    while (!foundUniqueSlug) {
-        const [{ count }] = await db('organisation')
-            .count('id')
-            .where('slug', slug)
-        if (count > 0) {
-            slug = `${originalSlug}-${slugUniqueness}`
-            slugUniqueness++
-        } else {
-            foundUniqueSlug = true
-        }
-    }
-
-    return slug
 }
 
 const find = async ({ filters }, db) => {
@@ -166,4 +168,5 @@ module.exports = {
     removeUser,
     hasUser,
     getUsersInOrganisation,
+    ensureUniqueSlug,
 }
