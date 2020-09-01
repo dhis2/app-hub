@@ -140,6 +140,12 @@ class VersionListEdit extends Component {
     }
 
     handleSubmitRow(version) {
+        //if nothing was changed, just behave the same way as clicking cancel
+        if (!this.state.editedValues[version.id]) {
+            this.handleCancelRow(version)
+            return
+        }
+
         const errors = validate(this.state.editedValues[version.id])
 
         if (Object.keys(errors).length > 0) {
