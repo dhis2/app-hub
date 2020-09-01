@@ -1,4 +1,5 @@
 import * as actions from '../constants/actionTypes'
+import * as dialogTypes from '../constants/dialogTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
 import { Auth } from '../api/api'
@@ -586,6 +587,7 @@ const addOrganisationMember = action$ =>
                                 orgId: orgId,
                             },
                         },
+                        actionCreators.closeDialog(),
                     ]
                 })
                 .catch(e => {
@@ -636,20 +638,23 @@ const addOrganisation = action$ =>
             const { name } = action.payload
             return api
                 .addOrganisation(name)
-                .then(response => [{
-                    type: actions.ORGANISATION_ADD_SUCCESS,
-                    payload: response,
-                },  {
-                    type: actions.ORGANISATIONS_LOAD,
-                    payload: {}
-                },
-            ])
+                .then(response => [
+                    {
+                        type: actions.ORGANISATION_ADD_SUCCESS,
+                        payload: response,
+                    },
+                    {
+                        type: actions.ORGANISATIONS_LOAD,
+                        payload: {},
+                    },
+                    actionCreators.closeDialog(),
+                ])
                 .catch(e => [
                     actionCreators.actionErrorCreator(
                         actions.ORGANISATION_ADD_ERROR,
                         e
-                    )]
-                )
+                    ),
+                ])
         }),
         mergeAll()
     )

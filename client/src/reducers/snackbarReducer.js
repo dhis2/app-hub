@@ -70,6 +70,13 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
+        case actionTypes.ORGANISATION_ADD_SUCCESS: {
+            return {
+                ...state,
+                message: 'Organisation created',
+            }
+        }
+
         case actionTypes.SNACKBAR_EMPTY: {
             return {
                 ...emptySnackbar,
