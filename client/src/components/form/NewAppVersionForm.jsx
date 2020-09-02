@@ -1,17 +1,18 @@
-import React, { Component, PropTypes } from 'react'
+// eslint-disable-next-line react/no-deprecated
+import React, { PropTypes } from 'react'
+
 import { connect } from 'react-redux'
-import { Card, CardText } from 'material-ui/Card'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
-import config from '../../../config'
+
 import { validateZipFile, validateURL } from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
-const DHISVersions = config.ui.dhisVersions
+import DHISVersionItems from '../appVersion/VersionItems'
 
 const validate = values => {
     const errors = {}
@@ -26,21 +27,15 @@ const validate = values => {
 }
 
 const NewAppVersionForm = props => {
-    const { handleSubmit, pristine, submitting, submitFailed, channels } = props
+    const { handleSubmit, submitFailed, channels } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
 
     const onSub = values => {
-        const data = {
-            version: values.version,
-            minDhisVersion: values.minVer,
-            maxDhisVersion: values.maxVer,
-            channel: values.channel,
-            demoUrl: values.demoUrl || '',
-        }
+        values.demoUrl = values.demoUrl || ''
         const file = values.file[0]
-        return props.submitted({ data, file: file })
+        return props.submitted({ data: values, file: file })
     }
 
     const loading = channels.loading
@@ -67,18 +62,19 @@ const NewAppVersionForm = props => {
             />{' '}
             <br />
             <Field
-                style={{ display: 'block' }}
-                name="minVer"
-                component={formUtils.renderAutoCompleteField}
+                name="minDhisVersion"
+                component={formUtils.renderSelectField}
                 label="Minimum DHIS version"
-                dataSource={DHISVersions}
-            />
+            >
+                {DHISVersionItems}
+            </Field>
             <Field
-                name="maxVer"
-                component={formUtils.renderAutoCompleteField}
+                name="maxDhisVersion"
+                component={formUtils.renderSelectField}
                 label="Maximum DHIS version"
-                dataSource={DHISVersions}
-            />
+            >
+                {DHISVersionItems}
+            </Field>
             <Field
                 name="channel"
                 component={formUtils.renderSelectField}
@@ -106,7 +102,10 @@ const NewAppVersionForm = props => {
 }
 
 NewAppVersionForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    submitFailed: PropTypes.bool.isRequired,
     submitted: PropTypes.func.isRequired,
+    channels: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
