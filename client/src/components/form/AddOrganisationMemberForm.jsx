@@ -12,7 +12,7 @@ import { Field, reduxForm, Form } from 'redux-form'
 
 const validate = values => {
     const errors = {}
-    if(!values.email) {
+    if (!values.email) {
         errors.email = 'Required'
     }
 
@@ -35,12 +35,14 @@ const AddOrganisationMemberForm = props => {
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <Field
-                name="email"
-                component={formUtils.renderTextField}
-                autoFocus
-                label="Email address"
-            />
+            <div style={{height: '72px'}}>
+                <Field
+                    name="email"
+                    component={formUtils.renderTextField}
+                    autoFocus
+                    label="Email address"
+                />
+            </div>
         </Form>
     )
 }

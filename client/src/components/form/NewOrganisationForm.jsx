@@ -12,7 +12,7 @@ import { Field, reduxForm, Form } from 'redux-form'
 
 const validate = values => {
     const errors = {}
-    if(!values.name) {
+    if (!values.name) {
         errors.name = 'Required'
     }
 
@@ -21,7 +21,7 @@ const validate = values => {
 
 const NewOrganisationForm = props => {
     const { handleSubmit, pristine, submitting } = props
-    
+
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -35,15 +35,19 @@ const NewOrganisationForm = props => {
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <Field
-                name="name"
-                component={formUtils.renderTextField}
-                autoFocus
-                label="Organisation name"
-            />
+            <div style={{ height: '72px' }}>
+                <Field
+                    name="name"
+                    component={formUtils.renderTextField}
+                    autoFocus
+                    label="Organisation name"
+                />
+            </div>
         </Form>
     )
 }
 
 NewOrganisationForm.propTypes = {}
-export default reduxForm({ form: 'newOrganisation', validate })(NewOrganisationForm)
+export default reduxForm({ form: 'newOrganisation', validate })(
+    NewOrganisationForm
+)
