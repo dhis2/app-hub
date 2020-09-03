@@ -11,12 +11,14 @@ const routes = require('../routes/index.js')
 const defaultNotFoundRoute = {
     method: 'GET',
     path: '/{p*}',
-    handler: () => {
-        return {
-            statusCode: 404,
-            error: 'Not Found',
-            message: 'Not Found',
-        }
+    handler: (request, h) => {
+        return h
+            .response({
+                statusCode: 404,
+                error: 'Not Found',
+                message: 'Not Found',
+            })
+            .code(404)
     },
 }
 
