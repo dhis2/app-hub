@@ -6,6 +6,22 @@ const createUserValidationFunc = require('../security/createUserValidationFunc')
 
 const routes = require('../routes/index.js')
 
+// This is needed to override staticFrontendRoutes's catch-all route
+// so that 404s under /api is not redirected to index.html
+const defaultNotFoundRoute = {
+    method: 'GET',
+    path: '/{p*}',
+    handler: (request, h) => {
+        return h
+            .response({
+                statusCode: 404,
+                error: 'Not Found',
+                message: 'Not Found',
+            })
+            .code(404)
+    },
+}
+
 const apiRoutesPlugin = {
     name: 'DHIS2 App Hub Backend',
     register: async (server, options) => {
@@ -72,7 +88,7 @@ const apiRoutesPlugin = {
             }
         }
 
-        server.route(routes)
+        server.route([...routes, defaultNotFoundRoute])
     },
 }
 
