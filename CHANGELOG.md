@@ -1,3 +1,11 @@
+## [2.7.2](https://github.com/dhis2/app-hub/compare/v2.7.1...v2.7.2) (2020-09-04)
+
+
+### Bug Fixes
+
+* **apiroutes:** do not redirect 404 under /api to index ([af45fc5](https://github.com/dhis2/app-hub/commit/af45fc50c0d653469c7400b4ecd400dd01744831))
+* **apiroutes:** set 404-statuscode ([8235e57](https://github.com/dhis2/app-hub/commit/8235e57ae7dabbd912f874e1412fe5e3487e871b))
+
 ## [2.7.1](https://github.com/dhis2/app-hub/compare/v2.7.0...v2.7.1) (2020-09-01)
 
 
