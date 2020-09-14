@@ -294,6 +294,12 @@ function userInfoReducer(
 
 function organisationReducer(state = { ...initialState, list: {} }, action) {
     switch (action.type) {
+        case actionTypes.ORGANISATION_ADD_SUCCESS: {
+            return {
+                ...state,
+                list: [...state.list, action.payload.id],
+            }
+        }
         case actionTypes.ME_LOAD_SUCCESS: {
             return {
                 ...state,
