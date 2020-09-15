@@ -13,7 +13,11 @@ import Theme from '../../../styles/theme'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
 import * as userSelectors from '../../../selectors/userSelectors'
 import * as organisationSelectors from '../../../selectors/organisationSelectors'
-import { loadOrganisation, openDialog } from '../../../actions/actionCreators'
+import {
+    loadOrganisation,
+    editOrganisation,
+    openDialog,
+} from '../../../actions/actionCreators'
 import * as dialogTypes from '../../../constants/dialogTypes'
 import OrganisationMemberList from './OrganisationMemberList'
 import RaisedButton from 'material-ui/RaisedButton/RaisedButton'
@@ -37,7 +41,6 @@ const styles = {
     },
 }
 class OrganisationView extends Component {
-
     componentDidMount() {
         this.props.loadOrganisation(this.props.match.params.slug)
     }
@@ -45,7 +48,7 @@ class OrganisationView extends Component {
     render() {
         const { organisation } = this.props
         if (!organisation || !organisation.users) return null
-        
+
         const subtitle = (
             <div>
                 Owner: {organisation.owner.name} <br />
@@ -63,25 +66,33 @@ class OrganisationView extends Component {
                         //subtitle={subtitle}
                         titleStyle={{ fontSize: '2em' }}
                     >
-                        <IconButton
-                            style={styles.rightIconButtonStyle}
-                            //onClick={onOpenEditApp}
-                        >
-                            <i className="material-icons">edit</i>
-                        </IconButton>
+                        {this.props.canEdit && (
+                            <IconButton
+                                style={styles.rightIconButtonStyle}
+                                onClick={() =>
+                                    this.props.openEditOrganisationDialog(
+                                        this.props.organisation
+                                    )
+                                }
+                            >
+                                <i className="material-icons">edit</i>
+                            </IconButton>
+                        )}
                     </CardHeader>
 
                     <CardText
                         style={Theme.paddedCard}
                         className="multiline-content"
                     >
-                        All members of an organisation is allowed to upload apps on behalf of the organisation. 
-                        Members may add new members to the organisation. Only the owner of the organisation is allowed to rename it.
+                        All members of an organisation is allowed to upload apps
+                        on behalf of the organisation. Members may add new
+                        members to the organisation. Only the owner of the
+                        organisation is allowed to rename it.
                     </CardText>
                 </Card>
                 <Card style={styles.paddedCard}>
                     <FloatingActionButton
-                    style={styles.floatingActionButton}
+                        style={styles.floatingActionButton}
                         mini={true}
                         title="Add Member"
                         onClick={() =>
@@ -99,7 +110,7 @@ class OrganisationView extends Component {
                         className="multiline-content"
                     >
                         <OrganisationMemberList
-                        organisation={organisation}
+                            organisation={organisation}
                             members={organisation.users}
                             owner={organisation.owner}
                         />
@@ -130,6 +141,11 @@ const mapDispatchToProps = dispatch => ({
         dispatch(
             openDialog(dialogTypes.ADD_ORGANISATION_MEMBER, { organisation })
         ),
+    openEditOrganisationDialog: organisation => {
+        dispatch(
+            openDialog(dialogTypes.EDIT_ORGANISATION_DIALOG, { organisation })
+        )
+    },
     ...bindActionCreators({ loadOrganisation }, dispatch),
 })
 

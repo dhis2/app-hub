@@ -659,6 +659,30 @@ const addOrganisation = action$ =>
         mergeAll()
     )
 
+const editOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_EDIT),
+        concatMap(action => {
+            const { orgId, ...editObject } = action.payload
+            return api
+                .editOrganisation(orgId, editObject)
+                .then(() => [
+                    {
+                        type: actions.ORGANISATION_EDIT_SUCCESS,
+                        payload: action.payload
+                    },
+                    actionCreators.closeDialog(),
+                ])
+                .catch(e =>
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_EDIT_ERROR,
+                        e
+                    )
+                )
+        }),
+        mergeAll()
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -683,5 +707,6 @@ export default combineEpics(
     loadOrganisation,
     addOrganisationMember,
     removeOrganisationMember,
-    addOrganisation
+    addOrganisation,
+    editOrganisation
 )

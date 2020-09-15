@@ -37,6 +37,20 @@ const organisations = (state = initialState, action) => {
             }
         }
 
+        case actions.ORGANISATION_EDIT_SUCCESS : {
+            const { orgId, name } = action.payload
+            return {
+                ...state,
+                byId: {
+                    ...state.byId,
+                    [action.payload.orgId]: {
+                        ...state.byId[orgId],
+                        name
+                    }
+                }
+            }
+        }
+
         case actions.ORGANISATION_LOAD_SUCCESS: {
             const response = action.payload;
             

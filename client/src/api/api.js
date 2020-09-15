@@ -281,3 +281,15 @@ export function addOrganisation(name) {
         }
     )
 }
+
+export function editOrganisation(id, { name }) {
+    return apiV2.request(`organisations/${id}`, {
+        useAuth: true
+    }, {
+        method: 'PATCH',
+        body: JSON.stringify({ name }),
+        headers: {
+            'content-type': 'application/json',
+        }
+    })
+}

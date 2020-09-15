@@ -37,6 +37,7 @@ export class AddOrganisationMemberDialog extends Component {
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
                 contentStyle={{maxWidth: '600px'}}
+                autoCloseOnApprove={false}
             >
                 <NoteBlock>
                         The new member must have logged in with the

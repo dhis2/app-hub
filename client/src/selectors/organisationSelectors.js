@@ -40,4 +40,4 @@ export const isMember = (state, orgId) => {
     return getUserOrganisationIds(state).includes(orgId)
 }
 
-export const canEditOrganisation = (state, orgId) => isOwner(state, orgId) || isMember(state, orgId)
+export const canEditOrganisation = (state, orgId) => isOwner(state, orgId) || isManager(state)

@@ -9,6 +9,7 @@ import EditImageDialog from './EditImageDialog'
 import ConfirmGeneric from './ConfirmGeneric'
 import AddOrganisationMemberDialog from './AddOrganisationMemberDialog'
 import NewOrganisationDialog from './NewOrganisationDialog'
+import EditOrganisationDialog from './EditOrganisationDialog'
 
 const DialogComponents = {}
 DialogComponents[dialogTypes.NEW_VERSION] = NewAppVersionDialog
@@ -18,6 +19,7 @@ DialogComponents[dialogTypes.EDIT_IMAGE] = EditImageDialog
 DialogComponents[dialogTypes.CONFIRM_GENERIC] = ConfirmGeneric
 DialogComponents[dialogTypes.ADD_ORGANISATION_MEMBER] = AddOrganisationMemberDialog
 DialogComponents[dialogTypes.NEW_ORGANISATION_DIALOG] = NewOrganisationDialog
+DialogComponents[dialogTypes.EDIT_ORGANISATION_DIALOG] = EditOrganisationDialog
 
 class DialogRoot extends Component {
     constructor(props) {
