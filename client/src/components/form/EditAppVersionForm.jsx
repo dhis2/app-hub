@@ -85,12 +85,6 @@ const EditAppVersionForm = props => {
             />{' '}
             <br />
             <Field
-                name="demoUrl"
-                component={formUtils.renderTextField}
-                fullWidth
-                label="Demo URL"
-            />
-            <Field
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}
                 label="Minimum DHIS version"
@@ -111,6 +105,12 @@ const EditAppVersionForm = props => {
             >
                 {releaseChannels}
             </Field>
+            <Field
+                name="demoUrl"
+                component={formUtils.renderTextField}
+                fullWidth
+                label="Demo URL"
+            />
         </Form>
     )
 }
