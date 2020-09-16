@@ -153,9 +153,7 @@ module.exports = [
                 }),
             },
             response: {
-                schema: Joi.object({
-                    id: Joi.string().uuid(),
-                }),
+                schema: OrgModel.definition
             },
         },
         handler: async (request, h) => {
@@ -177,9 +175,7 @@ module.exports = [
                     )
                 }
                 await Organisation.update(organisation.id, updateObj, db)
-                return {
-                    id: organisation.id,
-                }
+                return Organisation.findOne(request.params.orgId, false, db)
             }
 
             const transaction = await db.transaction(updateOrganisation)

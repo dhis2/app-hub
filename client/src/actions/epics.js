@@ -14,6 +14,7 @@ import {
     catchError,
     filter,
     distinctUntilChanged,
+    tap,
 } from 'rxjs/operators'
 import { of, from, merge } from 'rxjs'
 import { startAsyncValidation, stopAsyncValidation } from 'redux-form'
@@ -664,23 +665,31 @@ const editOrganisation = action$ =>
         ofType(actions.ORGANISATION_EDIT),
         concatMap(action => {
             const { orgId, ...editObject } = action.payload
-            return api
-                .editOrganisation(orgId, editObject)
-                .then(() => [
-                    {
-                        type: actions.ORGANISATION_EDIT_SUCCESS,
-                        payload: action.payload,
-                    },
-                    actionCreators.closeDialog(),
-                ])
-                .catch(e => [
-                    actionCreators.actionErrorCreator(
+            return from(api.editOrganisation(orgId, editObject)).pipe(
+                switchMap(orgResult => {
+                    return merge(
+                        of({
+                            type: actions.ORGANISATION_EDIT_SUCCESS,
+                            payload: orgResult,
+                        }).pipe(
+                            // need to update url if slug changed
+                            tap(action =>
+                                history.push(
+                                    `/user/organisations/${action.payload.slug}`
+                                )
+                            )
+                        ),
+                        of(actionCreators.closeDialog())
+                    )
+                }),
+                catchError(e =>
+                    [actionCreators.actionErrorCreator(
                         actions.ORGANISATION_EDIT_ERROR,
                         e
-                    ),
-                ])
-        }),
-        mergeAll()
+                    )]
+                )
+            )
+        })
     )
 
 export default combineEpics(

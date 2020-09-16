@@ -12,6 +12,7 @@ const getOrganisationQuery = db =>
         'organisation.updated_at',
         'organisation.created_at'
     )
+
 const checkSlugExists = async (slug, knex) => {
     const slugMatch = await knex('organisation')
         .select('name')
@@ -116,7 +117,26 @@ const getUsersInOrganisation = async (orgId, knex) => {
 
 const update = async (id, updateData, db) => {
     const dbData = Organisation.formatDatabaseJson(updateData)
-        return db('organisation')
+
+    // update slug if name changed
+    if (updateData.name) {
+        const slug = slugify(updateData.name, { lower: true })
+        // check if slug exists, but allow current org's slug to be the same (eg. case of name updated)
+        const slugMatch = await db('organisation')
+            .select('name')
+            .where('slug', slug)
+            .whereNot('id', id)
+            .limit(1)
+        if (slugMatch.length > 0) {
+            throw Boom.conflict(
+                `Organisation already exists or is too similar to existing organisation (${slugMatch[0].name})`
+            )
+        }
+
+        dbData.slug = slug
+    }
+
+    return db('organisation')
         .update(dbData)
         .where({ id })
 }

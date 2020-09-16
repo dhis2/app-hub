@@ -38,14 +38,15 @@ const organisations = (state = initialState, action) => {
         }
 
         case actions.ORGANISATION_EDIT_SUCCESS : {
-            const { orgId, name } = action.payload
+            const updatedOrg = action.payload
+            const orgId = updatedOrg.id
             return {
                 ...state,
                 byId: {
                     ...state.byId,
-                    [action.payload.orgId]: {
+                    [orgId]: {
                         ...state.byId[orgId],
-                        name
+                        ...updatedOrg
                     }
                 }
             }
