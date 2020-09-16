@@ -8,6 +8,10 @@ const validate = values => {
         errors.name = 'Required'
     }
 
+    if (values.name && values.name.length > 100){
+        errors.name = 'Name is too long, maximum 100 characters allowed'
+    }
+
     return errors
 }
 
