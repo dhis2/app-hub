@@ -16,12 +16,27 @@ import DHISVersionItems from '../appVersion/VersionItems'
 
 const validate = values => {
     const errors = {}
-    const requiredFields = ['version', 'file', 'channel', 'minVer', 'maxVer']
+    const requiredFields = [
+        'version',
+        'file',
+        'channel',
+        'minDhisVersion',
+        'maxDhisVersion',
+    ]
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
         }
     })
+
+    if (
+        values.minDhisVersion &&
+        values.maxDhisVersion &&
+        values.minDhisVersion > values.maxDhisVersion
+    ) {
+        errors.minDhisVersion = 'Cannot be higher than maximum version'
+        errors.maxDhisVersion = 'Cannot be lower than minimum version'
+    }
 
     return errors
 }

@@ -16,7 +16,7 @@ import DHISVersionItems from '../appVersion/VersionItems'
 
 const validate = values => {
     const errors = {}
-    const requiredFields = ['version']
+    const requiredFields = ['version', 'minDhisVersion', 'maxDhisVersion']
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
