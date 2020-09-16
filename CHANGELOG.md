@@ -1,3 +1,30 @@
+## [2.7.2](https://github.com/dhis2/app-hub/compare/v2.7.1...v2.7.2) (2020-09-04)
+
+
+### Bug Fixes
+
+* **apiroutes:** do not redirect 404 under /api to index ([af45fc5](https://github.com/dhis2/app-hub/commit/af45fc50c0d653469c7400b4ecd400dd01744831))
+* **apiroutes:** set 404-statuscode ([8235e57](https://github.com/dhis2/app-hub/commit/8235e57ae7dabbd912f874e1412fe5e3487e871b))
+
+## [2.7.1](https://github.com/dhis2/app-hub/compare/v2.7.0...v2.7.1) (2020-09-01)
+
+
+### Bug Fixes
+
+* prevent error when saving unmodified version ([572cd2d](https://github.com/dhis2/app-hub/commit/572cd2d4ba56cbdb7e7eb9fd02d9a700e39ce350))
+
+# [2.7.0](https://github.com/dhis2/app-hub/compare/v2.6.4...v2.7.0) (2020-08-27)
+
+
+### Bug Fixes
+
+* improve config tests ([ccacce7](https://github.com/dhis2/app-hub/commit/ccacce74109e4041ebd082868e3013854615f54d))
+
+
+### Features
+
+* add 2.35 as supported dhis2-version ([b41e802](https://github.com/dhis2/app-hub/commit/b41e802018a19afb610928653b8d08aa3aedee8e))
+
 ## [2.6.4](https://github.com/dhis2/app-hub/compare/v2.6.3...v2.6.4) (2020-08-26)
 
 
