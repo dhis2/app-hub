@@ -669,16 +669,16 @@ const editOrganisation = action$ =>
                 .then(() => [
                     {
                         type: actions.ORGANISATION_EDIT_SUCCESS,
-                        payload: action.payload
+                        payload: action.payload,
                     },
                     actionCreators.closeDialog(),
                 ])
-                .catch(e =>
+                .catch(e => [
                     actionCreators.actionErrorCreator(
                         actions.ORGANISATION_EDIT_ERROR,
                         e
-                    )
-                )
+                    ),
+                ])
         }),
         mergeAll()
     )

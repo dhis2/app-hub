@@ -116,8 +116,7 @@ const getUsersInOrganisation = async (orgId, knex) => {
 
 const update = async (id, updateData, db) => {
     const dbData = Organisation.formatDatabaseJson(updateData)
-
-    return db('organisation')
+        return db('organisation')
         .update(dbData)
         .where({ id })
 }
