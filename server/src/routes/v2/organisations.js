@@ -30,6 +30,9 @@ module.exports = [
                     name: Joi.filter().description(
                         'The name of the organisation'
                     ),
+                    slug: Joi.filter().description(
+                        'The slug of the organisation'
+                    ),
                     owner: Joi.filter(Joi.string().guid())
                         .operator(Joi.valid('eq'))
                         .description(
@@ -52,7 +55,6 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const filters = request.plugins.queryFilter
-
             const orgs = await Organisation.find({ filters }, db)
             return orgs
         },
