@@ -41,6 +41,7 @@ export class NewOrganisation extends Component {
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
                 contentStyle={{maxWidth: '600px'}}
+                autoCloseOnApprove={false}
             >
                 <NewOrganisationForm
                     ref={ref => {
