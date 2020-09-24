@@ -1,3 +1,13 @@
+## [2.7.3](https://github.com/dhis2/app-hub/compare/v2.7.2...v2.7.3) (2020-09-24)
+
+
+### Bug Fixes
+
+* add versionitems file ([c641be0](https://github.com/dhis2/app-hub/commit/c641be077bda239b608ba194cf82889ff74b802c))
+* consolidate version validations ([789bfc2](https://github.com/dhis2/app-hub/commit/789bfc2e6b1302f32a4ab1f3863bed35556e7c8e))
+* re-order fields to same as when creating ([3630275](https://github.com/dhis2/app-hub/commit/3630275bf43ea2bc207766ed4d03f204e49e3f91))
+* **version:** use select-field when editing version ([c1e6158](https://github.com/dhis2/app-hub/commit/c1e6158926d611ecc3c90375ca0586794e70ef5e))
+
 ## [2.7.2](https://github.com/dhis2/app-hub/compare/v2.7.1...v2.7.2) (2020-09-04)
 
 
