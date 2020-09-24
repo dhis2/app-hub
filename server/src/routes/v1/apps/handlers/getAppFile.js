@@ -13,7 +13,7 @@ const {
 module.exports = {
     method: 'GET',
     path:
-        '/v1/apps/download/{organisation_slug}/{appver_slug}/{app_version}.zip',
+        '/v1/apps/download/{organisation_slug}/{appver_slug}_{app_version}.zip',
     config: {
         auth: { strategy: 'token', mode: 'try' },
         tags: ['api', 'v1'],
