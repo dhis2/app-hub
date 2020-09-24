@@ -52,6 +52,7 @@ const apiRoutesPlugin = {
                 ),
             })
         } else {
+            // eslint-disable-next-line no-unused-vars
             server.auth.scheme('no-auth', (server, options) => ({
                 authenticate: async (request, reply) => {
                     const user = await knex('users')

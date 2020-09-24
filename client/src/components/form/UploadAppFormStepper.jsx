@@ -15,6 +15,7 @@ import FormStepper from './FormStepper'
 import { loadChannels } from '../../actions/actionCreators'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
+import DHISVersionItems from '../appVersion/VersionItems'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
@@ -83,9 +84,6 @@ const validate = values => {
 
 const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
-))
-const DHISVersionItems = config.ui.dhisVersions.map(version => (
-    <MenuItem key={version} value={version} primaryText={version} />
 ))
 
 const AppGeneralSection = props => {

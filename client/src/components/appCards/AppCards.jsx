@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+// eslint-disable-next-line react/no-deprecated
+import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import AppCardItem from './AppCardItem'
 import Grid from '../../material/Grid/Grid'
@@ -6,11 +7,7 @@ import Col from '../../material/Grid/Col'
 import Popover from 'material-ui/Popover'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
-import {
-    loadAllApps,
-    loadApprovedApps,
-    loadChannels,
-} from '../../actions/actionCreators'
+import { loadApprovedApps, loadChannels } from '../../actions/actionCreators'
 import {
     TextFilter,
     filterApp,
@@ -28,7 +25,6 @@ import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.scss'
-import Theme from '../../styles/theme'
 
 const debug = Debug('apphub:frontend:components:appcards')
 
@@ -128,7 +124,7 @@ class AppCards extends Component {
                 debug('app filter result', filterResult)
                 return filterResult
             })
-            .map((app, i) => (
+            .map(app => (
                 <Col key={app.id} span={3} phone={4} style={styles.appItem}>
                     <AppCardItem key={app.id} app={app} />
                 </Col>
@@ -139,7 +135,7 @@ class AppCards extends Component {
         const emptyApps = (
             <FadeAnimation appear>
                 <Col align="middle" span={12} style={styles.emptyApps}>
-                    <p>We couldn't find any apps.</p>
+                    <p>We couldn&#39;t find any apps.</p>
                 </Col>
             </FadeAnimation>
         )
@@ -162,7 +158,7 @@ class AppCards extends Component {
                                 open={this.state.filterOpen}
                                 anchorEl={this.state.filterAnchorEl}
                                 style={{ width: '200px' }}
-                                onRequestClose={r =>
+                                onRequestClose={() =>
                                     this.setState({ filterOpen: false })
                                 }
                             >
@@ -212,6 +208,16 @@ class AppCards extends Component {
     }
 }
 
+AppCards.propTypes = {
+    appChannelFilter: PropTypes.string,
+    appList: PropTypes.object,
+    appSearchFilter: PropTypes.string,
+    appTypeFilter: PropTypes.string,
+    channels: PropTypes.object,
+    loadApps: PropTypes.func,
+    loadChannels: PropTypes.func,
+}
+
 const mapStateToProps = state => ({
     appList: state.appsList,
     appTypeFilter: state.form.appTypeFilter,
@@ -229,7 +235,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AppCards)
+export default connect(mapStateToProps, mapDispatchToProps)(AppCards)
