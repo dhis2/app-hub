@@ -115,6 +115,7 @@ class OrganisationView extends Component {
                             owner={organisation.owner}
                             canChangeOwner={this.props.canEdit}
                             changeOwner={this.props.changeOwner}
+                            currentUserId={this.props.currentUserId}
                         />
                     </CardText>
                 </Card>
@@ -135,6 +136,7 @@ const mapStateToProps = (state, ownProps) => {
     return {
         organisation,
         sortedOrgMembers,
+        currentUserId: userSelectors.getUserInfo(state).userId,
         canEdit:
             organisation &&
             organisationSelectors.canEditOrganisation(state, organisation.id),

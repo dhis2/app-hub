@@ -27,7 +27,7 @@ import { ListItem, List } from 'material-ui/List/'
 class OrganisationMemberList extends Component {
 
     render() {
-        const { members, owner, organisation } = this.props
+        const { members, owner, organisation, currentUserId } = this.props
         const orgId = organisation.id
         return (
             <List>
@@ -35,6 +35,7 @@ class OrganisationMemberList extends Component {
                     <MemberListItem
                         user={user}
                         key={user.id}
+                        currentUserId={currentUserId}
                         isOwner={owner.id === user.id}
                         onRemove={() => this.props.removeOrganisationMember(orgId, user.id)}
                         onChangeOwner={() => this.props.changeOwner(orgId, user.id)}
@@ -50,23 +51,8 @@ const mapDispatch = {
     removeOrganisationMember,
 }
 
-function MemberListItemMenu(props) {
-    return (
-        <IconMenu>
-            iconButtonElement=
-            {
-                <IconButton>
-                    <FontIcon className="material-icons">more_vert</FontIcon>
-                </IconButton>
-            }
-            <MenuItem></MenuItem>
-            <MenuItem onClick={() => {}} primaryText="Remove" />
-        </IconMenu>
-    )
-}
-
 function MemberListItem(props) {
-    const { user, isOwner, canChangeOwner } = props
+    const { user, isOwner, canChangeOwner, currentUserId } = props
 
     const memberListItemMenu = (
         <IconMenu
@@ -77,7 +63,7 @@ function MemberListItem(props) {
             }
         >
             <MenuItem
-                primaryText="Remove"
+                primaryText={currentUserId === user.id ? "Leave Organisation" : "Remove"}
                 disabled={isOwner}
                 title={isOwner && 'Cannot remove the owner of the organisation'}
                 onClick={!isOwner && props.onRemove}
