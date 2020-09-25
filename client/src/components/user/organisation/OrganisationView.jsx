@@ -111,8 +111,10 @@ class OrganisationView extends Component {
                     >
                         <OrganisationMemberList
                             organisation={organisation}
-                            members={organisation.users}
+                            members={this.props.sortedOrgMembers}
                             owner={organisation.owner}
+                            canChangeOwner={this.props.canEdit}
+                            changeOwner={this.props.changeOwner}
                         />
                     </CardText>
                 </Card>
@@ -128,8 +130,11 @@ const mapStateToProps = (state, ownProps) => {
         slug
     )
 
+    const sortedOrgMembers = organisation ? organisationSelectors.getSortedOrgMembers(state, organisation.id) : []
+
     return {
         organisation,
+        sortedOrgMembers,
         canEdit:
             organisation &&
             organisationSelectors.canEditOrganisation(state, organisation.id),
@@ -145,6 +150,9 @@ const mapDispatchToProps = dispatch => ({
         dispatch(
             openDialog(dialogTypes.EDIT_ORGANISATION_DIALOG, { organisation })
         )
+    },
+    changeOwner: (orgId, userId) => {
+        dispatch(editOrganisation(orgId, { owner: userId }))
     },
     ...bindActionCreators({ loadOrganisation }, dispatch),
 })

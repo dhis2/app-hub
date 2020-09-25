@@ -149,7 +149,7 @@ module.exports = [
                 payload: Joi.object({
                     name: OrgModel.definition.extract('name'),
                     owner: OrgModel.definition.extract('owner'),
-                }),
+                }).min(1),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
                 }),

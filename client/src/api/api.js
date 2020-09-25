@@ -282,12 +282,12 @@ export function addOrganisation(name) {
     )
 }
 
-export function editOrganisation(id, { name }) {
+export function editOrganisation(id, { name, owner }) {
     return apiV2.request(`organisations/${id}`, {
         useAuth: true
     }, {
         method: 'PATCH',
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name, owner }),
         headers: {
             'content-type': 'application/json',
         }

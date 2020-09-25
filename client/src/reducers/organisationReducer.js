@@ -18,6 +18,7 @@ const errorState = {
     error: true,
 }
 
+
 const organisations = (state = initialState, action) => {
     switch (action.type) {
         case actions.ORGANISATIONS_LOAD_SUCCESS:
@@ -40,6 +41,10 @@ const organisations = (state = initialState, action) => {
         case actions.ORGANISATION_EDIT_SUCCESS : {
             const updatedOrg = action.payload
             const orgId = updatedOrg.id
+
+            if(updatedOrg.owner !== state.byId[orgId].owner) {
+                updatedOrg.owner = state.byId[orgId].users.find(u => u.id === updatedOrg.owner)
+            }
             return {
                 ...state,
                 byId: {

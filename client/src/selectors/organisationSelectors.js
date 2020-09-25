@@ -1,5 +1,6 @@
-import { getUserOrganisationIds, getUserId, isManager } from './userSelectors'
+import { createSelector } from 'reselect'
 import { getFormSubmitErrors } from 'redux-form'
+import { getUserOrganisationIds, getUserId, isManager } from './userSelectors'
 
 export const getOrganisationById = (state, id) => getOrganisations(state)[id]
 
@@ -26,18 +27,37 @@ export const getAuthorizedOrganisationsList = state => {
         : getUserOrganisationsList(state)
 }
 
-
 export const hasAccessToOrganisation = (state, orgId) => {
-    return getAuthorizedOrganisationsList.findIndex(org => org.id === orgId)
+    return getAuthorizedOrganisationsList(state).findIndex(
+        org => org.id === orgId
+    )
 }
 
 export const isOwner = (state, orgId) => {
     const userId = getUserId(state)
-    return getOrganisationById(state, orgId).owner === userId
+    return getOrganisationById(state, orgId).owner.id === userId
 }
 
 export const isMember = (state, orgId) => {
     return getUserOrganisationIds(state).includes(orgId)
 }
 
-export const canEditOrganisation = (state, orgId) => isOwner(state, orgId) || isManager(state)
+export const canEditOrganisation = (state, orgId) =>
+    isOwner(state, orgId) || isManager(state)
+
+export const getOrgMembers = (state, orgId) =>
+    getOrganisationById(state, orgId).users || []
+
+export const getSortedOrgMembers = createSelector(
+    (state, orgId) => getOrganisationById(state, orgId).owner,
+    (state, orgId) => getOrgMembers(state, orgId),
+    (orgOwner, members) =>
+        [...members].sort((a, b) => {
+            if (a.id === orgOwner.id) {
+                return -1
+            }
+            if (b.id === orgOwner.id) {
+                return 1
+            }
+        })
+)

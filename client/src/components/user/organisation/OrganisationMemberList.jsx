@@ -25,13 +25,6 @@ import {
 import { ListItem, List } from 'material-ui/List/'
 
 class OrganisationMemberList extends Component {
-    renderRow() {
-        return (
-            <TableRow>
-                <TableRowColumn></TableRowColumn>
-            </TableRow>
-        )
-    }
 
     render() {
         const { members, owner, organisation } = this.props
@@ -44,6 +37,8 @@ class OrganisationMemberList extends Component {
                         key={user.id}
                         isOwner={owner.id === user.id}
                         onRemove={() => this.props.removeOrganisationMember(orgId, user.id)}
+                        onChangeOwner={() => this.props.changeOwner(orgId, user.id)}
+                        canChangeOwner={this.props.canChangeOwner}
                     />
                 ))}
             </List>
@@ -71,7 +66,7 @@ function MemberListItemMenu(props) {
 }
 
 function MemberListItem(props) {
-    const { user, isOwner } = props
+    const { user, isOwner, canChangeOwner } = props
 
     const memberListItemMenu = (
         <IconMenu
@@ -87,6 +82,12 @@ function MemberListItem(props) {
                 title={isOwner && 'Cannot remove the owner of the organisation'}
                 onClick={!isOwner && props.onRemove}
             />
+            {canChangeOwner && <MenuItem
+                primaryText="Promote to owner"
+                disabled={isOwner}
+                title={isOwner && 'User is already the owner'}
+                onClick={!isOwner && props.onChangeOwner}
+            />}
         </IconMenu>
     )
     return (
@@ -110,16 +111,6 @@ function MemberListItem(props) {
             hoverColor='none'
             style={{cursor: 'inherit'}}
         />
-    )
-    return (
-        <TableRow>
-            <TableRowColumn>{user.name}</TableRowColumn>
-            <TableRowColumn>
-                <IconButton>
-                    <FontIcon className="material-icons">more_vert</FontIcon>
-                </IconButton>
-            </TableRowColumn>
-        </TableRow>
     )
 }
 
