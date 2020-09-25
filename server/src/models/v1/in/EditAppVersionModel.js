@@ -5,7 +5,7 @@ const payloadSchema = joi.object({
         .string()
         .uri()
         .allow(''),
-    version: joi.string(),
+    version: joi.string().pattern(/_/, { invert: true }),
     minDhisVersion: joi
         .string()
         .required()
