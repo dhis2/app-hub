@@ -5,31 +5,15 @@ import { connect } from 'react-redux'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
-import semverValid from 'semver/functions/valid'
+import semverClean from 'semver/functions/valid'
 
-import { validateURL } from './ReduxFormUtils'
+import { validateURL, validateVersion } from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 import DHISVersionItems from '../appVersion/VersionItems'
-
-const SemanticVersionError = () => {
-    return (
-        <div style={{ whiteSpace: 'pre-wrap' }}>
-            Must be a semantic version. Use the form <span>x.x.x.</span>
-            <br />
-            <a
-                href="https://docs.npmjs.com/about-semantic-versioning"
-                target="_blank"
-            >
-                Click here
-            </a>{' '}
-            for more information{' '}
-        </div>
-    )
-}
 
 const validate = values => {
     const errors = {}
@@ -50,8 +34,8 @@ const validate = values => {
         }
     })
 
-    if (values.version && semverValid(values.version) == null) {
-        errors.version = <SemanticVersionError />
+    if (values.version) {
+        errors.version = validateVersion(values.version)
     }
 
     if (
@@ -105,7 +89,7 @@ const EditAppVersionForm = props => {
                 label="Version"
                 onBlur={event => {
                     const { value } = event.target
-                    const semverStr = semver.clean(value, {
+                    const semverStr = semverClean(value, {
                         loose: true,
                         includePrerelease: true,
                     })
