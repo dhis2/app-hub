@@ -17,7 +17,7 @@ const CreateModelAppData = Joi.object().keys({
     }),
     versions: Joi.array().items(
         Joi.object().keys({
-            version: Joi.string(),
+            version: Joi.string().pattern(/_/, { invert: true }),
             minDhisVersion: Joi.string(),
             maxDhisVersion: Joi.string().allow(''),
             demoUrl: Joi.string()
