@@ -1,16 +1,14 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card'
-import { Toolbar, ToolbarGroup, ToolbarTitle } from 'material-ui/Toolbar'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
-import Button from 'material-ui/RaisedButton'
 import ContentAdd from 'material-ui/svg-icons/content/add'
 import {
     loadUserApp,
     addImageToApp,
     openDialog,
     deleteAppVersion,
-    editAppVersion,
     addMultipleImagesToApp,
     setAppApproval,
 } from '../../../actions/actionCreators'
@@ -32,7 +30,6 @@ import {
     APP_STATUS_PENDING,
     APP_STATUS_REJECTED,
 } from '../../../constants/apiConstants'
-import Spinner from '../../utils/Spinner'
 
 class UserAppView extends Component {
     constructor(props) {
@@ -57,7 +54,7 @@ class UserAppView extends Component {
                 <p>
                     Are you sure you want to delete version{' '}
                     <i>{version.version} </i>
-                    for app '{this.props.app.name}'?
+                    for app &#39;{this.props.app.name}&#39;?
                 </p>
                 This cannot be undone.
             </div>
@@ -70,7 +67,7 @@ class UserAppView extends Component {
     }
 
     handleUploadImages(mergedFilesArray) {
-        const images = mergedFilesArray.map((image, i) => {
+        const images = mergedFilesArray.map(image => {
             const imageObj = {
                 image: {
                     caption: '',
@@ -88,7 +85,10 @@ class UserAppView extends Component {
     }
 
     handleEditVersion(version) {
-        this.props.editVersion(this.props.app.id, version)
+        this.props.editVersion({
+            appId: this.props.app.id,
+            appVersion: version,
+        })
     }
 
     handleSetAppApproval(status) {
@@ -102,15 +102,9 @@ class UserAppView extends Component {
         }
         const FABStyle = {
             margin: 0,
-            top: 0,
             right: 10,
             top: '-26px',
             position: 'absolute',
-        }
-        const rightIconButtonStyle = {
-            position: 'absolute',
-            top: 0,
-            right: '4px',
         }
 
         const cardStyle = {
@@ -181,7 +175,20 @@ class UserAppView extends Component {
     }
 }
 
-UserAppView.propTypes = {}
+UserAppView.propTypes = {
+    addImagesToApp: PropTypes.func,
+    app: PropTypes.object,
+    appLogo: PropTypes.object,
+    deleteVersion: PropTypes.func,
+    editVersion: PropTypes.func,
+    loadApp: PropTypes.func,
+    match: PropTypes.object,
+    openConfirmDeleteVersion: PropTypes.func,
+    openEditAppDialog: PropTypes.func,
+    openNewVersionDialog: PropTypes.func,
+    setAppApproval: PropTypes.func,
+    user: PropTypes.object,
+}
 
 const mapStateToProps = (state, ownProps) => ({
     app: selectors.getApp(state, ownProps.match.params.appId),
@@ -213,8 +220,8 @@ const mapDispatchToProps = dispatch => ({
     openEditAppDialog(dialogProps) {
         dispatch(openDialog(dialogType.EDIT_APP, dialogProps))
     },
-    editVersion(appId, version) {
-        dispatch(editAppVersion(appId, version))
+    editVersion(dialogProps) {
+        dispatch(openDialog(dialogType.EDIT_VERSION, dialogProps))
     },
 
     openConfirmDeleteVersion(dialogProps) {
@@ -237,15 +244,6 @@ const UserAppCardHeader = ({
         position: 'absolute',
         top: 0,
         right: '4px',
-    }
-
-    const rightIconsStyle = {
-        position: 'absolute',
-        top: '0px',
-        right: '70px',
-        height: '48px',
-        display: 'flex',
-        alignItems: 'center',
     }
 
     const cardHeaderRightStyle = {
@@ -354,8 +352,9 @@ const UserAppCardHeader = ({
 UserAppCardHeader.propTypes = {
     app: PropTypes.object.isRequired,
     onOpenEditApp: PropTypes.func.isRequired,
-    onAppApproval: PropTypes.func,
+    appLogo: PropTypes.object,
     isManager: PropTypes.bool,
+    onAppApproval: PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAppView)

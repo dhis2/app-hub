@@ -1,6 +1,5 @@
 // eslint-disable-next-line react/no-deprecated
 import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
 
 import {
     Table,
@@ -12,36 +11,7 @@ import {
 } from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
-import MenuItem from 'material-ui/MenuItem'
-import TextField from 'material-ui/TextField'
-import Theme from '../../styles/theme'
-import SelectField from 'material-ui/SelectField'
-
-import merge from 'lodash/fp/merge'
-
-import ErrorOrLoading from '../utils/ErrorOrLoading'
-
-import { loadChannels } from '../../actions/actionCreators'
-
 import { getAuth } from '../../utils/AuthService'
-
-import { validateURL } from '../form/ReduxFormUtils'
-
-const validate = values => {
-    const errors = {}
-    const uriFields = ['demoUrl']
-
-    uriFields.forEach(field => {
-        if (values[field]) {
-            const validationError = validateURL(values[field])
-            if (validationError) {
-                errors[field] = validationError
-            }
-        }
-    })
-
-    return errors
-}
 
 const styles = {
     tableHeaderColumn: {
@@ -93,148 +63,23 @@ class VersionListEdit extends Component {
         this.state = {
             open: false,
             anchorEl: null,
-            editingFields: [],
-            editedValues: {},
-            errors: {},
         }
 
         this.renderRow = this.renderRow.bind(this)
-        this.handleCancelRow = this.handleCancelRow.bind(this)
-    }
-
-    componentDidMount() {
-        this.props.loadChannels()
-    }
-
-    handleOpenEditField(e) {
-        this.setState({
-            ...this.state,
-            open: !this.state.open,
-            anchorEl: e.currentTarget,
-        })
-    }
-
-    handleCloseEditField() {
-        this.setState({
-            ...this.state,
-            open: !this.state.open,
-            anchorEl: null,
-        })
     }
 
     handleEditRow(version) {
-        this.setState({
-            ...this.state,
-            editingFields: [...this.state.editingFields, version.id],
-        })
+        this.props.handleEdit(version)
     }
 
-    handleCancelRow(version) {
-        this.setState({
-            ...this.state,
-            errors: {},
-            editingFields: this.state.editingFields.filter(
-                v => v !== version.id
-            ),
-        })
-    }
-
-    handleSubmitRow(version) {
-        const errors = validate(this.state.editedValues[version.id])
-
-        if (Object.keys(errors).length > 0) {
-            //Validation errors
-            this.setState({
-                ...this.state,
-                errors,
-            })
-            return false
-        }
-
-        this.setState({
-            ...this.state,
-            editingFields: this.state.editingFields.filter(
-                v => v !== version.id
-            ),
-        })
-        const newVersion = {
-            ...this.state.editedValues[version.id],
-        }
-        const mergedVers = { ...version, ...newVersion }
-
-        this.props.handleEdit(mergedVers)
-    }
-
-    /**
-     * Generic onChange-handler of TextFields to update the state according to value of textField
-     * @param versionId of version being edited
-     * @param fieldName of field being edited, should be the same as the name in store
-     * @param e event fired from TextField
-     * @param newValue from TextField
-     */
-    //eslint-disable-next-line max-params
-    handleValueChange(versionId, fieldName, e, newValue) {
-        const editedValues = this.state.editedValues
-        this.setState({
-            editedValues: merge(editedValues, {
-                [versionId]: { [fieldName]: newValue },
-            }),
-        })
-    }
-
-    handleChannelChange(versionId, e, selectedIndex) {
-        const editedValues = this.state.editedValues
-        this.setState({
-            editedValues: merge(editedValues, {
-                [versionId]: {
-                    channel: this.props.channels.list[selectedIndex].name,
-                },
-            }),
-        })
-    }
-
-    hasError(fieldName) {
-        return !!this.state.errors[fieldName]
-    }
-
-    validationErrorMessage(fieldName) {
-        return this.state.errors[fieldName] || ''
-    }
-
-    versionRowHasError(version) {
-        return (
-            this.state.editedValues[version.id] &&
-            Object.keys(this.state.errors).length > 0
-        )
-    }
-
-    renderRow(version, edit) {
+    renderRow(appVersion) {
         const editIcon = (
             <IconButton
                 key="edit"
                 style={styles.iconButton}
-                onTouchTap={() => this.handleEditRow(version)}
+                onTouchTap={() => this.handleEditRow(appVersion)}
             >
                 <TableIcon>edit</TableIcon>
-            </IconButton>
-        )
-        const submitIcon = (
-            <IconButton
-                key="submit"
-                style={styles.iconButton}
-                onTouchTap={() => this.handleSubmitRow(version)}
-            >
-                <TableIcon>check</TableIcon>
-            </IconButton>
-        )
-
-        const cancelIcon = (
-            <IconButton
-                key="cancel"
-                style={styles.iconButton}
-                onTouchTap={() => this.handleCancelRow(version)}
-            >
-                <TableIcon>clear</TableIcon>
             </IconButton>
         )
 
@@ -248,158 +93,64 @@ class VersionListEdit extends Component {
             </IconButton>
         )
 
-        const DHISReleaseChannels = this.props.channels.list.map(channel => (
-            <MenuItem
-                key={'channel_' + channel.name}
-                value={channel.name}
-                primaryText={channel.name}
-            />
-        ))
-
-        const editingIcons = [submitIcon, cancelIcon]
-        const normalIcons = [editIcon, deleteIcon]
-
-        const values = merge(version, this.state.editedValues[version.id])
+        const editIcons = [editIcon, deleteIcon]
+        const {
+            demoUrl,
+            version,
+            minDhisVersion,
+            maxDhisVersion,
+            channel,
+            created,
+        } = appVersion
 
         //auth0 stores the JWT token in localStorage
         //as only authenticated users can edit an app, just assume this exists in this component
         const token = getAuth().getToken()
 
         //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
-        const downloadUrlWithToken = `${values.downloadUrl}?token=${token}`
+        const downloadUrlWithToken = `${version.downloadUrl}?token=${token}`
 
-        //TODO: add error instead of passing false to ErrorOrLoading
         return (
-            <TableRow
-                key={version.id}
-                className={this.versionRowHasError(version) ? 'hasError' : null}
-            >
+            <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
                     <a href={downloadUrlWithToken} title="Download">
                         <TableIcon>file_download</TableIcon>
                     </a>
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
-                    {edit ? (
-                        <div>
-                            <TextField
-                                defaultValue={version.demoUrl}
-                                onChange={this.handleValueChange.bind(
-                                    this,
-                                    version.id,
-                                    'demoUrl'
-                                )}
-                                name="demoUrl"
-                            />
-                            {this.hasError('demoUrl') && (
-                                <span className="error">
-                                    {this.validationErrorMessage('demoUrl')}
-                                </span>
-                            )}
-                        </div>
-                    ) : values.demoUrl ? (
-                        <a
-                            href={`${values.demoUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ color: Theme.palette.primary1Color }}
-                        >
-                            Demo
-                        </a>
-                    ) : (
-                        'N/A'
-                    )}
+                    {demoUrl || 'N/A'}
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
-                    {edit ? (
-                        <TextField
-                            defaultValue={values.version}
-                            onChange={this.handleValueChange.bind(
-                                this,
-                                version.id,
-                                'version'
-                            )}
-                            name="version"
-                        />
-                    ) : (
-                        values.version
-                    )}
+                    {version}
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
-                    {edit ? (
-                        <TextField
-                            defaultValue={values.minDhisVersion}
-                            onChange={this.handleValueChange.bind(
-                                this,
-                                version.id,
-                                'minDhisVersion'
-                            )}
-                            name="minDhisVersion"
-                        />
-                    ) : (
-                        values.minDhisVersion
-                    )}
+                    {minDhisVersion}
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
-                    {edit ? (
-                        <TextField
-                            defaultValue={values.maxDhisVersion}
-                            onChange={this.handleValueChange.bind(
-                                this,
-                                version.id,
-                                'maxDhisVersion'
-                            )}
-                            name="maxDhisVersion"
-                        />
-                    ) : (
-                        values.maxDhisVersion
-                    )}
+                    {maxDhisVersion}
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
-                    {edit && !this.props.channels.loading ? (
-                        <SelectField
-                            value={values.channel}
-                            onChange={this.handleChannelChange.bind(
-                                this,
-                                version.id
-                            )}
-                            name="channel"
-                        >
-                            {DHISReleaseChannels}
-                        </SelectField>
-                    ) : edit && this.props.channels.loading ? (
-                        <ErrorOrLoading
-                            loading={this.props.channels.loading}
-                            error={false}
-                        />
-                    ) : (
-                        version.channel
-                    )}
+                    {channel}
                 </TableRowColumn>
                 <TableRowColumn
                     style={styles.tableRowColumn}
-                    title={new Date(version.created).toLocaleString()}
+                    title={new Date(created).toLocaleString()}
                 >
-                    {new Date(version.created).toLocaleDateString()}
+                    {new Date(created).toLocaleDateString()}
                 </TableRowColumn>
                 <TableRowColumn style={styles.editColumn}>
-                    {edit ? editingIcons : normalIcons}
+                    {editIcons}
                 </TableRowColumn>
             </TableRow>
         )
     }
 
     render() {
-        const props = this.props
+        const { versionList } = this.props
 
-        const versions = props.versionList
+        const versions = versionList
             .sort((a, b) => b.created - a.created)
-            .map(version => {
-                const editingRow =
-                    this.state.editingFields.indexOf(version.id) > -1
-
-                return this.renderRow(version, editingRow)
-            })
+            .map(version => this.renderRow(version))
 
         return (
             <Table selectable={false}>
@@ -471,20 +222,8 @@ class VersionListEdit extends Component {
 VersionListEdit.propTypes = {
     handleDelete: PropTypes.func.isRequired,
     handleEdit: PropTypes.func.isRequired,
-    loadChannels: PropTypes.func.isRequired,
     versionList: PropTypes.array.isRequired,
-    channels: PropTypes.array,
 }
 VersionListEdit.defaultProps = {}
 
-const mapStateToProps = state => ({
-    channels: state.channels,
-})
-
-const mapDispatchToProps = dispatch => ({
-    loadChannels() {
-        dispatch(loadChannels())
-    },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(VersionListEdit)
+export default VersionListEdit

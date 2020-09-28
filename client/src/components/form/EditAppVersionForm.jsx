@@ -6,7 +6,7 @@ import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
 
-import { validateZipFile, validateURL } from './ReduxFormUtils'
+import { validateURL } from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
@@ -16,16 +16,20 @@ import DHISVersionItems from '../appVersion/VersionItems'
 
 const validate = values => {
     const errors = {}
-    const requiredFields = [
-        'version',
-        'file',
-        'channel',
-        'minDhisVersion',
-        'maxDhisVersion',
-    ]
+    const requiredFields = ['version', 'minDhisVersion', 'maxDhisVersion']
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'Required'
+        }
+    })
+
+    const uriFields = ['demoUrl']
+    uriFields.forEach(field => {
+        if (values[field]) {
+            const validationError = validateURL(values[field])
+            if (validationError) {
+                errors[field] = validationError
+            }
         }
     })
 
@@ -41,27 +45,31 @@ const validate = values => {
     return errors
 }
 
-const NewAppVersionForm = props => {
-    const { handleSubmit, submitFailed, channels } = props
+const EditAppVersionForm = props => {
+    const { handleSubmit, submitted } = props
+
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
 
     const onSub = values => {
         values.demoUrl = values.demoUrl || ''
-        const file = values.file[0]
-        return props.submitted({ data: values, file: file })
+        return submitted(values)
     }
 
-    const loading = channels.loading
+    const { channels } = props
 
-    const releaseChannels = channels.list.map(channel => (
-        <MenuItem
-            key={channel.name}
-            value={channel.name}
-            primaryText={channel.name}
-        />
-    ))
+    const loading = channels ? channels.loading : false
+
+    const releaseChannels = channels
+        ? channels.list.map(channel => (
+              <MenuItem
+                  key={channel.name}
+                  value={channel.name}
+                  primaryText={channel.name}
+              />
+          ))
+        : null
 
     //TODO: add error instead of passing false to ErrorOrLoading
     return loading ? (
@@ -100,27 +108,17 @@ const NewAppVersionForm = props => {
             <Field
                 name="demoUrl"
                 component={formUtils.renderTextField}
+                fullWidth
                 label="Demo URL"
-                validate={validateURL}
-            />
-            <Field
-                name="file"
-                component={formUtils.renderUploadField}
-                validate={validateZipFile}
-                formMeta={{ submitFailed }}
-                accept=".zip"
-                label="Upload version"
-                id="file"
             />
         </Form>
     )
 }
 
-NewAppVersionForm.propTypes = {
+EditAppVersionForm.propTypes = {
     handleSubmit: PropTypes.func.isRequired,
-    submitFailed: PropTypes.bool.isRequired,
-    submitted: PropTypes.func.isRequired,
     channels: PropTypes.object,
+    submitted: PropTypes.func,
 }
 
 const mapStateToProps = state => ({
@@ -133,11 +131,11 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-const ConnectedNewAppVersionForm = connect(
+const ConnectedEditAppVersionForm = connect(
     mapStateToProps,
     mapDispatchToProps
-)(NewAppVersionForm)
+)(EditAppVersionForm)
 
-export default reduxForm({ form: 'newAppVersionForm', validate })(
-    ConnectedNewAppVersionForm
+export default reduxForm({ form: 'editAppVersionForm', validate })(
+    ConnectedEditAppVersionForm
 )
