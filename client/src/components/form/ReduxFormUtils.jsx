@@ -8,6 +8,7 @@ import Toggle from 'material-ui/Toggle'
 import React from 'react'
 import _size from 'lodash/size'
 import _keys from 'lodash/keys'
+import semverValid from 'semver/functions/valid'
 
 export const renderTextField = ({
     input,
@@ -204,3 +205,26 @@ export const validateURL = value => {
 
 export const hasError = errors =>
     _keys(errors).find(key => _size(errors[key]) > 0) !== undefined
+
+const SemanticVersionError = () => {
+    return (
+        <div style={{ whiteSpace: 'pre-wrap' }}>
+            Must be a semantic version. Use the form <span>x.x.x.</span>
+            <br />
+            <a
+                href="https://docs.npmjs.com/about-semantic-versioning"
+                target="_blank"
+            >
+                Click here
+            </a>{' '}
+            for more information
+        </div>
+    )
+}
+
+export const validateVersion = version => {
+    if (version && semverValid(version) == null) {
+        return <SemanticVersionError />
+    }
+    return undefined
+}

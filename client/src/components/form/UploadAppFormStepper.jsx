@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import config from '../../../config'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, FormSection } from 'redux-form'
+import semverClean from 'semver/functions/clean'
 import * as formUtils from './ReduxFormUtils'
 import {
     validateZipFile,
     validateImageFile,
     validateURL,
     hasError,
+    validateVersion,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
 
@@ -17,6 +19,7 @@ import { loadChannels } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import DHISVersionItems from '../appVersion/VersionItems'
 
+const FORM_NAME = 'uploadAppForm'
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
     label: config.ui.appTypeToDisplayName[key],
@@ -145,6 +148,18 @@ const AppVersionSection = props => {
                 component={formUtils.renderTextField}
                 autoFocus
                 label="Version *"
+                validate={validateVersion}
+                onBlur={event => {
+                    const { value } = event.target
+                    const semverStr = semverClean(value, {
+                        loose: true,
+                        includePrerelease: true,
+                    })
+                    if (semverStr) {
+                        event.preventDefault()
+                        props.change('version.version', semverStr)
+                    }
+                }}
             />
             <br />
             <Field
@@ -337,7 +352,7 @@ class UploadAppFormStepper extends Component {
             <ErrorOrLoading loading={loading} error={false} />
         ) : (
             <FormStepper
-                form="uploadAppForm"
+                form={FORM_NAME}
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[

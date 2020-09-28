@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
+import semverValid from 'semver/functions/valid'
 
 import { validateURL } from './ReduxFormUtils'
 
@@ -13,6 +14,22 @@ import { loadChannels } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 
 import DHISVersionItems from '../appVersion/VersionItems'
+
+const SemanticVersionError = () => {
+    return (
+        <div style={{ whiteSpace: 'pre-wrap' }}>
+            Must be a semantic version. Use the form <span>x.x.x.</span>
+            <br />
+            <a
+                href="https://docs.npmjs.com/about-semantic-versioning"
+                target="_blank"
+            >
+                Click here
+            </a>{' '}
+            for more information{' '}
+        </div>
+    )
+}
 
 const validate = values => {
     const errors = {}
@@ -33,6 +50,10 @@ const validate = values => {
         }
     })
 
+    if (values.version && semverValid(values.version) == null) {
+        errors.version = <SemanticVersionError />
+    }
+
     if (
         values.minDhisVersion &&
         values.maxDhisVersion &&
@@ -46,7 +67,7 @@ const validate = values => {
 }
 
 const EditAppVersionForm = props => {
-    const { handleSubmit, submitted } = props
+    const { handleSubmit, submitted, change } = props
 
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
@@ -82,7 +103,18 @@ const EditAppVersionForm = props => {
                 autoFocus
                 fullWidth
                 label="Version"
-            />{' '}
+                onBlur={event => {
+                    const { value } = event.target
+                    const semverStr = semver.clean(value, {
+                        loose: true,
+                        includePrerelease: true,
+                    })
+                    if (semverStr) {
+                        event.preventDefault()
+                        change('version', semverStr)
+                    }
+                }}
+            />
             <br />
             <Field
                 name="minDhisVersion"
