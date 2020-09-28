@@ -1,3 +1,14 @@
+## [2.7.4](https://github.com/dhis2/app-hub/compare/v2.7.3...v2.7.4) (2020-09-28)
+
+
+### Bug Fixes
+
+* **download:** encode download-components ([179cae4](https://github.com/dhis2/app-hub/commit/179cae458b3480ea42209d6f51808315999c9200))
+* **download:** encode download-components, use / as seperators instead of _ ([44663b9](https://github.com/dhis2/app-hub/commit/44663b94328b239e7d168f01a2d802e7c528d1cb))
+* **migration:** remove down migration ([b22fa9d](https://github.com/dhis2/app-hub/commit/b22fa9d6d3546f355037ff42f59c6b5d5a63e31b))
+* **migration:** replace _ with . in app_version ([693cee2](https://github.com/dhis2/app-hub/commit/693cee2c0ad3f7d8edd1e25a1f596c307b6f5e60))
+* **version:** prevent version to contain underscore ([90ebb36](https://github.com/dhis2/app-hub/commit/90ebb3688853cfffb1844495f484ee7b52f5989c))
+
 ## [2.7.3](https://github.com/dhis2/app-hub/compare/v2.7.2...v2.7.3) (2020-09-24)
 
 
