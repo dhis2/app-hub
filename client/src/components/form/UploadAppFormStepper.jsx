@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import config from '../../../config'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, FormSection } from 'redux-form'
-import semverClean from 'semver/functions/clean'
 import * as formUtils from './ReduxFormUtils'
 import {
     validateZipFile,
@@ -143,23 +142,9 @@ const AppVersionSection = props => {
     ))
     return (
         <FormSection name={props.name}>
-            <Field
-                name="version"
-                component={formUtils.renderTextField}
-                autoFocus
-                label="Version *"
-                validate={validateVersion}
-                onBlur={event => {
-                    const { value } = event.target
-                    const semverStr = semverClean(value, {
-                        loose: true,
-                        includePrerelease: true,
-                    })
-                    if (semverStr) {
-                        event.preventDefault()
-                        props.change('version.version', semverStr)
-                    }
-                }}
+            <formUtils.VersionField
+                name={'version'}
+                fieldUpdater={value => props.change('version.version', value)}
             />
             <br />
             <Field

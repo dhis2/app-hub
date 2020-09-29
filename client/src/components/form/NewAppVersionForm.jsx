@@ -6,7 +6,7 @@ import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
 
-import { validateZipFile, validateURL } from './ReduxFormUtils'
+import { validateZipFile, validateURL, validateVersion} from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
@@ -38,11 +38,15 @@ const validate = values => {
         errors.maxDhisVersion = 'Cannot be lower than minimum version'
     }
 
+    if (values.version) {
+        errors.version = validateVersion(values.version)
+    }
+
     return errors
 }
 
 const NewAppVersionForm = props => {
-    const { handleSubmit, submitFailed, channels } = props
+    const { handleSubmit, submitFailed, channels, change } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -68,14 +72,10 @@ const NewAppVersionForm = props => {
         <ErrorOrLoading loading={loading} error={false} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
-            <Field
+            <formUtils.VersionField
                 name="version"
-                component={formUtils.renderTextField}
-                autoFocus
-                fullWidth
-                label="Version"
-            />{' '}
-            <br />
+                fieldUpdater={value => change('version', value)}
+            />
             <Field
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}

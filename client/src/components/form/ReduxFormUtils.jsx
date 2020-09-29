@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import AutoComplete from 'material-ui/AutoComplete'
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
@@ -5,25 +7,48 @@ import FontIcon from 'material-ui/FontIcon'
 import SelectField from 'material-ui/SelectField'
 import UploadFileField from './UploadFileField'
 import Toggle from 'material-ui/Toggle'
-import React from 'react'
 import _size from 'lodash/size'
 import _keys from 'lodash/keys'
 import semverValid from 'semver/functions/valid'
+import semverClean from 'semver/functions/clean'
+import Theme from '../../styles/theme'
+import { Field } from 'redux-form'
 
 export const renderTextField = ({
     input,
     label,
+    helpText,
+    hintText,
     forceShowErrors,
     meta: { touched, error },
     ...props
-}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={(touched || forceShowErrors) && error}
-        {...input}
-        {...props}
-    />
+}) => {
+    const showHelpText = !forceShowErrors && (!error || !touched) && helpText
+    const helpTextStyle = {
+        position: 'relative',
+        fontSize: '12px',
+        lineHeight: '12px',
+        color: Theme.palette.textHeaderColor,
+        bottom: '1px',
+        marginBottom: '16px'
+    }
+
+    return (
+        <span>
+            <TextField
+                hintText={hintText || label}
+                floatingLabelText={label}
+                errorText={(touched || forceShowErrors) && error}
+                {...input}
+                {...props}
+            />
+            {showHelpText && <div style={helpTextStyle}>{helpText}</div>}
+        </span>
+    )
+}
+
+export const renderTextFieldWithHelpText = ({ props, ...rest }) => (
+    <renderTextField errorStyle={{ color: 'rgba(0, 0, 0, 0.3)' }} {...props} />
 )
 
 export const renderUploadField = ({
@@ -206,18 +231,21 @@ export const validateURL = value => {
 export const hasError = errors =>
     _keys(errors).find(key => _size(errors[key]) > 0) !== undefined
 
+const VersionHelpText =
+    'Version number must use semantic versioning with format x.x.x (e.g. 2.3.1).'
 const SemanticVersionError = () => {
     return (
-        <div style={{ whiteSpace: 'pre-wrap' }}>
-            Must be a semantic version. Use the form <span>x.x.x.</span>
+        <div>
+            {VersionHelpText}
             <br />
             <a
                 href="https://docs.npmjs.com/about-semantic-versioning"
                 target="_blank"
+                style={{ textDecoration: 'underline' }}
             >
-                Click here
-            </a>{' '}
-            for more information
+                Read more about semantic versioning
+            </a>
+            .
         </div>
     )
 }
@@ -227,4 +255,37 @@ export const validateVersion = version => {
         return <SemanticVersionError />
     }
     return undefined
+}
+
+/**
+ * Wraps Redux-Form Field with Version-specific
+ * Props are forwarded to Field-Component
+ * @param {} props forwarded to Field-component
+ * @param props.fieldUpdater function that updates the value of the field
+ */
+export const VersionField = ({ fieldUpdater, ...props }) => (
+    <Field
+        component={renderTextField}
+        autoFocus
+        fullWidth
+        label="Version *"
+        helpText={<SemanticVersionError />}
+        onBlur={event => {
+            const { value } = event.target
+            const semverStr = semverClean(value, {
+                loose: true,
+                includePrerelease: true,
+            })
+            if (semverStr) {
+                event.preventDefault()
+                fieldUpdater(semverStr)
+            }
+        }}
+        {...props}
+    />
+)
+
+VersionField.propTypes = {
+    // A function that will update the field when called with the value
+    fieldUpdater: PropTypes.func.required,
 }

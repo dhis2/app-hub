@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
-import semverClean from 'semver/functions/valid'
 
 import { validateURL, validateVersion } from './ReduxFormUtils'
 
@@ -81,25 +80,10 @@ const EditAppVersionForm = props => {
         <ErrorOrLoading loading={loading} error={false} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
-            <Field
-                name="version"
-                component={formUtils.renderTextField}
-                autoFocus
-                fullWidth
-                label="Version"
-                onBlur={event => {
-                    const { value } = event.target
-                    const semverStr = semverClean(value, {
-                        loose: true,
-                        includePrerelease: true,
-                    })
-                    if (semverStr) {
-                        event.preventDefault()
-                        change('version', semverStr)
-                    }
-                }}
+            <formUtils.VersionField
+                name={'version'}
+                fieldUpdater={value => change('version', value)}
             />
-            <br />
             <Field
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}
