@@ -14,6 +14,10 @@ import semverClean from 'semver/functions/clean'
 import Theme from '../../styles/theme'
 import { Field } from 'redux-form'
 
+const floatingLabelStyle = {
+    color: Theme.palette.textHeaderColor,
+}
+
 export const renderTextField = ({
     input,
     label,
@@ -30,20 +34,22 @@ export const renderTextField = ({
         lineHeight: '12px',
         color: Theme.palette.textHeaderColor,
         bottom: '1px',
-        marginBottom: '16px'
+        marginBottom: '16px',
     }
 
     return (
-        <span>
+        <div>
             <TextField
-                hintText={hintText || label}
+                floatingLabelStyle={floatingLabelStyle}
+                floatingLabelFixed={true}
                 floatingLabelText={label}
+                hintText={hintText || label}
                 errorText={(touched || forceShowErrors) && error}
                 {...input}
                 {...props}
             />
             {showHelpText && <div style={helpTextStyle}>{helpText}</div>}
-        </span>
+        </div>
     )
 }
 
@@ -96,6 +102,7 @@ export const renderTextFieldWithClearButton = ({
             <TextField
                 hintText={label}
                 floatingLabelText={label}
+                floatingLabelStyle={floatingLabelStyle}
                 errorText={(touched || forceShowErrors) && error}
                 {...input}
                 {...props}
@@ -131,6 +138,7 @@ export const renderAutoCompleteField = ({
 export const renderSelectField = ({
     input,
     label,
+    hintText,
     forceShowErrors,
     meta: { touched, error },
     children,
@@ -138,7 +146,10 @@ export const renderSelectField = ({
 }) => {
     return (
         <SelectField
+            floatingLabelStyle={floatingLabelStyle}
             floatingLabelText={label}
+            floatingLabelFixed
+            hintText={hintText}
             errorText={(touched || forceShowErrors) && error}
             {...input}
             onFocus={() => {}} //prevent reset of value when tabbing + enter
@@ -241,7 +252,7 @@ const SemanticVersionError = () => {
             <a
                 href="https://docs.npmjs.com/about-semantic-versioning"
                 target="_blank"
-                style={{ textDecoration: 'underline' }}
+                className={'link'}
             >
                 Read more about semantic versioning
             </a>

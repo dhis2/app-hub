@@ -50,6 +50,13 @@ a {
     text-decoration: inherit;
 }
 
+.link {
+    color: #0366d6;
+}
+.link:hover {
+    text-decoration: underline;
+}
+
 .paper {
     height: 100%;
     margin: 0 auto 0 auto;

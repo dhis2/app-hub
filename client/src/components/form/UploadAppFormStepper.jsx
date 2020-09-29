@@ -145,11 +145,12 @@ const AppVersionSection = props => {
             <formUtils.VersionField
                 name={'version'}
                 fieldUpdater={value => props.change('version.version', value)}
+                validate={validateVersion}
             />
-            <br />
             <Field
                 name="minVer"
                 component={formUtils.renderSelectField}
+                hintText={'Select version'}
                 label="Minimum DHIS version *"
             >
                 {DHISVersionItems}
@@ -159,6 +160,7 @@ const AppVersionSection = props => {
                 name="maxVer"
                 component={formUtils.renderSelectField}
                 label="Maximum DHIS version *"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -167,6 +169,7 @@ const AppVersionSection = props => {
                 name="channel"
                 component={formUtils.renderSelectField}
                 label="Release channel *"
+                hintText={'Select channel'}
             >
                 {releaseChannels}
             </Field>
