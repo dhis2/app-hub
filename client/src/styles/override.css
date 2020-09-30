@@ -51,9 +51,6 @@ a {
 }
 
 .link {
-    color: #0366d6;
-}
-.link:hover {
     text-decoration: underline;
 }
 

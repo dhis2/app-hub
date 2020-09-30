@@ -105,14 +105,13 @@ const AppGeneralSection = props => {
                 rows={1}
                 label="App Description"
             />
-            <br />
             <Field
                 name="sourceUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Source Code URL"
                 validate={validateURL}
             />
-            <br />
             <Field
                 name="appType"
                 component={formUtils.renderSelectField}
@@ -176,6 +175,7 @@ const AppVersionSection = props => {
             <br />
             <Field
                 name="demoUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Demo URL"
                 validate={validateURL}
@@ -189,6 +189,7 @@ const AppVersionSection = props => {
                 accept=".zip"
                 validate={validateZipFile}
                 label="Upload app *"
+                hintText="Select a file to upload"
             />
         </FormSection>
     )
@@ -209,19 +210,20 @@ const AppDeveloperSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="developerName"
+                fullWidth
                 autoFocus
                 component={formUtils.renderTextField}
                 label="Developer Name *"
             />
-            <br />
             <Field
                 name="developerEmail"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Developer Email *"
             />
-            <br />
             <Field
                 name="developerOrg"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Organisation *"
             />
@@ -261,6 +263,8 @@ const AppImageSection = props => {
             <br />
             <Field
                 name="imageDescription"
+                multiLine
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Image description"
             />

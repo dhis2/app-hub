@@ -35,6 +35,7 @@ export const renderTextField = ({
         color: Theme.palette.textHeaderColor,
         bottom: '1px',
         marginBottom: '16px',
+        width: props.fullWidth ? '100%' : '256px'
     }
 
     return (
@@ -59,6 +60,7 @@ export const renderTextFieldWithHelpText = ({ props, ...rest }) => (
 
 export const renderUploadField = ({
     input,
+    hintText,
     label,
     forceShowErrors,
     meta: { touched, error, dirty },
@@ -68,7 +70,8 @@ export const renderUploadField = ({
 }) => {
     return (
         <UploadFileField
-            hintText={label}
+            hintText={hintText || label}
+            label={label}
             handleUpload={files => {
                 input.onChange(files)
             }}
@@ -278,7 +281,6 @@ export const VersionField = ({ fieldUpdater, ...props }) => (
     <Field
         component={renderTextField}
         autoFocus
-        fullWidth
         label="Version *"
         helpText={<SemanticVersionError />}
         onBlur={event => {

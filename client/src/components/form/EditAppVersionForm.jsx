@@ -82,6 +82,7 @@ const EditAppVersionForm = props => {
         <Form onSubmit={handleSubmit(onSub)}>
             <formUtils.VersionField
                 name={'version'}
+                fullWidth
                 fieldUpdater={value => change('version', value)}
             />
             <Field

@@ -80,6 +80,7 @@ const NewAppVersionForm = props => {
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}
                 label="Minimum DHIS version"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -87,6 +88,7 @@ const NewAppVersionForm = props => {
                 name="maxDhisVersion"
                 component={formUtils.renderSelectField}
                 label="Maximum DHIS version"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -94,11 +96,13 @@ const NewAppVersionForm = props => {
                 name="channel"
                 component={formUtils.renderSelectField}
                 label="Release channel"
+                hintText={'Select channel'}
             >
                 {releaseChannels}
             </Field>
             <Field
                 name="demoUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Demo URL"
                 validate={validateURL}
@@ -110,6 +114,7 @@ const NewAppVersionForm = props => {
                 formMeta={{ submitFailed }}
                 accept=".zip"
                 label="Upload version"
+                hintText="Select a file to upload"
                 id="file"
             />
         </Form>
