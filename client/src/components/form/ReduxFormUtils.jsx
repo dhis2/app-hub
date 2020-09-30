@@ -35,7 +35,7 @@ export const renderTextField = ({
         color: Theme.palette.textHeaderColor,
         bottom: '1px',
         marginBottom: '16px',
-        width: props.fullWidth ? '100%' : '256px'
+        width: props.fullWidth ? '100%' : '256px',
     }
 
     return (
@@ -245,12 +245,11 @@ export const validateURL = value => {
 export const hasError = errors =>
     _keys(errors).find(key => _size(errors[key]) > 0) !== undefined
 
-const VersionHelpText =
-    'Version number must use semantic versioning with format x.x.x (e.g. 2.3.1).'
-const SemanticVersionError = () => {
+const SemanticVersionHelpText = () => {
     return (
         <div>
-            {VersionHelpText}
+            Version number must use semantic versioning with format x.x.x (e.g.
+            2.3.1).
             <br />
             <a
                 href="https://docs.npmjs.com/about-semantic-versioning"
@@ -266,39 +265,37 @@ const SemanticVersionError = () => {
 
 export const validateVersion = version => {
     if (version && semverValid(version) == null) {
-        return <SemanticVersionError />
+        return <SemanticVersionHelpText />
     }
     return undefined
 }
 
-/**
- * Wraps Redux-Form Field with Version-specific
- * Props are forwarded to Field-Component
- * @param {} props forwarded to Field-component
- * @param props.fieldUpdater function that updates the value of the field
- */
-export const VersionField = ({ fieldUpdater, ...props }) => (
-    <Field
-        component={renderTextField}
-        autoFocus
-        label="Version *"
-        helpText={<SemanticVersionError />}
-        onBlur={event => {
-            const { value } = event.target
-            const semverStr = semverClean(value, {
-                loose: true,
-                includePrerelease: true,
-            })
-            if (semverStr) {
-                event.preventDefault()
-                fieldUpdater(semverStr)
-            }
-        }}
-        {...props}
-    />
-)
+// Alias so we can render with JSX
+const TextFieldRF = renderTextField
 
-VersionField.propTypes = {
-    // A function that will update the field when called with the value
-    fieldUpdater: PropTypes.func.required,
+/**
+ * Wraps TextField with Version-specific props
+ * @param {} props forwarded to textfield-component
+ */
+export const VersionField = (props) => {
+    return (
+        <TextFieldRF
+            label="Version *"
+            helpText={<SemanticVersionHelpText />}
+            {...props}
+            onBlur={event => {
+                const { value } = event.target
+                const semverStr = semverClean(value, {
+                    loose: true,
+                    includePrerelease: true,
+                })
+                if (semverStr) {
+                    event.preventDefault()
+                    props.input.onBlur(semverStr)
+                } else {
+                    props.input.onBlur(event)
+                }
+            }}
+        />
+    )
 }

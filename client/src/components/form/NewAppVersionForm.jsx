@@ -72,9 +72,11 @@ const NewAppVersionForm = props => {
         <ErrorOrLoading loading={loading} error={false} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
-            <formUtils.VersionField
+            <Field
+                component={formUtils.VersionField}
+                autoFocus
                 name="version"
-                fieldUpdater={value => change('version', value)}
+                validate={validateVersion}
             />
             <Field
                 name="minDhisVersion"

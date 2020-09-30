@@ -119,13 +119,9 @@ class FormStepper extends Component {
             valid,
             reset,
             dirty,
-            change,
             submitting,
         } = this.props
 
-        const formProps = {
-            change
-        }
         const { stepIndex } = this.state
         const styles = {
             nextButton: {
@@ -185,7 +181,6 @@ class FormStepper extends Component {
                 <AnimateHeight height={this.state.sectionHeight}>
                     {React.cloneElement(this.props.sections[stepIndex], {
                         errors: currStepErrors,
-                        ...formProps
                     })}
                 </AnimateHeight>
 

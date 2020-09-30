@@ -80,10 +80,11 @@ const EditAppVersionForm = props => {
         <ErrorOrLoading loading={loading} error={false} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
-            <formUtils.VersionField
+            <Field
+                component={formUtils.VersionField}
+                validate={validateVersion}
                 name={'version'}
                 fullWidth
-                fieldUpdater={value => change('version', value)}
             />
             <Field
                 name="minDhisVersion"

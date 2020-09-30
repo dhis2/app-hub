@@ -93,6 +93,7 @@ const AppGeneralSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="appName"
+                autoFocus
                 component={formUtils.renderTextField}
                 fullWidth
                 label="App Name *"
@@ -141,10 +142,11 @@ const AppVersionSection = props => {
     ))
     return (
         <FormSection name={props.name}>
-            <formUtils.VersionField
-                name={'version'}
-                fieldUpdater={value => props.change('version.version', value)}
+            <Field
+                component={formUtils.VersionField}
                 validate={validateVersion}
+                autoFocus
+                name="version"
             />
             <Field
                 name="minVer"
