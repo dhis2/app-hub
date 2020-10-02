@@ -1,3 +1,19 @@
+# [2.8.0](https://github.com/dhis2/app-hub/compare/v2.7.4...v2.8.0) (2020-10-02)
+
+
+### Bug Fixes
+
+* **version:** fix UI-jump when tranisitioning between error and helptext ([b89acbf](https://github.com/dhis2/app-hub/commit/b89acbf657ea954bf2eef933cd29f079a9d71e47))
+* cleanup versiofield, add link style ([204da3e](https://github.com/dhis2/app-hub/commit/204da3ed776bdcbeca48a40066621285b73ae269))
+* misc form styling ([1d0b196](https://github.com/dhis2/app-hub/commit/1d0b1960aa6250a775eb049b4da38afcc623cbf3))
+* textheader and helpertext styling ([d5512ea](https://github.com/dhis2/app-hub/commit/d5512ea395540940b2f25db5edf7851b1858d4a9))
+
+
+### Features
+
+* **validation:** add semver validation backend ([6aac6e1](https://github.com/dhis2/app-hub/commit/6aac6e1a36c72435c29925975788e754601adbce))
+* add semver-validation on client ([d5a859c](https://github.com/dhis2/app-hub/commit/d5a859cf0f6a856f7a669af548bb1c020a1bce52))
+
 ## [2.7.4](https://github.com/dhis2/app-hub/compare/v2.7.3...v2.7.4) (2020-09-28)
 
 
