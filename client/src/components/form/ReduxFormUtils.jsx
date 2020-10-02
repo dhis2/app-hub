@@ -25,6 +25,7 @@ export const renderTextField = ({
     hintText,
     forceShowErrors,
     meta: { touched, error },
+    rootStyle,
     ...props
 }) => {
     const showHelpText = !forceShowErrors && (!error || !touched) && helpText
@@ -39,7 +40,7 @@ export const renderTextField = ({
     }
 
     return (
-        <div>
+        <div style={rootStyle}>
             <TextField
                 floatingLabelStyle={floatingLabelStyle}
                 floatingLabelFixed={true}
@@ -53,10 +54,6 @@ export const renderTextField = ({
         </div>
     )
 }
-
-export const renderTextFieldWithHelpText = ({ props, ...rest }) => (
-    <renderTextField errorStyle={{ color: 'rgba(0, 0, 0, 0.3)' }} {...props} />
-)
 
 export const renderUploadField = ({
     input,
@@ -296,6 +293,7 @@ export const VersionField = (props) => {
                     props.input.onBlur(event)
                 }
             }}
+            rootStyle={{height: '120px'}} // fixes jumping when transitioning between error and helptext
         />
     )
 }
