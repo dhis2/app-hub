@@ -31,6 +31,7 @@ export default getMuiTheme({
         pickerHeaderColor: blue500,
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
+        textHeaderColor: '#4A5768'
     },
 
     paddedCard: {

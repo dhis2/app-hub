@@ -6,7 +6,7 @@ import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
 
-import { validateURL } from './ReduxFormUtils'
+import { validateURL, validateVersion } from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
@@ -33,6 +33,10 @@ const validate = values => {
         }
     })
 
+    if (values.version) {
+        errors.version = validateVersion(values.version)
+    }
+
     if (
         values.minDhisVersion &&
         values.maxDhisVersion &&
@@ -46,7 +50,7 @@ const validate = values => {
 }
 
 const EditAppVersionForm = props => {
-    const { handleSubmit, submitted } = props
+    const { handleSubmit, submitted, change } = props
 
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
@@ -77,13 +81,11 @@ const EditAppVersionForm = props => {
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
             <Field
-                name="version"
-                component={formUtils.renderTextField}
-                autoFocus
+                component={formUtils.VersionField}
+                validate={validateVersion}
+                name={'version'}
                 fullWidth
-                label="Version"
-            />{' '}
-            <br />
+            />
             <Field
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}

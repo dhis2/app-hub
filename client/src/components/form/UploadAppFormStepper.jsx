@@ -9,6 +9,7 @@ import {
     validateImageFile,
     validateURL,
     hasError,
+    validateVersion,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
 
@@ -17,6 +18,7 @@ import { loadChannels } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import DHISVersionItems from '../appVersion/VersionItems'
 
+const FORM_NAME = 'uploadAppForm'
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
     label: config.ui.appTypeToDisplayName[key],
@@ -91,6 +93,7 @@ const AppGeneralSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="appName"
+                autoFocus
                 component={formUtils.renderTextField}
                 fullWidth
                 label="App Name *"
@@ -103,14 +106,13 @@ const AppGeneralSection = props => {
                 rows={1}
                 label="App Description"
             />
-            <br />
             <Field
                 name="sourceUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Source Code URL"
                 validate={validateURL}
             />
-            <br />
             <Field
                 name="appType"
                 component={formUtils.renderSelectField}
@@ -141,15 +143,15 @@ const AppVersionSection = props => {
     return (
         <FormSection name={props.name}>
             <Field
-                name="version"
-                component={formUtils.renderTextField}
+                component={formUtils.VersionField}
+                validate={validateVersion}
                 autoFocus
-                label="Version *"
+                name="version"
             />
-            <br />
             <Field
                 name="minVer"
                 component={formUtils.renderSelectField}
+                hintText={'Select version'}
                 label="Minimum DHIS version *"
             >
                 {DHISVersionItems}
@@ -159,6 +161,7 @@ const AppVersionSection = props => {
                 name="maxVer"
                 component={formUtils.renderSelectField}
                 label="Maximum DHIS version *"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -167,12 +170,14 @@ const AppVersionSection = props => {
                 name="channel"
                 component={formUtils.renderSelectField}
                 label="Release channel *"
+                hintText={'Select channel'}
             >
                 {releaseChannels}
             </Field>
             <br />
             <Field
                 name="demoUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Demo URL"
                 validate={validateURL}
@@ -186,6 +191,7 @@ const AppVersionSection = props => {
                 accept=".zip"
                 validate={validateZipFile}
                 label="Upload app *"
+                hintText="Select a file to upload"
             />
         </FormSection>
     )
@@ -206,19 +212,20 @@ const AppDeveloperSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="developerName"
+                fullWidth
                 autoFocus
                 component={formUtils.renderTextField}
                 label="Developer Name *"
             />
-            <br />
             <Field
                 name="developerEmail"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Developer Email *"
             />
-            <br />
             <Field
                 name="developerOrg"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Organisation *"
             />
@@ -258,6 +265,8 @@ const AppImageSection = props => {
             <br />
             <Field
                 name="imageDescription"
+                multiLine
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Image description"
             />
@@ -337,7 +346,7 @@ class UploadAppFormStepper extends Component {
             <ErrorOrLoading loading={loading} error={false} />
         ) : (
             <FormStepper
-                form="uploadAppForm"
+                form={FORM_NAME}
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[

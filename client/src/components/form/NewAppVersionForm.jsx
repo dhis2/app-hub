@@ -6,7 +6,7 @@ import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
 import { Field, Form, reduxForm } from 'redux-form'
 
-import { validateZipFile, validateURL } from './ReduxFormUtils'
+import { validateZipFile, validateURL, validateVersion} from './ReduxFormUtils'
 
 import { loadChannels } from '../../actions/actionCreators'
 
@@ -38,11 +38,15 @@ const validate = values => {
         errors.maxDhisVersion = 'Cannot be lower than minimum version'
     }
 
+    if (values.version) {
+        errors.version = validateVersion(values.version)
+    }
+
     return errors
 }
 
 const NewAppVersionForm = props => {
-    const { handleSubmit, submitFailed, channels } = props
+    const { handleSubmit, submitFailed, channels, change } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -69,17 +73,16 @@ const NewAppVersionForm = props => {
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>
             <Field
-                name="version"
-                component={formUtils.renderTextField}
+                component={formUtils.VersionField}
                 autoFocus
-                fullWidth
-                label="Version"
-            />{' '}
-            <br />
+                name="version"
+                validate={validateVersion}
+            />
             <Field
                 name="minDhisVersion"
                 component={formUtils.renderSelectField}
                 label="Minimum DHIS version"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -87,6 +90,7 @@ const NewAppVersionForm = props => {
                 name="maxDhisVersion"
                 component={formUtils.renderSelectField}
                 label="Maximum DHIS version"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -94,11 +98,13 @@ const NewAppVersionForm = props => {
                 name="channel"
                 component={formUtils.renderSelectField}
                 label="Release channel"
+                hintText={'Select channel'}
             >
                 {releaseChannels}
             </Field>
             <Field
                 name="demoUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Demo URL"
                 validate={validateURL}
@@ -110,6 +116,7 @@ const NewAppVersionForm = props => {
                 formMeta={{ submitFailed }}
                 accept=".zip"
                 label="Upload version"
+                hintText="Select a file to upload"
                 id="file"
             />
         </Form>
