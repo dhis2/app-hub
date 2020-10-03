@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/dhis2/app-hub/compare/v2.8.0...v2.8.1) (2020-10-03)
+
+
+### Bug Fixes
+
+* downloadUrl-link ([ea2287d](https://github.com/dhis2/app-hub/commit/ea2287d690ea5452dd99d2bdbadbffa54f9d14f3))
+
 # [2.8.0](https://github.com/dhis2/app-hub/compare/v2.7.4...v2.8.0) (2020-10-02)
 
 
