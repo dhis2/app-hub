@@ -96,6 +96,7 @@ class VersionListEdit extends Component {
         const editIcons = [editIcon, deleteIcon]
         const {
             demoUrl,
+            downloadUrl,
             version,
             minDhisVersion,
             maxDhisVersion,
@@ -108,7 +109,7 @@ class VersionListEdit extends Component {
         const token = getAuth().getToken()
 
         //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
-        const downloadUrlWithToken = `${version.downloadUrl}?token=${token}`
+        const downloadUrlWithToken = `${downloadUrl}?token=${token}`
 
         return (
             <TableRow key={version.id}>
