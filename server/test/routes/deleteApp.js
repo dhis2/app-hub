@@ -36,7 +36,7 @@ describe('test delete app', () => {
         },
         versions: [
             {
-                version: '1',
+                version: '1.0.0',
                 minDhisVersion: '2.25',
                 maxDhisVersion: '2.33',
                 demoUrl: 'https://www.dhis2.org',
