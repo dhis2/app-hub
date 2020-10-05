@@ -3,6 +3,12 @@ import AutoComplete from 'material-ui/AutoComplete'
 import { connect } from 'react-redux'
 import { searchOrganisation, getMe } from '../../../actions/actionCreators'
 import { isAsyncValidating } from 'redux-form'
+import Theme from '../../../styles/theme'
+
+const floatingLabelStyle = {
+    color: Theme.palette.textHeaderColor,
+}
+
 class OrganisationSearchField extends Component {
     constructor(props) {
         super(props)
@@ -10,9 +16,8 @@ class OrganisationSearchField extends Component {
         // This is used to get the "open"-state of the autocomplete,
         // so that we are not showing the "new org"-message.
         // This is needed since the field is loosing focus when autocomplete-menu is open.
-        this.autoCompleteInput = null
         this.state = {
-            open: false // tries to keep in sync with open autocomplete-menu, used to show message
+            open: false, // tries to keep in sync with open autocomplete-menu, used to show message
         }
     }
 
@@ -25,9 +30,6 @@ class OrganisationSearchField extends Component {
         const { organisations } = this.props
         const { touched, valid, active } = this.props.meta
         const { value } = this.props.input
-        const isOpen =
-            (this.autoCompleteInput && this.autoCompleteInput.state.open) ||
-            false
 
         if (
             value &&
@@ -55,17 +57,14 @@ class OrganisationSearchField extends Component {
             this.props.searchOrganisation(val)
             this.props.input.onChange(val)
         }
-        this.setState({open: true})
-    }
-
-    setAutoCompleteInputRef = element => {
-        this.autoCompleteInput = element
+        this.setState({ open: true })
     }
 
     render() {
         const {
             input,
             label,
+            hintText,
             forceShowErrors,
             meta: { touched, error },
             organisations,
@@ -74,16 +73,19 @@ class OrganisationSearchField extends Component {
         return (
             <div>
                 <AutoComplete
-                openOnFocus
+                    openOnFocus
+                    floatingLabelFixed
+                    floatingLabelText={label}
+                    floatingLabelStyle={floatingLabelStyle}
                     ref={this.setAutoCompleteInputRef}
-                    hintText={label}
+                    hintText={hintText || label}
                     dataSource={orgs}
                     onUpdateInput={this.handleOnChange}
                     onNewRequest={this.handleOnChange}
                     onClose={() => {
                         console.log('close!')
-                        this.setState({open: false})
-                    } }
+                        this.setState({ open: false })
+                    }}
                     filter={(searchText, key) =>
                         searchText !== '' &&
                         key.toLowerCase().indexOf(searchText.toLowerCase()) !==
@@ -91,7 +93,9 @@ class OrganisationSearchField extends Component {
                     }
                     errorText={(touched || forceShowErrors) && error}
                     searchText={input.value}
-                    onBlur={(...args) => this.props.onBlur(...args) && this.forceUpdate()}
+                    onBlur={(...args) =>
+                        this.props.onBlur(...args) && this.forceUpdate()
+                    }
                     open={true}
                     {...input}
                 ></AutoComplete>
