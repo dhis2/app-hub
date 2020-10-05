@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import AutoComplete from 'material-ui/AutoComplete'
 import TextField from 'material-ui/TextField'
 import IconButton from 'material-ui/IconButton'
@@ -5,28 +7,57 @@ import FontIcon from 'material-ui/FontIcon'
 import SelectField from 'material-ui/SelectField'
 import UploadFileField from './UploadFileField'
 import Toggle from 'material-ui/Toggle'
-import React from 'react'
 import _size from 'lodash/size'
 import _keys from 'lodash/keys'
+import semverValid from 'semver/functions/valid'
+import semverClean from 'semver/functions/clean'
+import Theme from '../../styles/theme'
+import { Field } from 'redux-form'
+
+const floatingLabelStyle = {
+    color: Theme.palette.textHeaderColor,
+}
 
 export const renderTextField = ({
     input,
     label,
+    helpText,
+    hintText,
     forceShowErrors,
     meta: { touched, error },
+    rootStyle,
     ...props
-}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={(touched || forceShowErrors) && error}
-        {...input}
-        {...props}
-    />
-)
+}) => {
+    const showHelpText = !forceShowErrors && (!error || !touched) && helpText
+    const helpTextStyle = {
+        position: 'relative',
+        fontSize: '12px',
+        lineHeight: '12px',
+        color: Theme.palette.textHeaderColor,
+        bottom: '1px',
+        marginBottom: '16px',
+        width: props.fullWidth ? '100%' : '256px',
+    }
+
+    return (
+        <div style={rootStyle}>
+            <TextField
+                floatingLabelStyle={floatingLabelStyle}
+                floatingLabelFixed={true}
+                floatingLabelText={label}
+                hintText={hintText || label}
+                errorText={(touched || forceShowErrors) && error}
+                {...input}
+                {...props}
+            />
+            {showHelpText && <div style={helpTextStyle}>{helpText}</div>}
+        </div>
+    )
+}
 
 export const renderUploadField = ({
     input,
+    hintText,
     label,
     forceShowErrors,
     meta: { touched, error, dirty },
@@ -36,7 +67,8 @@ export const renderUploadField = ({
 }) => {
     return (
         <UploadFileField
-            hintText={label}
+            hintText={hintText || label}
+            label={label}
             handleUpload={files => {
                 input.onChange(files)
             }}
@@ -70,6 +102,7 @@ export const renderTextFieldWithClearButton = ({
             <TextField
                 hintText={label}
                 floatingLabelText={label}
+                floatingLabelStyle={floatingLabelStyle}
                 errorText={(touched || forceShowErrors) && error}
                 {...input}
                 {...props}
@@ -105,6 +138,7 @@ export const renderAutoCompleteField = ({
 export const renderSelectField = ({
     input,
     label,
+    hintText,
     forceShowErrors,
     meta: { touched, error },
     children,
@@ -112,7 +146,10 @@ export const renderSelectField = ({
 }) => {
     return (
         <SelectField
+            floatingLabelStyle={floatingLabelStyle}
             floatingLabelText={label}
+            floatingLabelFixed
+            hintText={hintText}
             errorText={(touched || forceShowErrors) && error}
             {...input}
             onFocus={() => {}} //prevent reset of value when tabbing + enter
@@ -204,3 +241,59 @@ export const validateURL = value => {
 
 export const hasError = errors =>
     _keys(errors).find(key => _size(errors[key]) > 0) !== undefined
+
+const SemanticVersionHelpText = () => {
+    return (
+        <div>
+            Version number must use semantic versioning with format x.x.x (e.g.
+            2.3.1).
+            <br />
+            <a
+                href="https://docs.npmjs.com/about-semantic-versioning"
+                target="_blank"
+                className={'link'}
+            >
+                Read more about semantic versioning
+            </a>
+            .
+        </div>
+    )
+}
+
+export const validateVersion = version => {
+    if (version && semverValid(version) == null) {
+        return <SemanticVersionHelpText />
+    }
+    return undefined
+}
+
+// Alias so we can render with JSX
+const TextFieldRF = renderTextField
+
+/**
+ * Wraps TextField with Version-specific props
+ * @param {} props forwarded to textfield-component
+ */
+export const VersionField = props => {
+    return (
+        <TextFieldRF
+            label="Version *"
+            helpText={<SemanticVersionHelpText />}
+            {...props}
+            onBlur={event => {
+                const { value } = event.target
+                const semverStr = semverClean(value, {
+                    loose: true,
+                    includePrerelease: true,
+                })
+                if (semverStr) {
+                    event.preventDefault()
+                    props.input.onBlur(semverStr)
+                } else {
+                    props.input.onBlur(event)
+                }
+            }}
+            rootStyle={{ height: '120px' }} // fixes jumping when transitioning between error and helptext
+        />
+    )
+}

@@ -1,3 +1,62 @@
+## [2.8.1](https://github.com/dhis2/app-hub/compare/v2.8.0...v2.8.1) (2020-10-03)
+
+
+### Bug Fixes
+
+* downloadUrl-link ([ea2287d](https://github.com/dhis2/app-hub/commit/ea2287d690ea5452dd99d2bdbadbffa54f9d14f3))
+
+# [2.8.0](https://github.com/dhis2/app-hub/compare/v2.7.4...v2.8.0) (2020-10-02)
+
+
+### Bug Fixes
+
+* **version:** fix UI-jump when tranisitioning between error and helptext ([b89acbf](https://github.com/dhis2/app-hub/commit/b89acbf657ea954bf2eef933cd29f079a9d71e47))
+* cleanup versiofield, add link style ([204da3e](https://github.com/dhis2/app-hub/commit/204da3ed776bdcbeca48a40066621285b73ae269))
+* misc form styling ([1d0b196](https://github.com/dhis2/app-hub/commit/1d0b1960aa6250a775eb049b4da38afcc623cbf3))
+* textheader and helpertext styling ([d5512ea](https://github.com/dhis2/app-hub/commit/d5512ea395540940b2f25db5edf7851b1858d4a9))
+
+
+### Features
+
+* **validation:** add semver validation backend ([6aac6e1](https://github.com/dhis2/app-hub/commit/6aac6e1a36c72435c29925975788e754601adbce))
+* add semver-validation on client ([d5a859c](https://github.com/dhis2/app-hub/commit/d5a859cf0f6a856f7a669af548bb1c020a1bce52))
+
+## [2.7.4](https://github.com/dhis2/app-hub/compare/v2.7.3...v2.7.4) (2020-09-28)
+
+
+### Bug Fixes
+
+* **download:** encode download-components ([179cae4](https://github.com/dhis2/app-hub/commit/179cae458b3480ea42209d6f51808315999c9200))
+* **download:** encode download-components, use / as seperators instead of _ ([44663b9](https://github.com/dhis2/app-hub/commit/44663b94328b239e7d168f01a2d802e7c528d1cb))
+* **migration:** remove down migration ([b22fa9d](https://github.com/dhis2/app-hub/commit/b22fa9d6d3546f355037ff42f59c6b5d5a63e31b))
+* **migration:** replace _ with . in app_version ([693cee2](https://github.com/dhis2/app-hub/commit/693cee2c0ad3f7d8edd1e25a1f596c307b6f5e60))
+* **version:** prevent version to contain underscore ([90ebb36](https://github.com/dhis2/app-hub/commit/90ebb3688853cfffb1844495f484ee7b52f5989c))
+
+## [2.7.3](https://github.com/dhis2/app-hub/compare/v2.7.2...v2.7.3) (2020-09-24)
+
+
+### Bug Fixes
+
+* add versionitems file ([c641be0](https://github.com/dhis2/app-hub/commit/c641be077bda239b608ba194cf82889ff74b802c))
+* consolidate version validations ([789bfc2](https://github.com/dhis2/app-hub/commit/789bfc2e6b1302f32a4ab1f3863bed35556e7c8e))
+* re-order fields to same as when creating ([3630275](https://github.com/dhis2/app-hub/commit/3630275bf43ea2bc207766ed4d03f204e49e3f91))
+* **version:** use select-field when editing version ([c1e6158](https://github.com/dhis2/app-hub/commit/c1e6158926d611ecc3c90375ca0586794e70ef5e))
+
+## [2.7.2](https://github.com/dhis2/app-hub/compare/v2.7.1...v2.7.2) (2020-09-04)
+
+
+### Bug Fixes
+
+* **apiroutes:** do not redirect 404 under /api to index ([af45fc5](https://github.com/dhis2/app-hub/commit/af45fc50c0d653469c7400b4ecd400dd01744831))
+* **apiroutes:** set 404-statuscode ([8235e57](https://github.com/dhis2/app-hub/commit/8235e57ae7dabbd912f874e1412fe5e3487e871b))
+
+## [2.7.1](https://github.com/dhis2/app-hub/compare/v2.7.0...v2.7.1) (2020-09-01)
+
+
+### Bug Fixes
+
+* prevent error when saving unmodified version ([572cd2d](https://github.com/dhis2/app-hub/commit/572cd2d4ba56cbdb7e7eb9fd02d9a700e39ce350))
+
 # [2.7.0](https://github.com/dhis2/app-hub/compare/v2.6.4...v2.7.0) (2020-08-27)
 
 

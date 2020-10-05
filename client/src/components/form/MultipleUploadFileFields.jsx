@@ -79,6 +79,7 @@ class UploadFieldsArray extends Component {
                             name={name}
                             key={i}
                             component={formUtils.renderUploadField}
+                            hintText={'Select file(s) to upload'}
                             renderAdd={
                                 (!error &&
                                     multiLastOnly &&

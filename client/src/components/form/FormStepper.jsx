@@ -116,7 +116,19 @@ class FormStepper extends Component {
     }
 
     render() {
-        const { handleSubmit, submitFailed, error, submitting } = this.props
+        const {
+            handleSubmit,
+            submitted,
+            submitFailed,
+            pristine,
+            error,
+            invalid,
+            valid,
+            reset,
+            dirty,
+            submitting,
+        } = this.props
+
         const { stepIndex } = this.state
         const styles = {
             nextButton: {

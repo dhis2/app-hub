@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React from 'react'
 import {
     Table,
     TableBody,
@@ -17,7 +17,7 @@ const VersionList = props => {
     //Max 3 versions before "more button"
     const versions = props.versionList
         .sort((a, b) => b.created - a.created)
-        .map((version, i) => {
+        .map(version => {
             const editMenu = (
                 <IconMenu
                     iconButtonElement={

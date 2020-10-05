@@ -10,6 +10,7 @@ import {
     validateImageFile,
     validateURL,
     hasError,
+    validateVersion,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
 import OrganisationSearch from './helpers/OrganisationSearch'
@@ -17,7 +18,9 @@ import { loadChannels } from '../../actions/actionCreators'
 import * as organisationSelectors from '../../selectors/organisationSelectors'
 import * as userSelectors from '../../selectors/userSelectors'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
+import DHISVersionItems from '../appVersion/VersionItems'
 
+const FORM_NAME = 'uploadAppForm'
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,
     label: config.ui.appTypeToDisplayName[key],
@@ -83,17 +86,21 @@ const validate = values => {
     return errors
 }
 
-
 /**
  * Checks that the user have permission to upload app for organisation
- * @param {} value the value (name) of the organisation 
+ * @param {} value the value (name) of the organisation
  * @param {*} organisations all organisations
  * @param {*} memberOfOrgs list of org-ids the user is member of
  */
-export const validateOrganisation = (value, organisations, memberOfOrgs, isManager) => {
+export const validateOrganisation = (
+    value,
+    organisations,
+    memberOfOrgs,
+    isManager
+) => {
     if (!value) return undefined
-    if(value.length >= 100) return 'Exceeds limit of maximum 100 characters.'
-    
+    if (value.length >= 100) return 'Exceeds limit of maximum 100 characters.'
+
     const existingOrganisation = organisations.find(
         org => org.name.toLowerCase() === value.toLowerCase()
     )
@@ -108,13 +115,15 @@ export const validateOrganisation = (value, organisations, memberOfOrgs, isManag
 }
 
 const syncValidateOrganisation = (value, allValues, props) =>
-    validateOrganisation(value, props.organisations, props.memberOfOrgs, props.isManager)
+    validateOrganisation(
+        value,
+        props.organisations,
+        props.memberOfOrgs,
+        props.isManager
+    )
 
 const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
-))
-const DHISVersionItems = config.ui.dhisVersions.map(version => (
-    <MenuItem key={version} value={version} primaryText={version} />
 ))
 
 const AppGeneralSection = props => {
@@ -122,6 +131,7 @@ const AppGeneralSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="appName"
+                autoFocus
                 component={formUtils.renderTextField}
                 fullWidth
                 label="App Name *"
@@ -134,14 +144,13 @@ const AppGeneralSection = props => {
                 rows={1}
                 label="App Description"
             />
-            <br />
             <Field
                 name="sourceUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Source Code URL"
                 validate={validateURL}
             />
-            <br />
             <Field
                 name="appType"
                 component={formUtils.renderSelectField}
@@ -172,15 +181,15 @@ const AppVersionSection = props => {
     return (
         <FormSection name={props.name}>
             <Field
-                name="version"
-                component={formUtils.renderTextField}
+                component={formUtils.VersionField}
+                validate={validateVersion}
                 autoFocus
-                label="Version *"
+                name="version"
             />
-            <br />
             <Field
                 name="minVer"
                 component={formUtils.renderSelectField}
+                hintText={'Select version'}
                 label="Minimum DHIS version *"
             >
                 {DHISVersionItems}
@@ -190,6 +199,7 @@ const AppVersionSection = props => {
                 name="maxVer"
                 component={formUtils.renderSelectField}
                 label="Maximum DHIS version *"
+                hintText={'Select version'}
             >
                 {DHISVersionItems}
             </Field>
@@ -198,12 +208,14 @@ const AppVersionSection = props => {
                 name="channel"
                 component={formUtils.renderSelectField}
                 label="Release channel *"
+                hintText={'Select channel'}
             >
                 {releaseChannels}
             </Field>
             <br />
             <Field
                 name="demoUrl"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Demo URL"
                 validate={validateURL}
@@ -217,6 +229,7 @@ const AppVersionSection = props => {
                 accept=".zip"
                 validate={validateZipFile}
                 label="Upload app *"
+                hintText="Select a file to upload"
             />
         </FormSection>
     )
@@ -236,17 +249,17 @@ const AppDeveloperSection = props => {
         <FormSection name={props.name}>
             <Field
                 name="developerName"
+                fullWidth
                 autoFocus
                 component={formUtils.renderTextField}
                 label="Developer Name *"
             />
-            <br />
             <Field
                 name="developerEmail"
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Developer Email *"
             />
-            <br />
             <Field
                 name="developerOrg"
                 component={OrganisationSearch}
@@ -291,6 +304,8 @@ const AppImageSection = props => {
             <br />
             <Field
                 name="imageDescription"
+                multiLine
+                fullWidth
                 component={formUtils.renderTextField}
                 label="Image description"
             />
@@ -370,7 +385,7 @@ class UploadAppFormStepper extends Component {
             <ErrorOrLoading loading={loading} error={false} />
         ) : (
             <FormStepper
-                form={this.props.form}
+                form={FORM_NAME}
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[
@@ -405,7 +420,7 @@ const mapStateToProps = state => ({
     channels: state.channels,
     organisations: organisationSelectors.getOrganisationsList(state),
     memberOfOrgs: userSelectors.getUserOrganisationIds(state),
-    isManager: userSelectors.isManager(state)
+    isManager: userSelectors.isManager(state),
 })
 
 const mapDispatchToProps = dispatch => ({
