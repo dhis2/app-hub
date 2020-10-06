@@ -77,6 +77,13 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
+        case actionTypes.ORGANISATION_EDIT_SUCCESS: {
+            return {
+                ...state,
+                message: 'Organisation updated',
+            }
+        }
+
         case actionTypes.SNACKBAR_EMPTY: {
             return {
                 ...emptySnackbar,

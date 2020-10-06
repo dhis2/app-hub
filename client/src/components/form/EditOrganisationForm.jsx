@@ -8,7 +8,7 @@ const validate = values => {
         errors.name = 'Required'
     }
 
-    if (values.name && values.name.length > 100){
+    if (values.name && values.name.length > 100) {
         errors.name = 'Name is too long, maximum 100 characters allowed'
     }
 
@@ -24,19 +24,27 @@ const EditOrganisationForm = props => {
     const onSub = values => {
         const data = {
             name: values.name,
+            email: values.email || null,
         }
 
         return props.submitted(data)
     }
-
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <div style={{ height: '72px' }}>
+            <div style={{ height: '190px' }}>
                 <Field
                     name="name"
+                    fullWidth
                     component={formUtils.renderTextField}
                     autoFocus
                     label="Organisation name"
+                />
+                <Field
+                    name="email"
+                    fullWidth
+                    component={formUtils.renderTextField}
+                    autoFocus
+                    label="Contact email"
                 />
             </div>
         </Form>
@@ -44,6 +52,6 @@ const EditOrganisationForm = props => {
 }
 
 EditOrganisationForm.propTypes = {}
-export default reduxForm({ form: 'editOrganisation',  validate })(
+export default reduxForm({ form: 'editOrganisation', validate })(
     EditOrganisationForm
 )

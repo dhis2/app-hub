@@ -17,7 +17,7 @@ export class NewOrganisation extends Component {
     submitForm() {
         //submit form manually as dialog actions work as submit button
         const res = this.form.submit()
-        
+
         if (this.form.valid) {
             return Promise.resolve(res)
         } else {
@@ -25,8 +25,8 @@ export class NewOrganisation extends Component {
         }
     }
 
-    handleAddMember = values => {
-        this.props.addOrganisation(values.name)
+    handleAddMember = ({ name, email }) => {
+        this.props.addOrganisation({ name, email })
     }
 
     render() {
@@ -40,7 +40,7 @@ export class NewOrganisation extends Component {
                 approveLabel={'Add'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
-                contentStyle={{maxWidth: '600px'}}
+                contentStyle={{ maxWidth: '600px' }}
                 autoCloseOnApprove={false}
             >
                 <NewOrganisationForm
@@ -55,8 +55,8 @@ export class NewOrganisation extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addOrganisation(name) {
-        dispatch(addOrganisation(name))
+    addOrganisation(organisation) {
+        dispatch(addOrganisation(organisation))
     },
 })
 

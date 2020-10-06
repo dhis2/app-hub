@@ -12,8 +12,13 @@ import { Field, reduxForm, Form } from 'redux-form'
 
 const validate = values => {
     const errors = {}
+
     if (!values.name) {
         errors.name = 'Required'
+    }
+
+    if (values.name && values.name.length > 100) {
+        errors.name = 'Name is too long, maximum 100 characters allowed'
     }
 
     return errors
@@ -28,6 +33,7 @@ const NewOrganisationForm = props => {
     const onSub = values => {
         const data = {
             name: values.name,
+            email: values.email || null,
         }
 
         return props.submitted(data)
@@ -35,12 +41,19 @@ const NewOrganisationForm = props => {
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <div style={{ height: '72px' }}>
+            <div style={{ height: '190px' }}>
                 <Field
                     name="name"
+                    fullWidth
                     component={formUtils.renderTextField}
                     autoFocus
                     label="Organisation name"
+                />
+                <Field
+                    name="email"
+                    fullWidth
+                    component={formUtils.renderTextField}
+                    label="Contact email"
                 />
             </div>
         </Form>

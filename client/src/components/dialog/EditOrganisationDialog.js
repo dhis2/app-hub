@@ -13,7 +13,7 @@ export class EditOrganisationDialog extends Component {
     submitForm() {
         //submit form manually as dialog actions work as submit button
         const res = this.form.submit()
-        
+
         if (this.form.valid) {
             return Promise.resolve(res)
         } else {
@@ -22,7 +22,7 @@ export class EditOrganisationDialog extends Component {
     }
 
     handleEditOrganisation = values => {
-        this.props.editOrganisation(this.props.organisation.id, { name: values.name })
+        this.props.editOrganisation(this.props.organisation.id, values)
     }
 
     render() {
@@ -36,14 +36,17 @@ export class EditOrganisationDialog extends Component {
                 approveLabel={'Ok'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
-                contentStyle={{maxWidth: '600px'}}
+                contentStyle={{ maxWidth: '600px' }}
                 autoCloseOnApprove={false}
             >
                 <EditOrganisationForm
                     ref={ref => {
                         this.form = ref
                     }}
-                    initialValues={{name: this.props.organisation.name}}
+                    initialValues={{
+                        name: this.props.organisation.name,
+                        email: this.props.organisation.email,
+                    }}
                     submitted={this.handleEditOrganisation}
                 />
             </DialogBase>

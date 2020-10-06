@@ -268,13 +268,13 @@ export function removeOrganisationMember(orgId, user) {
     )
 }
 
-export function addOrganisation(name) {
+export function addOrganisation({ name, email }) {
     return apiV2.request(
         `organisations/`,
         { useAuth: true },
         {
             method: 'POST',
-            body: JSON.stringify({ name }),
+            body: JSON.stringify({ name, email }),
             headers: {
                 'content-type': 'application/json',
             },
@@ -282,14 +282,18 @@ export function addOrganisation(name) {
     )
 }
 
-export function editOrganisation(id, { name, owner }) {
-    return apiV2.request(`organisations/${id}`, {
-        useAuth: true
-    }, {
-        method: 'PATCH',
-        body: JSON.stringify({ name, owner }),
-        headers: {
-            'content-type': 'application/json',
+export function editOrganisation(id, { name, owner, email }) {
+    return apiV2.request(
+        `organisations/${id}`,
+        {
+            useAuth: true,
+        },
+        {
+            method: 'PATCH',
+            body: JSON.stringify({ name, owner, email }),
+            headers: {
+                'content-type': 'application/json',
+            },
         }
-    })
+    )
 }

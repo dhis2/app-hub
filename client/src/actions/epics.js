@@ -636,9 +636,9 @@ const addOrganisation = action$ =>
     action$.pipe(
         ofType(actions.ORGANISATION_ADD),
         concatMap(action => {
-            const { name } = action.payload
+            const organisation = action.payload
             return api
-                .addOrganisation(name)
+                .addOrganisation(organisation)
                 .then(response => [
                     {
                         type: actions.ORGANISATION_ADD_SUCCESS,
@@ -682,12 +682,12 @@ const editOrganisation = action$ =>
                         of(actionCreators.closeDialog())
                     )
                 }),
-                catchError(e =>
-                    [actionCreators.actionErrorCreator(
+                catchError(e => [
+                    actionCreators.actionErrorCreator(
                         actions.ORGANISATION_EDIT_ERROR,
                         e
-                    )]
-                )
+                    ),
+                ])
             )
         })
     )
