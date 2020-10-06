@@ -110,6 +110,7 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     name: OrgModel.definition.extract('name').required(),
+                    email: OrgModel.definition.extract('email'),
                 }),
             },
             tags: ['api', 'v2'],
