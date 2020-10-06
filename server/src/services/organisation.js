@@ -7,6 +7,7 @@ const getOrganisationQuery = db =>
     db('organisation').select(
         'organisation.id',
         'organisation.name',
+        'organisation.email',
         'organisation.slug',
         'organisation.created_by_user_id',
         'organisation.updated_at',

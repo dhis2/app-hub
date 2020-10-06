@@ -43,6 +43,9 @@ module.exports = [
                         .description(
                             'The uuid of the user to get organisations for'
                         ),
+                    email: Joi.filter().description(
+                        'The email of the organisation'
+                    ),
                 }),
             },
             plugins: {
@@ -148,6 +151,7 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     name: OrgModel.definition.extract('name'),
+                    email: OrgModel.definition.extract('email'),
                     owner: OrgModel.definition.extract('owner'),
                 }).min(1),
                 params: Joi.object({
@@ -155,7 +159,7 @@ module.exports = [
                 }),
             },
             response: {
-                schema: OrgModel.definition
+                schema: OrgModel.definition,
             },
         },
         handler: async (request, h) => {
