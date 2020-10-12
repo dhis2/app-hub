@@ -28,7 +28,7 @@
         "material-ui": "^0.18.7",
         "react": "~15.6",
         "react-animate-height": "^0.9.9",
-        "react-dom": "~15.4",
+        "react-dom": "~16.13",
         "react-redux": "5",
         "react-router": "4",
         "react-router-dom": "4",
