@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/dhis2/app-hub/compare/v2.8.1...v2.8.2) (2020-10-12)
+
+
+### Bug Fixes
+
+* correctly load channels, refactor version form, fix version delete ([cd5472d](https://github.com/dhis2/app-hub/commit/cd5472dc1de61c2a966f53a00398050cf8f40aaa))
+
 ## [2.8.1](https://github.com/dhis2/app-hub/compare/v2.8.0...v2.8.1) (2020-10-03)
 
 
