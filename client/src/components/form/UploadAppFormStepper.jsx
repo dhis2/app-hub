@@ -85,42 +85,6 @@ const validate = values => {
     return errors
 }
 
-/**
- * Checks that the user have permission to upload app for organisation
- * @param {} value the value (name) of the organisation
- * @param {*} organisations all organisations
- * @param {*} memberOfOrgs list of org-ids the user is member of
- */
-export const validateOrganisation = (
-    value,
-    organisations,
-    memberOfOrgs,
-    isManager
-) => {
-    if (!value) return undefined
-    if (value.length >= 100) return 'Exceeds limit of maximum 100 characters.'
-
-    const existingOrganisation = organisations.find(
-        org => org.name.toLowerCase() === value.toLowerCase()
-    )
-
-    if (!isManager && existingOrganisation) {
-        const isMember = memberOfOrgs.includes(existingOrganisation.id)
-        if (!isMember) {
-            return 'You are not a member of this organisation. Contact the owner to get access to upload apps.'
-        }
-    }
-    return undefined
-}
-
-const syncValidateOrganisation = (value, allValues, props) =>
-    validateOrganisation(
-        value,
-        props.organisations,
-        props.memberOfOrgs,
-        props.isManager
-    )
-
 const appTypesItems = appTypes.map(type => (
     <MenuItem key={type.value} value={type.value} primaryText={type.label} />
 ))

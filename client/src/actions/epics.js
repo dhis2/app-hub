@@ -1,5 +1,4 @@
 import * as actions from '../constants/actionTypes'
-import * as dialogTypes from '../constants/dialogTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
 import { Auth } from '../api/api'
@@ -17,8 +16,6 @@ import {
     tap,
 } from 'rxjs/operators'
 import { of, from, merge } from 'rxjs'
-import { startAsyncValidation, stopAsyncValidation } from 'redux-form'
-import { validateOrganisation } from '../components/form/UploadAppFormStepper'
 import * as userSelectors from '../selectors/userSelectors'
 
 const loadAppsAll = action$ =>
@@ -457,7 +454,7 @@ const loadChannels = action$ =>
  * Async validation is used to prevent form-submission and clicking continue
  * We are also using synchronous validation for orgs that have been fetched earlier
  */
-const searchOrganisation = (action$, state$) =>
+const searchOrganisation = action$ =>
     action$.pipe(
         ofType(actions.ORGANISATIONS_SEARCH),
         filter(action => !!action.payload.name),
@@ -466,42 +463,25 @@ const searchOrganisation = (action$, state$) =>
         ),
         debounceTime(250),
         switchMap(action => {
-            return merge(
-                of(startAsyncValidation('uploadAppForm')),
-                from(api.searchOrganisations(action.payload.name)).pipe(
-                    switchMap(orgs => {
-                        const memberOfOrgs =
-                            state$.value.user.organisations.list
-                        const isManager = userSelectors.isManager(state$.value)
-                        const validateError = validateOrganisation(
-                            action.payload.name,
-                            orgs,
-                            memberOfOrgs,
-                            isManager
-                        )
-                        const error = validateError
-                            ? { developer: { developerOrg: validateError } }
-                            : undefined
-                        return [
-                            {
-                                type: actions.ORGANISATIONS_SEARCH_SUCCESS,
-                                payload: {
-                                    list: orgs,
-                                },
+            from(api.searchOrganisations(action.payload.name)).pipe(
+                switchMap(orgs => {
+                    return [
+                        {
+                            type: actions.ORGANISATIONS_SEARCH_SUCCESS,
+                            payload: {
+                                list: orgs,
                             },
-                            stopAsyncValidation('uploadAppForm', error),
-                        ]
-                    }),
-                    catchError(e => {
-                        return [
-                            actionCreators.actionErrorCreator(
-                                actions.ORGANISATIONS_SEARCH_ERROR,
-                                e
-                            ),
-                            stopAsyncValidation('uploadAppForm'),
-                        ]
-                    })
-                )
+                        },
+                    ]
+                }),
+                catchError(e => {
+                    return [
+                        actionCreators.actionErrorCreator(
+                            actions.ORGANISATIONS_SEARCH_ERROR,
+                            e
+                        ),
+                    ]
+                })
             )
         })
     )
