@@ -1,6 +1,14 @@
 import { createSelector } from 'reselect'
-import { getFormSubmitErrors } from 'redux-form'
 import { getUserOrganisationIds, getUserId, isManager } from './userSelectors'
+
+export const getOrganisationMeta = state => {
+    const { error, loading, loaded } = state.organisations
+    return {
+        error,
+        loading,
+        loaded,
+    }
+}
 
 export const getOrganisationById = (state, id) => getOrganisations(state)[id]
 
@@ -9,8 +17,10 @@ export const getOrganisationBySlug = (state, slug) =>
 
 export const getOrganisations = state => state.organisations.byId
 
-export const getOrganisationsList = state =>
-    Object.values(getOrganisations(state))
+export const getOrganisationsList = createSelector(
+    state => getOrganisations(state),
+    orgs => Object.values(orgs).sort((a, b) => a.name.localeCompare(b.name))
+)
 
 // list of organisations that user is member of
 export const getUserOrganisationsList = state => {

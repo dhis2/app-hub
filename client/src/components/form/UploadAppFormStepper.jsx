@@ -13,9 +13,8 @@ import {
     validateVersion,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
-import OrganisationSearch from './helpers/OrganisationSearch'
+import OrganisationSelector from './helpers/OrganisationSelectorField'
 import { loadChannels } from '../../actions/actionCreators'
-import * as organisationSelectors from '../../selectors/organisationSelectors'
 import * as userSelectors from '../../selectors/userSelectors'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import DHISVersionItems from '../appVersion/VersionItems'
@@ -262,11 +261,9 @@ const AppDeveloperSection = props => {
             />
             <Field
                 name="developerOrg"
-                component={OrganisationSearch}
+                component={OrganisationSelector}
                 label="Organisation *"
                 organisations={props.organisations}
-                validate={syncValidateOrganisation}
-                normalize={val => val.trim()}
             />
         </FormSection>
     )
@@ -291,7 +288,7 @@ const AppImageSection = props => {
                 name="image"
                 component={formUtils.renderUploadField}
                 accept="image/*"
-                hintText="Upload logo"
+                label="Upload logo"
                 validate={validateImageFile}
                 id="imageFile"
             />
@@ -402,8 +399,6 @@ class UploadAppFormStepper extends Component {
                     />,
                     <AppImageSection key="image" name="image" />,
                 ]}
-                organisations={this.props.organisations}
-                memberOfOrgs={this.props.memberOfOrgs}
                 isManager={this.props.isManager}
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
@@ -418,8 +413,6 @@ UploadAppFormStepper.defaultProps = {}
 
 const mapStateToProps = state => ({
     channels: state.channels,
-    organisations: organisationSelectors.getOrganisationsList(state),
-    memberOfOrgs: userSelectors.getUserOrganisationIds(state),
     isManager: userSelectors.isManager(state),
 })
 
