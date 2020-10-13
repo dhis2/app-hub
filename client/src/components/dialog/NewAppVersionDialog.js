@@ -1,15 +1,19 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { addAppVersion } from '../../actions/actionCreators'
-import * as formUtils from '../form/ReduxFormUtils'
-import UploadFileField from '../form/UploadFileField'
-import NewAppVersionForm from '../form/NewAppVersionForm'
+
+import { loadChannels } from '../../actions/actionCreators'
+
+import AppVersionForm from '../form/AppVersionForm'
 export class NewAppVersionDialog extends Component {
     constructor(props) {
         super(props)
+    }
+
+    componentDidMount() {
+        this.props.loadChannels()
     }
 
     submitForm() {
@@ -27,10 +31,6 @@ export class NewAppVersionDialog extends Component {
     }
 
     render() {
-        const fieldStyle = {
-            display: 'block',
-            width: '100%',
-        }
         return (
             <DialogBase
                 title="New App Version"
@@ -38,7 +38,8 @@ export class NewAppVersionDialog extends Component {
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
             >
-                <NewAppVersionForm
+                <AppVersionForm
+                    isNew={true}
                     ref={ref => {
                         this.form = ref
                     }}
@@ -50,15 +51,19 @@ export class NewAppVersionDialog extends Component {
 }
 
 NewAppVersionDialog.propTypes = {
-    app: PropTypes.object,
-    appId: PropTypes.string,
-    addVersion: PropTypes.func,
+    addVersion: PropTypes.func.isRequired,
+    app: PropTypes.object.isRequired,
+    closeDialog: PropTypes.func.isRequired,
+    loadChannels: PropTypes.func.isRequired,
 }
 
 const mapDispatchToProps = dispatch => ({
     addVersion(appVersion, file, id) {
         dispatch(addAppVersion(appVersion, file, id))
     },
+    loadChannels() {
+        dispatch(loadChannels())
+    },
 })
 
-export default connect(null, mapDispatchToProps)(NewAppVersionDialog)
+export default connect(undefined, mapDispatchToProps)(NewAppVersionDialog)

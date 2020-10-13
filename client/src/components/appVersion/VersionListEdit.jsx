@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-
 import {
     Table,
     TableBody,
@@ -12,16 +10,6 @@ import {
 } from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
-import MenuItem from 'material-ui/MenuItem'
-import TextField from 'material-ui/TextField'
-import Theme from '../../styles/theme'
-import SelectField from 'material-ui/SelectField'
-
-import merge from 'lodash/fp/merge'
-
-import ErrorOrLoading from '../utils/ErrorOrLoading'
-
-import { loadChannels } from '../../actions/actionCreators'
 
 import { Auth } from '../../api/api'
 
@@ -99,7 +87,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="delete"
                 style={styles.iconButton}
-                onTouchTap={() => this.props.handleDelete(version)}
+                onTouchTap={() => this.props.handleDelete(appVersion)}
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>

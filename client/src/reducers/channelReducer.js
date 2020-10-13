@@ -11,25 +11,24 @@ const channelReducer = (state = initialState, action) => {
         case actionTypes.CHANNELS_LOAD_ERROR: {
             return {
                 ...state,
-                error: {
-                    loaded: false,
-                    loading: false,
-                    error: action.payload,
-                },
+                loaded: false,
+                loading: false,
+                error: action.payload,
             }
         }
 
         case actionTypes.CHANNELS_LOAD_BEGIN: {
             return {
                 ...state,
+                loaded: false,
                 loading: true,
             }
         }
         case actionTypes.CHANNELS_LOAD_SUCCESS: {
             return {
                 ...state,
-                loading: false,
                 loaded: true,
+                loading: false,
                 list: action.payload,
             }
         }
