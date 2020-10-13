@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { editAppVersion, loadChannels } from '../../actions/actionCreators'
 
-import EditAppVersionForm from '../form/EditAppVersionForm'
+import AppVersionForm from '../form/AppVersionForm'
 
 export class EditAppVersionDialog extends Component {
     constructor(props) {
@@ -26,13 +26,11 @@ export class EditAppVersionDialog extends Component {
         }
     }
 
-    handleEdit(editedVersion) {
-        this.props.editVersion(this.props.appId, editedVersion)
+    handleEdit({ data }) {
+        this.props.editVersion(this.props.appId, data)
     }
 
     render() {
-        if (this.props.channels.loading) return null
-
         return (
             <DialogBase
                 title="Edit version"
@@ -40,7 +38,8 @@ export class EditAppVersionDialog extends Component {
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
             >
-                <EditAppVersionForm
+                <AppVersionForm
+                    isNew={false}
                     ref={ref => {
                         this.form = ref
                     }}
@@ -57,15 +56,10 @@ export class EditAppVersionDialog extends Component {
 EditAppVersionDialog.propTypes = {
     appId: PropTypes.string,
     appVersion: PropTypes.object,
-    channels: PropTypes.object,
     closeDialog: PropTypes.func,
     editVersion: PropTypes.func,
     loadChannels: PropTypes.func,
 }
-
-const mapStateToProps = state => ({
-    channels: state.channels,
-})
 
 const mapDispatchToProps = dispatch => ({
     editVersion(appId, appVersion) {
@@ -76,7 +70,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(EditAppVersionDialog)
+export default connect(undefined, mapDispatchToProps)(EditAppVersionDialog)

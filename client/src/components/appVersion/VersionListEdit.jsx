@@ -87,7 +87,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="delete"
                 style={styles.iconButton}
-                onTouchTap={() => this.props.handleDelete(version)}
+                onTouchTap={() => this.props.handleDelete(appVersion)}
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>
