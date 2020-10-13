@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { editOrganisation } from '../../actions/actionCreators'
-import EditOrganisationForm from '../form/EditOrganisationForm'
+import OrganisationForm from '../form/OrganisationForm'
 
 export class EditOrganisationDialog extends Component {
     constructor(props) {
@@ -26,10 +26,6 @@ export class EditOrganisationDialog extends Component {
     }
 
     render() {
-        const fieldStyle = {
-            display: 'block',
-            width: '100%',
-        }
         return (
             <DialogBase
                 title="Edit Organisation"
@@ -39,7 +35,7 @@ export class EditOrganisationDialog extends Component {
                 contentStyle={{ maxWidth: '600px' }}
                 autoCloseOnApprove={false}
             >
-                <EditOrganisationForm
+                <OrganisationForm
                     ref={ref => {
                         this.form = ref
                     }}
@@ -52,6 +48,23 @@ export class EditOrganisationDialog extends Component {
             </DialogBase>
         )
     }
+}
+
+EditOrganisationDialog.PropTypes = {
+    organisation: PropTypes.shape({
+        email: PropTypes.string,
+        id: PropTypes.string,
+        name: PropTypes.string,
+        owner: PropTypes.objectOf(
+            PropTypes.shape({
+                email: PropTypes.string,
+                id: PropTypes.string,
+                name: PropTypes.string,
+            })
+        ),
+        slug: PropTypes.string,
+        users: PropTypes.array,
+    }),
 }
 
 const mapDispatchToProps = dispatch => ({

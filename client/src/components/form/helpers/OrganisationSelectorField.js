@@ -33,7 +33,16 @@ class OrganisationSelectorField extends Component {
     }
 
     render() {
-        const { input, label, organisations, requestMeta, ...rest } = this.props
+        const {
+            input,
+            label,
+            organisations,
+            requestMeta,
+            openNewOrganisationDialog,
+            getMe,
+            loadAllOrganisations,
+            ...rest
+        } = this.props
 
         return (
             <div>
@@ -59,7 +68,7 @@ class OrganisationSelectorField extends Component {
                             />
                         ))}
                     </SelectFieldRF>
-                    <IconButton onClick={this.props.openNewOrganisationDialog}>
+                    <IconButton onClick={openNewOrganisationDialog}>
                         <FontIcon className="material-icons">add</FontIcon>
                     </IconButton>
                 </div>
@@ -69,7 +78,6 @@ class OrganisationSelectorField extends Component {
 }
 
 const mapStateToProps = state => ({
-    orgs: 'test',
     organisations: getAuthorizedOrganisationsList(state),
     requestMeta: getOrganisationMeta(state),
 })

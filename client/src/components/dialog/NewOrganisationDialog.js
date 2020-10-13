@@ -1,13 +1,8 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { addOrganisation } from '../../actions/actionCreators'
-import * as formUtils from '../form/ReduxFormUtils'
-import UploadFileField from '../form/UploadFileField'
-import NewOrganisationForm from '../form/NewOrganisationForm'
-import NoteBlock from '../utils/NoteBlock'
+import OrganisationForm from '../form/OrganisationForm'
 
 export class NewOrganisation extends Component {
     constructor(props) {
@@ -30,10 +25,6 @@ export class NewOrganisation extends Component {
     }
 
     render() {
-        const fieldStyle = {
-            display: 'block',
-            width: '100%',
-        }
         return (
             <DialogBase
                 title="New Organisation"
@@ -43,7 +34,7 @@ export class NewOrganisation extends Component {
                 contentStyle={{ maxWidth: '600px' }}
                 autoCloseOnApprove={false}
             >
-                <NewOrganisationForm
+                <OrganisationForm
                     ref={ref => {
                         this.form = ref
                     }}
