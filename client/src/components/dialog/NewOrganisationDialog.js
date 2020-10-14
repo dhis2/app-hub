@@ -20,7 +20,7 @@ export class NewOrganisation extends Component {
         }
     }
 
-    handleAddMember = ({ name, email }) => {
+    handleAddOrganisation = ({ name, email }) => {
         this.props.addOrganisation({ name, email })
     }
 
@@ -38,7 +38,7 @@ export class NewOrganisation extends Component {
                     ref={ref => {
                         this.form = ref
                     }}
-                    submitted={this.handleAddMember}
+                    submitted={this.handleAddOrganisation}
                 />
             </DialogBase>
         )
