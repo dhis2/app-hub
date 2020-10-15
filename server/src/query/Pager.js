@@ -38,6 +38,10 @@ class Pager {
     }
 
     formatResult(queryResult, total) {
+        if (!this.enabled) {
+            return queryResult
+        }
+
         const pagerObject = {
             page: this.page,
             pageSize: this.pageSize,

@@ -42,12 +42,12 @@ const onPreHandler = function(request, h) {
 
     const routeQuery = request.query
 
-    const pagingObject = Joi.attempt(routeQuery, pagingSchema, {
+    const pagingParams = Joi.attempt(routeQuery, pagingSchema, {
         stripUnknown: true,
     })
 
     try {
-        const pager = new Pager(pagingObject)
+        const pager = new Pager(pagingParams)
         request.plugins.pagination = pager
     } catch (e) {
         Bounce.rethrow(e, 'system')
