@@ -15,7 +15,6 @@ import {
     openDialog,
     getMe,
 } from '../../../actions/actionCreators'
-import sortBy from 'lodash/sortBy'
 import ErrorOrLoading from '../../utils/ErrorOrLoading'
 import * as userSelectors from '../../../selectors/userSelectors'
 import * as organisationSelectors from '../../../selectors/organisationSelectors'
@@ -78,7 +77,7 @@ class OrganisationList extends Component {
             ? searchFilter.values.orgSearchFilter
             : ''
 
-        const orgItems = sortBy(organisationList, ['name'])
+        const orgItems = organisationList
             .filter(org =>
                 !orgSearchFilter
                     ? true

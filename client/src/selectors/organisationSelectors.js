@@ -23,11 +23,11 @@ export const getOrganisationsList = createSelector(
 )
 
 // list of organisations that user is member of
-export const getUserOrganisationsList = state => {
-    const allOrgs = getOrganisationsList(state)
-    const userOrgIds = getUserOrganisationIds(state)
-    return allOrgs.filter(org => userOrgIds.includes(org.id))
-}
+export const getUserOrganisationsList = createSelector(
+    getOrganisationsList,
+    getUserOrganisationIds,
+    (allOrgs, userOrgIds) => allOrgs.filter(org => userOrgIds.includes(org.id))
+)
 
 // list of organisations that user have rights to view
 // eg. full list of orgs for managers
@@ -37,11 +37,11 @@ export const getAuthorizedOrganisationsList = state => {
         : getUserOrganisationsList(state)
 }
 
-export const hasAccessToOrganisation = (state, orgId) => {
-    return getAuthorizedOrganisationsList(state).findIndex(
-        org => org.id === orgId
-    )
-}
+export const hasAccessToOrganisation = createSelector(
+    (_, orgId) => orgId,
+    getAuthorizedOrganisationsList,
+    (orgId, orgs) => orgs.findIndex(org => org.id === orgId)
+)
 
 export const isOwner = (state, orgId) => {
     const userId = getUserId(state)
