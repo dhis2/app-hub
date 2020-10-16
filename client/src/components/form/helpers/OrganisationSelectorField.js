@@ -6,12 +6,14 @@ import { connect } from 'react-redux'
 import {
     getMe,
     loadAllOrganisations,
+    loadCurrentUserOrganisations,
     openDialog,
 } from '../../../actions/actionCreators'
 import {
     getAuthorizedOrganisationsList,
     getOrganisationMeta,
 } from '../../../selectors/organisationSelectors'
+import { isManager } from '../../../selectors/userSelectors'
 import * as dialogTypes from '../../../constants/dialogTypes'
 import { renderSelectField } from '../ReduxFormUtils'
 
@@ -29,7 +31,9 @@ class OrganisationSelectorField extends Component {
     componentDidMount() {
         // reload /me to get up to date orgs
         this.props.getMe()
-        this.props.loadAllOrganisations()
+        this.props.isManager
+            ? this.props.loadAllOrganisations()
+            : this.props.loadCurrentUserOrganisations()
     }
 
     render() {
@@ -41,6 +45,7 @@ class OrganisationSelectorField extends Component {
             openNewOrganisationDialog,
             getMe,
             loadAllOrganisations,
+            loadCurrentUserOrganisations,
             ...rest
         } = this.props
 
@@ -77,10 +82,13 @@ class OrganisationSelectorField extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    organisations: getAuthorizedOrganisationsList(state),
-    requestMeta: getOrganisationMeta(state),
-})
+const mapStateToProps = state => {
+    return {
+        organisations: getAuthorizedOrganisationsList(state),
+        requestMeta: getOrganisationMeta(state),
+        isManager: isManager(state),
+    }
+}
 
 const mapDispatchToProps = dispatch => ({
     getMe() {
@@ -88,6 +96,9 @@ const mapDispatchToProps = dispatch => ({
     },
     loadAllOrganisations() {
         dispatch(loadAllOrganisations())
+    },
+    loadCurrentUserOrganisations() {
+        dispatch(loadCurrentUserOrganisations())
     },
     openNewOrganisationDialog() {
         dispatch(openDialog(dialogTypes.NEW_ORGANISATION_DIALOG))
