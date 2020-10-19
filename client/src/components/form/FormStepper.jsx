@@ -203,7 +203,7 @@ class FormStepper extends Component {
                                 style={styles.backButton}
                                 label="Back"
                                 primary={true}
-                                onTouchTap={this.prevStep}
+                                onClick={this.prevStep}
                             />
                         )}
                         {stepIndex < this.props.sections.length - 1 && (
@@ -211,7 +211,7 @@ class FormStepper extends Component {
                                 style={styles.nextButton}
                                 label="Continue"
                                 primary={true}
-                                onTouchTap={this.nextStep}
+                                onClick={this.nextStep}
                             />
                         )}
                         {this.state.stepIndex ===

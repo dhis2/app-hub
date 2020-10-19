@@ -12,12 +12,10 @@ import Header from './header/Header'
 import Snackbar from './utils/Snackbar'
 import DialogRoot from './dialog/DialogRoot'
 import PrivateRoute from './utils/PrivateRoute'
-import { Provider, connect } from 'react-redux'
+import { Provider } from 'react-redux'
 import store from '../store'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import { getAuth } from '../utils/AuthService'
-
-injectTapEventPlugin()
+import '../utils/preRender'
 
 const auth = getAuth()
 export default function AppHub() {

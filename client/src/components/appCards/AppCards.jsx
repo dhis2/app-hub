@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AppCardItem from './AppCardItem'
 import Grid from '../../material/Grid/Grid'
@@ -27,7 +27,8 @@ import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.scss'
-
+import { Provider, ReactReduxContext } from 'react-redux'
+import PopoverWithReduxState from '../../utils/PopoverWithReduxState'
 const debug = Debug('apphub:frontend:components:appcards')
 
 class AppCards extends Component {
@@ -156,12 +157,14 @@ class AppCards extends Component {
                                     filter_list
                                 </FontIcon>
                             </IconButton>
-                            <Popover
+                            <PopoverWithReduxState
                                 open={this.state.filterOpen}
                                 anchorEl={this.state.filterAnchorEl}
                                 style={{ width: '200px' }}
                                 onRequestClose={() =>
-                                    this.setState({ filterOpen: false })
+                                    this.setState({
+                                        filterOpen: false,
+                                    })
                                 }
                             >
                                 <div style={{ padding: '10px' }}>
@@ -182,7 +185,7 @@ class AppCards extends Component {
                                         destroyOnUnmount={false}
                                     />
                                 </div>
-                            </Popover>
+                            </PopoverWithReduxState>
                         </ToolbarGroup>
                     </SubHeader>
                 </Col>
