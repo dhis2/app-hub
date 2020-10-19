@@ -1,5 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import AppCardItem from './AppCardItem'
 import Grid from '../../material/Grid/Grid'
