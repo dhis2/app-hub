@@ -53,7 +53,7 @@ describe('Get all published apps [v1]', async () => {
             'https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report'
         )
         expect(whoApp[0].versions[0].downloadUrl).to.be.equal(
-            'http://localhost:3000/api/v1/apps/download/world-health-organization/a-nice-app-by-who/1.0/app.zip'
+            'http://localhost:3000/api/v1/apps/download/world-health-organization/a-nice-app-by-who_1.0.zip'
         )
 
         expect(whoApp[0].sourceUrl).to.be.equal(

@@ -1,3 +1,4 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { PropTypes } from 'react'
 import { Error } from './Error'
 //import { Spinner } from './Loader';
@@ -13,8 +14,8 @@ export const ErrorOrLoading = props => {
 }
 
 ErrorOrLoading.propTypes = {
-    loading: PropTypes.bool.isRequired,
     error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]).isRequired,
+    loading: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
     errorObject: PropTypes.object,
     retry: PropTypes.func,

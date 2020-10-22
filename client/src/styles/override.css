@@ -50,6 +50,10 @@ a {
     text-decoration: inherit;
 }
 
+.link {
+    text-decoration: underline;
+}
+
 .paper {
     height: 100%;
     margin: 0 auto 0 auto;

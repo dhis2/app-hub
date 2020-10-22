@@ -1,7 +1,9 @@
+// eslint-disable-next-line react/no-deprecated
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import * as dialogTypes from '../../constants/dialogTypes'
 import NewAppVersionDialog from './NewAppVersionDialog'
+import EditAppVersionDialog from './EditAppVersionDialog'
 import EditAppDialog from './EditAppDialog'
 import ConfirmDeleteAppDialog from './ConfirmDeleteAppDialog'
 import EditImageDialog from './EditImageDialog'
@@ -9,6 +11,7 @@ import ConfirmGeneric from './ConfirmGeneric'
 
 const DialogComponents = {}
 DialogComponents[dialogTypes.NEW_VERSION] = NewAppVersionDialog
+DialogComponents[dialogTypes.EDIT_VERSION] = EditAppVersionDialog
 DialogComponents[dialogTypes.CONFIRM_DELETE_APP] = ConfirmDeleteAppDialog
 DialogComponents[dialogTypes.EDIT_APP] = EditAppDialog
 DialogComponents[dialogTypes.EDIT_IMAGE] = EditImageDialog
@@ -30,6 +33,7 @@ class DialogRoot extends Component {
 }
 
 DialogRoot.propTypes = {
+    dialogProps: PropTypes.object,
     dialogType: PropTypes.string,
 }
 
