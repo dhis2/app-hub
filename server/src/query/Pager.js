@@ -1,6 +1,6 @@
-const Joi = require('@hapi/joi')
+const Joi = require('../utils/CustomJoi')
 
-const pagingResultSchema = Joi.object({
+const defaultPagingResultSchema = Joi.object({
     pager: Joi.object({
         page: Joi.number(),
         pageCount: Joi.number(),
@@ -10,11 +10,16 @@ const pagingResultSchema = Joi.object({
     result: Joi.array(),
 })
 
+const defaultOptions = {
+    schema: defaultPagingResultSchema,
+}
 class Pager {
-    constructor(pagingParams) {
+    constructor(pagingParams, options = defaultOptions) {
         this.enabled = pagingParams.paging
         this.page = pagingParams.page
         this.pageSize = pagingParams.pageSize
+
+        this.schema = options.schema
     }
 
     applyToQuery(query) {
@@ -54,9 +59,9 @@ class Pager {
                 pager: pagerObject,
                 result: queryResult,
             },
-            pagingResultSchema
+            this.schema
         )
     }
 }
 
-module.exports = { default: Pager, Pager, pagingResultSchema }
+module.exports = { default: Pager, Pager }

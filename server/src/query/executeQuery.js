@@ -7,7 +7,7 @@
  * @param {*} queryHelpers.pager an instance of Pager that can be used to apply pagination to query
  * @param {*} queryHelpers.model a "model" object that can be used to format the output.
  * @param {*} options Options object
- * @param {*} options.formatter a function that overrides format-logic from model, gets the result and should return formatted result
+ * @param {*} options.formatter a function with signature `function(result)` that overrides format-logic from model, should return formatted result
  */
 async function executeQuery(query, { filters, pager, model }, options = {}) {
     if (filters) {
