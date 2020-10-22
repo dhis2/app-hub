@@ -1,3 +1,142 @@
+## [2.8.2](https://github.com/dhis2/app-hub/compare/v2.8.1...v2.8.2) (2020-10-12)
+
+
+### Bug Fixes
+
+* correctly load channels, refactor version form, fix version delete ([cd5472d](https://github.com/dhis2/app-hub/commit/cd5472dc1de61c2a966f53a00398050cf8f40aaa))
+
+## [2.8.1](https://github.com/dhis2/app-hub/compare/v2.8.0...v2.8.1) (2020-10-03)
+
+
+### Bug Fixes
+
+* downloadUrl-link ([ea2287d](https://github.com/dhis2/app-hub/commit/ea2287d690ea5452dd99d2bdbadbffa54f9d14f3))
+
+# [2.8.0](https://github.com/dhis2/app-hub/compare/v2.7.4...v2.8.0) (2020-10-02)
+
+
+### Bug Fixes
+
+* **version:** fix UI-jump when tranisitioning between error and helptext ([b89acbf](https://github.com/dhis2/app-hub/commit/b89acbf657ea954bf2eef933cd29f079a9d71e47))
+* cleanup versiofield, add link style ([204da3e](https://github.com/dhis2/app-hub/commit/204da3ed776bdcbeca48a40066621285b73ae269))
+* misc form styling ([1d0b196](https://github.com/dhis2/app-hub/commit/1d0b1960aa6250a775eb049b4da38afcc623cbf3))
+* textheader and helpertext styling ([d5512ea](https://github.com/dhis2/app-hub/commit/d5512ea395540940b2f25db5edf7851b1858d4a9))
+
+
+### Features
+
+* **validation:** add semver validation backend ([6aac6e1](https://github.com/dhis2/app-hub/commit/6aac6e1a36c72435c29925975788e754601adbce))
+* add semver-validation on client ([d5a859c](https://github.com/dhis2/app-hub/commit/d5a859cf0f6a856f7a669af548bb1c020a1bce52))
+
+## [2.7.4](https://github.com/dhis2/app-hub/compare/v2.7.3...v2.7.4) (2020-09-28)
+
+
+### Bug Fixes
+
+* **download:** encode download-components ([179cae4](https://github.com/dhis2/app-hub/commit/179cae458b3480ea42209d6f51808315999c9200))
+* **download:** encode download-components, use / as seperators instead of _ ([44663b9](https://github.com/dhis2/app-hub/commit/44663b94328b239e7d168f01a2d802e7c528d1cb))
+* **migration:** remove down migration ([b22fa9d](https://github.com/dhis2/app-hub/commit/b22fa9d6d3546f355037ff42f59c6b5d5a63e31b))
+* **migration:** replace _ with . in app_version ([693cee2](https://github.com/dhis2/app-hub/commit/693cee2c0ad3f7d8edd1e25a1f596c307b6f5e60))
+* **version:** prevent version to contain underscore ([90ebb36](https://github.com/dhis2/app-hub/commit/90ebb3688853cfffb1844495f484ee7b52f5989c))
+
+## [2.7.3](https://github.com/dhis2/app-hub/compare/v2.7.2...v2.7.3) (2020-09-24)
+
+
+### Bug Fixes
+
+* add versionitems file ([c641be0](https://github.com/dhis2/app-hub/commit/c641be077bda239b608ba194cf82889ff74b802c))
+* consolidate version validations ([789bfc2](https://github.com/dhis2/app-hub/commit/789bfc2e6b1302f32a4ab1f3863bed35556e7c8e))
+* re-order fields to same as when creating ([3630275](https://github.com/dhis2/app-hub/commit/3630275bf43ea2bc207766ed4d03f204e49e3f91))
+* **version:** use select-field when editing version ([c1e6158](https://github.com/dhis2/app-hub/commit/c1e6158926d611ecc3c90375ca0586794e70ef5e))
+
+## [2.7.2](https://github.com/dhis2/app-hub/compare/v2.7.1...v2.7.2) (2020-09-04)
+
+
+### Bug Fixes
+
+* **apiroutes:** do not redirect 404 under /api to index ([af45fc5](https://github.com/dhis2/app-hub/commit/af45fc50c0d653469c7400b4ecd400dd01744831))
+* **apiroutes:** set 404-statuscode ([8235e57](https://github.com/dhis2/app-hub/commit/8235e57ae7dabbd912f874e1412fe5e3487e871b))
+
+## [2.7.1](https://github.com/dhis2/app-hub/compare/v2.7.0...v2.7.1) (2020-09-01)
+
+
+### Bug Fixes
+
+* prevent error when saving unmodified version ([572cd2d](https://github.com/dhis2/app-hub/commit/572cd2d4ba56cbdb7e7eb9fd02d9a700e39ce350))
+
+# [2.7.0](https://github.com/dhis2/app-hub/compare/v2.6.4...v2.7.0) (2020-08-27)
+
+
+### Bug Fixes
+
+* improve config tests ([ccacce7](https://github.com/dhis2/app-hub/commit/ccacce74109e4041ebd082868e3013854615f54d))
+
+
+### Features
+
+* add 2.35 as supported dhis2-version ([b41e802](https://github.com/dhis2/app-hub/commit/b41e802018a19afb610928653b8d08aa3aedee8e))
+
+## [2.6.4](https://github.com/dhis2/app-hub/compare/v2.6.3...v2.6.4) (2020-08-26)
+
+
+### Bug Fixes
+
+* allow a developer to delete his own versions ([dfaf618](https://github.com/dhis2/app-hub/commit/dfaf61803525cd019ef6c534893d96d5a43711e2))
+* allow devs to delete images on own apps ([5987bd0](https://github.com/dhis2/app-hub/commit/5987bd0e41548001933f450cedc8d0d8db345958))
+* allow devs to upload media to own apps ([be87503](https://github.com/dhis2/app-hub/commit/be87503c44e2104622cb1d5e7c52c5c16aa8f9f9))
+
+## [2.6.3](https://github.com/dhis2/app-hub/compare/v2.6.2...v2.6.3) (2020-08-25)
+
+
+### Bug Fixes
+
+* change filename in download url ([658b471](https://github.com/dhis2/app-hub/commit/658b471e37fe004a8b15b8bbb11cb7adcdc1ad2e))
+* use slug + version as filename on download ([23bbb04](https://github.com/dhis2/app-hub/commit/23bbb04c6f4cd6524a978adab08daa7c1d65c092))
+
+## [2.6.2](https://github.com/dhis2/app-hub/compare/v2.6.1...v2.6.2) (2020-08-25)
+
+
+### Bug Fixes
+
+* use wildcard for matching patch-versions ([4d96a7b](https://github.com/dhis2/app-hub/commit/4d96a7bcdd6727e2aea8bb7181066c2c32a5ae55))
+
+## [2.6.1](https://github.com/dhis2/app-hub/compare/v2.6.0...v2.6.1) (2020-08-17)
+
+
+### Bug Fixes
+
+* **createversion:** add try-catch for parsing json ([0de1a50](https://github.com/dhis2/app-hub/commit/0de1a5049c47250dbab6a47d6035d0fa51d8542d))
+* fix tests ([b39bbc6](https://github.com/dhis2/app-hub/commit/b39bbc6163e47a103f2919791716c6d62dd5d0a8))
+* **createappversion:** allow null demoUrl ([45acd4a](https://github.com/dhis2/app-hub/commit/45acd4ad8842b1064c342ec0d6d1a6c9219a05b6))
+* **editversion:** actually allow null for demourl ([c9154e2](https://github.com/dhis2/app-hub/commit/c9154e23201803c977789403ac3c470201ae9bd4))
+* **errormapper:** map Joi-errors to 400-badrequest errors ([fad7757](https://github.com/dhis2/app-hub/commit/fad775734de4bc1fa7bd85ca64d9addd8fdce063))
+
+# [2.6.0](https://github.com/dhis2/app-hub/compare/v2.5.2...v2.6.0) (2020-06-15)
+
+
+### Features
+
+* **routes:** support for getting org by slug ([a6d27e1](https://github.com/dhis2/app-hub/commit/a6d27e1d747b591607e2f345e8393939a627aaf7))
+* **services:** findOneBySlug ([16eeb8a](https://github.com/dhis2/app-hub/commit/16eeb8af99dbfe985809d6c78e2ff38cb0c2a529))
+* **services:** getUsersInOrganisation function ([ce06205](https://github.com/dhis2/app-hub/commit/ce062058b5fe8875f7f8e1e54da1f67740336cd0))
+
+## [2.5.2](https://github.com/dhis2/app-hub/compare/v2.5.1...v2.5.2) (2020-06-03)
+
+
+### Bug Fixes
+
+* add ui validation for demourl ([380b686](https://github.com/dhis2/app-hub/commit/380b68630d52387347ddbcc2c3615f0c720ad100))
+* validate demoUrl/sourceUrl as URI ([4950e77](https://github.com/dhis2/app-hub/commit/4950e77835a368e5fdc8c531674ffb3932b8f03f))
+
+## [2.5.1](https://github.com/dhis2/app-hub/compare/v2.5.0...v2.5.1) (2020-06-01)
+
+
+### Bug Fixes
+
+* edit app form tweaks ([6ce2387](https://github.com/dhis2/app-hub/commit/6ce23873b5de3b191981a12195e5d5169c8a6a05))
+* pre-fill sourceUrl field when editing ([b9ebf98](https://github.com/dhis2/app-hub/commit/b9ebf988bbfae57c8a9b45a4d95ae76cf21572ec))
+* save sourceUrl correctly when creating an app ([a3a4577](https://github.com/dhis2/app-hub/commit/a3a457769a046cd8a2e23bc52f788989ea77892f))
+
 # [2.5.0](https://github.com/dhis2/app-hub/compare/v2.4.2...v2.5.0) (2020-05-12)
 
 

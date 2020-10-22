@@ -1,4 +1,3 @@
-const uuid = require('uuid/v4')
 const joi = require('@hapi/joi')
 
 const debug = require('debug')('apphub:server:data:createAppVersion')
@@ -16,8 +15,14 @@ const paramsSchema = joi
             .string()
             .uuid()
             .required(),
-        demoUrl: joi.string().allow('', null),
-        sourceUrl: joi.string().allow('', null),
+        demoUrl: joi
+            .string()
+            .uri()
+            .allow('', null),
+        sourceUrl: joi
+            .string()
+            .uri()
+            .allow('', null),
         version: joi.string().allow(''),
     })
     .options({ allowUnknown: true })
@@ -37,32 +42,26 @@ const paramsSchema = joi
  * @param {string} params.demoUrl URL where the app can be seen or tested
  * @param {string} params.sourceUrl URL where to find the source, for example github
  * @param {string} params.version A version for the app version to create for example normally something like 1.2 or 1.4.5
- * @param {*} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @property {Promise<CreateAppVersionResult>}
  */
-const createAppVersion = async (params, knex, transaction) => {
+const createAppVersion = async (params, knex) => {
     const paramsValidation = paramsSchema.validate(params)
 
     if (paramsValidation.error !== undefined) {
         debug(paramsValidation.error)
-        throw new Error(paramsValidation.error)
-    }
-
-    if (!transaction) {
-        debug('missing transaction')
-        throw new Error('No transaction passed to function')
+        throw paramsValidation.error
     }
 
     const { userId, appId, demoUrl, sourceUrl, version } = params
     debug('got params: ', params)
 
     try {
-        if (!(await appExists(appId, knex, transaction))) {
+        if (!(await appExists(appId, knex))) {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
         const [id] = await knex('app_version')
-            .transacting(transaction)
             .insert({
                 app_id: appId,
                 created_at: knex.fn.now(),

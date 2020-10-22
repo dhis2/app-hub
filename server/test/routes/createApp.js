@@ -1,4 +1,7 @@
 const Lab = require('@hapi/lab')
+const fs = require('fs')
+const path = require('path')
+const request = require('request-promise')
 
 const { it, describe, beforeEach, afterEach } = (exports.lab = Lab.script())
 
@@ -36,7 +39,7 @@ describe('test create app', () => {
         },
         versions: [
             {
-                version: '1',
+                version: '1.0.0',
                 minDhisVersion: '2.25',
                 maxDhisVersion: '2.33',
                 demoUrl: 'https://www.dhis2.org',
@@ -47,10 +50,6 @@ describe('test create app', () => {
     }
 
     it('should create a test app without any images', async () => {
-        const fs = require('fs')
-        const path = require('path')
-        const request = require('request-promise')
-
         const form = {
             app: JSON.stringify(sampleApp),
             file: {
@@ -73,5 +72,40 @@ describe('test create app', () => {
         console.log('got response:', response)
 
         expect(response.statusCode).to.equal(200)
+    })
+
+    it('should return 400 bad request if version is not valid', async () => {
+        const badVersionApp = {
+            ...sampleApp,
+            versions: [
+                {
+                    version: '2',
+                    minDhisVersion: '2.25',
+                    maxDhisVersion: '2.33',
+                    demoUrl: 'https://www.dhis2.org',
+                    channel: 'Stable',
+                },
+            ],
+        }
+        const form = {
+            app: JSON.stringify(badVersionApp),
+            file: {
+                value: fs.createReadStream(
+                    path.join(__dirname, '../', 'sample-app.zip')
+                ),
+                options: {
+                    filename: 'sample-app.zip',
+                    contentType: 'application/zip',
+                },
+            },
+        }
+
+        const response = await expect(request.post({
+            url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
+            json: true,
+            formData: form,
+        })).to.reject()
+
+        expect(response.statusCode).to.equal(400)
     })
 })

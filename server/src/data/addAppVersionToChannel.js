@@ -40,18 +40,14 @@ const paramSchema = joi
  * @param {string} params.channelName Name of the channel to publish this app version to
  * @param {string} params.minDhisVersion Minimum dhis2 version supported for example 2.29
  * @param {string} params.maxDhisVersion Maximum dhis2 version supported for example 2.31
- * @param {object} knex DB instance of knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<AddAppVersionToChannelResult>}
  */
-const addAppVersionToChannel = async (params, knex, transaction) => {
+const addAppVersionToChannel = async (params, knex) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== undefined) {
         throw new Error(validation.error)
-    }
-
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
     }
 
     const {
@@ -67,7 +63,6 @@ const addAppVersionToChannel = async (params, knex, transaction) => {
             .where({ name: channelName })
 
         const [id] = await knex('app_channel')
-            .transacting(transaction)
             .insert({
                 app_version_id: appVersionId,
                 channel_id: channel.id,

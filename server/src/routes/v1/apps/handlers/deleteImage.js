@@ -1,14 +1,15 @@
 const Boom = require('@hapi/boom')
 
+const debug = require('debug')('apphub:server:routes:handlers:v1:deleteImage')
+
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
 
 const {
-    getAppDeveloperId,
-    getAppMedia,
     deleteAppMedia,
+    getOrganisationAppsByUserId,
 } = require('../../../../data')
 
 const { deleteFile } = require('../../../../utils')
@@ -36,16 +37,21 @@ module.exports = {
         const { appMediaId, appId } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(appId, db)
-
         const isManager = currentUserIsManager(request)
 
-        if (isManager || appDeveloperId === currentUser.id) {
+        const userApps = await getOrganisationAppsByUserId(currentUser.id, db)
+        const canDeleteImage =
+            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+
+        debug('isManager:', isManager)
+        debug('canDeleteImage:', canDeleteImage)
+
+        if (canDeleteImage) {
             //can edit app
             const transaction = await db.transaction()
 
             try {
-                await deleteAppMedia(appMediaId, db, transaction)
+                await deleteAppMedia(appMediaId, transaction)
 
                 await transaction.commit()
 

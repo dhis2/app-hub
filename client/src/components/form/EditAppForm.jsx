@@ -1,10 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import { Card, CardText } from 'material-ui/Card'
-import Button from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
-import FontIcon from 'material-ui/FontIcon'
-import UploadFileField from './UploadFileField'
-import SelectField from 'material-ui/SelectField'
+// eslint-disable-next-line react/no-deprecated
+import React, { PropTypes } from 'react'
 import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
@@ -50,7 +45,7 @@ const validate = values => {
 }
 
 const EditForm = props => {
-    const { handleSubmit, pristine, submitting } = props
+    const { handleSubmit, submitted } = props
     //this is called when the form is submitted, translating
     //fields to an object the api understands.
     //we then call props.submitted, so this data can be passed to parent component
@@ -68,10 +63,10 @@ const EditForm = props => {
             },
         }
 
-        return props.submitted({ data })
+        return submitted({ data })
     }
 
-    const menuItems = appTypes.map((type, i) => (
+    const menuItems = appTypes.map(type => (
         <MenuItem
             key={type.value}
             value={type.value}
@@ -103,6 +98,7 @@ const EditForm = props => {
                 component={formUtils.renderTextField}
                 label="Source Code URL"
                 validate={validateURL}
+                fullWidth
             />
             <br />
             <Field
@@ -120,32 +116,36 @@ const EditForm = props => {
                 component={formUtils.renderTextField}
                 label="Developer Name"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerEmail"
                 component={formUtils.renderTextField}
                 label="Developer Email"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerAddress"
                 component={formUtils.renderTextField}
                 label="Developer Address"
                 disabled={true}
+                fullWidth
             />
             <Field
                 name="developerOrg"
                 component={formUtils.renderTextField}
                 label="Organisation"
                 disabled={true}
+                fullWidth
             />
         </Form>
     )
 }
 EditForm.propTypes = {
-    //Callback for the values when the form has been submitted.
-    submitted: PropTypes.func,
     //Submits the form, given by Redux-form "Form"-component.
-    submit: PropTypes.func,
+    handleSubmit: PropTypes.func.required,
+    //Callback for the values when the form has been submitted.
+    submitted: PropTypes.func.required,
 }
 export default reduxForm({ form: 'editAppForm', validate })(EditForm)

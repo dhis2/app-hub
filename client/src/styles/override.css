@@ -50,6 +50,10 @@ a {
     text-decoration: inherit;
 }
 
+.link {
+    text-decoration: underline;
+}
+
 .paper {
     height: 100%;
     margin: 0 auto 0 auto;
@@ -155,6 +159,25 @@ a {
 
 h1, h2, h3, h4 {
     font-weight: inherit
+}
+
+span.error {
+    clear: both;
+    display: block;
+    color: #f00;
+}
+
+tr.hasError {
+    height: 80px !important;
+}
+
+tr.hasError td {
+    vertical-align: top;
+}
+
+tr.hasError td:nth-of-type(1),
+tr.hasError td:nth-of-type(7) {
+    padding-top: 18px;
 }
 
 /* Change toolbar-padding according to mdc-layout-grid-margins*/

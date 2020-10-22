@@ -23,7 +23,7 @@ const paramsSchema = joi
  * @param {*} knex db instance
  * @returns {Promise}
  */
-const addUserToOrganisation = async (params, knex, transaction) => {
+const addUserToOrganisation = async (params, knex) => {
     const validation = paramsSchema.validate(params)
 
     if (validation.error !== undefined) {
@@ -34,15 +34,10 @@ const addUserToOrganisation = async (params, knex, transaction) => {
         throw new Error('Missing parameter: knex')
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
-    }
-
     const { userId, organisationId } = params
 
     try {
         await knex
-            .transacting(transaction)
             .insert({
                 user_id: userId,
                 organisation_id: organisationId,

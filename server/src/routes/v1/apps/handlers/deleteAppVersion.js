@@ -1,11 +1,17 @@
 const Boom = require('@hapi/boom')
+const debug = require('debug')(
+    'apphub:server:routes:handlers:v1:deleteAppVersion'
+)
 
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
 
-const { getAppDeveloperId, deleteAppVersion } = require('../../../../data')
+const {
+    deleteAppVersion,
+    getOrganisationAppsByUserId,
+} = require('../../../../data')
 
 const { deleteFile } = require('../../../../utils')
 
@@ -32,16 +38,20 @@ module.exports = {
         const { appId, versionId } = request.params
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(appId, db)
 
         const isManager = currentUserIsManager(request)
+        const userApps = await getOrganisationAppsByUserId(currentUser.id, db)
+        const userCanDeleteVersion =
+            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
 
-        if (isManager || appDeveloperId === currentUser.id) {
+        debug('isManager:', isManager)
+        debug('userCanDeleteVersion:', userCanDeleteVersion)
+        if (isManager || userCanDeleteVersion) {
             //can edit app
             const transaction = await db.transaction()
 
             try {
-                await deleteAppVersion(versionId, db, transaction)
+                await deleteAppVersion(versionId, transaction)
                 await transaction.commit()
                 await deleteFile(`${appId}/${versionId}`, 'app.zip')
             } catch (err) {

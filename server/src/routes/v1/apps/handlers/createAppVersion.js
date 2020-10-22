@@ -73,7 +73,14 @@ module.exports = {
         }
 
         const versionPayload = request.payload.version
-        const appVersionJson = JSON.parse(versionPayload)
+
+        let appVersionJson
+        try {
+            appVersionJson = JSON.parse(versionPayload)
+        } catch (e) {
+            throw Boom.badRequest('Invalid JSON')
+        }
+
         const validationResult = CreateAppVersionModel.def.validate(
             appVersionJson
         )
@@ -142,7 +149,7 @@ module.exports = {
                 versionId = appVersion.id
             } catch (err) {
                 await transaction.rollback()
-                throw Boom.internal('Could not create app version', err)
+                throw Boom.boomify(err)
             }
 
             //Add the texts as english language, only supported for now
@@ -160,7 +167,7 @@ module.exports = {
                 )
             } catch (err) {
                 await transaction.rollback()
-                throw Boom.internal('Could not save localized appversion', err)
+                throw Boom.boomify(err)
             }
 
             try {
@@ -177,17 +184,14 @@ module.exports = {
                 )
             } catch (err) {
                 await transaction.rollback()
-                throw Boom.internal(
-                    `Could not publish appversion to channel ${channel}`,
-                    err
-                )
+                throw Boom.boomify(err)
             }
 
             try {
                 await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
             } catch (err) {
                 await transaction.rollback()
-                throw Boom.internal(`Could not save app file to storage`, err)
+                throw Boom.boomify(err)
             }
 
             await transaction.commit()

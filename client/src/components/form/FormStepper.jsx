@@ -121,6 +121,7 @@ class FormStepper extends Component {
             dirty,
             submitting,
         } = this.props
+
         const { stepIndex } = this.state
         const styles = {
             nextButton: {

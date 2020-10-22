@@ -3,12 +3,11 @@ import React, { PropTypes, Component } from 'react'
 
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
-import { addAppVersion } from '../../actions/actionCreators'
-
-import { loadChannels } from '../../actions/actionCreators'
+import { editAppVersion, loadChannels } from '../../actions/actionCreators'
 
 import AppVersionForm from '../form/AppVersionForm'
-export class NewAppVersionDialog extends Component {
+
+export class EditAppVersionDialog extends Component {
     constructor(props) {
         super(props)
     }
@@ -27,44 +26,48 @@ export class NewAppVersionDialog extends Component {
         }
     }
 
-    handleCreate(values) {
-        this.props.addVersion(values.data, values.file, this.props.app.id)
+    handleEdit({ data }) {
+        this.props.editVersion(this.props.appId, data)
     }
 
     render() {
         return (
             <DialogBase
-                title="New App Version"
-                approveLabel={'Upload'}
+                title="Edit version"
+                approveLabel={'Save'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
             >
                 <AppVersionForm
-                    isNew={true}
+                    isNew={false}
                     ref={ref => {
                         this.form = ref
                     }}
-                    submitted={this.handleCreate.bind(this)}
+                    initialValues={{
+                        ...this.props.appVersion,
+                    }}
+                    submitted={this.handleEdit.bind(this)}
                 />
             </DialogBase>
         )
     }
 }
 
-NewAppVersionDialog.propTypes = {
-    addVersion: PropTypes.func.isRequired,
-    app: PropTypes.object.isRequired,
-    closeDialog: PropTypes.func.isRequired,
-    loadChannels: PropTypes.func.isRequired,
+EditAppVersionDialog.propTypes = {
+    appId: PropTypes.string,
+    appVersion: PropTypes.object,
+    closeDialog: PropTypes.func,
+    editVersion: PropTypes.func,
+    loadChannels: PropTypes.func,
 }
 
 const mapDispatchToProps = dispatch => ({
-    addVersion(appVersion, file, id) {
-        dispatch(addAppVersion(appVersion, file, id))
+    editVersion(appId, appVersion) {
+        dispatch(editAppVersion(appId, appVersion))
     },
     loadChannels() {
         dispatch(loadChannels())
     },
 })
 
-export default connect(undefined, mapDispatchToProps)(NewAppVersionDialog)
+export default connect(undefined, mapDispatchToProps)(EditAppVersionDialog)

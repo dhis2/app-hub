@@ -46,32 +46,29 @@ const createUserValidationFunc = (db, audience) => {
 
                     if (!user) {
                         //create the user if it doesn't exist
-                        const transaction = await db.transaction()
+                        const trx = await db.transaction()
                         try {
                             user = await createUser(
                                 {
                                     email,
                                     name,
                                 },
-                                db,
-                                transaction
+                                trx
                             )
 
                             debug(
                                 `created user with id ${user.id} for email ${user.email}`
                             )
 
-                            await db('user_external_id')
-                                .transacting(transaction)
-                                .insert({
-                                    user_id: user.id,
-                                    external_id: decoded.sub,
-                                })
+                            await trx('user_external_id').insert({
+                                user_id: user.id,
+                                external_id: decoded.sub,
+                            })
 
-                            await transaction.commit()
+                            await trx.commit()
                         } catch (err) {
                             debug('error creating user', err)
-                            await transaction.rollback()
+                            await trx.rollback()
                             throw Boom.internal(err)
                         }
                     } else {

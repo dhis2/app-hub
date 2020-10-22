@@ -3,6 +3,7 @@ import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import TextField from 'material-ui/TextField'
 import FAB from 'material-ui/FloatingActionButton'
+import Theme from '../../styles/theme'
 
 const uploadIconPosition = PropTypes.oneOf(['right', 'left'])
 
@@ -86,6 +87,8 @@ class UploadFileField extends Component {
             },
             fieldDiv: {
                 position: 'relative',
+                display: 'flex',
+                alignItems: 'flex-end'
             },
         }
 
@@ -137,6 +140,9 @@ class UploadFileField extends Component {
                         name={this.props.name}
                         style={styles.field}
                         readOnly
+                        floatingLabelText={props.label}
+                        floatingLabelFixed
+                        floatingLabelStyle={{color: Theme.palette.textHeaderColor}}
                         hintText={props.hintText}
                         errorText={props.errorText}
                         value={textFieldOutput}

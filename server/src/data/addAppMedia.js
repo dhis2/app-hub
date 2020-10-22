@@ -42,18 +42,18 @@ const paramSchema = joi
  * @param {number} params.mediaType MediaType enum that determines if this is a logotype or image/screenshot
  * @param {string} params.fileName Original filename as when uploaded
  * @param {string} params.mime MIME type for the file, for example 'image/jpeg'
- * @param {object} knex DB instance of knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<AppMediaResult>}
  */
-const addAppMedia = async (params, knex, transaction) => {
+const addAppMedia = async (params, knex) => {
     const validation = paramSchema.validate(params)
 
     if (validation.error !== undefined) {
         throw new Error(validation.error)
     }
 
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
+    if (!knex) {
+        throw new Error('No db passed to function')
     }
 
     const { appId, userId, mediaType, fileName, mime } = params
@@ -67,7 +67,6 @@ const addAppMedia = async (params, knex, transaction) => {
 
         if (!mimeTypes || mimeTypes.length === 0) {
             const [id] = await knex('mime_type')
-                .transacting(transaction)
                 .insert({
                     mime,
                 })
@@ -92,7 +91,6 @@ const addAppMedia = async (params, knex, transaction) => {
         }
 
         const [mediaId] = await knex('media')
-            .transacting(transaction)
             .insert(mediaToInsert)
             .returning('id')
 
@@ -105,7 +103,6 @@ const addAppMedia = async (params, knex, transaction) => {
         }
 
         const [id] = await knex('app_media')
-            .transacting(transaction)
             .insert(insertData)
             .returning('id')
 

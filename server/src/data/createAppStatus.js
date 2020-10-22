@@ -12,22 +12,18 @@ const appExists = require('./appExists')
  * @param {number} params.userId
  * @param {number} params.appId
  * @param {number} params.status A value (string) from the AppStatus enum, APPROVED|PENDING|NOT_APPROVED
- * @param {object} knex
+ * @param {object} knex DB instance of knex, or transaction
  * @returns {Promise<CreateAppStatusResult>} result object with database id for inserted app_status row
  */
-const createAppStatus = async (params, knex, transaction) => {
-    if (!transaction) {
-        throw new Error('No transaction passed to function')
-    }
+const createAppStatus = async (params, knex) => {
     const { userId, appId, status } = params
     try {
         //Make sure the app exist
-        if (!(await appExists(appId, knex, transaction))) {
+        if (!(await appExists(appId, knex))) {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
         const [id] = await knex('app_status')
-            .transacting(transaction)
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,

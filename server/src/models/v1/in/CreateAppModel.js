@@ -1,4 +1,5 @@
 const Joi = require('@hapi/joi')
+const { isSemver } =  require('../../helpers')
 
 const { AppTypes } = require('../../../enums')
 
@@ -17,10 +18,12 @@ const CreateModelAppData = Joi.object().keys({
     }),
     versions: Joi.array().items(
         Joi.object().keys({
-            version: Joi.string(),
+            version: Joi.string().custom(isSemver, 'semver validate'),
             minDhisVersion: Joi.string(),
             maxDhisVersion: Joi.string().allow(''),
-            demoUrl: Joi.string().allow(''),
+            demoUrl: Joi.string()
+                .uri()
+                .allow(''),
             channel: Joi.string(),
         })
     ),
