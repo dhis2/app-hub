@@ -1,3 +1,11 @@
+## [2.8.3](https://github.com/dhis2/app-hub/compare/v2.8.2...v2.8.3) (2020-10-23)
+
+
+### Bug Fixes
+
+* React-PropTypes to proptypes package ([71ddcd6](https://github.com/dhis2/app-hub/commit/71ddcd611cb15773b2dbcdf0f7a2728e11cdc746))
+* upgrade to react@16 with deps ([eee9ea7](https://github.com/dhis2/app-hub/commit/eee9ea7ded9589264543d9b6c55347315579f252))
+
 ## [2.8.2](https://github.com/dhis2/app-hub/compare/v2.8.1...v2.8.2) (2020-10-12)
 
 
