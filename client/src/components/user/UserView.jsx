@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
