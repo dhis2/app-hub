@@ -12,9 +12,9 @@ const { Pager } = require('../query/Pager')
  * All options can be overwritten by each route.
  * Options:
  *  enabled - enable the paginationPlugin
- * querySchema - Joi schema for query-params. Should use default as a base, and are mostly 
+ * querySchema - Joi schema for query-params. Should use default as a base, and are mostly
  * intended to be used to rename keys or change defaults through Joi.
- * resultSchema - Joi schema for formatted result. Should use default as a base, and are mostly 
+ * resultSchema - Joi schema for formatted result. Should use default as a base, and are mostly
  * intended to be used to rename keys or change defaults through Joi.
  * keepParams - If true, the query-params related to paging will not be removed from request.query
  * decorate - decorate options, or false if toolkit should not be decorated.
@@ -146,11 +146,11 @@ const paginationPlugin = {
     name: 'PaginationPlugin',
     register: async (server, options = {}) => {
         const opts = Joi.attempt(options, optionsSchema)
-        
+
         server.bind({
             options: opts,
         })
-        
+
         server.ext('onPreHandler', onPreHandler)
 
         // validate plugin settings so that we don't need to do this during runtime
@@ -158,7 +158,7 @@ const paginationPlugin = {
             .table()
             .filter(r => r.settings.plugins && r.settings.plugins.pagination)
             .map(r =>
-                Joi.attempt(
+                Joi.assert(
                     r.settings.plugins.pagination,
                     optionsSchema,
                     `PaginationPlugin validation failed at route ${r.path}:`
