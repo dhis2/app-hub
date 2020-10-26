@@ -1,0 +1,26 @@
+version = 1
+
+[merge]
+automerge_label = "automerge"
+require_automerge_label = true
+blocking_title_regex = "^WIP:.*"
+blocking_labels = ["wip"]
+method = "merge"
+delete_branch_on_merge = true
+notify_on_conflict = true
+optimistic_updates = true
+dont_wait_on_status_checks = []
+prioritize_ready_to_merge = false
+do_not_merge = false
+
+[merge.message]
+title = "github_default"
+body = "github_default"
+include_pull_request_url = false
+include_pr_number = true
+body_type = "markdown"
+strip_html_comments = false
+
+[update]
+always = false
+require_automerge_label = true
