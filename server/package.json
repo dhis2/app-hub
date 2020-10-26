@@ -48,6 +48,6 @@
         "mock-local-storage": "^1.1.8",
         "nodemon": "^1.19.2",
         "request-promise": "^4.2.5",
-        "sqlite3": "^4.0.6"
+        "sqlite3": "^5.0.0"
     }
 }
