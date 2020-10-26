@@ -14,10 +14,8 @@ import DialogRoot from './dialog/DialogRoot'
 import PrivateRoute from './utils/PrivateRoute'
 import { Provider } from 'react-redux'
 import store from '../store'
-import injectTapEventPlugin from 'react-tap-event-plugin'
-import { Auth } from '../api/api.js'
-
-injectTapEventPlugin()
+import { getAuth } from '../utils/AuthService'
+import '../utils/preRender'
 
 export default function AppHub() {
     return (

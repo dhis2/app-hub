@@ -1,3 +1,6 @@
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { connect, dispatch } from 'react-redux'
 import SnackbarUI from 'material-ui/Snackbar'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
@@ -21,7 +24,7 @@ export class Snackbar extends Component {
         const { message, retryAction } = this.props.snackbar
         const retryProps = {
             action: 'Retry',
-            onActionTouchTap: retryAction,
+            onClick: retryAction,
         }
 
         return (

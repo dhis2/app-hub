@@ -1,5 +1,8 @@
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+// eslint-disable-next-line react/no-deprecated
+import PropTypes from 'prop-types';
+
+import React, { Component } from 'react';
+
 import {
     Table,
     TableBody,
@@ -77,7 +80,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="edit"
                 style={styles.iconButton}
-                onTouchTap={() => this.handleEditRow(appVersion)}
+                onClick={() => this.handleEditRow(appVersion)}
             >
                 <TableIcon>edit</TableIcon>
             </IconButton>
@@ -87,7 +90,7 @@ class VersionListEdit extends Component {
             <IconButton
                 key="delete"
                 style={styles.iconButton}
-                onTouchTap={() => this.props.handleDelete(appVersion)}
+                onClick={() => this.props.handleDelete(appVersion)}
             >
                 <TableIcon>delete</TableIcon>
             </IconButton>

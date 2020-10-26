@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+import PropTypes from 'prop-types';
+import React from 'react';
 import classNames from 'classnames'
 
 const AlignType = PropTypes.oneOf(['top', 'middle', 'bottom'])

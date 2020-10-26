@@ -1,5 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import { Link } from 'react-router-dom'
 import config from '../../../config'
 import { Card, CardMedia, CardTitle } from 'material-ui/Card'

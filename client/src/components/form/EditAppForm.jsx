@@ -1,5 +1,7 @@
-import PropTypes from 'prop-types'
-import React from 'react'
+// eslint-disable-next-line react/no-deprecated
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
