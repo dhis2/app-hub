@@ -40,12 +40,7 @@ async function executeQuery(
 
     if (pager) {
         const totalCount =
-      
-      
-      
-      
-                                rawResult.length > 0 ? rawResult[0].total_count || result.length     : 0
-        console.log('call pager with', result, totalCount)
+            rawResult.length > 0 ? rawResult[0].total_count || result.length : 0
         result = pager.formatResult(result, totalCount)
     }
 
