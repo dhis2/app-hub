@@ -1,4 +1,4 @@
-FROM node:lts-slim as build
+FROM node:lts-buster-slim as build
 
 ENV NODE_ENV=development
 
@@ -13,7 +13,7 @@ RUN yarn workspace client pack --filename app-hub-client.tgz
 RUN tar zxvf client/app-hub-client.tgz --directory server/
 RUN mv server/package/build server/static && rm -rf server/package
 
-FROM node:lts-slim
+FROM node:lts-buster-slim
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
