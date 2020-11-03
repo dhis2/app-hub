@@ -38,6 +38,7 @@ import {
     APP_STATUS_PENDING,
     APP_STATUS_REJECTED,
 } from '../../../constants/apiConstants'
+import PopoverWithReduxState from '../../../utils/PopoverWithReduxState'
 
 class AppList extends Component {
     constructor(props) {
@@ -158,7 +159,7 @@ class AppList extends Component {
                             filter_list
                         </FontIcon>
                     </IconButton>
-                    <Popover
+                    <PopoverWithReduxState
                         open={this.state.open}
                         anchorEl={this.state.anchorEl}
                         style={{ width: '200px' }}
@@ -189,7 +190,7 @@ class AppList extends Component {
                             />
                             {manager ? this.renderStatusFilters() : null}
                         </div>
-                    </Popover>
+                    </PopoverWithReduxState>
                 </SubHeader>
                 <Card>
                     <CardText>
@@ -233,7 +234,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(AppList)
+export default connect(mapStateToProps, mapDispatchToProps)(AppList)

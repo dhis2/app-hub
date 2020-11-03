@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Card, CardText } from 'material-ui/Card'
 import Button from 'material-ui/RaisedButton'
@@ -202,7 +203,7 @@ class FormStepper extends Component {
                                 style={styles.backButton}
                                 label="Back"
                                 primary={true}
-                                onTouchTap={this.prevStep}
+                                onClick={this.prevStep}
                             />
                         )}
                         {stepIndex < this.props.sections.length - 1 && (
@@ -210,7 +211,7 @@ class FormStepper extends Component {
                                 style={styles.nextButton}
                                 label="Continue"
                                 primary={true}
-                                onTouchTap={this.nextStep}
+                                onClick={this.nextStep}
                             />
                         )}
                         {this.state.stepIndex ===
