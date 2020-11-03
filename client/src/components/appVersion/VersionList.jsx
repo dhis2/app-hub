@@ -1,5 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+
+import React from 'react'
 import {
     Table,
     TableBody,
@@ -29,7 +31,7 @@ const VersionList = props => {
                     }
                 >
                     <MenuItem
-                        onTouchTap={() => props.handleDelete(version)}
+                        onClick={() => props.handleDelete(version)}
                         primaryText="Delete"
                     />
                 </IconMenu>
