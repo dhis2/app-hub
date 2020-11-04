@@ -1,3 +1,10 @@
+## [2.10.1](https://github.com/dhis2/app-hub/compare/v2.10.0...v2.10.1) (2020-11-04)
+
+
+### Bug Fixes
+
+* **api:** do not remove leading slash on first path ([0c3d7a2](https://github.com/dhis2/app-hub/commit/0c3d7a2f571c30079c03269833b7d89f3e8ec856))
+
 # [2.10.0](https://github.com/dhis2/app-hub/compare/v2.9.1...v2.10.0) (2020-11-04)
 
 
