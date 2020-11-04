@@ -17,10 +17,15 @@ const encodeQueryParameter = param => {
 export const joinUrlPath = (...paths) => {
     const truePaths = paths.filter(path => !!path)
     return truePaths
-        .map(path => {
+        .map((path, i) => {
             path = typeof path === 'string' ? path : String(path)
             //remove trailing and leading slashes
-            return path.replace(/^\/+|\/+$/g, '')
+            let regex = /^\/+|\/+$/g
+            if (i === 0) {
+                // if first path, only remove trailing slash. Leading slash is valid as a relative url to the domain-root.
+                regex = /\/+$/g
+            }
+            return path.replace(regex, '')
         })
         .join('/')
 }
