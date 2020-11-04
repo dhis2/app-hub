@@ -1,3 +1,10 @@
+## [2.9.1](https://github.com/dhis2/app-hub/compare/v2.9.0...v2.9.1) (2020-11-04)
+
+
+### Bug Fixes
+
+* pin node version to 14 ([d6998d5](https://github.com/dhis2/app-hub/commit/d6998d597adbd7bdc931d7f65a7a2880a5d146bd))
+
 # [2.9.0](https://github.com/dhis2/app-hub/compare/v2.8.3...v2.9.0) (2020-11-03)
 
 
