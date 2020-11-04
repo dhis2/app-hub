@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Spinner } from './Loader'
+import Spinner from './Spinner'
 import { Route, Redirect } from 'react-router-dom'
 import { userAuthenticated, userLogout } from '../../actions/actionCreators'
 import { getUserInfo } from '../../selectors/userSelectors'

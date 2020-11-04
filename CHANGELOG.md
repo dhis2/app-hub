@@ -1,3 +1,23 @@
+## [2.9.1](https://github.com/dhis2/app-hub/compare/v2.9.0...v2.9.1) (2020-11-04)
+
+
+### Bug Fixes
+
+* pin node version to 14 ([d6998d5](https://github.com/dhis2/app-hub/commit/d6998d597adbd7bdc931d7f65a7a2880a5d146bd))
+
+# [2.9.0](https://github.com/dhis2/app-hub/compare/v2.8.3...v2.9.0) (2020-11-03)
+
+
+### Bug Fixes
+
+* cleanup old spinner ([8737475](https://github.com/dhis2/app-hub/commit/873747567e1b629b0fbba3cb937436f4c8684fc8))
+* **spinner:** use circularprogress for spinner instead of custom svg ([2764873](https://github.com/dhis2/app-hub/commit/2764873f22630692dede510e02e92e2342f4ad5c))
+
+
+### Features
+
+* remove node-sass ([b4496df](https://github.com/dhis2/app-hub/commit/b4496df573e8587678e2f7e91f90049bfef5425d))
+
 ## [2.8.3](https://github.com/dhis2/app-hub/compare/v2.8.2...v2.8.3) (2020-10-23)
 
 
