@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { connect, dispatch } from 'react-redux'
 import SnackbarUI from 'material-ui/Snackbar'
-import PropTypes from 'prop-types'
-import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { emptySnackbar } from '../../actions/actionCreators'
 
