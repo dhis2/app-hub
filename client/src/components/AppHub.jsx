@@ -14,7 +14,7 @@ import DialogRoot from './dialog/DialogRoot'
 import PrivateRoute from './utils/PrivateRoute'
 import { Provider } from 'react-redux'
 import store from '../store'
-import { getAuth } from '../utils/AuthService'
+import { Auth } from '../api/api'
 import '../utils/preRender'
 
 export default function AppHub() {

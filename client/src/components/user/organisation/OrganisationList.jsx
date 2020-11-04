@@ -34,6 +34,7 @@ const styles = {
         bottom: -20,
         right: 10,
         position: 'absolute',
+        zIndex: 2,
     },
 }
 
