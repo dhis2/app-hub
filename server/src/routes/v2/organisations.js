@@ -7,7 +7,8 @@ const {
 const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
-const debug = require('debug')('apphub:server:routes:handlers:organisations')
+// const debug = require('debug')('apphub:server:routes:handlers:organisations')
+const { wrapError, UniqueViolationError } = require('db-errors')
 
 module.exports = [
     {
@@ -29,6 +30,9 @@ module.exports = [
                     name: Joi.filter().description(
                         'The name of the organisation'
                     ),
+                    slug: Joi.filter().description(
+                        'The slug of the organisation'
+                    ),
                     owner: Joi.filter(Joi.string().guid())
                         .operator(Joi.valid('eq'))
                         .description(
@@ -39,6 +43,9 @@ module.exports = [
                         .description(
                             'The uuid of the user to get organisations for'
                         ),
+                    email: Joi.filter().description(
+                        'The email of the organisation'
+                    ),
                 }),
             },
             plugins: {
@@ -51,7 +58,6 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const filters = request.plugins.queryFilter
-
             const orgs = await Organisation.find({ filters }, db)
             return orgs
         },
@@ -104,6 +110,7 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     name: OrgModel.definition.extract('name').required(),
+                    email: OrgModel.definition.extract('email'),
                 }),
             },
             tags: ['api', 'v2'],
@@ -145,16 +152,15 @@ module.exports = [
             validate: {
                 payload: Joi.object({
                     name: OrgModel.definition.extract('name'),
+                    email: OrgModel.definition.extract('email'),
                     owner: OrgModel.definition.extract('owner'),
-                }),
+                }).min(1),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
                 }),
             },
             response: {
-                schema: Joi.object({
-                    id: Joi.string().uuid(),
-                }),
+                schema: OrgModel.definition,
             },
         },
         handler: async (request, h) => {
@@ -176,9 +182,7 @@ module.exports = [
                     )
                 }
                 await Organisation.update(organisation.id, updateObj, db)
-                return {
-                    id: organisation.id,
-                }
+                return Organisation.findOne(request.params.orgId, false, db)
             }
 
             const transaction = await db.transaction(updateOrganisation)
@@ -233,18 +237,28 @@ module.exports = [
                     trx
                 )
                 if (userToAdd && userToAdd.id) {
-                    await Organisation.addUserById(org.id, userToAdd.id, trx)
+                    try {
+                        await Organisation.addUserById(
+                            org.id,
+                            userToAdd.id,
+                            trx
+                        )
+                    } catch (e) {
+                        const wrapped = wrapError(e)
+                        if (wrapped instanceof UniqueViolationError) {
+                            throw Boom.conflict(
+                                'User is already a member of that organisation.'
+                            )
+                        }
+                        throw e
+                    }
                     return userToAdd
                 } else {
                     throw Boom.conflict(`User with email not found.`)
                 }
             }
 
-            await db.transaction(addUserToOrganisation)
-
-            return {
-                statusCode: 200,
-            }
+            return db.transaction(addUserToOrganisation)
         },
     },
     {

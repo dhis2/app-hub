@@ -89,7 +89,7 @@ class UploadFileField extends Component {
             fieldDiv: {
                 position: 'relative',
                 display: 'flex',
-                alignItems: 'flex-end'
+                alignItems: 'flex-end',
             },
         }
 
@@ -143,7 +143,9 @@ class UploadFileField extends Component {
                         readOnly
                         floatingLabelText={props.label}
                         floatingLabelFixed
-                        floatingLabelStyle={{color: Theme.palette.textHeaderColor}}
+                        floatingLabelStyle={{
+                            color: Theme.palette.textHeaderColor,
+                        }}
                         hintText={props.hintText}
                         errorText={props.errorText}
                         value={textFieldOutput}

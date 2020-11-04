@@ -1,5 +1,6 @@
 const joi = require('@hapi/joi')
 const slugify = require('slugify')
+const { ensureUniqueSlug } = require('../services/organisation')
 
 const paramsSchema = joi.object().keys({
     userId: joi.string().uuid(),
@@ -39,22 +40,9 @@ const createOrganisation = async (params, knex) => {
 
     const { userId, name } = params
     const originalSlug = slugify(name, { lower: true })
-    let slug = originalSlug
+    const slug = await ensureUniqueSlug(originalSlug, knex)
 
     try {
-        let slugUniqueness = 2
-        let foundUniqueSlug = false
-        while (!foundUniqueSlug) {
-            const [{ count }] = await knex('organisation')
-                .count('id')
-                .where('slug', slug)
-            if (count > 0) {
-                slug = `${originalSlug}-${slugUniqueness}`
-                slugUniqueness++
-            } else {
-                foundUniqueSlug = true
-            }
-        }
         const [id] = await knex('organisation')
             .insert({
                 created_at: knex.fn.now(),

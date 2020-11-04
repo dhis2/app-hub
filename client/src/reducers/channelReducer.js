@@ -8,7 +8,7 @@ const initialState = {
 
 const channelReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.CHANNEL_LOAD_ERROR: {
+        case actionTypes.CHANNELS_LOAD_ERROR: {
             return {
                 ...state,
                 loaded: false,

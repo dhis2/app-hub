@@ -33,7 +33,7 @@ class DialogBase extends Component {
 
         const finalAction = () => {
             Promise.resolve(approveAction())
-                .then(() => defaultCloseDialog())
+                .then(() => this.props.autoCloseOnApprove && defaultCloseDialog())
                 .catch(() => {})
         }
 
@@ -90,6 +90,11 @@ DialogBase.propTypes = {
     defaultCloseDialog: PropTypes.func,
     contentStyle: PropTypes.object,
     bodyStyle: PropTypes.object,
+    autoCloseOnApprove: PropTypes.bool,
+}
+
+DialogBase.defaultProps = {
+    autoCloseOnApprove: true,
 }
 
 const mapDispatchToProps = dispatch => ({

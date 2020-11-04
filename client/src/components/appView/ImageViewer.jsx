@@ -283,7 +283,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(ImageViewer)
+export default connect(null, mapDispatchToProps)(ImageViewer)

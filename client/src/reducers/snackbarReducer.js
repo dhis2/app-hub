@@ -63,6 +63,27 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
+        case actionTypes.ORGANISATION_MEMBER_ADD_SUCCESS: {
+            return {
+                ...state,
+                message: 'Member added',
+            }
+        }
+
+        case actionTypes.ORGANISATION_ADD_SUCCESS: {
+            return {
+                ...state,
+                message: 'Organisation created',
+            }
+        }
+
+        case actionTypes.ORGANISATION_EDIT_SUCCESS: {
+            return {
+                ...state,
+                message: 'Organisation updated',
+            }
+        }
+
         case actionTypes.SNACKBAR_EMPTY: {
             return {
                 ...emptySnackbar,

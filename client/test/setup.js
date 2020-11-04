@@ -6,6 +6,7 @@ global.window = new JSDOM('<!doctype html><html><body></body></html>', {
 }).window
 global.document = global.window.document
 global.navigator = global.window.navigator
+global.location = global.window.location
 global.HTMLElement = global.window.HTMLElement
 if (!global.window.localStorage) {
     const localStorage = {
@@ -38,3 +39,5 @@ global.chai.use(sinonChai)
 global.sinon = require('sinon')
 
 global.expect = global.chai.expect
+
+process.NODE_ENV = 'test'

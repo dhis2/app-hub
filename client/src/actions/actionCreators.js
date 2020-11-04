@@ -319,3 +319,32 @@ export const openDialog = (dialogType, dialogprops) =>
  * @return {object}             Dialog action
  */
 export const closeDialog = actionCreator(actions.CLOSE_DIALOG)
+
+export const searchOrganisation = actionCreator(actions.ORGANISATIONS_SEARCH)
+
+export const getMe = actionCreator(actions.ME_LOAD)
+
+export const loadCurrentUserOrganisations = () =>
+    actionCreator(actions.ORGANISATIONS_LOAD)({
+        currentUser: true,
+    })
+
+export const loadAllOrganisations = () =>
+    actionCreator(actions.ORGANISATIONS_LOAD)()
+
+export const loadOrganisation = orgId =>
+    actionCreator(actions.ORGANISATION_LOAD)({
+        orgId,
+    })
+
+export const addOrganisationMember = (orgId, email) =>
+    actionCreator(actions.ORGANISATION_MEMBER_ADD)({ orgId, email })
+
+export const removeOrganisationMember = (orgId, userId) =>
+    actionCreator(actions.ORGANISATION_MEMBER_REMOVE)({ orgId, userId })
+
+export const addOrganisation = orgObject =>
+    actionCreator(actions.ORGANISATION_ADD)(orgObject)
+
+export const editOrganisation = (orgId, editObject) =>
+    actionCreator(actions.ORGANISATION_EDIT)({ orgId, ...editObject })

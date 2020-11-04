@@ -1,16 +1,39 @@
 const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
 const Organisation = require('../models/v2/Organisation')
+const Boom = require('@hapi/boom')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
         'organisation.id',
         'organisation.name',
+        'organisation.email',
         'organisation.slug',
         'organisation.created_by_user_id',
         'organisation.updated_at',
         'organisation.created_at'
     )
+
+const checkSlugExists = async (slug, knex) => {
+    const slugMatch = await knex('organisation')
+        .select('name')
+        .where('slug', slug)
+        .limit(1)
+    if (slugMatch.length > 0) {
+        return slugMatch[0].name
+    }
+    return false
+}
+
+const ensureUniqueSlug = async (slug, knex) => {
+    const matchedOrgName = await checkSlugExists(slug, knex)
+    if (matchedOrgName) {
+        throw Boom.conflict(
+            `Organisation already exists or is too similar to existing organisation (${matchedOrgName})`
+        )
+    }
+    return slug
+}
 
 /**
  * Creates an organisation.
@@ -34,25 +57,6 @@ const create = async ({ userId, name }, db) => {
         .returning(['id'])
 
     return Organisation.parseDatabaseJson(organisation)
-}
-
-const ensureUniqueSlug = async (originalSlug, db) => {
-    let slug = originalSlug
-    let slugUniqueness = 2
-    let foundUniqueSlug = false
-    while (!foundUniqueSlug) {
-        const [{ count }] = await db('organisation')
-            .count('id')
-            .where('slug', slug)
-        if (count > 0) {
-            slug = `${originalSlug}-${slugUniqueness}`
-            slugUniqueness++
-        } else {
-            foundUniqueSlug = true
-        }
-    }
-
-    return slug
 }
 
 const find = async ({ filters }, db) => {
@@ -115,6 +119,24 @@ const getUsersInOrganisation = async (orgId, knex) => {
 const update = async (id, updateData, db) => {
     const dbData = Organisation.formatDatabaseJson(updateData)
 
+    // update slug if name changed
+    if (updateData.name) {
+        const slug = slugify(updateData.name, { lower: true })
+        // check if slug exists, but allow current org's slug to be the same (eg. case of name updated)
+        const slugMatch = await db('organisation')
+            .select('name')
+            .where('slug', slug)
+            .whereNot('id', id)
+            .limit(1)
+        if (slugMatch.length > 0) {
+            throw Boom.conflict(
+                `Organisation already exists or is too similar to existing organisation (${slugMatch[0].name})`
+            )
+        }
+
+        dbData.slug = slug
+    }
+
     return db('organisation')
         .update(dbData)
         .where({ id })
@@ -166,4 +188,5 @@ module.exports = {
     removeUser,
     hasUser,
     getUsersInOrganisation,
+    ensureUniqueSlug,
 }

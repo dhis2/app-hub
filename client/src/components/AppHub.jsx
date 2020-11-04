@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { history } from '../utils/history'
 import 'material-components-web/dist/material-components-web.css'
@@ -14,10 +14,9 @@ import DialogRoot from './dialog/DialogRoot'
 import PrivateRoute from './utils/PrivateRoute'
 import { Provider } from 'react-redux'
 import store from '../store'
-import { getAuth } from '../utils/AuthService'
+import { Auth } from '../api/api'
 import '../utils/preRender'
 
-const auth = getAuth()
 export default function AppHub() {
     return (
         <Provider store={store}>
@@ -32,14 +31,13 @@ export default function AppHub() {
                                 <Route path="/app/:appId" component={AppView} />
                                 <PrivateRoute
                                     path="/user"
-                                    auth={auth}
+                                    auth={Auth}
                                     component={UserView}
                                 />
                                 {/* No-match route - redirect to index */}
-                                <Route render={props => <Redirect to="/" />} />
+                                <Route render={() => <Redirect to="/" />} />
                             </Switch>
                         </div>
-
                         <Snackbar />
                     </div>
                 </Router>
