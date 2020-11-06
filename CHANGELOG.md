@@ -1,3 +1,92 @@
+## [2.10.1](https://github.com/dhis2/app-hub/compare/v2.10.0...v2.10.1) (2020-11-04)
+
+
+### Bug Fixes
+
+* **api:** do not remove leading slash on first path ([0c3d7a2](https://github.com/dhis2/app-hub/commit/0c3d7a2f571c30079c03269833b7d89f3e8ec856))
+
+# [2.10.0](https://github.com/dhis2/app-hub/compare/v2.9.1...v2.10.0) (2020-11-04)
+
+
+### Bug Fixes
+
+* bad merge, org-add button ([754740e](https://github.com/dhis2/app-hub/commit/754740ef59daecf54690a9caf42e57fabdfbea41))
+* fix bad merge ([866da6c](https://github.com/dhis2/app-hub/commit/866da6c8c8f4a153cffb5145795149830e5bc3fb))
+* **channels:** fix typo in reducer ([d21b8f1](https://github.com/dhis2/app-hub/commit/d21b8f127766b38d11834303d0c3ae9a1c0645ad))
+* **errormapper:** respect preserveErrors option ([189be31](https://github.com/dhis2/app-hub/commit/189be315692b3c83c0f3729ed11d07b2ee1d3970))
+* **organisation:** add org id to user-reducer when added ([11ff3b2](https://github.com/dhis2/app-hub/commit/11ff3b28e111aa3b4b49862cea59d5eab77a6e86))
+* **organisation:** allow email when post org ([47636c4](https://github.com/dhis2/app-hub/commit/47636c45710bbd4964ae9897539baffcf6a906dd))
+* **organisation:** check and update slug when updating org-name ([f3f24fe](https://github.com/dhis2/app-hub/commit/f3f24fee4ceb2a0ad5a58c5a4dc582939a4f56b4))
+* **organisation:** cleanup org-field ([108f13d](https://github.com/dhis2/app-hub/commit/108f13d9daed1acce9e353678583d932ba1443a2))
+* **organisation:** dont close organisation dialog when errored ([c51a1cb](https://github.com/dhis2/app-hub/commit/c51a1cb7f0b2ff8a5e4fd2f53e2d45ef71c1a5d9))
+* **organisation:** fix rename error ([089e9a4](https://github.com/dhis2/app-hub/commit/089e9a47ae0d67285dce48ce126c2be325930317))
+* **organisation:** more specific label when removing yourself from org ([87ca5ea](https://github.com/dhis2/app-hub/commit/87ca5ea10acb4e97feab5723e277b840921af509))
+* **organisation:** prevent org names that are very similar ([aca299c](https://github.com/dhis2/app-hub/commit/aca299c76e6ad5383814c26e3eb0c5609444672e))
+* **organisation:** validate max 100 chars for org ([fa0c11b](https://github.com/dhis2/app-hub/commit/fa0c11bf0fe1c12c6c8192a46305d6adc81ddd27))
+* **organisation-list:** use selector sort ([da941db](https://github.com/dhis2/app-hub/commit/da941db54b293e52395cc070a0c4c4af1c1889d8))
+* **organisation-selector:** load only member-orgs if not manager ([5674f42](https://github.com/dhis2/app-hub/commit/5674f421828ef915d4d7c713a34bb37eeeb391ae))
+* **test:** fix failing tests ([fa3cbae](https://github.com/dhis2/app-hub/commit/fa3cbae12053762d6e5d36fa2698841436001735))
+* add new org-form file ([61b016b](https://github.com/dhis2/app-hub/commit/61b016b29095c4fcd471309375d37d631a5dec7f))
+* **organisation:** client - add email for org ([b95d11c](https://github.com/dhis2/app-hub/commit/b95d11cddc294549dbda9dc740cb5d4c30ea71cd))
+* cancel-buttons on modal ([6e9d00f](https://github.com/dhis2/app-hub/commit/6e9d00fa3d02ad3a78caeb08ef4bc7352ffc459b))
+* **snackbar:** allow longer messages ([b1e149d](https://github.com/dhis2/app-hub/commit/b1e149d96ae222e6622092ed863cc1784233a4a9))
+* add orgmember dialog styles ([15c552e](https://github.com/dhis2/app-hub/commit/15c552e1ff389bf32d33333def2624860b6ea5f9))
+* cleanup add org member ([3554efb](https://github.com/dhis2/app-hub/commit/3554efb2d738a58f8d9f27b3de3b9063cbf2167a))
+* close dialog when success with a message ([91ba32e](https://github.com/dhis2/app-hub/commit/91ba32e0bf7833f93267b634267c202f4644b2b2))
+* race condition when loading orgs ([d44e8e9](https://github.com/dhis2/app-hub/commit/d44e8e9bda59ffd98b4feb6859743c470e04317e))
+* reload orgs when adding new ([96343bb](https://github.com/dhis2/app-hub/commit/96343bb0509e03ab9b858be620c50af0a809250a))
+* search for org, allow manager to upload to all orgs ([80d7270](https://github.com/dhis2/app-hub/commit/80d72702c574779755ac18321a24c7ade27130c3))
+* search org-params ([573288d](https://github.com/dhis2/app-hub/commit/573288df450b730e8f2a21ebb16d674b80fd6349))
+* **organisations:** return user when added to org, better error msg ([463a11a](https://github.com/dhis2/app-hub/commit/463a11ac8a11b1e6296b77746e0d5ddfc59d56fa))
+* show correct org-list ([6be8c60](https://github.com/dhis2/app-hub/commit/6be8c6010f7526b8ea02f106fd5369454ea33844))
+* **organisationsearch:** sync validation, create org-message visibility ([9cc3754](https://github.com/dhis2/app-hub/commit/9cc37540d997915a27418478cf2288e4fad016de))
+* use prop-types from package instead of from react ([3ca2fc9](https://github.com/dhis2/app-hub/commit/3ca2fc9cae8c1de97585897cbaaae755cb77c5a0))
+* use rewire in test-env only ([edc379a](https://github.com/dhis2/app-hub/commit/edc379ad745924518620d688cb0282a0c3329e2f))
+
+
+### Features
+
+* **add-org:** add organisation ([a75d5d9](https://github.com/dhis2/app-hub/commit/a75d5d947e9d889fc6ee85fa1204991e4ba306d7))
+* **filter:** allow filter for slug ([3216cb0](https://github.com/dhis2/app-hub/commit/3216cb03567d28226ad24e2acbdf4f9fd226099a))
+* **migrations:** add organisation email ([547affa](https://github.com/dhis2/app-hub/commit/547affa0f833d3db639bffea8e75b03ec1ea1981))
+* **organisation:** add ability to change owner ([c7d44ba](https://github.com/dhis2/app-hub/commit/c7d44bad5b44be5a67d3527a1eb2f2032dfbe41a))
+* **organisation:** add backend support for organisation email ([a673170](https://github.com/dhis2/app-hub/commit/a6731703cd12ec09f9e9b8e11b8b13f4587f4cf5))
+* **organisations:** add and remove members ([6933a2c](https://github.com/dhis2/app-hub/commit/6933a2cb6b2ca88717590cbf5a3ec24f39f486cc))
+* **organisations:** support for editing org-name ([d47e193](https://github.com/dhis2/app-hub/commit/d47e1939890c1b78cfa841f4515114e6c97fedbf))
+* add /me api ([f53e805](https://github.com/dhis2/app-hub/commit/f53e80508bc90378b8ba39d5058e47b23d7d0763))
+* fetch wrapper with params support ([09614ba](https://github.com/dhis2/app-hub/commit/09614baa9cbd9d9c2d7b5b082634950b6556b751))
+* organisationlist ([0183fdc](https://github.com/dhis2/app-hub/commit/0183fdc4c7a538c78d422bb91b59690f382558ef))
+* wip organisation manage view ([cfa6999](https://github.com/dhis2/app-hub/commit/cfa69991ee38608fcc957463e544706faca974cd))
+* **uploadapp:** organisation registration ([f82f89f](https://github.com/dhis2/app-hub/commit/f82f89fa44198f2b430f5fa41675e5ce2d4a61be))
+
+## [2.9.1](https://github.com/dhis2/app-hub/compare/v2.9.0...v2.9.1) (2020-11-04)
+
+
+### Bug Fixes
+
+* pin node version to 14 ([d6998d5](https://github.com/dhis2/app-hub/commit/d6998d597adbd7bdc931d7f65a7a2880a5d146bd))
+
+# [2.9.0](https://github.com/dhis2/app-hub/compare/v2.8.3...v2.9.0) (2020-11-03)
+
+
+### Bug Fixes
+
+* cleanup old spinner ([8737475](https://github.com/dhis2/app-hub/commit/873747567e1b629b0fbba3cb937436f4c8684fc8))
+* **spinner:** use circularprogress for spinner instead of custom svg ([2764873](https://github.com/dhis2/app-hub/commit/2764873f22630692dede510e02e92e2342f4ad5c))
+
+
+### Features
+
+* remove node-sass ([b4496df](https://github.com/dhis2/app-hub/commit/b4496df573e8587678e2f7e91f90049bfef5425d))
+
+## [2.8.3](https://github.com/dhis2/app-hub/compare/v2.8.2...v2.8.3) (2020-10-23)
+
+
+### Bug Fixes
+
+* React-PropTypes to proptypes package ([71ddcd6](https://github.com/dhis2/app-hub/commit/71ddcd611cb15773b2dbcdf0f7a2728e11cdc746))
+* upgrade to react@16 with deps ([eee9ea7](https://github.com/dhis2/app-hub/commit/eee9ea7ded9589264543d9b6c55347315579f252))
+
 ## [2.8.2](https://github.com/dhis2/app-hub/compare/v2.8.1...v2.8.2) (2020-10-12)
 
 

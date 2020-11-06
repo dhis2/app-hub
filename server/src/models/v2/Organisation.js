@@ -5,7 +5,11 @@ const { createDefaultValidator } = require('./helpers')
 
 const definition = defaultDefinition
     .append({
-        name: joi.string(),
+        name: joi.string().max(100),
+        email: joi
+            .string()
+            .email()
+            .allow(null),
         slug: joi.string(),
         owner: joi.string().guid({ version: 'uuidv4' }),
         users: joi.array().items(User.definition),

@@ -1,5 +1,6 @@
-import React, { PropTypes, Component } from 'react'
-import { connect } from 'react-redux'
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
+import { Provider, ReactReduxContext, connect } from 'react-redux'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import { closeDialog } from '../../actions/actionCreators'
@@ -13,7 +14,7 @@ const styles = {
 
 class DialogBase extends Component {
     static buildButton(action, text, primary = false) {
-        return <FlatButton label={text} primary={primary} onTouchTap={action} />
+        return <FlatButton label={text} primary={primary} onClick={action} />
     }
 
     render() {
@@ -32,7 +33,7 @@ class DialogBase extends Component {
 
         const finalAction = () => {
             Promise.resolve(approveAction())
-                .then(() => defaultCloseDialog())
+                .then(() => this.props.autoCloseOnApprove && defaultCloseDialog())
                 .catch(() => {})
         }
 
@@ -52,23 +53,30 @@ class DialogBase extends Component {
             )
 
         return (
-            <Dialog
-                open
-                title={title}
-                actions={actions}
-                modal={false}
-                autoScrollBodyContent
-                contentStyle={
-                    { ...styles.contentStyle, ...contentStyle } ||
-                    styles.contentStyle
-                }
-                bodyStyle={
-                    { ...styles.bodyStyle, ...bodyStyle } || styles.bodyStyle
-                }
-                onRequestClose={defaultCloseDialog}
-            >
-                {this.props.children}
-            </Dialog>
+            <ReactReduxContext.Consumer>
+                {ctx => (
+                    <Dialog
+                        open
+                        title={title}
+                        actions={actions}
+                        modal={false}
+                        autoScrollBodyContent
+                        contentStyle={
+                            { ...styles.contentStyle, ...contentStyle } ||
+                            styles.contentStyle
+                        }
+                        bodyStyle={
+                            { ...styles.bodyStyle, ...bodyStyle } ||
+                            styles.bodyStyle
+                        }
+                        onRequestClose={defaultCloseDialog}
+                    >
+                        <Provider store={ctx.store}>
+                            {this.props.children}
+                        </Provider>
+                    </Dialog>
+                )}
+            </ReactReduxContext.Consumer>
         )
     }
 }
@@ -82,6 +90,11 @@ DialogBase.propTypes = {
     defaultCloseDialog: PropTypes.func,
     contentStyle: PropTypes.object,
     bodyStyle: PropTypes.object,
+    autoCloseOnApprove: PropTypes.bool,
+}
+
+DialogBase.defaultProps = {
+    autoCloseOnApprove: true,
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -90,7 +103,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(DialogBase)
+export default connect(null, mapDispatchToProps)(DialogBase)

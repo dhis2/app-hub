@@ -1,4 +1,5 @@
-import React, { PropTypes, Component } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import FontIcon from 'material-ui/FontIcon'
 import Button from 'material-ui/FlatButton'
 const SizeType = PropTypes.oneOf(['small', 'medium', 'large'])

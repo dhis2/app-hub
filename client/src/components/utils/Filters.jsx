@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import TextField from 'material-ui/TextField'
 import Toggle from 'material-ui/Toggle'
@@ -106,7 +107,7 @@ class Textfilter extends Component {
 
         return (
             <Field
-                name={this.props.form}
+                name={this.props.name || this.props.form}
                 style={style}
                 hintText={hintText}
                 component={
@@ -130,7 +131,11 @@ Textfilter.defaultProps = {
     form: 'searchFilter',
     clearButton: true,
     destroyOnUnmount: false,
-    initialValues: { searchFilter: '' },
+    initialValues: {
+        searchFilter: '',
+        appSearchFilter: '',
+        orgSearchFilter: '',
+    },
 }
 
 export const TextFilter = reduxForm({
@@ -252,7 +257,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export const SelectFilter = connect(
-    mapStateToProps,
-    null
-)(SelectedFilterForm)
+export const SelectFilter = connect(mapStateToProps, null)(SelectedFilterForm)
