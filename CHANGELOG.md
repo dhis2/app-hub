@@ -1,3 +1,10 @@
+## [2.10.2](https://github.com/dhis2/app-hub/compare/v2.10.1...v2.10.2) (2020-11-08)
+
+
+### Bug Fixes
+
+* **organisationlist:** replace ontouchtap with onclick ([7ecb02a](https://github.com/dhis2/app-hub/commit/7ecb02a64bf2de818aae816b3e31fe25a48a7b67))
+
 ## [2.10.1](https://github.com/dhis2/app-hub/compare/v2.10.0...v2.10.1) (2020-11-04)
 
 
