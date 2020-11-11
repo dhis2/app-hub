@@ -182,3 +182,23 @@ branches.
 
 So: **all work should be merged to `next`, and then `next` is merged to
 `master` when we decide to cut a release**.
+
+
+## Report an issue
+
+The issue tracker can be found in [DHIS2 JIRA](https://jira.dhis2.org)
+under the [HUB](https://jira.dhis2.org/projects/HUB) project.
+
+Deep links:
+
+-   Client:
+    -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10314)
+    -   [Improvement](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10002&components=10314)
+    -   [New Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10005&components=10314)
+    -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10314)
+    
+-   Server:
+    -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10315)
+    -   [Improvement](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10002&components=10315)
+    -   [New Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10005&components=10315)
+    -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10315)
