@@ -1,3 +1,10 @@
+## [2.10.3](https://github.com/dhis2/app-hub/compare/v2.10.2...v2.10.3) (2020-11-11)
+
+
+### Bug Fixes
+
+* **dialog:** fix dialogposition when dialog has loading ([a925532](https://github.com/dhis2/app-hub/commit/a925532bc046dc781e491bc7e6a7b9ab4c95def7))
+
 ## [2.10.2](https://github.com/dhis2/app-hub/compare/v2.10.1...v2.10.2) (2020-11-08)
 
 
