@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi')
-const { isSemver } =  require('../../helpers')
+const { isSemver } = require('../../helpers')
 
 const { AppTypes } = require('../../../enums')
 

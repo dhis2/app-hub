@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import config from '../../../config'
 import MenuItem from 'material-ui/MenuItem'
@@ -12,9 +13,9 @@ import {
     validateVersion,
 } from './ReduxFormUtils'
 import FormStepper from './FormStepper'
-
+import OrganisationSelector from './helpers/OrganisationSelectorField'
 import { loadChannels } from '../../actions/actionCreators'
-
+import * as userSelectors from '../../selectors/userSelectors'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import DHISVersionItems from '../appVersion/VersionItems'
 
@@ -198,9 +199,8 @@ const AppVersionSection = props => {
 }
 
 AppVersionSection.propTypes = {
-    name: PropTypes.string,
-    formState: PropTypes.object,
     channels: PropTypes.array,
+    name: PropTypes.string,
 }
 
 AppVersionSection.defaultProps = {
@@ -225,9 +225,9 @@ const AppDeveloperSection = props => {
             />
             <Field
                 name="developerOrg"
-                fullWidth
-                component={formUtils.renderTextField}
+                component={OrganisationSelector}
                 label="Organisation *"
+                organisations={props.organisations}
             />
         </FormSection>
     )
@@ -252,7 +252,7 @@ const AppImageSection = props => {
                 name="image"
                 component={formUtils.renderUploadField}
                 accept="image/*"
-                hintText="Upload logo"
+                label="Upload logo"
                 validate={validateImageFile}
                 id="imageFile"
             />
@@ -350,14 +350,20 @@ class UploadAppFormStepper extends Component {
                 onSubmit={this.onSubmit.bind(this)}
                 validate={validate}
                 sections={[
-                    <AppGeneralSection name="general" />,
+                    <AppGeneralSection key="general" name="general" />,
                     <AppVersionSection
+                        key="version"
                         name="version"
                         channels={this.props.channels.list}
                     />,
-                    <AppDeveloperSection name="developer" />,
-                    <AppImageSection name="image" />,
+                    <AppDeveloperSection
+                        key="developer"
+                        name="developer"
+                        organisations={this.props.organisations}
+                    />,
+                    <AppImageSection key="image" name="image" />,
                 ]}
+                isManager={this.props.isManager}
                 initialValues={{ general: { appType: appTypes[0].value } }}
             />
         )
@@ -365,13 +371,13 @@ class UploadAppFormStepper extends Component {
 }
 UploadAppFormStepper.propTypes = {
     submitted: PropTypes.func.isRequired,
-    form: PropTypes.string.isRequired,
 }
 
 UploadAppFormStepper.defaultProps = {}
 
 const mapStateToProps = state => ({
     channels: state.channels,
+    isManager: userSelectors.isManager(state),
 })
 
 const mapDispatchToProps = dispatch => ({

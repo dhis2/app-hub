@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
@@ -6,7 +7,6 @@ import FontIcon from 'material-ui/FontIcon'
 import { Link, Route, Redirect, Switch } from 'react-router-dom'
 import UserAppView from './userAppView/UserAppView'
 import { List, ListItem } from 'material-ui/List'
-import AppUpload from './appUpload/AppUpload'
 import AppUploadStepper from './appUpload/AppUploadStepper'
 import AppList from './appList/AppList'
 import Divider from 'material-ui/Divider'
@@ -14,7 +14,8 @@ import { getUserInfo } from '../../selectors/userSelectors'
 import { userLoad } from '../../actions/actionCreators'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import ActiveLink from '../utils/ActiveLink'
-
+import OrganisationList from './organisation/OrganisationList'
+import OrganisationView from './organisation/OrganisationView'
 class UserView extends Component {
     componentDidMount() {
         this.props.loadUser()
@@ -32,6 +33,11 @@ class UserView extends Component {
                     component={AppList}
                 />
                 <Route
+                    path={`${this.props.match.url}/organisations`}
+                    component={OrganisationList}
+                    exact={true}
+                />
+                <Route
                     path={`${this.props.match.url}/upload`}
                     component={AppUploadStepper}
                 />
@@ -39,8 +45,12 @@ class UserView extends Component {
                     path={`${this.props.match.url}/app/:appId`}
                     component={UserAppView}
                 />
+                <Route
+                    path={`${this.props.match.url}/organisations/:slug`}
+                    component={OrganisationView}
+                />
                 {/* No-match route - redirect to index */}
-                <Route render={props => <Redirect to="/user" />} />
+                <Route render={() => <Redirect to="/user" />} />
             </Switch>
         )
 
@@ -70,6 +80,19 @@ class UserView extends Component {
                                 leftIcon={
                                     <FontIcon className="material-icons">
                                         list
+                                    </FontIcon>
+                                }
+                            />
+                        </ActiveLink>
+                        <ActiveLink
+                            to={`${this.props.match.url}/organisations`}
+                            activeOnlyWhenExact
+                        >
+                            <ListItem
+                                primaryText="Organisations"
+                                leftIcon={
+                                    <FontIcon className="material-icons">
+                                        people
                                     </FontIcon>
                                 }
                             />
@@ -124,7 +147,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(UserView)
+export default connect(mapStateToProps, mapDispatchToProps)(UserView)

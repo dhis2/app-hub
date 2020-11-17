@@ -47,23 +47,53 @@ describe('@services::Organisation', () => {
 
         it('should find organisations by user if filter has user', async () => {
             const user = await getUserByEmail('apphub-api@dhis2.org', db)
-            const filter = {
+            const filters = Filters.createFromQueryFilters({
                 user: user.id,
-            }
-            const orgs = await Organisation.find({ filter }, db)
+            })
+            const orgs = await Organisation.find({ filters }, db)
             const DHIS2App = orgs.find(o => o.name === 'DHIS2')
             expect(DHIS2App).to.not.be.null()
         })
 
         it('should work with multiple filters, ie user and name', async () => {
             const user = await getUserByEmail('apphub-api@dhis2.org', db)
-            const filter = {
+            const filters = Filters.createFromQueryFilters({
                 name: 'DHIS2',
                 user: user.id,
-            }
-            const orgs = await Organisation.find({ filter }, db)
+            })
+            const orgs = await Organisation.find({ filters }, db)
             const DHIS2App = orgs.find(o => o.name === 'DHIS2')
             expect(DHIS2App).to.not.be.null()
+            expect(
+                orgs.find(o => OrganisationMocks[1].id === o.id)
+            ).to.be.undefined()
+        })
+
+        it('should work with org email-filter', async () => {
+            // update email
+            const dhis2Org = OrganisationMocks[0]
+            const email = 'apps@dhis2.org'
+
+            await Organisation.update(dhis2Org.id, { email }, db)
+            const updatedOrg = await Organisation.findOne(
+                dhis2Org.id,
+                false,
+                db
+            )
+
+            expect(updatedOrg).to.be.an.object()
+            expect(updatedOrg.id).to.be.equal(dhis2Org.id)
+            expect(updatedOrg.email).to.be.equal(email)
+
+            const filters = Filters.createFromQueryFilters({
+                email,
+            })
+            const orgs = await Organisation.find({ filters }, db)
+            const DHIS2App = orgs.find(o => o.name === 'DHIS2')
+            expect(DHIS2App).to.not.be.undefined()
+            expect(
+                orgs.find(o => OrganisationMocks[1].id === o.id)
+            ).to.be.undefined()
         })
     })
 
@@ -96,7 +126,6 @@ describe('@services::Organisation', () => {
             expect(orgById).to.not.be.null()
             expect(orgById.users).to.be.an.array()
             expect(orgById.users).to.have.length(3)
-            console.log(orgById.users)
 
             const members = [UserMocks[1].name, UserMocks[2].name]
             members.forEach(name => {
@@ -409,6 +438,23 @@ describe('@services::Organisation', () => {
                 { owner: org.created_by_user_id },
                 db
             )
+        })
+
+        it('should update email successfully', async () => {
+            const dhis2Org = OrganisationMocks[0]
+            const email = 'apps@dhis2.org'
+
+            await Organisation.update(dhis2Org.id, { email }, db)
+
+            const updatedOrg = await Organisation.findOne(
+                dhis2Org.id,
+                false,
+                db
+            )
+
+            expect(updatedOrg).to.be.an.object()
+            expect(updatedOrg.id).to.be.equal(dhis2Org.id)
+            expect(updatedOrg.email).to.be.equal(email)
         })
     })
 })

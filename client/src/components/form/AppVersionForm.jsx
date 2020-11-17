@@ -1,5 +1,6 @@
-// eslint-disable-next-line react/no-deprecated
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types'
+
+import React from 'react'
 
 import { connect } from 'react-redux'
 import * as formUtils from './ReduxFormUtils'
@@ -54,7 +55,7 @@ const AppVersionForm = props => {
     }
 
     //TODO: add error instead of passing false to ErrorOrLoading
-    return channels.loading || channels.error ? (
+    return channels.list.length < 1 && (channels.loading || channels.error) ? (
         <ErrorOrLoading loading={channels.loading} error={channels.error} />
     ) : (
         <Form onSubmit={handleSubmit(onSub)}>

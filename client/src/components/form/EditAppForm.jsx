@@ -1,5 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import React, { PropTypes } from 'react'
+import PropTypes from 'prop-types';
+
+import React from 'react';
 import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
@@ -148,4 +150,7 @@ EditForm.propTypes = {
     //Callback for the values when the form has been submitted.
     submitted: PropTypes.func.required,
 }
-export default reduxForm({ form: 'editAppForm', validate })(EditForm)
+
+//const mapDispatch
+const reduxFormed = reduxForm({ form: 'editAppForm', validate })(EditForm)
+export default reduxFormed

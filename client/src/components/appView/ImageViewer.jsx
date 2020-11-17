@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import {
     deleteImageFromApp,
@@ -282,7 +283,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(ImageViewer)
+export default connect(null, mapDispatchToProps)(ImageViewer)

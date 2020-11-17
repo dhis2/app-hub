@@ -1,8 +1,6 @@
-import Auth0Lock from 'auth0-lock'
+import Zero from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper'
-import { BrowserRouter } from 'react-router-dom'
 import History from './history'
-import config from '../../config'
 import store from '../store'
 import Theme from '../styles/theme'
 import logo from '../assets/img/dhis2.svg'
@@ -10,7 +8,7 @@ import logo from '../assets/img/dhis2.svg'
 export default class AuthService {
     constructor(clientId, domain) {
         // Configure Auth0
-        this.lock = new Auth0Lock(clientId, domain, {
+        this.lock = new Zero(clientId, domain, {
             auth: {
                 redirectUrl: `${window.location.protocol}//${window.location.host}/user`,
                 responseType: 'token',
@@ -90,11 +88,4 @@ export default class AuthService {
         localStorage.removeItem('profile')
         History.push('/')
     }
-}
-let auth
-export function getAuth() {
-    if (auth) return auth
-
-    auth = new AuthService(config.auth0.clientID, config.auth0.domain)
-    return auth
 }

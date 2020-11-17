@@ -1,5 +1,6 @@
-// eslint-disable-next-line react/no-deprecated
-import React, { PropTypes, Component } from 'react'
+import PropTypes from 'prop-types'
+
+import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
@@ -37,6 +38,7 @@ export class EditAppVersionDialog extends Component {
                 approveLabel={'Save'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
+                contentStyle={{ minHeight: '550px' }}
             >
                 <AppVersionForm
                     isNew={false}

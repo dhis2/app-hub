@@ -1,10 +1,22 @@
 import * as actions from '../constants/actionTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
-import { getAuth } from '../utils/AuthService'
+import { Auth } from '../api/api'
 import { history } from '../utils/history'
 import * as api from '../api/api'
-import { concatMap, mergeAll } from 'rxjs/operators'
+import {
+    concatMap,
+    switchMap,
+    mergeAll,
+    concatAll,
+    debounceTime,
+    catchError,
+    filter,
+    distinctUntilChanged,
+    tap,
+} from 'rxjs/operators'
+import { of, from, merge } from 'rxjs'
+import * as userSelectors from '../selectors/userSelectors'
 
 const loadAppsAll = action$ =>
     action$.pipe(
@@ -115,18 +127,23 @@ const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
         concatMap(() => {
-            const auth = getAuth()
-            return new Promise((resolve, reject) => {
-                auth.lock.getProfile(auth.getToken(), (error, profile) => {
-                    if (error) {
-                        reject(actionCreators.userError())
-                    } else {
-                        auth.setProfile(profile)
-                        resolve(actionCreators.userLoaded(profile))
-                    }
-                })
-            })
-        })
+            return [
+                new Promise((resolve, reject) => {
+                    Auth.lock.getProfile(Auth.getToken(), (error, profile) => {
+                        if (error) {
+                            reject(actionCreators.userError())
+                        } else {
+                            Auth.setProfile(profile)
+                            resolve(actionCreators.userLoaded(profile))
+                        }
+                    })
+                }),
+                of({
+                    type: actions.ME_LOAD,
+                }),
+            ]
+        }),
+        concatAll()
     )
 
 const userApps = action$ =>
@@ -429,6 +446,232 @@ const loadChannels = action$ =>
         })
     )
 
+/**
+ * Gets organisation by name
+ *
+ * Need to have validation here, as the validation is based upon the
+ * results and thus we cannot use regular promise validation.
+ * Async validation is used to prevent form-submission and clicking continue
+ * We are also using synchronous validation for orgs that have been fetched earlier
+ */
+const searchOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATIONS_SEARCH),
+        filter(action => !!action.payload.name),
+        distinctUntilChanged(
+            (prev, curr) => prev.payload.name === curr.payload.name
+        ),
+        debounceTime(250),
+        switchMap(action => {
+            from(api.searchOrganisations(action.payload.name)).pipe(
+                switchMap(orgs => {
+                    return [
+                        {
+                            type: actions.ORGANISATIONS_SEARCH_SUCCESS,
+                            payload: {
+                                list: orgs,
+                            },
+                        },
+                    ]
+                }),
+                catchError(e => {
+                    return [
+                        actionCreators.actionErrorCreator(
+                            actions.ORGANISATIONS_SEARCH_ERROR,
+                            e
+                        ),
+                    ]
+                })
+            )
+        })
+    )
+
+const loadMe = action$ =>
+    action$.pipe(
+        ofType(actions.ME_LOAD),
+        switchMap(() =>
+            api
+                .getMe()
+                .then(response => ({
+                    type: actions.ME_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e => ({
+                    type: actions.ME_LOAD_ERROR,
+                    payload: e,
+                }))
+        )
+    )
+
+const loadOrganisations = (action$, state$) =>
+    action$.pipe(
+        ofType(actions.ORGANISATIONS_LOAD),
+        switchMap(action => {
+            const filters = action.payload.filters || {}
+            if (action.payload.currentUser) {
+                const currentUserId = userSelectors.getUserId(state$.value)
+                filters.user = currentUserId
+            }
+
+            return api
+                .getOrganisations(filters)
+                .then(response => ({
+                    type: actions.ORGANISATIONS_LOAD_SUCCESS,
+                    payload: {
+                        list: response,
+                    },
+                }))
+                .catch(e =>
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATIONS_LOAD_ERROR,
+                        e
+                    )
+                )
+        })
+    )
+
+const loadOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_LOAD),
+        switchMap(action =>
+            api
+                .getOrganisation(action.payload.orgId)
+                .then(response => ({
+                    type: actions.ORGANISATION_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e =>
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_LOAD_ERROR,
+                        e
+                    )
+                )
+        )
+    )
+
+const addOrganisationMember = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_MEMBER_ADD),
+        concatMap(action => {
+            const { orgId, email } = action.payload
+            return api
+                .addOrganisationMember(orgId, email)
+                .then(response => {
+                    return [
+                        {
+                            type: actions.ORGANISATION_MEMBER_ADD_SUCCESS,
+                            payload: response,
+                        },
+                        {
+                            type: actions.ORGANISATION_LOAD,
+                            payload: {
+                                orgId: orgId,
+                            },
+                        },
+                        actionCreators.closeDialog(),
+                    ]
+                })
+                .catch(e => {
+                    return [
+                        actionCreators.actionErrorCreator(
+                            actions.ORGANISATION_MEMBER_ADD_ERROR,
+                            e
+                        ),
+                    ]
+                })
+        }),
+        mergeAll()
+    )
+
+const removeOrganisationMember = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_MEMBER_REMOVE),
+        concatMap(action => {
+            const { orgId, userId } = action.payload
+            return api
+                .removeOrganisationMember(orgId, userId)
+                .then(response => [
+                    {
+                        type: actions.ORGANISATION_MEMBER_REMOVE_SUCCESS,
+                        payload: response,
+                    },
+                    {
+                        type: actions.ORGANISATION_LOAD,
+                        payload: {
+                            orgId: orgId,
+                        },
+                    },
+                ])
+                .catch(e => [
+                    {
+                        type: actions.ORGANISATION_MEMBER_REMOVE_ERROR,
+                        payload: e,
+                    },
+                ])
+        }),
+        mergeAll()
+    )
+
+const addOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_ADD),
+        concatMap(action => {
+            const organisation = action.payload
+            return api
+                .addOrganisation(organisation)
+                .then(response => [
+                    {
+                        type: actions.ORGANISATION_ADD_SUCCESS,
+                        payload: response,
+                    },
+                    {
+                        type: actions.ORGANISATIONS_LOAD,
+                        payload: {},
+                    },
+                    actionCreators.closeDialog(),
+                ])
+                .catch(e => [
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_ADD_ERROR,
+                        e
+                    ),
+                ])
+        }),
+        mergeAll()
+    )
+
+const editOrganisation = action$ =>
+    action$.pipe(
+        ofType(actions.ORGANISATION_EDIT),
+        concatMap(action => {
+            const { orgId, ...editObject } = action.payload
+            return from(api.editOrganisation(orgId, editObject)).pipe(
+                switchMap(orgResult => {
+                    return merge(
+                        of({
+                            type: actions.ORGANISATION_EDIT_SUCCESS,
+                            payload: orgResult,
+                        }).pipe(
+                            // need to update url if slug changed
+                            tap(action =>
+                                history.push(
+                                    `/user/organisations/${action.payload.slug}`
+                                )
+                            )
+                        ),
+                        of(actionCreators.closeDialog())
+                    )
+                }),
+                catchError(e => [
+                    actionCreators.actionErrorCreator(
+                        actions.ORGANISATION_EDIT_ERROR,
+                        e
+                    ),
+                ])
+            )
+        })
+    )
+
 export default combineEpics(
     loadAppsAll,
     loadAppsApproved,
@@ -446,5 +689,13 @@ export default combineEpics(
     deleteImage,
     editVersion,
     addMultipleImages,
-    loadChannels
+    loadChannels,
+    searchOrganisation,
+    loadMe,
+    loadOrganisations,
+    loadOrganisation,
+    addOrganisationMember,
+    removeOrganisationMember,
+    addOrganisation,
+    editOrganisation
 )

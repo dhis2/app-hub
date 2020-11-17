@@ -1,5 +1,6 @@
 import config from '../../config'
-import { getAuth } from '../utils/AuthService'
+import AuthService from '../utils/AuthService'
+import AppHubAPI from './AppHubAPI'
 
 const baseURL = config.api.baseURL
 
@@ -20,6 +21,20 @@ const updateOpts = {
         'content-type': 'application/json',
     },
 }
+
+// This hack is needed to prevent Auth0-Lock to initialize which sends requests that hang in test
+export let Auth
+if (process.NODE_ENV !== 'test') {
+    Auth = new AuthService(config.auth0.clientID, config.auth0.domain)
+} else {
+    Auth = {}
+}
+
+const apiV2 = new AppHubAPI({
+    baseUrl: config.api.baseURL,
+    apiVersion: 'v2',
+    auth: Auth,
+})
 
 export function getAllApps() {
     return fromApi('v1/apps/all', true)
@@ -136,7 +151,7 @@ export function fromApi(url, auth = false, extraOpts) {
 
 export function getAuthHeaders() {
     const headers = {}
-    headers['Authorization'] = 'Bearer ' + getAuth().getToken()
+    headers['Authorization'] = 'Bearer ' + Auth.getToken()
     return headers
 }
 
@@ -208,5 +223,83 @@ export function createUploadImageOptions(data) {
 }
 
 export function getAllChannels() {
-    return fromApi('v2/channels')
+    return apiV2.request('channels')
+}
+
+export function searchOrganisations(name) {
+    return apiV2.request('organisations', {
+        params: {
+            name: `ilike:%${name}%`,
+        },
+    })
+}
+
+export function getMe() {
+    return apiV2.request('me', { useAuth: true })
+}
+
+export function getOrganisations(filters) {
+    return apiV2.request('organisations', { params: filters })
+}
+
+export function getOrganisation(orgId) {
+    return apiV2.request(`organisations/${orgId}`, { useAuth: true })
+}
+
+export function addOrganisationMember(orgId, email) {
+    return apiV2.request(
+        `organisations/${orgId}/user`,
+        { useAuth: true },
+        {
+            method: 'POST',
+            body: JSON.stringify({ email }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        }
+    )
+}
+
+export function removeOrganisationMember(orgId, user) {
+    return apiV2.request(
+        `organisations/${orgId}/user`,
+        { useAuth: true },
+        {
+            method: 'DELETE',
+            body: JSON.stringify({ user }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        }
+    )
+}
+
+export function addOrganisation({ name, email }) {
+    return apiV2.request(
+        `organisations/`,
+        { useAuth: true },
+        {
+            method: 'POST',
+            body: JSON.stringify({ name, email }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        }
+    )
+}
+
+export function editOrganisation(id, { name, owner, email }) {
+    return apiV2.request(
+        `organisations/${id}`,
+        {
+            useAuth: true,
+        },
+        {
+            method: 'PATCH',
+            body: JSON.stringify({ name, owner, email }),
+            headers: {
+                'content-type': 'application/json',
+            },
+        }
+    )
 }
