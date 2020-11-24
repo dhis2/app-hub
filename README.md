@@ -193,12 +193,10 @@ Deep links:
 -   Client:
 
     -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10314)
-    -   [Improvement](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10002&components=10314)
-    -   [New Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10005&components=10314)
+    -   [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10314)
     -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10314)
 
 -   Server:
     -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10315)
-    -   [Improvement](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10002&components=10315)
-    -   [New Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10005&components=10315)
+    -   [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10315)
     -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10315)
