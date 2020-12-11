@@ -1,3 +1,10 @@
+## [2.10.4](https://github.com/dhis2/app-hub/compare/v2.10.3...v2.10.4) (2020-12-11)
+
+
+### Bug Fixes
+
+* **imageviewer:** fix image scaling for wide images ([#419](https://github.com/dhis2/app-hub/issues/419)) ([801d9ee](https://github.com/dhis2/app-hub/commit/801d9ee586119bd40ecbd788b05c0c475047c4d5))
+
 ## [2.10.3](https://github.com/dhis2/app-hub/compare/v2.10.2...v2.10.3) (2020-11-11)
 
 
