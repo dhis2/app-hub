@@ -43,7 +43,7 @@ The backend config file `server/.env` contains credentials for the database, AWS
 
 Available options are documented in [`.env.template`](server/.env.template).
 
-See `server/knexfile.js` to specify which database connections/credentials or server to use depending on the value of `process.env.NODE_ENV`.
+See [`server/knexfile.js`](server/knexfile.js) to specify which database connections/credentials or server to use depending on the value of `process.env.NODE_ENV`.
 
 ## Frontend config
 
