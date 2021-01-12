@@ -10,6 +10,9 @@
         "tools"
     ],
     "scripts": {
+        "db:migrate": "yarn workspace server db:migrate",
+        "db:reset": "yarn workspace server db:reset",
+        "db:seed": "yarn workspace server db:seed",
         "build": "yarn workspace client build",
         "start": "concurrently -n w: \"yarn:dev:*\"",
         "dev:server": "yarn workspace server start:dev",
