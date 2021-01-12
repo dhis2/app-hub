@@ -18,15 +18,14 @@ See docs in [dhis2/docker-compose/app-hub](https://github.com/dhis2/docker-compo
 ## Local Installation
 
 1. Install dependencies with `yarn install`
-2. Copy `server/.env.template` to `server/.env` (`cp server/.env.template
-   server/.env`) and edit `server/.env`. For development, your config will
+2. Copy `server/.env.template` to `server/.env` (`cp server/.env.template server/.env`) and edit `server/.env`. For development, your config will
    probably look something like:
-   ```
-   NODE_ENV=development
-   RDS_USERNAME=postgres
-   RDS_PASSWORD=postgres
-   NO_AUTH_MAPPED_USER_ID=true
-   ```
+    ```
+    NODE_ENV=development
+    RDS_USERNAME=postgres
+    RDS_PASSWORD=postgres
+    NO_AUTH_MAPPED_USER_ID=true
+    ```
 3. Create database tables with `yarn db:migrate`.
 4. Seed the database with `yarn db:seed`
 
@@ -60,8 +59,8 @@ Config files are loaded in the following order:
 
 Environment specific configurations are also supported, and are loaded if `process.env.NODE_ENV` is set to either `development` or `production`.
 
-- `development.config.js`
-- `production.config.js`
+-   `development.config.js`
+-   `production.config.js`
 
 Note that the exported objects from each config file are merged with the previous, so any options not changed are kept from the previous config.
 
@@ -134,8 +133,8 @@ yarn run clone
 This application is automatically released when merging into controlled
 branches.
 
-- The `next` branch is deployed to **staging**.
-- The `master` branch is deployed to **production**.
+-   The `next` branch is deployed to **staging**.
+-   The `master` branch is deployed to **production**.
 
 So: **all work should be merged to `next`, and then `next` is merged to
 `master` when we decide to cut a release**.
@@ -147,12 +146,13 @@ under the [HUB](https://jira.dhis2.org/projects/HUB) project.
 
 Deep links:
 
-- Client:
-  - [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10314)
-  - [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10314)
-  - [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10314)
+-   Client:
 
-- Server:
-  - [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10315)
-  - [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10315)
-  - [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10315)
+    -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10314)
+    -   [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10314)
+    -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10314)
+
+-   Server:
+    -   [Bug](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10006&components=10315)
+    -   [Feature](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10300&components=10315)
+    -   [Task](https://jira.dhis2.org/secure/CreateIssueDetails!init.jspa?pid=10100&issuetype=10003&components=10315)
