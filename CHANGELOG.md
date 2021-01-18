@@ -1,3 +1,10 @@
+## [2.10.5](https://github.com/dhis2/app-hub/compare/v2.10.4...v2.10.5) (2021-01-18)
+
+
+### Bug Fixes
+
+* improve README instructions for local installation ([#421](https://github.com/dhis2/app-hub/issues/421)) ([f7492c5](https://github.com/dhis2/app-hub/commit/f7492c51769ded084a0b123d8cc860baa9a63c5d))
+
 ## [2.10.4](https://github.com/dhis2/app-hub/compare/v2.10.3...v2.10.4) (2020-12-11)
 
 
