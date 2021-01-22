@@ -248,10 +248,18 @@ function userInfoReducer(
             }
         }
 
+        case 'USER_SET_AUTH': {
+            return {
+                ...state,
+                auth: action.payload,
+            }
+        }
+
         case actionTypes.USER_LOGOUT: {
             return {
                 ...state,
                 authenticated: false,
+                profile: null,
             }
         }
 

@@ -1,43 +1,60 @@
 import React from 'react'
-import { connect } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Toolbar from '../../material/Toolbar/Toolbar'
 import ToolbarSection from '../../material/Toolbar/ToolbarSection'
 import ToolbarTitle from '../../material/Toolbar/ToolbarTitle'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
-import { Auth } from '../../api/api'
 import { Link } from 'react-router-dom'
 import Theme from '../../styles/theme'
 import Avatar from 'material-ui/Avatar'
 import logo from '../../assets/img/dhis2_logo_reversed.svg'
-import { getUserInfo, getUserProfile } from '../../selectors/userSelectors'
+import { useAuth0 } from '@auth0/auth0-react'
+import { getUserProfile } from '../../selectors/userSelectors'
 
 const styles = {
     logo: {
         height: 32,
     },
 }
-const renderProfileButton = props => {
-    const avatarUrl = props.avatarImg
-    const isLoggedIn = Auth.isLoggedIn()
-    const avatar = <Avatar size={24} src={avatarUrl} />
-    const notLoggedInIcon = (
-        <FontIcon color="white" className="material-icons">
-            account_circle
-        </FontIcon>
-    )
+
+const NotLoggedInIcon = () => (
+    <FontIcon color="white" className="material-icons">
+        account_circle
+    </FontIcon>
+)
+
+const AuthenticatedProfileButton = props => {}
+
+//const UnAUthenticatedProfileButton = ()
+
+const ProfileButton = () => {
+    const {
+        user,
+        isLoading,
+        isAuthenticated,
+        loginWithRedirect,
+        getIdTokenClaims,
+        ...rest
+    } = useAuth0()
+
+    const profile = useSelector(getUserProfile)
+
     const button = (
         <IconButton
             style={{ transform: 'translate(12px)' }}
-            onClick={() => (!isLoggedIn ? Auth.login() : {})}
+            onClick={() => (!isAuthenticated ? loginWithRedirect() : {})}
             title="Account"
         >
-            {isLoggedIn && typeof props.avatarImg === 'string'
-                ? avatar
-                : notLoggedInIcon}
+            {(isAuthenticated || isLoading) &&
+            typeof profile?.picture === 'string' ? (
+                <Avatar size={24} src={profile.picture} />
+            ) : (
+                <NotLoggedInIcon />
+            )}
         </IconButton>
     )
-    return isLoggedIn ? <Link to="/user">{button}</Link> : button
+    return isAuthenticated ? <Link to="/user">{button}</Link> : button
 }
 
 const Header = props => (
@@ -61,14 +78,9 @@ const Header = props => (
                 <Link to="/">App Hub</Link>
             </ToolbarTitle>
 
-            {renderProfileButton(props)}
+            <ProfileButton />
         </ToolbarSection>
     </Toolbar>
 )
 
-const mapStateTopProps = state => ({
-    avatarImg: getUserProfile(state).picture,
-    authenticated: getUserInfo(state).authenticated,
-})
-
-export default connect(mapStateTopProps)(Header)
+export default Header

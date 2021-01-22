@@ -5,6 +5,19 @@ import Spinner from './Spinner'
 import { Route, Redirect } from 'react-router-dom'
 import { userAuthenticated, userLogout } from '../../actions/actionCreators'
 import { getUserInfo } from '../../selectors/userSelectors'
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+
+const ProtectedRoute = ({ component, ...rest }) => {
+    return (
+        <Route
+            {...rest}
+            component={withAuthenticationRequired(component, {
+                onRedirecting: () => <Spinner size="large" />,
+            })}
+        />
+    )
+}
+
 export class PrivateRoute extends Component {
     componentDidMount() {
         const { auth } = this.props
@@ -81,6 +94,13 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 //need non-pure-component else router-context won't be passed down to protected component
-export default connect(mapStateToProps, mapDispatchToProps, null, {
-    pure: false,
-})(PrivateRoute)
+const ConnectedPrivateRoute = connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    null,
+    {
+        pure: false,
+    }
+)(PrivateRoute)
+
+export default ProtectedRoute

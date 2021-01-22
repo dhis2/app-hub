@@ -8,7 +8,6 @@ import {
     concatMap,
     switchMap,
     mergeAll,
-    concatAll,
     debounceTime,
     catchError,
     filter,
@@ -127,6 +126,7 @@ const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
         concatMap(() => {
+            return [{ type: actions.ME_LOAD }]
             return [
                 new Promise((resolve, reject) => {
                     Auth.lock.getProfile(Auth.getToken(), (error, profile) => {
@@ -142,8 +142,8 @@ const user = action$ =>
                     type: actions.ME_LOAD,
                 }),
             ]
-        }),
-        concatAll()
+        })
+        //concatAll()
     )
 
 const userApps = action$ =>
@@ -446,14 +446,6 @@ const loadChannels = action$ =>
         })
     )
 
-/**
- * Gets organisation by name
- *
- * Need to have validation here, as the validation is based upon the
- * results and thus we cannot use regular promise validation.
- * Async validation is used to prevent form-submission and clicking continue
- * We are also using synchronous validation for orgs that have been fetched earlier
- */
 const searchOrganisation = action$ =>
     action$.pipe(
         ofType(actions.ORGANISATIONS_SEARCH),
@@ -461,9 +453,9 @@ const searchOrganisation = action$ =>
         distinctUntilChanged(
             (prev, curr) => prev.payload.name === curr.payload.name
         ),
-        debounceTime(250),
+        debounceTime(500),
         switchMap(action => {
-            from(api.searchOrganisations(action.payload.name)).pipe(
+            return from(api.searchOrganisations(action.payload.name)).pipe(
                 switchMap(orgs => {
                     return [
                         {

@@ -24,16 +24,17 @@ const updateOpts = {
 
 // This hack is needed to prevent Auth0-Lock to initialize which sends requests that hang in test
 export let Auth
+
 if (process.NODE_ENV !== 'test') {
-    Auth = new AuthService(config.auth0.clientID, config.auth0.domain)
+    Auth = new AuthService(config.auth0.clientIDOld, config.auth0.domain)
 } else {
     Auth = {}
 }
 
-const apiV2 = new AppHubAPI({
+export const apiV2 = new AppHubAPI({
     baseUrl: config.api.baseURL,
     apiVersion: 'v2',
-    auth: Auth,
+    //auth: Auth,
 })
 
 export function getAllApps() {
