@@ -6,6 +6,8 @@ const createUserValidationFunc = require('../security/createUserValidationFunc')
 
 const routes = require('../routes/index.js')
 
+const jwksRsa = require('jwks-rsa')
+
 // This is needed to override staticFrontendRoutes's catch-all route
 // so that 404s under /api is not redirected to index.html
 const defaultNotFoundRoute = {
@@ -35,7 +37,12 @@ const apiRoutesPlugin = {
             await server.register(jwt)
 
             const authConfig = {
-                key: auth.config.secrets,
+                key: jwksRsa.hapiJwt2KeyAsync({
+                    cache: true,
+                    rateLimit: true,
+                    jwksRequestsPerMinute: 5,
+                    jwksUri: `${auth.config.issuer}.well-known/jwks.json`,
+                }),
                 verifyOptions: {
                     audience: auth.config.audience,
                     issuer: auth.config.issuer,
