@@ -19,8 +19,12 @@ const config = {
             strategy: process.env.AUTH_STRATEGY,
             secrets: [process.env.AUTH0_SECRET, process.env.AUTH0_M2M_SECRET],
             audience: process.env.AUTH0_AUDIENCE,
-            issuer: process.env.AUTH0_DOMAIN,
+            domain: process.env.AUTH0_DOMAIN,
+            issuer: process.env.AUTH0_ISSUER,
             algorithms: [process.env.AUTH0_ALG],
+            managementClientId: process.env.AUTH0_MANAGEMENT_CLIENT_ID,
+            managementAudience: process.env.AUTH0_MANGAGEMENT_AUDIENCE,
+            managementSecret: process.env.AUTH0_MANAGEMENT_SECRET,
         },
         useAuth0: () => {
             return (
@@ -28,7 +32,10 @@ const config = {
                 config.auth.config.secrets.length > 0 &&
                 config.auth.config.audience &&
                 config.auth.config.issuer &&
-                config.auth.config.algorithms
+                config.auth.config.algorithms &&
+                config.auth.config.managementClientId &&
+                config.auth.config.managementAudience &&
+                config.auth.config.managementSecret
             )
         },
     },

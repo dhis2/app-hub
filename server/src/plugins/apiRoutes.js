@@ -1,5 +1,7 @@
 const jwt = require('hapi-auth-jwt2')
 
+const Auth0ManagementClient = require('auth0').ManagementClient
+
 const debug = require('debug')('apphub:server:plugins:apiRoutes')
 
 const createUserValidationFunc = require('../security/createUserValidationFunc')
@@ -29,8 +31,16 @@ const apiRoutesPlugin = {
     register: async (server, options) => {
         const { knex, auth } = options
 
+        const auth0ManagementClient = new Auth0ManagementClient({
+            domain: 'dhis2.eu.auth0.com',
+            clientId: auth.config.managementClientId,
+            clientSecret: auth.config.managementSecret,
+            scope: 'read:users',
+        })
+
         server.bind({
             db: knex,
+            auth0ManagementClient,
         })
 
         if (auth && auth.useAuth0()) {
@@ -55,7 +65,8 @@ const apiRoutesPlugin = {
                 complete: true,
                 validate: createUserValidationFunc(
                     knex,
-                    authConfig.verifyOptions.audience
+                    authConfig.verifyOptions.audience,
+                    auth0ManagementClient
                 ),
             })
         } else {

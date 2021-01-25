@@ -1,4 +1,9 @@
 const debug = require('debug')('apphub:server:security')
+
+const ROLES = {
+    MANAGER: 'App Hub Manager',
+}
+
 /**
  * This returns true if the request is authenticated (e.g. contains a valid token)
  * @param {*} request
@@ -32,7 +37,7 @@ const hasRole = (request, role) => {
  * @param {*} request
  */
 const canDeleteApp = request =>
-    isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+    isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 /**
  * Checks if the user on the request has permissions to change the status of an app
@@ -40,7 +45,7 @@ const canDeleteApp = request =>
  * @param {*} hapi
  */
 const canChangeAppStatus = request =>
-    isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+    isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 /**
  * Checks if the user on the request has permissions to create an app version
@@ -59,10 +64,10 @@ const canCreateApp = request => isAuthenticated(request)
  * @param {*} request
  */
 const canSeeAllApps = request =>
-    isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+    isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 const currentUserIsManager = request =>
-    isAuthenticated(request) && hasRole(request, 'ROLE_MANAGER')
+    isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 const getCurrentUserFromRequest = request => {
     return new Promise((resolve, reject) => {
