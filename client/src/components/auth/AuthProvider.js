@@ -23,14 +23,19 @@ const AuthProvider = ({ children }) => (
 )
 
 const InitializeAuth = ({ children }) => {
-    const auth0API = useAuth0()
+    const {
+        user,
+        isAuthenticated,
+        isLoading,
+        getAccessTokenSilently,
+    } = useAuth0()
     const dispatch = useDispatch()
 
     useEffect(() => {
-        const { user, isAuthenticated, isLoading } = auth0API
-        //AuthService.setAuth0API(auth0API)
-        apiV2.setAccessTokenFunc(auth0API.getAccessTokenSilently)
+        apiV2.setAccessTokenFunc(getAccessTokenSilently)
+    }, [getAccessTokenSilently])
 
+    useEffect(() => {
         if (!isLoading && isAuthenticated && user) {
             const userProfile = {
                 ...user,
@@ -43,17 +48,10 @@ const InitializeAuth = ({ children }) => {
         }
 
         if (!isLoading && !isAuthenticated && localStorage.getItem('profile')) {
-            console.log('removez')
             localStorage.removeItem('profile')
             dispatch({ type: 'USER_LOGOUT' })
         }
-    }, [auth0API])
-
-    // const dispatch = useDispatch()
-
-    // useEffect(() => {
-    //     dispatch({ type: 'USER_SET_AUTH', payload: getAccessTokenSilently })
-    // }, [getAccessTokenSilently, dispatch])
+    }, [user, isAuthenticated, isLoading])
 
     return children
 }
