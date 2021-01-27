@@ -1,3 +1,10 @@
+## [2.10.6](https://github.com/dhis2/app-hub/compare/v2.10.5...v2.10.6) (2021-01-27)
+
+
+### Bug Fixes
+
+* **imageviewer:** center image when only one image ([#426](https://github.com/dhis2/app-hub/issues/426)) ([d04040b](https://github.com/dhis2/app-hub/commit/d04040b23f0f3cb063059c25f302c8d3b604eba3))
+
 ## [2.10.5](https://github.com/dhis2/app-hub/compare/v2.10.4...v2.10.5) (2021-01-18)
 
 
