@@ -201,7 +201,7 @@ class ImageViewer extends Component {
             dots: true,
             centerMode: true,
             slidesToShow: 1,
-            centerPadding: '60px',
+            centerPadding: '50px',
             draggable: true,
             swipeToSlide: true,
             infinite: false,
