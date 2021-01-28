@@ -4,7 +4,7 @@ const Boom = require('@hapi/boom')
 const { createUser } = require('../data')
 
 const customClaimsNamespace = 'https://apps.dhis2.org'
-const getNamespacedClaim = key => `${customClaimsNamespace}/{key}`
+const getNamespacedClaimKey = key => `${customClaimsNamespace}/${key}`
 
 const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
     return async (decoded, request, h, asf) => {
@@ -74,7 +74,8 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                 }
 
                 returnObj.credentials.userId = user.id
-                const roles = returnObj.credentials[getNamespacedClaim('roles')]
+                const roles =
+                    returnObj.credentials[getNamespacedClaimKey('roles')]
                 returnObj.credentials.roles = roles
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
@@ -107,7 +108,6 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                     throw Boom.internal(err)
                 }
             }
-
             return returnObj
         }
 
