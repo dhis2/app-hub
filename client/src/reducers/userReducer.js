@@ -1,6 +1,7 @@
 import * as actionTypes from '../constants/actionTypes'
 import { combineReducers } from 'redux'
 import { optimistic } from 'redux-optimistic-ui'
+import { roles } from '../constants/apiConstants'
 
 const localStorageProfile = localStorage.getItem('profile')
 const initialProfile = localStorageProfile
@@ -264,9 +265,8 @@ function userInfoReducer(
         }
 
         case actionTypes.USER_LOADED: {
-            const manager = action.payload.profile.roles.includes(
-                'ROLE_MANAGER'
-            )
+            const manager = action.payload.profile.roles.includes(roles.manager)
+
             return {
                 ...state,
                 profile: {

@@ -9,25 +9,20 @@ export default class AppHubAPI {
      * @param {*} apiOptions
      * @param {*} apiOptions.baseUrl baseUrl to use
      * @param {*} apiOptions.apiVersion apiVersion to use, appended to baseUrl
-     * @param {*} defaultFetchOptions default options passed to fetch
+     * @param {AuthService} apiOptions.auth AuthService-instance with getAccessToken function set.
+     * @param {*} fetchOptions default options passed to fetch
+    
      */
     constructor(apiOptions, fetchOptions = defaultFetchOptions) {
-        const { baseUrl, apiVersion } = apiOptions
+        const { baseUrl, apiVersion, auth } = apiOptions
         this.apiUrl = joinUrlPath(baseUrl, apiVersion)
         this.defaultFetchOptions = fetchOptions
-    }
-
-    async getAccessToken() {
-        throw new Error('function should not be called before it is overidden.')
-    }
-
-    setAccessTokenFunc(func) {
-        this.getAccessToken = func
+        this.auth = auth
     }
 
     async getAuthHeaders() {
         const headers = {}
-        const accessToken = await this.getAccessToken()
+        const accessToken = await this.auth.getAccessToken()
         headers['Authorization'] = `Bearer ${accessToken}`
         return headers
     }

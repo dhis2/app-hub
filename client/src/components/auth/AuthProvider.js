@@ -32,7 +32,7 @@ const InitializeAuth = ({ children }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        apiV2.setAccessTokenFunc(getAccessTokenSilently)
+        Auth.setAccessTokenFunc(getAccessTokenSilently)
     }, [getAccessTokenSilently])
 
     useEffect(() => {
@@ -42,13 +42,12 @@ const InitializeAuth = ({ children }) => {
                 roles: user['https://apps.dhis2.org/roles'],
             }
 
-            localStorage.setItem('profile', JSON.stringify(userProfile))
-
+            Auth.setProfile(userProfile)
             dispatch(userLoaded(userProfile))
         }
 
         if (!isLoading && !isAuthenticated && localStorage.getItem('profile')) {
-            localStorage.removeItem('profile')
+            Auth.logout()
             dispatch({ type: 'USER_LOGOUT' })
         }
     }, [user, isAuthenticated, isLoading])

@@ -31,3 +31,8 @@ export const appSchema = {
 }
 
 export const DHISVersions = ['2.26', '2.25', '2.24', '2.23', '2.22', '2.21']
+
+// manager roles as defined in Auth0
+export const roles = {
+    manager: 'App Hub Manager',
+}

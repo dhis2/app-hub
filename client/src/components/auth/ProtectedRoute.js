@@ -1,16 +1,23 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
-import Spinner from './Spinner'
-import { Route, Redirect } from 'react-router-dom'
-import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
+import React from 'react'
+import Spinner from '../utils/Spinner'
+import { Route } from 'react-router-dom'
+import { withAuthenticationRequired } from '@auth0/auth0-react'
 
-const ProtectedRoute = ({ component, ...rest }) => {
+const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
         <Route
             {...rest}
-            component={withAuthenticationRequired(component, {
-                onRedirecting: () => <Spinner size="large" />,
-            })}
+            render={props => {
+                const ProtectedComponent = withAuthenticationRequired(
+                    component,
+                    {
+                        onRedirecting: () => <Spinner size="large" />,
+                    }
+                )
+
+                return <ProtectedComponent auth={auth} {...props} />
+            }}
         />
     )
 }

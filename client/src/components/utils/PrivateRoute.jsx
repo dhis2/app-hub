@@ -7,13 +7,20 @@ import { userAuthenticated, userLogout } from '../../actions/actionCreators'
 import { getUserInfo } from '../../selectors/userSelectors'
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react'
 
-const ProtectedRoute = ({ component, ...rest }) => {
+const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
         <Route
             {...rest}
-            component={withAuthenticationRequired(component, {
-                onRedirecting: () => <Spinner size="large" />,
-            })}
+            render={props => {
+                const ProtectedComponent = withAuthenticationRequired(
+                    component,
+                    {
+                        onRedirecting: () => <Spinner size="large" />,
+                    }
+                )
+
+                return <ProtectedComponent auth={auth} {...props} />
+            }}
         />
     )
 }
