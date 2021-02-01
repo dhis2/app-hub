@@ -22,6 +22,9 @@ const config = {
             domain: process.env.AUTH0_DOMAIN,
             issuer: process.env.AUTH0_ISSUER,
             algorithms: [process.env.AUTH0_ALG],
+            jwksUri:
+                process.env.AUTH0_JWKS_URI ||
+                new URL('.well-known/jwks.json', process.env.AUTH0_ISSUER).href,
             managementClientId: process.env.AUTH0_MANAGEMENT_CLIENT_ID,
             managementAudience: process.env.AUTH0_MANGAGEMENT_AUDIENCE,
             managementSecret: process.env.AUTH0_MANAGEMENT_SECRET,
@@ -31,8 +34,12 @@ const config = {
                 config.auth.config.strategy === 'jwt' &&
                 config.auth.config.secrets.length > 0 &&
                 config.auth.config.audience &&
+                config.auth.config.domain &&
                 config.auth.config.issuer &&
                 config.auth.config.algorithms &&
+                (config.auth.config.algorithms.includes('RS256')
+                    ? config.auth.config.jwksUri
+                    : true) &&
                 config.auth.config.managementClientId &&
                 config.auth.config.managementAudience &&
                 config.auth.config.managementSecret

@@ -31,8 +31,9 @@ const apiRoutesPlugin = {
     register: async (server, options) => {
         const { knex, auth } = options
 
+        // Client used for Auth0 Management API to get new user-information from Auth0
         const auth0ManagementClient = new Auth0ManagementClient({
-            domain: 'dhis2.eu.auth0.com',
+            domain: auth.config.domain,
             clientId: auth.config.managementClientId,
             clientSecret: auth.config.managementSecret,
             scope: 'read:users',
@@ -45,13 +46,12 @@ const apiRoutesPlugin = {
 
         if (auth && auth.useAuth0()) {
             await server.register(jwt)
-
             const authConfig = {
                 key: jwksRsa.hapiJwt2KeyAsync({
                     cache: true,
                     rateLimit: true,
                     jwksRequestsPerMinute: 5,
-                    jwksUri: `${auth.config.issuer}.well-known/jwks.json`,
+                    jwksUri: auth.config.jwksUri,
                 }),
                 verifyOptions: {
                     audience: auth.config.audience,
