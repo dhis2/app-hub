@@ -14,7 +14,6 @@
     },
     "dependencies": {
         "@auth0/auth0-react": "^1.2.0",
-        "auth0-lock": "^10.18.0",
         "classnames": "^2.2.5",
         "core-js": "^3.4.8",
         "css-loader": "^0.26.1",

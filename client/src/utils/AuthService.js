@@ -1,12 +1,5 @@
-import Zero from 'auth0-lock'
 import { isTokenExpired } from './jwtHelper'
-import History from './history'
-import store from '../store'
-import Theme from '../styles/theme'
-import logo from '../assets/img/dhis2.svg'
-
 export default class AuthService {
-    
     login() {
         // Call the show method to display the widget.
         this.lock.show()
@@ -27,11 +20,13 @@ export default class AuthService {
     }
 
     getAccessTokenSilently() {
-        throw new Error('Should not be called before overidden by setAccessTokenSilentlyFunc')
+        throw new Error(
+            'Should not be called before overidden by setAccessTokenSilentlyFunc'
+        )
     }
 
     setAccessTokenFunc(func) {
-        this.getAccessTokenSilently = func 
+        this.getAccessTokenSilently = func
     }
 
     async getAccessToken() {
