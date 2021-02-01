@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => (
         domain={config.auth0.domain}
         clientId={config.auth0.clientID}
         audience={config.auth0.audience}
-        redirectUri={`${window.location.protocol}//${window.location.host}`}
+        redirectUri={`${window.location.protocol}//${window.location.host}/user`}
         useRefreshTokens={true}
         advancedOptions={{
             defaultScope:
@@ -32,8 +32,9 @@ const InitializeAuth = ({ children }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        console.log('set token func')
         Auth.setAccessTokenFunc(getAccessTokenSilently)
-    }, [getAccessTokenSilently])
+    }, [])
 
     useEffect(() => {
         if (!isLoading && isAuthenticated && user) {
@@ -47,8 +48,9 @@ const InitializeAuth = ({ children }) => {
         }
 
         if (!isLoading && !isAuthenticated && localStorage.getItem('profile')) {
-            Auth.logout()
-            dispatch({ type: 'USER_LOGOUT' })
+            console.log('logout')
+            //Auth.logout()
+            //dispatch({ type: 'USER_LOGOUT' })
         }
     }, [user, isAuthenticated, isLoading])
 
