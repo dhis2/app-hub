@@ -1,10 +1,15 @@
+
 import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { history } from '../utils/history'
 import 'material-components-web/dist/material-components-web.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import theme from '../styles/theme'
+
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
 import '../styles/override.css'
+
 import AppCards from './appCards/AppCards'
 import AppView from './appView/AppView'
 import UserView from './user/UserView'
@@ -16,6 +21,7 @@ import { Provider } from 'react-redux'
 import store from '../store'
 import { Auth } from '../api/api'
 import '../utils/preRender'
+
 
 export default function AppHub() {
     return (

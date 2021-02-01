@@ -9199,10 +9199,10 @@ react-router@5.2.0, react-router@^5.2.0:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-slick@^0.27.12:
-  version "0.27.12"
-  resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.27.12.tgz#9970d9f040e3ee57ad6e0ab98e4e04bb9dd823ab"
-  integrity sha512-MGhkKK2YACB5+65/AjW+V9e/M+labh6zCJzSSGi34YiMg5n9LBzTUV8Qz6N0PbsKZQpeRwEwWkyIwqm8987B1w==
+react-slick@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/react-slick/-/react-slick-0.28.0.tgz#b3f8511b0facca41cabe35cbf37771250f8287ea"
+  integrity sha512-/EZI9FOVFo9PseQKOw08K/lVT/T81rkVJkCDGCQbDGbg4irSMALaoesBMmAZie2YALuMlKHdzDsqioNtkmJKVg==
   dependencies:
     classnames "^2.2.5"
     enquire.js "^2.1.6"

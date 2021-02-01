@@ -32,7 +32,7 @@ const webpackConfig = {
                 use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/i,
+                test: /\.(jpe?g|png|gif|svg|woff(2)?|ttf|eot)$/i,
                 use: [
                     {
                         loader: 'file-loader',
