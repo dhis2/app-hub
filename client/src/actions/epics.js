@@ -1,7 +1,6 @@
 import * as actions from '../constants/actionTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
-import { Auth } from '../api/api'
 import { history } from '../utils/history'
 import * as api from '../api/api'
 import {
@@ -125,25 +124,18 @@ const deleteApp = action$ =>
 const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
-        concatMap(() => {
-            return [{ type: actions.ME_LOAD }]
-            return [
-                new Promise((resolve, reject) => {
-                    Auth.lock.getProfile(Auth.getToken(), (error, profile) => {
-                        if (error) {
-                            reject(actionCreators.userError())
-                        } else {
-                            Auth.setProfile(profile)
-                            resolve(actionCreators.userLoaded(profile))
-                        }
-                    })
-                }),
-                of({
-                    type: actions.ME_LOAD,
-                }),
-            ]
-        })
-        //concatAll()
+        concatMap(() =>
+            api
+                .getMe()
+                .then(response => ({
+                    type: actions.ME_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e => ({
+                    type: actions.ME_LOAD_ERROR,
+                    payload: e,
+                }))
+        )
     )
 
 const userApps = action$ =>
@@ -478,23 +470,6 @@ const searchOrganisation = action$ =>
         })
     )
 
-const loadMe = action$ =>
-    action$.pipe(
-        ofType(actions.ME_LOAD),
-        switchMap(() =>
-            api
-                .getMe()
-                .then(response => ({
-                    type: actions.ME_LOAD_SUCCESS,
-                    payload: response,
-                }))
-                .catch(e => ({
-                    type: actions.ME_LOAD_ERROR,
-                    payload: e,
-                }))
-        )
-    )
-
 const loadOrganisations = (action$, state$) =>
     action$.pipe(
         ofType(actions.ORGANISATIONS_LOAD),
@@ -683,7 +658,6 @@ export default combineEpics(
     addMultipleImages,
     loadChannels,
     searchOrganisation,
-    loadMe,
     loadOrganisations,
     loadOrganisation,
     addOrganisationMember,

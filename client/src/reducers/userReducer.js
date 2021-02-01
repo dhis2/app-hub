@@ -238,33 +238,18 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
 }
 
 function userInfoReducer(
-    state = { authenticated: false, ...initialState, profile: initialProfile },
+    state = { ...initialState, profile: initialProfile },
     action
 ) {
     switch (action.type) {
-        case actionTypes.USER_AUTHENTICATED: {
-            return {
-                ...state,
-                authenticated: true,
-            }
-        }
-
-        case 'USER_SET_AUTH': {
-            return {
-                ...state,
-                auth: action.payload,
-            }
-        }
-
         case actionTypes.USER_LOGOUT: {
             return {
                 ...state,
-                authenticated: false,
                 profile: null,
             }
         }
 
-        case actionTypes.USER_LOADED: {
+        case actionTypes.USER_LOAD_SUCCESS: {
             const manager = action.payload.profile.roles.includes(roles.manager)
 
             return {
