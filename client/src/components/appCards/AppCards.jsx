@@ -27,9 +27,7 @@ import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.css'
-import { Provider, ReactReduxContext } from 'react-redux'
 import PopoverWithReduxState from '../../utils/PopoverWithReduxState'
-import LogoutButton from '../../components/auth/LogoutButton'
 
 const debug = Debug('apphub:frontend:components:appcards')
 
@@ -208,7 +206,6 @@ class AppCards extends Component {
                             {apps}
                         </FadeAnimationList>
                     )}
-                    <LogoutButton />
                     {loaded && apps.length < 1 && emptyApps}
                 </Col>
             </Grid>

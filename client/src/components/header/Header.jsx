@@ -24,10 +24,6 @@ const NotLoggedInIcon = () => (
     </FontIcon>
 )
 
-const AuthenticatedProfileButton = props => {}
-
-//const UnAUthenticatedProfileButton = ()
-
 const ProfileButton = () => {
     const {
         user,
@@ -43,7 +39,7 @@ const ProfileButton = () => {
     const button = (
         <IconButton
             style={{ transform: 'translate(12px)' }}
-            onClick={() => (!isAuthenticated ? loginWithRedirect() : {})}
+            onClick={!isAuthenticated ? loginWithRedirect : undefined}
             title="Account"
         >
             {(isAuthenticated || isLoading) &&

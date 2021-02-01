@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import config from '../../../config'
 import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'
-import { Auth, apiV2 } from '../../api/api'
+import { Auth } from '../../api/api'
 import { userLoaded } from '../../actions/actionCreators'
 
 const AuthProvider = ({ children }) => (
@@ -32,9 +32,8 @@ const InitializeAuth = ({ children }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('set token func')
         Auth.setAccessTokenFunc(getAccessTokenSilently)
-    }, [])
+    }, [getAccessTokenSilently])
 
     useEffect(() => {
         if (!isLoading && isAuthenticated && user) {
@@ -48,9 +47,8 @@ const InitializeAuth = ({ children }) => {
         }
 
         if (!isLoading && !isAuthenticated && localStorage.getItem('profile')) {
-            console.log('logout')
-            //Auth.logout()
-            //dispatch({ type: 'USER_LOGOUT' })
+            Auth.logout()
+            dispatch({ type: 'USER_LOGOUT' })
         }
     }, [user, isAuthenticated, isLoading])
 
