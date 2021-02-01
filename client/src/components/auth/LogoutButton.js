@@ -1,20 +1,18 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'
+import React from 'react'
+import { useAuth0 } from '@auth0/auth0-react'
+import { ListItem } from 'material-ui/List'
+import FontIcon from 'material-ui/FontIcon'
 
-const LogoutButton = ({ children }) => {
-    const { logout, isAuthenticated } = useAuth0()
-
+export const ListItemLogoutButton = props => {
+    const { logout } = useAuth0()
     return (
-        <button
-            onClick={() =>
-                logout({ returnTo: window.location.origin, localOnly: true })
+        <ListItem
+            primaryText="Logout"
+            leftIcon={
+                <FontIcon className="material-icons">exit_to_app</FontIcon>
             }
-        >
-            {isAuthenticated ? 'Log out' : 'Log in'}
-        </button>
+            onClick={() => logout({ returnTo: window.location.origin })}
+            {...props}
+        />
     )
 }
-
-export default LogoutButton
