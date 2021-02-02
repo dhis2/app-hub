@@ -1,12 +1,9 @@
-// eslint-disable-next-line react/no-deprecated
 import PropTypes from 'prop-types'
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import AppCardItem from './AppCardItem'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
-import Popover from 'material-ui/Popover'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import { loadApprovedApps, loadChannels } from '../../actions/actionCreators'
@@ -18,16 +15,12 @@ import {
     filterAppChannel,
 } from '../utils/Filters'
 import { ToolbarGroup } from 'material-ui/Toolbar'
-//import {values, sortBy} from 'lodash';
 import sortBy from 'lodash/sortBy'
 import Debug from 'debug'
-
-//import values from 'lodash/values';
 import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.css'
-import { Provider, ReactReduxContext } from 'react-redux'
 import PopoverWithReduxState from '../../utils/PopoverWithReduxState'
 const debug = Debug('apphub:frontend:components:appcards')
 
