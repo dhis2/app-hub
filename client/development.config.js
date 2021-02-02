@@ -5,7 +5,6 @@ module.exports = {
     auth0: {
         audience: 'apps.dhis2.org/api',
         clientID: 'M7fOVRQlS4xI0Sf928IXXeLxBxRs4nQN',
-        clientIDOld: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',
         domain: 'dhis2.eu.auth0.com',
     },
     routes: {
