@@ -54,6 +54,8 @@ class AppCards extends Component {
     }
 
     render() {
+        console.log(this.props.appTypeFilter)
+
         const styles = {
             grid: {
                 padding: 0,
@@ -217,7 +219,7 @@ AppCards.propTypes = {
     appChannelFilter: PropTypes.string,
     appList: PropTypes.object,
     appSearchFilter: PropTypes.string,
-    appTypeFilter: PropTypes.string,
+    appTypeFilter: PropTypes.object,
     channels: PropTypes.object,
     loadApps: PropTypes.func,
     loadChannels: PropTypes.func,
