@@ -91,4 +91,5 @@ module.exports = {
     createUserValidationFunc: require('./createUserValidationFunc'),
     getCurrentUserFromRequest,
     currentUserIsManager,
+    ROLES,
 }

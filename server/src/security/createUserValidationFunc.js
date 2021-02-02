@@ -2,7 +2,7 @@ const debug = require('debug')('apphub:server:security:createUserValidation')
 const Boom = require('@hapi/boom')
 
 const { createUser } = require('../data')
-
+const { ROLES } = require('./index')
 const customClaimsNamespace = 'https://apps.dhis2.org'
 const getNamespacedClaimKey = key => `${customClaimsNamespace}/${key}`
 
@@ -97,11 +97,7 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                 try {
                     //Add the mapped user email to enable it to work through the rest of the permission system
                     returnObj.credentials.email = apiUser.email
-                    returnObj.credentials.roles = [
-                        'ROLE_MANAGER',
-                        'ROLE_USER',
-                        'ROLE_ADMIN',
-                    ] //the M2M has full access (all roles)
+                    returnObj.credentials.roles = [ROLES.MANAGER] //the M2M has full access (all roles)
                     returnObj.credentials.email_verified = true
                     returnObj.credentials.userId = apiUser.id
                 } catch (err) {

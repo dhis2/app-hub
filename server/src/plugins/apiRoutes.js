@@ -4,8 +4,7 @@ const Auth0ManagementClient = require('auth0').ManagementClient
 
 const debug = require('debug')('apphub:server:plugins:apiRoutes')
 
-const createUserValidationFunc = require('../security/createUserValidationFunc')
-
+const { createUserValidationFunc, ROLES } = require('../security')
 const routes = require('../routes/index.js')
 
 const jwksRsa = require('jwks-rsa')
@@ -80,7 +79,7 @@ const apiRoutesPlugin = {
                         credentials: {
                             ...user,
                             userId: user.id,
-                            roles: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER'],
+                            roles: [ROLES.MANAGER],
                         },
                     })
                 },
