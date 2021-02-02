@@ -2,10 +2,9 @@ const debug = require('debug')('apphub:server:env-config:')
 
 const getRequiredEnv = envVar => {
     const value = process.env[envVar]
-    console.log(value)
-    if (value == undefined && process.env.NODE_ENV === 'production') {
+    if (!value && process.env.NODE_ENV === 'production') {
         throw new Error(`Expected env ${envVar} to be present.`)
-    } else if (value == undefined) {
+    } else if (!value) {
         debug(`Env ${envVar} not set. This is required for production.`)
     }
     return value
