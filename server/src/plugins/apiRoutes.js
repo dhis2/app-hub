@@ -31,20 +31,20 @@ const apiRoutesPlugin = {
     register: async (server, options) => {
         const { knex, auth } = options
 
-        // Client used for Auth0 Management API to get new user-information from Auth0
-        const auth0ManagementClient = new Auth0ManagementClient({
-            domain: auth.config.domain,
-            clientId: auth.config.managementClientId,
-            clientSecret: auth.config.managementSecret,
-            scope: 'read:users',
-        })
-
-        server.bind({
+        const bindContext = {
             db: knex,
-            auth0ManagementClient,
-        })
+        }
 
         if (auth && auth.useAuth0()) {
+            // Client used for Auth0 Management API to get new user-information from Auth0
+            const auth0ManagementClient = new Auth0ManagementClient({
+                domain: auth.config.domain,
+                clientId: auth.config.managementClientId,
+                clientSecret: auth.config.managementSecret,
+                scope: 'read:users',
+            })
+            bindContext.auth0ManagementClient = auth0ManagementClient
+
             await server.register(jwt)
             const authConfig = {
                 key: jwksRsa.hapiJwt2KeyAsync({
@@ -106,6 +106,8 @@ const apiRoutesPlugin = {
                 )
             }
         }
+
+        server.bind(bindContext)
 
         server.route([...routes, defaultNotFoundRoute])
     },
