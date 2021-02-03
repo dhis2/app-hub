@@ -16,7 +16,8 @@ const getApps = (
         channels = [],
         types = [],
         query,
-        pageSize = 10,
+        paginate = true,
+        pageSize = 12,
         page = 1,
     },
     knex
@@ -25,7 +26,7 @@ const getApps = (
     debug('languageCode:', languageCode)
     debug('channels:', channels)
 
-    return knex('apps_view')
+    const knexQuery = knex('apps_view')
         .select()
         .where(builder => {
             builder.where('status', status)
@@ -53,11 +54,15 @@ const getApps = (
                 builder.where('name', 'ilike', `%${query}%`)
             }
         })
-        .paginate({
+
+    if (paginate) {
+        return knexQuery.paginate({
             perPage: pageSize,
             currentPage: page,
             isLengthAware: true,
         })
+    }
+    return knexQuery
 }
 
 module.exports = getApps
