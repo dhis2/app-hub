@@ -54,7 +54,7 @@ const Apps = () => {
             <Col span={12}>
                 <AppCards isLoading={!data} error={error} apps={data?.apps} />
             </Col>
-            {!error && data ? (
+            {data?.apps?.length > 0 ? (
                 <Col span={12}>
                     <Pagination
                         page={page}
