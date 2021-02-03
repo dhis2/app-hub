@@ -40,6 +40,7 @@ const ToggleList = ({ toggles, selected, onChange }) =>
                 onChange(newSelected)
             }}
             toggled={selected.has(value)}
+            disabled={selected.has(value) && selected.size == 1}
         />
     ))
 
