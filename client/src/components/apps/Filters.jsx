@@ -19,6 +19,10 @@ const styles = {
     filterWrapper: {
         padding: '10px',
     },
+    filterName: {
+        marginTop: 0,
+        marginBottom: '0.3em',
+    }
 }
 
 const ToggleList = ({ toggles, selected, onChange }) =>
@@ -91,7 +95,7 @@ const Filters = ({
                     onRequestClose={() => setShow(false)}
                 >
                     <div style={styles.filterWrapper}>
-                        <h3>App type</h3>
+                        <h3 style={styles.filterName}>App type</h3>
                         <ToggleList
                             toggles={types}
                             selected={typesFilter}
@@ -99,7 +103,7 @@ const Filters = ({
                         />
                     </div>
                     <div style={styles.filterWrapper}>
-                        <h3>Channel</h3>
+                        <h3 style={styles.filterName}>Channel</h3>
                         <ToggleList
                             toggles={channels}
                             selected={channelsFilter}
