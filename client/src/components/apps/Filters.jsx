@@ -17,8 +17,8 @@ const styles = {
         width: '200px',
     },
     filterWrapper: {
-        padding: '10px'
-    }
+        padding: '10px',
+    },
 }
 
 /*
@@ -61,7 +61,7 @@ const Filters = ({
     types,
     typesFilter,
     onTypesFilterChange,
-    onQueryChange
+    onQueryChange,
 }) => {
     const [show, setShow] = useState(false)
     const [popoverAnchorEl, setPopoverAnchorEl] = useState(null)
@@ -78,9 +78,7 @@ const Filters = ({
             </ToolbarGroup>
             <ToolbarGroup>
                 <IconButton onClick={handlePopoverToggle}>
-                    <FontIcon className="material-icons">
-                        filter_list
-                    </FontIcon>
+                    <FontIcon className="material-icons">filter_list</FontIcon>
                 </IconButton>
                 <Popover
                     open={show}

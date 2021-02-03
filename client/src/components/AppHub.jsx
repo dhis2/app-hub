@@ -1,4 +1,3 @@
-
 import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { history } from '../utils/history'
@@ -21,7 +20,6 @@ import { Provider } from 'react-redux'
 import store from '../store'
 import { Auth } from '../api/api'
 import '../utils/preRender'
-
 
 export default function AppHub() {
     return (

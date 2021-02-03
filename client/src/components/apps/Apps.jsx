@@ -11,9 +11,9 @@ import Filters from './Filters'
 import Pagination from './Pagination'
 
 const types = {
-    'APP': 'Standard app',
-    'DASHBOARD_WIDGET': 'Dashboard app',
-    'TRACKER_DASHBOARD_WIDGET': 'Tracker widget'
+    APP: 'Standard app',
+    DASHBOARD_WIDGET: 'Dashboard app',
+    TRACKER_DASHBOARD_WIDGET: 'Tracker widget',
 }
 
 const Apps = ({ loadChannels, channelsData }) => {
@@ -24,12 +24,15 @@ const Apps = ({ loadChannels, channelsData }) => {
     const [query, setQuery] = useState('')
     const [page, setPage] = useState(1)
 
-    const params = useMemo(() => ({
-        channels: channelsFilter,
-        types: typesFilter,
-        query,
-        page
-    }), [channelsFilter, typesFilter, query, page])
+    const params = useMemo(
+        () => ({
+            channels: channelsFilter,
+            types: typesFilter,
+            query,
+            page,
+        }),
+        [channelsFilter, typesFilter, query, page]
+    )
     const { data, error } = useQuery('apps', params)
 
     if (channelsData.loading) {
@@ -50,17 +53,15 @@ const Apps = ({ loadChannels, channelsData }) => {
                 />
             </Col>
             <Col span={12}>
-                <AppCards
-                    isLoading={!data}
-                    error={error}
-                    apps={data?.apps} />
+                <AppCards isLoading={!data} error={error} apps={data?.apps} />
             </Col>
-            {(!error && data) ? (
+            {!error && data ? (
                 <Col span={12}>
                     <Pagination
                         page={page}
                         pageCount={data.pager.pageCount}
-                        onPageChange={setPage} />
+                        onPageChange={setPage}
+                    />
                 </Col>
             ) : null}
         </Grid>

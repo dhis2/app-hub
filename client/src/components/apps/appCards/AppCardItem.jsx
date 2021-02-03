@@ -1,6 +1,6 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import config from '../../../../config'
 import { Card, CardMedia, CardTitle } from 'material-ui/Card'
@@ -32,7 +32,9 @@ const AppItem = ({ app }) => {
                     title={<Link to={`/app/${id}`}>{name}</Link>}
                     subtitle={
                         <span>
-                            {developer.organisation || developer.name || 'Unspecified'}
+                            {developer.organisation ||
+                                developer.name ||
+                                'Unspecified'}
                             <br />
                             {config.ui.appTypeToDisplayName[appType]}{' '}
                         </span>

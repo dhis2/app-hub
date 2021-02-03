@@ -44,7 +44,7 @@ const filterApp = (app, filterVal) => {
     if (!filterVal) return true
     const filter = filterVal.toLowerCase()
     const valsToFilter = ['name', 'appType', 'organisation']
-    for (let val of valsToFilter) {
+    for (const val of valsToFilter) {
         const prop = app[val] || app.developer[val]
         if (prop && prop.toLowerCase().includes(filter)) {
             return true
@@ -62,7 +62,7 @@ const filterApp = (app, filterVal) => {
  */
 const filterAppType = (app, filters) => {
     if (!filters || filters.values.length == 0) {
-         return true
+        return true
     }
 
     const filterVal = filters.values
@@ -78,7 +78,7 @@ const filterAppType = (app, filters) => {
 
 const filterAppStatus = (app, filters) => {
     if (!filters || filters.values.length == 0) {
-         return true
+        return true
     }
 
     const filterVal = filters.values
@@ -91,7 +91,6 @@ const filterAppStatus = (app, filters) => {
     }
     return false
 }
-
 
 class AppList extends Component {
     constructor(props) {

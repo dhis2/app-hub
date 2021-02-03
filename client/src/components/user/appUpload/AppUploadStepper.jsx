@@ -40,7 +40,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(AppUploadStepper)
+export default connect(null, mapDispatchToProps)(AppUploadStepper)
