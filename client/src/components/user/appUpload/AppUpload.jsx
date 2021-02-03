@@ -32,9 +32,6 @@ class AppUpload extends Component {
         )
     }
 }
-const mapStateToProps = state => ({
-    appList: state.appsList.appList,
-})
 
 const mapDispatchToProps = dispatch => ({
     addApp(app, file, image) {
@@ -43,6 +40,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(AppUpload)

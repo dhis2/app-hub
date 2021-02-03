@@ -10,7 +10,7 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import '../styles/override.css'
 
-import AppCards from './appCards/AppCards'
+import Apps from './apps/Apps'
 import AppView from './appView/AppView'
 import UserView from './user/UserView'
 import Header from './header/Header'
@@ -33,7 +33,7 @@ export default function AppHub() {
                         <Header />
                         <div id="container" style={theme.container}>
                             <Switch>
-                                <Route exact path="/" component={AppCards} />
+                                <Route exact path="/" component={Apps} />
                                 <Route path="/app/:appId" component={AppView} />
                                 <PrivateRoute
                                     path="/user"
