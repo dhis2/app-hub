@@ -32,16 +32,20 @@ const getApps = (
             builder.where('language_code', languageCode)
 
             if (channels.length > 0) {
-                builder.where('channel_name', channels[0])
-                channels.slice(1).forEach(channel => {
-                    builder.orWhere('channel_name', channel)
+                builder.where(builder => {
+                    builder.where('channel_name', channels[0])
+                    channels.slice(1).forEach(channel => {
+                        builder.orWhere('channel_name', channel)
+                    })
                 })
             }
 
             if (types.length > 0) {
-                builder.where('type', types[0])
-                types.slice(1).forEach(type => {
-                    builder.orWhere('type', type)
+                builder.where(builder => {
+                    builder.where('type', types[0])
+                    types.slice(1).forEach(type => {
+                        builder.orWhere('type', type)
+                    })
                 })
             }
 
