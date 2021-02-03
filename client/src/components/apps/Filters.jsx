@@ -21,29 +21,33 @@ const styles = {
     },
 }
 
-/*
-<Toggle
-        label={label}
-        onToggle={(e, toggled) => {
-            input.onChange(toggled)
-            onToggle ? onToggle(toggled) : () => {}
-        }}
-        toggled={input.value ? true : false}
-        {...input}
-        {...props}
-    />
-*/
-const ToggleList = ({ toggles, selected, onChange }) => <p>Todo</p>
+const ToggleList = ({ toggles, selected, onChange }) =>
+    Object.entries(toggles).map(([value, label]) => (
+        <Toggle
+            key={value}
+            label={label}
+            onToggle={(_, toggled) => {
+                const newSelected = new Set(selected)
+                if (toggled) {
+                    newSelected.add(value)
+                } else {
+                    newSelected.delete(value)
+                }
+                onChange(newSelected)
+            }}
+            toggled={selected.has(value)}
+        />
+    ))
 
 ToggleList.propTypes = {
-    // TODO
+    selected: PropTypes.object.isRequired,
+    toggles: PropTypes.arrayOf(PropTypes.object).isRequired,
+    onChange: PropTypes.func.isRequired,
 }
 
 const SearchField = ({ onChange }) => {
-    const [value, setValue] = useState('')
     const debouncedOnChange = useMemo(() => debounce(onChange, 300), [onChange])
     const handleChange = (_, value) => {
-        setValue(value)
         debouncedOnChange(value)
     }
 
@@ -109,7 +113,13 @@ const Filters = ({
 }
 
 Filters.propTypes = {
-    // TODO
+    channels: PropTypes.object.isRequired,
+    channelsFilter: PropTypes.object.isRequired,
+    types: PropTypes.object.isRequired,
+    typesFilter: PropTypes.object.isRequired,
+    onChannelsFilterChange: PropTypes.func.isRequired,
+    onQueryChange: PropTypes.func.isRequired,
+    onTypesFilterChange: PropTypes.object.isRequired,
 }
 
 export default Filters

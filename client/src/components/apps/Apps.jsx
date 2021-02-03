@@ -19,15 +19,15 @@ const types = {
 const Apps = ({ loadChannels, channelsData }) => {
     useEffect(loadChannels, [])
 
-    const [channelsFilter, setChannelsFilter] = useState(['Stable'])
-    const [typesFilter, setTypesFilter] = useState(Object.keys(types))
+    const [channelsFilter, setChannelsFilter] = useState(new Set(['Stable']))
+    const [typesFilter, setTypesFilter] = useState(new Set(Object.keys(types)))
     const [query, setQuery] = useState('')
     const [page, setPage] = useState(1)
 
     const params = useMemo(
         () => ({
-            channels: channelsFilter,
-            types: typesFilter,
+            channels: [...channelsFilter],
+            types: [...typesFilter],
             query,
             page,
         }),
