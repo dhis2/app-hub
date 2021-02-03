@@ -22,7 +22,7 @@ const styles = {
     filterName: {
         marginTop: 0,
         marginBottom: '0.3em',
-    }
+    },
 }
 
 const ToggleList = ({ toggles, selected, onChange }) =>
@@ -45,7 +45,7 @@ const ToggleList = ({ toggles, selected, onChange }) =>
 
 ToggleList.propTypes = {
     selected: PropTypes.object.isRequired,
-    toggles: PropTypes.arrayOf(PropTypes.object).isRequired,
+    toggles: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired,
 }
 
@@ -123,7 +123,7 @@ Filters.propTypes = {
     typesFilter: PropTypes.object.isRequired,
     onChannelsFilterChange: PropTypes.func.isRequired,
     onQueryChange: PropTypes.func.isRequired,
-    onTypesFilterChange: PropTypes.object.isRequired,
+    onTypesFilterChange: PropTypes.func.isRequired,
 }
 
 export default Filters
