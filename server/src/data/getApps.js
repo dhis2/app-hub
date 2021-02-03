@@ -10,7 +10,15 @@ const debug = require('debug')('apphub:server:data:getApps')
  *
  */
 const getApps = (
-    { status, languageCode, channels = [], query, pageSize = 10, page = 1 },
+    {
+        status,
+        languageCode,
+        channels = [],
+        types = [],
+        query,
+        pageSize = 10,
+        page = 1,
+    },
     knex
 ) => {
     debug('status:', status)
@@ -27,6 +35,13 @@ const getApps = (
                 builder.where('channel_name', channels[0])
                 channels.slice(1).forEach(channel => {
                     builder.orWhere('channel_name', channel)
+                })
+            }
+
+            if (types.length > 0) {
+                builder.where('type', types[0])
+                types.slice(1).forEach(type => {
+                    builder.orWhere('type', type)
                 })
             }
 

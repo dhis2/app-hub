@@ -32,11 +32,17 @@ module.exports = [
                     .filter(channel => channel !== 'All')
             }
 
+            let types = []
+            if (request.query.types) {
+                types = request.query.types.split(',')
+            }
+
             const { data: apps, pagination } = await getApps(
                 {
                     status: AppStatus.APPROVED,
                     languageCode: 'en',
                     channels,
+                    types,
                     query: request.query.query,
                     page: request.query.page,
                 },
