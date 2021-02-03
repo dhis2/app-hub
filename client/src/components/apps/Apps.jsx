@@ -1,14 +1,16 @@
-import PropTypes from 'prop-types'
-import React, { useState, useMemo, useEffect } from 'react'
-import { connect } from 'react-redux'
-import { loadChannels } from '../../actions/actionCreators'
+import React, { useState, useMemo } from 'react'
 import { useQuery } from '../../api/api'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
-import Spinner from '../utils/Spinner'
 import AppCards from './appCards/AppCards'
 import Filters from './Filters'
 import Pagination from './Pagination'
+
+const channels = {
+    Stable: 'Stable',
+    Development: 'Development',
+    Canary: 'Canary',
+}
 
 const types = {
     APP: 'Standard app',
@@ -16,11 +18,12 @@ const types = {
     TRACKER_DASHBOARD_WIDGET: 'Tracker widget',
 }
 
-const Apps = ({ loadChannels, channelsData }) => {
-    useEffect(loadChannels, [])
+const defaultChannelsFilter = new Set(['Stable'])
+const defaultTypesFilter = new Set(Object.keys(types))
 
-    const [channelsFilter, setChannelsFilter] = useState(new Set(['Stable']))
-    const [typesFilter, setTypesFilter] = useState(new Set(Object.keys(types)))
+const Apps = () => {
+    const [channelsFilter, setChannelsFilter] = useState(defaultChannelsFilter)
+    const [typesFilter, setTypesFilter] = useState(defaultTypesFilter)
     const [query, setQuery] = useState('')
     const [page, setPage] = useState(1)
 
@@ -35,15 +38,11 @@ const Apps = ({ loadChannels, channelsData }) => {
     )
     const { data, error } = useQuery('apps', params)
 
-    if (channelsData.loading) {
-        return <Spinner size="large" />
-    }
-
     return (
         <Grid>
             <Col span={12}>
                 <Filters
-                    channels={channelsData.channels}
+                    channels={channels}
                     channelsFilter={channelsFilter}
                     onChannelsFilterChange={setChannelsFilter}
                     types={types}
@@ -68,25 +67,4 @@ const Apps = ({ loadChannels, channelsData }) => {
     )
 }
 
-Apps.propTypes = {
-    channels: PropTypes.object,
-    loadChannels: PropTypes.func,
-}
-
-const mapStateToProps = state => ({
-    channelsData: {
-        loading: state.channels.loading,
-        channels: state.channels.list.reduce((channels, channel) => {
-            channels[channel.name] = channel.name
-            return channels
-        }, {}),
-    },
-})
-
-const mapDispatchToProps = dispatch => ({
-    loadChannels() {
-        dispatch(loadChannels())
-    },
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Apps)
+export default Apps
