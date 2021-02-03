@@ -1,4 +1,6 @@
-const dotenv = require('dotenv').config()
+require('dotenv').config()
+const { attachPaginate } = require('knex-paginate')
+attachPaginate()
 
 const debug = require('debug')('apphub:server:knexconfig')
 

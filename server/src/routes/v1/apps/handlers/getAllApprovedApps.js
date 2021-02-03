@@ -45,13 +45,15 @@ module.exports = {
             {
                 status: AppStatus.APPROVED,
                 languageCode: 'en',
-                channel,
+                channels: [channel],
+                query: request.query.query,
+                page: request.query.page,
             },
             h.context.db
         )
 
         debug(appsQuery.toString())
-        const apps = await appsQuery
+        const { data: apps } = await appsQuery
 
         const filteredApps = filterAppsBySpecificDhis2Version(
             apps,

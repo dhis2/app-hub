@@ -9,10 +9,13 @@ const debug = require('debug')('apphub:server:data:getApps')
  * @returns {Promise<Array>}
  *
  */
-const getApps = ({ status, languageCode, channel }, knex) => {
+const getApps = (
+    { status, languageCode, channels = [], query, pageSize = 10, page = 1 },
+    knex
+) => {
     debug('status:', status)
     debug('languageCode:', languageCode)
-    debug('channel:', channel)
+    debug('channels:', channels)
 
     return knex('apps_view')
         .select()
@@ -20,9 +23,21 @@ const getApps = ({ status, languageCode, channel }, knex) => {
             builder.where('status', status)
             builder.where('language_code', languageCode)
 
-            if (channel) {
-                builder.where('channel_name', channel)
+            if (channels.length > 0) {
+                builder.where('channel_name', channels[0])
+                channels.slice(1).forEach(channel => {
+                    builder.orWhere('channel_name', channel)
+                })
             }
+
+            if (query) {
+                builder.where('name', 'ilike', `%${query}%`)
+            }
+        })
+        .paginate({
+            perPage: pageSize,
+            currentPage: page,
+            isLengthAware: true,
         })
 }
 
