@@ -34,22 +34,6 @@ const loadAppsAll = action$ =>
         })
     )
 
-const loadAppsApproved = action$ =>
-    action$.pipe(
-        ofType(actions.APPS_APPROVED_LOAD),
-        concatMap(() => {
-            return api
-                .getApprovedApps()
-                .then(apps => actionCreators.loadedApprovedApps(apps))
-                .catch(error =>
-                    actionCreators.actionErrorCreator(
-                        actions.APPS_APPROVED_ERROR,
-                        error
-                    )
-                )
-        })
-    )
-
 const loadApp = action$ =>
     action$.pipe(
         ofType(actions.APP_LOAD),
@@ -674,7 +658,6 @@ const editOrganisation = action$ =>
 
 export default combineEpics(
     loadAppsAll,
-    loadAppsApproved,
     loadApp,
     setAppApproval,
     deleteApp,
