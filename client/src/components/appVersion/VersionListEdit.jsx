@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect } from 'react'
 
 import {
     Table,
@@ -59,6 +59,33 @@ TableIcon.propTypes = {
     children: PropTypes.array,
 }
 
+const DownloadLinkWithToken = ({ downloadUrl }) => {
+    const [token, setToken] = useState(null)
+
+    useEffect(() => {
+        const getToken = async () => {
+            console.log('get tokenz')
+            const token = await Auth.getAccessToken()
+            console.log('token', token)
+            setToken(token)
+        }
+        getToken()
+    }, [Auth.getAccessTokenSilently])
+
+    //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
+    const downloadUrlWithToken = `${downloadUrl}?token=${token}`
+
+    return (
+        <a href={downloadUrlWithToken} title="Download">
+            <TableIcon>file_download</TableIcon>
+        </a>
+    )
+}
+
+DownloadLinkWithToken.propTypes = {
+    downloadUrl: PropTypes.string.isRequired,
+}
+
 class VersionListEdit extends Component {
     constructor(props) {
         super(props)
@@ -107,19 +134,10 @@ class VersionListEdit extends Component {
             created,
         } = appVersion
 
-        //auth0 stores the JWT token in localStorage
-        //as only authenticated users can edit an app, just assume this exists in this component
-        const token = Auth.getToken()
-
-        //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
-        const downloadUrlWithToken = `${downloadUrl}?token=${token}`
-
         return (
             <TableRow key={version.id}>
                 <TableRowColumn style={styles.firstColumn}>
-                    <a href={downloadUrlWithToken} title="Download">
-                        <TableIcon>file_download</TableIcon>
-                    </a>
+                    <DownloadLinkWithToken downloadUrl={downloadUrl} />
                 </TableRowColumn>
                 <TableRowColumn style={styles.tableRowColumn}>
                     {demoUrl || 'N/A'}
