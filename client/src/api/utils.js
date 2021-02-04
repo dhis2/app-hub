@@ -31,9 +31,7 @@ export const joinUrlPath = (...paths) => {
 }
 
 export const queryParametersToQueryString = params =>
-    Object.keys(params)
-        .map(key => {
-            const value = params[key]
-            return `${encodeURIComponent(key)}=${encodeQueryParameter(value)}`
-        })
+    Object.entries(params)
+        .filter(([_, value]) => value)
+        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeQueryParameter(value)}`)
         .join('&')
