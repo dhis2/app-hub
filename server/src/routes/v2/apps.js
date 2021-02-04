@@ -48,7 +48,6 @@ module.exports = [
                 },
                 h.context.db
             )
-
             const filteredApps = filterAppsBySpecificDhis2Version(
                 apps,
                 request.query.dhis_version

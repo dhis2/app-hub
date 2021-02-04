@@ -27,6 +27,7 @@ const getApps = (
     debug('channels:', channels)
 
     const knexQuery = knex('apps_view')
+        .distinctOn('app_id')
         .select()
         .where(builder => {
             builder.where('status', status)
