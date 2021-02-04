@@ -10,7 +10,7 @@
     "scripts": {
         "start": "cross-env NODE_ENV=production node ./src/main.js",
         "start:dev": "cross-env DEBUG=knex:tx,apphub* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
-        "test": "cross-env NODE_ENV=test yarn db:reload && lab -a @hapi/code -v -I 'core,__core-js_shared__,k,FinalizationRegistry,WeakRef'",
+        "test": "cross-env NODE_ENV=test yarn db:reload && lab -a @hapi/code -v --leaks",
         "test:coverage": "cross-env NODE_ENV=test yarn db:reload && lab -c -a @hapi/code -t 80 -r html -o coverage/coverage.html",
         "db:migrate": "knex migrate:latest",
         "db:reset": "knex migrate:rollback && knex migrate:latest",
