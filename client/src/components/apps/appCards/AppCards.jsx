@@ -8,17 +8,20 @@ import AppCardItem from './AppCardItem'
 
 const styles = {
     emptyApps: {
+        margin: 'auto',
+        marginTop: '2em',
+        fontSize: '2em',
         textAlign: 'center',
     },
 }
 
 const AppCards = ({ isLoading, error, apps }) => {
-    if (isLoading) {
-        return <Spinner size="large" />
-    }
-
     if (error) {
         return <Error size="large" message={error} />
+    }
+
+    if (isLoading) {
+        return <Spinner size="large" />
     }
 
     if (apps.length == 0) {

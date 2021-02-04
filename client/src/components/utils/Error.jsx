@@ -30,7 +30,7 @@ export const Error = props => (
         <FontIcon style={style.iconStyle} className="material-icons">
             error
         </FontIcon>
-        <p style={style.errorTextStyle}>An error occurred {props.message}</p>
+        <p style={style.errorTextStyle}>An error occurred: {props.message}</p>
         {props.retry ? (
             <Button
                 onClick={props.retry}

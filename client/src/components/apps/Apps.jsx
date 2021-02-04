@@ -52,7 +52,7 @@ const Apps = () => {
                 />
             </Col>
             <Col span={12}>
-                <AppCards isLoading={!data} error={error} apps={data?.apps} />
+                <AppCards isLoading={!data} error={error?.message} apps={data?.apps} />
             </Col>
             {data?.apps?.length > 0 ? (
                 <Col span={12}>
