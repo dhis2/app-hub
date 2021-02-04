@@ -72,8 +72,12 @@ const currentUserIsManager = request =>
 const getCurrentUserFromRequest = request => {
     return new Promise((resolve, reject) => {
         try {
+            const id = request.auth.credentials.userId
+            if (!id) {
+                reject('No userId')
+            }
             const user = {
-                id: request.auth.credentials.userId,
+                id,
             }
             resolve(user)
         } catch (err) {
