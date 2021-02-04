@@ -1,15 +1,6 @@
-import { isTokenExpired } from './jwtHelper'
-export default class AuthService {
-    login() {
-        // Call the show method to display the widget.
-        this.lock.show()
-    }
 
-    isLoggedIn() {
-        // Checks if there is a saved token and it's still valid
-        const token = this.getToken()
-        return !!token && !isTokenExpired(token)
-    }
+export default class AuthService {
+
 
     setProfile(profile) {
         localStorage.setItem('profile', JSON.stringify(profile))
