@@ -49,6 +49,7 @@ const getApps = (
                 })
             }
         })
+        .orderBy('name')
 }
 
 module.exports = getApps
