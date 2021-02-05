@@ -30,22 +30,22 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        //default to Stable if not specified. Or undefined if we want to fetch all channels
-        const channel =
+        //default to Stable if not specified. Or empty list if we want to fetch all channels
+        const channels =
             request.query.channel === 'All'
-                ? undefined
-                : request.query.channel || 'Stable'
+                ? []
+                : [request.query.channel || 'Stable']
 
         const dhis2Version = request.query.dhis_version || null
 
-        debug(`Filtering by channel: '${channel}'`)
+        debug(`Filtering by channel: '${channels[0]}'`)
         debug(`Filtering by dhis2Version: '${dhis2Version}'`)
 
         const appsQuery = getApps(
             {
                 status: AppStatus.APPROVED,
                 languageCode: 'en',
-                channels: [channel],
+                channels,
                 paginate: false,
             },
             h.context.db
