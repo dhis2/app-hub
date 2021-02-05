@@ -12,9 +12,13 @@ const queryParamsSchema = Joi.object({
 
 function paginate(key, data) {
     try {
-        const { page, pageSize } = Joi.attempt(this.request.query, queryParamsSchema, {
-            stripUnknown: true
-        })
+        const { page, pageSize } = Joi.attempt(
+            this.request.query,
+            queryParamsSchema,
+            {
+                stripUnknown: true,
+            }
+        )
         const startIndex = (page - 1) * pageSize
         const endIndex = startIndex + pageSize
         const total = data.length
@@ -25,7 +29,7 @@ function paginate(key, data) {
                 page,
                 pageCount: Math.ceil(total / pageSize),
                 pageSize,
-                total
+                total,
             },
         })
     } catch (e) {
@@ -37,5 +41,5 @@ module.exports = {
     name: 'PaginatePlugin',
     register: server => {
         server.decorate('toolkit', 'paginate', paginate)
-    }
+    },
 }

@@ -84,7 +84,9 @@ const Filters = ({
             </ToolbarGroup>
             <ToolbarGroup>
                 <IconButton onClick={handlePopoverToggle}>
-                    <FontIcon title="Filter" className="material-icons">filter_list</FontIcon>
+                    <FontIcon title="Filter" className="material-icons">
+                        filter_list
+                    </FontIcon>
                 </IconButton>
                 <Popover
                     open={show}

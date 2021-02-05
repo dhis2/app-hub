@@ -33,7 +33,7 @@ const Apps = () => {
             types: [...typesFilter],
             query,
             page,
-            pageSize: 12
+            pageSize: 12,
         }),
         [channelsFilter, typesFilter, query, page]
     )
@@ -53,7 +53,11 @@ const Apps = () => {
                 />
             </Col>
             <Col span={12}>
-                <AppCards isLoading={!data} error={error?.message} apps={data?.apps} />
+                <AppCards
+                    isLoading={!data}
+                    error={error?.message}
+                    apps={data?.apps}
+                />
             </Col>
             {data?.apps?.length > 0 ? (
                 <Col span={12}>

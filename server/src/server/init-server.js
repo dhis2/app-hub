@@ -101,7 +101,7 @@ exports.init = async (knex, config) => {
     })
 
     await server.register({
-        plugin: paginate
+        plugin: paginate,
     })
 
     await server.register(
