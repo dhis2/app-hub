@@ -43,7 +43,10 @@ const getApps = (
             }
 
             if (query) {
-                builder.where('name', 'ilike', `%${query}%`)
+                builder.where(builder => {
+                    builder.where('name', 'ilike', `%${query}%`)
+                    builder.orWhere('organisation', 'ilike', `%${query}%`)
+                })
             }
         })
 }
