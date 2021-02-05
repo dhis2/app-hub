@@ -3,16 +3,16 @@ const Boom = require('@hapi/boom')
 
 const { createUser } = require('../data')
 const { ROLES } = require('./index')
+
 const customClaimsNamespace = 'https://apps.dhis2.org'
 const getNamespacedClaimKey = key => `${customClaimsNamespace}/${key}`
 
 const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
-    return async (decoded, request, h, asf) => {
+    return async (decoded, request, h) => {
         if (decoded && decoded.sub) {
             debug(`Valid user with external userId: ${decoded.sub}`, decoded)
 
             const isM2M = decoded.sub === `${audience}@clients`
-            //const { email, email_verified, name } = decoded
             const returnObj = { isValid: true, credentials: decoded }
             if (!isM2M) {
                 let user = null
@@ -44,11 +44,16 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                         userInfo = await auth0ManagementClient.getUser({
                             id: decoded.sub,
                         })
+                        debug('User with info', userInfo)
                     } catch (e) {
                         debug(e)
-                        throw Boom.internal(e)
+                        throw Boom.conflict(
+                            'Failed to get user information from Identity Provider'
+                        )
                     }
-
+                    if (!userInfo.email_verified) {
+                        throw Boom.conflict('Email not verified')
+                    }
                     //create the user if it doesn't exist
                     const createUserTransaction = async trx => {
                         const dbUser = await createUser(
