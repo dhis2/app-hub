@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useCallback } from 'react'
 import { ToolbarGroup } from 'material-ui/Toolbar'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
@@ -51,11 +51,8 @@ ToggleList.propTypes = {
 }
 
 const SearchField = ({ onChange }) => {
-    const debouncedOnChange = useMemo(() => debounce(onChange, 300), [onChange])
-    const handleChange = (_, value) => {
-        debouncedOnChange(value)
-    }
-
+    const debouncedOnChange = useCallback(debounce(onChange, 300), [onChange])
+    const handleChange = (_, value) => debouncedOnChange(value)
     return <TextField hintText="Search" onChange={handleChange} />
 }
 
