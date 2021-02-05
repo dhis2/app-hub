@@ -14,6 +14,7 @@ const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
 const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
+const paginate = require('../plugins/paginate')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -97,6 +98,10 @@ exports.init = async (knex, config) => {
 
     await server.register({
         plugin: queryFilter,
+    })
+
+    await server.register({
+        plugin: paginate
     })
 
     await server.register(

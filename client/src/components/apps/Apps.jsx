@@ -33,6 +33,7 @@ const Apps = () => {
             types: [...typesFilter],
             query,
             page,
+            pageSize: 12
         }),
         [channelsFilter, typesFilter, query, page]
     )

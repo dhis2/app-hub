@@ -46,7 +46,6 @@ module.exports = {
                 status: AppStatus.APPROVED,
                 languageCode: 'en',
                 channels,
-                paginate: false,
             },
             h.context.db
         )

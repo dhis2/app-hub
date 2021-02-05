@@ -1,4 +1,3 @@
-const Joi = require('@hapi/joi')
 const AppModel = require('../../models/v1/out/App')
 const { AppStatus } = require('../../enums')
 const { getApps } = require('../../data')
@@ -12,17 +11,6 @@ module.exports = [
         config: {
             auth: false,
             tags: ['api', 'v2'],
-            response: {
-                schema: Joi.object({
-                    apps: Joi.array().items(AppModel.def),
-                    pager: Joi.object({
-                        page: Joi.number(),
-                        pageCount: Joi.number(),
-                        total: Joi.number(),
-                        pageSize: Joi.number(),
-                    }),
-                }),
-            },
         },
         handler: async (request, h) => {
             let channels = ['Stable']
@@ -37,14 +25,13 @@ module.exports = [
                 types = request.query.types.split(',')
             }
 
-            const { data: apps, pagination } = await getApps(
+            const apps = await getApps(
                 {
                     status: AppStatus.APPROVED,
                     languageCode: 'en',
                     channels,
                     types,
                     query: request.query.query,
-                    page: request.query.page,
                 },
                 h.context.db
             )
@@ -52,16 +39,10 @@ module.exports = [
                 apps,
                 request.query.dhis_version
             )
-
-            return {
-                apps: convertAppsToApiV1Format(filteredApps, request),
-                pager: {
-                    page: pagination.currentPage,
-                    pageCount: pagination.lastPage,
-                    total: pagination.total,
-                    pageSize: pagination.perPage,
-                },
-            }
+            return h.paginate(
+                'apps',
+                convertAppsToApiV1Format(filteredApps, request)
+            )
         },
     },
 ]
