@@ -29,8 +29,8 @@ const Apps = () => {
 
     const params = useMemo(
         () => ({
-            channels: [...channelsFilter],
-            types: [...typesFilter],
+            channels: channelsFilter,
+            types: typesFilter,
             query,
             page,
             pageSize: 12,
