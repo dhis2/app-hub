@@ -6,6 +6,14 @@ const Joi = require('../utils/CustomJoi')
  * This plugin hooks into onPrehandler, processing all requests it's enabled for.
  *
  * The purpose of the plugin is to group all paging-queries in `request.plugins.pagination`.
+ * The value of this property is an instance of Pager.
+ *
+ * All options can be overwritten by each route.
+ * Options:
+ * querySchema - Joi schema for query-params. Should use default as a base, and are mostly
+ * intended to be used to rename keys or change defaults through Joi.
+ * resultSchema - Joi schema for formatted result. Should use default as a base, and are mostly
+ * intended to be used to rename keys or change defaults through Joi.
  */
 
 // Joi-schema for paging props
@@ -56,6 +64,9 @@ const onPreHandler = function(request, h) {
  * This can be used to paginate results directly, without
  * paginating the actual DB-query.
  *
+ * It uses the pager to set the paging-meta on the response.
+ * Unless options.slice is false, the resulting array will have a max-size
+ * of pager.pageSize, and try to slice the array accordingly.
  * @returns hapi toolkit.response() with the pager and paginated
  * results.
  */
