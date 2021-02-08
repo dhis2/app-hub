@@ -125,7 +125,6 @@ const createPaginateDecoration = function(opts) {
             ...opts,
             ...options,
         }
-        //console.log('decor opts', this)
 
         let res = result
         if (options.slice) {
