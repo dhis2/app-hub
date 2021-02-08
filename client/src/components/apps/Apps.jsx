@@ -56,7 +56,7 @@ const Apps = () => {
                 <AppCards
                     isLoading={!data}
                     error={error?.message}
-                    apps={data?.apps}
+                    apps={data?.result}
                 />
             </Col>
             {data?.apps?.length > 0 ? (

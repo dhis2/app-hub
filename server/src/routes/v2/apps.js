@@ -11,6 +11,11 @@ module.exports = [
         config: {
             auth: false,
             tags: ['api', 'v2'],
+            plugins: {
+                pagination: {
+                    enabled: true,
+                },
+            },
         },
         handler: async (request, h) => {
             let channels = ['Stable']
@@ -39,10 +44,12 @@ module.exports = [
                 apps,
                 request.query.dhis_version
             )
-            return h.paginate(
-                'apps',
-                convertAppsToApiV1Format(filteredApps, request)
-            )
+            const pager = request.plugins.pagination
+            const result = convertAppsToApiV1Format(filteredApps, request)
+            return h.paginate(pager, {
+                result,
+                total: result.length
+            })
         },
     },
 ]
