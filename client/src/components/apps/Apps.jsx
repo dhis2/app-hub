@@ -2,24 +2,13 @@ import React, { useState, useMemo } from 'react'
 import { useQuery } from '../../api/api'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
+import config from '../../../config'
 import AppCards from './appCards/AppCards'
 import Filters from './Filters'
 import Pagination from './Pagination'
 
-const channels = {
-    Stable: 'Stable',
-    Development: 'Development',
-    Canary: 'Canary',
-}
-
-const types = {
-    APP: 'Standard app',
-    DASHBOARD_WIDGET: 'Dashboard app',
-    TRACKER_DASHBOARD_WIDGET: 'Tracker widget',
-}
-
-const defaultChannelsFilter = new Set(['Stable'])
-const defaultTypesFilter = new Set(Object.keys(types))
+const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
+const defaultTypesFilter = new Set(Object.keys(config.ui.appTypeToDisplayName))
 
 const Apps = () => {
     const [channelsFilter, setChannelsFilter] = useState(defaultChannelsFilter)
@@ -44,10 +33,10 @@ const Apps = () => {
         <Grid>
             <Col span={12}>
                 <Filters
-                    channels={channels}
+                    channels={config.ui.appChannelToDisplayName}
                     channelsFilter={channelsFilter}
                     onChannelsFilterChange={setChannelsFilter}
-                    types={types}
+                    types={config.ui.appTypeToDisplayName}
                     typesFilter={typesFilter}
                     onTypesFilterChange={setTypesFilter}
                     onQueryChange={setQuery}
