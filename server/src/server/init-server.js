@@ -14,6 +14,7 @@ const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
 const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
+const pagination = require('../plugins/pagination')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -43,6 +44,7 @@ exports.init = async (knex, config) => {
 
     server.bind({
         config,
+        db: knex,
     })
 
     await server.register({
@@ -95,10 +97,6 @@ exports.init = async (knex, config) => {
         },
     })
 
-    await server.register({
-        plugin: queryFilter,
-    })
-
     await server.register(
         {
             plugin: apiRoutes,
@@ -113,6 +111,14 @@ exports.init = async (knex, config) => {
             },
         }
     )
+
+    await server.register({
+        plugin: queryFilter,
+    })
+
+    await server.register({
+        plugin: pagination,
+    })
 
     await server.start()
 
