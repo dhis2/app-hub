@@ -8,9 +8,6 @@ const Joi = require('../utils/CustomJoi')
  * The purpose of the plugin is to group all paging-queries in `request.plugins.pagination`.
  */
 
-// Joi-schema for paging props
-// key-names can be changed by using .rename() - but you must renmame
-// to the original keys
 const querySchema = Joi.object({
     page: Joi.number()
         .default(1)
@@ -20,7 +17,6 @@ const querySchema = Joi.object({
         .min(1),
 })
 
-// renames are supported here as well, but you must rename to the original keys
 const resultSchema = Joi.object({
     pager: Joi.object({
         page: Joi.number(),
