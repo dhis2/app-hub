@@ -262,7 +262,7 @@ describe('@plugins::PaginationPlugin', () => {
             expect(res.result.result).to.shallow.equal(rawResult)
 
             expect(res.result.pager.pageSize).to.be.equal(25)
-            expect(res.result.pager.pageCount).to.be.equal(30)
+            expect(res.result.pager.pageCount).to.be.equal(2)
         })
     })
 
