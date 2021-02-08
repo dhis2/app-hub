@@ -50,7 +50,7 @@ class Pager {
         const pagerObject = {
             page: this.page,
             pageSize: this.pageSize,
-            pageCount: queryResult.length,
+            pageCount: Math.ceil(total / this.pageSize),
             total,
         }
 
