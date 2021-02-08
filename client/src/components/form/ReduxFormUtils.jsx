@@ -140,6 +140,7 @@ export const renderSelectField = ({
     label,
     hintText,
     forceShowErrors,
+    loading,
     meta: { touched, error },
     children,
     ...props
@@ -149,12 +150,14 @@ export const renderSelectField = ({
             floatingLabelStyle={floatingLabelStyle}
             floatingLabelText={label}
             floatingLabelFixed
-            hintText={hintText}
+            hintText={loading ? 'Loading...' : hintText}
             errorText={(touched || forceShowErrors) && error}
             {...input}
             onFocus={() => {}} //prevent reset of value when tabbing + enter
             onBlur={() => {}}
-            onChange={(event, index, value) => input.onChange(value)}
+            onChange={(event, index, value) => {
+                input.onChange(value)
+            }}
             {...props}
             children={children}
         />
@@ -274,7 +277,7 @@ const TextFieldRF = renderTextField
  * Wraps TextField with Version-specific props
  * @param {} props forwarded to textfield-component
  */
-export const VersionField = (props) => {
+export const VersionField = props => {
     return (
         <TextFieldRF
             label="Version *"
@@ -293,7 +296,7 @@ export const VersionField = (props) => {
                     props.input.onBlur(event)
                 }
             }}
-            rootStyle={{height: '120px'}} // fixes jumping when transitioning between error and helptext
+            rootStyle={{ height: '120px' }} // fixes jumping when transitioning between error and helptext
         />
     )
 }

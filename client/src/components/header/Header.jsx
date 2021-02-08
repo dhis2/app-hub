@@ -5,7 +5,7 @@ import ToolbarSection from '../../material/Toolbar/ToolbarSection'
 import ToolbarTitle from '../../material/Toolbar/ToolbarTitle'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
-import { getAuth } from '../../utils/AuthService'
+import { Auth } from '../../api/api'
 import { Link } from 'react-router-dom'
 import Theme from '../../styles/theme'
 import Avatar from 'material-ui/Avatar'
@@ -19,7 +19,7 @@ const styles = {
 }
 const renderProfileButton = props => {
     const avatarUrl = props.avatarImg
-    const isLoggedIn = getAuth().isLoggedIn()
+    const isLoggedIn = Auth.isLoggedIn()
     const avatar = <Avatar size={24} src={avatarUrl} />
     const notLoggedInIcon = (
         <FontIcon color="white" className="material-icons">
@@ -29,7 +29,7 @@ const renderProfileButton = props => {
     const button = (
         <IconButton
             style={{ transform: 'translate(12px)' }}
-            onClick={() => (!isLoggedIn ? getAuth().login() : {})}
+            onClick={() => (!isLoggedIn ? Auth.login() : {})}
             title="Account"
         >
             {isLoggedIn && typeof props.avatarImg === 'string'

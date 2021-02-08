@@ -100,11 +100,13 @@ describe('test create app', () => {
             },
         }
 
-        const response = await expect(request.post({
-            url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
-            json: true,
-            formData: form,
-        })).to.reject()
+        const response = await expect(
+            request.post({
+                url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
+                json: true,
+                formData: form,
+            })
+        ).to.reject()
 
         expect(response.statusCode).to.equal(400)
     })

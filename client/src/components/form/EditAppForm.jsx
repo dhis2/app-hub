@@ -150,4 +150,7 @@ EditForm.propTypes = {
     //Callback for the values when the form has been submitted.
     submitted: PropTypes.func.required,
 }
-export default reduxForm({ form: 'editAppForm', validate })(EditForm)
+
+//const mapDispatch
+const reduxFormed = reduxForm({ form: 'editAppForm', validate })(EditForm)
+export default reduxFormed

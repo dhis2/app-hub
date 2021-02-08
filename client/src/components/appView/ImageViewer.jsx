@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
     deleteImageFromApp,
@@ -7,9 +7,7 @@ import {
     editImageLogo,
 } from '../../actions/actionCreators'
 import * as DialogTypes from '../../constants/dialogTypes'
-import { GridList, GridTile } from 'material-ui/GridList'
 import Slider from 'react-slick'
-import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 import { FadeAnimationBasic } from '../utils/Animate'
 import Theme from '../../styles/theme'
@@ -28,6 +26,7 @@ const styles = {
     },
     imageStyle: {
         maxHeight: '100%',
+        maxWidth: '100%',
     },
     expandedImageStyle: {},
     actionIconStyle: {
@@ -100,11 +99,11 @@ const ImageElement = props => {
 }
 
 ImageElement.propTypes = {
-    title: PropTypes.string,
-    subtitle: PropTypes.string,
     actions: PropTypes.element,
     renderTitleBar: PropTypes.bool,
     style: PropTypes.object,
+    subtitle: PropTypes.string,
+    title: PropTypes.string,
 }
 ImageElement.defaultProps = {
     renderTitleBar: true,
@@ -158,7 +157,7 @@ class ImageViewer extends Component {
         this.props.openEditImageDialog(this.props.appId, image)
     }
 
-    renderActions(image, index) {
+    renderActions(image) {
         const setLogoIcon = image.logo ? 'star' : 'star_border'
         return (
             <div style={{ display: 'flex' }}>
@@ -202,7 +201,7 @@ class ImageViewer extends Component {
             dots: true,
             centerMode: true,
             slidesToShow: 1,
-            centerPadding: '60px',
+            centerPadding: '50px',
             draggable: true,
             swipeToSlide: true,
             infinite: false,
@@ -258,9 +257,9 @@ class ImageViewer extends Component {
 ImageViewer.PropTypes = {
     images: PropTypes.arrayOf(
         PropTypes.shape({
-            imageUrl: PropTypes.string,
-            description: PropTypes.string,
             caption: PropTypes.string,
+            description: PropTypes.string,
+            imageUrl: PropTypes.string,
         })
     ),
     appId: PropTypes.string,
@@ -283,7 +282,4 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(ImageViewer)
+export default connect(null, mapDispatchToProps)(ImageViewer)

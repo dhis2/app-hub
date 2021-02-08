@@ -54,6 +54,8 @@ describe('ErrorMapperPlugin', () => {
             handler: () => {
                 throw new UniqueViolationError({
                     nativeError: new Error('Item already exists!'),
+                    table: 'organisation',
+                    columns: ['name']
                 })
             },
         })
@@ -220,7 +222,7 @@ describe('ErrorMapperPlugin', () => {
             expect(res.result.message).to.be.equal('Constraint violation!')
         })
 
-        it('should return 409: conflict with preserved message when UniqueViolationError is thrown', async () => {
+        it('should return 409: conflict with override message when UniqueViolationError is thrown', async () => {
             const request = {
                 method: 'POST',
                 url: '/unique',
@@ -228,7 +230,7 @@ describe('ErrorMapperPlugin', () => {
 
             const res = await server.inject(request)
             expect(res.statusCode).to.be.equal(409)
-            expect(res.result.message).to.be.equal('Item already exists!')
+            expect(res.result.message).to.be.equal('organisation with that name already exists.')
         })
     })
 })

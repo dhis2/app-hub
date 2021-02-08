@@ -1,6 +1,5 @@
 const Joi = require('@hapi/joi')
-const { isSemver } =  require('../../helpers')
-
+const { isSemver } = require('../../helpers')
 
 /**
  * For client implementation see /client/src/api/api.js - createUploadVersionOptions

@@ -6,7 +6,6 @@ import Dialog from 'material-ui/Dialog'
 import { closeDialog } from '../../actions/actionCreators'
 
 const styles = {
-    bodyStyle: {},
     contentStyle: {
         maxWidth: '500px',
     },
@@ -33,7 +32,9 @@ class DialogBase extends Component {
 
         const finalAction = () => {
             Promise.resolve(approveAction())
-                .then(() => defaultCloseDialog())
+                .then(
+                    () => this.props.autoCloseOnApprove && defaultCloseDialog()
+                )
                 .catch(() => {})
         }
 
@@ -61,14 +62,11 @@ class DialogBase extends Component {
                         actions={actions}
                         modal={false}
                         autoScrollBodyContent
-                        contentStyle={
-                            { ...styles.contentStyle, ...contentStyle } ||
-                            styles.contentStyle
-                        }
-                        bodyStyle={
-                            { ...styles.bodyStyle, ...bodyStyle } ||
-                            styles.bodyStyle
-                        }
+                        contentStyle={{
+                            ...styles.contentStyle,
+                            ...contentStyle,
+                        }}
+                        bodyStyle={{ ...styles.bodyStyle, ...bodyStyle }}
                         onRequestClose={defaultCloseDialog}
                     >
                         <Provider store={ctx.store}>
@@ -82,14 +80,19 @@ class DialogBase extends Component {
 }
 
 DialogBase.propTypes = {
-    title: PropTypes.string,
-    cancelLabel: PropTypes.string,
-    approveLabel: PropTypes.string,
-    cancelAction: PropTypes.func,
     approveAction: PropTypes.func,
-    defaultCloseDialog: PropTypes.func,
-    contentStyle: PropTypes.object,
+    approveLabel: PropTypes.string,
+    autoCloseOnApprove: PropTypes.bool,
     bodyStyle: PropTypes.object,
+    cancelAction: PropTypes.func,
+    cancelLabel: PropTypes.string,
+    contentStyle: PropTypes.object,
+    defaultCloseDialog: PropTypes.func,
+    title: PropTypes.string,
+}
+
+DialogBase.defaultProps = {
+    autoCloseOnApprove: true,
 }
 
 const mapDispatchToProps = dispatch => ({

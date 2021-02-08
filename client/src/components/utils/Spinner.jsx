@@ -1,8 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import SvgIcon from 'material-ui/SvgIcon'
+import PropTypes from 'prop-types'
+import React from 'react'
+import CircularProgress from 'material-ui/CircularProgress'
 
 const SizeType = PropTypes.oneOf(['small', 'medium', 'large'])
+const sizeMap = {
+    small: 24,
+    medium: 48,
+    large: 64,
+}
 
 const styles = {
     svgAttributes: {
@@ -42,27 +47,19 @@ const styles = {
 export const Spinner = props => {
     const style = {
         ...styles.base,
-        ...styles[props.size],
         ...(props.inButton && styles.inButton),
         ...props.style,
     }
 
-    return (
-        <SvgIcon
-            className="spinner"
-            {...styles.svgAttributes}
-            style={style}
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <circle className="path" {...styles.path} />
-        </SvgIcon>
-    )
+    const size = props.inButton ? sizeMap['small'] : sizeMap[props.size]
+
+    return <CircularProgress size={size} style={{ ...style }} />
 }
 
 Spinner.propTypes = {
-    style: PropTypes.object,
-    size: SizeType,
     inButton: PropTypes.bool,
+    size: SizeType,
+    style: PropTypes.object,
 }
 
 Spinner.defaultProps = {

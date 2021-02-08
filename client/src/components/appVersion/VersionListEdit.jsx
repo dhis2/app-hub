@@ -13,7 +13,8 @@ import {
 } from 'material-ui/Table'
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
-import { getAuth } from '../../utils/AuthService'
+
+import { Auth } from '../../api/api'
 
 const styles = {
     tableHeaderColumn: {
@@ -108,7 +109,7 @@ class VersionListEdit extends Component {
 
         //auth0 stores the JWT token in localStorage
         //as only authenticated users can edit an app, just assume this exists in this component
-        const token = getAuth().getToken()
+        const token = Auth.getToken()
 
         //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
         const downloadUrlWithToken = `${downloadUrl}?token=${token}`

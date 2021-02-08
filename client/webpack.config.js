@@ -28,19 +28,11 @@ const webpackConfig = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.scss$/,
-                use: [
-                    { loader: 'style-loader' },
-                    { loader: 'css-loader' },
-                    { loader: 'sass-loader' },
-                ],
-            },
-            {
                 test: /\.css$/,
                 use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
             },
             {
-                test: /\.(jpe?g|png|gif|svg)$/i,
+                test: /\.(jpe?g|png|gif|svg|woff(2)?|ttf|eot)$/i,
                 use: [
                     {
                         loader: 'file-loader',

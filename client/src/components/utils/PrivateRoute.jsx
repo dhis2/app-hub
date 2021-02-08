@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Spinner } from './Loader'
+import Spinner from './Spinner'
 import { Route, Redirect } from 'react-router-dom'
 import { userAuthenticated, userLogout } from '../../actions/actionCreators'
 import { getUserInfo } from '../../selectors/userSelectors'
@@ -81,11 +81,6 @@ const mapDispatchToProps = dispatch => ({
     },
 })
 //need non-pure-component else router-context won't be passed down to protected component
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps,
-    null,
-    {
-        pure: false,
-    }
-)(PrivateRoute)
+export default connect(mapStateToProps, mapDispatchToProps, null, {
+    pure: false,
+})(PrivateRoute)
