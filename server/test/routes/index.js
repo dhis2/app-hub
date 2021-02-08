@@ -173,7 +173,7 @@ describe('Get all published apps [v2]', () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(200)
 
-        const { apps } = JSON.parse(response.payload)
+        const { result: apps } = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
 
         const approvedApps = apps.filter(app => app.status === 'APPROVED')
@@ -211,7 +211,7 @@ describe('Get all published apps [v2]', () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(200)
 
-        const { apps } = JSON.parse(response.payload)
+        const { result: apps } = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
@@ -231,7 +231,7 @@ describe('Get all published apps [v2]', () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(200)
 
-        const { apps } = JSON.parse(response.payload)
+        const { result: apps } = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
@@ -256,7 +256,7 @@ describe('Get all published apps [v2]', () => {
         const response = await server.inject(injectOptions)
         expect(response.statusCode).to.equal(200)
 
-        const { apps } = JSON.parse(response.payload)
+        const { result: apps } = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
