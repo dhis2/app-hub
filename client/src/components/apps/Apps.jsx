@@ -38,6 +38,7 @@ const Apps = () => {
         [channelsFilter, typesFilter, query, page]
     )
     const { data, error } = useQuery('apps', params)
+    const apps = data?.result
 
     return (
         <Grid>
@@ -56,10 +57,10 @@ const Apps = () => {
                 <AppCards
                     isLoading={!data}
                     error={error?.message}
-                    apps={data?.result}
+                    apps={apps}
                 />
             </Col>
-            {data?.apps?.length > 0 ? (
+            {apps?.length > 0 ? (
                 <Col span={12}>
                     <Pagination
                         page={page}
