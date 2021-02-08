@@ -1,8 +1,13 @@
+const Joi = require('@hapi/joi')
 const AppModel = require('../../models/v1/out/App')
 const { AppStatus } = require('../../enums')
 const { getApps } = require('../../data')
 const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
 const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
+const { FilterJoi, StringArrayJoi } = require('../../utils/CustomJoi')
+
+const CHANNELS = ['Stable', 'Development', 'Canary']
+const APPTYPES = ['APP', 'DASHBOARD_WIDGET', 'TRACKER_DASHBOARD_WIDGET']
 
 module.exports = [
     {
@@ -11,24 +16,28 @@ module.exports = [
         config: {
             auth: false,
             tags: ['api', 'v2'],
+            validate: {
+                query: Joi.object({
+                    channels: FilterJoi.filter(StringArrayJoi.stringArray().items(Joi.valid(...CHANNELS))).description(
+                        'Filter by channel'
+                    ),
+                    types: FilterJoi.filter(StringArrayJoi.stringArray().items(Joi.valid(...APPTYPES))).description(
+                        'Filter by app types'
+                    ),
+                }).unknown(true),
+            },
             plugins: {
+                queryFilter: {
+                    enabled: true
+                },
                 pagination: {
                     enabled: true,
                 },
             },
         },
         handler: async (request, h) => {
-            let channels = ['Stable']
-            if (request.query.channels) {
-                channels = request.query.channels
-                    .split(',')
-                    .filter(channel => channel !== 'All')
-            }
-
-            let types = []
-            if (request.query.types) {
-                types = request.query.types.split(',')
-            }
+            const channels = request.plugins.queryFilter.getFilter('channels').value
+            const types = request.plugins.queryFilter.getFilter('types').value
 
             const apps = await getApps(
                 {
