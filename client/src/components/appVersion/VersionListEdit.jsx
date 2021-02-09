@@ -14,7 +14,7 @@ import {
 import FontIcon from 'material-ui/FontIcon'
 import IconButton from 'material-ui/IconButton'
 
-import { Auth } from '../../api/api'
+import { useAuth0 } from '@auth0/auth0-react'
 
 const styles = {
     tableHeaderColumn: {
@@ -61,16 +61,15 @@ TableIcon.propTypes = {
 
 const DownloadLinkWithToken = ({ downloadUrl }) => {
     const [token, setToken] = useState(null)
+    const { getAccessTokenSilently } = useAuth0()
 
     useEffect(() => {
         const getToken = async () => {
-            console.log('get tokenz')
-            const token = await Auth.getAccessToken()
-            console.log('token', token)
+            const token = await getAccessTokenSilently()
             setToken(token)
         }
         getToken()
-    }, [Auth.getAccessTokenSilently])
+    }, [getAccessTokenSilently])
 
     //as we use hapi-auth-jwt2 in the backend, it allows us to pass the JWT in the querystring
     const downloadUrlWithToken = `${downloadUrl}?token=${token}`
