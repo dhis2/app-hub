@@ -93,6 +93,7 @@ module.exports = {
     canCreateAppVersion,
     canSeeAllApps,
     createUserValidationFunc: require('./createUserValidationFunc'),
+    createApiKeyValidationFunc: require('./createApiKeyValidationFunc'),
     getCurrentUserFromRequest,
     currentUserIsManager,
     ROLES,

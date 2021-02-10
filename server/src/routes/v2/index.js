@@ -3,4 +3,5 @@ module.exports = [
     require('./channels.js'),
     require('./organisations.js'),
     require('./me.js'),
+    require('./apikey.js'),
 ]
