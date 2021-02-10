@@ -25,9 +25,10 @@ const scheme = function(server, schemeOptions) {
             if (!apiKey) {
                 return h.unauthenticated(Boom.unauthorized(null, 'api-key'))
             }
-            Joi.attempt(apiKey, options.keySchema)
+
             if (apiKey) {
                 try {
+                    Joi.attempt(apiKey, options.keySchema)
                     const { isValid, credentials } = await options.validate(
                         apiKey,
                         request,
