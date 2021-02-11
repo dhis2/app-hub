@@ -13,13 +13,13 @@ const Pagination = ({ page, pageCount, onPageChange }) => (
         <FlatButton
             label="Previous page"
             onClick={() => onPageChange(page - 1)}
-            disabled={page == 1}
+            disabled={page === 1}
         />
         <span style={styles.currentPage}>{`Page ${page} of ${pageCount}`}</span>
         <FlatButton
             label="Next page"
             onClick={() => onPageChange(page + 1)}
-            disabled={page == pageCount}
+            disabled={page === pageCount}
         />
     </>
 )
