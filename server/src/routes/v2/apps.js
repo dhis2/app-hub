@@ -1,21 +1,12 @@
-const Joi = require('@hapi/joi')
 const AppModel = require('../../models/v1/out/App')
 const { AppStatus } = require('../../enums')
 const { getApps } = require('../../data')
 const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
 const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
-const CustomJoi = require('../../utils/CustomJoi')
+const Joi = require('../../utils/CustomJoi')
 
 const CHANNELS = ['Stable', 'Development', 'Canary']
 const APPTYPES = ['APP', 'DASHBOARD_WIDGET', 'TRACKER_DASHBOARD_WIDGET']
-
-const StringArrayJoi = Joi.extend({
-    base: Joi.array(),
-    type: 'stringArray',
-    coerce: (value, state, options) => ({
-        value: value.split ? value.split(',') : value
-    })
-})
 
 module.exports = [
     {
@@ -26,13 +17,13 @@ module.exports = [
             tags: ['api', 'v2'],
             validate: {
                 query: Joi.object({
-                    channels: CustomJoi.filter(
-                        StringArrayJoi.stringArray().items(Joi.valid(...CHANNELS))
+                    channels: Joi.filter(
+                        Joi.stringArray().items(Joi.valid(...CHANNELS))
                     ).description(
                         'Filter by channel'
                     ).default(['Stable']),
-                    types: CustomJoi.filter(
-                        StringArrayJoi.stringArray().items(Joi.valid(...APPTYPES))
+                    types: Joi.filter(
+                        Joi.stringArray().items(Joi.valid(...APPTYPES))
                     ).description(
                         'Filter by app type'
                     ).default(['APP']),
