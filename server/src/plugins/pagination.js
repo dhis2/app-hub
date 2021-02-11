@@ -93,7 +93,6 @@ const onPreHandler = function(request, h) {
         if (!options.keepParams) {
             Object.keys(pagingParams).forEach(key => delete request.query[key])
         }
- 
         request.plugins.pagination = pager
     } catch (e) {
         Bounce.rethrow(e, 'system')
@@ -158,7 +157,11 @@ const paginationPlugin = {
             .table()
             .filter(r => r.settings.plugins && r.settings.plugins.pagination)
             .map(r =>
+<<<<<<< HEAD
                 Joi.attempt(
+=======
+                Joi.assert(
+>>>>>>> next
                     r.settings.plugins.pagination,
                     optionsSchema,
                     `PaginationPlugin validation failed at route ${r.path}:`
