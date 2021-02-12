@@ -93,7 +93,6 @@ const onPreHandler = function(request, h) {
         if (!options.keepParams) {
             Object.keys(pagingParams).forEach(key => delete request.query[key])
         }
-
         request.plugins.pagination = pager
     } catch (e) {
         Bounce.rethrow(e, 'system')

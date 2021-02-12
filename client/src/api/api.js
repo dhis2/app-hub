@@ -23,15 +23,9 @@ const updateOpts = {
     },
 }
 
-// This hack is needed to prevent Auth0-Lock to initialize which sends requests that hang in test
-export let Auth
-if (process.NODE_ENV !== 'test') {
-    Auth = new AuthService(config.auth0.clientID, config.auth0.domain)
-} else {
-    Auth = {}
-}
+export const Auth = new AuthService()
 
-const apiV2 = new AppHubAPI({
+export const apiV2 = new AppHubAPI({
     baseUrl: config.api.baseURL,
     apiVersion: 'v2',
     auth: Auth,
@@ -134,14 +128,11 @@ export function deleteReview(appId, reviewId) {
     return fromApi(`v1/apps/${appId}/reviews/${reviewId}`, true, deleteOpts)
 }
 
-export function fromApi(url, auth = false, extraOpts) {
-    const headers = getAuthHeaders()
-
+export async function fromApi(url, auth = false, extraOpts) {
     const opts = { ...baseOptions, ...extraOpts }
-    if (auth && opts.headers) {
-        opts.headers = { ...headers, ...opts.headers }
-    } else if (auth) {
-        opts.headers = headers
+    if (auth) {
+        const authHeaders = await getAuthHeaders()
+        opts.headers = { ...opts.headers, ...authHeaders }
     }
 
     return fetch(baseURL + url, opts)
@@ -149,9 +140,10 @@ export function fromApi(url, auth = false, extraOpts) {
         .then(response => response.json())
 }
 
-export function getAuthHeaders() {
+export async function getAuthHeaders() {
     const headers = {}
-    headers['Authorization'] = 'Bearer ' + Auth.getToken()
+    const accessToken = await Auth.getAccessToken()
+    headers['Authorization'] = 'Bearer ' + accessToken
     return headers
 }
 

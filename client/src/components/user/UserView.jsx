@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
@@ -16,6 +16,8 @@ import ErrorOrLoading from '../utils/ErrorOrLoading'
 import ActiveLink from '../utils/ActiveLink'
 import OrganisationList from './organisation/OrganisationList'
 import OrganisationView from './organisation/OrganisationView'
+import { ListItemLogoutButton } from '../auth/LogoutButton'
+
 class UserView extends Component {
     componentDidMount() {
         this.props.loadUser()
@@ -107,15 +109,7 @@ class UserView extends Component {
                                 }
                             />
                         </ActiveLink>
-                        <ListItem
-                            primaryText="Logout"
-                            leftIcon={
-                                <FontIcon className="material-icons">
-                                    exit_to_app
-                                </FontIcon>
-                            }
-                            onClick={() => this.props.auth.logout()}
-                        />
+                        <ListItemLogoutButton />
                     </List>
                 </Col>
                 <Col span={8} style={{ maxWidth: '900px' }}>

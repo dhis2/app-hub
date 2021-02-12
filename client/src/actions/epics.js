@@ -1,14 +1,12 @@
 import * as actions from '../constants/actionTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
-import { Auth } from '../api/api'
 import { history } from '../utils/history'
 import * as api from '../api/api'
 import {
     concatMap,
     switchMap,
     mergeAll,
-    concatAll,
     debounceTime,
     catchError,
     filter,
@@ -110,24 +108,18 @@ const deleteApp = action$ =>
 const user = action$ =>
     action$.pipe(
         ofType(actions.USER_LOAD),
-        concatMap(() => {
-            return [
-                new Promise((resolve, reject) => {
-                    Auth.lock.getProfile(Auth.getToken(), (error, profile) => {
-                        if (error) {
-                            reject(actionCreators.userError())
-                        } else {
-                            Auth.setProfile(profile)
-                            resolve(actionCreators.userLoaded(profile))
-                        }
-                    })
-                }),
-                of({
-                    type: actions.ME_LOAD,
-                }),
-            ]
-        }),
-        concatAll()
+        concatMap(() =>
+            api
+                .getMe()
+                .then(response => ({
+                    type: actions.ME_LOAD_SUCCESS,
+                    payload: response,
+                }))
+                .catch(e => ({
+                    type: actions.ME_LOAD_ERROR,
+                    payload: e,
+                }))
+        )
     )
 
 const userApps = action$ =>
@@ -430,14 +422,6 @@ const loadChannels = action$ =>
         })
     )
 
-/**
- * Gets organisation by name
- *
- * Need to have validation here, as the validation is based upon the
- * results and thus we cannot use regular promise validation.
- * Async validation is used to prevent form-submission and clicking continue
- * We are also using synchronous validation for orgs that have been fetched earlier
- */
 const searchOrganisation = action$ =>
     action$.pipe(
         ofType(actions.ORGANISATIONS_SEARCH),
@@ -445,9 +429,9 @@ const searchOrganisation = action$ =>
         distinctUntilChanged(
             (prev, curr) => prev.payload.name === curr.payload.name
         ),
-        debounceTime(250),
+        debounceTime(500),
         switchMap(action => {
-            from(api.searchOrganisations(action.payload.name)).pipe(
+            return from(api.searchOrganisations(action.payload.name)).pipe(
                 switchMap(orgs => {
                     return [
                         {
@@ -468,23 +452,6 @@ const searchOrganisation = action$ =>
                 })
             )
         })
-    )
-
-const loadMe = action$ =>
-    action$.pipe(
-        ofType(actions.ME_LOAD),
-        switchMap(() =>
-            api
-                .getMe()
-                .then(response => ({
-                    type: actions.ME_LOAD_SUCCESS,
-                    payload: response,
-                }))
-                .catch(e => ({
-                    type: actions.ME_LOAD_ERROR,
-                    payload: e,
-                }))
-        )
     )
 
 const loadOrganisations = (action$, state$) =>
@@ -674,7 +641,6 @@ export default combineEpics(
     addMultipleImages,
     loadChannels,
     searchOrganisation,
-    loadMe,
     loadOrganisations,
     loadOrganisation,
     addOrganisationMember,

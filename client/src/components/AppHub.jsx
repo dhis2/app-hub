@@ -16,15 +16,16 @@ import UserView from './user/UserView'
 import Header from './header/Header'
 import Snackbar from './utils/Snackbar'
 import DialogRoot from './dialog/DialogRoot'
-import PrivateRoute from './utils/PrivateRoute'
-import { Provider } from 'react-redux'
+import ProtectedRoute from './auth/ProtectedRoute'
+import { Provider as ReduxProvider } from 'react-redux'
 import store from '../store'
 import { Auth } from '../api/api'
+import AuthProvider from '../components/auth/AuthProvider'
 import '../utils/preRender'
 
-export default function AppHub() {
-    return (
-        <Provider store={store}>
+const AppHub = () => (
+    <ReduxProvider store={store}>
+        <AuthProvider>
             <MuiThemeProvider muiTheme={theme}>
                 <Router history={history}>
                     <QueryParamProvider ReactRouterRoute={Route}>
@@ -38,7 +39,7 @@ export default function AppHub() {
                                         path="/app/:appId"
                                         component={AppView}
                                     />
-                                    <PrivateRoute
+                                    <ProtectedRoute
                                         path="/user"
                                         auth={Auth}
                                         component={UserView}
@@ -52,6 +53,8 @@ export default function AppHub() {
                     </QueryParamProvider>
                 </Router>
             </MuiThemeProvider>
-        </Provider>
-    )
-}
+        </AuthProvider>
+    </ReduxProvider>
+)
+
+export default AppHub
