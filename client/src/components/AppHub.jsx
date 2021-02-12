@@ -1,5 +1,6 @@
 import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
+import { QueryParamProvider } from 'use-query-params'
 import { history } from '../utils/history'
 import 'material-components-web/dist/material-components-web.css'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -26,24 +27,29 @@ export default function AppHub() {
         <Provider store={store}>
             <MuiThemeProvider muiTheme={theme}>
                 <Router history={history}>
-                    <div className="app">
-                        <DialogRoot />
-                        <Header />
-                        <div id="container" style={theme.container}>
-                            <Switch>
-                                <Route exact path="/" component={Apps} />
-                                <Route path="/app/:appId" component={AppView} />
-                                <PrivateRoute
-                                    path="/user"
-                                    auth={Auth}
-                                    component={UserView}
-                                />
-                                {/* No-match route - redirect to index */}
-                                <Route render={() => <Redirect to="/" />} />
-                            </Switch>
+                    <QueryParamProvider ReactRouterRoute={Route}>
+                        <div className="app">
+                            <DialogRoot />
+                            <Header />
+                            <div id="container" style={theme.container}>
+                                <Switch>
+                                    <Route exact path="/" component={Apps} />
+                                    <Route
+                                        path="/app/:appId"
+                                        component={AppView}
+                                    />
+                                    <PrivateRoute
+                                        path="/user"
+                                        auth={Auth}
+                                        component={UserView}
+                                    />
+                                    {/* No-match route - redirect to index */}
+                                    <Route render={() => <Redirect to="/" />} />
+                                </Switch>
+                            </div>
+                            <Snackbar />
                         </div>
-                        <Snackbar />
-                    </div>
+                    </QueryParamProvider>
                 </Router>
             </MuiThemeProvider>
         </Provider>

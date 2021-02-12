@@ -1,4 +1,12 @@
-import React, { useState, useMemo } from 'react'
+import React, { useMemo } from 'react'
+import {
+    useQueryParams,
+    StringParam,
+    NumberParam,
+    encodeDelimitedArray,
+    decodeDelimitedArray,
+    withDefault,
+} from 'use-query-params'
 import { useQuery } from '../../api/api'
 import Grid from '../../material/Grid/Grid'
 import Col from '../../material/Grid/Col'
@@ -10,21 +18,49 @@ import Pagination from './Pagination'
 const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
 const defaultTypesFilter = new Set(Object.keys(config.ui.appTypeToDisplayName))
 
+const SetParam = {
+    encode(set) {
+        if (set) {
+            return encodeDelimitedArray([...set], ',')
+        }
+    },
+    decode(arrayString) {
+        if (arrayString) {
+            return new Set(decodeDelimitedArray(arrayString, ','))
+        }
+    },
+}
+
 const Apps = () => {
-    const [channelsFilter, setChannelsFilter] = useState(defaultChannelsFilter)
-    const [typesFilter, setTypesFilter] = useState(defaultTypesFilter)
-    const [query, setQuery] = useState('')
-    const [page, setPage] = useState(1)
+    const [queryParams, setQueryParams] = useQueryParams({
+        channels: withDefault(SetParam, defaultChannelsFilter),
+        types: withDefault(SetParam, defaultTypesFilter),
+        query: StringParam,
+        page: withDefault(NumberParam, 1),
+    })
+    const { channels, types, query, page } = queryParams
+    const setChannels = channels => {
+        setQueryParams({ channels, page: 1 })
+    }
+    const setTypes = types => {
+        setQueryParams({ types, page: 1 })
+    }
+    const setQuery = query => {
+        setQueryParams({ query, page: 1 }, 'replaceIn')
+    }
+    const setPage = page => {
+        setQueryParams({ page })
+    }
 
     const params = useMemo(
         () => ({
-            channels: channelsFilter,
-            types: typesFilter,
+            channels,
+            types,
             query,
             page,
-            pageSize: 12,
+            pageSize: 24,
         }),
-        [channelsFilter, typesFilter, query, page]
+        [channels, types, query, page]
     )
     const { data, error } = useQuery('apps', params)
     const apps = data?.result
@@ -34,11 +70,11 @@ const Apps = () => {
             <Col span={12}>
                 <Filters
                     channels={config.ui.appChannelToDisplayName}
-                    channelsFilter={channelsFilter}
-                    onChannelsFilterChange={setChannelsFilter}
+                    channelsFilter={channels}
+                    onChannelsFilterChange={setChannels}
                     types={config.ui.appTypeToDisplayName}
-                    typesFilter={typesFilter}
-                    onTypesFilterChange={setTypesFilter}
+                    typesFilter={types}
+                    onTypesFilterChange={setTypes}
                     onQueryChange={setQuery}
                 />
             </Col>
