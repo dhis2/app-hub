@@ -1,7 +1,6 @@
-// eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card'
 import ImageViewer from './ImageViewer'
@@ -46,11 +45,13 @@ class AppView extends Component {
         )
 
         const logo = images.filter(elem => elem.logo)[0]
+        const backLink =
+            this.props.history.length > 1 ? this.props.history.goBack : '/'
 
         return (
             <Grid style={{ maxWidth: '900px' }}>
                 <Col span={12} phone={4}>
-                    <Subheader title="App overview" backLink="/" />
+                    <Subheader title="App overview" backLink={backLink} />
                     <Card>
                         <div data-test="app-card-header">
                             <CardHeader
