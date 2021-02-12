@@ -9,19 +9,21 @@ export default class AppHubAPI {
      * @param {*} apiOptions
      * @param {*} apiOptions.baseUrl baseUrl to use
      * @param {*} apiOptions.apiVersion apiVersion to use, appended to baseUrl
-     * @param {AuthService} apiOptions.auth AuthService object to use to get authentication headers
-     * @param {*} defaultFetchOptions default options passed to fetch
+     * @param {AuthService} apiOptions.auth AuthService-instance with getAccessToken function set.
+     * @param {*} fetchOptions default options passed to fetch
+    
      */
     constructor(apiOptions, fetchOptions = defaultFetchOptions) {
         const { baseUrl, apiVersion, auth } = apiOptions
         this.apiUrl = joinUrlPath(baseUrl, apiVersion)
-        this.auth = auth
         this.defaultFetchOptions = fetchOptions
+        this.auth = auth
     }
 
-    getAuthHeaders() {
+    async getAuthHeaders() {
         const headers = {}
-        headers['Authorization'] = 'Bearer ' + this.auth.getToken()
+        const accessToken = await this.auth.getAccessToken()
+        headers['Authorization'] = `Bearer ${accessToken}`
         return headers
     }
     /**
@@ -33,7 +35,7 @@ export default class AppHubAPI {
      * @param {*} apiOptions.useAuth send auth headers, using auth-object
      * @param {*} fetchOptions options passed to fetch
      */
-    request(
+    async request(
         path,
         { useAuth = false, external = false, params = {} } = {},
         fetchOptions
@@ -43,7 +45,8 @@ export default class AppHubAPI {
             ...fetchOptions,
         }
         if (useAuth) {
-            options.headers = { ...options.headers, ...this.getAuthHeaders() }
+            const authHeaders = await this.getAuthHeaders()
+            options.headers = { ...options.headers, ...authHeaders }
         }
 
         const baseUrl = external ? '' : this.apiUrl
@@ -53,16 +56,17 @@ export default class AppHubAPI {
             url = `${url}?${queryParametersToQueryString(params)}`
         }
 
-        return fetch(url, options)
-            .then(response => {
-                const contentType = response.headers.get('content-type')
-                let result
-                if (contentType.includes('application/json')) {
-                    result = response.json()
-                } else {
-                    result = response.text()
-                }
-                return result.then(result => response.ok ? Promise.resolve(result) : Promise.reject(result))
-            })
+        return fetch(url, options).then(response => {
+            const contentType = response.headers.get('content-type')
+            let result
+            if (contentType.includes('application/json')) {
+                result = response.json()
+            } else {
+                result = response.text()
+            }
+            return result.then(result =>
+                response.ok ? Promise.resolve(result) : Promise.reject(result)
+            )
+        })
     }
 }

@@ -13,7 +13,7 @@
         "test": "cross-env NODE_ENV=test mocha --opts test/mocha.opts"
     },
     "dependencies": {
-        "auth0-lock": "^10.18.0",
+        "@auth0/auth0-react": "^1.2.0",
         "classnames": "^2.2.5",
         "core-js": "^3.4.8",
         "css-loader": "^0.26.1",
@@ -53,6 +53,7 @@
     "devDependencies": {
         "@babel/core": "^7.8.7",
         "@babel/plugin-proposal-class-properties": "^7.8.3",
+        "@babel/plugin-proposal-optional-chaining": "^7.12.7",
         "@babel/preset-env": "^7.9.0",
         "@babel/preset-react": "^7.9.1",
         "@babel/register": "^7.9.0",

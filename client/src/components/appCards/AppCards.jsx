@@ -27,8 +27,8 @@ import SubHeader from '../header/SubHeader'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import { FadeAnimation, FadeAnimationList } from '../utils/Animate'
 import '../../styles/utils/animations.css'
-import { Provider, ReactReduxContext } from 'react-redux'
 import PopoverWithReduxState from '../../utils/PopoverWithReduxState'
+
 const debug = Debug('apphub:frontend:components:appcards')
 
 class AppCards extends Component {

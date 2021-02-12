@@ -7,3 +7,8 @@ export const appStatusToUI = {
     PENDING: 'Pending',
     APPROVED: 'Approved',
 }
+
+// manager roles as defined in Auth0
+export const roles = {
+    manager: 'App Hub Manager',
+}
