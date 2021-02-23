@@ -103,7 +103,7 @@ const form = formReducer.plugin({
                 }
                 const channels = action.payload
                 const filterValues = channels.reduce((acc, c) => {
-                    acc[c.name] = c.name === 'Stable'
+                    acc[c.name] = c.name === 'stable'
                     return acc
                 }, {})
                 return {

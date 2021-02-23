@@ -5,7 +5,7 @@ const debug = require('debug')('apphub:server:data:getApps')
  * @param {object} params
  * @param {string} params.status Which status to get the apps for, example APPROVED AppTypes in src/enum
  * @param {string} params.languageCode The language code for which language to use when fetching translations
- * @param {array} params.channels Channels to filter apps by, for example Stable, Development, Canary is commonly used
+ * @param {array} params.channels List of channels to filter apps by, e.g. stable, development or canary
  * @param {array} params.types Types to filter apps by
  * @param {string} params.query Search query for app names
  * @returns {Promise<Array>}

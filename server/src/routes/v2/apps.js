@@ -5,7 +5,7 @@ const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
 const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
 const Joi = require('../../utils/CustomJoi')
 
-const CHANNELS = ['Stable', 'Development', 'Canary']
+const CHANNELS = ['stable', 'development', 'canary']
 const APPTYPES = ['APP', 'DASHBOARD_WIDGET', 'TRACKER_DASHBOARD_WIDGET']
 
 module.exports = [
@@ -21,7 +21,7 @@ module.exports = [
                         Joi.stringArray().items(Joi.valid(...CHANNELS))
                     ).description(
                         'Filter by channel'
-                    ).default(['Stable']),
+                    ).default(['stable']),
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
                     ).description(

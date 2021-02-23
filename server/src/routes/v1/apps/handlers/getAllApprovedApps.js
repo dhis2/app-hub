@@ -30,11 +30,11 @@ module.exports = {
     handler: async (request, h) => {
         request.logger.info('In handler %s', request.path)
 
-        //default to Stable if not specified. Or empty list if we want to fetch all channels
+        //default to stable if not specified. Or empty list if we want to fetch all channels
         const channels =
             request.query.channel === 'All'
                 ? []
-                : [request.query.channel || 'Stable']
+                : [request.query.channel || 'stable']
 
         const dhis2Version = request.query.dhis_version || null
 

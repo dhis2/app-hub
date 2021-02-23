@@ -61,10 +61,10 @@ describe('Get all published apps [v1]', async () => {
         )
     })
 
-    it('should only return apps from the Stable channel', async () => {
+    it('should only return apps from the stable channel', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v1/apps?channel=Stable',
+            url: '/api/v1/apps?channel=stable',
         }
 
         const response = await server.inject(injectOptions)
@@ -76,15 +76,15 @@ describe('Get all published apps [v1]', async () => {
 
         const versions = flatten(apps.map(app => app.versions))
         const filteredVersions = versions.filter(
-            version => version.channel === 'Stable'
+            version => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
     })
 
-    it('should only return apps from the Stable channel supporting version 2.27', async () => {
+    it('should only return apps from the stable channel supporting version 2.27', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v1/apps?channel=Stable&dhis_version=2.27',
+            url: '/api/v1/apps?channel=stable&dhis_version=2.27',
         }
 
         const response = await server.inject(injectOptions)
@@ -97,7 +97,7 @@ describe('Get all published apps [v1]', async () => {
         const versions = flatten(apps.map(app => app.versions))
 
         const filteredVersions = versions.filter(
-            version => version.channel === 'Stable'
+            version => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
 
@@ -202,10 +202,10 @@ describe('Get all published apps [v2]', () => {
         )
     })
 
-    it('should only return apps from the Stable channel', async () => {
+    it('should only return apps from the stable channel', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v2/apps?channels=Stable',
+            url: '/api/v2/apps?channels=stable',
         }
 
         const response = await server.inject(injectOptions)
@@ -217,15 +217,15 @@ describe('Get all published apps [v2]', () => {
 
         const versions = flatten(apps.map(app => app.versions))
         const filteredVersions = versions.filter(
-            version => version.channel === 'Stable'
+            version => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
     })
 
-    it('should only return apps from the Stable channel supporting version 2.27', async () => {
+    it('should only return apps from the stable channel supporting version 2.27', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v2/apps?channels=Stable&dhis_version=2.27',
+            url: '/api/v2/apps?channels=stable&dhis_version=2.27',
         }
 
         const response = await server.inject(injectOptions)
@@ -238,7 +238,7 @@ describe('Get all published apps [v2]', () => {
         const versions = flatten(apps.map(app => app.versions))
 
         const filteredVersions = versions.filter(
-            version => version.channel === 'Stable'
+            version => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
 
@@ -250,7 +250,7 @@ describe('Get all published apps [v2]', () => {
     it('should only return apps supporting version 2.27', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v2/apps?channels=Stable,Development,Canary&dhis_version=2.27',
+            url: '/api/v2/apps?channels=stable,development,canary&dhis_version=2.27',
         }
 
         const response = await server.inject(injectOptions)

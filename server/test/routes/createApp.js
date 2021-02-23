@@ -43,7 +43,7 @@ describe('test create app', () => {
                 minDhisVersion: '2.25',
                 maxDhisVersion: '2.33',
                 demoUrl: 'https://www.dhis2.org',
-                channel: 'Stable',
+                channel: 'stable',
             },
         ],
         images: [],
@@ -83,7 +83,7 @@ describe('test create app', () => {
                     minDhisVersion: '2.25',
                     maxDhisVersion: '2.33',
                     demoUrl: 'https://www.dhis2.org',
-                    channel: 'Stable',
+                    channel: 'stable',
                 },
             ],
         }
