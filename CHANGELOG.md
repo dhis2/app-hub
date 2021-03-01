@@ -1,3 +1,10 @@
+# [2.11.0](https://github.com/dhis2/app-hub/compare/v2.10.6...v2.11.0) (2021-02-08)
+
+
+### Features
+
+* **pagination:** initial pagination implementation ([#384](https://github.com/dhis2/app-hub/issues/384)) ([09927c4](https://github.com/dhis2/app-hub/commit/09927c4aa039377efe0938d102e6db4d4649e582))
+
 ## [2.10.6](https://github.com/dhis2/app-hub/compare/v2.10.5...v2.10.6) (2021-01-27)
 
 
