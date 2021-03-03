@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/dhis2/app-hub/compare/v2.12.0...v2.12.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **getApps:** don't call toLowerCase on app type ([#445](https://github.com/dhis2/app-hub/issues/445)) ([5ae1511](https://github.com/dhis2/app-hub/commit/5ae15116a2c55be0d84b052c4401c1a1d13a11e1))
+
 # [2.12.0](https://github.com/dhis2/app-hub/compare/v2.11.0...v2.12.0) (2021-03-03)
 
 
