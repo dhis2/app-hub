@@ -35,9 +35,9 @@ const getApps = (
 
             if (types.length > 0) {
                 builder.where(builder => {
-                    builder.where('type', types[0].toLowerCase())
+                    builder.where('type', types[0])
                     types.slice(1).forEach(type => {
-                        builder.orWhere('type', type.toLowerCase())
+                        builder.orWhere('type', type)
                     })
                 })
             }
