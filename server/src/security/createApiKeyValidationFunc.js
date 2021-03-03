@@ -2,25 +2,30 @@
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
 const debug = require('debug')('apphub:server:security:apiKeyValidation')
-const crypto = require('crypto')
+const { getUserIdByApiKey } = require('../services/apiKey')
+
+const getUserByApiKey = async (apiKey, trx) => {
+    const userId = getUserIdByApiKey(apiKey, trx)
+
+    if (!userId) {
+        return null
+    }
+
+    // TODO: this should probably be in some User-service
+    const userInfo = await trx('users')
+        .select()
+        .where({ id: userId })
+        .first()
+
+    return userInfo
+}
 
 const createApiKeyValidationFunc = db => {
-    return async (apiKey, request, h) => {
+    return async apiKey => {
         debug('Validate api-key')
         const credentials = {}
         try {
-            const hashedKey = crypto
-                .createHash('sha256')
-                .update(apiKey)
-                .digest('hex')
-
-            const user = await db('users')
-                .select('users.*')
-                .innerJoin('user_api_key', 'user_api_key.user_id', 'users.id')
-                .where({
-                    api_key: hashedKey,
-                })
-                .first()
+            const user = db.transaction(trx => getUserByApiKey(apiKey, trx))
 
             if (!user) {
                 throw Boom.unauthorized()
