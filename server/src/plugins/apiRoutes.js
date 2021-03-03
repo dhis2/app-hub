@@ -96,6 +96,7 @@ const apiRoutesPlugin = {
 
             //Map required authentication to no-auth
             server.auth.strategy('token', 'no-auth')
+            server.auth.strategy('api-key', 'no-auth')
 
             //Warn with red background
             debug(

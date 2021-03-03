@@ -1,45 +1,40 @@
-const Boom = require('@hapi/boom')
-const Bounce = require('@hapi/bounce')
-const { v4: uuidv4 } = require('uuid')
-const crypto = require('crypto')
-const { wrapError, UniqueViolationError } = require('db-errors')
 const { getCurrentUserFromRequest } = require('../../security')
+const { ApiKey } = require('../../services/')
+
 module.exports = [
     {
         method: 'POST',
         path: '/v2/key',
         config: {
-            auth: 'token',
+            auth: 'token', // you cannot generate a new token using API-key
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {
             const { db } = h.context
             const { id: userId } = await getCurrentUserFromRequest(request, db)
 
-            const apiKey = uuidv4()
-            const hashedHex = crypto
-                .createHash('sha256')
-                .update(apiKey)
-                .digest('hex')
-            console.log(hashedHex)
-            const createKeyTrx = async trx => {
-                try {
-                    await trx('user_api_key').insert({
-                        api_key: hashedHex,
-                        user_id: userId,
-                    })
-                } catch (e) {
-                    const wrapped = wrapError(e)
-                    Bounce.ignore(wrapped, UniqueViolationError)
-                    throw Boom.conflict('Only one API-key per user')
-                }
-            }
-
-            await db.transaction(createKeyTrx)
+            const apiKey = ApiKey.createApiKeyForUser(userId, db)
             return {
                 apiKey,
-                hashedHex,
             }
+        },
+    },
+    {
+        method: 'DELETE',
+        path: '/v2/key',
+        config: {
+            auth: {
+                strategies: ['token', 'api-key'],
+            },
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { id: userId } = await getCurrentUserFromRequest(request, db)
+
+            ApiKey.deleteApiKeyForUser(userId, db)
+
+            return h.response('API key revoked').code(200)
         },
     },
 ]
