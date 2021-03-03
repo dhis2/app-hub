@@ -269,7 +269,7 @@ module.exports = {
                 trx
             )
 
-            //Publish the app to Stable channel by default
+            //Publish the app to stable channel by default
             const {
                 minDhisVersion,
                 maxDhisVersion,

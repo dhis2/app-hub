@@ -1,3 +1,4 @@
+import useSWR from 'swr'
 import config from '../../config'
 import AuthService from '../utils/AuthService'
 import AppHubAPI from './AppHubAPI'
@@ -30,12 +31,11 @@ export const apiV2 = new AppHubAPI({
     auth: Auth,
 })
 
+export const useQuery = (url, params) =>
+    useSWR([url, params], (url, params) => apiV2.request(url, { params }))
+
 export function getAllApps() {
     return fromApi('v1/apps/all', true)
-}
-
-export function getApprovedApps() {
-    return fromApi('v1/apps?channel=All')
 }
 
 export function getApp(appId, auth) {

@@ -23,7 +23,7 @@ migrate(knex)
         process.exit(1)
     })
     .then(() =>
-        knex.transaction(trx => createChannel({ name: 'Stable' }, knex, trx))
+        knex.transaction(trx => createChannel({ name: 'stable' }, knex, trx))
     )
     .then(r => debug('Channel was created', r))
     .catch(r => debug('Channel probably exists, skipping', r))

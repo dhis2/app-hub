@@ -31,5 +31,11 @@ module.exports = {
             DASHBOARD_WIDGET: 'Dashboard',
             TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
         },
+        appChannelToDisplayName: {
+            stable: 'Stable',
+            development: 'Development',
+            canary: 'Canary',
+        },
+        defaultAppChannel: 'stable'
     },
 }

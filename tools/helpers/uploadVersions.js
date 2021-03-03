@@ -20,7 +20,7 @@ module.exports = async ({ targetUrl, authToken, dir, app, appId, errors }) => {
             minDhisVersion: version.minDhisVersion || '',
             maxDhisVersion: version.maxDhisVersion || '',
             demoUrl: version.demoUrl || '',
-            channel: 'Stable',
+            channel: 'stable',
         }
 
         console.log(
