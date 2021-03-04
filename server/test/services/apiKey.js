@@ -76,4 +76,17 @@ describe('@services: ApiKey', () => {
             expect(userId).to.be.equal(user.id)
         })
     })
+
+    describe('deleteApiKeyForUser', () => {
+        it('should successfully delete an api key', async () => {
+            await ApiKey.createApiKeyForUser(user.id, db)
+
+            const deletedRows = await ApiKey.deleteApiKeyForUser(user.id, db)
+            expect(deletedRows).to.be.equal(1)
+        })
+
+        it('should throw if user does not have API-key', async () => {
+            expect(ApiKey.deleteApiKeyForUser(user.id, db)).to.reject()
+        })
+    })
 })
