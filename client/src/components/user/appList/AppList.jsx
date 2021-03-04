@@ -5,13 +5,7 @@ import { Card, CardText } from 'material-ui/Card'
 import TextField from 'material-ui/TextField'
 import AppListItem from './AppListItem'
 import Popover from 'material-ui/Popover'
-import {
-    TextFilter,
-    filterApp,
-    SelectFilter,
-    filterAppType,
-    filterAppStatus,
-} from '../../utils/Filters'
+import { TextFilter, SelectFilter } from '../../utils/Filters'
 import {
     Toolbar,
     ToolbarGroup,
@@ -39,6 +33,64 @@ import {
     APP_STATUS_REJECTED,
 } from '../../../constants/apiConstants'
 import PopoverWithReduxState from '../../../utils/PopoverWithReduxState'
+
+/**
+ * Filters an app according to properties defined in valsToFilter.
+ * @param app to filter
+ * @param filter a string to check if any of the properties in app contains this.
+ * @returns {boolean} true if any of the properties matches the filter.
+ */
+const filterApp = (app, filterVal) => {
+    if (!filterVal) return true
+    const filter = filterVal.toLowerCase()
+    const valsToFilter = ['name', 'appType', 'organisation']
+    for (const val of valsToFilter) {
+        const prop = app[val] || app.developer[val]
+        if (prop && prop.toLowerCase().includes(filter)) {
+            return true
+        }
+    }
+    return false
+}
+
+/**
+ *
+ * @param app to filter.
+ * @param filters an redux-form object containing filters to check for app.
+ * Should be of shape {filters: values}. Values should be of shape {appType: bool}.
+ * @returns {boolean} true if app has an apptype in filter, otherwise false.
+ */
+const filterAppType = (app, filters) => {
+    if (!filters || filters.values.length == 0) {
+        return true
+    }
+
+    const filterVal = filters.values
+    for (const key in filterVal) {
+        if (filterVal.hasOwnProperty(key)) {
+            if (key == app.appType && filterVal[key] === true) {
+                return true
+            }
+        }
+    }
+    return false
+}
+
+const filterAppStatus = (app, filters) => {
+    if (!filters || filters.values.length == 0) {
+        return true
+    }
+
+    const filterVal = filters.values
+    for (const key in filterVal) {
+        if (filterVal.hasOwnProperty(key)) {
+            if (key == app.status && filterVal[key]) {
+                return true
+            }
+        }
+    }
+    return false
+}
 
 class AppList extends Component {
     constructor(props) {

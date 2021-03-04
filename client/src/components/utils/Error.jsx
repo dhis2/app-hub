@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import FontIcon from 'material-ui/FontIcon'
 import Button from 'material-ui/FlatButton'
 const SizeType = PropTypes.oneOf(['small', 'medium', 'large'])
@@ -30,7 +30,7 @@ export const Error = props => (
         <FontIcon style={style.iconStyle} className="material-icons">
             error
         </FontIcon>
-        <p style={style.errorTextStyle}>An error occurred {props.message}</p>
+        <p style={style.errorTextStyle}>An error occurred: {props.message}</p>
         {props.retry ? (
             <Button
                 onClick={props.retry}

@@ -1,3 +1,5 @@
+const defaultConfig = require('./default.config')
+
 module.exports = {
     api: {
         baseURL: 'http://localhost:3000/api/',
@@ -10,26 +12,5 @@ module.exports = {
     routes: {
         baseAppName: '/',
     },
-    ui: {
-        dhisVersions: [
-            '2.35',
-            '2.34',
-            '2.33',
-            '2.32',
-            '2.31',
-            '2.30',
-            '2.29',
-            '2.28',
-        ],
-        appStatusToDisplayName: {
-            NOT_APPROVED: 'Rejected',
-            PENDING: 'Pending',
-            APPROVED: 'Approved',
-        },
-        appTypeToDisplayName: {
-            APP: 'Standard',
-            DASHBOARD_WIDGET: 'Dashboard',
-            TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
-        },
-    },
+    ui: defaultConfig.ui
 }

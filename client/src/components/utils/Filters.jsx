@@ -1,101 +1,12 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import TextField from 'material-ui/TextField'
-import Toggle from 'material-ui/Toggle'
 import { Field, reduxForm } from 'redux-form'
 import {
     renderTextField,
     renderTextFieldWithClearButton,
     renderToggle,
 } from '../form/ReduxFormUtils'
-
-/**
- * Filters an app according to properties defined in valsToFilter.
- * @param app to filter
- * @param filter a string to check if any of the properties in app contains this.
- * @returns {boolean} true if any of the properties matches the filter.
- */
-export const filterApp = (app, filterVal) => {
-    if (!filterVal) return true
-    const filter = filterVal.toLowerCase()
-    const valsToFilter = ['name', 'appType', 'organisation']
-    for (let i = 0; i < valsToFilter.length; i++) {
-        const val = valsToFilter[i]
-        const prop = app[val]
-        if (prop) {
-            if (prop.toLowerCase().includes(filter)) {
-                return true
-            }
-        }
-        const devProp = app.developer[val]
-        if (devProp) {
-            if (devProp.toLowerCase().includes(filter)) {
-                return true
-            }
-        }
-    }
-    return false
-}
-
-/**
- *
- * @param app to filter.
- * @param filters an redux-form object containing filters to check for app.
- * Should be of shape {filters: values}. Values should be of shape {appType: bool}.
- * @returns {boolean} true if app has an apptype in filter, otherwise false.
- */
-export const filterAppType = (app, filters) => {
-    if (!filters) return true
-    const filterVal = filters.values
-    for (const key in filterVal) {
-        if (filterVal.hasOwnProperty(key)) {
-            if (key == app.appType && filterVal[key] === true) {
-                return true
-            }
-        }
-    }
-    return filterVal.length < 1 ? true : false
-}
-
-export const filterAppStatus = (app, filters) => {
-    if (!filters) return true
-    const filterVal = filters.values
-    for (const key in filterVal) {
-        if (filterVal.hasOwnProperty(key)) {
-            if (key == app.status && filterVal[key] === true) {
-                return true
-            }
-        }
-    }
-    return filterVal.length < 1 ? true : false
-}
-
-export const filterAppChannel = (app, filters) => {
-    if (!filters) return true
-
-    const filterVal = filters.values
-    let foundAnyVersionWithMatchingChannel = false
-
-    for (const versionIndex in app.versions) {
-        const channel = app.versions[versionIndex].channel
-        for (const key in filterVal) {
-            if (
-                filterVal.hasOwnProperty(key) &&
-                key === channel &&
-                filterVal[key] === true
-            ) {
-                foundAnyVersionWithMatchingChannel = true
-                break
-            }
-        }
-        if (foundAnyVersionWithMatchingChannel) {
-            break
-        }
-    }
-
-    return foundAnyVersionWithMatchingChannel
-}
 
 class Textfilter extends Component {
     constructor(props) {

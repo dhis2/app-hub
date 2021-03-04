@@ -14,6 +14,7 @@ import FontIcon from 'material-ui/FontIcon'
 import IconMenu from 'material-ui/IconMenu'
 import IconButton from 'material-ui/IconButton'
 import MenuItem from 'material-ui/MenuItem'
+import config from '../../../config'
 
 const VersionList = props => {
     //Max 3 versions before "more button"
@@ -49,7 +50,7 @@ const VersionList = props => {
                     <TableRowColumn>{version.version}</TableRowColumn>
                     <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                     <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
-                    <TableRowColumn>{version.channel}</TableRowColumn>
+                    <TableRowColumn>{config.ui.appChannelToDisplayName[version.channel]}</TableRowColumn>
                     <TableRowColumn
                         title={new Date(version.created).toLocaleString()}
                     >

@@ -1,3 +1,23 @@
+## [2.12.1](https://github.com/dhis2/app-hub/compare/v2.12.0...v2.12.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **getApps:** don't call toLowerCase on app type ([#445](https://github.com/dhis2/app-hub/issues/445)) ([5ae1511](https://github.com/dhis2/app-hub/commit/5ae15116a2c55be0d84b052c4401c1a1d13a11e1))
+
+# [2.12.0](https://github.com/dhis2/app-hub/compare/v2.11.0...v2.12.0) (2021-03-03)
+
+
+### Bug Fixes
+
+* **createApiUser:** fix server crash when audience is changed ([#437](https://github.com/dhis2/app-hub/issues/437)) ([3685b5f](https://github.com/dhis2/app-hub/commit/3685b5f7c26eb62cebf9bc1e78de0fb355b90e8d))
+
+
+### Features
+
+* **apps:** use server-side pagination and filtering  ([#431](https://github.com/dhis2/app-hub/issues/431)) ([111d806](https://github.com/dhis2/app-hub/commit/111d806d6210b0116e6bc905d6b06378d5ac81e5))
+* update authentication flow ([#425](https://github.com/dhis2/app-hub/issues/425)) ([e9c65ae](https://github.com/dhis2/app-hub/commit/e9c65ae0f94ebc9983c004387fe3cdcffd121daa))
+
 # [2.11.0](https://github.com/dhis2/app-hub/compare/v2.10.6...v2.11.0) (2021-02-08)
 
 

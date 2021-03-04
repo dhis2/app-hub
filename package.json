@@ -20,7 +20,11 @@
         "test": "yarn test:server && yarn test:client",
         "test:server": "yarn workspace server test",
         "test:client": "yarn workspace client test",
-        "clone": "yarn workspace tools clone"
+        "clone": "yarn workspace tools clone",
+        "format": "yarn format:js && yarn format:text",
+        "format:staged": "yarn format:js --staged && yarn format:text --staged",
+        "format:js": "d2-style js apply",
+        "format:text": "d2-style text apply"
     },
     "devDependencies": {
         "@dhis2/cli-style": "^6.0.0",
@@ -30,5 +34,5 @@
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
     },
-    "version": "2.11.0"
+    "version": "2.12.1"
 }

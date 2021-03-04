@@ -22,15 +22,13 @@ describe('@plugins::PaginationPlugin', () => {
                 },
                 response: {
                     failAction: (request, h, err) => {
-                        console.log(err)
-                        //throw err
+                        throw err
                     },
                 },
             },
 
             handler: request => {
                 const pager = request.plugins.pagination
-                //console.log(pager)
                 return pager
             },
         })

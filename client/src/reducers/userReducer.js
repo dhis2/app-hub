@@ -32,12 +32,6 @@ const errorState = {
 }
 function appListReducer(state = { ...initialState, byId: {} }, action) {
     switch (action.type) {
-        case actionTypes.APPS_APPROVED_ERROR: {
-            return {
-                ...state,
-                error: action.payload,
-            }
-        }
         case actionTypes.APPS_ALL_LOADED:
         case actionTypes.USER_APPS_LOADED: {
             const byId = {}
