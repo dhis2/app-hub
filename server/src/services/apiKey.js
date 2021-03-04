@@ -24,7 +24,7 @@ const createApiKeyForUser = async (userId, knex) => {
 
     try {
         await knex(userApiKeyTable).insert({
-            api_key: hashedKey,
+            hashed_api_key: hashedKey,
             user_id: userId,
         })
 
@@ -41,7 +41,7 @@ const getUserIdByApiKey = async (apiKey, knex) => {
     const res = await knex(userApiKeyTable)
         .select('user_id')
         .where({
-            api_key: hashedKey,
+            hashed_api_key: hashedKey,
         })
         .first()
 
