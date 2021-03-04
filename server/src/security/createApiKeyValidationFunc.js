@@ -1,4 +1,3 @@
-//const { find: findAPIKey } = require('../services/apiKey')
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
 const debug = require('debug')('apphub:server:security:apiKeyValidation')
