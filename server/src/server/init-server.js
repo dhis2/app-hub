@@ -125,6 +125,7 @@ exports.init = async (knex, config) => {
     await server.register({
         plugin: pagination,
     })
+    server.method(appVersionMethods)
 
     await server.start()
 
