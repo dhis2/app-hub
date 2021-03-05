@@ -15,6 +15,7 @@ const apiRoutes = require('../plugins/apiRoutes')
 const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
 const pagination = require('../plugins/pagination')
+const { methods: appVersionMethods } = require('../services/appVersion')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -119,6 +120,7 @@ exports.init = async (knex, config) => {
     await server.register({
         plugin: pagination,
     })
+    server.method(appVersionMethods)
 
     await server.start()
 

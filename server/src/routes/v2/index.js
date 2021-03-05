@@ -4,4 +4,5 @@ module.exports = [
     require('./organisations.js'),
     require('./me.js'),
     require('./apikey.js'),
+    require('./appVersions'),
 ]

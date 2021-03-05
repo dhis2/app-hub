@@ -1,4 +1,3 @@
-const AppModel = require('../../models/v1/out/App')
 const { AppStatus } = require('../../enums')
 const { getApps } = require('../../data')
 const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
@@ -19,19 +18,19 @@ module.exports = [
                 query: Joi.object({
                     channels: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...CHANNELS))
-                    ).description(
-                        'Filter by channel'
-                    ).default(['stable']),
+                    )
+                        .description('Filter by channel')
+                        .default(['stable']),
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
-                    ).description(
-                        'Filter by app type'
-                    ).default(['APP']),
+                    )
+                        .description('Filter by app type')
+                        .default(['APP']),
                 }).unknown(true),
             },
             plugins: {
                 queryFilter: {
-                    enabled: true
+                    enabled: true,
                 },
                 pagination: {
                     enabled: true,
@@ -39,7 +38,8 @@ module.exports = [
             },
         },
         handler: async (request, h) => {
-            const channels = request.plugins.queryFilter.getFilter('channels').value
+            const channels = request.plugins.queryFilter.getFilter('channels')
+                .value
             const types = request.plugins.queryFilter.getFilter('types').value
 
             const apps = await getApps(
@@ -60,7 +60,7 @@ module.exports = [
             const result = convertAppsToApiV1Format(filteredApps, request)
             return h.paginate(pager, {
                 result,
-                total: result.length
+                total: result.length,
             })
         },
     },
