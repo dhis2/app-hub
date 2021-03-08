@@ -3,10 +3,28 @@ const { ApiKey } = require('../../services/')
 
 module.exports = [
     {
+        method: 'GET',
+        path: '/v2/key',
+        config: {
+            auth: 'token',
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { id: userId } = await getCurrentUserFromRequest(request, db)
+
+            const apiKey = await ApiKey.getApiKeyByUserId(userId, db)
+
+            return {
+                hasApiKey: !!apiKey,
+            }
+        },
+    },
+    {
         method: 'POST',
         path: '/v2/key',
         config: {
-            auth: 'token', // you cannot generate a new token using API-key
+            auth: 'token', // you cannot generate a new key using API-key
             tags: ['api', 'v2'],
         },
         handler: async (request, h) => {
