@@ -13,7 +13,7 @@ module.exports = [
             const { db } = h.context
             const { id: userId } = await getCurrentUserFromRequest(request, db)
 
-            const apiKey = ApiKey.createApiKeyForUser(userId, db)
+            const apiKey = await ApiKey.createApiKeyForUser(userId, db)
             return {
                 apiKey,
             }
@@ -32,7 +32,7 @@ module.exports = [
             const { db } = h.context
             const { id: userId } = await getCurrentUserFromRequest(request, db)
 
-            ApiKey.deleteApiKeyForUser(userId, db)
+            await ApiKey.deleteApiKeyForUser(userId, db)
 
             return h.response('API key revoked').code(200)
         },
