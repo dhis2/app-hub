@@ -78,7 +78,7 @@ module.exports = {
         try {
             appVersionJson = JSON.parse(versionPayload)
         } catch (e) {
-            throw Boom.badRequest('Invalid JSON')
+            throw Boom.badRequest(e)
         }
 
         const validationResult = CreateAppVersionModel.def.validate(
@@ -143,7 +143,6 @@ module.exports = {
                         sourceUrl,
                         version,
                     },
-                    db,
                     transaction
                 )
                 versionId = appVersion.id
@@ -162,7 +161,6 @@ module.exports = {
                         name: dbApp.name,
                         languageCode: languageCode,
                     },
-                    db,
                     transaction
                 )
             } catch (err) {
@@ -179,7 +177,6 @@ module.exports = {
                         minDhisVersion,
                         maxDhisVersion,
                     },
-                    db,
                     transaction
                 )
             } catch (err) {
