@@ -4,11 +4,15 @@ const Auth0ManagementClient = require('auth0').ManagementClient
 
 const debug = require('debug')('apphub:server:plugins:apiRoutes')
 
-const { createUserValidationFunc, ROLES } = require('../security')
+const {
+    createUserValidationFunc,
+    createApiKeyValidationFunc,
+    ROLES,
+} = require('../security')
 const routes = require('../routes/index.js')
 
 const jwksRsa = require('jwks-rsa')
-
+const { scheme: apiKeyScheme } = require('../security/apiKeyScheme')
 // This is needed to override staticFrontendRoutes's catch-all route
 // so that 404s under /api is not redirected to index.html
 const defaultNotFoundRoute = {
@@ -68,6 +72,11 @@ const apiRoutesPlugin = {
                     auth0ManagementClient
                 ),
             })
+
+            server.auth.scheme('api-key', apiKeyScheme)
+            server.auth.strategy('api-key', 'api-key', {
+                validate: createApiKeyValidationFunc(knex),
+            })
         } else {
             // eslint-disable-next-line no-unused-vars
             server.auth.scheme('no-auth', (server, options) => ({
@@ -87,6 +96,7 @@ const apiRoutesPlugin = {
 
             //Map required authentication to no-auth
             server.auth.strategy('token', 'no-auth')
+            server.auth.strategy('api-key', 'no-auth')
 
             //Warn with red background
             debug(
