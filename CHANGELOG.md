@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/dhis2/app-hub/compare/v2.12.1...v2.13.0) (2021-03-09)
+
+
+### Features
+
+* apiKey generation ([#447](https://github.com/dhis2/app-hub/issues/447)) ([6cf035c](https://github.com/dhis2/app-hub/commit/6cf035caa3750b5db4ba26faad4c5855bc025862))
+
 ## [2.12.1](https://github.com/dhis2/app-hub/compare/v2.12.0...v2.12.1) (2021-03-03)
 
 
