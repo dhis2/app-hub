@@ -120,83 +120,79 @@ module.exports = {
 
         let versionId = null
 
-        if (userCanEditApp) {
-            const transaction = await db.transaction()
+        const transaction = await db.transaction()
 
-            const {
-                demoUrl,
-                sourceUrl,
-                version,
-                minDhisVersion,
-                maxDhisVersion,
-                channel,
-            } = appVersionJson
+        const {
+            demoUrl,
+            sourceUrl,
+            version,
+            minDhisVersion,
+            maxDhisVersion,
+            channel,
+        } = appVersionJson
 
-            const [dbApp] = dbAppRows
-            debug(`Adding version to app ${dbApp.name}`)
-            let appVersion = null
+        const [dbApp] = dbAppRows
+        debug(`Adding version to app ${dbApp.name}`)
+        let appVersion = null
 
-            try {
-                appVersion = await createAppVersion(
-                    {
-                        userId: currentUserId,
-                        appId: dbApp.app_id,
-                        demoUrl,
-                        sourceUrl,
-                        version,
-                    },
-                    transaction
-                )
-                versionId = appVersion.id
-            } catch (err) {
-                await transaction.rollback()
-                throw Boom.boomify(err)
-            }
-
-            //Add the texts as english language, only supported for now
-            try {
-                await createLocalizedAppVersion(
-                    {
-                        userId: currentUserId,
-                        appVersionId: appVersion.id,
-                        description: dbApp.description || '',
-                        name: dbApp.name,
-                        languageCode: languageCode,
-                    },
-                    transaction
-                )
-            } catch (err) {
-                await transaction.rollback()
-                throw Boom.boomify(err)
-            }
-
-            try {
-                await addAppVersionToChannel(
-                    {
-                        appVersionId: appVersion.id,
-                        createdByUserId: currentUserId,
-                        channelName: channel,
-                        minDhisVersion,
-                        maxDhisVersion,
-                    },
-                    transaction
-                )
-            } catch (err) {
-                await transaction.rollback()
-                throw Boom.boomify(err)
-            }
-
-            try {
-                await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
-            } catch (err) {
-                await transaction.rollback()
-                throw Boom.boomify(err)
-            }
-
-            await transaction.commit()
-        } else {
-            throw Boom.unauthorized()
+        try {
+            appVersion = await createAppVersion(
+                {
+                    userId: currentUserId,
+                    appId: dbApp.app_id,
+                    demoUrl,
+                    sourceUrl,
+                    version,
+                },
+                transaction
+            )
+            versionId = appVersion.id
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.boomify(err)
         }
+
+        //Add the texts as english language, only supported for now
+        try {
+            await createLocalizedAppVersion(
+                {
+                    userId: currentUserId,
+                    appVersionId: appVersion.id,
+                    description: dbApp.description || '',
+                    name: dbApp.name,
+                    languageCode: languageCode,
+                },
+                transaction
+            )
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.boomify(err)
+        }
+
+        try {
+            await addAppVersionToChannel(
+                {
+                    appVersionId: appVersion.id,
+                    createdByUserId: currentUserId,
+                    channelName: channel,
+                    minDhisVersion,
+                    maxDhisVersion,
+                },
+                transaction
+            )
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.boomify(err)
+        }
+
+        try {
+            await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.boomify(err)
+        }
+
+        await transaction.commit()
 
         //fetch the new version rows and filter out the one we've just created data for
         dbAppRows = await getAppsById(appId, languageCode, db)
