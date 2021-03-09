@@ -13,7 +13,7 @@ const CreateAppVersionModel = Joi.object().keys({
         .uri()
         .allow('', null),
     images: Joi.array(),
-    channel: Joi.string(),
+    channel: Joi.string().required(),
 })
 
 const payloadSchema = Joi.object({
