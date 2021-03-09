@@ -4,7 +4,7 @@ const debug = require('debug')('apphub:server:security:apiKeyValidation')
 const { getUserIdByApiKey } = require('../services/apiKey')
 
 const getUserByApiKey = async (apiKey, trx) => {
-    const userId = getUserIdByApiKey(apiKey, trx)
+    const userId = await getUserIdByApiKey(apiKey, trx)
 
     if (!userId) {
         return null
@@ -24,7 +24,9 @@ const createApiKeyValidationFunc = db => {
         debug('Validate api-key')
         const credentials = {}
         try {
-            const user = db.transaction(trx => getUserByApiKey(apiKey, trx))
+            const user = await db.transaction(trx =>
+                getUserByApiKey(apiKey, trx)
+            )
 
             if (!user) {
                 throw Boom.unauthorized()
