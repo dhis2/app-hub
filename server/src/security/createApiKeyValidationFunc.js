@@ -41,6 +41,7 @@ const createApiKeyValidationFunc = db => {
             }
         } catch (e) {
             Bounce.rethrow(e, 'system')
+            debug(e)
             return { isValid: false }
         }
     }
