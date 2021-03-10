@@ -7,7 +7,7 @@ const { isSemver } = require('../../helpers')
 
 const CreateAppVersionModel = Joi.object().keys({
     version: Joi.string().custom(isSemver, 'semver validate'),
-    minDhisVersion: Joi.string(),
+    minDhisVersion: Joi.string().required(),
     maxDhisVersion: Joi.string().allow('', null),
     demoUrl: Joi.string()
         .uri()
