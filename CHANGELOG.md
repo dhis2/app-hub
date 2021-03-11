@@ -1,3 +1,10 @@
+## [2.13.1](https://github.com/dhis2/app-hub/compare/v2.13.0...v2.13.1) (2021-03-11)
+
+
+### Bug Fixes
+
+* **client:** update DHIS versions ([#453](https://github.com/dhis2/app-hub/issues/453)) ([0392f6f](https://github.com/dhis2/app-hub/commit/0392f6f22f03247c2bb3f22c79ea9e90ebb2c029))
+
 # [2.13.0](https://github.com/dhis2/app-hub/compare/v2.12.1...v2.13.0) (2021-03-09)
 
 
