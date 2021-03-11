@@ -12,6 +12,7 @@ module.exports = {
     },
     ui: {
         dhisVersions: [
+            '2.36',
             '2.35',
             '2.34',
             '2.33',
