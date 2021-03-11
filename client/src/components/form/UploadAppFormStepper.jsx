@@ -27,14 +27,14 @@ const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
 
 const requiredFields = {
     general: ['appName', 'appType'],
-    version: ['file', 'version', 'channel', 'minVer', 'maxVer'],
+    version: ['file', 'version', 'channel', 'minVer'],
     developer: ['developerName', 'developerEmail', 'developerOrg'],
     image: [],
 }
 
 const varCharFields = {
     general: ['appName', 'appType', 'sourceUrl'],
-    version: ['version'],
+    version: ['version', 'maxVer'],
     developer: ['developerName', 'developerEmail', 'developerOrg'],
     image: ['imageCaption', 'imageDescription'],
 }
