@@ -1,3 +1,33 @@
+# [2.14.0](https://github.com/dhis2/app-hub/compare/v2.13.1...v2.14.0) (2021-03-12)
+
+
+### Bug Fixes
+
+* make version-field required when uploading version ([03a12bd](https://github.com/dhis2/app-hub/commit/03a12bd8cbf6c286fc107dbe6dc20647b790dfdc))
+* **version:** fix a broken window - unnecessary check ([a0ffb95](https://github.com/dhis2/app-hub/commit/a0ffb95dcfd82fce15325b457ba4b5e107cca536))
+* **version:** make minDhisVersion required in API-model ([ab87504](https://github.com/dhis2/app-hub/commit/ab875048dd809fcc2acd95e50eb9c34079148746))
+* make channel required when uploading version ([eb3721a](https://github.com/dhis2/app-hub/commit/eb3721aa45468baacb99bd5ad7fb8167fcff8c41))
+* **version:** use transaction when creation version ([e3bbb2a](https://github.com/dhis2/app-hub/commit/e3bbb2af63866da401ea3130fbd16089b35b8069))
+
+
+### Features
+
+* **version:** allow uploading app-version with api-key ([fe06bee](https://github.com/dhis2/app-hub/commit/fe06bee3ffa0c38cc1d333de338fb885f7fc0475))
+
+## [2.13.1](https://github.com/dhis2/app-hub/compare/v2.13.0...v2.13.1) (2021-03-11)
+
+
+### Bug Fixes
+
+* **client:** update DHIS versions ([#453](https://github.com/dhis2/app-hub/issues/453)) ([0392f6f](https://github.com/dhis2/app-hub/commit/0392f6f22f03247c2bb3f22c79ea9e90ebb2c029))
+
+# [2.13.0](https://github.com/dhis2/app-hub/compare/v2.12.1...v2.13.0) (2021-03-09)
+
+
+### Features
+
+* apiKey generation ([#447](https://github.com/dhis2/app-hub/issues/447)) ([6cf035c](https://github.com/dhis2/app-hub/commit/6cf035caa3750b5db4ba26faad4c5855bc025862))
+
 ## [2.12.1](https://github.com/dhis2/app-hub/compare/v2.12.0...v2.12.1) (2021-03-03)
 
 
