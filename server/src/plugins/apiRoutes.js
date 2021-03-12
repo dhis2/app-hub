@@ -1,11 +1,18 @@
 const jwt = require('hapi-auth-jwt2')
 
+const Auth0ManagementClient = require('auth0').ManagementClient
+
 const debug = require('debug')('apphub:server:plugins:apiRoutes')
 
-const createUserValidationFunc = require('../security/createUserValidationFunc')
-
+const {
+    createUserValidationFunc,
+    createApiKeyValidationFunc,
+    ROLES,
+} = require('../security')
 const routes = require('../routes/index.js')
 
+const jwksRsa = require('jwks-rsa')
+const { scheme: apiKeyScheme } = require('../security/apiKeyScheme')
 // This is needed to override staticFrontendRoutes's catch-all route
 // so that 404s under /api is not redirected to index.html
 const defaultNotFoundRoute = {
@@ -27,15 +34,28 @@ const apiRoutesPlugin = {
     register: async (server, options) => {
         const { knex, auth } = options
 
-        server.bind({
+        const bindContext = {
             db: knex,
-        })
+        }
 
         if (auth && auth.useAuth0()) {
-            await server.register(jwt)
+            // Client used for Auth0 Management API to get new user-information from Auth0
+            const auth0ManagementClient = new Auth0ManagementClient({
+                domain: auth.config.domain,
+                clientId: auth.config.managementClientId,
+                clientSecret: auth.config.managementSecret,
+                scope: 'read:users',
+            })
+            bindContext.auth0ManagementClient = auth0ManagementClient
 
+            await server.register(jwt)
             const authConfig = {
-                key: auth.config.secrets,
+                key: jwksRsa.hapiJwt2KeyAsync({
+                    cache: true,
+                    rateLimit: true,
+                    jwksRequestsPerMinute: 5,
+                    jwksUri: auth.config.jwksUri,
+                }),
                 verifyOptions: {
                     audience: auth.config.audience,
                     issuer: auth.config.issuer,
@@ -48,8 +68,14 @@ const apiRoutesPlugin = {
                 complete: true,
                 validate: createUserValidationFunc(
                     knex,
-                    authConfig.verifyOptions.audience
+                    authConfig.verifyOptions.audience,
+                    auth0ManagementClient
                 ),
+            })
+
+            server.auth.scheme('api-key', apiKeyScheme)
+            server.auth.strategy('api-key', 'api-key', {
+                validate: createApiKeyValidationFunc(knex),
             })
         } else {
             // eslint-disable-next-line no-unused-vars
@@ -62,7 +88,7 @@ const apiRoutesPlugin = {
                         credentials: {
                             ...user,
                             userId: user.id,
-                            roles: ['ROLE_ADMIN', 'ROLE_USER', 'ROLE_MANAGER'],
+                            roles: [ROLES.MANAGER],
                         },
                     })
                 },
@@ -70,6 +96,7 @@ const apiRoutesPlugin = {
 
             //Map required authentication to no-auth
             server.auth.strategy('token', 'no-auth')
+            server.auth.strategy('api-key', 'no-auth')
 
             //Warn with red background
             debug(
@@ -88,6 +115,8 @@ const apiRoutesPlugin = {
                 )
             }
         }
+
+        server.bind(bindContext)
 
         server.route([...routes, defaultNotFoundRoute])
     },

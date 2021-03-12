@@ -21,9 +21,9 @@ exports.seed = async knex => {
 
     await knex('channel').del()
     await knex('channel').insert([
-        { id: stableId, name: 'Stable' },
-        { id: developmentId, name: 'Development' },
-        { id: canaryId, name: 'Canary' },
+        { id: stableId, name: 'stable' },
+        { id: developmentId, name: 'development' },
+        { id: canaryId, name: 'canary' },
     ])
 
     await knex('app_channel').insert([

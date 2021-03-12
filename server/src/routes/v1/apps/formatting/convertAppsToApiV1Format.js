@@ -108,7 +108,7 @@ const convertAll = (apps, request) => {
         }
     })
 
-    return Object.keys(formattedApps).map(x => formattedApps[x])
+    return Object.values(formattedApps)
 }
 
 module.exports = {

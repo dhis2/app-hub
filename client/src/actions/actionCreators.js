@@ -65,10 +65,6 @@ export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD)
 
 export const appsAllLoaded = actionCreator(actions.APPS_ALL_LOADED)
 
-export const loadApprovedApps = actionCreator(actions.APPS_APPROVED_LOAD)
-
-export const loadedApprovedApps = actionCreator(actions.APPS_APPROVED_LOADED)
-
 export const setAppApproval = (app, status) =>
     optimisticActionCreator(
         actionCreator(actions.SET_APPROVAL_APP)({
@@ -242,15 +238,14 @@ export const deleteAppSuccess = app =>
     })
 
 export const userLoaded = profile =>
-    actionCreator(actions.USER_LOADED)({
+    actionCreator(actions.USER_LOAD_SUCCESS)({
         profile,
     })
 
-export const userError = actionCreator(actions.USER_ERROR)
+export const userLoadError = actionCreator(actions.USER_LOAD_ERROR)
 export const userAppsLoad = actionCreator(actions.USER_APPS_LOAD)
 export const userAppsLoaded = actionCreator(actions.USER_APPS_LOADED)
 
-export const userAuthenticated = actionCreator(actions.USER_AUTHENTICATED)
 export const userLogout = actionCreator(actions.USER_LOGOUT)
 
 export const loadUserApp = appId =>

@@ -1,6 +1,6 @@
 {
     "name": "server",
-    "version": "2.10.6",
+    "version": "2.14.0",
     "description": "The App Hub Server",
     "main": "src/main.js",
     "repository": "https://github.com/dhis2/app-hub",
@@ -10,12 +10,14 @@
     "scripts": {
         "start": "cross-env NODE_ENV=production node ./src/main.js",
         "start:dev": "cross-env DEBUG=knex:tx,apphub* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
-        "test": "cross-env NODE_ENV=test yarn db:reload && lab -a @hapi/code -v -I 'core,__core-js_shared__,k,FinalizationRegistry,WeakRef'",
+        "test": "cross-env NODE_ENV=test yarn db:reload && lab -a @hapi/code -v --leaks",
+        "test-only": "cross-env NODE_ENV=test lab -a @hapi/code -v --leaks",
         "test:coverage": "cross-env NODE_ENV=test yarn db:reload && lab -c -a @hapi/code -t 80 -r html -o coverage/coverage.html",
         "db:migrate": "knex migrate:latest",
         "db:reset": "knex migrate:rollback && knex migrate:latest",
         "db:seed": "knex seed:run",
-        "db:reload": "yarn db:reset && yarn db:seed"
+        "db:reload": "yarn db:reset && yarn db:seed",
+        "generate:migration": "knex migrate:make"
     },
     "dependencies": {
         "@hapi/boom": "^9.0.0",
@@ -24,16 +26,18 @@
         "@hapi/inert": "^6.0.1",
         "@hapi/joi": "^17.1.1",
         "@hapi/vision": "^6.0.0",
+        "auth0": "^2.32.0",
         "aws-sdk": "^2.640.0",
         "blipp": "^4.0.1",
         "db-errors": "^0.2.3",
         "debug": "^4.1.1",
         "dotenv": "^6.2.0",
         "hapi-api-version": "^2.3.1",
-        "hapi-auth-jwt2": "^8.8.1",
+        "hapi-auth-jwt2": "^10.2.0",
         "hapi-pino": "^6.3.0",
         "hapi-swagger": "^12.0.0",
-        "knex": "^0.19.5",
+        "knex": "^0.21.17",
+        "jwks-rsa": "^1.12.2",
         "pg": "^8.4.1",
         "rimraf": "^3.0.1",
         "semver": "^7.3.2",
@@ -48,6 +52,7 @@
         "mock-knex": "^0.4.4",
         "mock-local-storage": "^1.1.8",
         "nodemon": "^1.19.2",
-        "request-promise": "^4.2.5"
+        "request-promise": "^4.2.5",
+        "sinon": "^9.2.1"
     }
 }

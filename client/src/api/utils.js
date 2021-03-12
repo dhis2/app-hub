@@ -8,6 +8,9 @@ const encodeQueryParameter = param => {
     if (typeof param === 'number') {
         return String(param)
     }
+    if (param instanceof Set) {
+        return encodeQueryParameter([...param])
+    }
     if (typeof param === 'object') {
         throw new Error('Object parameter mappings not yet implemented')
     }
@@ -31,9 +34,10 @@ export const joinUrlPath = (...paths) => {
 }
 
 export const queryParametersToQueryString = params =>
-    Object.keys(params)
-        .map(key => {
-            const value = params[key]
-            return `${encodeURIComponent(key)}=${encodeQueryParameter(value)}`
-        })
+    Object.entries(params)
+        .filter(([, value]) => value)
+        .map(
+            ([key, value]) =>
+                `${encodeURIComponent(key)}=${encodeQueryParameter(value)}`
+        )
         .join('&')
