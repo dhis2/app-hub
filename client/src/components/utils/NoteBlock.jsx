@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import React, { Component } from 'react'
+import React from 'react'
 import FontIcon from 'material-ui/FontIcon'
 
 const styles = {
@@ -8,39 +8,40 @@ const styles = {
         margin: 0,
         border: '1px solid #d3e9fc',
         borderRadius: '3px',
-        padding: '8px'
+        padding: '8px',
     },
     blockQuoteContainer: {
-      //  lineHeight: '1.2rem',
+        //  lineHeight: '1.2rem',
         marginTop: 0,
     },
     iconHeader: {
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     iconStyle: {
         fontSize: '24px',
         padding: '4px',
-        marginRight: '8px'
+        marginRight: '8px',
     },
 }
 export const NoteBlock = props => (
     <div style={{ ...styles.containerStyle, ...props.styles }}>
         <div style={styles.iconHeader}>
             <FontIcon style={styles.iconStyle} className="material-icons">
-                info_outline
+                {props.icon || 'info_outline'}
             </FontIcon>
             {props.header || <b>Note</b>}
         </div>
-    <blockquote style={styles.blockQuoteContainer}> 
-        {props.children}
-    </blockquote>
+        <blockquote style={styles.blockQuoteContainer}>
+            {props.children}
+        </blockquote>
     </div>
 )
 
 NoteBlock.propTypes = {
     children: PropTypes.node,
     header: PropTypes.node,
+    icon: PropTypes.string,
 }
 
 export default NoteBlock
