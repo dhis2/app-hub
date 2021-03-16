@@ -54,20 +54,23 @@ const GenerateApiKey = props => {
                     primary
                     label="Generate api key"
                     onClick={props.onGenerate}
+                    icon={props.isUpdating ? <Spinner inButton /> : null}
+                    disabled={props.isUpdating}
                 />
             </div>
         </div>
     )
 }
 
-const ApiKeyDisplay = ({ createdAt, onDelete, apiKey }) => {
+const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
     return (
         <div>
             {!apiKey && (
                 <NoteBlock>
-                    If you suspect a key is compromised or you lost one, you can
-                    delete it and generate a new one. Be aware that any scripts
-                    or applications using the API key will need to be updated.
+                    If you suspect your key is compromised or you lost it, you
+                    can delete it and generate a new one. Be aware that any
+                    scripts or applications using the API key will need to be
+                    updated.
                 </NoteBlock>
             )}
             <div>
@@ -99,6 +102,8 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey }) => {
                         label="Delete API key"
                         onClick={onDelete}
                         style={{ color: 'red' }}
+                        icon={isUpdating ? <Spinner inButton /> : null}
+                        disabled={isUpdating}
                     />
                 </div>
             </div>
@@ -108,22 +113,28 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey }) => {
 
 const ApiKeyStatus = () => {
     const [apiKey, setApiKey] = useState(null)
+    const [isUpdating, setIsUpdating] = useState(false)
     const { data, error, mutate } = useQuery('key', null, requestOpts)
 
     const handleDeleteKey = async () => {
-        const res = await deleteApiKey()
-        console.log(res)
+        setIsUpdating(true)
+        await deleteApiKey()
+        setIsUpdating(false)
         mutate({ hasApiKey: false, createdAt: undefined })
     }
 
     const handleGenerateKey = async () => {
-        const res = await generateApiKey()
-        console.log(res)
-        setApiKey(res.apiKey)
-        mutate()
+        try {
+            setIsUpdating(true)
+            const { apiKey } = await generateApiKey()
+            setIsUpdating(false)
+            setApiKey(apiKey)
+            mutate({ hasApiKey: true, createdAt: new Date() }, false)
+        } catch (e) {
+            console.error(e)
+            //TODO: show snackbar?
+        }
     }
-
-    console.log(data, error)
 
     if (error) {
         return 'Failed to load API-key status'
@@ -137,9 +148,13 @@ const ApiKeyStatus = () => {
             createdAt={data.createdAt}
             apiKey={apiKey}
             onDelete={handleDeleteKey}
+            isUpdating={isUpdating}
         />
     ) : (
-        <GenerateApiKey onGenerate={handleGenerateKey} />
+        <GenerateApiKey
+            onGenerate={handleGenerateKey}
+            isUpdating={isUpdating}
+        />
     )
 }
 
