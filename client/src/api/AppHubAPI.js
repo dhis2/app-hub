@@ -48,7 +48,6 @@ export default class AppHubAPI {
             const authHeaders = await this.getAuthHeaders()
             options.headers = { ...options.headers, ...authHeaders }
         }
-        console.log('opts', options)
 
         const baseUrl = external ? '' : this.apiUrl
         let url = joinUrlPath(baseUrl, path)
