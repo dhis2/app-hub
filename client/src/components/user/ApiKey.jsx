@@ -2,23 +2,24 @@ import React, { useState } from 'react'
 import { Card, CardText } from 'material-ui/Card'
 import Button from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
 import SubHeader from '../header/SubHeader'
 import { useQuery, deleteApiKey, generateApiKey } from '../../api/api'
 import NoteBlock from '../utils/NoteBlock'
 import Spinner from '../utils/Spinner'
+import copy from 'copy-text-to-clipboard'
 
 const requestOpts = {
     useAuth: true,
 }
 
 const styles = {
-    rowDiv: {
+    flexCenterDiv: {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-    },
-    generateKeyButton: {
-        marginTop: 5,
+        marginTop: '5px',
     },
 }
 
@@ -48,7 +49,7 @@ const GenerateApiKey = props => {
                 again. Treat API-keys as passwords, they can be used to upload
                 arbitrary apps to your organisation.
             </NoteBlock>
-            <div style={styles.rowDiv}>
+            <div style={styles.flexCenterDiv}>
                 No API key active
                 <Button
                     primary
@@ -63,6 +64,10 @@ const GenerateApiKey = props => {
 }
 
 const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
+    const handleCopyToClipboard = () => {
+        copy(apiKey)
+    }
+
     return (
         <div>
             {!apiKey && (
@@ -80,22 +85,28 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
                             header={<b>API key generated</b>}
                             icon="check_circle"
                         >
-                            Make sure to copy your new API key now. You won’t be
-                            able to see it again!
-                            <p>
-                                API key:
+                            Make sure to copy your new API key below. You won’t
+                            be able to see it again!
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
                                 <code>{apiKey}</code>
-                            </p>
+                                <IconButton
+                                    tooltip="Copy API key"
+                                    onClick={handleCopyToClipboard}
+                                >
+                                    <FontIcon className="material-icons">
+                                        content_paste
+                                    </FontIcon>
+                                </IconButton>
+                            </div>
                         </NoteBlock>
                     </div>
                 )}
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                    }}
-                >
+                <div style={styles.flexCenterDiv}>
                     API is key active. API key was generated at{' '}
                     {new Date(createdAt).toLocaleString()}
                     <FlatButton
