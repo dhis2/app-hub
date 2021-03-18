@@ -301,9 +301,7 @@ export function editOrganisation(id, { name, owner, email }) {
 export function generateApiKey() {
     return apiV2.request(
         'key',
-
         { useAuth: true },
-
         {
             method: 'POST',
         }
@@ -313,9 +311,7 @@ export function generateApiKey() {
 export function deleteApiKey() {
     return apiV2.request(
         'key',
-
         { useAuth: true },
-
         {
             method: 'DELETE',
         }

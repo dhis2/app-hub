@@ -8,7 +8,7 @@ import SubHeader from '../header/SubHeader'
 import { useQuery, deleteApiKey, generateApiKey } from '../../api/api'
 import NoteBlock from '../utils/NoteBlock'
 import Spinner from '../utils/Spinner'
-import copy from 'copy-text-to-clipboard'
+import copyToClipboard from 'copy-text-to-clipboard'
 
 const requestOpts = {
     useAuth: true,
@@ -31,8 +31,8 @@ const ApiKeyView = () => {
                 <CardText>
                     <p>
                         An API key can be used to upload new app versions
-                        through the App Hub API. This can be useful for use in
-                        continous integration workflows.
+                        through the App Hub API. This can be useful in continous
+                        integration workflows.
                     </p>
                     <ApiKeyStatus />
                 </CardText>
@@ -44,10 +44,12 @@ const ApiKeyView = () => {
 const GenerateApiKey = props => {
     return (
         <div>
-            <NoteBlock>
-                Once an API-key is generated, you will not be able to view it
-                again. Treat API-keys as passwords, they can be used to upload
-                arbitrary apps to your organisation.
+            <NoteBlock
+                warning
+                header={<b>API keys should be kept confidential</b>}
+            >
+                Treat API-keys as passwords, they can be used to upload
+                arbitrary apps to your organisations.
             </NoteBlock>
             <div style={styles.flexCenterDiv}>
                 No API key active
@@ -65,7 +67,7 @@ const GenerateApiKey = props => {
 
 const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
     const handleCopyToClipboard = () => {
-        copy(apiKey)
+        copyToClipboard(apiKey)
     }
 
     return (
