@@ -52,7 +52,7 @@ export default class AppHubAPI {
         const baseUrl = external ? '' : this.apiUrl
         let url = joinUrlPath(baseUrl, path)
 
-        if (Object.keys(params).length > 0) {
+        if (params && Object.keys(params).length > 0) {
             url = `${url}?${queryParametersToQueryString(params)}`
         }
 

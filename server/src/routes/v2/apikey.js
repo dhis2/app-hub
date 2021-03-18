@@ -17,6 +17,7 @@ module.exports = [
 
             return {
                 hasApiKey: !!apiKey,
+                createdAt: apiKey && apiKey.created_at,
             }
         },
     },
@@ -30,7 +31,6 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { id: userId } = await getCurrentUserFromRequest(request, db)
-
             const apiKey = await ApiKey.createApiKeyForUser(userId, db)
             return {
                 apiKey,

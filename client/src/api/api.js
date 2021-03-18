@@ -31,8 +31,10 @@ export const apiV2 = new AppHubAPI({
     auth: Auth,
 })
 
-export const useQuery = (url, params) =>
-    useSWR([url, params], (url, params) => apiV2.request(url, { params }))
+export const useQuery = (url, params, requestOpts) =>
+    useSWR([url, params, requestOpts], (url, params, requestOpts) =>
+        apiV2.request(url, { ...requestOpts, params })
+    )
 
 export function getAllApps() {
     return fromApi('v1/apps/all', true)
@@ -292,6 +294,26 @@ export function editOrganisation(id, { name, owner, email }) {
             headers: {
                 'content-type': 'application/json',
             },
+        }
+    )
+}
+
+export function generateApiKey() {
+    return apiV2.request(
+        'key',
+        { useAuth: true },
+        {
+            method: 'POST',
+        }
+    )
+}
+
+export function deleteApiKey() {
+    return apiV2.request(
+        'key',
+        { useAuth: true },
+        {
+            method: 'DELETE',
         }
     )
 }
