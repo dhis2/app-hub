@@ -16,6 +16,7 @@ import ErrorOrLoading from '../utils/ErrorOrLoading'
 import ActiveLink from '../utils/ActiveLink'
 import OrganisationList from './organisation/OrganisationList'
 import OrganisationView from './organisation/OrganisationView'
+import ApiKeyView from './ApiKey'
 import { ListItemLogoutButton } from '../auth/LogoutButton'
 
 class UserView extends Component {
@@ -50,6 +51,10 @@ class UserView extends Component {
                 <Route
                     path={`${this.props.match.url}/organisations/:slug`}
                     component={OrganisationView}
+                />
+                <Route
+                    path={`${this.props.match.url}/apikey`}
+                    component={ApiKeyView}
                 />
                 {/* No-match route - redirect to index */}
                 <Route render={() => <Redirect to="/user" />} />
@@ -105,6 +110,16 @@ class UserView extends Component {
                                 leftIcon={
                                     <FontIcon className="material-icons">
                                         file_upload
+                                    </FontIcon>
+                                }
+                            />
+                        </ActiveLink>
+                        <ActiveLink to={`${this.props.match.url}/apikey`}>
+                            <ListItem
+                                primaryText="API Key"
+                                leftIcon={
+                                    <FontIcon className="material-icons">
+                                        vpn_key
                                     </FontIcon>
                                 }
                             />
