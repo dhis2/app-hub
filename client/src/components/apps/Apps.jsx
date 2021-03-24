@@ -75,6 +75,7 @@ const Apps = () => {
                     types={config.ui.appTypeToDisplayName}
                     typesFilter={types}
                     onTypesFilterChange={setTypes}
+                    query={query}
                     onQueryChange={setQuery}
                 />
             </Col>
