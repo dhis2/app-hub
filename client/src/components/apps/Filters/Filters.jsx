@@ -1,6 +1,6 @@
 import { Input, Checkbox, Divider } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
-import React, { useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import debounce from 'lodash/debounce'
 import styles from './Filters.module.css'
 
@@ -31,21 +31,27 @@ CheckboxList.propTypes = {
     onChange: PropTypes.func.isRequired,
 }
 
-const SearchField = ({ onChange }) => {
+const SearchField = ({ initialValue, onChange }) => {
+    const [value, setValue] = useState(initialValue)
     const debouncedOnChange = useCallback(debounce(onChange, 300), [onChange])
-    const handleChange = ({ value }) => debouncedOnChange(value)
+    const handleChange = ({ value }) => {
+        setValue(value)
+        debouncedOnChange(value)
+    }
     return (
         <Input
             type="search"
             placeholder="Search for an app"
             dense
             onChange={handleChange}
+            value={value}
         />
     )
 }
 
 SearchField.propTypes = {
     onChange: PropTypes.func.isRequired,
+    initialValue: PropTypes.string,
 }
 
 const Filters = ({
@@ -55,10 +61,11 @@ const Filters = ({
     types,
     typesFilter,
     onTypesFilterChange,
+    query,
     onQueryChange,
 }) => (
-    <div>
-        <SearchField onChange={onQueryChange} />
+    <>
+        <SearchField initialValue={query} onChange={onQueryChange} />
         <div className={styles.dividerContainer}>
             <Divider />
         </div>
@@ -78,7 +85,7 @@ const Filters = ({
                 onChange={onChannelsFilterChange}
             />
         </div>
-    </div>
+    </>
 )
 
 Filters.propTypes = {
@@ -89,6 +96,7 @@ Filters.propTypes = {
     onChannelsFilterChange: PropTypes.func.isRequired,
     onQueryChange: PropTypes.func.isRequired,
     onTypesFilterChange: PropTypes.func.isRequired,
+    query: PropTypes.string,
 }
 
 export default Filters
