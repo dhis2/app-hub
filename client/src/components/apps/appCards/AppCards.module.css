@@ -3,3 +3,10 @@
     font-size: 1.8rem;
     text-align: center;
 }
+
+.appCards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: var(--spacers-dp16);
+    max-width: 992px;
+}

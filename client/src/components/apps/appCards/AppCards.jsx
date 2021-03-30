@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
-import AppCardItem from './AppCardItem'
+import AppCardItem from './AppCardItem/AppCardItem'
 import styles from './AppCards.module.css'
 
 const AppCards = ({ isLoading, error, apps }) => {
     if (error) {
         return (
-            <NoticeBox title={'Error'} error>
+            <NoticeBox title={'Error loading apps'} error>
                 {error}
             </NoticeBox>
         )
@@ -30,11 +30,17 @@ const AppCards = ({ isLoading, error, apps }) => {
     }
 
     return (
-        <div>
+        <div className={styles.appCards}>
             {apps.map(app => (
-                <div key={app.id}>
-                    <AppCardItem app={app} />
-                </div>
+                <AppCardItem
+                    key={app.id}
+                    id={app.id}
+                    name={app.name}
+                    developer={app.developer}
+                    type={app.appType}
+                    description={app.description}
+                    images={app.images}
+                />
             ))}
         </div>
     )
