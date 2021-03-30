@@ -8,10 +8,10 @@ import {
     withDefault,
 } from 'use-query-params'
 import { useQuery } from '../../api/api'
+import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
 import config from '../../../config'
 import AppCards from './appCards/AppCards'
 import Filters from './Filters/Filters'
-import Pagination from './Pagination'
 import styles from './Apps.module.css'
 
 const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
@@ -85,9 +85,10 @@ const Apps = () => {
                 />
                 {apps?.length > 0 ? (
                     <Pagination
-                        page={page}
-                        pageCount={data.pager.pageCount}
+                        className={styles.pagination}
+                        hidePageSizeSelect
                         onPageChange={setPage}
+                        {...data.pager}
                     />
                 ) : null}
             </div>

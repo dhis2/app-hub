@@ -17,3 +17,8 @@
     position: relative;
     grid-area: main;
 }
+
+.pagination {
+    margin: var(--spacers-dp24) 0;
+    max-width: 992px;
+}
