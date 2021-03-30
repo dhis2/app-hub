@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import { Link } from 'react-router-dom'
 import Avatar from 'material-ui/Avatar'
@@ -21,28 +20,25 @@ const NotLoggedInIcon = () => {
 
 const ProfileButton = () => {
     const { isLoading, isAuthenticated } = useAuth0()
+    const profile = useSelector(getUserProfile)
+
+    if (isLoading) {
+        return null
+    }
 
     if (!isAuthenticated) {
         return <NotLoggedInIcon />
     }
 
-    const profile = useSelector(getUserProfile)
-
     return (
-        <Link to="/user">
-            <IconButton
-                style={{ transform: 'translate(12px)' }}
-                title="Account"
-            >
-                {(isAuthenticated || isLoading) &&
-                typeof profile?.picture === 'string' ? (
-                    <Avatar size={24} src={profile.picture} />
-                ) : (
-                    <FontIcon color="white" className="material-icons">
-                        account_circle
-                    </FontIcon>
-                )}
-            </IconButton>
+        <Link to="/user" title="Account">
+            {isAuthenticated && typeof profile?.picture === 'string' ? (
+                <Avatar size={24} src={profile.picture} />
+            ) : (
+                <FontIcon color="white" className="material-icons">
+                    account_circle
+                </FontIcon>
+            )}
         </Link>
     )
 }
