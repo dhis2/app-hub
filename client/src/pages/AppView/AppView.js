@@ -1,7 +1,7 @@
 import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import { useQueryV1 } from '../../api/api'
+import { useQueryV1 } from 'src/api'
 
 // import config from '../../../config'
 

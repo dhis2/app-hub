@@ -7,9 +7,9 @@ import {
     decodeDelimitedArray,
     withDefault,
 } from 'use-query-params'
-import { useQuery } from '../../api/api'
+import { useQuery } from 'src/api'
 import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
-import config from '../../../config'
+import config from 'config'
 import AppCards from './AppCards/AppCards'
 import Filters from './Filters/Filters'
 import styles from './Apps.module.css'

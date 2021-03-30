@@ -2,7 +2,7 @@ import * as actions from '../constants/actionTypes'
 import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
 import { history } from '../utils/history'
-import * as api from '../api/api'
+import * as api from '../api'
 import {
     concatMap,
     switchMap,

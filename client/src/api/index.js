@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import config from '../../config'
+import config from 'config'
 import AuthService from '../utils/AuthService'
 import AppHubAPI from './AppHubAPI'
 

@@ -10,7 +10,7 @@ import Header from './components/Header/Header'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AuthProvider from './components/auth/AuthProvider'
 import store from './store'
-import { Auth } from './api/api'
+import { Auth } from './api'
 
 // import UserView from './user/UserView'
 const UserView = () => null
