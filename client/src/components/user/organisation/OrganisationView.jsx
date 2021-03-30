@@ -131,7 +131,9 @@ const mapStateToProps = (state, ownProps) => {
         slug
     )
 
-    const sortedOrgMembers = organisation ? organisationSelectors.getSortedOrgMembers(state, organisation.id) : []
+    const sortedOrgMembers = organisation
+        ? organisationSelectors.getSortedOrgMembers(state, organisation.id)
+        : []
 
     return {
         organisation,

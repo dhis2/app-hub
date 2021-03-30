@@ -50,7 +50,9 @@ const VersionList = props => {
                     <TableRowColumn>{version.version}</TableRowColumn>
                     <TableRowColumn>{version.minDhisVersion}</TableRowColumn>
                     <TableRowColumn>{version.maxDhisVersion}</TableRowColumn>
-                    <TableRowColumn>{config.ui.appChannelToDisplayName[version.channel]}</TableRowColumn>
+                    <TableRowColumn>
+                        {config.ui.appChannelToDisplayName[version.channel]}
+                    </TableRowColumn>
                     <TableRowColumn
                         title={new Date(version.created).toLocaleString()}
                     >

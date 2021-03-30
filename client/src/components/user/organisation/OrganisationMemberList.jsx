@@ -25,7 +25,6 @@ import {
 import { ListItem, List } from 'material-ui/List/'
 
 class OrganisationMemberList extends Component {
-
     render() {
         const { members, owner, organisation, currentUserId } = this.props
         const orgId = organisation.id
@@ -37,8 +36,12 @@ class OrganisationMemberList extends Component {
                         key={user.id}
                         currentUserId={currentUserId}
                         isOwner={owner.id === user.id}
-                        onRemove={() => this.props.removeOrganisationMember(orgId, user.id)}
-                        onChangeOwner={() => this.props.changeOwner(orgId, user.id)}
+                        onRemove={() =>
+                            this.props.removeOrganisationMember(orgId, user.id)
+                        }
+                        onChangeOwner={() =>
+                            this.props.changeOwner(orgId, user.id)
+                        }
                         canChangeOwner={this.props.canChangeOwner}
                     />
                 ))}
@@ -63,17 +66,21 @@ function MemberListItem(props) {
             }
         >
             <MenuItem
-                primaryText={currentUserId === user.id ? "Leave Organisation" : "Remove"}
+                primaryText={
+                    currentUserId === user.id ? 'Leave Organisation' : 'Remove'
+                }
                 disabled={isOwner}
                 title={isOwner && 'Cannot remove the owner of the organisation'}
                 onClick={!isOwner && props.onRemove}
             />
-            {canChangeOwner && <MenuItem
-                primaryText="Promote to owner"
-                disabled={isOwner}
-                title={isOwner && 'User is already the owner'}
-                onClick={!isOwner && props.onChangeOwner}
-            />}
+            {canChangeOwner && (
+                <MenuItem
+                    primaryText="Promote to owner"
+                    disabled={isOwner}
+                    title={isOwner && 'User is already the owner'}
+                    onClick={!isOwner && props.onChangeOwner}
+                />
+            )}
         </IconMenu>
     )
     return (
@@ -94,8 +101,8 @@ function MemberListItem(props) {
             }
             secondaryText={user.email}
             rightIconButton={memberListItemMenu}
-            hoverColor='none'
-            style={{cursor: 'inherit'}}
+            hoverColor="none"
+            style={{ cursor: 'inherit' }}
         />
     )
 }

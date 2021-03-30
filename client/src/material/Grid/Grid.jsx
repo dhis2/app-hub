@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import PropTypes from 'prop-types'
+import React from 'react'
 import classNames from 'classnames'
 import '@material/layout-grid/dist/mdc.layout-grid.css'
 

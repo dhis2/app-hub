@@ -13,7 +13,7 @@ export const ErrorOrLoading = props => {
         return null
     }
     const error = <Error retry={props.retry} message={props.errorMessage} />
-    
+
     return props.error ? error : loading
 }
 

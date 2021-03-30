@@ -37,6 +37,6 @@ module.exports = {
             development: 'Development',
             canary: 'Canary',
         },
-        defaultAppChannel: 'stable'
+        defaultAppChannel: 'stable',
     },
 }

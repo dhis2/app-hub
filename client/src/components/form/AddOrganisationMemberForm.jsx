@@ -35,7 +35,7 @@ const AddOrganisationMemberForm = props => {
 
     return (
         <Form onSubmit={handleSubmit(onSub)}>
-            <div style={{height: '72px'}}>
+            <div style={{ height: '72px' }}>
                 <Field
                     name="email"
                     component={formUtils.renderTextField}

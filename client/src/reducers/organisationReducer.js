@@ -18,7 +18,6 @@ const errorState = {
     error: true,
 }
 
-
 const organisations = (state = initialState, action) => {
     switch (action.type) {
         case actions.ORGANISATIONS_LOAD_SUCCESS:
@@ -38,12 +37,14 @@ const organisations = (state = initialState, action) => {
             }
         }
 
-        case actions.ORGANISATION_EDIT_SUCCESS : {
+        case actions.ORGANISATION_EDIT_SUCCESS: {
             const updatedOrg = action.payload
             const orgId = updatedOrg.id
 
-            if(updatedOrg.owner !== state.byId[orgId].owner) {
-                updatedOrg.owner = state.byId[orgId].users.find(u => u.id === updatedOrg.owner)
+            if (updatedOrg.owner !== state.byId[orgId].owner) {
+                updatedOrg.owner = state.byId[orgId].users.find(
+                    u => u.id === updatedOrg.owner
+                )
             }
             return {
                 ...state,
@@ -51,18 +52,20 @@ const organisations = (state = initialState, action) => {
                     ...state.byId,
                     [orgId]: {
                         ...state.byId[orgId],
-                        ...updatedOrg
-                    }
-                }
+                        ...updatedOrg,
+                    },
+                },
             }
         }
 
         case actions.ORGANISATION_LOAD_SUCCESS: {
-            const response = action.payload;
-            
-            if(response.owner && response.users) {
-                const ownerUser = response.users.find(u => u.id === response.owner)
-                if(ownerUser) {
+            const response = action.payload
+
+            if (response.owner && response.users) {
+                const ownerUser = response.users.find(
+                    u => u.id === response.owner
+                )
+                if (ownerUser) {
                     response.owner = ownerUser
                 }
             }
@@ -88,7 +91,7 @@ const organisations = (state = initialState, action) => {
                 return {
                     ...state,
                     ...errorState,
-                    error: action.payload
+                    error: action.payload,
                 }
             } else {
                 return state

@@ -11,6 +11,7 @@ import Avatar from 'material-ui/Avatar'
 import logo from '../../assets/img/dhis2_logo_reversed.svg'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUserProfile } from '../../selectors/userSelectors'
+import classes from './Header.module.css'
 
 const styles = {
     logo: {
@@ -53,7 +54,7 @@ const ProfileButton = () => {
     return isAuthenticated ? <Link to="/user">{button}</Link> : button
 }
 
-const Header = props => (
+const HeaderOld = props => (
     <Toolbar
         style={{
             backgroundColor: Theme.palette.primary1Color,
@@ -78,5 +79,8 @@ const Header = props => (
         </ToolbarSection>
     </Toolbar>
 )
+
+console.log('classes:', classes)
+const Header = () => <div className={classes.header}></div>
 
 export default Header
