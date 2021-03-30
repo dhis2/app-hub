@@ -10,7 +10,7 @@ import {
 import { useQuery } from '../../api/api'
 import config from '../../../config'
 import AppCards from './appCards/AppCards'
-import Filters from './Filters'
+import Filters from './Filters/Filters'
 import Pagination from './Pagination'
 import styles from './Apps.module.css'
 

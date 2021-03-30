@@ -1,0 +1,14 @@
+.dividerContainer {
+    margin: var(--spacers-dp16) 0;
+}
+
+.filterWrapper {
+    margin-bottom: 1.5rem;
+}
+
+.filterName {
+    margin-top: 0;
+    margin-bottom: 0.3em;
+    font-size: 14px;
+    font-weight: 500;
+}
