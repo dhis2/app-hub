@@ -29,7 +29,10 @@ const webpackConfig = {
             },
             {
                 test: /\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+                use: [
+                    { loader: 'style-loader' },
+                    { loader: 'css-loader', options: { modules: true } },
+                ],
             },
             {
                 test: /\.(jpe?g|png|gif|svg|woff(2)?|ttf|eot)$/i,
