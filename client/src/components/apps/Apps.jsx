@@ -8,12 +8,11 @@ import {
     withDefault,
 } from 'use-query-params'
 import { useQuery } from '../../api/api'
-import Grid from '../../material/Grid/Grid'
-import Col from '../../material/Grid/Col'
 import config from '../../../config'
 import AppCards from './appCards/AppCards'
 import Filters from './Filters'
 import Pagination from './Pagination'
+import styles from './Apps.module.css'
 
 const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
 const defaultTypesFilter = new Set(Object.keys(config.ui.appTypeToDisplayName))
@@ -66,8 +65,8 @@ const Apps = () => {
     const apps = data?.result
 
     return (
-        <Grid>
-            <Col span={12}>
+        <div className={styles.container}>
+            <div className={styles.sidebar}>
                 <Filters
                     channels={config.ui.appChannelToDisplayName}
                     channelsFilter={channels}
@@ -77,24 +76,22 @@ const Apps = () => {
                     onTypesFilterChange={setTypes}
                     onQueryChange={setQuery}
                 />
-            </Col>
-            <Col span={12}>
+            </div>
+            <div className={styles.content}>
                 <AppCards
                     isLoading={!data}
                     error={error?.message}
                     apps={apps}
                 />
-            </Col>
-            {apps?.length > 0 ? (
-                <Col span={12}>
+                {apps?.length > 0 ? (
                     <Pagination
                         page={page}
                         pageCount={data.pager.pageCount}
                         onPageChange={setPage}
                     />
-                </Col>
-            ) : null}
-        </Grid>
+                ) : null}
+            </div>
+        </div>
     )
 }
 

@@ -44,7 +44,7 @@ const ProfileButton = () => {
 }
 
 const Header = () => (
-    <div className={styles.header}>
+    <header className={styles.header}>
         <div className={styles.flexContainer}>
             <Link to="/" className={styles.brand}>
                 <img src={logo} className={styles.brandLogo} />
@@ -62,7 +62,7 @@ const Header = () => (
         </div>
 
         <ProfileButton />
-    </div>
+    </header>
 )
 
 export default Header

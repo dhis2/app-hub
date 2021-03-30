@@ -1,45 +1,42 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import Grid from '../../../material/Grid/Grid'
-import Col from '../../../material/Grid/Col'
-import Spinner from '../../utils/Spinner'
-import Error from '../../utils/Error'
+import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
 import AppCardItem from './AppCardItem'
-
-const styles = {
-    emptyApps: {
-        margin: 'auto',
-        marginTop: '2em',
-        fontSize: '2em',
-        textAlign: 'center',
-    },
-}
+import styles from './AppCards.module.css'
 
 const AppCards = ({ isLoading, error, apps }) => {
     if (error) {
-        return <Error size="large" message={error} />
+        return (
+            <NoticeBox title={'Error'} error>
+                {error}
+            </NoticeBox>
+        )
     }
 
     if (isLoading) {
-        return <Spinner size="large" />
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
     }
 
     if (apps.length == 0) {
         return (
-            <p style={styles.emptyApps}>
+            <p className={styles.emptyApps}>
                 We couldn't find any apps that match your criteria.
             </p>
         )
     }
 
     return (
-        <Grid>
+        <div>
             {apps.map(app => (
-                <Col key={app.id} span={3} phone={4}>
+                <div key={app.id}>
                     <AppCardItem app={app} />
-                </Col>
+                </div>
             ))}
-        </Grid>
+        </div>
     )
 }
 

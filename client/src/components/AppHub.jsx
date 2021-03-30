@@ -1,5 +1,4 @@
-import { CssReset } from '@dhis2/ui-core/build/es/CssReset/CssReset'
-import { CssVariables } from '@dhis2/ui-core/build/es/CssVariables/CssVariables'
+import { CssVariables, CssReset } from '@dhis2/ui-core'
 import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { QueryParamProvider } from 'use-query-params'
@@ -40,22 +39,17 @@ const AppHub = () => (
                         <div className="app">
                             <DialogRoot />
                             <Header />
-                            <div id="container" style={theme.container}>
-                                <Switch>
-                                    <Route exact path="/" component={Apps} />
-                                    <Route
-                                        path="/app/:appId"
-                                        component={AppView}
-                                    />
-                                    <ProtectedRoute
-                                        path="/user"
-                                        auth={Auth}
-                                        component={UserView}
-                                    />
-                                    {/* No-match route - redirect to index */}
-                                    <Route render={() => <Redirect to="/" />} />
-                                </Switch>
-                            </div>
+                            <Switch>
+                                <Route exact path="/" component={Apps} />
+                                <Route path="/app/:appId" component={AppView} />
+                                <ProtectedRoute
+                                    path="/user"
+                                    auth={Auth}
+                                    component={UserView}
+                                />
+                                {/* No-match route - redirect to index */}
+                                <Route render={() => <Redirect to="/" />} />
+                            </Switch>
                             <Snackbar />
                         </div>
                     </QueryParamProvider>
