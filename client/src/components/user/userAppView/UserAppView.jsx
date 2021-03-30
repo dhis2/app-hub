@@ -1,5 +1,5 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types'
+/*import PropTypes from 'prop-types'
 
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
@@ -360,3 +360,6 @@ UserAppCardHeader.propTypes = {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserAppView)
+*/
+
+export default () => null

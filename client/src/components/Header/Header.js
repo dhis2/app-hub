@@ -1,12 +1,24 @@
-import React from 'react'
+import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import FontIcon from 'material-ui/FontIcon'
+import Icon from 'src/components/Icon/Icon'
 import { Link } from 'react-router-dom'
-import Avatar from 'material-ui/Avatar'
-import logo from '../../assets/img/dhis2-icon-reversed.svg'
+import logo from 'src/assets/img/dhis2-icon-reversed.svg'
 import { useAuth0 } from '@auth0/auth0-react'
-import { getUserProfile } from '../../selectors/userSelectors'
+import { getUserProfile } from 'src/selectors/userSelectors'
 import styles from './Header.module.css'
+
+const Avatar = ({ size, src }) => (
+    <img
+        alt="Avatar"
+        src={src}
+        style={{ height: size, width: size, borderRadius: '50%' }}
+    />
+)
+
+Avatar.propTypes = {
+    size: PropTypes.number.isRequired,
+    src: PropTypes.string.isRequired,
+}
 
 const NotLoggedInIcon = () => {
     const { loginWithRedirect } = useAuth0()

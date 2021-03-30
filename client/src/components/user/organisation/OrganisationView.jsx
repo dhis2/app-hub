@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+/*import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -162,3 +162,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrganisationView)
+*/
+
+export default () => null

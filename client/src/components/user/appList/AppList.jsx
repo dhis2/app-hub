@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+/*import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { List } from 'material-ui/List'
 import { Card, CardText } from 'material-ui/Card'
@@ -34,12 +34,6 @@ import {
 } from '../../../constants/apiConstants'
 import PopoverWithReduxState from '../../../utils/PopoverWithReduxState'
 
-/**
- * Filters an app according to properties defined in valsToFilter.
- * @param app to filter
- * @param filter a string to check if any of the properties in app contains this.
- * @returns {boolean} true if any of the properties matches the filter.
- */
 const filterApp = (app, filterVal) => {
     if (!filterVal) return true
     const filter = filterVal.toLowerCase()
@@ -53,13 +47,6 @@ const filterApp = (app, filterVal) => {
     return false
 }
 
-/**
- *
- * @param app to filter.
- * @param filters an redux-form object containing filters to check for app.
- * Should be of shape {filters: values}. Values should be of shape {appType: bool}.
- * @returns {boolean} true if app has an apptype in filter, otherwise false.
- */
 const filterAppType = (app, filters) => {
     if (!filters || filters.values.length == 0) {
         return true
@@ -287,3 +274,6 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppList)
+*/
+
+export default () => null

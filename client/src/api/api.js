@@ -36,6 +36,9 @@ export const useQuery = (url, params, requestOpts) =>
         apiV2.request(url, { ...requestOpts, params })
     )
 
+export const useQueryV1 = (url, auth = false) =>
+    useSWR([url, auth], (url, auth) => fromApi(`v1/${url}`, auth))
+
 export function getAllApps() {
     return fromApi('v1/apps/all', true)
 }

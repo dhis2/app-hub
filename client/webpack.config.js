@@ -11,7 +11,7 @@ const appEntry = path.join(__dirname, 'src', 'app-hub.js')
 
 const webpackConfig = {
     entry: {
-        app: ['whatwg-fetch', appEntry],
+        app: appEntry,
     },
     mode: nodeEnv,
     output: {
@@ -53,7 +53,11 @@ const webpackConfig = {
         historyApiFallback: true,
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js'],
+        alias: {
+            config: path.resolve(__dirname, 'config/'),
+            src: path.resolve(__dirname, 'src/'),
+        },
     },
     plugins: [
         new webpack.DefinePlugin({

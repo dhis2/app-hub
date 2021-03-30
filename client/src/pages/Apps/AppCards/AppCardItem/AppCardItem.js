@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import config from '../../../../../config'
-import AppIcon from '../AppIcon/AppIcon'
+import config from 'config'
+import AppIcon from 'src/components/AppIcon/AppIcon'
 import styles from './AppCardItem.module.css'
 
 const summarise = text => {

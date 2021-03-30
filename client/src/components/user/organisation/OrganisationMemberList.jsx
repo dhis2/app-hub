@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+/*import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -108,3 +108,6 @@ function MemberListItem(props) {
 }
 
 export default connect(null, mapDispatch)(OrganisationMemberList)
+*/
+
+export default () => null

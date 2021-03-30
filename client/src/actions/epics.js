@@ -304,7 +304,6 @@ const addMultipleImages = action$ =>
                 )
             })
             return [...promises, allCompleted]
-            //return from([...promises, allCompleted]).pipe(mergeAll())
         }),
         mergeAll()
     )

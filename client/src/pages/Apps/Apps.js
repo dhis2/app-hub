@@ -10,7 +10,7 @@ import {
 import { useQuery } from '../../api/api'
 import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
 import config from '../../../config'
-import AppCards from './appCards/AppCards'
+import AppCards from './AppCards/AppCards'
 import Filters from './Filters/Filters'
 import styles from './Apps.module.css'
 

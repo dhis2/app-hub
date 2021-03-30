@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import React from 'react'
 import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
 import AppCardItem from './AppCardItem/AppCardItem'
 import styles from './AppCards.module.css'
