@@ -1,3 +1,5 @@
+import { CssReset } from '@dhis2/ui-core/build/es/CssReset/CssReset'
+import { CssVariables } from '@dhis2/ui-core/build/es/CssVariables/CssVariables'
 import React from 'react'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { QueryParamProvider } from 'use-query-params'
@@ -29,6 +31,8 @@ const AppHub = () => (
             <MuiThemeProvider muiTheme={theme}>
                 <Router history={history}>
                     <QueryParamProvider ReactRouterRoute={Route}>
+                        <CssReset />
+                        <CssVariables colors theme spacers />
                         <div className="app">
                             <DialogRoot />
                             <Header />

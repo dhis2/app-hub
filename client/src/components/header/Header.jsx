@@ -1,86 +1,72 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Toolbar from '../../material/Toolbar/Toolbar'
-import ToolbarSection from '../../material/Toolbar/ToolbarSection'
-import ToolbarTitle from '../../material/Toolbar/ToolbarTitle'
 import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
 import { Link } from 'react-router-dom'
-import Theme from '../../styles/theme'
 import Avatar from 'material-ui/Avatar'
-import logo from '../../assets/img/dhis2_logo_reversed.svg'
+import logo from '../../assets/img/dhis2-icon-reversed.svg'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUserProfile } from '../../selectors/userSelectors'
-import classes from './Header.module.css'
+import styles from './Header.module.css'
 
-const styles = {
-    logo: {
-        height: 32,
-    },
+const NotLoggedInIcon = () => {
+    const { loginWithRedirect } = useAuth0()
+
+    return (
+        <button className={styles.signInButton} onClick={loginWithRedirect}>
+            Sign in
+        </button>
+    )
 }
 
-const NotLoggedInIcon = () => (
-    <FontIcon color="white" className="material-icons">
-        account_circle
-    </FontIcon>
-)
-
 const ProfileButton = () => {
-    const {
-        user,
-        isLoading,
-        isAuthenticated,
-        loginWithRedirect,
-        getIdTokenClaims,
-        ...rest
-    } = useAuth0()
+    const { isLoading, isAuthenticated } = useAuth0()
+
+    if (!isAuthenticated) {
+        return <NotLoggedInIcon />
+    }
 
     const profile = useSelector(getUserProfile)
 
-    const button = (
-        <IconButton
-            style={{ transform: 'translate(12px)' }}
-            onClick={!isAuthenticated ? loginWithRedirect : undefined}
-            title="Account"
-        >
-            {(isAuthenticated || isLoading) &&
-            typeof profile?.picture === 'string' ? (
-                <Avatar size={24} src={profile.picture} />
-            ) : (
-                <NotLoggedInIcon />
-            )}
-        </IconButton>
+    return (
+        <Link to="/user">
+            <IconButton
+                style={{ transform: 'translate(12px)' }}
+                title="Account"
+            >
+                {(isAuthenticated || isLoading) &&
+                typeof profile?.picture === 'string' ? (
+                    <Avatar size={24} src={profile.picture} />
+                ) : (
+                    <FontIcon color="white" className="material-icons">
+                        account_circle
+                    </FontIcon>
+                )}
+            </IconButton>
+        </Link>
     )
-    return isAuthenticated ? <Link to="/user">{button}</Link> : button
 }
 
-const HeaderOld = props => (
-    <Toolbar
-        style={{
-            backgroundColor: Theme.palette.primary1Color,
-            padding: '0 24px',
-        }}
-    >
-        <ToolbarSection
-            align="center"
-            style={{
-                maxWidth: Theme.container.maxWidth - 48,
-                margin: '0 auto',
-            }}
-        >
-            <Link to="/" style={styles.logo}>
-                <img src={logo} style={styles.logo} />
+const Header = () => (
+    <div className={styles.header}>
+        <div className={styles.flexContainer}>
+            <Link to="/" className={styles.brand}>
+                <img src={logo} className={styles.brandLogo} />
+                <h1 className={styles.brandText}>DHIS2 App Hub</h1>
             </Link>
-            <ToolbarTitle align="center" titleStyle={{ margin: 0 }}>
-                <Link to="/">App Hub</Link>
-            </ToolbarTitle>
 
-            <ProfileButton />
-        </ToolbarSection>
-    </Toolbar>
+            <ul className={styles.navLinks}>
+                <li className={styles.navLink}>
+                    <Link to="/">All apps</Link>
+                </li>
+                <li className={styles.navLink}>
+                    <Link to="/user">My apps</Link>
+                </li>
+            </ul>
+        </div>
+
+        <ProfileButton />
+    </div>
 )
-
-console.log('classes:', classes)
-const Header = () => <div className={classes.header}></div>
 
 export default Header

@@ -10,7 +10,11 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production webpack -p --config ./webpack.config.js",
         "start": "cross-env NODE_ENV=development webpack-dev-server",
-        "test": "cross-env NODE_ENV=test mocha --opts test/mocha.opts"
+        "test": "cross-env NODE_ENV=test mocha --opts test/mocha.opts",
+        "format": "yarn format:js && yarn format:text",
+        "format:staged": "yarn format:js --staged && yarn format:text --staged",
+        "format:js": "d2-style js apply",
+        "format:text": "d2-style text apply"
     },
     "dependencies": {
         "@auth0/auth0-react": "^1.2.0",
@@ -49,6 +53,7 @@
         "semver": "^7.3.2",
         "slick-carousel": "^1.8.1",
         "style-loader": "^0.13.1",
+        "styled-jsx": "3.3.0",
         "svg-loader": "^0.0.2",
         "swr": "^0.4.1",
         "transform-imports": "^2.0.0",

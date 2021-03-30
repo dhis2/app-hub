@@ -1,4 +1,87 @@
+:root {
+    --header-bg: #1C2431;
+    --header-height: 48px;
+}
+
 .header {
-    background: #1C2431;
-    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--header-bg);
+    padding: 0 var(--spacers-dp12);
+    height: var(--header-height);
+    color: white;
+    font-size: 14px;
+}
+
+.flexContainer {
+    display: flex;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.brand:hover {
+    opacity: 0.85;
+}
+
+.brandLogo {
+    height: 28px;
+}
+
+.brandText {
+    margin-left: var(--spacers-dp16);
+    color: inherit;
+    font-weight: bold;
+    font-size: inherit;
+}
+
+.signInButton {
+    height: 28px;
+    border: 1px solid var(--colors-grey200);
+    border-radius: 4px;
+    padding: 0 var(--spacers-dp8);
+    font-size: inherit;
+    line-height: 16px;
+    letter-spacing: 0.5px;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+}
+
+.signInButton:hover {
+    color: var(--header-bg);
+    background: white;
+}
+
+.signInButton:focus {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.navLinks {
+    list-style: none;
+    margin: 0;
+    margin-left: var(--spacers-dp48);
+    padding: 0;
+}
+
+.navLink {
+    display: inline-block;
+}
+
+.navLink a {
+    display: inline-block;
+    height: var(--header-height);
+    padding: var(--spacers-dp16);
+    font-weight: 500;
+    font-size: inherit;
+}
+
+.navLink a:hover, .navLink a:focus {
+    color: var(--colors-grey050);
+    background: black;
 }
