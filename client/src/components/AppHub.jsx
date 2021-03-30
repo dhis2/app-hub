@@ -10,7 +10,11 @@ import theme from '../styles/theme'
 
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import '../styles/override.css'
+
+import '../styles/mdc-layout-grid.css'
+import '../styles/slick-overrides.css'
+import '../styles/auth0-overrides.css'
+import '../styles/styles.css'
 
 import Apps from './apps/Apps'
 import AppView from './appView/AppView'
