@@ -1,13 +1,16 @@
-import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
+import { CenteredContent, CircularLoader, NoticeBox, Card, Divider } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useQueryV1 } from 'src/api'
-
-// import config from '../../../config'
+import AppIcon from 'src/components/AppIcon/AppIcon'
+import styles from './AppView.module.css'
+import Screenshots from './Screenshots'
+import classnames from 'classnames'
+import config from 'config'
 
 const AppView = ({ match }) => {
     const { appId } = match.params
-    const { data, error } = useQueryV1(`apps/${appId}`)
+    const { data: app, error } = useQueryV1(`apps/${appId}`)
 
     if (error) {
         return (
@@ -17,7 +20,7 @@ const AppView = ({ match }) => {
         )
     }
 
-    if (!data) {
+    if (!app) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -25,11 +28,43 @@ const AppView = ({ match }) => {
         )
     }
 
-    console.log(data)
-    // const backLink =
-    // this.props.history.length > 1 ? this.props.history.goBack : '/'
+    const logo = app.images.find(img => img.logo)
+    const screenshots = app.images.filter(img => !img.logo).map(i => i.imageUrl)
 
-    return null
+    return (
+        <div className={styles.appCardContainer}>
+            <Card className={styles.appCard}>
+                <section className={classnames(styles.appCardSection, styles.appCardHeader)}>
+                    <AppIcon src={logo?.imageUrl} />
+                    <div>
+                        <h2 className={styles.appCardName}>{app.name}</h2>
+                        <span className={styles.appCardDeveloper}>
+                            by {app.developer.organisation || app.developer.name}
+                        </span>
+                        <span className={styles.appCardType}>
+                            {config.ui.appTypeToDisplayName[app.appType]}
+                        </span>
+                    </div>
+                </section>
+                <Divider />
+                <section className={styles.appCardSection}>
+                    <h2 className={styles.appCardHeading}>About this app</h2>
+                    <p className={styles.appCardPara}>
+                        {app.description || 'The developer of this app has not provided a description.'}
+                    </p>
+                </section>
+                <Divider />
+                <section className={styles.appCardSection}>
+                    <h2 className={styles.appCardHeading}>Screenshots</h2>
+                    <Screenshots screenshots={screenshots} />
+                </section>
+                <Divider />
+                <section className={styles.appCardSection}>
+                    <h2 className={styles.appCardHeading}>All versions of this application</h2>
+                </section>
+            </Card>
+        </div>
+    )
 }
 
 AppView.propTypes = {
