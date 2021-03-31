@@ -54,6 +54,8 @@ const webpackConfig = {
     },
     resolve: {
         extensions: ['.js'],
+        // If these cause issues with using nodejs for testing, see
+        // https://stackoverflow.com/questions/33793504/using-webpack-aliases-in-mocha-tests
         alias: {
             config: path.resolve(__dirname, 'config/'),
             src: path.resolve(__dirname, 'src/'),
