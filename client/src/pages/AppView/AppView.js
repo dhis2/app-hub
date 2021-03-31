@@ -1,6 +1,11 @@
-import { CenteredContent, CircularLoader, NoticeBox, Card, Divider } from '@dhis2/ui-core'
+import {
+    CenteredContent,
+    CircularLoader,
+    NoticeBox,
+    Card,
+    Divider,
+} from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
 import { useQueryV1 } from 'src/api'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 import styles from './AppView.module.css'
@@ -15,9 +20,13 @@ const AppView = ({ match }) => {
 
     if (error) {
         return (
-            <NoticeBox title={'Error loading app'} error>
-                {error}
-            </NoticeBox>
+            <div className={styles.appCardContainer}>
+                <CenteredContent>
+                    <NoticeBox title={'Error loading app'} error>
+                        {error.message || error.statusText}
+                    </NoticeBox>
+                </CenteredContent>
+            </div>
         )
     }
 
@@ -36,12 +45,18 @@ const AppView = ({ match }) => {
     return (
         <div className={styles.appCardContainer}>
             <Card className={styles.appCard}>
-                <section className={classnames(styles.appCardSection, styles.appCardHeader)}>
+                <section
+                    className={classnames(
+                        styles.appCardSection,
+                        styles.appCardHeader
+                    )}
+                >
                     <AppIcon src={logo?.imageUrl} />
                     <div>
                         <h2 className={styles.appCardName}>{app.name}</h2>
                         <span className={styles.appCardDeveloper}>
-                            by {app.developer.organisation || app.developer.name}
+                            by{' '}
+                            {app.developer.organisation || app.developer.name}
                         </span>
                         <span className={styles.appCardType}>
                             {config.ui.appTypeToDisplayName[app.appType]}
@@ -49,10 +64,14 @@ const AppView = ({ match }) => {
                     </div>
                 </section>
                 <Divider />
-                <section className={styles.appCardSection} style={{ maxWidth: 544 }}>
+                <section
+                    className={styles.appCardSection}
+                    style={{ maxWidth: 544 }}
+                >
                     <h2 className={styles.appCardHeading}>About this app</h2>
                     <p className={styles.appCardPara}>
-                        {app.description || 'The developer of this app has not provided a description.'}
+                        {app.description ||
+                            'The developer of this app has not provided a description.'}
                     </p>
                 </section>
                 <Divider />
@@ -62,7 +81,9 @@ const AppView = ({ match }) => {
                 </section>
                 <Divider />
                 <section className={styles.appCardSection}>
-                    <h2 className={styles.appCardHeading}>All versions of this application</h2>
+                    <h2 className={styles.appCardHeading}>
+                        All versions of this application
+                    </h2>
                     <Versions versions={versions} />
                 </section>
             </Card>

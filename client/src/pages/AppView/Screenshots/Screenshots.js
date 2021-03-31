@@ -20,12 +20,10 @@ const Screenshots = ({ screenshots }) => {
                     <button
                         key={index}
                         onClick={() => setCurrentScreenshotIndex(index)}
-                        className={
-                            classnames(
-                                styles.otherScreenshot,
-                                {[styles.otherScreenshotCurrent]: index === currentScreenshotIndex}
-                            )
-                        }
+                        className={classnames(styles.otherScreenshot, {
+                            [styles.otherScreenshotCurrent]:
+                                index === currentScreenshotIndex,
+                        })}
                     >
                         <img src={screenshot} />
                     </button>

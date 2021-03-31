@@ -57,9 +57,7 @@ const Filters = ({ versions, channelsFilter, setChannelsFilter }) => {
 
     return (
         <div className={styles.versionsFilters}>
-            <h3 className={styles.subheader}>
-                Channel
-            </h3>
+            <h3 className={styles.subheader}>Channel</h3>
             {Object.keys(channelToDisplayName)
                 .filter(hasChannel)
                 .map(name => (
@@ -92,7 +90,7 @@ const renderDhisVersionsCompatibility = (min, max) => {
     return null
 }
 
-const VersionsTable = ({ installedVersion, versions }) => (
+const VersionsTable = ({ versions }) => (
     <Table>
         <TableHead>
             <TableRowHead>
@@ -111,9 +109,14 @@ const VersionsTable = ({ installedVersion, versions }) => (
                         {channelToDisplayName[version.channel]}
                     </TableCell>
                     <TableCell>
-                        {renderDhisVersionsCompatibility(version.minDhisVersion, version.maxDhisVersion)}
+                        {renderDhisVersionsCompatibility(
+                            version.minDhisVersion,
+                            version.maxDhisVersion
+                        )}
                     </TableCell>
-                    <TableCell>{(new Date(version.created)).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                        {new Date(version.created).toLocaleDateString()}
+                    </TableCell>
                     <TableCell>
                         <a download href={version.downloadUrl}>
                             <Button small secondary>
@@ -129,10 +132,9 @@ const VersionsTable = ({ installedVersion, versions }) => (
 
 VersionsTable.propTypes = {
     versions: PropTypes.array.isRequired,
-    installedVersion: PropTypes.string,
 }
 
-const Versions = ({ installedVersion, versions }) => {
+const Versions = ({ versions }) => {
     let initialChannelsFilter = new Set(['stable'])
     if (!versions.find(v => v.channel === 'stable')) {
         if (versions.find(v => v.channel === 'development')) {
@@ -142,7 +144,9 @@ const Versions = ({ installedVersion, versions }) => {
         }
     }
     const [channelsFilter, setChannelsFilter] = useState(initialChannelsFilter)
-    const filteredVersions = versions.filter(version => channelsFilter.has(version.channel))
+    const filteredVersions = versions.filter(version =>
+        channelsFilter.has(version.channel)
+    )
 
     return (
         <div className={styles.versionsContainer}>
@@ -152,10 +156,7 @@ const Versions = ({ installedVersion, versions }) => {
                 setChannelsFilter={setChannelsFilter}
             />
             {filteredVersions.length > 0 ? (
-                <VersionsTable
-                    installedVersion={installedVersion}
-                    versions={filteredVersions}
-                />
+                <VersionsTable versions={filteredVersions} />
             ) : (
                 <em>There are no compatible versions matching your criteria</em>
             )}
@@ -165,7 +166,6 @@ const Versions = ({ installedVersion, versions }) => {
 
 Versions.propTypes = {
     versions: PropTypes.array.isRequired,
-    installedVersion: PropTypes.string,
 }
 
 export default Versions

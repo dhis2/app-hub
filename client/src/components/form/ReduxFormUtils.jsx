@@ -255,6 +255,7 @@ const SemanticVersionHelpText = () => {
                 href="https://docs.npmjs.com/about-semantic-versioning"
                 target="_blank"
                 className={'link'}
+                rel="noreferrer"
             >
                 Read more about semantic versioning
             </a>
