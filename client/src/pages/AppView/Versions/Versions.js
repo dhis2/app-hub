@@ -133,7 +133,15 @@ VersionsTable.propTypes = {
 }
 
 const Versions = ({ installedVersion, versions }) => {
-    const [channelsFilter, setChannelsFilter] = useState(new Set(['stable']))
+    let initialChannelsFilter = new Set(['stable'])
+    if (!versions.find(v => v.channel === 'stable')) {
+        if (versions.find(v => v.channel === 'development')) {
+            initialChannelsFilter = new Set(['development'])
+        } else {
+            initialChannelsFilter = new Set(['canary'])
+        }
+    }
+    const [channelsFilter, setChannelsFilter] = useState(initialChannelsFilter)
     const filteredVersions = versions.filter(version => channelsFilter.has(version.channel))
 
     return (
