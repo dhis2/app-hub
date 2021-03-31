@@ -23,10 +23,10 @@ const AppCardItem = ({ id, name, developer, type, description, images }) => {
                     <AppIcon src={logo?.imageUrl} />
                     <div>
                         <h2 className={styles.appCardName}>{name}</h2>
-                        <span className={styles.appCardMetadata}>
+                        <span className={styles.appCardDeveloper}>
                             {developer.organisation || developer.name}
                         </span>
-                        <span className={styles.appCardMetadata}>
+                        <span className={styles.appCardType}>
                             {config.ui.appTypeToDisplayName[type]}
                         </span>
                     </div>

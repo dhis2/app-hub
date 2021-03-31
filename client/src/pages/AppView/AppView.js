@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 import { useQueryV1 } from 'src/api'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 import styles from './AppView.module.css'
-import Screenshots from './Screenshots'
+import Screenshots from './Screenshots/Screenshots'
+import Versions from './Versions/Versions'
 import classnames from 'classnames'
 import config from 'config'
 
@@ -30,6 +31,7 @@ const AppView = ({ match }) => {
 
     const logo = app.images.find(img => img.logo)
     const screenshots = app.images.filter(img => !img.logo).map(i => i.imageUrl)
+    const versions = app.versions.sort((a, b) => b.created - a.created)
 
     return (
         <div className={styles.appCardContainer}>
@@ -47,7 +49,7 @@ const AppView = ({ match }) => {
                     </div>
                 </section>
                 <Divider />
-                <section className={styles.appCardSection}>
+                <section className={styles.appCardSection} style={{ maxWidth: 544 }}>
                     <h2 className={styles.appCardHeading}>About this app</h2>
                     <p className={styles.appCardPara}>
                         {app.description || 'The developer of this app has not provided a description.'}
@@ -61,6 +63,7 @@ const AppView = ({ match }) => {
                 <Divider />
                 <section className={styles.appCardSection}>
                     <h2 className={styles.appCardHeading}>All versions of this application</h2>
+                    <Versions versions={versions} />
                 </section>
             </Card>
         </div>

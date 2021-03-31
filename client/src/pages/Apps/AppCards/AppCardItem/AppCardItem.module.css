@@ -23,10 +23,17 @@
     margin-bottom: var(--spacers-dp4);
 }
 
-.appCardMetadata {
+.appCardDeveloper, .appCardType {
     display: block;
     margin: var(--spacers-dp4) 0;
     font-size: 14px;
+}
+
+.appCardDeveloper {
+    color: var(--colors-grey800);
+}
+
+.appCardType {
     color: var(--colors-grey700)
 }
 
