@@ -50,7 +50,7 @@ const AboutSection = ({ appDescription, latestVersion }) => (
             </p>
         </div>
         <div>
-            <a download href={latestVersion.downloadUrl}>
+            <a download href={latestVersion.downloadUrl} tabIndex="-1">
                 <Button primary>Download latest version</Button>
             </a>
             <p className={styles.latestVersionDescription}>

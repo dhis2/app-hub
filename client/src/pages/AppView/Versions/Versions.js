@@ -9,9 +9,12 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    SingleSelectOption,
 } from '@dhis2/ui-core'
+import { SingleSelectField } from '@dhis2/ui-widgets/build/es/SingleSelectField/SingleSelectField'
 import React, { useState } from 'react'
 import config from 'config'
+import semver from 'semver'
 import styles from './Versions.module.css'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
@@ -36,6 +39,7 @@ const ChannelCheckbox = ({
     return (
         <div className={styles.channelCheckbox}>
             <Checkbox
+                dense
                 checked={channelsFilter.has(name)}
                 disabled={channelsFilter.size === 1 && channelsFilter.has(name)}
                 onChange={handleChange}
@@ -52,7 +56,14 @@ ChannelCheckbox.propTypes = {
     setChannelsFilter: PropTypes.func.isRequired,
 }
 
-const Filters = ({ versions, channelsFilter, setChannelsFilter }) => {
+const Filters = ({
+    versions,
+    channelsFilter,
+    setChannelsFilter,
+    dhisVersionFilter,
+    setDhisVersionFilter,
+    dhisVersions,
+}) => {
     const hasChannel = channel => versions.some(v => v.channel === channel)
 
     return (
@@ -69,13 +80,34 @@ const Filters = ({ versions, channelsFilter, setChannelsFilter }) => {
                         setChannelsFilter={setChannelsFilter}
                     />
                 ))}
+            <div className={styles.dhisVersionSelect}>
+                <SingleSelectField
+                    dense
+                    placeholder={'Select a version'}
+                    label={'Compatible with DHIS2 version'}
+                    clearable
+                    selected={dhisVersionFilter}
+                    onChange={({ selected }) => setDhisVersionFilter(selected)}
+                >
+                    {dhisVersions.map(dhisVersion => (
+                        <SingleSelectOption
+                            key={dhisVersion}
+                            label={dhisVersion}
+                            value={dhisVersion}
+                        />
+                    ))}
+                </SingleSelectField>
+            </div>
         </div>
     )
 }
 
 Filters.propTypes = {
     channelsFilter: PropTypes.object.isRequired,
+    dhisVersionFilter: PropTypes.string.isRequired,
+    dhisVersions: PropTypes.array.isRequired,
     setChannelsFilter: PropTypes.func.isRequired,
+    setDhisVersionFilter: PropTypes.func.isRequired,
     versions: PropTypes.array.isRequired,
 }
 
@@ -107,7 +139,7 @@ const VersionsTable = ({ versions }) => (
                         {new Date(version.created).toLocaleDateString()}
                     </TableCell>
                     <TableCell>
-                        <a download href={version.downloadUrl}>
+                        <a download href={version.downloadUrl} tabIndex="-1">
                             <Button small secondary>
                                 Download
                             </Button>
@@ -133,16 +165,36 @@ const Versions = ({ versions }) => {
         }
     }
     const [channelsFilter, setChannelsFilter] = useState(initialChannelsFilter)
-    const filteredVersions = versions.filter(version =>
-        channelsFilter.has(version.channel)
-    )
+    const [dhisVersionFilter, setDhisVersionFilter] = useState('')
+    const dhisVersionFilterSemver = semver.coerce(dhisVersionFilter)
+    const satisfiesDhisVersion = version => {
+        const { minDhisVersion: min, maxDhisVersion: max } = version
+        if (!dhisVersionFilter || (!min && !max)) {
+            return true
+        } else if (min && max) {
+            const range = new semver.Range(`${min} - ${max}`)
+            return semver.satisfies(dhisVersionFilterSemver, range)
+        } else if (!min && max) {
+            const range = new semver.Range(`<=${max}`)
+            return semver.satisfies(dhisVersionFilterSemver, range)
+        } else if (min && !max) {
+            const range = new semver.Range(`>=${min}`)
+            return semver.satisfies(dhisVersionFilterSemver, range)
+        }
+    }
+    const filteredVersions = versions
+        .filter(version => channelsFilter.has(version.channel))
+        .filter(satisfiesDhisVersion)
 
     return (
         <div className={styles.versionsContainer}>
             <Filters
                 versions={versions}
+                dhisVersions={config.ui.dhisVersions}
                 channelsFilter={channelsFilter}
                 setChannelsFilter={setChannelsFilter}
+                dhisVersionFilter={dhisVersionFilter}
+                setDhisVersionFilter={setDhisVersionFilter}
             />
             {filteredVersions.length > 0 ? (
                 <VersionsTable versions={filteredVersions} />
