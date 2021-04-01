@@ -86,7 +86,7 @@ const NavLink = props => (
 
 const Header = () => (
     <header className={styles.header}>
-        <div className={styles.flexContainer}>
+        <nav className={styles.nav}>
             <Link to="/" className={styles.brand}>
                 <LogoIconWhite className={styles.brandLogo} />
                 <h1 className={styles.brandText}>DHIS2 App Hub</h1>
@@ -109,7 +109,7 @@ const Header = () => (
                     </NavLink>
                 </li>
             </ul>
-        </div>
+        </nav>
 
         <ProfileButton />
     </header>

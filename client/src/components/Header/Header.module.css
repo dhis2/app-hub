@@ -14,9 +14,10 @@
     font-size: 14px;
 }
 
-.flexContainer {
+.nav {
     display: flex;
     align-items: center;
+    user-select: none;
 }
 
 .brand {
