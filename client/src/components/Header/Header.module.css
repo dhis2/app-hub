@@ -81,7 +81,7 @@
     font-size: inherit;
 }
 
-.navLink a:hover, .navLink a:focus {
+.navLink a:hover, .navLink a:focus, .activeNavLink {
     color: var(--colors-grey050);
     background: black;
 }

@@ -6,7 +6,7 @@ import DropdownMenuItemLink from './DropdownMenuItemLink/DropdownMenuItemLink'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import Icon from 'src/components/Icon/Icon'
-import { Link } from 'react-router-dom'
+import { Link, NavLink as NavLink_ } from 'react-router-dom'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUserProfile } from 'src/selectors/userSelectors'
 import styles from './Header.module.css'
@@ -66,6 +66,9 @@ const ProfileButton = () => {
             </DropdownMenuItemLink>
             <Divider dense />
             <DropdownMenuItemLink to="/user">Your apps</DropdownMenuItemLink>
+            <DropdownMenuItemLink to="/user/organisations">
+                Your organisations
+            </DropdownMenuItemLink>
             <DropdownMenuItemLink to="/user/apikey">
                 Your API keys
             </DropdownMenuItemLink>
@@ -77,6 +80,10 @@ const ProfileButton = () => {
     return <DropdownButton icon={icon} menu={menu} />
 }
 
+const NavLink = props => (
+    <NavLink_ activeClassName={styles.activeNavLink} {...props}></NavLink_>
+)
+
 const Header = () => (
     <header className={styles.header}>
         <div className={styles.flexContainer}>
@@ -87,10 +94,19 @@ const Header = () => (
 
             <ul className={styles.navLinks}>
                 <li className={styles.navLink}>
-                    <Link to="/">All apps</Link>
+                    <NavLink exact to="/">
+                        All apps
+                    </NavLink>
                 </li>
                 <li className={styles.navLink}>
-                    <Link to="/user">Your apps</Link>
+                    <NavLink exact to="/user">
+                        Your apps
+                    </NavLink>
+                </li>
+                <li className={styles.navLink}>
+                    <NavLink exact to="/user/organisations">
+                        Your organisations
+                    </NavLink>
                 </li>
             </ul>
         </div>
