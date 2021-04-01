@@ -52,14 +52,19 @@
     cursor: pointer;
 }
 
+.profileLink {
+    display: flex;
+    border-radius: 50%;
+}
+
 .signInButton:hover {
     color: var(--header-bg);
     background: white;
 }
 
-.signInButton:focus-visible {
+.signInButton:focus-visible, .profileLink:focus-visible {
     outline: 0;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
 }
 
 .navLinks {

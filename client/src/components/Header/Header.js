@@ -43,13 +43,11 @@ const ProfileButton = () => {
     }
 
     return (
-        <Link to="/user" title="Account">
+        <Link to="/user" title="Account" className={styles.profileLink}>
             {isAuthenticated && typeof profile?.picture === 'string' ? (
                 <Avatar size={24} src={profile.picture} />
             ) : (
-                <FontIcon color="white" className="material-icons">
-                    account_circle
-                </FontIcon>
+                <Icon size={24} name="account_circle" color="white" />
             )}
         </Link>
     )
