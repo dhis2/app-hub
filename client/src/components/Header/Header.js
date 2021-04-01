@@ -68,7 +68,7 @@ const Header = () => (
                     <Link to="/">All apps</Link>
                 </li>
                 <li className={styles.navLink}>
-                    <Link to="/user">My apps</Link>
+                    <Link to="/user">Your apps</Link>
                 </li>
             </ul>
         </div>
