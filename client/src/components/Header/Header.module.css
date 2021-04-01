@@ -57,8 +57,8 @@
     background: white;
 }
 
-.signInButton:focus-visible, .profileMenu:focus-visible {
-    outline: 0;
+.signInButton:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
 }
 
@@ -86,13 +86,6 @@
     background: black;
 }
 
-.profileMenu, .profileMenu::after {
-    /* Override styling from @dhis2/ui-core */
-    border: none !important;
-}
-
-.profileMenu svg {
-    /* Override styling from @dhis2/ui-core */
-    fill: white !important;
-    margin-left: var(--spacers-dp4);
+.profileName {
+    font-weight: 500;
 }

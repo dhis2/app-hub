@@ -1,18 +1,25 @@
-import {
-    DropdownButton,
-    FlyoutMenu,
-    MenuItem,
-    MenuSectionHeader,
-} from '@dhis2/ui-core'
-import { useHistory } from 'react-router-dom'
+import { Divider, LogoIconWhite } from '@dhis2/ui-core'
+import DropdownMenu from './DropdownMenu/DropdownMenu'
+import DropdownButton from './DropdownButton/DropdownButton'
+import DropdownMenuItem from './DropdownMenuItem/DropdownMenuItem'
+import DropdownMenuItemLink from './DropdownMenuItemLink/DropdownMenuItemLink'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import Icon from 'src/components/Icon/Icon'
 import { Link } from 'react-router-dom'
-import logo from 'src/assets/img/dhis2-icon-reversed.svg'
 import { useAuth0 } from '@auth0/auth0-react'
 import { getUserProfile } from 'src/selectors/userSelectors'
 import styles from './Header.module.css'
+
+const NotLoggedInIcon = () => {
+    const { loginWithRedirect } = useAuth0()
+
+    return (
+        <button className={styles.signInButton} onClick={loginWithRedirect}>
+            Sign in
+        </button>
+    )
+}
 
 const Avatar = ({ size, src }) => (
     <img
@@ -27,19 +34,11 @@ Avatar.propTypes = {
     src: PropTypes.string.isRequired,
 }
 
-const NotLoggedInIcon = () => {
-    const { loginWithRedirect } = useAuth0()
-
-    return (
-        <button className={styles.signInButton} onClick={loginWithRedirect}>
-            Sign in
-        </button>
-    )
-}
-
 const ProfileButton = () => {
-    const history = useHistory()
     const { isLoading, isAuthenticated, logout } = useAuth0()
+    const handleLogout = () => {
+        logout({ returnTo: window.location.origin })
+    }
     const profile = useSelector(getUserProfile)
 
     if (isLoading) {
@@ -57,40 +56,32 @@ const ProfileButton = () => {
             <Icon size={24} name="account_circle" color="white" />
         )
 
-    return (
-        <DropdownButton
-            className={styles.profileMenu}
-            small
-            secondary
-            icon={icon}
-            component={
-                <FlyoutMenu dense>
-                    <MenuSectionHeader
-                        label={`Signed in as ${profile.given_name ||
-                            profile.name}`}
-                    />
-                    <MenuItem
-                        label="Your apps"
-                        href="/user"
-                        onClick={() => history.push('/user')}
-                    />
-                    <MenuItem
-                        label="Sign out"
-                        onClick={() =>
-                            logout({ returnTo: window.location.origin })
-                        }
-                    />
-                </FlyoutMenu>
-            }
-        ></DropdownButton>
+    const menu = (
+        <DropdownMenu>
+            <DropdownMenuItemLink to="/user">
+                Signed in as{' '}
+                <span className={styles.profileName}>
+                    {profile.given_name || profile.name}
+                </span>
+            </DropdownMenuItemLink>
+            <Divider dense />
+            <DropdownMenuItemLink to="/user">Your apps</DropdownMenuItemLink>
+            <DropdownMenuItemLink to="/user/apikey">
+                Your API keys
+            </DropdownMenuItemLink>
+            <Divider dense />
+            <DropdownMenuItem onClick={handleLogout}>Sign out</DropdownMenuItem>
+        </DropdownMenu>
     )
+
+    return <DropdownButton icon={icon} menu={menu} />
 }
 
 const Header = () => (
     <header className={styles.header}>
         <div className={styles.flexContainer}>
             <Link to="/" className={styles.brand}>
-                <img src={logo} className={styles.brandLogo} />
+                <LogoIconWhite className={styles.brandLogo} />
                 <h1 className={styles.brandText}>DHIS2 App Hub</h1>
             </Link>
 
