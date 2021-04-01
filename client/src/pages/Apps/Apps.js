@@ -88,6 +88,7 @@ const Apps = () => {
                     <Pagination
                         className={styles.pagination}
                         hidePageSizeSelect
+                        onPageSizeChange={() => null}
                         onPageChange={setPage}
                         {...data.pager}
                     />

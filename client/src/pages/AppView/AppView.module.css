@@ -46,3 +46,17 @@
     margin-top: 0;
     margin-bottom: var(--spacers-dp8);
 }
+
+.aboutSection {
+    display: grid;
+    grid-gap: var(--spacers-dp96);
+    grid-template-columns: 60% auto;
+}
+
+.latestVersionDescription {
+    max-width: 168px;
+    margin-top: var(--spacers-dp8);
+    margin-bottom: 0;
+    font-size: 11px;
+    color: var(--colors-grey700);
+}

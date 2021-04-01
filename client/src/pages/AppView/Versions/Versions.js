@@ -11,9 +11,9 @@ import {
     TableCell,
 } from '@dhis2/ui-core'
 import React, { useState } from 'react'
-import semver from 'semver'
-import styles from './Versions.module.css'
 import config from 'config'
+import styles from './Versions.module.css'
+import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
 const channelToDisplayName = config.ui.appChannelToDisplayName
 
@@ -77,17 +77,6 @@ Filters.propTypes = {
     channelsFilter: PropTypes.object.isRequired,
     setChannelsFilter: PropTypes.func.isRequired,
     versions: PropTypes.array.isRequired,
-}
-
-const renderDhisVersionsCompatibility = (min, max) => {
-    if (min && max) {
-        return `${min}–${max}`
-    } else if (min && !max) {
-        return `${min} and above`
-    } else if (!min && max) {
-        return `${max} and below`
-    }
-    return null
 }
 
 const VersionsTable = ({ versions }) => (
