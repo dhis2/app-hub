@@ -6,14 +6,12 @@ import { Provider as ReduxProvider } from 'react-redux'
 import { history } from './utils/history'
 import Apps from './pages/Apps/Apps'
 import AppView from './pages/AppView/AppView'
+import UserView from './pages/UserView/UserView'
 import Header from './components/Header/Header'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import AuthProvider from './components/auth/AuthProvider'
 import store from './store'
 import { Auth } from './api'
-
-// import UserView from './user/UserView'
-const UserView = () => null
 
 import './styles/auth0-overrides.css'
 import './styles/styles.css'
