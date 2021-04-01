@@ -1,3 +1,10 @@
+import {
+    DropdownButton,
+    FlyoutMenu,
+    MenuItem,
+    MenuSectionHeader,
+} from '@dhis2/ui-core'
+import { useHistory } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import Icon from 'src/components/Icon/Icon'
@@ -31,7 +38,8 @@ const NotLoggedInIcon = () => {
 }
 
 const ProfileButton = () => {
-    const { isLoading, isAuthenticated } = useAuth0()
+    const history = useHistory()
+    const { isLoading, isAuthenticated, logout } = useAuth0()
     const profile = useSelector(getUserProfile)
 
     if (isLoading) {
@@ -42,14 +50,39 @@ const ProfileButton = () => {
         return <NotLoggedInIcon />
     }
 
+    const icon =
+        typeof profile?.picture === 'string' ? (
+            <Avatar size={24} src={profile.picture} />
+        ) : (
+            <Icon size={24} name="account_circle" color="white" />
+        )
+
     return (
-        <Link to="/user" title="Account" className={styles.profileLink}>
-            {isAuthenticated && typeof profile?.picture === 'string' ? (
-                <Avatar size={24} src={profile.picture} />
-            ) : (
-                <Icon size={24} name="account_circle" color="white" />
-            )}
-        </Link>
+        <DropdownButton
+            className={styles.profileMenu}
+            small
+            secondary
+            icon={icon}
+            component={
+                <FlyoutMenu dense>
+                    <MenuSectionHeader
+                        label={`Signed in as ${profile.given_name ||
+                            profile.name}`}
+                    />
+                    <MenuItem
+                        label="Your apps"
+                        href="/user"
+                        onClick={() => history.push('/user')}
+                    />
+                    <MenuItem
+                        label="Sign out"
+                        onClick={() =>
+                            logout({ returnTo: window.location.origin })
+                        }
+                    />
+                </FlyoutMenu>
+            }
+        ></DropdownButton>
     )
 }
 
