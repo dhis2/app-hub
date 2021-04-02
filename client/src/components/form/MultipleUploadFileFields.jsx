@@ -1,3 +1,5 @@
+import FontIcon from 'material-ui/FontIcon'
+import Button from 'material-ui/RaisedButton'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import {
@@ -7,11 +9,9 @@ import {
     reduxForm,
     defaultShouldValidate,
 } from 'redux-form'
+import Spinner from '../utils/Spinner'
 import * as formUtils from './ReduxFormUtils'
 import { validateImageFile } from './ReduxFormUtils'
-import Button from 'material-ui/RaisedButton'
-import Spinner from '../utils/Spinner'
-import FontIcon from 'material-ui/FontIcon'
 
 class UploadFieldsArray extends Component {
     constructor(props) {

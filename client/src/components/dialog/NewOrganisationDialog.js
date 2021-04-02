@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { addOrganisation } from '../../actions/actionCreators'
 import OrganisationForm from '../form/OrganisationForm'
+import DialogBase from './DialogBase'
 
 export class NewOrganisation extends Component {
     constructor(props) {

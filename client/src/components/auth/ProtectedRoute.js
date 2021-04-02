@@ -1,8 +1,8 @@
+import { withAuthenticationRequired } from '@auth0/auth0-react'
 import { CenteredContent, CircularLoader } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { withAuthenticationRequired } from '@auth0/auth0-react'
 import AuthService from 'src/utils/AuthService'
 
 // eslint-disable react/display-name

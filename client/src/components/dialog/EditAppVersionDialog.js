@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types'
-
 import React, { Component } from 'react'
-
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { editAppVersion, loadChannels } from '../../actions/actionCreators'
-
 import AppVersionForm from '../form/AppVersionForm'
+import DialogBase from './DialogBase'
 
 export class EditAppVersionDialog extends Component {
     constructor(props) {

@@ -1,15 +1,15 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import { Divider, LogoIconWhite } from '@dhis2/ui-core'
-import DropdownMenu from './DropdownMenu/DropdownMenu'
-import DropdownButton from './DropdownButton/DropdownButton'
-import DropdownMenuItem from './DropdownMenuItem/DropdownMenuItem'
-import DropdownMenuItemLink from './DropdownMenuItemLink/DropdownMenuItemLink'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import Icon from 'src/components/Icon/Icon'
 import { Link, NavLink as NavLink_ } from 'react-router-dom'
-import { useAuth0 } from '@auth0/auth0-react'
-import { getUserProfile } from 'src/selectors/userSelectors'
+import DropdownButton from './DropdownButton/DropdownButton'
+import DropdownMenu from './DropdownMenu/DropdownMenu'
+import DropdownMenuItem from './DropdownMenuItem/DropdownMenuItem'
+import DropdownMenuItemLink from './DropdownMenuItemLink/DropdownMenuItemLink'
 import styles from './Header.module.css'
+import Icon from 'src/components/Icon/Icon'
+import { getUserProfile } from 'src/selectors/userSelectors'
 
 const NotLoggedInIcon = () => {
     const { loginWithRedirect } = useAuth0()

@@ -1,11 +1,11 @@
+import { NoticeBox, CenteredContent, CircularLoader } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import { useEffect } from 'react'
-import { NoticeBox, CenteredContent, CircularLoader } from '@dhis2/ui-core'
-import { Route, Redirect, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUserInfo } from 'src/selectors/userSelectors'
-import { userLoad } from 'src/actions/actionCreators'
+import { Route, Redirect, Switch } from 'react-router-dom'
 import UserApps from '../UserApps/UserApps'
+import { userLoad } from 'src/actions/actionCreators'
+import { getUserInfo } from 'src/selectors/userSelectors'
 
 const UserView = ({ loadUser, user, match }) => {
     useEffect(() => {

@@ -1,7 +1,9 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types'
 
-import React from 'react'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
+import IconMenu from 'material-ui/IconMenu'
+import MenuItem from 'material-ui/MenuItem'
 import {
     Table,
     TableBody,
@@ -10,10 +12,8 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table'
-import FontIcon from 'material-ui/FontIcon'
-import IconMenu from 'material-ui/IconMenu'
-import IconButton from 'material-ui/IconButton'
-import MenuItem from 'material-ui/MenuItem'
+import PropTypes from 'prop-types'
+import React from 'react'
 import config from '../../../config'
 
 const VersionList = props => {

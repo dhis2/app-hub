@@ -1,14 +1,14 @@
+import { Card, CardText } from 'material-ui/Card'
+import FontIcon from 'material-ui/FontIcon'
+import MenuItem from 'material-ui/MenuItem'
+import Button from 'material-ui/RaisedButton'
+import SelectField from 'material-ui/SelectField'
+import TextField from 'material-ui/TextField'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import { Card, CardText } from 'material-ui/Card'
-import Button from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
-import FontIcon from 'material-ui/FontIcon'
-import UploadFileField from './UploadFileField'
-import SelectField from 'material-ui/SelectField'
-import MenuItem from 'material-ui/MenuItem'
-import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
+import * as formUtils from './ReduxFormUtils'
+import UploadFileField from './UploadFileField'
 
 const validate = values => {
     const errors = {}

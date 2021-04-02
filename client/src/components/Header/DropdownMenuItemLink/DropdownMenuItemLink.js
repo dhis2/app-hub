@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
-import { useHistory } from 'react-router-dom'
 import { useRef, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import styles from '../DropdownMenuItem/DropdownMenuItem.module.css'
 
 const isModifiedEvent = event =>

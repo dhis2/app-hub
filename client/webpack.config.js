@@ -1,11 +1,11 @@
-const webpack = require('webpack')
-const path = require('path')
 const packageJSON = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const nodeEnv = process.env.NODE_ENV || 'development'
-
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
+const path = require('path')
+const webpack = require('webpack')
 const config = require('./config/configResolver.js').default
+
+const nodeEnv = process.env.NODE_ENV || 'development'
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 
 const appEntry = path.join(__dirname, 'src', 'app-hub.js')
 

@@ -1,8 +1,8 @@
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { Provider, ReactReduxContext, connect } from 'react-redux'
-import FlatButton from 'material-ui/FlatButton'
-import Dialog from 'material-ui/Dialog'
 import { closeDialog } from '../../actions/actionCreators'
 
 const styles = {

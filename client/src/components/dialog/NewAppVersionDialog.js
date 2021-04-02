@@ -1,14 +1,10 @@
 import PropTypes from 'prop-types'
-
 import React, { Component } from 'react'
-
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { addAppVersion } from '../../actions/actionCreators'
-
 import { loadChannels } from '../../actions/actionCreators'
-
 import AppVersionForm from '../form/AppVersionForm'
+import DialogBase from './DialogBase'
 export class NewAppVersionDialog extends Component {
     constructor(props) {
         super(props)

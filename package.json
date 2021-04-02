@@ -27,7 +27,7 @@
         "format:text": "d2-style text apply"
     },
     "devDependencies": {
-        "@dhis2/cli-style": "^6.0.0",
+        "@dhis2/cli-style": "^7.3.0",
         "concurrently": "^4.1.2",
         "cross-env": "^6.0.3"
     },

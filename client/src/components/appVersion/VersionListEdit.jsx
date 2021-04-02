@@ -1,8 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types'
-
-import React, { Component, useState, useEffect } from 'react'
-
+import { useAuth0 } from '@auth0/auth0-react'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
 import {
     Table,
     TableBody,
@@ -11,10 +10,8 @@ import {
     TableRow,
     TableRowColumn,
 } from 'material-ui/Table'
-import FontIcon from 'material-ui/FontIcon'
-import IconButton from 'material-ui/IconButton'
-
-import { useAuth0 } from '@auth0/auth0-react'
+import PropTypes from 'prop-types'
+import React, { Component, useState, useEffect } from 'react'
 
 const styles = {
     tableHeaderColumn: {

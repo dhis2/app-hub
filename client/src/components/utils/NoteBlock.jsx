@@ -1,6 +1,6 @@
+import FontIcon from 'material-ui/FontIcon'
 import PropTypes from 'prop-types'
 import React from 'react'
-import FontIcon from 'material-ui/FontIcon'
 
 const styles = {
     containerStyle: {

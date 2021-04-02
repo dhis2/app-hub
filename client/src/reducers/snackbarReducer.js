@@ -1,6 +1,6 @@
+import React from 'react'
 import * as actionTypes from '../constants/actionTypes'
 import { appStatusToUI } from '../constants/apiConstants'
-import React from 'react'
 const emptySnackbar = { message: '', duration: 4000 }
 const initialState = {
     ...emptySnackbar,

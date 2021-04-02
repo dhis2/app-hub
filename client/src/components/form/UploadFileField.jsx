@@ -1,9 +1,9 @@
+import FAB from 'material-ui/FloatingActionButton'
+import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
+import TextField from 'material-ui/TextField'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import IconButton from 'material-ui/IconButton'
-import FontIcon from 'material-ui/FontIcon'
-import TextField from 'material-ui/TextField'
-import FAB from 'material-ui/FloatingActionButton'
 import Theme from '../../styles/theme'
 
 const uploadIconPosition = PropTypes.oneOf(['right', 'left'])

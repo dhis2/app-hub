@@ -1,17 +1,12 @@
-import PropTypes from 'prop-types'
-
-import React from 'react'
-
-import { connect } from 'react-redux'
-import * as formUtils from './ReduxFormUtils'
 import MenuItem from 'material-ui/MenuItem'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { connect } from 'react-redux'
 import { Field, Form, reduxForm } from 'redux-form'
-
-import { validateZipFile, validateURL, validateVersion } from './ReduxFormUtils'
-
-import ErrorOrLoading from '../utils/ErrorOrLoading'
-
 import DHISVersionItems from '../appVersion/VersionItems'
+import ErrorOrLoading from '../utils/ErrorOrLoading'
+import * as formUtils from './ReduxFormUtils'
+import { validateZipFile, validateURL, validateVersion } from './ReduxFormUtils'
 
 const validate = (values, isNew) => {
     const errors = {}

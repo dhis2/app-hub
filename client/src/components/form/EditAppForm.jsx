@@ -1,12 +1,11 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types'
-
-import React from 'react'
 import MenuItem from 'material-ui/MenuItem'
-import * as formUtils from './ReduxFormUtils'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { Field, reduxForm, Form } from 'redux-form'
-import { validateURL } from './ReduxFormUtils'
 import config from '../../../config'
+import * as formUtils from './ReduxFormUtils'
+import { validateURL } from './ReduxFormUtils'
 
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
     value: key,

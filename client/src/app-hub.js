@@ -1,7 +1,7 @@
+import Debug from 'debug'
 import React from 'react'
 import { render } from 'react-dom'
 import AppHub from './AppHub'
-import Debug from 'debug'
 
 const debug = Debug('apphub:init')
 

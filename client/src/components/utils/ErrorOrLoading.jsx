@@ -1,6 +1,5 @@
 // eslint-disable-next-line react/no-deprecated
 import PropTypes from 'prop-types'
-
 import React from 'react'
 import { Error } from './Error'
 //import { Spinner } from './Loader';

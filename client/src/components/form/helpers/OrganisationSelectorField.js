@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import IconButton from 'material-ui/IconButton'
 import FontIcon from 'material-ui/FontIcon'
+import IconButton from 'material-ui/IconButton'
 import MenuItem from 'material-ui/MenuItem'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import {
     getMe,
@@ -9,12 +9,12 @@ import {
     loadCurrentUserOrganisations,
     openDialog,
 } from '../../../actions/actionCreators'
+import * as dialogTypes from '../../../constants/dialogTypes'
 import {
     getAuthorizedOrganisationsList,
     getOrganisationMeta,
 } from '../../../selectors/organisationSelectors'
 import { isManager } from '../../../selectors/userSelectors'
-import * as dialogTypes from '../../../constants/dialogTypes'
 import { renderSelectField } from '../ReduxFormUtils'
 
 const SelectFieldRF = renderSelectField

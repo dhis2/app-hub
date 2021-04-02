@@ -6,14 +6,14 @@ import {
     Divider,
     Button,
 } from '@dhis2/ui-core'
-import PropTypes from 'prop-types'
 import classnames from 'classnames'
-import config from 'config'
-import { useQueryV1 } from 'src/api'
-import AppIcon from 'src/components/AppIcon/AppIcon'
+import PropTypes from 'prop-types'
 import styles from './AppView.module.css'
 import Screenshots from './Screenshots/Screenshots'
 import Versions from './Versions/Versions'
+import config from 'config'
+import { useQueryV1 } from 'src/api'
+import AppIcon from 'src/components/AppIcon/AppIcon'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
 const HeaderSection = ({ appName, appDeveloper, appType, logoSrc }) => (

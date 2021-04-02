@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { editOrganisation } from '../../actions/actionCreators'
 import OrganisationForm from '../form/OrganisationForm'
+import DialogBase from './DialogBase'
 
 export class EditOrganisationDialog extends Component {
     constructor(props) {

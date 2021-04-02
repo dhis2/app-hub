@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import {
     Checkbox,
     Button,
@@ -12,10 +11,11 @@ import {
     SingleSelectOption,
 } from '@dhis2/ui-core'
 import { SingleSelectField } from '@dhis2/ui-widgets/build/es/SingleSelectField/SingleSelectField'
+import PropTypes from 'prop-types'
 import React, { useState } from 'react'
-import config from 'config'
 import semver from 'semver'
 import styles from './Versions.module.css'
+import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
 const channelToDisplayName = config.ui.appChannelToDisplayName

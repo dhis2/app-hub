@@ -1,11 +1,10 @@
 // eslint-disable-next-line react/no-deprecated
 import PropTypes from 'prop-types'
-
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { editApp } from '../../actions/actionCreators'
 import EditAppForm from '../form/EditAppForm'
+import DialogBase from './DialogBase'
 
 export class EditAppDialog extends Component {
     constructor(props) {

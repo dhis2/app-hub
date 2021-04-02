@@ -1,6 +1,6 @@
+import CircularProgress from 'material-ui/CircularProgress'
 import PropTypes from 'prop-types'
 import React from 'react'
-import CircularProgress from 'material-ui/CircularProgress'
 
 const SizeType = PropTypes.oneOf(['small', 'medium', 'large'])
 const sizeMap = {

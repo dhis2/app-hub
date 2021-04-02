@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Link } from 'react-router-dom'
+import styles from './AppCardItem.module.css'
 import config from 'config'
 import AppIcon from 'src/components/AppIcon/AppIcon'
-import styles from './AppCardItem.module.css'
 
 const summarise = text => {
     const maxLength = 120

@@ -1,4 +1,6 @@
+import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
 import React, { useMemo } from 'react'
+import { useDebounce } from 'use-debounce'
 import {
     useQueryParams,
     StringParam,
@@ -7,13 +9,11 @@ import {
     decodeDelimitedArray,
     withDefault,
 } from 'use-query-params'
-import { useDebounce } from 'use-debounce'
-import { useQuery } from 'src/api'
-import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
-import config from 'config'
 import AppCards from './AppCards/AppCards'
-import Filters from './Filters/Filters'
 import styles from './Apps.module.css'
+import Filters from './Filters/Filters'
+import config from 'config'
+import { useQuery } from 'src/api'
 
 const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
 const defaultTypesFilter = new Set(Object.keys(config.ui.appTypeToDisplayName))

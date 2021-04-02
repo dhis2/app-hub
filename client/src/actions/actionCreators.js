@@ -1,5 +1,5 @@
-import * as actions from '../constants/actionTypes'
 import { REVERT, COMMIT } from 'redux-optimistic-ui'
+import * as actions from '../constants/actionTypes'
 
 //OPTIMISTIC-ACTION HANDLERS
 

@@ -1,10 +1,10 @@
+import TextField from 'material-ui/TextField'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { editImage } from '../../actions/actionCreators'
 import EditImageForm from '../form/EditImageForm'
+import DialogBase from './DialogBase'
 
 export class EditImageDialog extends Component {
     constructor(props) {

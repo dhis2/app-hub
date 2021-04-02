@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
+import * as formUtils from './ReduxFormUtils'
 
 const validate = values => {
     const errors = {}

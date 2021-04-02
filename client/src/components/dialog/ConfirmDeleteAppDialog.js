@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import DialogBase from './DialogBase'
 import { deleteApp } from '../../actions/actionCreators'
+import DialogBase from './DialogBase'
 
 export class ConfirmDeleteAppDialog extends Component {
     constructor(props) {

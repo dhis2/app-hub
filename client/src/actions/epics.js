@@ -1,8 +1,5 @@
-import * as actions from '../constants/actionTypes'
-import * as actionCreators from './actionCreators'
 import { combineEpics, ofType } from 'redux-observable'
-import { history } from '../utils/history'
-import * as api from '../api'
+import { of, from, merge } from 'rxjs'
 import {
     concatMap,
     switchMap,
@@ -13,8 +10,11 @@ import {
     distinctUntilChanged,
     tap,
 } from 'rxjs/operators'
-import { of, from, merge } from 'rxjs'
+import * as api from '../api'
+import * as actions from '../constants/actionTypes'
 import * as userSelectors from '../selectors/userSelectors'
+import { history } from '../utils/history'
+import * as actionCreators from './actionCreators'
 
 const loadAppsAll = action$ =>
     action$.pipe(

@@ -1,6 +1,6 @@
-import * as actionTypes from '../constants/actionTypes'
 import { combineReducers } from 'redux'
 import { optimistic } from 'redux-optimistic-ui'
+import * as actionTypes from '../constants/actionTypes'
 import { roles } from '../constants/apiConstants'
 
 const localStorageProfile = localStorage.getItem('profile')

@@ -1,9 +1,15 @@
+import MenuItem from 'material-ui/MenuItem'
 import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import config from '../../../config'
-import MenuItem from 'material-ui/MenuItem'
 import { Field, FormSection } from 'redux-form'
+import config from '../../../config'
+import { loadChannels } from '../../actions/actionCreators'
+import * as userSelectors from '../../selectors/userSelectors'
+import DHISVersionItems from '../appVersion/VersionItems'
+import ErrorOrLoading from '../utils/ErrorOrLoading'
+import FormStepper from './FormStepper'
+import OrganisationSelector from './helpers/OrganisationSelectorField'
 import * as formUtils from './ReduxFormUtils'
 import {
     validateZipFile,
@@ -12,12 +18,6 @@ import {
     hasError,
     validateVersion,
 } from './ReduxFormUtils'
-import FormStepper from './FormStepper'
-import OrganisationSelector from './helpers/OrganisationSelectorField'
-import { loadChannels } from '../../actions/actionCreators'
-import * as userSelectors from '../../selectors/userSelectors'
-import ErrorOrLoading from '../utils/ErrorOrLoading'
-import DHISVersionItems from '../appVersion/VersionItems'
 
 const FORM_NAME = 'uploadAppForm'
 const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({

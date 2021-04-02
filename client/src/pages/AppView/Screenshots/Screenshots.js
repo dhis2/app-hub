@@ -1,7 +1,7 @@
+import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import styles from './Screenshots.module.css'
-import classnames from 'classnames'
 
 const Screenshots = ({ screenshots }) => {
     const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState(0)
