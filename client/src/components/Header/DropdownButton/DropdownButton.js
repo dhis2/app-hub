@@ -23,7 +23,7 @@ const DropdownButton = ({ icon, menu }) => {
             {isOpen && (
                 <Layer onClick={handleClose} transparent>
                     <Popper placement="bottom-end" reference={anchorRef}>
-                        {menu}
+                        <div onClick={handleClose}>{menu}</div>
                     </Popper>
                 </Layer>
             )}

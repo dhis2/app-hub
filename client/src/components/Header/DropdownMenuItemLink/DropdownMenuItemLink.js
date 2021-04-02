@@ -3,11 +3,16 @@ import { useHistory } from 'react-router-dom'
 import { useRef, useEffect } from 'react'
 import styles from '../DropdownMenuItem/DropdownMenuItem.module.css'
 
-const DropdownMenuItem = ({ to, children, initialFocus }) => {
+const isModifiedEvent = event =>
+    event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
+
+const DropdownMenuItemLink = ({ to, children, initialFocus }) => {
     const history = useHistory()
     const handleClick = event => {
-        event.preventDefault()
-        history.push(to)
+        if (!isModifiedEvent(event)) {
+            event.preventDefault()
+            history.push(to)
+        }
     }
     const ref = useRef()
 
@@ -24,10 +29,10 @@ const DropdownMenuItem = ({ to, children, initialFocus }) => {
     )
 }
 
-DropdownMenuItem.propTypes = {
+DropdownMenuItemLink.propTypes = {
     children: PropTypes.node.isRequired,
     to: PropTypes.string.isRequired,
     initialFocus: PropTypes.bool,
 }
 
-export default DropdownMenuItem
+export default DropdownMenuItemLink
