@@ -159,8 +159,9 @@ export const renderSelectField = ({
                 input.onChange(value)
             }}
             {...props}
-            children={children}
-        />
+        >
+            {children}
+        </SelectField>
     )
 }
 
@@ -178,7 +179,7 @@ export const renderToggle = ({
             input.onChange(toggled)
             onToggle ? onToggle(toggled) : () => {}
         }}
-        toggled={input.value ? true : false}
+        toggled={!!input.value}
         {...input}
         {...props}
     />

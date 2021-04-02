@@ -5,6 +5,8 @@ import { Route } from 'react-router-dom'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
 import AuthService from 'src/utils/AuthService'
 
+// eslint-disable react/display-name
+
 const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
         <Route
