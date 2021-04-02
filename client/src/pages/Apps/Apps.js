@@ -7,6 +7,7 @@ import {
     decodeDelimitedArray,
     withDefault,
 } from 'use-query-params'
+import { useDebounce } from 'use-debounce'
 import { useQuery } from 'src/api'
 import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
 import config from 'config'
@@ -34,10 +35,11 @@ const Apps = () => {
     const [queryParams, setQueryParams] = useQueryParams({
         channels: withDefault(SetParam, defaultChannelsFilter),
         types: withDefault(SetParam, defaultTypesFilter),
-        query: StringParam,
+        query: withDefault(StringParam, ''),
         page: withDefault(NumberParam, 1),
     })
     const { channels, types, query, page } = queryParams
+    const [debouncedQuery] = useDebounce(query, 300)
     const setChannels = channels => {
         setQueryParams({ channels, page: 1 })
     }
@@ -59,7 +61,7 @@ const Apps = () => {
             page,
             pageSize: 24,
         }),
-        [channels, types, query, page]
+        [channels, types, debouncedQuery, page]
     )
     const { data, error } = useQuery('apps', params)
     const apps = data?.result

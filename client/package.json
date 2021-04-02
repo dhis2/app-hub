@@ -52,6 +52,7 @@
         "svg-loader": "^0.0.2",
         "swr": "^0.4.1",
         "transform-imports": "^2.0.0",
+        "use-debounce": "^6.0.0",
         "use-query-params": "^1.1.9"
     },
     "devDependencies": {

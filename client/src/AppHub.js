@@ -22,7 +22,10 @@ const AppHub = () => (
     <ReduxProvider store={store}>
         <AuthProvider>
             <Router history={history}>
-                <QueryParamProvider ReactRouterRoute={Route}>
+                <QueryParamProvider
+                    ReactRouterRoute={Route}
+                    stringifyOptions={{ skipEmptyString: true }}
+                >
                     <CssReset />
                     <CssVariables colors spacers />
                     <Header />

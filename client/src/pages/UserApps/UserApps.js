@@ -118,8 +118,6 @@ const UserApps = ({
         )
     }
 
-    // TODO: test with user.manager == false
-
     apps = sortBy(apps.byId, 'name')
     const approvedApps = apps.filter(app => app.status === APP_STATUS_APPROVED)
     const pendingApps = apps
