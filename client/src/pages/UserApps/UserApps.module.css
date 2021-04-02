@@ -16,8 +16,9 @@
 
 .statusCard {
     max-width: 960px;
-    background: white;
+    margin-bottom: 40px;
     padding: var(--spacers-dp16);
+    background: white;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -31,6 +32,7 @@
     margin-bottom: var(--spacers-dp12);
     font-size: 20px;
     font-weight: 500;
+    color: var(--colors-grey800);
 }
 
 .rejectedStatusCardHeader {
@@ -42,4 +44,32 @@
     font-size: 14px;
     margin-top: 0;
     margin-bottom: var(--spacers-dp24);
+}
+
+.appCard {
+    display: grid;
+    grid-template-columns: 72px auto;
+    grid-gap: var(--spacers-dp12);
+    max-width: 620px;
+    padding: var(--spacers-dp16);
+    margin-bottom: var(--spacers-dp16);
+    background: white;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.appCard:hover, .appCardFocus {
+    background: var(--colors-grey300);
+}
+
+.appCardName {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp4);
+}
+
+.appCardAction {
+    margin-bottom: var(--spacers-dp4);
+    font-size: 13px;
+    color: var(--colors-grey700);
 }
