@@ -15,13 +15,12 @@ export const getUserId = state => getUserInfo(state).userId
 
 export const getAppLogo = (state, appId) => {
     const app = ensureState(state).byId[appId]
-    if (!app) return null
-    return app.images.filter(image => image.logo)[0] || null
+    return app?.images.filter(image => image.logo)[0] || null
 }
 
 export const getUserOrganisationIds = state => state.user.organisations.list
 
 export const isManager = state => {
     const userInfo = getUserInfo(state)
-    return userInfo && userInfo.profile && userInfo.profile.manager
+    return userInfo?.profile?.manager
 }

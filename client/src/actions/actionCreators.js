@@ -243,10 +243,9 @@ export const userLoaded = profile =>
     })
 
 export const userLoadError = actionCreator(actions.USER_LOAD_ERROR)
-export const userAppsLoad = actionCreator(actions.USER_APPS_LOAD)
-export const userAppsLoaded = actionCreator(actions.USER_APPS_LOADED)
 
-export const userLogout = actionCreator(actions.USER_LOGOUT)
+export const loadUserApps = actionCreator(actions.USER_APPS_LOAD)
+export const userAppsLoaded = actionCreator(actions.USER_APPS_LOADED)
 
 export const loadUserApp = appId =>
     actionCreator(actions.APP_LOAD)({

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { withAuthenticationRequired } from '@auth0/auth0-react'
-import AuthService from '../../utils/AuthService'
+import AuthService from 'src/utils/AuthService'
 
 const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
