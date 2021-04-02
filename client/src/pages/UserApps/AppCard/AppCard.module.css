@@ -1,26 +1,16 @@
 .appCardLink {
     display: block;
+    max-width: 620px;
 }
 
 .appCard {
     display: grid;
     grid-template-columns: 72px auto;
     grid-gap: var(--spacers-dp12);
-    width: 100%;
     padding: var(--spacers-dp16);
     margin-bottom: var(--spacers-dp16);
     background: white;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
-}
-
-@media (min-width: 700px) {
-    .appCardLink {
-        display: inline-block;
-    }
-
-    .appCard {
-        width: 620px;
-    }
 }
 
 a:hover .appCard, a:focus .appCard {
