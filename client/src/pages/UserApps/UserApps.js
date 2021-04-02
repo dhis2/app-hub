@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
     APP_STATUS_APPROVED,
@@ -85,6 +85,17 @@ AppCard.propTypes = {
     app: PropTypes.object.isRequired,
 }
 
+const filterApps = (apps, query) => {
+    if (!query) {
+        return apps
+    }
+    return apps.filter(app => [
+        app.name,
+        app.appType,
+        app.developer.organisation || app.developer.name
+    ].some(prop => prop.toLowerCase().includes(query)))
+}
+
 const UserApps = ({
     user,
     apps,
@@ -92,6 +103,8 @@ const UserApps = ({
     loadUserApps,
     setAppApproval,
 }) => {
+    const [query, setQuery] = useState('')
+
     useEffect(() => {
         if (user.manager) {
             loadAllApps()
@@ -118,7 +131,7 @@ const UserApps = ({
         )
     }
 
-    apps = sortBy(apps.byId, 'name')
+    apps = filterApps(sortBy(apps.byId, 'name'), query)
     const approvedApps = apps.filter(app => app.status === APP_STATUS_APPROVED)
     const pendingApps = apps
         .filter(app => app.status === APP_STATUS_PENDING)
@@ -141,6 +154,8 @@ const UserApps = ({
                     className={styles.searchInput}
                     type="search"
                     placeholder="Search all your apps"
+                  value={query}
+                  onChange={({ value }) => setQuery(value)}
                 />
             </div>
             {apps.length === 0 && (
