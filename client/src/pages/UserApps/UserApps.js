@@ -1,99 +1,41 @@
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
-import {
-    APP_STATUS_APPROVED,
-    APP_STATUS_PENDING,
-    APP_STATUS_REJECTED,
-} from 'src/constants/apiConstants'
-import * as selectors from 'src/selectors/userSelectors'
-import {
-    loadAllApps,
-    loadUserApps,
-    setAppApproval,
-} from 'src/actions/actionCreators'
 import {
     CenteredContent,
     NoticeBox,
     CircularLoader,
     Button,
     Input,
-    Tag,
 } from '@dhis2/ui-core'
 import classnames from 'classnames'
 import sortBy from 'lodash/sortBy'
-import AppIcon from 'src/components/AppIcon/AppIcon'
+import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import AppCard from './AppCard/AppCard'
 import styles from './UserApps.module.css'
-import { relativeTimeFormat } from 'src/lib/relative-time-format'
-
-const appCardActionForStatus = appStatus => {
-    switch (appStatus) {
-        case APP_STATUS_APPROVED:
-            return 'Updated'
-        case APP_STATUS_PENDING:
-            return 'Uploaded'
-        case APP_STATUS_REJECTED:
-            return 'Reviewed'
-    }
-}
-
-const appStatusToCardText = appStatus => {
-    switch (appStatus) {
-        case APP_STATUS_APPROVED:
-            return 'Available'
-        case APP_STATUS_PENDING:
-            return 'Waiting for approval'
-        case APP_STATUS_REJECTED:
-            return 'Rejected'
-    }
-}
-
-const AppCard = ({ app }) => {
-    const logo = app.images.find(i => i.logo)
-    const actionForStatus = appCardActionForStatus(app.status)
-    const actionRelativeTime = relativeTimeFormat(
-        Math.max(...app.versions.map(v => v.created))
-    )
-
-    return (
-        <Link to={`/user/app/${app.id}`}>
-            <div className={styles.appCard}>
-                <div>
-                    <AppIcon src={logo?.imageUrl} />
-                </div>
-                <div>
-                    <h3 className={styles.appCardName}>{app.name}</h3>
-                    <div
-                        className={styles.appCardAction}
-                    >{`${actionForStatus} ${actionRelativeTime}`}</div>
-                    <div>
-                        <Tag
-                            positive={app.status === APP_STATUS_APPROVED}
-                            negative={app.status === APP_STATUS_REJECTED}
-                        >
-                            {appStatusToCardText(app.status)}
-                        </Tag>
-                    </div>
-                </div>
-            </div>
-        </Link>
-    )
-}
-
-AppCard.propTypes = {
-    app: PropTypes.object.isRequired,
-}
+import {
+    loadAllApps,
+    loadUserApps,
+    setAppApproval,
+} from 'src/actions/actionCreators'
+import {
+    APP_STATUS_APPROVED,
+    APP_STATUS_PENDING,
+    APP_STATUS_REJECTED,
+} from 'src/constants/apiConstants'
+import * as selectors from 'src/selectors/userSelectors'
 
 const filterApps = (apps, query) => {
     if (!query) {
         return apps
     }
-    return apps.filter(app => [
-        app.name,
-        app.appType,
-        app.developer.organisation || app.developer.name
-    ].some(prop => prop.toLowerCase().includes(query)))
+    return apps.filter(app =>
+        [
+            app.name,
+            app.appType,
+            app.developer.organisation || app.developer.name,
+        ].some(prop => prop.toLowerCase().includes(query))
+    )
 }
 
 const UserApps = ({
@@ -140,7 +82,14 @@ const UserApps = ({
             const bLatestVersion = Math.max(...b.versions.map(v => v.created))
             return bLatestVersion - aLatestVersion
         })
-    const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
+    // const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
+    // XXX
+    const rejectedApps = [
+        {
+            ...apps[0],
+            status: APP_STATUS_REJECTED,
+        },
+    ]
 
     return (
         <div className={styles.container}>
@@ -154,8 +103,8 @@ const UserApps = ({
                     className={styles.searchInput}
                     type="search"
                     placeholder="Search all your apps"
-                  value={query}
-                  onChange={({ value }) => setQuery(value)}
+                    value={query}
+                    onChange={({ value }) => setQuery(value)}
                 />
             </div>
             {apps.length === 0 && (
