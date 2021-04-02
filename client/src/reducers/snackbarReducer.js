@@ -90,7 +90,7 @@ const snackbarReducer = (state = initialState, action) => {
             }
         }
 
-        default:
+        default: {
             const { payload, meta } = action
             if (action.type.endsWith('_ERROR')) {
                 let message = 'An error occured'
@@ -111,6 +111,7 @@ const snackbarReducer = (state = initialState, action) => {
                     ...state,
                 }
             }
+        }
     }
 }
 
