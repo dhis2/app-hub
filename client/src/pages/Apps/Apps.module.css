@@ -5,7 +5,6 @@
     grid-template-columns: 296px auto;
     grid-gap: var(--spacers-dp24);
     color: var(--colors-grey900);
-    padding: var(--spacers-dp16);
 }
 
 .sidebar {

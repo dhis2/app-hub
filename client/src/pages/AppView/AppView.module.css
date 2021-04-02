@@ -1,6 +1,6 @@
 .appCardContainer {
     max-width: 960px;
-    margin: var(--spacers-dp16) auto;
+    margin: 0 auto;
 }
 
 .appCardSection {

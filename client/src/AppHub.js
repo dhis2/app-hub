@@ -12,6 +12,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import AuthProvider from './components/auth/AuthProvider'
 import store from './store'
 import { Auth } from './api'
+import styles from './AppHub.module.css'
 
 import './styles/auth0-overrides.css'
 import './styles/styles.css'
@@ -25,17 +26,19 @@ const AppHub = () => (
                     <CssReset />
                     <CssVariables colors spacers />
                     <Header />
-                    <Switch>
-                        <Route exact path="/" component={Apps} />
-                        <Route path="/app/:appId" component={AppView} />
-                        <ProtectedRoute
-                            path="/user"
-                            auth={Auth}
-                            component={UserView}
-                        />
-                        {/* No-match route - redirect to index */}
-                        <Route render={() => <Redirect to="/" />} />
-                    </Switch>
+                    <main className={styles.main}>
+                        <Switch>
+                            <Route exact path="/" component={Apps} />
+                            <Route path="/app/:appId" component={AppView} />
+                            <ProtectedRoute
+                                path="/user"
+                                auth={Auth}
+                                component={UserView}
+                            />
+                            {/* No-match route - redirect to index */}
+                            <Route render={() => <Redirect to="/" />} />
+                        </Switch>
+                    </main>
                 </QueryParamProvider>
             </Router>
         </AuthProvider>
