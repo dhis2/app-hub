@@ -17,7 +17,11 @@ const FallbackIcon = () => (
 
 const AppIcon = ({ src }) => (
     <div className={styles.appIcon}>
-        {src ? <img src={src} loading="lazy" /> : <FallbackIcon />}
+        {src ? (
+            <img alt="App logo" src={src} loading="lazy" />
+        ) : (
+            <FallbackIcon />
+        )}
     </div>
 )
 

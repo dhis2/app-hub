@@ -1,0 +1,46 @@
+.card {
+    display: block !important;
+    max-width: 960px;
+    margin: auto;
+    margin-bottom: var(--spacers-dp24);
+    padding: var(--spacers-dp16);
+}
+
+.cardHeader {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp12);
+}
+
+.descriptionParagraph {
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.detailsCardHeader {
+    display: grid;
+    grid-template-columns: 85px auto;
+    grid-gap: var(--spacers-dp12);
+    margin-bottom: var(--spacers-dp8);
+}
+
+.detailsCardName {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: var(--spacers-dp8);
+    margin-bottom: 6px;
+    margin-right: var(--spacers-dp8);
+}
+
+.detailsCardDeveloper {
+    color: var(--colors-grey800);
+    margin-bottom: var(--spacers-dp8);
+    margin-right: var(--spacers-dp8);
+}
+
+.detailsCardType {
+    color: var(--colors-grey700);
+    margin-right: var(--spacers-dp8);
+}

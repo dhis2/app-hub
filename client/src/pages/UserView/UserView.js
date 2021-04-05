@@ -4,8 +4,8 @@ import { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import { loadUser } from 'src/actions/actionCreators'
+import UserApp from 'src/pages/UserApp/UserApp'
 import UserApps from 'src/pages/UserApps/UserApps'
-import UserAppView from 'src/pages/UserAppView/UserAppView'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
 const PageNotFound = () => (
@@ -47,7 +47,7 @@ const UserView = ({ loadUser, user, match }) => {
             <Route exact path={match.url} component={provideUser(UserApps)} />
             <Route
                 path={`${match.url}/app/:appId`}
-                component={provideUser(UserAppView)}
+                component={provideUser(UserApp)}
             />
             {/*
             <Route

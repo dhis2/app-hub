@@ -9,6 +9,7 @@
 }
 
 .currentScreenshot {
+    display: block;
     border: 1px solid var(--colors-grey200);
 }
 
@@ -30,4 +31,8 @@
 
 .otherScreenshotCurrent:focus-visible {
     box-shadow: 0 0 0 3px #2196f37d;
+}
+
+.deleteButton {
+    margin-top: var(--spacers-dp8);
 }

@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import styles from './AppView.module.css'
 import config from 'config'
 import { useQueryV1 } from 'src/api'
+import AppDescription from 'src/components/AppDescription/AppDescription'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
@@ -40,14 +41,16 @@ const AboutSection = ({ appDescription, latestVersion }) => (
     <section className={classnames(styles.appCardSection, styles.aboutSection)}>
         <div>
             <h2 className={styles.appCardHeading}>About this app</h2>
-            <p className={styles.appCardPara}>
-                {appDescription || (
-                    <em>
-                        The developer of this app has not provided a
-                        description.
-                    </em>
-                )}
-            </p>
+            {appDescription ? (
+                <AppDescription
+                    description={appDescription}
+                    paragraphClassName={styles.appCardParagraph}
+                />
+            ) : (
+                <em>
+                    The developer of this app has not provided a description.
+                </em>
+            )}
         </div>
         <div>
             <a download href={latestVersion.downloadUrl} tabIndex="-1">

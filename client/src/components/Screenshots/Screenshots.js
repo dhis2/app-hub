@@ -18,6 +18,7 @@ const Screenshots = ({ screenshots, onDelete }) => {
 
                 {onDelete && (
                     <Button
+                        className={styles.deleteButton}
                         destructive
                         small
                         onClick={() => onDelete(currentScreenshot.id)}
