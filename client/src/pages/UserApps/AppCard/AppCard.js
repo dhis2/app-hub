@@ -1,4 +1,4 @@
-import { Tag } from '@dhis2/ui-core'
+import { Tag, Button } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styles from './AppCard.module.css'
@@ -32,7 +32,7 @@ const appStatusToCardText = appStatus => {
     }
 }
 
-const AppCard = ({ app }) => {
+const AppCard = ({ app, onApprove, onReject, onDelete }) => {
     const logo = app.images.find(i => i.logo)
     const actionForStatus = appCardActionForStatus(app.status)
     const actionRelativeTime = relativeTimeFormat(
@@ -59,6 +59,23 @@ const AppCard = ({ app }) => {
                         </Tag>
                     </div>
                 </div>
+                <div className={styles.appCardActions}>
+                    {onApprove && (
+                        <Button small onClick={onApprove}>
+                            Approve
+                        </Button>
+                    )}
+                    {onReject && (
+                        <Button small onClick={onReject}>
+                            Reject
+                        </Button>
+                    )}
+                    {onDelete && (
+                        <Button small destructive onClick={onDelete}>
+                            Delete
+                        </Button>
+                    )}
+                </div>
             </div>
         </Link>
     )
@@ -66,6 +83,9 @@ const AppCard = ({ app }) => {
 
 AppCard.propTypes = {
     app: PropTypes.object.isRequired,
+    onApprove: PropTypes.func,
+    onDelete: PropTypes.func,
+    onReject: PropTypes.func,
 }
 
 export default AppCard

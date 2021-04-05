@@ -1,6 +1,5 @@
 import React from 'react'
 import * as actionTypes from '../constants/actionTypes'
-import { appStatusToUI } from '../constants/apiConstants'
 const emptySnackbar = { message: '', duration: 4000 }
 const initialState = {
     ...emptySnackbar,
@@ -14,16 +13,7 @@ const snackbarReducer = (state = initialState, action) => {
                 message: 'New app version has been uploaded',
             }
         }
-        case actionTypes.SET_APPROVAL_APP_SUCCESS: {
-            return {
-                ...state,
-                message:
-                    'Status for ' +
-                    action.payload.app.name +
-                    ' was updated to ' +
-                    appStatusToUI[action.payload.status],
-            }
-        }
+
         case actionTypes.APP_ADD_SUCCESS: {
             return {
                 ...state,
@@ -39,13 +29,6 @@ const snackbarReducer = (state = initialState, action) => {
                         App <i>{action.payload.app.name}</i> has been updated
                     </span>
                 ),
-            }
-        }
-
-        case actionTypes.APP_DELETE_SUCCESS: {
-            return {
-                ...state,
-                message: action.payload.app.name + ' has been deleted',
             }
         }
 

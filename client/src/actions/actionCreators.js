@@ -65,10 +65,10 @@ export const loadAllApps = actionCreator(actions.APPS_ALL_LOAD)
 
 export const appsAllLoaded = actionCreator(actions.APPS_ALL_LOADED)
 
-export const setAppApproval = (app, status) =>
+export const setAppApproval = (appID, status) =>
     optimisticActionCreator(
         actionCreator(actions.SET_APPROVAL_APP)({
-            app,
+            appID,
             status,
         })
     )

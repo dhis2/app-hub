@@ -8,22 +8,23 @@ import {
 import classnames from 'classnames'
 import sortBy from 'lodash/sortBy'
 import PropTypes from 'prop-types'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import AppCard from './AppCard/AppCard'
 import styles from './UserApps.module.css'
-import {
-    loadAllApps,
-    loadUserApps,
-    setAppApproval,
-} from 'src/actions/actionCreators'
+import config from 'config'
+import * as api from 'src/api'
+import { useQueryV1 } from 'src/api'
 import {
     APP_STATUS_APPROVED,
     APP_STATUS_PENDING,
     APP_STATUS_REJECTED,
 } from 'src/constants/apiConstants'
+import { useAlert } from 'src/lib/use-alert'
 import * as selectors from 'src/selectors/userSelectors'
+
+const { appStatusToDisplayName } = config.ui
 
 const filterApps = (apps, query) => {
     if (!query) {
@@ -38,34 +39,37 @@ const filterApps = (apps, query) => {
     )
 }
 
-const UserApps = ({
-    user,
-    apps,
-    loadAllApps,
-    loadUserApps,
-    setAppApproval,
-}) => {
+const UserApps = ({ user }) => {
     const [query, setQuery] = useState('')
-
-    useEffect(() => {
-        if (user.manager) {
-            loadAllApps()
-        } else {
-            loadUserApps()
+    const { data, error, mutate } = useQueryV1(
+        user.manager ? 'apps/all' : 'apps/myapps',
+        {
+            auth: true,
         }
-    }, [])
+    )
+    const successAlert = useAlert(
+        ({ message }) => message,
+        options => ({
+            ...options,
+            success: true,
+        })
+    )
+    const errorAlert = useAlert(
+        ({ error }) => `An error occured: ${error.message}`,
+        { critical: true }
+    )
 
-    if (apps.error) {
+    if (error) {
         return (
             <CenteredContent>
                 <NoticeBox title="Error loading your apps" error>
-                    {apps.error.message}
+                    {error.message}
                 </NoticeBox>
             </CenteredContent>
         )
     }
 
-    if (apps.loading) {
+    if (!data) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -73,7 +77,7 @@ const UserApps = ({
         )
     }
 
-    apps = filterApps(sortBy(apps.byId, 'name'), query)
+    const apps = filterApps(sortBy(data, 'name'), query)
     const approvedApps = apps.filter(app => app.status === APP_STATUS_APPROVED)
     const pendingApps = apps
         .filter(app => app.status === APP_STATUS_PENDING)
@@ -82,14 +86,56 @@ const UserApps = ({
             const bLatestVersion = Math.max(...b.versions.map(v => v.created))
             return bLatestVersion - aLatestVersion
         })
-    // const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
-    // XXX
-    const rejectedApps = [
-        {
-            ...apps[0],
-            status: APP_STATUS_REJECTED,
-        },
-    ]
+    const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
+
+    const setAppStatus = (app, status) => {
+        api.setAppApproval(app.id, status)
+            .then(() => {
+                mutate(
+                    data.map(a => {
+                        if (a.id === app.id) {
+                            return { ...a, status }
+                        }
+                        return a
+                    })
+                )
+                successAlert.show({
+                    message: `Status for ${app.name} was updated to ${appStatusToDisplayName[status]}`,
+                    actions: [
+                        {
+                            label: 'Undo',
+                            onClick: () => setAppStatus(app, app.status),
+                        },
+                    ],
+                })
+            })
+            .catch(error => {
+                errorAlert.show({ error })
+            })
+    }
+
+    const handleApprove = app => {
+        setAppStatus(app, APP_STATUS_APPROVED)
+    }
+    const handleReject = app => {
+        setAppStatus(app, APP_STATUS_REJECTED)
+    }
+    const handleDelete = app => {
+        if (!window.confirm(`Are you sure you want to delete ${app.name}?`)) {
+            return
+        }
+
+        api.deleteApp(app.id)
+            .then(() => {
+                mutate(data.filter(a => a.id !== app.id))
+                successAlert.show({
+                    message: `${app.name} has been deleted`,
+                })
+            })
+            .catch(error => {
+                errorAlert.show({ error })
+            })
+    }
 
     return (
         <div className={styles.container}>
@@ -148,7 +194,14 @@ const UserApps = ({
                     </p>
 
                     {rejectedApps.map(app => (
-                        <AppCard key={app.id} app={app} />
+                        <AppCard
+                            key={app.id}
+                            app={app}
+                            onApprove={
+                                user.manager && (() => handleApprove(app))
+                            }
+                            onDelete={user.manager && (() => handleDelete(app))}
+                        />
                     ))}
                 </section>
             )}
@@ -164,7 +217,15 @@ const UserApps = ({
                     </p>
 
                     {pendingApps.map(app => (
-                        <AppCard key={app.id} app={app} />
+                        <AppCard
+                            key={app.id}
+                            app={app}
+                            onApprove={
+                                user.manager && (() => handleApprove(app))
+                            }
+                            onReject={user.manager && (() => handleReject(app))}
+                            onDelete={user.manager && (() => handleDelete(app))}
+                        />
                     ))}
                 </section>
             )}
@@ -179,7 +240,12 @@ const UserApps = ({
                     </p>
 
                     {approvedApps.map(app => (
-                        <AppCard key={app.id} app={app} />
+                        <AppCard
+                            key={app.id}
+                            app={app}
+                            onReject={user.manager && (() => handleReject(app))}
+                            onDelete={user.manager && (() => handleDelete(app))}
+                        />
                     ))}
                 </section>
             )}
@@ -188,22 +254,11 @@ const UserApps = ({
 }
 
 UserApps.propTypes = {
-    apps: PropTypes.object.isRequired,
-    loadAllApps: PropTypes.func.isRequired,
-    loadUserApps: PropTypes.func.isRequired,
-    setAppApproval: PropTypes.func.isRequired,
     user: PropTypes.object.isRequired,
 }
 
 const mapStateToProps = state => ({
     user: selectors.getUserProfile(state),
-    apps: selectors.getUserAppList(state),
 })
 
-const mapDispatchToProps = {
-    loadAllApps,
-    loadUserApps,
-    setAppApproval,
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserApps)
+export default connect(mapStateToProps)(UserApps)

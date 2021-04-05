@@ -3,7 +3,6 @@ const defaultConfig = require('./default.config')
 module.exports = {
     api: {
         // baseURL: 'http://localhost:3000/api/',
-        // baseURL: 'https://apps.dhis2.org/api/',
         baseURL: 'https://staging.apps.dhis2.org/api/',
     },
     auth0: {

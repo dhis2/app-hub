@@ -55,13 +55,10 @@ const setAppApproval = action$ =>
     action$.pipe(
         ofType(actions.SET_APPROVAL_APP),
         concatMap(action => {
-            const {
-                app: { id },
-                status,
-            } = action.payload
+            const { appID, status } = action.payload
             const { id: transactionID } = action.meta.optimistic
             return api
-                .setAppApproval(id, status)
+                .setAppApproval(appID, status)
                 .then(() =>
                     actionCreators.commitOrRevertOptimisticAction(
                         actionCreators.setAppApprovalSuccess(action.payload),
@@ -75,31 +72,6 @@ const setAppApproval = action$ =>
                             error
                         ),
                         transactionID
-                    )
-                )
-        })
-    )
-
-const deleteApp = action$ =>
-    action$.pipe(
-        ofType(actions.APP_DELETE),
-        concatMap(action => {
-            const { id } = action.meta.optimistic
-            return api
-                .deleteApp(action.payload.app.id)
-                .then(() =>
-                    actionCreators.commitOrRevertOptimisticAction(
-                        actionCreators.deleteAppSuccess(action.payload.app),
-                        id
-                    )
-                )
-                .catch(error =>
-                    actionCreators.commitOrRevertOptimisticAction(
-                        actionCreators.actionErrorCreator(
-                            actions.APP_DELETE_ERROR,
-                            error
-                        ),
-                        id
                     )
                 )
         })
@@ -626,7 +598,6 @@ export default combineEpics(
     loadAppsAll,
     loadApp,
     setAppApproval,
-    deleteApp,
     user,
     userApps,
     newVersion,

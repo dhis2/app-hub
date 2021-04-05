@@ -35,7 +35,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APPS_ALL_LOADED:
         case actionTypes.USER_APPS_LOADED: {
             const byId = {}
-            action.payload.map(app => {
+            action.payload.forEach(app => {
                 byId[app.id] = app
             })
             return {
@@ -56,7 +56,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
             }
         }
         case actionTypes.SET_APPROVAL_APP: {
-            const appId = action.payload.app.id
+            const appId = action.payload.appID
             const app = state.byId[appId]
             return {
                 ...state,
@@ -76,14 +76,13 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
             if (!app) {
                 return state
             }
-            const newVer = [...app.versions, version]
             return {
                 ...state,
                 byId: {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        versions: newVer,
+                        versions: [...app.versions, version],
                     },
                 },
             }
@@ -96,14 +95,14 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
             if (!app) {
                 return state
             }
-            const newVer = app.versions.filter(v => v.id !== version.id)
+            const versions = app.versions.filter(v => v.id !== version.id)
             return {
                 ...state,
                 byId: {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        versions: newVer,
+                        versions,
                     },
                 },
             }
@@ -151,7 +150,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_IMAGE_EDIT: {
             const { appId, imageId, data } = action.payload
             const app = state.byId[appId]
-            const list = app.images.map(elem => {
+            const images = app.images.map(elem => {
                 if (elem.id == imageId) {
                     return {
                         ...elem,
@@ -163,7 +162,9 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
                         ...elem,
                         logo: false,
                     }
-                } else return elem
+                } else {
+                    return elem
+                }
             })
             return {
                 ...state,
@@ -171,7 +172,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        images: list,
+                        images,
                     },
                 },
             }
@@ -180,14 +181,14 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_IMAGE_DELETE: {
             const { appId, imageId } = action.payload
             const app = state.byId[appId]
-            const list = app.images.filter(elem => elem.id !== imageId)
+            const images = app.images.filter(elem => elem.id !== imageId)
             return {
                 ...state,
                 byId: {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        images: list,
+                        images,
                     },
                 },
             }
@@ -196,7 +197,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
         case actionTypes.APP_VERSION_EDIT: {
             const { appId, version } = action.payload
             const app = state.byId[appId]
-            const list = app.versions.map(elem => {
+            const versions = app.versions.map(elem => {
                 if (elem.id == version.id) {
                     return {
                         ...elem,
@@ -212,7 +213,7 @@ function appListReducer(state = { ...initialState, byId: {} }, action) {
                     ...state.byId,
                     [appId]: {
                         ...app,
-                        versions: list,
+                        versions,
                     },
                 },
             }

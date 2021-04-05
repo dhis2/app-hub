@@ -5,6 +5,7 @@ import { Router, Route, Redirect, Switch } from 'react-router-dom'
 import { QueryParamProvider } from 'use-query-params'
 import { Auth } from './api'
 import styles from './AppHub.module.css'
+import AlertsProvider from './components/AlertsProvider/AlertsProvider'
 import AuthProvider from './components/auth/AuthProvider'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header/Header'
@@ -26,22 +27,24 @@ const AppHub = () => (
                     ReactRouterRoute={Route}
                     stringifyOptions={{ skipEmptyString: true }}
                 >
-                    <CssReset />
-                    <CssVariables colors spacers />
-                    <Header />
-                    <main className={styles.main}>
-                        <Switch>
-                            <Route exact path="/" component={Apps} />
-                            <Route path="/app/:appId" component={AppView} />
-                            <ProtectedRoute
-                                path="/user"
-                                auth={Auth}
-                                component={UserView}
-                            />
-                            {/* No-match route - redirect to index */}
-                            <Route render={() => <Redirect to="/" />} />
-                        </Switch>
-                    </main>
+                    <AlertsProvider>
+                        <CssReset />
+                        <CssVariables colors spacers />
+                        <Header />
+                        <main className={styles.main}>
+                            <Switch>
+                                <Route exact path="/" component={Apps} />
+                                <Route path="/app/:appId" component={AppView} />
+                                <ProtectedRoute
+                                    path="/user"
+                                    auth={Auth}
+                                    component={UserView}
+                                />
+                                {/* No-match route - redirect to index */}
+                                <Route render={() => <Redirect to="/" />} />
+                            </Switch>
+                        </main>
+                    </AlertsProvider>
                 </QueryParamProvider>
             </Router>
         </AuthProvider>

@@ -5,7 +5,7 @@
 
 .appCard {
     display: grid;
-    grid-template-columns: 72px auto;
+    grid-template-columns: 72px 1fr auto;
     grid-gap: var(--spacers-dp12);
     padding: var(--spacers-dp16);
     margin-bottom: var(--spacers-dp16);
@@ -28,4 +28,13 @@ a:hover .appCard, a:focus .appCard {
     margin-bottom: var(--spacers-dp4);
     font-size: 13px;
     color: var(--colors-grey700);
+}
+
+.appCardActions {
+    display: flex;
+    flex-direction: column;
+}
+
+.appCardActions button {
+    margin-bottom: var(--spacers-dp4);
 }
