@@ -10,7 +10,7 @@ import {
     TableCell,
     SingleSelectOption,
 } from '@dhis2/ui-core'
-import { SingleSelectField } from '@dhis2/ui-widgets/build/es/SingleSelectField/SingleSelectField'
+import { SingleSelectField } from '@dhis2/ui-widgets'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import semver from 'semver'

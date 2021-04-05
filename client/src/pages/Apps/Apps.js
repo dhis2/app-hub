@@ -1,4 +1,4 @@
-import { Pagination } from '@dhis2/ui-widgets/build/es/Pagination/Pagination'
+import { Pagination } from '@dhis2/ui-widgets'
 import React, { useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
 import {
