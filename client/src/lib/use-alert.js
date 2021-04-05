@@ -18,3 +18,21 @@ export const useAlert = (message, options = {}) => {
 
     return { show }
 }
+
+export const useSuccessAlert = () =>
+    useAlert(
+        ({ message }) => message,
+        options => ({
+            ...options,
+            success: true,
+        })
+    )
+
+export const useErrorAlert = () =>
+    useAlert(
+        ({ error }) => `An error occured: ${error.message}`,
+        options => ({
+            ...options,
+            critical: true,
+        })
+    )

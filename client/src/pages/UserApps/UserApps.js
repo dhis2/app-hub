@@ -20,7 +20,7 @@ import {
     APP_STATUS_PENDING,
     APP_STATUS_REJECTED,
 } from 'src/constants/apiConstants'
-import { useAlert } from 'src/lib/use-alert'
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const { appStatusToDisplayName } = config.ui
 
@@ -45,17 +45,8 @@ const UserApps = ({ user }) => {
             auth: true,
         }
     )
-    const successAlert = useAlert(
-        ({ message }) => message,
-        options => ({
-            ...options,
-            success: true,
-        })
-    )
-    const errorAlert = useAlert(
-        ({ error }) => `An error occured: ${error.message}`,
-        { critical: true }
-    )
+    const successAlert = useSuccessAlert()
+    const errorAlert = useErrorAlert()
 
     if (error) {
         return (
@@ -99,12 +90,16 @@ const UserApps = ({ user }) => {
             )
             successAlert.show({
                 message: `Status for ${app.name} was updated to ${appStatusToDisplayName[status]}`,
-                actions: [
-                    {
-                        label: 'Undo',
-                        onClick: () => setAppStatus(app, app.status),
-                    },
-                ],
+                // Handle notification of status change undoing
+                actions:
+                    app.status !== status
+                        ? [
+                              {
+                                  label: 'Undo',
+                                  onClick: () => setAppStatus(app, app.status),
+                              },
+                          ]
+                        : null,
             })
         } catch (error) {
             errorAlert.show({ error })

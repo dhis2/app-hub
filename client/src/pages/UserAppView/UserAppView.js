@@ -11,6 +11,7 @@ import * as api from 'src/api'
 import { useQueryV1 } from 'src/api'
 import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
+import { useAlert, useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const DetailsCard = ({ app }) => (
     <Card className={styles.card}>
@@ -44,6 +45,8 @@ const VersionsCard = ({ app }) => {
 }
 
 const ScreenshotsCard = ({ app, mutate }) => {
+    const successAlert = useSuccessAlert()
+    const errorAlert = useErrorAlert()
     const screenshots = app.images.filter(img => !img.logo)
     const handleScreenshotDelete = async imageId => {
         try {
@@ -97,9 +100,6 @@ const UserAppView = ({ match, user }) => {
             </CenteredContent>
         )
     }
-
-    // TODO: don't include logo as part of screenshots - instead let user edit
-    // it in header
 
     return (
         <>

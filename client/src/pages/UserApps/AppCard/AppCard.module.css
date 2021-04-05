@@ -1,19 +1,26 @@
-.appCardLink {
-    display: block;
-    max-width: 620px;
-}
-
 .appCard {
     display: grid;
-    grid-template-columns: 72px 1fr auto;
+    grid-template-columns: 1fr auto;
     grid-gap: var(--spacers-dp12);
-    padding: var(--spacers-dp16);
+    max-width: 620px;
     margin-bottom: var(--spacers-dp16);
     background: white;
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-a:hover .appCard, a:focus .appCard {
+.appCardLink, .appCardActions {
+    padding: var(--spacers-dp16);
+}
+
+.appCardLink {
+    padding-right: 0;
+}
+
+.appCardActions {
+    padding-left: 0;
+}
+
+.appCardLink:focus {
     background: var(--colors-grey200);
 }
 

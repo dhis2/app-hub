@@ -40,8 +40,8 @@ const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
     )
 
     return (
-        <Link to={`/user/app/${app.id}`} className={styles.appCardLink}>
-            <div className={styles.appCard}>
+        <div className={styles.appCard}>
+            <Link to={`/user/app/${app.id}`} className={styles.appCardLink}>
                 <div>
                     <AppIcon src={logo?.imageUrl} />
                 </div>
@@ -59,34 +59,34 @@ const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
                         </Tag>
                     </div>
                 </div>
-                <div className={styles.appCardActions}>
-                    {showUploadButton &&
-                        (app.status === APP_STATUS_REJECTED ||
-                            app.status === APP_STATUS_APPROVED) && (
-                            <Link to="/user/app/${app.id}/upload">
-                                <Button small tabIndex="0">
-                                    Upload new version
-                                </Button>
-                            </Link>
-                        )}
-                    {onApprove && (
-                        <Button small onClick={onApprove}>
-                            Approve
-                        </Button>
+            </Link>
+            <div className={styles.appCardActions}>
+                {showUploadButton &&
+                    (app.status === APP_STATUS_REJECTED ||
+                        app.status === APP_STATUS_APPROVED) && (
+                        <Link to="/user/app/${app.id}/upload">
+                            <Button small tabIndex="0">
+                                Upload new version
+                            </Button>
+                        </Link>
                     )}
-                    {onReject && (
-                        <Button small onClick={onReject}>
-                            Reject
-                        </Button>
-                    )}
-                    {onDelete && (
-                        <Button small destructive onClick={onDelete}>
-                            Delete
-                        </Button>
-                    )}
-                </div>
+                {onApprove && (
+                    <Button small onClick={onApprove}>
+                        Approve
+                    </Button>
+                )}
+                {onReject && (
+                    <Button small onClick={onReject}>
+                        Reject
+                    </Button>
+                )}
+                {onDelete && (
+                    <Button small destructive onClick={onDelete}>
+                        Delete
+                    </Button>
+                )}
             </div>
-        </Link>
+        </div>
     )
 }
 
