@@ -32,7 +32,7 @@ const appStatusToCardText = appStatus => {
     }
 }
 
-const AppCard = ({ app, onApprove, onReject, onDelete }) => {
+const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
     const logo = app.images.find(i => i.logo)
     const actionForStatus = appCardActionForStatus(app.status)
     const actionRelativeTime = relativeTimeFormat(
@@ -60,6 +60,15 @@ const AppCard = ({ app, onApprove, onReject, onDelete }) => {
                     </div>
                 </div>
                 <div className={styles.appCardActions}>
+                    {showUploadButton &&
+                        (app.status === APP_STATUS_REJECTED ||
+                            app.status === APP_STATUS_APPROVED) && (
+                            <Link to="/user/app/${app.id}/upload">
+                                <Button small tabIndex="0">
+                                    Upload new version
+                                </Button>
+                            </Link>
+                        )}
                     {onApprove && (
                         <Button small onClick={onApprove}>
                             Approve
@@ -83,6 +92,7 @@ const AppCard = ({ app, onApprove, onReject, onDelete }) => {
 
 AppCard.propTypes = {
     app: PropTypes.object.isRequired,
+    showUploadButton: PropTypes.bool,
     onApprove: PropTypes.func,
     onDelete: PropTypes.func,
     onReject: PropTypes.func,

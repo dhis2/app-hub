@@ -197,6 +197,7 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
+                            showUploadButton={!user.manager}
                             onApprove={
                                 user.manager && (() => handleApprove(app))
                             }
@@ -220,6 +221,7 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
+                            showUploadButton={!user.manager}
                             onApprove={
                                 user.manager && (() => handleApprove(app))
                             }
@@ -243,6 +245,7 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
+                            showUploadButton={!user.manager}
                             onReject={user.manager && (() => handleReject(app))}
                             onDelete={user.manager && (() => handleDelete(app))}
                         />
