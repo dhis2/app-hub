@@ -1,4 +1,4 @@
-import { CssVariables, CssReset } from '@dhis2/ui-core'
+import { CssVariables, CssReset } from '@dhis2/ui'
 import React from 'react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { Router, Route, Redirect, Switch } from 'react-router-dom'

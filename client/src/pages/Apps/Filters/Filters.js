@@ -1,4 +1,4 @@
-import { Input, Checkbox, Divider } from '@dhis2/ui-core'
+import { Input, Checkbox, Divider } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import styles from './Filters.module.css'
 

@@ -1,5 +1,5 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react'
-import { CenteredContent, CircularLoader } from '@dhis2/ui-core'
+import { CenteredContent, CircularLoader } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import { Route } from 'react-router-dom'

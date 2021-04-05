@@ -4,14 +4,12 @@ import {
     CircularLoader,
     Card,
     Button,
-} from '@dhis2/ui-core'
-import {
     ReactFinalForm,
     InputFieldFF,
     TextAreaFieldFF,
     SingleSelectFieldFF,
     hasValue,
-} from '@dhis2/ui-forms'
+} from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useHistory } from 'react-router-dom'

@@ -1,4 +1,4 @@
-import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui-core'
+import { CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import AppCardItem from './AppCardItem/AppCardItem'
 import styles from './AppCards.module.css'

@@ -1,4 +1,4 @@
-import { Card } from '@dhis2/ui-core'
+import { Card } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { Children, cloneElement } from 'react'
 import styles from './DropdownMenu.module.css'

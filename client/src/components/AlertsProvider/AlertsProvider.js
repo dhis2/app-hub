@@ -1,4 +1,4 @@
-import { AlertBar, AlertStack } from '@dhis2/ui-core'
+import { AlertBar, AlertStack } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import AlertsContext from './AlertsContext'

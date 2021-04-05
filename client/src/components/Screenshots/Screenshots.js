@@ -1,4 +1,4 @@
-import { Button } from '@dhis2/ui-core'
+import { Button } from '@dhis2/ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { useState } from 'react'

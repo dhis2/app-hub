@@ -1,5 +1,5 @@
-import { Pagination } from '@dhis2/ui-widgets'
-import React, { useMemo } from 'react'
+import { Pagination } from '@dhis2/ui'
+import { useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
 import {
     useQueryParams,

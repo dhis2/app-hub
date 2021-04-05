@@ -8,9 +8,9 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    SingleSelectField,
     SingleSelectOption,
-} from '@dhis2/ui-core'
-import { SingleSelectField } from '@dhis2/ui-widgets'
+} from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import semver from 'semver'

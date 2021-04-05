@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import { Divider, LogoIconWhite } from '@dhis2/ui-core'
+import { Divider, LogoIconWhite } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { Link, NavLink as NavLink_ } from 'react-router-dom'

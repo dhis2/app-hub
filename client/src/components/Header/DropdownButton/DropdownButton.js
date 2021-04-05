@@ -1,4 +1,4 @@
-import { Layer, Popper } from '@dhis2/ui-core'
+import { Layer, Popper } from '@dhis2/ui'
 import { ArrowDown } from '@dhis2/ui-core/build/es/Icons/Arrow'
 import PropTypes from 'prop-types'
 import { useState, useRef } from 'react'

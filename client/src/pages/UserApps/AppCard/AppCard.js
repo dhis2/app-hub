@@ -1,4 +1,4 @@
-import { Tag, Button } from '@dhis2/ui-core'
+import { Tag, Button } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styles from './AppCard.module.css'

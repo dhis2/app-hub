@@ -5,7 +5,7 @@ import {
     Card,
     Button,
     Divider,
-} from '@dhis2/ui-core'
+} from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import styles from './UserApp.module.css'

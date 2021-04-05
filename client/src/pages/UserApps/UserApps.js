@@ -4,7 +4,7 @@ import {
     CircularLoader,
     Button,
     Input,
-} from '@dhis2/ui-core'
+} from '@dhis2/ui'
 import classnames from 'classnames'
 import sortBy from 'lodash/sortBy'
 import PropTypes from 'prop-types'

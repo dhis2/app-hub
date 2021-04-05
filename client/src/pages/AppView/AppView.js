@@ -5,7 +5,7 @@ import {
     Card,
     Divider,
     Button,
-} from '@dhis2/ui-core'
+} from '@dhis2/ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import styles from './AppView.module.css'

@@ -1,4 +1,4 @@
-import { NoticeBox, CenteredContent, CircularLoader } from '@dhis2/ui-core'
+import { NoticeBox, CenteredContent, CircularLoader } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
