@@ -2,10 +2,17 @@ import { NoticeBox, CenteredContent, CircularLoader } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
 import { useEffect } from 'react'
 import { connect } from 'react-redux'
-import { Route, Redirect, Switch } from 'react-router-dom'
-import UserApps from '../UserApps/UserApps'
-import { userLoad } from 'src/actions/actionCreators'
+import { Route, Switch } from 'react-router-dom'
+import { loadUser } from 'src/actions/actionCreators'
+import UserApps from 'src/pages/UserApps/UserApps'
+import UserAppView from 'src/pages/UserAppView/UserAppView'
 import { getUserInfo } from 'src/selectors/userSelectors'
+
+const PageNotFound = () => (
+    <CenteredContent>
+        <NoticeBox title="Page not found" error></NoticeBox>
+    </CenteredContent>
+)
 
 const UserView = ({ loadUser, user, match }) => {
     useEffect(() => {
@@ -15,7 +22,7 @@ const UserView = ({ loadUser, user, match }) => {
     if (user.error) {
         return (
             <CenteredContent>
-                <NoticeBox title="Error loading your profile">
+                <NoticeBox title="Error loading your profile" error>
                     {user.error.message}
                 </NoticeBox>
             </CenteredContent>
@@ -30,14 +37,19 @@ const UserView = ({ loadUser, user, match }) => {
         )
     }
 
+    // eslint-disable-next-line react/display-name
+    const provideUser = Component => props => (
+        <Component {...props} user={user.profile} />
+    )
+
     return (
         <Switch>
-            <Route exact path={match.url} component={UserApps} />
-            {/*
+            <Route exact path={match.url} component={provideUser(UserApps)} />
             <Route
                 path={`${match.url}/app/:appId`}
-                component={UserAppView}
+                component={provideUser(UserAppView)}
             />
+            {/*
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}
@@ -52,8 +64,8 @@ const UserView = ({ loadUser, user, match }) => {
                 component={UserOrganisationView}
             />
             */}
-            {/* No-match route - redirect to index */}
-            <Route render={() => <Redirect to="/user" />} />
+            {/* No-match route */}
+            <Route render={PageNotFound} />
         </Switch>
     )
 }
@@ -68,10 +80,8 @@ const mapStateToProps = state => ({
     user: getUserInfo(state),
 })
 
-const mapDispatchToProps = dispatch => ({
-    loadUser() {
-        dispatch(userLoad())
-    },
-})
+const mapDispatchToProps = {
+    loadUser,
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserView)

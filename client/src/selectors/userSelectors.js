@@ -9,8 +9,6 @@ export const getUserInfo = state => state.user.userInfo
 
 export const getUserProfile = state => getUserInfo(state).profile
 
-export const getUserAppList = state => ensureState(state)
-
 export const getUserId = state => getUserInfo(state).userId
 
 export const getAppLogo = (state, appId) => {

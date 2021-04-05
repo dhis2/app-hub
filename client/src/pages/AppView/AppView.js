@@ -9,11 +9,11 @@ import {
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import styles from './AppView.module.css'
-import Screenshots from './Screenshots/Screenshots'
-import Versions from './Versions/Versions'
 import config from 'config'
 import { useQueryV1 } from 'src/api'
 import AppIcon from 'src/components/AppIcon/AppIcon'
+import Screenshots from 'src/components/Screenshots/Screenshots'
+import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
 const HeaderSection = ({ appName, appDeveloper, appType, logoSrc }) => (
@@ -91,7 +91,7 @@ const AppView = ({ match }) => {
 
     const appDeveloper = app.developer.organisation || app.developer.name
     const logoSrc = app.images.find(img => img.logo)?.imageUrl
-    const screenshots = app.images.filter(img => !img.logo).map(i => i.imageUrl)
+    const screenshots = app.images.filter(img => !img.logo)
     const versions = app.versions.sort((a, b) => b.created - a.created)
     const latestVersion = versions[0]
 
@@ -110,11 +110,17 @@ const AppView = ({ match }) => {
                     latestVersion={latestVersion}
                 />
                 <Divider />
-                <section className={styles.appCardSection}>
-                    <h2 className={styles.appCardHeading}>Screenshots</h2>
-                    <Screenshots screenshots={screenshots} />
-                </section>
-                <Divider />
+                {screenshots.length > 0 && (
+                    <>
+                        <section className={styles.appCardSection}>
+                            <h2 className={styles.appCardHeading}>
+                                Screenshots
+                            </h2>
+                            <Screenshots screenshots={screenshots} />
+                        </section>
+                        <Divider />
+                    </>
+                )}
                 <section className={styles.appCardSection}>
                     <h2 className={styles.appCardHeading}>
                         All versions of this application

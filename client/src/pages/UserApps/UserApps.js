@@ -9,7 +9,6 @@ import classnames from 'classnames'
 import sortBy from 'lodash/sortBy'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
-import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import AppCard from './AppCard/AppCard'
 import styles from './UserApps.module.css'
@@ -22,7 +21,6 @@ import {
     APP_STATUS_REJECTED,
 } from 'src/constants/apiConstants'
 import { useAlert } from 'src/lib/use-alert'
-import * as selectors from 'src/selectors/userSelectors'
 
 const { appStatusToDisplayName } = config.ui
 
@@ -88,30 +86,29 @@ const UserApps = ({ user }) => {
         })
     const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
 
-    const setAppStatus = (app, status) => {
-        api.setAppApproval(app.id, status)
-            .then(() => {
-                mutate(
-                    data.map(a => {
-                        if (a.id === app.id) {
-                            return { ...a, status }
-                        }
-                        return a
-                    })
-                )
-                successAlert.show({
-                    message: `Status for ${app.name} was updated to ${appStatusToDisplayName[status]}`,
-                    actions: [
-                        {
-                            label: 'Undo',
-                            onClick: () => setAppStatus(app, app.status),
-                        },
-                    ],
+    const setAppStatus = async (app, status) => {
+        try {
+            await api.setAppApproval(app.id, status)
+            mutate(
+                data.map(a => {
+                    if (a.id === app.id) {
+                        return { ...a, status }
+                    }
+                    return a
                 })
+            )
+            successAlert.show({
+                message: `Status for ${app.name} was updated to ${appStatusToDisplayName[status]}`,
+                actions: [
+                    {
+                        label: 'Undo',
+                        onClick: () => setAppStatus(app, app.status),
+                    },
+                ],
             })
-            .catch(error => {
-                errorAlert.show({ error })
-            })
+        } catch (error) {
+            errorAlert.show({ error })
+        }
     }
 
     const handleApprove = app => {
@@ -120,21 +117,20 @@ const UserApps = ({ user }) => {
     const handleReject = app => {
         setAppStatus(app, APP_STATUS_REJECTED)
     }
-    const handleDelete = app => {
+    const handleDelete = async app => {
         if (!window.confirm(`Are you sure you want to delete ${app.name}?`)) {
             return
         }
 
-        api.deleteApp(app.id)
-            .then(() => {
-                mutate(data.filter(a => a.id !== app.id))
-                successAlert.show({
-                    message: `${app.name} has been deleted`,
-                })
+        try {
+            await api.deleteApp(app.id)
+            mutate(data.filter(a => a.id !== app.id))
+            successAlert.show({
+                message: `${app.name} has been deleted`,
             })
-            .catch(error => {
-                errorAlert.show({ error })
-            })
+        } catch (error) {
+            errorAlert.show({ error })
+        }
     }
 
     return (
@@ -260,8 +256,4 @@ UserApps.propTypes = {
     user: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = state => ({
-    user: selectors.getUserProfile(state),
-})
-
-export default connect(mapStateToProps)(UserApps)
+export default UserApps

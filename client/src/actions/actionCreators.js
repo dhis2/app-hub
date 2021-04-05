@@ -78,7 +78,7 @@ export const setAppApprovalSuccess = payload =>
         ...payload,
     })
 
-export const userLoad = actionCreator(actions.USER_LOAD)
+export const loadUser = actionCreator(actions.USER_LOAD)
 
 export const addAppVersion = (version, file, appId) =>
     actionCreator(actions.APP_VERSION_ADD)({
