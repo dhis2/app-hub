@@ -1,8 +1,8 @@
-const packageJSON = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path')
 const webpack = require('webpack')
 const config = require('./config/configResolver.js').default
+const packageJSON = require('./package.json')
 
 const nodeEnv = process.env.NODE_ENV || 'development'
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
@@ -59,6 +59,10 @@ const webpackConfig = {
         alias: {
             config: path.resolve(__dirname, 'config/'),
             src: path.resolve(__dirname, 'src/'),
+            '@dhis2/app-runtime': path.resolve(
+                __dirname,
+                'app-runtime-mock.js'
+            ),
         },
     },
     plugins: [

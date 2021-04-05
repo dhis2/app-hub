@@ -7,6 +7,7 @@ import {
     Divider,
 } from '@dhis2/ui-core'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import styles from './UserApp.module.css'
 import config from 'config'
 import * as api from 'src/api'
@@ -24,29 +25,34 @@ const DetailsCard = ({ app }) => {
     const appDeveloper = app.developer.organisation || app.developer.name
     const appType = appTypeToDisplayName[app.appType]
 
+    const EditButton = ({ children }) => (
+        <Link to={`/user/app/${app.id}/edit`}>
+            <Button tabIndex="0" small>
+                {children}
+            </Button>
+        </Link>
+    )
+
     return (
         <Card className={styles.card}>
             <section className={styles.detailsCardHeader}>
                 <div>
                     <AppIcon src={logo?.imageUrl} />
-                    <Button small>Edit logo</Button>
+                    <EditButton>Edit logo</EditButton>
                 </div>
                 <div>
                     <div>
                         <h2 className={styles.detailsCardName}>{app.name}</h2>
-                        <Button small>Edit name</Button>
+                        <EditButton>Edit name</EditButton>
                     </div>
-                    <div>
-                        <span className={styles.detailsCardDeveloper}>
-                            by {appDeveloper}
-                        </span>
-                        <Button small>Edit developer</Button>
-                    </div>
+                    <span className={styles.detailsCardDeveloper}>
+                        by {appDeveloper}
+                    </span>
                     <div>
                         <span className={styles.detailsCardType}>
                             {appType}
                         </span>
-                        <Button small>Edit app type</Button>
+                        <EditButton>Edit app type</EditButton>
                     </div>
                 </div>
             </section>
@@ -54,22 +60,30 @@ const DetailsCard = ({ app }) => {
             <section>
                 <h2 className={styles.cardHeader}>Description</h2>
                 <div style={{ display: 'flex' }}>
-                    {app.description ? (
-                        <>
-                            <div style={{ maxWidth: 640, marginRight: 8 }}>
-                                <AppDescription
-                                    description={app.description}
-                                    paragraphClassName={
-                                        styles.descriptionParagraph
-                                    }
-                                />
-                            </div>
-                            <Button small>Edit description</Button>
-                        </>
-                    ) : (
-                        <Button primary>Add a description</Button>
-                    )}
+                    <div style={{ maxWidth: 640, marginRight: 8 }}>
+                        {app.description ? (
+                            <AppDescription
+                                description={app.description}
+                                paragraphClassName={styles.descriptionParagraph}
+                            />
+                        ) : (
+                            <em>No description provided</em>
+                        )}
+                    </div>
+                    <EditButton>Edit description</EditButton>
                 </div>
+            </section>
+            <Divider />
+            <section>
+                <h2 className={styles.cardHeader}>Source code URL</h2>
+                <span style={{ marginRight: 8 }}>
+                    {app.sourceUrl ? (
+                        <a href="{app.sourceUrl}">{app.sourceUrl}</a>
+                    ) : (
+                        <em>No source code URL provided</em>
+                    )}
+                </span>
+                <EditButton>Edit source code URL</EditButton>
             </section>
         </Card>
     )
@@ -120,12 +134,12 @@ const ScreenshotsCard = ({ app, mutate }) => {
             ) : (
                 <em>This app has no screenshots</em>
             )}
-            {/* Buttons to upload images */}
+            {/* TODO: Buttons to upload images */}
         </Card>
     )
 }
 
-const UserApp = ({ match, user }) => {
+const UserApp = ({ match }) => {
     const { appId } = match.params
     const { data: app, error, mutate } = useQueryV1(`apps/${appId}`, {
         auth: true,
@@ -159,7 +173,7 @@ const UserApp = ({ match, user }) => {
 }
 
 UserApp.propTypes = {
-    user: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
 }
 
 export default UserApp

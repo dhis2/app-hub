@@ -35,9 +35,9 @@
 }
 
 .detailsCardDeveloper {
+    display: block;
     color: var(--colors-grey800);
     margin-bottom: var(--spacers-dp8);
-    margin-right: var(--spacers-dp8);
 }
 
 .detailsCardType {

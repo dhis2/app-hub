@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import { loadUser } from 'src/actions/actionCreators'
 import UserApp from 'src/pages/UserApp/UserApp'
+import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
@@ -45,11 +46,18 @@ const UserView = ({ loadUser, user, match }) => {
     return (
         <Switch>
             <Route exact path={match.url} component={provideUser(UserApps)} />
+            <Route exact path={`${match.url}/app/:appId`} component={UserApp} />
             <Route
-                path={`${match.url}/app/:appId`}
-                component={provideUser(UserApp)}
+                exact
+                path={`${match.url}/app/:appId/edit`}
+                component={UserAppEdit}
             />
             {/*
+            <Route
+                exact
+                path={`${match.url}/app/:appId/version/:versionId/edit`}
+                component={provideUser(UserAppEdit)}
+            />
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}

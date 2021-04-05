@@ -1,0 +1,140 @@
+import {
+    CenteredContent,
+    NoticeBox,
+    CircularLoader,
+    Card,
+    Button,
+} from '@dhis2/ui-core'
+import {
+    ReactFinalForm,
+    InputFieldFF,
+    TextAreaFieldFF,
+    SingleSelectFieldFF,
+    hasValue,
+} from '@dhis2/ui-forms'
+import PropTypes from 'prop-types'
+import { useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import styles from './UserAppEdit.module.css'
+import config from 'config'
+import { useQueryV1 } from 'src/api'
+import * as api from 'src/api'
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+
+const { appTypeToDisplayName } = config.ui
+
+const UserAppEdit = ({ match }) => {
+    const { appId } = match.params
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const { data: app, error } = useQueryV1(`apps/${appId}`, { auth: true })
+    const history = useHistory()
+    const successAlert = useSuccessAlert()
+    const errorAlert = useErrorAlert()
+
+    const handleSubmit = async values => {
+        setIsSubmitting(true)
+        try {
+            await api.updateApp(app.id, values)
+            successAlert.show({ message: 'App updated successfully' })
+            history.push(`/user/app/${app.id}`)
+        } catch (error) {
+            setIsSubmitting(false)
+            errorAlert.show({ error })
+        }
+    }
+
+    if (error) {
+        return (
+            <CenteredContent>
+                <NoticeBox title="Error loading your app" error>
+                    {error.message}
+                </NoticeBox>
+            </CenteredContent>
+        )
+    }
+
+    if (!app) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
+    }
+
+    return (
+        <Card className={styles.card}>
+            <header className={styles.header}>
+                <h2 className={styles.headerText}>Edit app</h2>
+                <a
+                    className={styles.guidelinesLink}
+                    href="https://developers.dhis2.org/docs/guides/apphub-guidelines"
+                >
+                    App Hub guidelines
+                </a>
+            </header>
+
+            <ReactFinalForm.Form onSubmit={handleSubmit}>
+                {({ handleSubmit }) => (
+                    <form onSubmit={handleSubmit}>
+                        <ReactFinalForm.Field
+                            required
+                            name="name"
+                            label="App name"
+                            placeholder="e.g. 'Data Visualizer' or 'Interactive Scorecards'"
+                            helpText="Try to capture the core functionality of the app in a few words."
+                            initialValue={app.name}
+                            component={InputFieldFF}
+                            className={styles.field}
+                            validate={hasValue}
+                        />
+                        <ReactFinalForm.Field
+                            required
+                            name="description"
+                            label="App description"
+                            placeholder="What is the purpose of this app?"
+                            helpText="A good app description helps users of the App Hub quickly understand what the purpose of an app is and any requirements to using it."
+                            initialValue={app.description}
+                            component={TextAreaFieldFF}
+                            className={styles.field}
+                            validate={hasValue}
+                            autoGrow
+                        />
+                        <ReactFinalForm.Field
+                            required
+                            name="appType"
+                            label="App type"
+                            initialValue={app.appType}
+                            component={SingleSelectFieldFF}
+                            className={styles.field}
+                            options={Object.entries(appTypeToDisplayName).map(
+                                ([value, label]) => ({
+                                    label,
+                                    value,
+                                })
+                            )}
+                            validate={hasValue}
+                        />
+                        <ReactFinalForm.Field
+                            name="sourceUrl"
+                            label="Source code URL"
+                            placeholder="e.g. https://github.com/user/app"
+                            helpText="Sharing the source code of your app lets technical users evaluate if the app is right for their instance."
+                            initialValue={app.sourceUrl}
+                            component={InputFieldFF}
+                            className={styles.field}
+                        />
+                        <Button primary type="submit" disabled={isSubmitting}>
+                            Update app
+                        </Button>
+                    </form>
+                )}
+            </ReactFinalForm.Form>
+        </Card>
+    )
+}
+
+UserAppEdit.propTypes = {
+    match: PropTypes.object.isRequired,
+}
+
+export default UserAppEdit
