@@ -111,7 +111,7 @@ Filters.propTypes = {
     versions: PropTypes.array.isRequired,
 }
 
-const VersionsTable = ({ versions }) => (
+const VersionsTable = ({ versions, renderEditVersionButton }) => (
     <Table>
         <TableHead>
             <TableRowHead>
@@ -144,6 +144,8 @@ const VersionsTable = ({ versions }) => (
                                 Download
                             </Button>
                         </a>
+                        {renderEditVersionButton &&
+                            renderEditVersionButton(version)}
                     </TableCell>
                 </TableRow>
             ))}
@@ -155,7 +157,7 @@ VersionsTable.propTypes = {
     versions: PropTypes.array.isRequired,
 }
 
-const Versions = ({ versions }) => {
+const Versions = ({ versions, renderEditVersionButton }) => {
     let initialChannelsFilter = new Set(['stable'])
     if (!versions.find(v => v.channel === 'stable')) {
         if (versions.find(v => v.channel === 'development')) {
@@ -197,7 +199,10 @@ const Versions = ({ versions }) => {
                 setDhisVersionFilter={setDhisVersionFilter}
             />
             {filteredVersions.length > 0 ? (
-                <VersionsTable versions={filteredVersions} />
+                <VersionsTable
+                    versions={filteredVersions}
+                    renderEditVersionButton={renderEditVersionButton}
+                />
             ) : (
                 <em>There are no compatible versions matching your criteria</em>
             )}
@@ -207,6 +212,7 @@ const Versions = ({ versions }) => {
 
 Versions.propTypes = {
     versions: PropTypes.array.isRequired,
+    renderEditVersionButton: PropTypes.func,
 }
 
 export default Versions

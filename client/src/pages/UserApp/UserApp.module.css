@@ -44,3 +44,7 @@
     color: var(--colors-grey700);
     margin-right: var(--spacers-dp8);
 }
+
+.editVersionButton {
+    margin-left: var(--spacers-dp8);
+}

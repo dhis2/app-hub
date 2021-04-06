@@ -26,10 +26,8 @@ const DetailsCard = ({ app }) => {
     const appType = appTypeToDisplayName[app.appType]
 
     const EditButton = ({ children }) => (
-        <Link to={`/user/app/${app.id}/edit`}>
-            <Button tabIndex="0" small>
-                {children}
-            </Button>
+        <Link to={`/user/app/${app.id}/edit`} tabIndex="-1">
+            <Button small>{children}</Button>
         </Link>
     )
 
@@ -91,11 +89,25 @@ const DetailsCard = ({ app }) => {
 
 const VersionsCard = ({ app }) => {
     const versions = app.versions.sort((a, b) => b.created - a.created)
+    const renderEditVersionButton = version => (
+        <Link
+            className={styles.editVersionButton}
+            to={`/user/app/${app.id}/version/${version.id}/edit`}
+            tabIndex="-1"
+        >
+            <Button small secondary>
+                Edit
+            </Button>
+        </Link>
+    )
 
     return (
         <Card className={styles.card}>
             <h2 className={styles.cardHeader}>Versions</h2>
-            <Versions versions={versions} />
+            <Versions
+                versions={versions}
+                renderEditVersionButton={renderEditVersionButton}
+            />
         </Card>
     )
 }

@@ -67,7 +67,9 @@ const UserApps = ({ user }) => {
     }
 
     const filteredApps = filterApps(sortBy(apps, 'name'), query)
-    const approvedApps = filteredApps.filter(app => app.status === APP_STATUS_APPROVED)
+    const approvedApps = filteredApps.filter(
+        app => app.status === APP_STATUS_APPROVED
+    )
     const pendingApps = filteredApps
         .filter(app => app.status === APP_STATUS_PENDING)
         .sort((a, b) => {
@@ -75,7 +77,9 @@ const UserApps = ({ user }) => {
             const bLatestVersion = Math.max(...b.versions.map(v => v.created))
             return bLatestVersion - aLatestVersion
         })
-    const rejectedApps = filteredApps.filter(app => app.status === APP_STATUS_REJECTED)
+    const rejectedApps = filteredApps.filter(
+        app => app.status === APP_STATUS_REJECTED
+    )
 
     const setAppStatus = async (app, status) => {
         try {
@@ -131,10 +135,8 @@ const UserApps = ({ user }) => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <Link to="/user/upload">
-                    <Button tabIndex="-1" primary>
-                        Upload a new app
-                    </Button>
+                <Link to="/user/upload" tabIndex="-1">
+                    <Button primary>Upload a new app</Button>
                 </Link>
                 <Input
                     className={styles.searchInput}
@@ -150,8 +152,8 @@ const UserApps = ({ user }) => {
                         You have no apps
                     </h2>
 
-                    <Link to="/user/upload">
-                        <Button tabIndex="-1" primary large>
+                    <Link to="/user/upload" tabIndex="-1">
+                        <Button primary large>
                             Upload your first app
                         </Button>
                     </Link>

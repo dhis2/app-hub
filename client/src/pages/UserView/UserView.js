@@ -7,6 +7,7 @@ import { loadUser } from 'src/actions/actionCreators'
 import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
+import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
 const PageNotFound = () => (
@@ -52,12 +53,12 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/app/:appId/edit`}
                 component={UserAppEdit}
             />
-            {/*
             <Route
                 exact
                 path={`${match.url}/app/:appId/version/:versionId/edit`}
-                component={provideUser(UserAppEdit)}
+                component={UserAppVersionEdit}
             />
+            {/*
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}

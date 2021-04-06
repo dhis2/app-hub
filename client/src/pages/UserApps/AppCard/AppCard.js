@@ -64,10 +64,8 @@ const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
                 {showUploadButton &&
                     (app.status === APP_STATUS_REJECTED ||
                         app.status === APP_STATUS_APPROVED) && (
-                        <Link to="/user/app/${app.id}/upload">
-                            <Button small tabIndex="0">
-                                Upload new version
-                            </Button>
+                        <Link to="/user/app/${app.id}/upload" tabIndex="-1">
+                            <Button small>Upload new version</Button>
                         </Link>
                     )}
                 {onApprove && (

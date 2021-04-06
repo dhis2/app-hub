@@ -13,8 +13,9 @@
 }
 
 .headerText {
-    font-size: 18px;
-    font-weight: 500;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--colors-grey800);
     margin: 0;
 }
 

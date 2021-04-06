@@ -11,7 +11,6 @@ import {
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './UserAppEdit.module.css'
 import config from 'config'
@@ -23,20 +22,17 @@ const { appTypeToDisplayName } = config.ui
 
 const UserAppEdit = ({ match }) => {
     const { appId } = match.params
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const { data: app, error } = useQueryV1(`apps/${appId}`, { auth: true })
     const history = useHistory()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
     const handleSubmit = async values => {
-        setIsSubmitting(true)
         try {
             await api.updateApp(app.id, values)
             successAlert.show({ message: 'App updated successfully' })
             history.push(`/user/app/${app.id}`)
         } catch (error) {
-            setIsSubmitting(false)
             errorAlert.show({ error })
         }
     }
@@ -72,7 +68,7 @@ const UserAppEdit = ({ match }) => {
             </header>
 
             <ReactFinalForm.Form onSubmit={handleSubmit}>
-                {({ handleSubmit }) => (
+                {({ handleSubmit, valid, submitting }) => (
                     <form onSubmit={handleSubmit}>
                         <ReactFinalForm.Field
                             required
@@ -121,7 +117,11 @@ const UserAppEdit = ({ match }) => {
                             component={InputFieldFF}
                             className={styles.field}
                         />
-                        <Button primary type="submit" disabled={isSubmitting}>
+                        <Button
+                            primary
+                            type="submit"
+                            disabled={!valid || submitting}
+                        >
                             Update app
                         </Button>
                     </form>
