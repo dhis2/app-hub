@@ -1,3 +1,10 @@
+## [2.16.1](https://github.com/dhis2/app-hub/compare/v2.16.0...v2.16.1) (2021-04-06)
+
+
+### Bug Fixes
+
+* show query in input when returning from search result ([#456](https://github.com/dhis2/app-hub/issues/456)) ([3890057](https://github.com/dhis2/app-hub/commit/389005710a4fd32632ec66ea154083e52fe65e1f))
+
 # [2.16.0](https://github.com/dhis2/app-hub/compare/v2.15.0...v2.16.0) (2021-03-22)
 
 
