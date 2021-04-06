@@ -50,14 +50,19 @@ ToggleList.propTypes = {
     onChange: PropTypes.func.isRequired,
 }
 
-const SearchField = ({ onChange }) => {
+const SearchField = ({ initialValue, onChange }) => {
+    const [value, setValue] = useState(initialValue)
     const debouncedOnChange = useCallback(debounce(onChange, 300), [onChange])
-    const handleChange = (_, value) => debouncedOnChange(value)
-    return <TextField hintText="Search" onChange={handleChange} />
+    const handleChange = (_, value) => {
+        setValue(value)
+        debouncedOnChange(value)
+    }
+    return <TextField hintText="Search" value={value} onChange={handleChange} />
 }
 
 SearchField.propTypes = {
     onChange: PropTypes.func.isRequired,
+    initialValue: PropTypes.string,
 }
 
 const Filters = ({
@@ -67,6 +72,7 @@ const Filters = ({
     types,
     typesFilter,
     onTypesFilterChange,
+    query,
     onQueryChange,
 }) => {
     const [show, setShow] = useState(false)
@@ -80,7 +86,7 @@ const Filters = ({
     return (
         <SubHeader style={styles.subHeader}>
             <ToolbarGroup>
-                <SearchField onChange={onQueryChange} />
+                <SearchField initialValue={query} onChange={onQueryChange} />
             </ToolbarGroup>
             <ToolbarGroup>
                 <IconButton onClick={handlePopoverToggle}>
@@ -124,6 +130,7 @@ Filters.propTypes = {
     onChannelsFilterChange: PropTypes.func.isRequired,
     onQueryChange: PropTypes.func.isRequired,
     onTypesFilterChange: PropTypes.func.isRequired,
+    query: PropTypes.string,
 }
 
 export default Filters
