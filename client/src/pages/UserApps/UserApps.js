@@ -39,7 +39,7 @@ const filterApps = (apps, query) => {
 
 const UserApps = ({ user }) => {
     const [query, setQuery] = useState('')
-    const { data, error, mutate } = useQueryV1(
+    const { data: apps, error, mutate } = useQueryV1(
         user.manager ? 'apps/all' : 'apps/myapps',
         {
             auth: true,
@@ -58,7 +58,7 @@ const UserApps = ({ user }) => {
         )
     }
 
-    if (!data) {
+    if (!apps) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -66,22 +66,22 @@ const UserApps = ({ user }) => {
         )
     }
 
-    const apps = filterApps(sortBy(data, 'name'), query)
-    const approvedApps = apps.filter(app => app.status === APP_STATUS_APPROVED)
-    const pendingApps = apps
+    const filteredApps = filterApps(sortBy(apps, 'name'), query)
+    const approvedApps = filteredApps.filter(app => app.status === APP_STATUS_APPROVED)
+    const pendingApps = filteredApps
         .filter(app => app.status === APP_STATUS_PENDING)
         .sort((a, b) => {
             const aLatestVersion = Math.max(...a.versions.map(v => v.created))
             const bLatestVersion = Math.max(...b.versions.map(v => v.created))
             return bLatestVersion - aLatestVersion
         })
-    const rejectedApps = apps.filter(app => app.status === APP_STATUS_REJECTED)
+    const rejectedApps = filteredApps.filter(app => app.status === APP_STATUS_REJECTED)
 
     const setAppStatus = async (app, status) => {
         try {
             await api.setAppApproval(app.id, status)
             mutate(
-                data.map(a => {
+                apps.map(a => {
                     if (a.id === app.id) {
                         return { ...a, status }
                     }
@@ -119,7 +119,7 @@ const UserApps = ({ user }) => {
 
         try {
             await api.deleteApp(app.id)
-            mutate(data.filter(a => a.id !== app.id))
+            mutate(apps.filter(a => a.id !== app.id))
             successAlert.show({
                 message: `${app.name} has been deleted`,
             })
@@ -155,6 +155,11 @@ const UserApps = ({ user }) => {
                             Upload your first app
                         </Button>
                     </Link>
+                </section>
+            )}
+            {apps.length > 0 && filteredApps.length === 0 && (
+                <section className={styles.statusCard}>
+                    <em>No apps match your search criteria.</em>
                 </section>
             )}
             {rejectedApps.length > 0 && (
