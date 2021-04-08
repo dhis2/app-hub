@@ -6,7 +6,6 @@ import {
     Input,
 } from '@dhis2/ui'
 import classnames from 'classnames'
-import sortBy from 'lodash/sortBy'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -24,6 +23,16 @@ import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const { appStatusToDisplayName } = config.ui
 
+const sortApps = apps =>
+    apps.sort((a, b) => {
+        if (a.name < b.name) {
+            return -1
+        } else if (a.name > b.name) {
+            return 1
+        }
+        return 0
+    })
+
 const filterApps = (apps, query) => {
     if (!query) {
         return apps
@@ -39,7 +48,7 @@ const filterApps = (apps, query) => {
 
 const UserApps = ({ user }) => {
     const [query, setQuery] = useState('')
-    const { data: apps, error, mutate } = useQueryV1(
+    const { data: appsById, error, mutate } = useQueryV1(
         user.manager ? 'apps/all' : 'apps/myapps',
         {
             auth: true,
@@ -58,7 +67,7 @@ const UserApps = ({ user }) => {
         )
     }
 
-    if (!apps) {
+    if (!appsById) {
         return (
             <CenteredContent>
                 <CircularLoader />
@@ -66,7 +75,8 @@ const UserApps = ({ user }) => {
         )
     }
 
-    const filteredApps = filterApps(sortBy(apps, 'name'), query)
+    const apps = sortApps(Object.values(appsById))
+    const filteredApps = filterApps(apps, query)
     const approvedApps = filteredApps.filter(
         app => app.status === APP_STATUS_APPROVED
     )
