@@ -5,6 +5,7 @@ import {
     Card,
     Button,
 } from '@dhis2/ui'
+import classnames from 'classnames'
 import copyToClipboard from 'copy-text-to-clipboard'
 import { useState } from 'react'
 import styles from './UserApiKey.module.css'
@@ -22,7 +23,7 @@ const GenerateApiKey = ({ onGenerate, isUpdating }) => (
             Treat API keys as passwords, they can be used to upload arbitrary
             apps to your organisations.
         </NoticeBox>
-        <div className={styles.flexCenter}>
+        <div className={classnames(styles.flexCenter, styles.justifyBetween)}>
             No API key active
             <Button primary onClick={onGenerate} disabled={isUpdating}>
                 Generate api key
@@ -54,22 +55,23 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
                     >
                         Make sure to copy your new API key below. You won’t be
                         able to see it again!
-                        <div
-                            style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                            }}
-                        >
+                        <div className={styles.flexCenter}>
                             <code>{apiKey}</code>
                             <Button
+                                small
+                                className={styles.copyToClipboardButton}
                                 icon={<PasteIcon width={16} height={16} />}
                                 onClick={handleCopyToClipboard}
-                                small
                             />
                         </div>
                     </NoticeBox>
                 )}
-                <div className={styles.flexCenter}>
+                <div
+                    className={classnames(
+                        styles.flexCenter,
+                        styles.justifyBetween
+                    )}
+                >
                     API key is active. API key was generated at{' '}
                     {new Date(createdAt).toLocaleString()}
                     <Button

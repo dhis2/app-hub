@@ -21,10 +21,17 @@
 .flexCenter {
     display: flex;
     align-items: center;
+}
+
+.justifyBetween {
     justify-content: space-between;
 }
 
 .noticeBox {
     margin-top: var(--spacers-dp24);
     margin-bottom: var(--spacers-dp24);
+}
+
+.copyToClipboardButton {
+    margin-left: var(--spacers-dp4);
 }
