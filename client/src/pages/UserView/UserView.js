@@ -8,6 +8,7 @@ import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
+import UserApiKey from 'src/pages/UserApiKey/UserApiKey'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
 const PageNotFound = () => (
@@ -58,7 +59,16 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/app/:appId/version/:versionId/edit`}
                 component={UserAppVersionEdit}
             />
+            <Route
+                path={`${match.url}/apikey`}
+                component={UserApiKey}
+            />
             {/*
+            <Route
+                exact
+                path={`${match.url}/app/:appId/version/upload`}
+                component={UserAppVersionUpload}
+            />
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}
