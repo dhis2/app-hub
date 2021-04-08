@@ -1,10 +1,16 @@
-import { useState } from 'react'
-import { CenteredContent, CircularLoader, NoticeBox, Card, Button } from '@dhis2/ui'
-import { useQuery, deleteApiKey, generateApiKey } from 'src/api'
-import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
-import Icon from 'src/components/Icon/Icon'
+import {
+    CenteredContent,
+    CircularLoader,
+    NoticeBox,
+    Card,
+    Button,
+} from '@dhis2/ui'
 import copyToClipboard from 'copy-text-to-clipboard'
+import { useState } from 'react'
 import styles from './UserApiKey.module.css'
+import { useQuery, deleteApiKey, generateApiKey } from 'src/api'
+import Icon from 'src/components/Icon/Icon'
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const GenerateApiKey = ({ onGenerate, isUpdating }) => (
     <>
@@ -13,16 +19,12 @@ const GenerateApiKey = ({ onGenerate, isUpdating }) => (
             title="API keys should be kept confidential"
             className={styles.noticeBox}
         >
-            Treat API keys as passwords, they can be used to upload
-            arbitrary apps to your organisations.
+            Treat API keys as passwords, they can be used to upload arbitrary
+            apps to your organisations.
         </NoticeBox>
         <div className={styles.flexCenter}>
             No API key active
-            <Button
-                primary
-                onClick={onGenerate}
-                disabled={isUpdating}
-            >
+            <Button primary onClick={onGenerate} disabled={isUpdating}>
                 Generate api key
             </Button>
         </div>
@@ -46,9 +48,12 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
             )}
             <div>
                 {apiKey && (
-                    <NoticeBox title="API key generated" className={styles.noticeBox}>
-                        Make sure to copy your new API key below. You won’t
-                        be able to see it again!
+                    <NoticeBox
+                        title="API key generated"
+                        className={styles.noticeBox}
+                    >
+                        Make sure to copy your new API key below. You won’t be
+                        able to see it again!
                         <div
                             style={{
                                 display: 'flex',
@@ -57,7 +62,12 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
                         >
                             <code>{apiKey}</code>
                             <Button
-                                icon={<Icon name="content_paste" title="Copy API key" />}
+                                icon={
+                                    <Icon
+                                        name="content_paste"
+                                        title="Copy API key"
+                                    />
+                                }
                                 onClick={handleCopyToClipboard}
                                 small
                             />
@@ -139,9 +149,9 @@ const UserApiKey = () => {
         <Card className={styles.card}>
             <h2 className={styles.header}>Your API key</h2>
             <p className={styles.description}>
-                An API key can be used to upload new app versions
-                through the App Hub API. This can be useful in continous
-                integration workflows.
+                An API key can be used to upload new app versions through the
+                App Hub API. This can be useful in continous integration
+                workflows.
             </p>
             {data.hasApiKey ? (
                 <ApiKeyDisplay

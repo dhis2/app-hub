@@ -1,0 +1,7 @@
+.hidden {
+    display: none;
+}
+
+.uploadButton {
+    margin-top: var(--spacers-dp16);
+}

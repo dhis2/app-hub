@@ -1,6 +1,6 @@
 .detailsCardHeader {
     display: grid;
-    grid-template-columns: 85px auto;
+    grid-template-columns: 120px auto;
     grid-gap: var(--spacers-dp12);
     margin-bottom: var(--spacers-dp8);
 }
@@ -32,7 +32,12 @@
     margin-left: var(--spacers-dp8);
 }
 
+.editLogoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .editLogoButton {
-    display: inline-block;
     margin-top: var(--spacers-dp4);
 }

@@ -4,11 +4,11 @@ import { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router-dom'
 import { loadUser } from 'src/actions/actionCreators'
+import UserApiKey from 'src/pages/UserApiKey/UserApiKey'
 import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
-import UserApiKey from 'src/pages/UserApiKey/UserApiKey'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
 const PageNotFound = () => (
@@ -59,10 +59,7 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/app/:appId/version/:versionId/edit`}
                 component={UserAppVersionEdit}
             />
-            <Route
-                path={`${match.url}/apikey`}
-                component={UserApiKey}
-            />
+            <Route exact path={`${match.url}/apikey`} component={UserApiKey} />
             {/*
             <Route
                 exact
@@ -80,7 +77,7 @@ const UserView = ({ loadUser, user, match }) => {
             />
             <Route
                 path={`${match.url}/organisations/:slug`}
-                component={UserOrganisationView}
+                component={UserOrganisation}
             />
             */}
             {/* No-match route */}

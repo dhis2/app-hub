@@ -2,6 +2,7 @@ import { Card, Button } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState, useRef } from 'react'
 import sharedStyles from '../UserApp.module.css'
+import styles from './ScreenshotsCard.module.css'
 import * as api from 'src/api'
 import Screenshots from 'src/components/Screenshots/Screenshots'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
@@ -75,7 +76,7 @@ const ScreenshotsCard = ({ app, mutate }) => {
             ) : (
                 <em>This app has no screenshots</em>
             )}
-            <form style={{ display: 'none' }} ref={formEl}>
+            <form className={styles.hidden} ref={formEl}>
                 <input
                     type="file"
                     multiple
@@ -84,14 +85,14 @@ const ScreenshotsCard = ({ app, mutate }) => {
                     ref={inputEl}
                 />
             </form>
-            <div style={{ marginTop: 8 }}>
-            <Button
-                primary
-                onClick={handleUploadButtonClick}
-                disabled={isUploading}
-            >
-                {isUploading ? 'Uploading...' : 'Upload screenshots'}
-            </Button>
+            <div className={styles.uploadButton}>
+                <Button
+                    primary
+                    onClick={handleUploadButtonClick}
+                    disabled={isUploading}
+                >
+                    {isUploading ? 'Uploading...' : 'Upload screenshots'}
+                </Button>
             </div>
         </Card>
     )
