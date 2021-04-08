@@ -141,7 +141,11 @@ export async function fromApi(url, auth = false, extraOpts) {
     }
 
     return fetch(baseURL + url, opts)
-        .then(response => (response.ok ? response : Promise.reject(response)))
+        .then(response =>
+            response.ok
+                ? response
+                : Promise.reject(new Error(response.statusText))
+        )
         .then(response => response.json())
 }
 

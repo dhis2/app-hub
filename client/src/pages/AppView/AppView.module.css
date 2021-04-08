@@ -1,6 +1,7 @@
-.appCardContainer {
+.appCard {
+    display: block !important;
     max-width: 960px;
-    margin: 0 auto;
+    margin: auto;
 }
 
 .appCardSection {

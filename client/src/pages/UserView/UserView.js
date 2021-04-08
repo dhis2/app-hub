@@ -25,9 +25,7 @@ const UserView = ({ loadUser, user, match }) => {
     if (user.error) {
         return (
             <CenteredContent>
-                <NoticeBox title="Error loading your profile" error>
-                    {user.error.message}
-                </NoticeBox>
+                <NoticeBox title="Error loading your profile" error />
             </CenteredContent>
         )
     }

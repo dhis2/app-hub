@@ -11,7 +11,7 @@ export default class AppHubAPI {
      * @param {*} apiOptions.apiVersion apiVersion to use, appended to baseUrl
      * @param {AuthService} apiOptions.auth AuthService-instance with getAccessToken function set.
      * @param {*} fetchOptions default options passed to fetch
-    
+
      */
     constructor(apiOptions, fetchOptions = defaultFetchOptions) {
         const { baseUrl, apiVersion, auth } = apiOptions
@@ -56,17 +56,14 @@ export default class AppHubAPI {
             url = `${url}?${queryParametersToQueryString(params)}`
         }
 
-        return fetch(url, options).then(response => {
-            const contentType = response.headers.get('content-type')
-            let result
-            if (contentType.includes('application/json')) {
-                result = response.json()
-            } else {
-                result = response.text()
-            }
-            return result.then(result =>
-                response.ok ? Promise.resolve(result) : Promise.reject(result)
-            )
-        })
+        const response = await fetch(url, options)
+        if (!response.ok) {
+            throw new Error(response.statusText)
+        }
+        const contentType = response.headers.get('content-type')
+        if (contentType.includes('application/json')) {
+            return await response.json()
+        }
+        return await response.text()
     }
 }

@@ -74,13 +74,11 @@ const AppView = ({ match }) => {
 
     if (error) {
         return (
-            <div className={styles.appCardContainer}>
-                <CenteredContent>
-                    <NoticeBox title={'Error loading app'} error>
-                        {error.message || error.statusText}
-                    </NoticeBox>
-                </CenteredContent>
-            </div>
+            <CenteredContent>
+                <NoticeBox title={'Error loading app'} error>
+                    {error.message}
+                </NoticeBox>
+            </CenteredContent>
         )
     }
 
@@ -99,39 +97,35 @@ const AppView = ({ match }) => {
     const latestVersion = versions[0]
 
     return (
-        <div className={styles.appCardContainer}>
-            <Card className={styles.appCard}>
-                <HeaderSection
-                    appName={app.name}
-                    appDeveloper={appDeveloper}
-                    appType={config.ui.appTypeToDisplayName[app.appType]}
-                    logoSrc={logoSrc}
-                />
-                <Divider />
-                <AboutSection
-                    appDescription={app.description}
-                    latestVersion={latestVersion}
-                />
-                <Divider />
-                {screenshots.length > 0 && (
-                    <>
-                        <section className={styles.appCardSection}>
-                            <h2 className={styles.appCardHeading}>
-                                Screenshots
-                            </h2>
-                            <Screenshots screenshots={screenshots} />
-                        </section>
-                        <Divider />
-                    </>
-                )}
-                <section className={styles.appCardSection}>
-                    <h2 className={styles.appCardHeading}>
-                        All versions of this application
-                    </h2>
-                    <Versions versions={versions} />
-                </section>
-            </Card>
-        </div>
+        <Card className={styles.appCard}>
+            <HeaderSection
+                appName={app.name}
+                appDeveloper={appDeveloper}
+                appType={config.ui.appTypeToDisplayName[app.appType]}
+                logoSrc={logoSrc}
+            />
+            <Divider />
+            <AboutSection
+                appDescription={app.description}
+                latestVersion={latestVersion}
+            />
+            <Divider />
+            {screenshots.length > 0 && (
+                <>
+                    <section className={styles.appCardSection}>
+                        <h2 className={styles.appCardHeading}>Screenshots</h2>
+                        <Screenshots screenshots={screenshots} />
+                    </section>
+                    <Divider />
+                </>
+            )}
+            <section className={styles.appCardSection}>
+                <h2 className={styles.appCardHeading}>
+                    All versions of this application
+                </h2>
+                <Versions versions={versions} />
+            </section>
+        </Card>
     )
 }
 
