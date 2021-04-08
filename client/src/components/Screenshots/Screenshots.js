@@ -6,7 +6,8 @@ import styles from './Screenshots.module.css'
 
 const Screenshots = ({ screenshots, onDelete }) => {
     const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState(0)
-    const currentScreenshot = screenshots[currentScreenshotIndex]
+    // Handle current screenshot being deleted in user app view
+    const currentScreenshot = screenshots[Math.min(currentScreenshotIndex, screenshots.length - 1)]
 
     return (
         <div className={styles.screenshots}>

@@ -1,0 +1,38 @@
+.detailsCardHeader {
+    display: grid;
+    grid-template-columns: 85px auto;
+    grid-gap: var(--spacers-dp12);
+    margin-bottom: var(--spacers-dp8);
+}
+
+.detailsCardName {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: var(--spacers-dp8);
+    margin-bottom: 6px;
+}
+
+.detailsCardDeveloper {
+    display: block;
+    color: var(--colors-grey800);
+    margin-bottom: var(--spacers-dp8);
+}
+
+.detailsCardType {
+    color: var(--colors-grey700);
+}
+
+.appDescriptionParagraph {
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.editButton {
+    margin-left: var(--spacers-dp8);
+}
+
+.editLogoButton {
+    display: inline-block;
+    margin-top: var(--spacers-dp4);
+}
