@@ -5,7 +5,7 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import AuthService from 'src/utils/AuthService'
 
-// eslint-disable react/display-name
+/* eslint-disable react/display-name */
 
 const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (

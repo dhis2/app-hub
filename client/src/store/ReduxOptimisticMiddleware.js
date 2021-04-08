@@ -1,4 +1,4 @@
-import { BEGIN, COMMIT, REVERT } from 'redux-optimistic-ui'
+import { BEGIN } from 'redux-optimistic-ui'
 
 //All redux action types that are optimistic have the following suffixes
 const _SUCCESS = '_SUCCESS'
@@ -7,9 +7,9 @@ const _ERROR = '_ERROR'
 //Each optimistic item will need a transaction Id to internally match the BEGIN to the COMMIT/REVERT
 let nextTransactionID = 0
 
-export default store => next => action => {
+export default () => next => action => {
     // FSA compliant
-    const { type, meta, error, payload } = action
+    const { type, meta } = action
 
     // Ignore actions without isOptimistic flag
     if (!meta || !meta.isOptimistic) return next(action)
