@@ -48,3 +48,8 @@
 .editVersionButton {
     margin-left: var(--spacers-dp8);
 }
+
+.editLogoButton {
+    display: inline-block;
+    margin-top: var(--spacers-dp4);
+}

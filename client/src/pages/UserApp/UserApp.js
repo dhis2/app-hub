@@ -27,7 +27,7 @@ const DetailsCard = ({ app }) => {
 
     const EditButton = ({ children }) => (
         <Link to={`/user/app/${app.id}/edit`} tabIndex="-1">
-            <Button small>{children}</Button>
+            <Button small secondary>{children}</Button>
         </Link>
     )
 
@@ -36,7 +36,9 @@ const DetailsCard = ({ app }) => {
             <section className={styles.detailsCardHeader}>
                 <div>
                     <AppIcon src={logo?.imageUrl} />
-                    <EditButton>Edit logo</EditButton>
+                    <Link to={`/user/app/${app.id}/logo/edit`} tabIndex="-1" className={styles.editLogoButton}>
+                        <Button small secondary>Edit logo</Button>
+                    </Link>
                 </div>
                 <div>
                     <div>
