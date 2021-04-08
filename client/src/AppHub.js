@@ -17,7 +17,6 @@ import { history } from './utils/history'
 
 import './styles/auth0-overrides.css'
 import './styles/styles.css'
-import 'material-design-icons-iconfont'
 
 const AppHub = () => (
     <ReduxProvider store={store}>

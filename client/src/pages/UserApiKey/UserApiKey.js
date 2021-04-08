@@ -8,8 +8,8 @@ import {
 import copyToClipboard from 'copy-text-to-clipboard'
 import { useState } from 'react'
 import styles from './UserApiKey.module.css'
+import PasteIcon from 'assets/icons/content_paste.svg'
 import { useQuery, deleteApiKey, generateApiKey } from 'src/api'
-import Icon from 'src/components/Icon/Icon'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const GenerateApiKey = ({ onGenerate, isUpdating }) => (
@@ -62,12 +62,7 @@ const ApiKeyDisplay = ({ createdAt, onDelete, apiKey, isUpdating }) => {
                         >
                             <code>{apiKey}</code>
                             <Button
-                                icon={
-                                    <Icon
-                                        name="content_paste"
-                                        title="Copy API key"
-                                    />
-                                }
+                                icon={<PasteIcon width={16} height={16} />}
                                 onClick={handleCopyToClipboard}
                                 small
                             />

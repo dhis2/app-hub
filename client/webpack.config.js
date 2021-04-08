@@ -35,7 +35,22 @@ const webpackConfig = {
                 ],
             },
             {
-                test: /\.(jpe?g|png|gif|svg|woff(2)?|ttf|eot)$/i,
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            svgoConfig: {
+                                plugins: {
+                                    removeViewBox: false,
+                                },
+                            },
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(jpe?g|png|gif|woff(2)?|ttf|eot)$/i,
                 use: [
                     {
                         loader: 'file-loader',
@@ -59,6 +74,7 @@ const webpackConfig = {
         alias: {
             config: path.resolve(__dirname, 'config/'),
             src: path.resolve(__dirname, 'src/'),
+            assets: path.resolve(__dirname, 'assets/'),
             '@dhis2/app-runtime': path.resolve(
                 __dirname,
                 'app-runtime-mock.js'

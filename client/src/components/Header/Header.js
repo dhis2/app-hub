@@ -8,7 +8,7 @@ import DropdownMenu from './DropdownMenu/DropdownMenu'
 import DropdownMenuItem from './DropdownMenuItem/DropdownMenuItem'
 import DropdownMenuItemLink from './DropdownMenuItemLink/DropdownMenuItemLink'
 import styles from './Header.module.css'
-import Icon from 'src/components/Icon/Icon'
+import AccountIcon from 'assets/icons/account_circle.svg'
 import { getUserProfile } from 'src/selectors/userSelectors'
 
 const NotLoggedInIcon = () => {
@@ -53,7 +53,7 @@ const ProfileButton = () => {
         typeof profile?.picture === 'string' ? (
             <Avatar size={24} src={profile.picture} />
         ) : (
-            <Icon size={24} name="account_circle" color="white" />
+            <AccountIcon width={24} height={24} fill="white" />
         )
 
     const menu = (
