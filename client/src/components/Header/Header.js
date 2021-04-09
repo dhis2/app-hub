@@ -103,11 +103,6 @@ const Header = () => (
                         Your apps
                     </NavLink>
                 </li>
-                <li className={styles.navLink}>
-                    <NavLink exact to="/user/organisations">
-                        Your organisations
-                    </NavLink>
-                </li>
             </ul>
         </nav>
 

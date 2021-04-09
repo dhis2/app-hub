@@ -49,7 +49,7 @@ const filterApps = (apps, query) => {
 const UserApps = ({ user }) => {
     const [query, setQuery] = useState('')
     const { data: appsById, error, mutate } = useQueryV1(
-        user.manager ? 'apps/all' : 'apps/myapps',
+        user.isManager ? 'apps/all' : 'apps/myapps',
         {
             auth: true,
         }
@@ -205,11 +205,13 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
-                            showUploadButton={!user.manager}
+                            showUploadButton={!user.isManager}
                             onApprove={
-                                user.manager && (() => handleApprove(app))
+                                user.isManager && (() => handleApprove(app))
                             }
-                            onDelete={user.manager && (() => handleDelete(app))}
+                            onDelete={
+                                user.isManager && (() => handleDelete(app))
+                            }
                         />
                     ))}
                 </section>
@@ -229,12 +231,16 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
-                            showUploadButton={!user.manager}
+                            showUploadButton={!user.isManager}
                             onApprove={
-                                user.manager && (() => handleApprove(app))
+                                user.isManager && (() => handleApprove(app))
                             }
-                            onReject={user.manager && (() => handleReject(app))}
-                            onDelete={user.manager && (() => handleDelete(app))}
+                            onReject={
+                                user.isManager && (() => handleReject(app))
+                            }
+                            onDelete={
+                                user.isManager && (() => handleDelete(app))
+                            }
                         />
                     ))}
                 </section>
@@ -253,9 +259,13 @@ const UserApps = ({ user }) => {
                         <AppCard
                             key={app.id}
                             app={app}
-                            showUploadButton={!user.manager}
-                            onReject={user.manager && (() => handleReject(app))}
-                            onDelete={user.manager && (() => handleDelete(app))}
+                            showUploadButton={!user.isManager}
+                            onReject={
+                                user.isManager && (() => handleReject(app))
+                            }
+                            onDelete={
+                                user.isManager && (() => handleDelete(app))
+                            }
                         />
                     ))}
                 </section>

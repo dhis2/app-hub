@@ -9,6 +9,7 @@ import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
+import UserOrganisations from 'src/pages/UserOrganisations/UserOrganisations'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
 const PageNotFound = () => (
@@ -40,7 +41,13 @@ const UserView = ({ loadUser, user, match }) => {
 
     // eslint-disable-next-line react/display-name
     const provideUser = Component => props => (
-        <Component {...props} user={user.profile} />
+        <Component
+            {...props}
+            user={{
+                isManager: user.profile.manager,
+                id: user.userId,
+            }}
+        />
     )
 
     return (
@@ -58,6 +65,11 @@ const UserView = ({ loadUser, user, match }) => {
                 component={UserAppVersionEdit}
             />
             <Route exact path={`${match.url}/apikey`} component={UserApiKey} />
+            <Route
+                exact
+                path={`${match.url}/organisations`}
+                component={provideUser(UserOrganisations)}
+            />
             {/*
             <Route
                 exact
@@ -67,11 +79,6 @@ const UserView = ({ loadUser, user, match }) => {
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}
-            />
-            <Route
-                exact
-                path={`${match.url}/organisations`}
-                component={UserOrganisations}
             />
             <Route
                 path={`${match.url}/organisations/:slug`}

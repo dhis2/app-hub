@@ -39,20 +39,8 @@ export const useQuery = (url, params, requestOpts) =>
 export const useQueryV1 = (url, options = { auth: false }) =>
     useSWR([url, options.auth], (url, auth) => fromApi(`v1/${url}`, auth))
 
-export function getAllApps() {
-    return fromApi('v1/apps/all', true)
-}
-
-export function getApp(appId, auth) {
-    return fromApi('v1/apps/' + appId, auth || false)
-}
-
 export function getUser() {
     return fromApi('v1/users/me', true)
-}
-
-export function getUserApps() {
-    return fromApi('v1/apps/myapps', true)
 }
 
 export function setAppApproval(appId, status) {
@@ -237,10 +225,6 @@ export function searchOrganisations(name) {
 
 export function getMe() {
     return apiV2.request('me', { useAuth: true })
-}
-
-export function getOrganisations(filters) {
-    return apiV2.request('organisations', { params: filters })
 }
 
 export function getOrganisation(orgId) {
