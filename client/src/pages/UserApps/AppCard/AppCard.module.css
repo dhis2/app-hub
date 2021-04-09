@@ -13,6 +13,9 @@
 }
 
 .appCardLink {
+    display: grid;
+    grid-template-columns: 72px auto;
+    grid-gap: var(--spacers-dp12);
     padding-right: 0;
 }
 
