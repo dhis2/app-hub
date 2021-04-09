@@ -9,6 +9,7 @@ import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
+import UserOrganisation from 'src/pages/UserOrganisation/UserOrganisation'
 import UserOrganisations from 'src/pages/UserOrganisations/UserOrganisations'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
@@ -70,6 +71,11 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/organisations`}
                 component={provideUser(UserOrganisations)}
             />
+            <Route
+                exact
+                path={`${match.url}/organisation/:slug`}
+                component={provideUser(UserOrganisation)}
+            />
             {/*
             <Route
                 exact
@@ -83,10 +89,6 @@ const UserView = ({ loadUser, user, match }) => {
             <Route
                 path={`${match.url}/organisations/new`}
                 component={UserOrganisationNew}
-            />
-            <Route
-                path={`${match.url}/organisation/:slug`}
-                component={UserOrganisation}
             />
             */}
             {/* No-match route */}

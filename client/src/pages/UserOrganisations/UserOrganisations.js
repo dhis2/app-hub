@@ -25,7 +25,7 @@ const filterOrganisations = (organisations, query) => {
 
 const OrganisationCard = ({ organisation, isOwner }) => (
     <Link
-        to={`/user/organisations/${organisation.slug}`}
+        to={`/user/organisation/${organisation.slug}`}
         className={styles.organisationLink}
     >
         <div className={styles.organisationHeader}>
@@ -95,6 +95,22 @@ const UserOrganisations = ({ user }) => {
             </div>
             <Card className={styles.card}>
                 <h2 className={styles.cardHeader}>Your organisations</h2>
+                {organisations.length === 0 && (
+                    <>
+                        <em>You are not a member of any organisations.</em>
+                        <div style={{ marginTop: 8 }}>
+                            <Link to="/user/organisations/new" tabIndex="-1">
+                                <Button primary large>
+                                    Create your first organisation
+                                </Button>
+                            </Link>
+                        </div>
+                    </>
+                )}
+                {organisations.length > 0 &&
+                    filteredOrganisations.length === 0 && (
+                        <em>No organisations match your search criteria.</em>
+                    )}
                 {filteredOrganisations.map(organisation => (
                     <OrganisationCard
                         key={organisation.id}

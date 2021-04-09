@@ -1,0 +1,57 @@
+.card {
+    display: block !important;
+    max-width: 680px;
+    margin: auto;
+    padding: var(--spacers-dp16);
+}
+
+.header {
+    margin-bottom: var(--spacers-dp16);
+}
+
+.organisationName {
+    font-size: 24px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.createdAt {
+    color: var(--colors-grey800);
+}
+
+.subheader {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--colors-grey800);
+    margin-top: var(--spacers-dp16);
+    margin-bottom: var(--spacers-dp8);
+}
+
+.user {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin-bottom: var(--spacers-dp24);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    padding: var(--spacers-dp16);
+}
+
+.userHeader {
+    margin-bottom: var(--spacers-dp8);
+}
+
+.userName {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    margin-right: var(--spacers-dp8);
+}
+
+.userEmail {
+    color: var(--colors-grey800);
+}
+
+.removeButton {
+    margin-left: var(--spacers-dp8);
+}
