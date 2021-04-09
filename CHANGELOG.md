@@ -1,3 +1,24 @@
+## [2.16.1](https://github.com/dhis2/app-hub/compare/v2.16.0...v2.16.1) (2021-04-06)
+
+
+### Bug Fixes
+
+* show query in input when returning from search result ([#456](https://github.com/dhis2/app-hub/issues/456)) ([3890057](https://github.com/dhis2/app-hub/commit/389005710a4fd32632ec66ea154083e52fe65e1f))
+
+# [2.16.0](https://github.com/dhis2/app-hub/compare/v2.15.0...v2.16.0) (2021-03-22)
+
+
+### Features
+
+* add env-var for skipping db-migration ([#455](https://github.com/dhis2/app-hub/issues/455)) ([b5e8aae](https://github.com/dhis2/app-hub/commit/b5e8aaeae5512b1cbf324d436af0baaed431faf4))
+
+# [2.15.0](https://github.com/dhis2/app-hub/compare/v2.14.0...v2.15.0) (2021-03-18)
+
+
+### Features
+
+* **apikey:** frontend for api key generation ([#454](https://github.com/dhis2/app-hub/issues/454)) ([4096b03](https://github.com/dhis2/app-hub/commit/4096b036947000599ad4bc6722f9b9e5e1e239de))
+
 # [2.14.0](https://github.com/dhis2/app-hub/compare/v2.13.1...v2.14.0) (2021-03-12)
 
 
