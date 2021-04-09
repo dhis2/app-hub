@@ -1,13 +1,27 @@
-.card {
-    display: block !important;
-    max-width: 960px;
-    margin: auto;
-    padding: var(--spacers-dp16);
+.container {
+    margin-left: var(--spacers-dp8);
 }
 
 .header {
-    font-size: 26px;
-    font-weight: 400;
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacers-dp24);
+}
+
+.searchInput {
+    margin-left: var(--spacers-dp24);
+    min-width: 25%;
+    max-width: 420px;
+}
+
+.card {
+    max-width: 960px;
+    padding: var(--spacers-dp16);
+}
+
+.cardHeader {
+    font-size: 20px;
+    font-weight: 500;
     color: var(--colors-grey800);
     margin-top: 0;
     margin-bottom: var(--spacers-dp16);

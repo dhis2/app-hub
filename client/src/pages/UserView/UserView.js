@@ -81,7 +81,11 @@ const UserView = ({ loadUser, user, match }) => {
                 component={AppUpload}
             />
             <Route
-                path={`${match.url}/organisations/:slug`}
+                path={`${match.url}/organisations/new`}
+                component={UserOrganisationNew}
+            />
+            <Route
+                path={`${match.url}/organisation/:slug`}
                 component={UserOrganisation}
             />
             */}

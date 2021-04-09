@@ -4,13 +4,24 @@ import {
     CircularLoader,
     Card,
     Tag,
+    Button,
+    Input,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import { useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './UserOrganisations.module.css'
 import { useQuery } from 'src/api'
 import { relativeTimeFormat } from 'src/lib/relative-time-format'
+
+const filterOrganisations = (organisations, query) => {
+    if (!query) {
+        return organisations
+    }
+    return organisations.filter(organisation =>
+        organisation.name.toLowerCase().includes(query.toLowerCase())
+    )
+}
 
 const OrganisationCard = ({ organisation, isOwner }) => (
     <Link
@@ -36,6 +47,7 @@ const requestOpts = {
 }
 
 const UserOrganisations = ({ user }) => {
+    const [query, setQuery] = useState('')
     const { data: organisations, error } = useQuery(
         'organisations',
         useMemo(
@@ -65,17 +77,33 @@ const UserOrganisations = ({ user }) => {
         )
     }
 
+    const filteredOrganisations = filterOrganisations(organisations, query)
+
     return (
-        <Card className={styles.card}>
-            <h2 className={styles.header}>Your organisations</h2>
-            {organisations.map(organisation => (
-                <OrganisationCard
-                    key={organisation.id}
-                    organisation={organisation}
-                    isOwner={user.id === organisation.owner}
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <Link to="/user/organisations/new" tabIndex="-1">
+                    <Button primary>Create a new organisation</Button>
+                </Link>
+                <Input
+                    className={styles.searchInput}
+                    type="search"
+                    placeholder="Search all your organisations"
+                    value={query}
+                    onChange={({ value }) => setQuery(value)}
                 />
-            ))}
-        </Card>
+            </div>
+            <Card className={styles.card}>
+                <h2 className={styles.cardHeader}>Your organisations</h2>
+                {filteredOrganisations.map(organisation => (
+                    <OrganisationCard
+                        key={organisation.id}
+                        organisation={organisation}
+                        isOwner={user.id === organisation.owner}
+                    />
+                ))}
+            </Card>
+        </div>
     )
 }
 
