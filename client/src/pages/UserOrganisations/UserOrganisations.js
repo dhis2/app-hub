@@ -25,7 +25,7 @@ const filterOrganisations = (organisations, query) => {
 
 const OrganisationCard = ({ organisation, isOwner }) => (
     <Link
-        to={`/user/organisation/${organisation.slug}`}
+        to={`/user/organisation/${organisation.id}`}
         className={styles.organisationLink}
     >
         <div className={styles.organisationHeader}>

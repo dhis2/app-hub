@@ -73,7 +73,7 @@ const UserView = ({ loadUser, user, match }) => {
             />
             <Route
                 exact
-                path={`${match.url}/organisation/:slug`}
+                path={`${match.url}/organisation/:organisationId`}
                 component={provideUser(UserOrganisation)}
             />
             {/*

@@ -211,24 +211,8 @@ export function createUploadImageOptions(data) {
     return fetchOptions
 }
 
-export function getAllChannels() {
-    return apiV2.request('channels')
-}
-
-export function searchOrganisations(name) {
-    return apiV2.request('organisations', {
-        params: {
-            name: `ilike:%${name}%`,
-        },
-    })
-}
-
 export function getMe() {
     return apiV2.request('me', { useAuth: true })
-}
-
-export function getOrganisation(orgId) {
-    return apiV2.request(`organisations/${orgId}`, { useAuth: true })
 }
 
 export function addOrganisationMember(orgId, email) {

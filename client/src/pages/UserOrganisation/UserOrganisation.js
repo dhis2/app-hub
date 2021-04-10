@@ -7,6 +7,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import NewMemberModal from './Modals/NewMemberModal'
+import EditNameModal from './Modals/EditNameModal'
 import OrganisationUser from './OrganisationUser/OrganisationUser'
 import styles from './UserOrganisation.module.css'
 import { useQuery } from 'src/api'
@@ -20,13 +21,14 @@ const requestOpts = {
 }
 
 const UserOrganisation = ({ match, user }) => {
-    const { slug } = match.params
+    const { organisationId } = match.params
     const { data: organisation, error, mutate } = useQuery(
-        `organisations/${slug}`,
+        `organisations/${organisationId}`,
         null,
         requestOpts
     )
     const newMemberModal = useModalState()
+    const editNameModal = useModalState()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
@@ -86,11 +88,19 @@ const UserOrganisation = ({ match, user }) => {
                     <h2 className={styles.organisationName}>
                         {organisation.name}
                     </h2>
-                    {/* TODO: show edit name modal on click */}
                     {isOwner && (
-                        <Button small secondary>
-                            Edit name
-                        </Button>
+                        <>
+                            {editNameModal.isVisible && (
+                                <EditNameModal
+                                    organisation={organisation}
+                                    mutate={mutate}
+                                    onClose={editNameModal.hide}
+                                />
+                            )}
+                            <Button small secondary onClick={editNameModal.show}>
+                                Edit name
+                            </Button>
+                        </>
                     )}
                 </div>
                 <div className={styles.createdAt}>
