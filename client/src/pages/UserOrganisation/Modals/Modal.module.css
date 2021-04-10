@@ -1,0 +1,10 @@
+.form {
+    margin-top: var(--spacers-dp24);
+    margin-bottom: var(--spacers-dp8);
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacers-dp16);
+}

@@ -3,42 +3,17 @@ import {
     NoticeBox,
     CircularLoader,
     Card,
-    Tag,
     Button,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
+import NewMemberModal from './Modals/NewMemberModal'
+import OrganisationUser from './OrganisationUser/OrganisationUser'
 import styles from './UserOrganisation.module.css'
 import { useQuery } from 'src/api'
+import * as api from 'src/api'
 import { relativeTimeFormat } from 'src/lib/relative-time-format'
-
-const OrganisationUser = ({ user, onPromote, onRemove }) => (
-    <div className={styles.user}>
-        <div>
-            <div className={styles.userHeader}>
-                <h4 className={styles.userName}>{user.name}</h4>
-                {user.isOwner && <Tag neutral>Owner</Tag>}
-            </div>
-            <span className={styles.userEmail}>{user.email}</span>
-        </div>
-        <div>
-            {!user.isOwner && onPromote && (
-                <Button small secondary onClick={onPromote}>
-                    Promote to owner
-                </Button>
-            )}
-            {onRemove && (
-                <Button
-                    small
-                    destructive
-                    onClick={onRemove}
-                    className={styles.removeButton}
-                >
-                    Remove
-                </Button>
-            )}
-        </div>
-    </div>
-)
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import { useModalState } from 'src/lib/use-modal-state'
 
 const requestOpts = {
     useAuth: true,
@@ -46,17 +21,42 @@ const requestOpts = {
 
 const UserOrganisation = ({ match, user }) => {
     const { slug } = match.params
-    const { data: organisation, error } = useQuery(
+    const { data: organisation, error, mutate } = useQuery(
         `organisations/${slug}`,
         null,
         requestOpts
     )
+    const newMemberModal = useModalState()
+    const successAlert = useSuccessAlert()
+    const errorAlert = useErrorAlert()
 
-    const handlePromote = (user) => {
-        //
+    const handlePromote = async userId => {
+        try {
+            await api.editOrganisation(organisation.id, { owner: userId })
+            mutate({
+                ...organisation,
+                owner: userId,
+            })
+            successAlert.show({
+                message: 'Successfully promoted organisation member',
+            })
+        } catch (error) {
+            errorAlert.show({ error })
+        }
     }
-    const handleRemove = (user) => {
-        //
+    const handleRemove = async userId => {
+        try {
+            await api.removeOrganisationMember(organisation.id, userId)
+            mutate({
+                ...organisation,
+                users: organisation.users.filter(ou => ou.id !== userId),
+            })
+            successAlert.show({
+                message: 'Successfully removed organisation member',
+            })
+        } catch (error) {
+            errorAlert.show({ error })
+        }
     }
 
     if (error) {
@@ -81,21 +81,47 @@ const UserOrganisation = ({ match, user }) => {
 
     return (
         <Card className={styles.card}>
-            {/* TODO: if user is owner, add 'edit name' button */}
             <div className={styles.header}>
-                <h2 className={styles.organisationName}>{organisation.name}</h2>
+                <div className={styles.flex}>
+                    <h2 className={styles.organisationName}>
+                        {organisation.name}
+                    </h2>
+                    {/* TODO: show edit name modal on click */}
+                    {isOwner && (
+                        <Button small secondary>
+                            Edit name
+                        </Button>
+                    )}
+                </div>
                 <div className={styles.createdAt}>
-                    Created {relativeTimeFormat(organisation.createdAt)}
+                    Created{' '}
+                    <span title={new Date(organisation.createdAt).toString()}>
+                        {relativeTimeFormat(organisation.createdAt)}
+                    </span>
                 </div>
             </div>
-            <NoticeBox>
+
+            <NoticeBox className={styles.notice}>
                 All members of an organisation are allowed to upload apps on
                 behalf of the organisation. Members may add new members to the
                 organisation. Only the owner of the organisation is allowed to
                 rename it.
             </NoticeBox>
+
             <section>
-                <h3 className={styles.subheader}>Members</h3>
+                {newMemberModal.isVisible && (
+                    <NewMemberModal
+                        organisation={organisation}
+                        mutate={mutate}
+                        onClose={newMemberModal.hide}
+                    />
+                )}
+                <div>
+                    <h3 className={styles.subheader}>Members</h3>
+                    <Button small primary onClick={newMemberModal.show}>
+                        Add member
+                    </Button>
+                </div>
                 {organisation.users.map(ou => (
                     <OrganisationUser
                         key={ou.id}
@@ -103,8 +129,8 @@ const UserOrganisation = ({ match, user }) => {
                             ...ou,
                             isOwner: ou.id === organisation.owner,
                         }}
-                        onPromote={isOwner && () => handlePromote(ou.id)}
-                        onRemove={isOwner && () => handleRemove(ou.id)}
+                        onPromote={isOwner && (() => handlePromote(ou.id))}
+                        onRemove={isOwner && (() => handleRemove(ou.id))}
                     />
                 ))}
             </section>
