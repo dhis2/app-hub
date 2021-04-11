@@ -2,7 +2,6 @@
     "name": "client",
     "version": "2.16.1",
     "description": "The App Hub Client",
-    "main": "src/index.js",
     "repository": "https://github.com/dhis2/app-hub",
     "author": "Birk Johansson <birk@dhis2.org>",
     "license": "BSD-3-Clause",
