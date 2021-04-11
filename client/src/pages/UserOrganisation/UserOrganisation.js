@@ -6,8 +6,8 @@ import {
     Button,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import NewMemberModal from './Modals/NewMemberModal'
 import EditNameModal from './Modals/EditNameModal'
+import NewMemberModal from './Modals/NewMemberModal'
 import OrganisationUser from './OrganisationUser/OrganisationUser'
 import styles from './UserOrganisation.module.css'
 import { useQuery } from 'src/api'
@@ -97,7 +97,11 @@ const UserOrganisation = ({ match, user }) => {
                                     onClose={editNameModal.hide}
                                 />
                             )}
-                            <Button small secondary onClick={editNameModal.show}>
+                            <Button
+                                small
+                                secondary
+                                onClick={editNameModal.show}
+                            >
                                 Edit name
                             </Button>
                         </>

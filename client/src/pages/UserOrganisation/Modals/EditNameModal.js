@@ -21,7 +21,7 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
             await api.editOrganisation(organisation.id, { name })
             mutate({
                 ...organisation,
-                name
+                name,
             })
             successAlert.show({
                 message: `Successfully updated organisation name to ${name}`,
