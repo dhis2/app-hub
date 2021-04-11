@@ -2,10 +2,6 @@ export const USER_LOAD = 'USER_LOAD'
 export const USER_LOAD_SUCCESS = 'USER_LOAD_SUCCESS'
 export const USER_LOAD_ERROR = 'USER_LOAD_ERROR'
 
-export const USER_APPS_LOAD = 'USER_APPS_LOAD'
-export const USER_APPS_LOADED = 'USER_APPS_LOADED'
-export const USER_APPS_ERROR = 'USER_APPS_ERROR'
-
 export const USER_LOGOUT = 'USER_LOGOUT'
 
 export const ME_LOAD = 'ME_LOAD'
