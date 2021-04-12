@@ -9,6 +9,7 @@ import {
     TextAreaFieldFF,
     SingleSelectFieldFF,
     hasValue,
+    url
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
@@ -116,6 +117,7 @@ const UserAppEdit = ({ match }) => {
                             initialValue={app.sourceUrl}
                             component={InputFieldFF}
                             className={styles.field}
+                            validate={url}
                         />
                         <Button
                             primary
