@@ -10,6 +10,7 @@ import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
 import UserOrganisation from 'src/pages/UserOrganisation/UserOrganisation'
+import UserOrganisationNew from 'src/pages/UserOrganisationNew/UserOrganisationNew'
 import UserOrganisations from 'src/pages/UserOrganisations/UserOrganisations'
 import { getUserInfo } from 'src/selectors/userSelectors'
 
@@ -76,6 +77,10 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/organisation/:organisationId`}
                 component={provideUser(UserOrganisation)}
             />
+            <Route
+                path={`${match.url}/organisations/new`}
+                component={UserOrganisationNew}
+            />
             {/*
             <Route
                 exact
@@ -85,10 +90,6 @@ const UserView = ({ loadUser, user, match }) => {
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}
-            />
-            <Route
-                path={`${match.url}/organisations/new`}
-                component={UserOrganisationNew}
             />
             */}
             {/* No-match route */}
