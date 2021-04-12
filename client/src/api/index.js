@@ -174,7 +174,7 @@ export function createUploadVersionOptions(data) {
     const jsonData = {
         version: version.version,
         minDhisVersion: version.minDhisVersion || null,
-        maxDhisVersion: version.maxDhisVersion || null,
+        maxDhisVersion: version.maxDhisVersion || '',
         demoUrl: version.demoUrl || null,
         channel: version.channel,
     }

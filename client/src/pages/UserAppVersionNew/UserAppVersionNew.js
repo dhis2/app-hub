@@ -1,26 +1,22 @@
 import {
-    CenteredContent,
-    NoticeBox,
-    CircularLoader,
     Card,
     Button,
     ReactFinalForm,
     InputFieldFF,
     SingleSelectFieldFF,
+    FileInputFieldFF,
     composeValidators,
     hasValue,
 } from '@dhis2/ui'
-import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
-import styles from './UserAppVersionEdit.module.css'
+import styles from './UserAppVersionNew.module.css'
 import config from 'config'
-import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
 import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
 import { semverValidator } from 'src/lib/form-validators/semver-validator'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
-const { dhisVersions, appChannelToDisplayName } = config.ui
+const { dhisVersions, defaultAppChannel, appChannelToDisplayName } = config.ui
 
 const dhisVersionOptions = dhisVersions.map(v => ({
     label: v,
@@ -34,57 +30,30 @@ const channelOptions = Object.entries(appChannelToDisplayName).map(
     })
 )
 
-const UserAppVersionEdit = ({ match }) => {
-    const { appId, versionId } = match.params
-    const { data: app, error } = useQueryV1(`apps/${appId}`, { auth: true })
-    const version = app?.versions.find(v => v.id === versionId)
+const UserAppVersionNew = ({ match }) => {
+    const { appId } = match.params
     const history = useHistory()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
     const handleSubmit = async values => {
         try {
-            await api.updateVersion(app.id, version.id, values)
-            successAlert.show({ message: 'App version updated successfully' })
-            history.push(`/user/app/${app.id}`)
+            await api.createNewVersion(appId, {
+                file: values.file[0],
+                version: values,
+            })
+            successAlert.show({
+                message: `Successfully created app version ${values.version}`,
+            })
+            history.push(`/user/app/${appId}`)
         } catch (error) {
             errorAlert.show({ error })
         }
     }
 
-    if (error) {
-        return (
-            <CenteredContent>
-                <NoticeBox title="Error loading app" error>
-                    {error.message}
-                </NoticeBox>
-            </CenteredContent>
-        )
-    }
-
-    if (!app) {
-        return (
-            <CenteredContent>
-                <CircularLoader />
-            </CenteredContent>
-        )
-    }
-
-    if (app && !version) {
-        return (
-            <CenteredContent>
-                <NoticeBox title="Error loading app version" error>
-                    App version not found
-                </NoticeBox>
-            </CenteredContent>
-        )
-    }
-
     return (
         <Card className={styles.card}>
-            <h2 className={styles.header}>
-                Edit app version v{version.version}
-            </h2>
+            <h2 className={styles.header}>Create app version</h2>
 
             <ReactFinalForm.Form onSubmit={handleSubmit}>
                 {({ handleSubmit, valid, submitting }) => (
@@ -105,7 +74,6 @@ const UserAppVersionEdit = ({ match }) => {
                                     </a>
                                 </>
                             }
-                            initialValue={version.version}
                             component={InputFieldFF}
                             className={styles.field}
                             validate={composeValidators(
@@ -117,7 +85,6 @@ const UserAppVersionEdit = ({ match }) => {
                             required
                             name="minDhisVersion"
                             label="Minimum DHIS version"
-                            initialValue={version.minDhisVersion}
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={hasValue}
@@ -126,7 +93,6 @@ const UserAppVersionEdit = ({ match }) => {
                         <ReactFinalForm.Field
                             name="maxDhisVersion"
                             label="Maximum DHIS version"
-                            initialValue={version.maxDhisVersion}
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={maxDhisVersionValidator}
@@ -139,7 +105,7 @@ const UserAppVersionEdit = ({ match }) => {
                             required
                             name="channel"
                             label="Release channel"
-                            initialValue={version.channel}
+                            initialValue={defaultAppChannel}
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={hasValue}
@@ -148,9 +114,17 @@ const UserAppVersionEdit = ({ match }) => {
                         <ReactFinalForm.Field
                             name="demoUrl"
                             label="Demo URL"
-                            initialValue={version.demoUrl}
                             placeholder="e.g. https://dhis2.org/demo"
                             component={InputFieldFF}
+                            className={styles.field}
+                        />
+                        <ReactFinalForm.Field
+                            required
+                            name="file"
+                            label="Upload version"
+                            accept=".zip"
+                            validate={hasValue}
+                            component={FileInputFieldFF}
                             className={styles.field}
                         />
                         <Button
@@ -158,7 +132,7 @@ const UserAppVersionEdit = ({ match }) => {
                             type="submit"
                             disabled={!valid || submitting}
                         >
-                            Update app version
+                            Create app version
                         </Button>
                     </form>
                 )}
@@ -167,8 +141,4 @@ const UserAppVersionEdit = ({ match }) => {
     )
 }
 
-UserAppVersionEdit.propTypes = {
-    match: PropTypes.object.isRequired,
-}
-
-export default UserAppVersionEdit
+export default UserAppVersionNew

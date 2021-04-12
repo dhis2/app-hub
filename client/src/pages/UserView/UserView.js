@@ -9,6 +9,7 @@ import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
+import UserAppVersionNew from 'src/pages/UserAppVersionNew/UserAppVersionNew'
 import UserOrganisation from 'src/pages/UserOrganisation/UserOrganisation'
 import UserOrganisationNew from 'src/pages/UserOrganisationNew/UserOrganisationNew'
 import UserOrganisations from 'src/pages/UserOrganisations/UserOrganisations'
@@ -81,12 +82,12 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/organisations/new`}
                 component={UserOrganisationNew}
             />
-            {/*
             <Route
                 exact
-                path={`${match.url}/app/:appId/version/upload`}
-                component={UserAppVersionUpload}
+                path={`${match.url}/app/:appId/version/new`}
+                component={UserAppVersionNew}
             />
+            {/*
             <Route
                 path={`${match.url}/upload`}
                 component={AppUpload}

@@ -26,6 +26,13 @@ const VersionsCard = ({ app }) => {
                 versions={versions}
                 renderEditVersionButton={renderEditVersionButton}
             />
+            <Link
+                className={styles.newVersionButton}
+                to={`/user/app/${app.id}/version/new`}
+                tabIndex="-1"
+            >
+                <Button primary>New version</Button>
+            </Link>
         </Card>
     )
 }
