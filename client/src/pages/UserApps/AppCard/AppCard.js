@@ -65,7 +65,7 @@ const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
                     (app.status === APP_STATUS_APPROVED ||
                         app.status === APP_STATUS_REJECTED) && (
                         <Link
-                            to="/user/app/${app.id}/version/upload"
+                            to={`/user/app/${app.id}/version/upload`}
                             tabIndex="-1"
                         >
                             <Button small>Upload new version</Button>
