@@ -37,7 +37,7 @@ HeaderSection.propTypes = {
     logoSrc: PropTypes.string,
 }
 
-const AboutSection = ({ appDescription, latestVersion }) => (
+const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
     <section className={classnames(styles.appCardSection, styles.aboutSection)}>
         <div>
             <h2 className={styles.appCardHeading}>About this app</h2>
@@ -64,6 +64,14 @@ const AboutSection = ({ appDescription, latestVersion }) => (
                     latestVersion.maxDhisVersion
                 )}
             </p>
+            {sourceUrl && (
+                <>
+                    <Divider margin="12px 0" className={styles.divider} />
+                    <a href={sourceUrl} className={styles.sourceUrl}>
+                        Source code
+                    </a>
+                </>
+            )}
         </div>
     </section>
 )
@@ -108,6 +116,7 @@ const AppView = ({ match }) => {
             <AboutSection
                 appDescription={app.description}
                 latestVersion={latestVersion}
+                sourceUrl={app.sourceUrl}
             />
             <Divider />
             {screenshots.length > 0 && (

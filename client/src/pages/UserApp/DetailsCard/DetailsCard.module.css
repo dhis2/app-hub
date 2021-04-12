@@ -43,5 +43,10 @@
 }
 
 .sourceUrl {
+    color: var(--colors-blue700);
     text-decoration: underline;
+}
+
+.sourceUrl:hover, .sourceUrl:focus {
+    color: var(--colors-grey900);
 }

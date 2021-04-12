@@ -61,3 +61,22 @@
     font-size: 11px;
     color: var(--colors-grey700);
 }
+
+.divider {
+    max-width: 80%;
+}
+
+.sourceUrl:before {
+    display: block;
+    content: "";
+}
+
+.sourceUrl {
+    font-size: 14px;
+    color: var(--colors-blue700);
+    text-decoration: underline;
+}
+
+.sourceUrl:hover, .sourceUrl:focus {
+    color: var(--colors-grey900);
+}
