@@ -41,3 +41,7 @@
 .editLogoButton {
     margin-top: var(--spacers-dp4);
 }
+
+.sourceUrl {
+    text-decoration: underline;
+}

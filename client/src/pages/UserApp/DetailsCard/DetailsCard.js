@@ -137,7 +137,12 @@ const DetailsCard = ({ app, mutate }) => {
                 <h2 className={sharedStyles.cardHeader}>Source code URL</h2>
                 <span style={{ marginRight: 8 }}>
                     {app.sourceUrl ? (
-                        <a href="{app.sourceUrl}">{app.sourceUrl}</a>
+                        <a
+                            href={`${app.sourceUrl}`}
+                            className={styles.sourceUrl}
+                        >
+                            {app.sourceUrl}
+                        </a>
                     ) : (
                         <em>No source code URL provided</em>
                     )}
