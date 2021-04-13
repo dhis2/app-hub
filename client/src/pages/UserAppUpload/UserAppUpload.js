@@ -14,12 +14,14 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import styles from './UserAppUpload.module.css'
 import config from 'config'
 import { useQuery } from 'src/api'
+import * as api from 'src/api'
 import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
 import { semverValidator } from 'src/lib/form-validators/semver-validator'
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const {
     defaultAppType,
@@ -63,6 +65,9 @@ const UserAppUpload = ({ user }) => {
         ),
         requestOpts
     )
+    const history = useHistory()
+    const successAlert = useSuccessAlert()
+    const errorAlert = useErrorAlert()
 
     if (error) {
         return (
@@ -106,8 +111,50 @@ const UserAppUpload = ({ user }) => {
         label: organisation.name,
         value: organisation.id,
     }))
-    const handleSubmit = async values => {
-        debugger
+    const handleSubmit = async ({
+        name,
+        description,
+        appType,
+        sourceUrl,
+        file,
+        logo,
+        developerName,
+        developerEmail,
+        developerOrganisation,
+        version,
+        minDhisVersion,
+        maxDhisVersion,
+        demoUrl,
+        channel,
+    }) => {
+        try {
+            const { appId } = await api.createApp({
+                file: file[0],
+                logo: logo[0],
+                app: {
+                    name,
+                    description,
+                    appType,
+                    sourceUrl,
+                    developer: {
+                        name: developerName,
+                        email: developerEmail,
+                        organisationId: developerOrganisation,
+                    },
+                    version: {
+                        version,
+                        minDhisVersion,
+                        maxDhisVersion,
+                        demoUrl,
+                        channel,
+                    },
+                },
+            })
+            successAlert.show({ message: `Successfully uploaded app ${name}` })
+            history.push(`/user/app/${appId}`)
+        } catch (error) {
+            errorAlert.show({ error })
+        }
     }
 
     return (
@@ -253,6 +300,7 @@ const UserAppUpload = ({ user }) => {
                                 name="developerName"
                                 label="Developer name"
                                 placeholder="Enter a name"
+                                initialValue={user.name}
                                 component={InputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
@@ -263,6 +311,7 @@ const UserAppUpload = ({ user }) => {
                                 label="Developer email"
                                 type="email"
                                 placeholder="Enter an email address"
+                                initialValue={user.email}
                                 component={InputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
@@ -281,7 +330,7 @@ const UserAppUpload = ({ user }) => {
 
                         <section className={styles.formSection}>
                             <h3 className={styles.subheader}>
-                                Upload app file
+                                Upload app file (Required)
                             </h3>
                             <p className={styles.description}>
                                 App files should be submitted as zip.
@@ -289,6 +338,7 @@ const UserAppUpload = ({ user }) => {
                             <ReactFinalForm.Field
                                 required
                                 name="file"
+                                buttonLabel="Upload a zip file"
                                 accept=".zip"
                                 component={FileInputFieldFF}
                                 className={styles.field}
@@ -297,7 +347,9 @@ const UserAppUpload = ({ user }) => {
                         </section>
 
                         <section className={styles.formSection}>
-                            <h3 className={styles.subheader}>Upload logo</h3>
+                            <h3 className={styles.subheader}>
+                                Upload logo (Required)
+                            </h3>
                             <p className={styles.description}>
                                 A logo will be displayed in the App Hub
                                 listings. A good-looking logo will help users
@@ -306,6 +358,7 @@ const UserAppUpload = ({ user }) => {
                             <ReactFinalForm.Field
                                 required
                                 name="logo"
+                                buttonLabel="Upload a logo"
                                 accept="image/*"
                                 component={FileInputFieldFF}
                                 className={styles.field}
@@ -317,7 +370,7 @@ const UserAppUpload = ({ user }) => {
                             primary
                             type="submit"
                             disabled={!valid || submitting}
-                          className={styles.submitButton}
+                            className={styles.submitButton}
                         >
                             Save and submit
                         </Button>

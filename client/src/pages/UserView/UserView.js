@@ -48,8 +48,10 @@ const UserView = ({ loadUser, user, match }) => {
         <Component
             {...props}
             user={{
-                isManager: user.profile.manager,
                 id: user.userId,
+                isManager: user.profile.manager,
+                name: user.profile.name,
+                email: user.profile.email,
             }}
         />
     )

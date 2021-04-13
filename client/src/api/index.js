@@ -51,8 +51,20 @@ export function setAppApproval(appId, status) {
     )
 }
 
-export function createApp(payload) {
-    return fromApi('v1/apps', true, createAppUploadOptions(payload))
+export function createApp({ file, logo, app }) {
+    const form = new FormData()
+    form.append('file', file, file.name)
+    form.append('app', JSON.stringify(app))
+    form.append('logo', logo, logo.name)
+
+    return apiV2.request(
+        'apps',
+        { useAuth: true },
+        {
+            method: 'POST',
+            body: form,
+        }
+    )
 }
 
 export function createNewVersion(appId, payload) {
@@ -142,23 +154,6 @@ export async function getAuthHeaders() {
     const accessToken = await Auth.getAccessToken()
     headers['Authorization'] = 'Bearer ' + accessToken
     return headers
-}
-
-export function createAppUploadOptions(data) {
-    const fileInput = data.file
-    const imageInput = data.image
-    const form = new FormData()
-    form.append('file', fileInput, fileInput.name)
-    form.append('app', JSON.stringify(data.app))
-    if (imageInput && imageInput.name) {
-        form.append('imageFile', imageInput, imageInput.name)
-    }
-
-    const fetchOptions = {
-        method: 'POST',
-        body: form,
-    }
-    return fetchOptions
 }
 
 /**
