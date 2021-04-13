@@ -8,6 +8,7 @@ import UserApiKey from 'src/pages/UserApiKey/UserApiKey'
 import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
+import UserAppUpload from 'src/pages/UserAppUpload/UserAppUpload'
 import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
 import UserAppVersionNew from 'src/pages/UserAppVersionNew/UserAppVersionNew'
 import UserOrganisation from 'src/pages/UserOrganisation/UserOrganisation'
@@ -87,12 +88,10 @@ const UserView = ({ loadUser, user, match }) => {
                 path={`${match.url}/app/:appId/version/new`}
                 component={UserAppVersionNew}
             />
-            {/*
             <Route
                 path={`${match.url}/upload`}
-                component={AppUpload}
+                component={provideUser(UserAppUpload)}
             />
-            */}
             {/* No-match route */}
             <Route render={PageNotFound} />
         </Switch>

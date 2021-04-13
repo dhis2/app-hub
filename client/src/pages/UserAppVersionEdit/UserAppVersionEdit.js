@@ -117,6 +117,7 @@ const UserAppVersionEdit = ({ match }) => {
                             required
                             name="minDhisVersion"
                             label="Minimum DHIS version"
+                            placeholder="Select a version"
                             initialValue={version.minDhisVersion}
                             component={SingleSelectFieldFF}
                             className={styles.field}
@@ -126,6 +127,7 @@ const UserAppVersionEdit = ({ match }) => {
                         <ReactFinalForm.Field
                             name="maxDhisVersion"
                             label="Maximum DHIS version"
+                            placeholder="Select a version"
                             initialValue={version.maxDhisVersion}
                             component={SingleSelectFieldFF}
                             className={styles.field}
@@ -148,6 +150,7 @@ const UserAppVersionEdit = ({ match }) => {
                         <ReactFinalForm.Field
                             name="demoUrl"
                             label="Demo URL"
+                            type="url"
                             initialValue={version.demoUrl}
                             placeholder="e.g. https://dhis2.org/demo"
                             component={InputFieldFF}

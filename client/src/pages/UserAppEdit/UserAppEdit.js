@@ -9,7 +9,7 @@ import {
     TextAreaFieldFF,
     SingleSelectFieldFF,
     hasValue,
-    url
+    url,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
@@ -112,6 +112,7 @@ const UserAppEdit = ({ match }) => {
                         <ReactFinalForm.Field
                             name="sourceUrl"
                             label="Source code URL"
+                            type="url"
                             placeholder="e.g. https://github.com/user/app"
                             helpText="Sharing the source code of your app lets technical users evaluate if the app is right for their instance."
                             initialValue={app.sourceUrl}
