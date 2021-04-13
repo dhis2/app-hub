@@ -34,7 +34,7 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
 
     return (
         <Modal onClose={onClose} small>
-            <ModalTitle>Add member</ModalTitle>
+            <ModalTitle>Edit organisation name</ModalTitle>
             <ModalContent>
                 <ReactFinalForm.Form onSubmit={handleSubmit}>
                     {({ handleSubmit, valid, submitting }) => (
@@ -56,7 +56,11 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                 >
                                     Update name
                                 </Button>
-                                <Button onClick={onClose} secondary>
+                                <Button
+                                    onClick={onClose}
+                                    secondary
+                                    disabled={submitting}
+                                >
                                     Cancel
                                 </Button>
                             </div>

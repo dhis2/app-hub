@@ -1,0 +1,15 @@
+.subheader {
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.versionsFilters {
+    padding: var(--spacers-dp16) var(--spacers-dp8);
+}
+
+.dhisVersionSelect {
+    max-width: 200px;
+    margin-top: var(--spacers-dp16);
+}

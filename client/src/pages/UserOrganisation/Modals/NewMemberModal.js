@@ -63,7 +63,11 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
                                 >
                                     Add member
                                 </Button>
-                                <Button onClick={onClose} secondary>
+                                <Button
+                                    onClick={onClose}
+                                    secondary
+                                    disabled={submitting}
+                                >
                                     Cancel
                                 </Button>
                             </div>

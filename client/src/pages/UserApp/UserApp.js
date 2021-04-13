@@ -32,7 +32,7 @@ const UserApp = ({ match }) => {
     return (
         <>
             <DetailsCard app={app} mutate={mutate} />
-            <VersionsCard app={app} />
+            <VersionsCard app={app} mutate={mutate} />
             <ScreenshotsCard app={app} mutate={mutate} />
         </>
     )

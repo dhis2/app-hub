@@ -1,176 +1,41 @@
-import {
-    Checkbox,
-    Button,
-    Table,
-    TableHead,
-    TableRowHead,
-    TableCellHead,
-    TableBody,
-    TableRow,
-    TableCell,
-    SingleSelectField,
-    SingleSelectOption,
-} from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import semver from 'semver'
+import Filters from './Filters/Filters'
 import styles from './Versions.module.css'
+import VersionsTable from './VersionsTable/VersionsTable'
 import config from 'config'
-import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
-const channelToDisplayName = config.ui.appChannelToDisplayName
+const { defaultAppChannel, appChannelToDisplayName } = config.ui
 
-const ChannelCheckbox = ({
-    name,
-    label,
-    channelsFilter,
-    setChannelsFilter,
-}) => {
-    const handleChange = ({ checked }) => {
-        const newState = new Set(channelsFilter)
-        if (checked) {
-            newState.add(name)
-        } else {
-            newState.delete(name)
-        }
-        setChannelsFilter(newState)
+const initialChannelsFilter = versions => {
+    const hasChannel = (versions, channel) =>
+        versions.find(v => v.channel === channel)
+
+    if (hasChannel(versions, defaultAppChannel)) {
+        return new Set([defaultAppChannel])
     }
-
-    return (
-        <div className={styles.channelCheckbox}>
-            <Checkbox
-                dense
-                checked={channelsFilter.has(name)}
-                disabled={channelsFilter.size === 1 && channelsFilter.has(name)}
-                onChange={handleChange}
-                label={label}
-            />
-        </div>
+    return new Set(
+        Object.keys(appChannelToDisplayName).filter(channel =>
+            hasChannel(versions, channel)
+        )
     )
 }
 
-ChannelCheckbox.propTypes = {
-    channelsFilter: PropTypes.object.isRequired,
-    label: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    setChannelsFilter: PropTypes.func.isRequired,
-}
-
-const Filters = ({
+const Versions = ({
     versions,
-    channelsFilter,
-    setChannelsFilter,
-    dhisVersionFilter,
-    setDhisVersionFilter,
-    dhisVersions,
+    renderEditVersionButton,
+    renderDeleteVersionButton,
 }) => {
-    const hasChannel = channel => versions.some(v => v.channel === channel)
-
-    return (
-        <div className={styles.versionsFilters}>
-            <h3 className={styles.subheader}>Channel</h3>
-            {Object.keys(channelToDisplayName)
-                .filter(hasChannel)
-                .map(name => (
-                    <ChannelCheckbox
-                        key={name}
-                        name={name}
-                        label={channelToDisplayName[name]}
-                        channelsFilter={channelsFilter}
-                        setChannelsFilter={setChannelsFilter}
-                    />
-                ))}
-            <div className={styles.dhisVersionSelect}>
-                <SingleSelectField
-                    dense
-                    placeholder={'Select a version'}
-                    label={'Compatible with DHIS2 version'}
-                    clearable
-                    selected={dhisVersionFilter}
-                    onChange={({ selected }) => setDhisVersionFilter(selected)}
-                >
-                    {dhisVersions.map(dhisVersion => (
-                        <SingleSelectOption
-                            key={dhisVersion}
-                            label={dhisVersion}
-                            value={dhisVersion}
-                        />
-                    ))}
-                </SingleSelectField>
-            </div>
-        </div>
+    const [channelsFilter, setChannelsFilter] = useState(() =>
+        initialChannelsFilter(versions)
     )
-}
-
-Filters.propTypes = {
-    channelsFilter: PropTypes.object.isRequired,
-    dhisVersionFilter: PropTypes.string.isRequired,
-    dhisVersions: PropTypes.array.isRequired,
-    setChannelsFilter: PropTypes.func.isRequired,
-    setDhisVersionFilter: PropTypes.func.isRequired,
-    versions: PropTypes.array.isRequired,
-}
-
-const VersionsTable = ({ versions, renderEditVersionButton }) => (
-    <Table>
-        <TableHead>
-            <TableRowHead>
-                <TableCellHead>Version</TableCellHead>
-                <TableCellHead>Channel</TableCellHead>
-                <TableCellHead>DHIS2 version compatibility</TableCellHead>
-                <TableCellHead>Upload date</TableCellHead>
-                <TableCellHead></TableCellHead>
-            </TableRowHead>
-        </TableHead>
-        <TableBody>
-            {versions.map(version => (
-                <TableRow key={version.id}>
-                    <TableCell>{version.version}</TableCell>
-                    <TableCell className={styles.channelNameCell}>
-                        {channelToDisplayName[version.channel]}
-                    </TableCell>
-                    <TableCell>
-                        {renderDhisVersionsCompatibility(
-                            version.minDhisVersion,
-                            version.maxDhisVersion
-                        )}
-                    </TableCell>
-                    <TableCell>
-                        {new Date(version.created).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>
-                        <a download href={version.downloadUrl} tabIndex="-1">
-                            <Button small secondary>
-                                Download
-                            </Button>
-                        </a>
-                        {renderEditVersionButton &&
-                            renderEditVersionButton(version)}
-                    </TableCell>
-                </TableRow>
-            ))}
-        </TableBody>
-    </Table>
-)
-
-VersionsTable.propTypes = {
-    versions: PropTypes.array.isRequired,
-}
-
-const Versions = ({ versions, renderEditVersionButton }) => {
-    let initialChannelsFilter = new Set(['stable'])
-    if (!versions.find(v => v.channel === 'stable')) {
-        if (versions.find(v => v.channel === 'development')) {
-            initialChannelsFilter = new Set(['development'])
-        } else {
-            initialChannelsFilter = new Set(['canary'])
-        }
-    }
-    const [channelsFilter, setChannelsFilter] = useState(initialChannelsFilter)
     const [dhisVersionFilter, setDhisVersionFilter] = useState('')
     const dhisVersionFilterSemver = semver.coerce(dhisVersionFilter)
-    const satisfiesDhisVersion = version => {
-        const { minDhisVersion: min, maxDhisVersion: max } = version
+    const satisfiesDhisVersion = ({
+        minDhisVersion: min,
+        maxDhisVersion: max,
+    }) => {
         if (!dhisVersionFilter || (!min && !max)) {
             return true
         } else if (min && max) {
@@ -185,14 +50,13 @@ const Versions = ({ versions, renderEditVersionButton }) => {
         }
     }
     const filteredVersions = versions
-        .filter(version => channelsFilter.has(version.channel))
+        .filter(({ channel }) => channelsFilter.has(channel))
         .filter(satisfiesDhisVersion)
 
     return (
         <div className={styles.versionsContainer}>
             <Filters
                 versions={versions}
-                dhisVersions={config.ui.dhisVersions}
                 channelsFilter={channelsFilter}
                 setChannelsFilter={setChannelsFilter}
                 dhisVersionFilter={dhisVersionFilter}
@@ -202,6 +66,7 @@ const Versions = ({ versions, renderEditVersionButton }) => {
                 <VersionsTable
                     versions={filteredVersions}
                     renderEditVersionButton={renderEditVersionButton}
+                    renderDeleteVersionButton={renderDeleteVersionButton}
                 />
             ) : (
                 <em>There are no compatible versions matching your criteria</em>
@@ -212,6 +77,7 @@ const Versions = ({ versions, renderEditVersionButton }) => {
 
 Versions.propTypes = {
     versions: PropTypes.array.isRequired,
+    renderDeleteVersionButton: PropTypes.func,
     renderEditVersionButton: PropTypes.func,
 }
 
