@@ -52,8 +52,8 @@ describe('v2/apps', () => {
         },
         version: {
             version: '1.0.0',
-            minDhisVersion: '2.25',
-            maxDhisVersion: '2.33',
+            minDhisVersion: '2.23',
+            maxDhisVersion: '2.35',
             demoUrl: 'https://www.dhis2.org',
             channel: 'stable',
         },
@@ -87,9 +87,9 @@ describe('v2/apps', () => {
                 payload: await streamToPromise(form),
             }
 
-            const res = await server.inject(request)
-            expect(res.statusCode).to.equal(201)
-            const receivedPayload = JSON.parse(res.payload)
+            const response = await server.inject(request)
+            expect(response.statusCode).to.equal(201)
+            const receivedPayload = JSON.parse(response.payload)
             expect(receivedPayload).to.include(['id'])
             expect(receivedPayload.id).to.be.string()
         })
@@ -110,8 +110,30 @@ describe('v2/apps', () => {
                 payload: await streamToPromise(form),
             }
 
-            const res = await server.inject(request)
-            expect(res.statusCode).to.equal(400)
+            const response = await server.inject(request)
+            expect(response.statusCode).to.equal(400)
+        })
+    })
+
+    describe('delete app', () => {
+        it('should be able to delete an app', async () => {
+            const form = createFormForApp(sampleApp)
+            const createRequest = {
+                method: 'POST',
+                url: '/api/v2/apps',
+                headers: form.getHeaders(),
+                payload: await streamToPromise(form),
+            }
+            const createResponse = await server.inject(createRequest)
+            expect(createResponse.statusCode).to.equal(201)
+
+            const { id: appId } = JSON.parse(createResponse.payload)
+            const deleteRequest = {
+                method: 'DELETE',
+                url: `/api/v1/apps/${appId}`,
+            }
+            const deleteResponse = await server.inject(deleteRequest)
+            expect(deleteResponse.statusCode).to.equal(200)
         })
     })
 })
