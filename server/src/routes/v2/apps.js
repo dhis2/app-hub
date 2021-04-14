@@ -1,9 +1,5 @@
 const Boom = require('@hapi/boom')
 const debug = require('debug')('apphub:server:routes:handlers:apps')
-const OrganisationService = require('../../services/organisation')
-const AppModel = require('../../models/v1/out/App')
-const CreateAppModel = require('../../models/v2/in/CreateAppModel')
-const { AppStatus, MediaType } = require('../../enums')
 const {
     getApps,
     createApp,
@@ -18,15 +14,19 @@ const {
     createUser,
     addUserToOrganisation,
 } = require('../../data')
-const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
-const { saveFile } = require('../../utils')
-const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
-const Joi = require('../../utils/CustomJoi')
+const { AppStatus, MediaType } = require('../../enums')
+const AppModel = require('../../models/v1/out/App')
+const CreateAppModel = require('../../models/v2/in/CreateAppModel')
 const {
     canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../security')
+const OrganisationService = require('../../services/organisation')
+const { saveFile } = require('../../utils')
+const Joi = require('../../utils/CustomJoi')
+const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
+const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
 
 const CHANNELS = ['stable', 'development', 'canary']
 const APPTYPES = ['APP', 'DASHBOARD_WIDGET', 'TRACKER_DASHBOARD_WIDGET']
@@ -42,19 +42,19 @@ module.exports = [
                 query: Joi.object({
                     channels: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...CHANNELS))
-                    ).description(
-                        'Filter by channel'
-                    ).default(['stable']),
+                    )
+                        .description('Filter by channel')
+                        .default(['stable']),
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
-                    ).description(
-                        'Filter by app type'
-                    ).default(['APP']),
+                    )
+                        .description('Filter by app type')
+                        .default(['APP']),
                 }).unknown(true),
             },
             plugins: {
                 queryFilter: {
-                    enabled: true
+                    enabled: true,
                 },
                 pagination: {
                     enabled: true,
@@ -62,7 +62,8 @@ module.exports = [
             },
         },
         handler: async (request, h) => {
-            const channels = request.plugins.queryFilter.getFilter('channels').value
+            const channels = request.plugins.queryFilter.getFilter('channels')
+                .value
             const types = request.plugins.queryFilter.getFilter('types').value
 
             const apps = await getApps(
@@ -83,7 +84,7 @@ module.exports = [
             const result = convertAppsToApiV1Format(filteredApps, request)
             return h.paginate(pager, {
                 result,
-                total: result.length
+                total: result.length,
             })
         },
     },
@@ -114,13 +115,15 @@ module.exports = [
                 throw Boom.unauthorized()
             }
 
-            const { app, logo, file } = request.payload
+            const { db } = h.context
+            const { id: currentUserId } = await getCurrentUserFromRequest(
+                request,
+                db
+            )
+            const isManager = currentUserIsManager(request)
 
-            if (!app || !logo || !file) {
-                throw Boom.badRequest('App, logo and zip file are all required')
-            }
-
-            const appJsonPayload = JSON.parse(app)
+            const { payload } = request
+            const appJsonPayload = JSON.parse(payload.app)
             const appJsonValidationResult = CreateAppModel.def.validate(
                 appJsonPayload
             )
@@ -129,87 +132,70 @@ module.exports = [
                 throw Boom.badRequest(appJsonValidationResult.error)
             }
 
-            const knex = h.context.db
-
-            let currentUser = null
-            let currentUserId = null
-            let isManager = false
-            try {
-                currentUser = await getCurrentUserFromRequest(request, knex)
-                currentUserId = currentUser.id
-
-                isManager = currentUserIsManager(request)
-            } catch (err) {
-                throw Boom.unauthorized('No user found for the request')
+            const { organisationId } = appJsonPayload.developer
+            const organisation = await OrganisationService.findOne(
+                organisationId,
+                false,
+                db
+            )
+            if (!organisation) {
+                throw Boom.badRequest('Unknown organisation')
             }
 
-            let appId = null
-            let versionId = null
-            let iconId = null
-
-            const trx = await knex.transaction()
-
-            try {
-                const { organisationId } = appJsonPayload.developer
-                const organisation = await OrganisationService.findOne(
-                    organisationId,
-                    false,
-                    trx
+            const isMember = await OrganisationService.hasUser(
+                organisationId,
+                currentUserId,
+                db
+            )
+            if (!isMember && !isManager) {
+                throw Boom.unauthorized(
+                    `You don't have permission to upload apps to that organisation`
                 )
+            }
 
-                if (!organisation) {
-                    throw Boom.badRequest('Unknown organisation')
-                }
-                const isMember = await OrganisationService.hasUser(
-                    organisationId,
-                    currentUserId,
-                    trx
-                )
-                if (!isMember && !isManager) {
-                    throw Boom.unauthorized(
-                        'You don\'t have permission to upload apps to that organisation'
-                    )
-                }
+            // TODO: Move function to apps service
+            const createAppWithLogo = async trx => {
+                const { appType, sourceUrl, version } = appJsonPayload
 
-                //Create the basic app
-                const dbApp = await createApp(
+                // TODO: Move function to apps service
+                const app = await createApp(
                     {
                         userId: currentUserId,
                         developerUserId: currentUserId,
                         orgId: organisationId,
-                        appType: appJsonPayload.appType,
+                        appType: appType,
                     },
                     trx
                 )
 
-                //Set newly uploaded apps as pending
-                appId = dbApp.id
+                // TODO: Move function to apps service
+                // TODO: The status of an app should default to PENDING upon
+                // creation, so should edit `createApp` so that this function
+                // is not necessary
                 await createAppStatus(
                     {
                         userId: currentUserId,
                         orgId: organisationId,
-                        appId: dbApp.id,
+                        appId: app.id,
                         status: AppStatus.PENDING,
                     },
                     trx
                 )
 
-                //Create the version of the app
-                const { demoUrl, version } = appJsonPayload.version
-                const { sourceUrl } = appJsonPayload
+                // TODO: Move function to apps service
                 const appVersion = await createAppVersion(
                     {
                         userId: currentUserId,
-                        appId: dbApp.id,
-                        demoUrl,
+                        appId: app.id,
                         sourceUrl,
-                        version,
+                        demoUrl: version.demoUrl,
+                        version: version.version,
                     },
                     trx
                 )
-                versionId = appVersion.id
 
-                //Add the texts as english language, only supported for now
+                // Store the app name and description in the English localised
+                // version, which is the only language currently supported
                 await createLocalizedAppVersion(
                     {
                         userId: currentUserId,
@@ -221,12 +207,7 @@ module.exports = [
                     trx
                 )
 
-                //Publish the app to stable channel by default
-                const {
-                    minDhisVersion,
-                    maxDhisVersion,
-                    channel,
-                } = appJsonPayload.version
+                const { minDhisVersion, maxDhisVersion, channel } = version
                 await addAppVersionToChannel(
                     {
                         appVersionId: appVersion.id,
@@ -238,11 +219,13 @@ module.exports = [
                     trx
                 )
 
+                const { logo } = payload
                 const logoMetadata = logo.hapi
-                const { id: appMedia_id, media_id } = await addAppMedia(
+                // TODO: Move function to apps service
+                const { id: logoId } = await addAppMedia(
                     {
                         userId: currentUserId,
-                        appId: appId,
+                        appId: app.id,
                         mediaType: MediaType.Logo,
                         fileName: logoMetadata.filename,
                         mime: logoMetadata.headers['content-type'],
@@ -252,42 +235,21 @@ module.exports = [
                     trx
                 )
 
-                debug(
-                    `Logo inserted with app_media_id '${appMedia_id}' and media_id: '${media_id}`
-                )
-                iconId = appMedia_id
-            } catch (err) {
-                debug('ROLLING BACK TRANSACTION')
-                debug(err)
-
-                await trx.rollback()
-                throw Boom.badRequest(err.message, err)
-            }
-
-            if (appId === null || versionId === null) {
-                await trx.rollback()
-                throw Boom.internal('Could not create app')
-            }
-
-            try {
-                await trx.commit()
+                const { file } = payload
                 const appUpload = saveFile(
-                    `${appId}/${versionId}`,
+                    `${app.id}/${appVersion.id}`,
                     'app.zip',
                     file._data
                 )
-                const iconUpload = saveFile(appId, iconId, logo._data)
-                await Promise.all([appUpload, iconUpload])
-            } catch (ex) {
-                debug(ex)
-                await trx.rollback()
-                throw Boom.internal(ex)
+                const logoUpload = saveFile(app.id, logoId, logo._data)
+                await Promise.all([appUpload, logoUpload])
+
+                return app
             }
 
-            return {
-                statusCode: 200,
-                appId
-            }
+            const app = await db.transaction(createAppWithLogo)
+
+            return h.response(app).created(`/v2/apps/${app.id}`)
         },
-    }
+    },
 ]
