@@ -1,28 +1,14 @@
 const Boom = require('@hapi/boom')
-const debug = require('debug')('apphub:server:routes:handlers:apps')
-const {
-    getApps,
-    createApp,
-    createAppStatus,
-    createAppVersion,
-    createLocalizedAppVersion,
-    addAppVersionToChannel,
-    addAppMedia,
-    getOrganisationsByName,
-    createOrganisation,
-    getUserByEmail,
-    createUser,
-    addUserToOrganisation,
-} = require('../../data')
+const { getApps } = require('../../data')
 const { AppStatus, MediaType } = require('../../enums')
-const AppModel = require('../../models/v1/out/App')
 const CreateAppModel = require('../../models/v2/in/CreateAppModel')
 const {
     canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../security')
-const OrganisationService = require('../../services/organisation')
+const App = require('../../services/app')
+const Organisation = require('../../services/organisation')
 const { saveFile } = require('../../utils')
 const Joi = require('../../utils/CustomJoi')
 const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
@@ -133,7 +119,7 @@ module.exports = [
             }
 
             const { organisationId } = appJsonPayload.developer
-            const organisation = await OrganisationService.findOne(
+            const organisation = await Organisation.findOne(
                 organisationId,
                 false,
                 db
@@ -142,7 +128,7 @@ module.exports = [
                 throw Boom.badRequest('Unknown organisation')
             }
 
-            const isMember = await OrganisationService.hasUser(
+            const isMember = await Organisation.hasUser(
                 organisationId,
                 currentUserId,
                 db
@@ -153,81 +139,51 @@ module.exports = [
                 )
             }
 
-            // TODO: Move function to apps service
-            const createAppWithLogo = async trx => {
-                const { appType, sourceUrl, version } = appJsonPayload
-
-                // TODO: Move function to apps service
-                const app = await createApp(
+            const app = await db.transaction(async trx => {
+                const { appType } = appJsonPayload
+                const app = await App.create(
                     {
                         userId: currentUserId,
-                        developerUserId: currentUserId,
-                        orgId: organisationId,
-                        appType: appType,
-                    },
-                    trx
-                )
-
-                // TODO: Move function to apps service
-                // TODO: The status of an app should default to PENDING upon
-                // creation, so should edit `createApp` so that this function
-                // is not necessary
-                await createAppStatus(
-                    {
-                        userId: currentUserId,
-                        orgId: organisationId,
-                        appId: app.id,
+                        organisationId,
+                        appType,
                         status: AppStatus.PENDING,
                     },
                     trx
                 )
 
-                // TODO: Move function to apps service
-                const appVersion = await createAppVersion(
+                const { name, description, sourceUrl } = appJsonPayload
+                const {
+                    version,
+                    demoUrl,
+                    minDhisVersion,
+                    maxDhisVersion,
+                    channel,
+                } = appJsonPayload.version
+                const appVersion = await App.createVersionForApp(
+                    app.id,
                     {
                         userId: currentUserId,
-                        appId: app.id,
+                        version,
+                        demoUrl,
                         sourceUrl,
-                        demoUrl: version.demoUrl,
-                        version: version.version,
-                    },
-                    trx
-                )
-
-                // Store the app name and description in the English localised
-                // version, which is the only language currently supported
-                await createLocalizedAppVersion(
-                    {
-                        userId: currentUserId,
-                        appVersionId: appVersion.id,
-                        description: appJsonPayload.description || '',
-                        name: appJsonPayload.name,
-                        languageCode: 'en',
-                    },
-                    trx
-                )
-
-                const { minDhisVersion, maxDhisVersion, channel } = version
-                await addAppVersionToChannel(
-                    {
-                        appVersionId: appVersion.id,
-                        createdByUserId: currentUserId,
-                        channelName: channel,
                         minDhisVersion,
                         maxDhisVersion: maxDhisVersion || '',
+                        channel,
+                        appName: name,
+                        description: description || '',
                     },
                     trx
                 )
 
                 const { logo } = payload
                 const logoMetadata = logo.hapi
-                // TODO: Move function to apps service
-                const { id: logoId } = await addAppMedia(
+
+                const { id: logoId } = await App.createMediaForApp(
+                    app.id,
                     {
                         userId: currentUserId,
-                        appId: app.id,
                         mediaType: MediaType.Logo,
-                        fileName: logoMetadata.filename,
+                        filename: logoMetadata.filename,
                         mime: logoMetadata.headers['content-type'],
                         caption: 'App logo',
                         description: '',
@@ -245,9 +201,7 @@ module.exports = [
                 await Promise.all([appUpload, logoUpload])
 
                 return app
-            }
-
-            const app = await db.transaction(createAppWithLogo)
+            })
 
             return h.response(app).created(`/v2/apps/${app.id}`)
         },
