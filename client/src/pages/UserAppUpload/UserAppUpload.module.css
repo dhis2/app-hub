@@ -47,6 +47,22 @@
     max-width: 480px;
 }
 
+.organisationFieldGroup {
+    composes: field;
+    display: flex;
+    align-items: end;
+}
+
+.organisationFieldGroup button {
+    /* Match height of input */
+    min-height: 40px;
+    margin-left: var(--spacers-dp16);
+}
+
+.organisationField {
+    flex: 1;
+}
+
 .createOrganisationLink {
     margin-top: var(--spacers-dp16);
 }

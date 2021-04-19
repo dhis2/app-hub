@@ -1,40 +1,42 @@
 import {
-    Card,
     Button,
+    Modal,
+    ModalTitle,
+    ModalContent,
     ReactFinalForm,
     InputFieldFF,
     composeValidators,
     hasValue,
     email,
 } from '@dhis2/ui'
-import { useHistory } from 'react-router-dom'
-import styles from './UserOrganisationNew.module.css'
-import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import PropTypes from 'prop-types'
+import styles from './CreateOrganisationModal.module.css'
+import * as api from 'src/api'
 
-const UserOrganisationNew = () => {
-    const history = useHistory()
+const CreateOrganisationModal = ({ mutate, onClose }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
     const handleSubmit = async ({ name, email }) => {
         try {
-            const { id } = await api.addOrganisation({ name, email })
+            const organisation = await api.addOrganisation({ name, email })
+            mutate(organisations => [...organisations, organisation])
             successAlert.show({
                 message: `Successfully created organisation ${name}`,
             })
-            history.push(`/user/organisation/${id}`)
+            onClose()
         } catch (error) {
             errorAlert.show({ error })
         }
     }
 
     return (
-        <Card className={styles.card}>
-            <h2 className={styles.header}>Create organisation</h2>
-
-            <ReactFinalForm.Form onSubmit={handleSubmit}>
-                {({ handleSubmit, valid, submitting }) => (
+        <Modal onClose={onClose} small>
+            <ModalTitle>Create organisation</ModalTitle>
+            <ModalContent>
+                <ReactFinalForm.Form onSubmit={handleSubmit}>
+                    {({ handleSubmit, valid, submitting }) => (
                     <form onSubmit={handleSubmit}>
                         <ReactFinalForm.Field
                             required
@@ -63,10 +65,16 @@ const UserOrganisationNew = () => {
                             Create organisation
                         </Button>
                     </form>
-                )}
-            </ReactFinalForm.Form>
-        </Card>
+                    )}
+                </ReactFinalForm.Form>
+            </ModalContent>
+        </Modal>
     )
 }
 
-export default UserOrganisationNew
+CreateOrganisationModal.propTypes = {
+    mutate: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired
+}
+
+export default CreateOrganisationModal

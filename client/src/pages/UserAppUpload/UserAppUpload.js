@@ -22,6 +22,8 @@ import * as api from 'src/api'
 import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
 import { semverValidator } from 'src/lib/form-validators/semver-validator'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import { useModalState } from 'src/lib/use-modal-state'
+import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 
 const {
     defaultAppType,
@@ -55,7 +57,7 @@ const requestOpts = {
 }
 
 const UserAppUpload = ({ user }) => {
-    const { data: organisations, error } = useQuery(
+    const { data: organisations, error, mutate } = useQuery(
         'organisations',
         useMemo(
             () => ({
@@ -65,6 +67,7 @@ const UserAppUpload = ({ user }) => {
         ),
         requestOpts
     )
+    const createOrganisationModal = useModalState()
     const history = useHistory()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
@@ -316,16 +319,27 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={hasValue}
                             />
-                            <ReactFinalForm.Field
-                                required
-                                name="developerOrganisation"
-                                label="Organisation"
-                                placeholder="Select an organisation"
-                                component={SingleSelectFieldFF}
-                                className={styles.field}
-                                validate={hasValue}
-                                options={organisationOptions}
-                            />
+                            <div className={styles.organisationFieldGroup}>
+                                {createOrganisationModal.isVisible && (
+                                    <CreateOrganisationModal
+                                      mutate={mutate}
+                                      onClose={createOrganisationModal.hide}
+                                    />
+                                )}
+                                <ReactFinalForm.Field
+                                    required
+                                    name="developerOrganisation"
+                                    label="Organisation"
+                                    placeholder="Select an organisation"
+                                    component={SingleSelectFieldFF}
+                                    className={styles.organisationField}
+                                    validate={hasValue}
+                                    options={organisationOptions}
+                                />
+                                <Button secondary onClick={createOrganisationModal.show}>
+                                    Create organisation
+                                </Button>
+                            </div>
                         </section>
 
                         <section className={styles.formSection}>
