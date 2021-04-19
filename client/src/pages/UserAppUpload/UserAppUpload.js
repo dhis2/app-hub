@@ -15,6 +15,7 @@ import {
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 import styles from './UserAppUpload.module.css'
 import config from 'config'
 import { useQuery } from 'src/api'
@@ -23,7 +24,6 @@ import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-versio
 import { semverValidator } from 'src/lib/form-validators/semver-validator'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 import { useModalState } from 'src/lib/use-modal-state'
-import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 
 const {
     defaultAppType,
@@ -322,8 +322,8 @@ const UserAppUpload = ({ user }) => {
                             <div className={styles.organisationFieldGroup}>
                                 {createOrganisationModal.isVisible && (
                                     <CreateOrganisationModal
-                                      mutate={mutate}
-                                      onClose={createOrganisationModal.hide}
+                                        mutate={mutate}
+                                        onClose={createOrganisationModal.hide}
                                     />
                                 )}
                                 <ReactFinalForm.Field
@@ -336,7 +336,10 @@ const UserAppUpload = ({ user }) => {
                                     validate={hasValue}
                                     options={organisationOptions}
                                 />
-                                <Button secondary onClick={createOrganisationModal.show}>
+                                <Button
+                                    secondary
+                                    onClick={createOrganisationModal.show}
+                                >
                                     Create organisation
                                 </Button>
                             </div>

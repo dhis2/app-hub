@@ -44,7 +44,9 @@ const VersionsTable = ({
                         )}
                     </TableCell>
                     <TableCell>
-                        {new Date(version.created).toLocaleDateString()}
+                        <span title={new Date(version.created)}>
+                            {new Date(version.created).toLocaleDateString()}
+                        </span>
                     </TableCell>
                     <TableCell>
                         <a download href={version.downloadUrl} tabIndex="-1">

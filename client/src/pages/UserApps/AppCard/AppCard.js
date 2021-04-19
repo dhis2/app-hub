@@ -35,9 +35,8 @@ const appStatusToCardText = appStatus => {
 const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
     const logo = app.images.find(i => i.logo)
     const actionForStatus = appCardActionForStatus(app.status)
-    const actionRelativeTime = relativeTimeFormat(
-        Math.max(...app.versions.map(v => v.created))
-    )
+    const actionTime = new Date(Math.max(...app.versions.map(v => v.created)))
+    const actionRelativeTime = relativeTimeFormat(actionTime)
 
     return (
         <div className={styles.appCard}>
@@ -47,9 +46,10 @@ const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
                 </div>
                 <div>
                     <h3 className={styles.appCardName}>{app.name}</h3>
-                    <div
-                        className={styles.appCardAction}
-                    >{`${actionForStatus} ${actionRelativeTime}`}</div>
+                    <div className={styles.appCardAction}>
+                        {`${actionForStatus} `}
+                        <span title={actionTime}>{actionRelativeTime}</span>
+                    </div>
                     <div>
                         <Tag
                             positive={app.status === APP_STATUS_APPROVED}

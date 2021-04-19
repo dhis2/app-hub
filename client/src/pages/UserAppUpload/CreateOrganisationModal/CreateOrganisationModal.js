@@ -9,10 +9,10 @@ import {
     hasValue,
     email,
 } from '@dhis2/ui'
-import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 import PropTypes from 'prop-types'
 import styles from './CreateOrganisationModal.module.css'
 import * as api from 'src/api'
+import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const CreateOrganisationModal = ({ mutate, onClose }) => {
     const successAlert = useSuccessAlert()
@@ -37,34 +37,34 @@ const CreateOrganisationModal = ({ mutate, onClose }) => {
             <ModalContent>
                 <ReactFinalForm.Form onSubmit={handleSubmit}>
                     {({ handleSubmit, valid, submitting }) => (
-                    <form onSubmit={handleSubmit}>
-                        <ReactFinalForm.Field
-                            required
-                            name="name"
-                            label="Organisation name"
-                            placeholder="e.g. 'My Organisation'"
-                            component={InputFieldFF}
-                            className={styles.field}
-                            validate={hasValue}
-                        />
-                        <ReactFinalForm.Field
-                            required
-                            name="email"
-                            label="Contact email"
-                            placeholder="Enter an email address"
-                            type="email"
-                            component={InputFieldFF}
-                            className={styles.field}
-                            validate={composeValidators(hasValue, email)}
-                        />
-                        <Button
-                            primary
-                            type="submit"
-                            disabled={!valid || submitting}
-                        >
-                            Create organisation
-                        </Button>
-                    </form>
+                        <form onSubmit={handleSubmit}>
+                            <ReactFinalForm.Field
+                                required
+                                name="name"
+                                label="Organisation name"
+                                placeholder="e.g. 'My Organisation'"
+                                component={InputFieldFF}
+                                className={styles.field}
+                                validate={hasValue}
+                            />
+                            <ReactFinalForm.Field
+                                required
+                                name="email"
+                                label="Contact email"
+                                placeholder="Enter an email address"
+                                type="email"
+                                component={InputFieldFF}
+                                className={styles.field}
+                                validate={composeValidators(hasValue, email)}
+                            />
+                            <Button
+                                primary
+                                type="submit"
+                                disabled={!valid || submitting}
+                            >
+                                Create organisation
+                            </Button>
+                        </form>
                     )}
                 </ReactFinalForm.Form>
             </ModalContent>
@@ -74,7 +74,7 @@ const CreateOrganisationModal = ({ mutate, onClose }) => {
 
 CreateOrganisationModal.propTypes = {
     mutate: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
 }
 
 export default CreateOrganisationModal
