@@ -1,3 +1,10 @@
+# [2.17.0](https://github.com/dhis2/app-hub/compare/v2.16.1...v2.17.0) (2021-04-15)
+
+
+### Features
+
+* validate mimetypes ([#461](https://github.com/dhis2/app-hub/issues/461)) ([0e8fba3](https://github.com/dhis2/app-hub/commit/0e8fba33ec6c1ce92eb72a51901ad22bca80b452))
+
 ## [2.16.1](https://github.com/dhis2/app-hub/compare/v2.16.0...v2.16.1) (2021-04-06)
 
 
