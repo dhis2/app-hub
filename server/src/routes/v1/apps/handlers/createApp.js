@@ -9,6 +9,7 @@ const {
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
 const { saveFile } = require('../../../../utils')
+const { validateImageMetadata } = require('../../../../utils/validateMime')
 
 module.exports = {
     method: 'POST',
@@ -113,6 +114,7 @@ module.exports = {
 
             const { logo } = payload
             const logoMetadata = logo.hapi
+            validateImageMetadata(request.server.mime, logoMetadata)
 
             const { id: logoId } = await App.createMediaForApp(
                 app.id,
