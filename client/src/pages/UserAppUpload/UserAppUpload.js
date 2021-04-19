@@ -128,7 +128,7 @@ const UserAppUpload = ({ user }) => {
         channel,
     }) => {
         try {
-            const { appId } = await api.createApp({
+            const { id: appId } = await api.createApp({
                 file: file[0],
                 logo: logo[0],
                 app: {

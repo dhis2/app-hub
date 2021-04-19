@@ -57,14 +57,10 @@ export function createApp({ file, logo, app }) {
     form.append('app', JSON.stringify(app))
     form.append('logo', logo, logo.name)
 
-    return apiV2.request(
-        'apps',
-        { useAuth: true },
-        {
-            method: 'POST',
-            body: form,
-        }
-    )
+    return fromApi('v1/apps', true, {
+        method: 'POST',
+        body: form,
+    })
 }
 
 export function createNewVersion(appId, payload) {
