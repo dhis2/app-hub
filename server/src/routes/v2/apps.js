@@ -1,6 +1,6 @@
 const Boom = require('@hapi/boom')
 const { getApps } = require('../../data')
-const { AppStatus, MediaType } = require('../../enums')
+const { AppStatus } = require('../../enums')
 const CreateAppModel = require('../../models/v2/in/CreateAppModel')
 const {
     canCreateApp,
@@ -9,7 +9,6 @@ const {
 } = require('../../security')
 const App = require('../../services/app')
 const Organisation = require('../../services/organisation')
-const { saveFile } = require('../../utils')
 const Joi = require('../../utils/CustomJoi')
 const { filterAppsBySpecificDhis2Version } = require('../../utils/filters')
 const { convertAppsToApiV1Format } = require('../v1/apps/formatting')
@@ -139,69 +138,16 @@ module.exports = [
                 )
             }
 
-            const app = await db.transaction(async trx => {
-                const { appType } = appJsonPayload
-                const app = await App.create(
-                    {
-                        userId: currentUserId,
-                        organisationId,
-                        appType,
-                        status: AppStatus.PENDING,
-                    },
-                    trx
-                )
-
-                const { name, description, sourceUrl } = appJsonPayload
-                const {
-                    version,
-                    demoUrl,
-                    minDhisVersion,
-                    maxDhisVersion,
-                    channel,
-                } = appJsonPayload.version
-                const appVersion = await App.createVersionForApp(
-                    app.id,
-                    {
-                        userId: currentUserId,
-                        version,
-                        demoUrl,
-                        sourceUrl,
-                        minDhisVersion,
-                        maxDhisVersion: maxDhisVersion || '',
-                        channel,
-                        appName: name,
-                        description: description || '',
-                    },
-                    trx
-                )
-
-                const { logo } = payload
-                const logoMetadata = logo.hapi
-
-                const { id: logoId } = await App.createMediaForApp(
-                    app.id,
-                    {
-                        userId: currentUserId,
-                        mediaType: MediaType.Logo,
-                        filename: logoMetadata.filename,
-                        mime: logoMetadata.headers['content-type'],
-                        caption: 'App logo',
-                        description: '',
-                    },
-                    trx
-                )
-
-                const { file } = payload
-                const appUpload = saveFile(
-                    `${app.id}/${appVersion.id}`,
-                    'app.zip',
-                    file._data
-                )
-                const logoUpload = saveFile(app.id, logoId, logo._data)
-                await Promise.all([appUpload, logoUpload])
-
-                return app
-            })
+            const { appType } = appJsonPayload
+            const app = await App.create(
+                {
+                    userId: currentUserId,
+                    organisationId,
+                    appType,
+                    status: AppStatus.PENDING,
+                },
+                db
+            )
 
             return h.response(app).created(`/v2/apps/${app.id}`)
         },
