@@ -69,7 +69,9 @@ const Versions = ({
                     renderDeleteVersionButton={renderDeleteVersionButton}
                 />
             ) : (
-                <em>There are no compatible versions matching your criteria</em>
+                <em className={styles.noVersions}>
+                    There are no compatible versions matching your criteria
+                </em>
             )}
         </div>
     )
