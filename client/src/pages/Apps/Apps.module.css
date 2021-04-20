@@ -11,6 +11,7 @@
         grid-template-areas: "filters apps";
         grid-template-columns: 224px auto;
         grid-gap: var(--spacers-dp24);
+        padding: 0;
     }
 }
 

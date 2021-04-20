@@ -1,17 +1,35 @@
-.container {
-    margin-left: var(--spacers-dp8);
+@value m-medium from 'src/styles/breakpoints.css';
+
+@media m-medium {
+    .container {
+        padding-left: var(--spacers-dp8);
+    }
 }
 
 .header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
-    margin-bottom: var(--spacers-dp24);
+    margin: var(--spacers-dp16) var(--spacers-dp4);
 }
 
-.searchInput {
-    margin-left: var(--spacers-dp24);
-    min-width: 25%;
-    max-width: 420px;
+@media (min-width: 500px) {
+    .header {
+        grid-template-columns: auto 1fr;
+    }
+
+    .searchInput {
+        margin-left: var(--spacers-dp24);
+        min-width: 25%;
+        max-width: 380px;
+    }
+}
+
+@media m-medium {
+    .header {
+        margin: 0;
+        margin-bottom: var(--spacers-dp24);
+    }
 }
 
 .statusCard {
