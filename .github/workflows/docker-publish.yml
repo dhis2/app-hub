@@ -60,7 +60,7 @@ jobs:
 
                   [ "$VERSION" == "master" ] && VERSION=latest
                   [ "$VERSION" == "next" ] && VERSION=staging
-                  [ "$VERSION" == "feat/ui-redesign" ] && VERSION=redesign
+                  [ "$VERSION" == "ui-redesign" ] && VERSION=redesign
 
                   echo VERSION=$VERSION
 
