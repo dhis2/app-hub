@@ -14,7 +14,11 @@ import styles from './CreateOrganisationModal.module.css'
 import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
-const CreateOrganisationModal = ({ mutate, onClose }) => {
+const CreateOrganisationModal = ({
+    mutate,
+    setDeveloperOrganisation,
+    onClose,
+}) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
@@ -22,6 +26,12 @@ const CreateOrganisationModal = ({ mutate, onClose }) => {
         try {
             const organisation = await api.addOrganisation({ name, email })
             mutate(organisations => [...organisations, organisation])
+            // Ensure data returned by useQuery in parent component has been
+            // updated to include new organisation before setting select input
+            // value
+            setTimeout(() => {
+                setDeveloperOrganisation(organisation.id)
+            }, 0)
             successAlert.show({
                 message: `Successfully created organisation ${name}`,
             })
@@ -74,6 +84,7 @@ const CreateOrganisationModal = ({ mutate, onClose }) => {
 
 CreateOrganisationModal.propTypes = {
     mutate: PropTypes.func.isRequired,
+    setDeveloperOrganisation: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
 }
 

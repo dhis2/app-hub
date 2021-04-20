@@ -72,6 +72,9 @@ const UserAppUpload = ({ user }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
+    // XXX
+    console.log('render', organisations)
+
     if (error) {
         return (
             <CenteredContent>
@@ -170,8 +173,23 @@ const UserAppUpload = ({ user }) => {
                 approved by the core DHIS2 team.
             </p>
 
-            <ReactFinalForm.Form onSubmit={handleSubmit}>
-                {({ handleSubmit, valid, submitting }) => (
+            <ReactFinalForm.Form
+                mutators={{
+                    setDeveloperOrganisation: (
+                        [organisationId],
+                        state,
+                        utils
+                    ) => {
+                        utils.changeValue(
+                            state,
+                            'developerOrganisation',
+                            () => organisationId
+                        )
+                    },
+                }}
+                onSubmit={handleSubmit}
+            >
+                {({ form, handleSubmit, valid, submitting }) => (
                     <form onSubmit={handleSubmit}>
                         <section className={styles.formSection}>
                             <h3 className={styles.subheader}>
@@ -323,6 +341,10 @@ const UserAppUpload = ({ user }) => {
                                 {createOrganisationModal.isVisible && (
                                     <CreateOrganisationModal
                                         mutate={mutate}
+                                        setDeveloperOrganisation={
+                                            form.mutators
+                                                .setDeveloperOrganisation
+                                        }
                                         onClose={createOrganisationModal.hide}
                                     />
                                 )}
