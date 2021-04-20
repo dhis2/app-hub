@@ -1,3 +1,16 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
+.table {
+    display: block;
+    overflow-x: scroll;
+}
+
+@media m-medium {
+    .table {
+        display: table;
+    }
+}
+
 .channelNameCell {
     color: var(--colors-grey700);
 }

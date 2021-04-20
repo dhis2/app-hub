@@ -1,9 +1,5 @@
 @value m-medium from 'src/styles/breakpoints.css';
 
-.main {
-    padding: var(--spacers-dp16) var(--spacers-dp12);
-}
-
 @media m-medium {
     .main {
         padding: var(--spacers-dp16);

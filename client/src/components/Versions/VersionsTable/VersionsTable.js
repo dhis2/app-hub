@@ -20,7 +20,7 @@ const VersionsTable = ({
     renderEditVersionButton,
     renderDeleteVersionButton,
 }) => (
-    <Table>
+    <Table className={styles.table}>
         <TableHead>
             <TableRowHead>
                 <TableCellHead>Version</TableCellHead>

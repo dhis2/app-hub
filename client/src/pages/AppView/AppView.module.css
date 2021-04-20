@@ -1,3 +1,5 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
 .appCard {
     display: block !important;
     max-width: 960px;
@@ -5,7 +7,13 @@
 }
 
 .appCardSection {
-    padding: var(--spacers-dp24);
+    padding: var(--spacers-dp12);
+}
+
+@media m-medium {
+    .appCardSection {
+        padding: var(--spacers-dp24);
+    }
 }
 
 .appCardHeader {
@@ -50,8 +58,15 @@
 
 .aboutSection {
     display: grid;
-    grid-gap: var(--spacers-dp96);
-    grid-template-columns: 60% auto;
+    grid-template-columns: 1fr;
+    grid-gap: var(--spacers-dp16);
+}
+
+@media m-medium {
+    .aboutSection {
+        grid-template-columns: 60% auto;
+        grid-gap: var(--spacers-dp96);
+    }
 }
 
 .latestVersionDescription {
