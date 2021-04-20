@@ -1,11 +1,9 @@
-@value m-medium from 'src/styles/breakpoints.css';
-
 .table {
     display: block;
     overflow-x: scroll;
 }
 
-@media m-medium {
+@media (min-width: 600px) {
     .table {
         display: table;
     }
