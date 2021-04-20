@@ -129,6 +129,6 @@ exports.down = async knex => {
                 ON users.id = app.developer_user_id
 
             INNER JOIN organisation AS org
-                ON org.id = app.
+                ON org.id = app.organisation_id
     `)
 }
