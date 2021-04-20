@@ -1,3 +1,5 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
 .emptyApps {
     margin: 2rem 0;
     font-size: 1.8rem;
@@ -6,7 +8,13 @@
 
 .appCards {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     grid-gap: var(--spacers-dp16);
-    max-width: 992px;
+}
+
+@media m-medium {
+    .appCards {
+        grid-template-columns: 1fr 1fr;
+        max-width: 992px;
+    }
 }

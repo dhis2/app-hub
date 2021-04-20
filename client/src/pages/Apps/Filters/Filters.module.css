@@ -1,5 +1,18 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
 .dividerContainer {
     margin: var(--spacers-dp16) 0;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media m-medium {
+    .filters {
+        grid-template-columns: 1fr;
+    }
 }
 
 .filterWrapper {

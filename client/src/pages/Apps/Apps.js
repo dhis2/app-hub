@@ -68,7 +68,7 @@ const Apps = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.sidebar}>
+            <div className={styles.filters}>
                 <Filters
                     channels={config.ui.appChannelToDisplayName}
                     channelsFilter={channels}
@@ -80,7 +80,7 @@ const Apps = () => {
                     onQueryChange={setQuery}
                 />
             </div>
-            <div className={styles.content}>
+            <div className={styles.apps}>
                 <AppCards
                     isLoading={!data}
                     error={error?.message}

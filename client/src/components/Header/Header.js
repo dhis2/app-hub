@@ -98,7 +98,7 @@ const Header = () => (
                         All apps
                     </NavLink>
                 </li>
-                <li className={styles.navLink}>
+                <li className={styles.yourAppsLink}>
                     <NavLink exact to="/user">
                         Your apps
                     </NavLink>

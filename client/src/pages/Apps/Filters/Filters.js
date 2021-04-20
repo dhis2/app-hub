@@ -50,21 +50,23 @@ const Filters = ({
         <div className={styles.dividerContainer}>
             <Divider />
         </div>
-        <div className={styles.filterWrapper}>
-            <h3 className={styles.filterName}>App Categories</h3>
-            <CheckboxList
-                checkboxes={types}
-                selected={typesFilter}
-                onChange={onTypesFilterChange}
-            />
-        </div>
-        <div className={styles.filterWrapper}>
-            <h3 className={styles.filterName}>Release Channels</h3>
-            <CheckboxList
-                checkboxes={channels}
-                selected={channelsFilter}
-                onChange={onChannelsFilterChange}
-            />
+        <div className={styles.filters}>
+            <div className={styles.filterWrapper}>
+                <h3 className={styles.filterName}>App Categories</h3>
+                <CheckboxList
+                    checkboxes={types}
+                    selected={typesFilter}
+                    onChange={onTypesFilterChange}
+                />
+            </div>
+            <div className={styles.filterWrapper}>
+                <h3 className={styles.filterName}>Release Channels</h3>
+                <CheckboxList
+                    checkboxes={channels}
+                    selected={channelsFilter}
+                    onChange={onChannelsFilterChange}
+                />
+            </div>
         </div>
     </>
 )

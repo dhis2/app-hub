@@ -1,3 +1,5 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
 :root {
     --header-bg: #1C2431;
     --header-height: 48px;
@@ -34,10 +36,17 @@
 }
 
 .brandText {
-    margin-left: var(--spacers-dp16);
+    margin-left: var(--spacers-dp8);
     color: inherit;
     font-weight: bold;
-    font-size: inherit;
+    font-size: 12px;
+}
+
+@media m-medium {
+    .brandText {
+        margin-left: var(--spacers-dp16);
+        font-size: inherit;
+    }
 }
 
 .signInButton {
@@ -66,13 +75,30 @@
 .navLinks {
     list-style: none;
     margin: 0;
-    margin-left: var(--spacers-dp48);
+    margin-left: var(--spacers-dp24);
     padding: 0;
+}
+
+@media m-medium {
+    .navLinks {
+        margin-left: var(--spacers-dp48);
+    }
 }
 
 .navLink {
     display: inline-block;
     color: var(--colors-grey400);
+}
+
+.yourAppsLink {
+    composes: navLink;
+    display: none;
+}
+
+@media (min-width: 500px) {
+    .yourAppsLink {
+        display: inline-block;
+    }
 }
 
 .navLink a {
