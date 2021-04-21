@@ -145,9 +145,11 @@ const UserApps = ({ user }) => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <Link to="/user/upload" tabIndex="-1">
-                    <Button primary>Upload a new app</Button>
-                </Link>
+                <div>
+                    <Link to="/user/upload" tabIndex="-1">
+                        <Button primary>Upload a new app</Button>
+                    </Link>
+                </div>
                 <Input
                     className={styles.searchInput}
                     type="search"

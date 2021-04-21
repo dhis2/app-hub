@@ -82,9 +82,11 @@ const UserOrganisations = ({ user }) => {
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <Link to="/user/organisations/new" tabIndex="-1">
-                    <Button primary>Create a new organisation</Button>
-                </Link>
+                <div>
+                    <Link to="/user/organisations/new" tabIndex="-1">
+                        <Button primary>Create a new organisation</Button>
+                    </Link>
+                </div>
                 <Input
                     className={styles.searchInput}
                     type="search"
