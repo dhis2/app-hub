@@ -77,12 +77,14 @@ exports.down = async knex => {
             .inTable('users')
     })
 
+    // if duplicate email, only one will be kept
     await knex.raw(`
         UPDATE app a
         SET developer_user_id = u.id
         from users u
         where u.email = a.contact_email
     `)
+
     await knex.schema.table('app', table => {
         table.dropColumn('contact_email')
         table

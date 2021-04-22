@@ -11,7 +11,6 @@ const CreateModelAppData = Joi.object().keys({
         .uri()
         .allow(''),
     developer: Joi.object().keys({
-        name: Joi.string(),
         email: Joi.string().email(),
         address: Joi.string().allow(''),
         organisation: Joi.string(),

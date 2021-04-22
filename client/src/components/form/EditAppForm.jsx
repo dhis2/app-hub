@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React from 'react';
+import React from 'react'
 import MenuItem from 'material-ui/MenuItem'
 import * as formUtils from './ReduxFormUtils'
 import { Field, reduxForm, Form } from 'redux-form'
@@ -19,8 +19,6 @@ const validate = values => {
         'appName',
         'appType',
         'file',
-        'developerName',
-        'developerEmail',
         'developerOrg',
         'version',
     ]
@@ -28,8 +26,7 @@ const validate = values => {
         'appName',
         'sourceUrl',
         'appType',
-        'developerName',
-        'developerEmail',
+        'contactEmail',
         'developerOrg',
     ]
     requiredFields.forEach(field => {
@@ -58,8 +55,7 @@ const EditForm = props => {
             appType: values.appType,
             description: values.description,
             developer: {
-                name: values.developerName,
-                email: values.developerEmail,
+                email: values.contactEmail,
                 address: values.developerAddress,
                 organisation: values.developerOrg,
             },
@@ -114,16 +110,9 @@ const EditForm = props => {
             <br />
             <h3>Developer</h3>
             <Field
-                name="developerName"
+                name="contactEmail"
                 component={formUtils.renderTextField}
-                label="Developer Name"
-                disabled={true}
-                fullWidth
-            />
-            <Field
-                name="developerEmail"
-                component={formUtils.renderTextField}
-                label="Developer Email"
+                label="Contact Email"
                 disabled={true}
                 fullWidth
             />

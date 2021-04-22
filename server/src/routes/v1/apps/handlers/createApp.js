@@ -23,8 +23,6 @@ const {
     addAppMedia,
     getOrganisationsByName,
     createOrganisation,
-    getUserByEmail,
-    createUser,
     addUserToOrganisation,
 } = require('../../../../data')
 
@@ -147,83 +145,14 @@ module.exports = {
                 }
             }
 
-            //Load developer or create if it doesnt exist
-            let appDeveloper = await getUserByEmail(
-                appJsonPayload.developer.email,
-                knex
-            )
-            if (appDeveloper === null) {
-                //Create developer
-                appDeveloper = await createUser(appJsonPayload.developer, trx)
-                await addUserToOrganisation(
-                    {
-                        userId: appDeveloper.id,
-                        organisationId: organisation.id,
-                    },
-                    trx
-                )
-            } else {
-                //TODO: Check if developer previously belongs to the organisation or add the dev to the org?
-                //TODO: decide business rules for how we should allow someone to be added to an organisation
-            }
-
             const organisationId = organisation.id
             const requestUserId = currentUserId
-            const developerUserId = appDeveloper.id
-
-            if (appJsonPayload.owner) {
-                const { email, name } = appJsonPayload.owner
-                let appOwner = await getUserByEmail(email, trx)
-
-                //Only automatically add the user to the organisation if,
-                //1. either it's a manager uploading the app
-                //2. or the owner e-mail is the same as verified on the request
-                const shouldAddUserToOrg =
-                    isManager || email === currentUser.email
-
-                debug('shouldAddUserToOrg:', shouldAddUserToOrg)
-                debug('isManager:', isManager)
-                debug('owner email:', email)
-                debug('currentUser.email', currentUser.email)
-
-                if (shouldAddUserToOrg && appOwner === null) {
-                    appOwner = await createUser(
-                        {
-                            email,
-                            name,
-                        },
-                        trx
-                    )
-                    await addUserToOrganisation(
-                        {
-                            userId: appOwner.id,
-                            organisationId: organisation.id,
-                        },
-                        trx
-                    )
-                } else if (shouldAddUserToOrg) {
-                    const hasUser = await OrganisationService.hasUser(
-                        organisation.id,
-                        appOwner.id,
-                        trx
-                    )
-                    if (!hasUser) {
-                        await addUserToOrganisation(
-                            {
-                                userId: appOwner.id,
-                                organisationId: organisation.id,
-                            },
-                            trx
-                        )
-                    }
-                }
-            }
 
             //Create the basic app
             const dbApp = await createApp(
                 {
                     userId: requestUserId,
-                    developerUserId,
+                    contactEmail: appJsonPayload.developer.email,
                     orgId: organisationId,
                     appType: appJsonPayload.appType,
                 },

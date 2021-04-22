@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import config from '../../../config'
 import MenuItem from 'material-ui/MenuItem'
@@ -28,14 +28,14 @@ const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
 const requiredFields = {
     general: ['appName', 'appType'],
     version: ['file', 'version', 'channel', 'minVer', 'maxVer'],
-    developer: ['developerName', 'developerEmail', 'developerOrg'],
+    developer: ['developerOrg'],
     image: [],
 }
 
 const varCharFields = {
     general: ['appName', 'appType', 'sourceUrl'],
     version: ['version'],
-    developer: ['developerName', 'developerEmail', 'developerOrg'],
+    developer: ['contactEmail', 'developerOrg'],
     image: ['imageCaption', 'imageDescription'],
 }
 
@@ -211,17 +211,10 @@ const AppDeveloperSection = props => {
     return (
         <FormSection name={props.name}>
             <Field
-                name="developerName"
-                fullWidth
-                autoFocus
-                component={formUtils.renderTextField}
-                label="Developer Name *"
-            />
-            <Field
-                name="developerEmail"
+                name="contactEmail"
                 fullWidth
                 component={formUtils.renderTextField}
-                label="Developer Email *"
+                label="Contact Email"
             />
             <Field
                 name="developerOrg"
@@ -307,8 +300,7 @@ class UploadAppFormStepper extends Component {
             appType: values.general.appType,
             sourceUrl: values.general.sourceUrl,
             developer: {
-                name: values.developer.developerName,
-                email: values.developer.developerEmail,
+                email: values.developer.contactEmail,
                 address: values.developer.developerAddress || '',
                 organisation: values.developer.developerOrg,
             },
