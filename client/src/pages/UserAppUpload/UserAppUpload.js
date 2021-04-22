@@ -72,9 +72,6 @@ const UserAppUpload = ({ user }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
-    // XXX
-    console.log('render', organisations)
-
     if (error) {
         return (
             <CenteredContent>
