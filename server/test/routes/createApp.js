@@ -32,9 +32,7 @@ describe('test create app', () => {
         appType: 'APP',
         sourceUrl: 'http://github.com',
         developer: {
-            name: 'Foo Bar',
-            email: 'foobar@dhis2.org',
-            address: '',
+            email: 'apphub-api@dhis2.org',
             organisation: 'The Largest Testing Organization In The World.',
         },
         versions: [

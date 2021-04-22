@@ -219,7 +219,7 @@ describe('@data::updateApp', () => {
 
         const newData = {
             id: app_id,
-            userId: firstApp.developer_id,
+            userId: firstApp.owner_id,
             name: 'Changed name',
             sourceUrl: 'https://some/url',
             demoUrl: 'http://some/other/url',
@@ -262,11 +262,11 @@ describe('@data::updateAppVersion', () => {
         expect(app.max_dhis2_version).to.equal(null)
         expect(app.min_dhis2_version).to.equal('2.28')
         expect(app.demo_url).to.equal(null)
-
+        console.log('appzz', app)
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: '123',
                 maxDhisVersion: '456',
                 version: '789',
@@ -291,7 +291,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: app.minDhisVersion,
                 maxDhisVersion: app.maxDhisVersion,
                 version: app.version,

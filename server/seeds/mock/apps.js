@@ -15,7 +15,7 @@ const whoApp = {
     organisation_id: organisations[1].id,
     created_by_user_id: users[0].id,
     type: AppType.APP,
-    contact_email: users[1].id,
+    contact_email: users[1].email,
 }
 const rejectedApp = {
     id: '384c41f8-b880-42c8-a360-02fc1d80e320',
