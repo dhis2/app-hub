@@ -23,7 +23,7 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
     //TODO: set address
     developer: {
         address: '',
-        email: app.developer_email,
+        email: app.contact_email,
         organisation: app.organisation,
     },
 
