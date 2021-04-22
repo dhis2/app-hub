@@ -1,3 +1,10 @@
+## [2.17.1](https://github.com/dhis2/app-hub/compare/v2.17.0...v2.17.1) (2021-04-20)
+
+
+### Bug Fixes
+
+* remove debug lines that spam logs ([#460](https://github.com/dhis2/app-hub/issues/460)) ([9059307](https://github.com/dhis2/app-hub/commit/9059307ececc7da600f0fd8a34a0b10afa952772))
+
 # [2.17.0](https://github.com/dhis2/app-hub/compare/v2.16.1...v2.17.0) (2021-04-15)
 
 
