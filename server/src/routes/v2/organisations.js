@@ -1,4 +1,5 @@
 const Boom = require('@hapi/boom')
+const JWT = require('jsonwebtoken')
 const Joi = require('../../utils/CustomJoi')
 const {
     currentUserIsManager,
@@ -9,6 +10,7 @@ const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
 // const debug = require('debug')('apphub:server:routes:handlers:organisations')
 const { wrapError, UniqueViolationError } = require('db-errors')
+const getServerUrl = require('../../utils/getServerUrl')
 
 module.exports = [
     {
@@ -325,6 +327,54 @@ module.exports = [
             return {
                 statusCode: 200,
             }
+        },
+    },
+    {
+        method: 'GET',
+        path: '/v2/organisations/invitation',
+        config: {
+                    //  auth: 'token',
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            //const { id } = await getCurrentUserFromRequest(request)
+
+            const { emailService } = request.services(true)
+
+            const token = await emailService.generateInvitation()
+
+            const link = `${getServerUrl(
+                request
+            )}/v2/organisations/invitation/${token}`
+
+            await emailService.sendInvitation(link)
+
+            return {
+                token,
+                link,
+            }
+        },
+    },
+    {
+        method: 'GET',
+        path: '/v2/organisations/invitation/{token}',
+        config: {
+            tags: ['api', 'v2'],
+        },
+        handler: async (request, h) => {
+            console.log('lzz')
+            const token = request.params.token
+            const secret = h.context.config.server.jwtSecret
+            let payload
+            try {
+                payload = JWT.verify(token, secret)
+            } catch (e) {
+                console.error(e)
+                return Boom.badRequest('Invalid token')
+            }
+
+            return 'Added to org' + payload.sub
         },
     },
 ]

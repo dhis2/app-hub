@@ -1568,6 +1568,13 @@
     "@hapi/bourne" "2.x.x"
     "@hapi/hoek" "9.x.x"
 
+"@hapipal/schmervice@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@hapipal/schmervice/-/schmervice-2.0.0.tgz#7b19f0d659f0944c43615a1e7f4de18d310bd6ff"
+  integrity sha512-EmQLVM4MdPXCw1iijqfG0gQXnawYsPypagdEFMo5c0kf637Sjj7x5DjDOMN2Qmce+tIm2Nv70vrSk6qfrJW3qw==
+  dependencies:
+    "@hapi/hoek" "9.x.x"
+
 "@marionebl/sander@^0.6.0":
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/@marionebl/sander/-/sander-0.6.1.tgz#1958965874f24bc51be48875feb50d642fc41f7b"
@@ -8160,6 +8167,11 @@ node-releases@^1.1.50:
   integrity sha512-snSiT1UypkgGt2wxPqS6ImEUICbNCMb31yaxWrOLXjhlt2z2/IBpaOxzONExqSm4y5oLnAqjjRWu+wsDzK5yNQ==
   dependencies:
     semver "^6.3.0"
+
+nodemailer@^6.5.0:
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-6.5.0.tgz#d12c28d8d48778918e25f1999d97910231b175d9"
+  integrity sha512-Tm4RPrrIZbnqDKAvX+/4M+zovEReiKlEXWDzG4iwtpL9X34MJY+D5LnQPH/+eghe8DLlAVshHAJZAZWBGhkguw==
 
 nodemon@^1.19.2:
   version "1.19.4"
