@@ -38,7 +38,6 @@ const AppHub = () => (
                                 <Switch>
                                     <Route exact path="/" component={Apps} />
                                     <Route
-                                        a
                                         path="/app/:appId"
                                         component={AppView}
                                     />

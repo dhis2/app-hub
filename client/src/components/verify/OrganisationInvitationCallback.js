@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom'
 import { useQueryParams, StringParam } from 'use-query-params'
 import JWT from 'jsonwebtoken'
 import { useAuth0 } from '@auth0/auth0-react'
@@ -29,7 +30,9 @@ const OrganisationInvitation = () => {
     }, [])
 
     if (!invitationToken) {
-        return 'No token to parse'
+        console.log('No invitationToken to parse, redirect to index')
+
+        return <Redirect to="/" />
     }
 
     if (error) {
