@@ -1,4 +1,5 @@
 const Boom = require('@hapi/boom')
+const Bounce = require('@hapi/bounce')
 const JWT = require('jsonwebtoken')
 const Joi = require('../../utils/CustomJoi')
 const {
@@ -330,25 +331,63 @@ module.exports = [
         },
     },
     {
-        method: 'GET',
-        path: '/v2/organisations/invitation',
+        method: 'POST',
+        path: '/v2/organisations/{orgId}/invitation',
         config: {
-                    //  auth: 'token',
+            auth: 'token',
             tags: ['api', 'v2'],
+            validate: {
+                payload: Joi.object({
+                    email: Joi.string()
+                        .email()
+                        .required(),
+                }),
+                params: Joi.object({
+                    orgId: OrgModel.definition.extract('id').required(),
+                }),
+            },
         },
         handler: async (request, h) => {
             const { db } = h.context
-            //const { id } = await getCurrentUserFromRequest(request)
+            const currentUser = await getCurrentUserFromRequest(request)
+
+            const org = await Organisation.findOne(
+                request.params.orgId,
+                true,
+                db
+            )
+            const isMember = await Organisation.hasUser(
+                org.id,
+
+                currentUser.id,
+
+                db
+            )
+            const isManager = currentUserIsManager(request)
+            const canAdd = org.owner === currentUser.id || isMember || isManager
+
+            if (!canAdd) {
+                throw Boom.forbidden('You do not have permission to add users')
+            }
 
             const { emailService } = request.services(true)
+            const { decoded, token } = Organisation.generateInvitationToken(
+                {
+                    organisation: org,
+                    user: currentUser,
+                },
+                request.payload.email
+            )
 
-            const token = await emailService.generateInvitation()
+            const link = `http://localhost:8081/verify/org?token=${token}`.replace(
+                '/api',
+                ''
+            )
 
-            const link = `${getServerUrl(
-                request
-            )}/v2/organisations/invitation/${token}`
-
-            await emailService.sendInvitation(link)
+            await emailService.sendOrganisationInvitation(
+                { emailTo: decoded.emailTo, organisation: org.name },
+                link
+            )
 
             return {
                 token,
@@ -357,24 +396,48 @@ module.exports = [
         },
     },
     {
-        method: 'GET',
+        // accept invitation-endpoint
+        method: 'POST',
         path: '/v2/organisations/invitation/{token}',
         config: {
+            auth: 'token',
             tags: ['api', 'v2'],
+            validate: {
+                params: Joi.object({
+                    token: Joi.string().required(),
+                }),
+            },
         },
         handler: async (request, h) => {
-            console.log('lzz')
+            const { id } = await getCurrentUserFromRequest(request)
+            const { db } = h.context
             const token = request.params.token
             const secret = h.context.config.server.jwtSecret
             let payload
+
             try {
                 payload = JWT.verify(token, secret)
             } catch (e) {
-                console.error(e)
+                request.logger.error(e)
                 return Boom.badRequest('Invalid token')
             }
+            try {
+                await Organisation.addUserById(payload.sub, id, db)
+            } catch (e) {
+                Bounce.ignore(e, UniqueViolationError)
+                throw Boom.conflict(
+                    'You are already a member of that organisation'
+                )
+            }
 
-            return 'Added to org' + payload.sub
+            return h
+                .response({
+                    organisation: {
+                        id: payload.sub,
+                        name: payload.organisation,
+                    },
+                })
+                .code(200)
         },
     },
 ]

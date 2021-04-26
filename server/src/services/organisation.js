@@ -2,6 +2,7 @@ const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
 const Organisation = require('../models/v2/Organisation')
 const Boom = require('@hapi/boom')
+const JWT = require('jsonwebtoken')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
@@ -177,6 +178,28 @@ const hasUser = async (id, userId, knex) => {
     return hasUser.length > 0
 }
 
+const generateInvitationToken = ({ organisation, user, secret }, emailTo) => {
+    secret = process.env.INTERNAL_JWT_SECRET
+    if (!secret) {
+        throw new Error('No secret setup, set INTERNAL_JWT_SECRET')
+    }
+
+    const decoded = {
+        from: { id: user.id, name: user.name },
+        emailTo,
+        sub: organisation.id,
+        organisation: organisation.name,
+    }
+
+    const token = JWT.sign(decoded, secret, {
+        expiresIn: 60 * 60 * 24 * 7, //one week
+    })
+    return {
+        decoded,
+        token,
+    }
+}
+
 module.exports = {
     find,
     findOne,
@@ -188,5 +211,6 @@ module.exports = {
     removeUser,
     hasUser,
     getUsersInOrganisation,
+    generateInvitationToken,
     ensureUniqueSlug,
 }

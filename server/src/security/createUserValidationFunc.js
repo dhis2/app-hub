@@ -78,10 +78,11 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                     user = await db.transaction(createUserTransaction)
                 }
 
-                returnObj.credentials.userId = user.id
                 const roles =
                     returnObj.credentials[getNamespacedClaimKey('roles')]
+                returnObj.credentials.userId = user.id
                 returnObj.credentials.roles = roles
+                returnObj.credentials.name = user.name
             } else if (decoded.sub === `${audience}@clients`) {
                 //If we get here we're dealing with an M2M API authenticated user
                 const [apiUser] = await db('users')
@@ -105,6 +106,7 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                     returnObj.credentials.roles = [ROLES.MANAGER] //the M2M has full access (all roles)
                     returnObj.credentials.email_verified = true
                     returnObj.credentials.userId = apiUser.id
+                    returnObj.credentials.name = apiUser.name
                 } catch (err) {
                     throw Boom.internal(err)
                 }

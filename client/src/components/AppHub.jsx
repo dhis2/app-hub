@@ -13,6 +13,8 @@ import '../styles/override.css'
 import Apps from './apps/Apps'
 import AppView from './appView/AppView'
 import UserView from './user/UserView'
+import OrganisationInvitation from './verify/OrganisationInvitation'
+import OrganisationInvitationCallback from './verify/OrganisationInvitationCallback'
 import Header from './header/Header'
 import Snackbar from './utils/Snackbar'
 import DialogRoot from './dialog/DialogRoot'
@@ -36,6 +38,7 @@ const AppHub = () => (
                                 <Switch>
                                     <Route exact path="/" component={Apps} />
                                     <Route
+                                        a
                                         path="/app/:appId"
                                         component={AppView}
                                     />
@@ -43,6 +46,16 @@ const AppHub = () => (
                                         path="/user"
                                         auth={Auth}
                                         component={UserView}
+                                    />
+                                    <Route
+                                        path="/verify/org/callback"
+                                        component={
+                                            OrganisationInvitationCallback
+                                        }
+                                    />
+                                    <Route
+                                        path="/verify/org"
+                                        component={OrganisationInvitation}
                                     />
                                     {/* No-match route - redirect to index */}
                                     <Route render={() => <Redirect to="/" />} />
