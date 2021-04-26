@@ -379,7 +379,7 @@ module.exports = [
                 request.payload.email
             )
 
-            const link = `http://localhost:8081/verify/org?token=${token}`.replace(
+            const link = `http://localhost:8081/verify/org?invitationToken=${token}`.replace(
                 '/api',
                 ''
             )
@@ -424,7 +424,7 @@ module.exports = [
             try {
                 await Organisation.addUserById(payload.sub, id, db)
             } catch (e) {
-                Bounce.ignore(e, UniqueViolationError)
+                Bounce.ignore(wrapError(e), UniqueViolationError)
                 throw Boom.conflict(
                     'You are already a member of that organisation'
                 )

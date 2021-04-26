@@ -47,8 +47,9 @@ const AppHub = () => (
                                         auth={Auth}
                                         component={UserView}
                                     />
-                                    <Route
+                                    <ProtectedRoute
                                         path="/verify/org/callback"
+                                        auth={Auth}
                                         component={
                                             OrganisationInvitationCallback
                                         }

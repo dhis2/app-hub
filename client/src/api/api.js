@@ -317,3 +317,11 @@ export function deleteApiKey() {
         }
     )
 }
+
+export function acceptOrganisationInvitation(token) {
+    return apiV2.request(
+        `organisations/invitation/${token}`,
+        { useAuth: true },
+        { method: 'POST' }
+    )
+}
