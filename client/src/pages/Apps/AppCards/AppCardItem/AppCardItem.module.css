@@ -2,13 +2,17 @@
     display: block;
     background: white;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 100ms;
     padding: var(--spacers-dp16);
     line-height: 20px;
     cursor: pointer;
 }
 
 .appCard:hover, .appCard:focus {
-    background: var(--colors-grey300);
+    background: inherit;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                0 4px 6px -1px rgba(0, 0, 0, 0.10);
 }
 
 .appCardHeader {
