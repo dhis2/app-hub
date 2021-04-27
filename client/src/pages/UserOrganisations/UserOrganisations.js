@@ -102,7 +102,7 @@ const UserOrganisations = ({ user }) => {
                         <em>You are not a member of any organisations.</em>
                         <div style={{ marginTop: 8 }}>
                             <Link to="/user/organisations/new" tabIndex="-1">
-                                <Button primary large>
+                                <Button large>
                                     Create your first organisation
                                 </Button>
                             </Link>
@@ -111,7 +111,9 @@ const UserOrganisations = ({ user }) => {
                 )}
                 {organisations.length > 0 &&
                     filteredOrganisations.length === 0 && (
-                        <em>No organisations match your search criteria.</em>
+                        <em>
+                            No organisations found. Try adjusting your search.
+                        </em>
                     )}
                 {filteredOrganisations.map(organisation => (
                     <OrganisationCard
