@@ -17,25 +17,23 @@ const AppCardItem = ({ id, name, developer, type, description, images }) => {
     const logo = images.find(elem => elem.logo)
 
     return (
-        <Link to={`/app/${id}`}>
-            <div className={styles.appCard}>
-                <header className={styles.appCardHeader}>
-                    <AppIcon src={logo?.imageUrl} />
-                    <div>
-                        <h2 className={styles.appCardName}>{name}</h2>
-                        <span className={styles.appCardDeveloper}>
-                            {developer.organisation || developer.name}
-                        </span>
-                        <span className={styles.appCardType}>
-                            {config.ui.appTypeToDisplayName[type]}
-                        </span>
-                    </div>
-                </header>
+        <Link to={`/app/${id}`} className={styles.appCard}>
+            <header className={styles.appCardHeader}>
+                <AppIcon src={logo?.imageUrl} />
+                <div>
+                    <h2 className={styles.appCardName}>{name}</h2>
+                    <span className={styles.appCardDeveloper}>
+                        {developer.organisation || developer.name}
+                    </span>
+                    <span className={styles.appCardType}>
+                        {config.ui.appTypeToDisplayName[type]}
+                    </span>
+                </div>
+            </header>
 
-                <p className={styles.appCardDescription}>
-                    {summarise(description)}
-                </p>
-            </div>
+            <p className={styles.appCardDescription}>
+                {summarise(description)}
+            </p>
         </Link>
     )
 }
