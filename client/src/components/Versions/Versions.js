@@ -22,11 +22,7 @@ const initialChannelsFilter = versions => {
     )
 }
 
-const Versions = ({
-    versions,
-    renderEditVersionButton,
-    renderDeleteVersionButton,
-}) => {
+const Versions = ({ versions, renderDeleteVersionButton }) => {
     const [channelsFilter, setChannelsFilter] = useState(() =>
         initialChannelsFilter(versions)
     )
@@ -65,7 +61,6 @@ const Versions = ({
             {filteredVersions.length > 0 ? (
                 <VersionsTable
                     versions={filteredVersions}
-                    renderEditVersionButton={renderEditVersionButton}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                 />
             ) : (
@@ -80,7 +75,6 @@ const Versions = ({
 Versions.propTypes = {
     versions: PropTypes.array.isRequired,
     renderDeleteVersionButton: PropTypes.func,
-    renderEditVersionButton: PropTypes.func,
 }
 
 export default Versions

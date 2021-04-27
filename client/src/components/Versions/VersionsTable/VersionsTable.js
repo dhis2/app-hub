@@ -15,11 +15,7 @@ import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-co
 
 const { appChannelToDisplayName } = config.ui
 
-const VersionsTable = ({
-    versions,
-    renderEditVersionButton,
-    renderDeleteVersionButton,
-}) => (
+const VersionsTable = ({ versions, renderDeleteVersionButton }) => (
     <Table className={styles.table}>
         <TableHead>
             <TableRowHead>
@@ -54,8 +50,6 @@ const VersionsTable = ({
                                 Download
                             </Button>
                         </a>
-                        {renderEditVersionButton &&
-                            renderEditVersionButton(version)}
                         {renderDeleteVersionButton &&
                             renderDeleteVersionButton(version)}
                     </TableCell>
@@ -68,7 +62,6 @@ const VersionsTable = ({
 VersionsTable.propTypes = {
     versions: PropTypes.array.isRequired,
     renderDeleteVersionButton: PropTypes.func,
-    renderEditVersionButton: PropTypes.func,
 }
 
 export default VersionsTable

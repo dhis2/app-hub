@@ -92,17 +92,6 @@ const DeleteVersionButton = ({ version, mutate }) => {
 
 const VersionsCard = ({ app, mutate }) => {
     const versions = app.versions.sort((a, b) => b.created - a.created)
-    const renderEditVersionButton = version => (
-        <Link
-            className={styles.editVersionButton}
-            to={`/user/app/${app.id}/version/${version.id}/edit`}
-            tabIndex="-1"
-        >
-            <Button small secondary>
-                Edit
-            </Button>
-        </Link>
-    )
     const renderDeleteVersionButton = version => (
         <DeleteVersionButton appId={app.id} version={version} mutate={mutate} />
     )
@@ -112,7 +101,6 @@ const VersionsCard = ({ app, mutate }) => {
             <h2 className={sharedStyles.cardHeader}>Versions</h2>
             <Versions
                 versions={versions}
-                renderEditVersionButton={renderEditVersionButton}
                 renderDeleteVersionButton={renderDeleteVersionButton}
             />
             <Link

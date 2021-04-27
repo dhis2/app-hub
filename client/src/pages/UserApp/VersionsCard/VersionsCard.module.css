@@ -1,4 +1,4 @@
-.editVersionButton, .deleteVersionButton {
+.deleteVersionButton {
     margin-left: var(--spacers-dp8);
 }
 
