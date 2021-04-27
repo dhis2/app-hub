@@ -167,7 +167,14 @@ const UserAppUpload = ({ user }) => {
                 A good app name, description and images are important. Make sure
                 to describe clearly what your app does and provide helpful
                 information for potential users. All submitted apps must be
-                approved by the core DHIS2 team.
+                approved by the core DHIS2 team. Check the{' '}
+                <a
+                    className={styles.helpTextLink}
+                    href="https://developers.dhis2.org/docs/guides/apphub-guidelines/"
+                >
+                    App Hub submission guidelines
+                </a>{' '}
+                to learn more.
             </p>
             <p className={styles.description}>
                 Fields marked with * are required.
