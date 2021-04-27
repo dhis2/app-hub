@@ -161,13 +161,11 @@ const UserApps = ({ user }) => {
             {apps.length === 0 && (
                 <section className={styles.statusCard}>
                     <h2 className={styles.statusCardHeader}>
-                        You have no apps
+                        You don't have any apps on the App Hub yet
                     </h2>
 
                     <Link to="/user/upload" tabIndex="-1">
-                        <Button primary large>
-                            Upload your first app
-                        </Button>
+                        <Button large>Upload your first app</Button>
                     </Link>
                 </section>
             )}
