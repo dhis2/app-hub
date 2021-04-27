@@ -1,4 +1,7 @@
 import {
+    CenteredContent,
+    NoticeBox,
+    CircularLoader,
     Card,
     Button,
     ReactFinalForm,
@@ -11,6 +14,7 @@ import {
 import { useHistory } from 'react-router-dom'
 import styles from './UserAppVersionNew.module.css'
 import config from 'config'
+import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
 import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
 import { semverValidator } from 'src/lib/form-validators/semver-validator'
@@ -32,6 +36,7 @@ const channelOptions = Object.entries(appChannelToDisplayName).map(
 
 const UserAppVersionNew = ({ match }) => {
     const { appId } = match.params
+    const { data: app, error } = useQueryV1(`apps/${appId}`, { auth: true })
     const history = useHistory()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
@@ -51,9 +56,27 @@ const UserAppVersionNew = ({ match }) => {
         }
     }
 
+    if (error) {
+        return (
+            <CenteredContent>
+                <NoticeBox title="Error loading your app" error>
+                    {error.message}
+                </NoticeBox>
+            </CenteredContent>
+        )
+    }
+
+    if (!app) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
+    }
+
     return (
         <Card className={styles.card}>
-            <h2 className={styles.header}>Create app version</h2>
+            <h2 className={styles.header}>Create app version: {app.name}</h2>
 
             <ReactFinalForm.Form onSubmit={handleSubmit}>
                 {({ handleSubmit, valid, submitting }) => (
