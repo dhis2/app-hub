@@ -102,7 +102,6 @@ const ScreenshotsCard = ({ app, mutate }) => {
             </form>
             <div className={styles.uploadButton}>
                 <Button
-                    primary
                     onClick={handleUploadButtonClick}
                     disabled={isUploading}
                 >

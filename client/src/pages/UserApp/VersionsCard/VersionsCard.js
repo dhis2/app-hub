@@ -107,7 +107,7 @@ const VersionsCard = ({ app, mutate }) => {
                 to={`/user/app/${app.id}/version/new`}
                 tabIndex="-1"
             >
-                <Button primary>New version</Button>
+                <Button>New version</Button>
             </Link>
         </Card>
     )

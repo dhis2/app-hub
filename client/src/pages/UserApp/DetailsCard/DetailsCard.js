@@ -120,7 +120,7 @@ const DetailsCard = ({ app, mutate }) => {
             </section>
             <Divider />
             <Link to={`/user/app/${app.id}/edit`} tabIndex="-1">
-                <Button secondary>Edit app details</Button>
+                <Button>Edit app details</Button>
             </Link>
         </Card>
     )
