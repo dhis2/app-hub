@@ -7,19 +7,15 @@ import {
     ReactFinalForm,
     InputFieldFF,
     TextAreaFieldFF,
-    SingleSelectFieldFF,
     hasValue,
     url,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useHistory } from 'react-router-dom'
 import styles from './UserAppEdit.module.css'
-import config from 'config'
 import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
-
-const { appTypeToDisplayName } = config.ui
 
 const UserAppEdit = ({ match }) => {
     const { appId } = match.params
@@ -93,21 +89,6 @@ const UserAppEdit = ({ match }) => {
                             className={styles.field}
                             validate={hasValue}
                             autoGrow
-                        />
-                        <ReactFinalForm.Field
-                            required
-                            name="appType"
-                            label="App type"
-                            initialValue={app.appType}
-                            component={SingleSelectFieldFF}
-                            className={styles.field}
-                            options={Object.entries(appTypeToDisplayName).map(
-                                ([value, label]) => ({
-                                    label,
-                                    value,
-                                })
-                            )}
-                            validate={hasValue}
                         />
                         <ReactFinalForm.Field
                             name="sourceUrl"
