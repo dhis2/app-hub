@@ -173,7 +173,7 @@ const UserApps = ({ user }) => {
             )}
             {apps.length > 0 && filteredApps.length === 0 && (
                 <section className={styles.statusCard}>
-                    <em>No apps match your search criteria.</em>
+                    <em>No apps found. Try adjusting your search.</em>
                 </section>
             )}
             {rejectedApps.length > 0 && (

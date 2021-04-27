@@ -32,6 +32,7 @@
     line-height: 19px;
     max-width: 600px;
     margin: 0;
+    margin-bottom: var(--spacers-dp8);
 }
 
 .subheader + .description {

@@ -107,7 +107,7 @@ const UserAppVersionNew = ({ match }) => {
                         <ReactFinalForm.Field
                             required
                             name="minDhisVersion"
-                            label="Minimum DHIS version"
+                            label="Minimum DHIS2 version"
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={hasValue}
@@ -115,7 +115,7 @@ const UserAppVersionNew = ({ match }) => {
                         />
                         <ReactFinalForm.Field
                             name="maxDhisVersion"
-                            label="Maximum DHIS version"
+                            label="Maximum DHIS2 version"
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={maxDhisVersionValidator}

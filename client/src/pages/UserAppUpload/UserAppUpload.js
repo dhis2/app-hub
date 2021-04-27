@@ -169,6 +169,9 @@ const UserAppUpload = ({ user }) => {
                 information for potential users. All submitted apps must be
                 approved by the core DHIS2 team.
             </p>
+            <p className={styles.description}>
+                Fields marked with * are required.
+            </p>
 
             <ReactFinalForm.Form
                 mutators={{
@@ -287,7 +290,7 @@ const UserAppUpload = ({ user }) => {
                             <ReactFinalForm.Field
                                 required
                                 name="minDhisVersion"
-                                label="Minimum DHIS version"
+                                label="Minimum DHIS2 version"
                                 placeholder="Select a version"
                                 component={SingleSelectFieldFF}
                                 className={styles.field}
@@ -296,7 +299,7 @@ const UserAppUpload = ({ user }) => {
                             />
                             <ReactFinalForm.Field
                                 name="maxDhisVersion"
-                                label="Maximum DHIS version"
+                                label="Maximum DHIS2 version"
                                 placeholder="Select a version"
                                 component={SingleSelectFieldFF}
                                 className={styles.field}
@@ -369,7 +372,7 @@ const UserAppUpload = ({ user }) => {
                                 Upload app file (Required)
                             </h3>
                             <p className={styles.description}>
-                                App files should be submitted as zip.
+                                Upload your app as a single .zip file.
                             </p>
                             <ReactFinalForm.Field
                                 required
@@ -388,14 +391,15 @@ const UserAppUpload = ({ user }) => {
                             </h3>
                             <p className={styles.description}>
                                 A logo will be displayed in the App Hub
-                                listings. A good-looking logo will help users
-                                find your app.
+                                listings. Use your app icon to help users find
+                                and recognize your app.
                             </p>
                             <ReactFinalForm.Field
                                 required
                                 name="logo"
                                 buttonLabel="Upload a logo"
                                 accept="image/*"
+                                helpText="Only .jpg, .png and .gif files, 2MB max size"
                                 component={FileInputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
@@ -408,7 +412,7 @@ const UserAppUpload = ({ user }) => {
                             disabled={!valid || submitting}
                             className={styles.submitButton}
                         >
-                            Save and submit
+                            Save and submit app
                         </Button>
                     </form>
                 )}

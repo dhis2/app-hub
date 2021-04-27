@@ -28,7 +28,7 @@ const ScreenshotsCard = ({ app, mutate }) => {
                 ...app,
                 images: app.images.filter(img => img.id != imageId),
             })
-            successAlert.show({ message: 'Image deleted' })
+            successAlert.show({ message: 'Screenshot deleted' })
         } catch (error) {
             errorAlert.show({ error })
         }
@@ -74,7 +74,22 @@ const ScreenshotsCard = ({ app, mutate }) => {
                     onDelete={handleScreenshotDelete}
                 />
             ) : (
-                <em>This app has no screenshots</em>
+                <>
+                    <h3 className={styles.addScreenshotHeader}>
+                        Add app screenshots
+                    </h3>
+                    <p className={styles.addScreenshotDescription}>
+                        Screenshots help users learn more about your app. Learn
+                        more about the{' '}
+                        <a
+                            href="https://developers.dhis2.org/docs/guides/apphub-guidelines/#screenshots"
+                            className={styles.screenshotsGuidelinesLink}
+                        >
+                            guidelines for App Hub screenshots
+                        </a>
+                        .
+                    </p>
+                </>
             )}
             <form className={styles.hidden} ref={formEl}>
                 <input

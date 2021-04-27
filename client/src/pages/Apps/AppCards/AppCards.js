@@ -23,7 +23,7 @@ const AppCards = ({ isLoading, error, apps }) => {
     if (apps.length == 0) {
         return (
             <p className={styles.emptyApps}>
-                We couldn't find any apps that match your criteria.
+                No apps found. Try adjusting your search or filter options.
             </p>
         )
     }
