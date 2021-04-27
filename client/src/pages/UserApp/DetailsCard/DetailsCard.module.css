@@ -28,10 +28,6 @@
     margin-bottom: var(--spacers-dp8);
 }
 
-.editButton {
-    margin-left: var(--spacers-dp8);
-}
-
 .editLogoContainer {
     display: flex;
     flex-direction: column;
@@ -40,6 +36,10 @@
 
 .editLogoButton {
     margin-top: var(--spacers-dp4);
+}
+
+.descriptionContainer {
+    max-width: 640px;
 }
 
 .sourceUrl {

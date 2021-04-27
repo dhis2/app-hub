@@ -79,18 +79,6 @@ const DetailsCard = ({ app, mutate }) => {
     const appDeveloper = app.developer.organisation || app.developer.name
     const appType = appTypeToDisplayName[app.appType]
 
-    const EditButton = ({ children }) => (
-        <Link
-            to={`/user/app/${app.id}/edit`}
-            tabIndex="-1"
-            className={styles.editButton}
-        >
-            <Button small secondary>
-                {children}
-            </Button>
-        </Link>
-    )
-
     return (
         <Card className={sharedStyles.card}>
             <section className={styles.detailsCardHeader}>
@@ -98,57 +86,42 @@ const DetailsCard = ({ app, mutate }) => {
                     <EditLogo logo={logo} appId={app.id} mutate={mutate} />
                 </div>
                 <div>
-                    <div>
-                        <h2 className={styles.detailsCardName}>{app.name}</h2>
-                        <EditButton>Edit name</EditButton>
-                    </div>
+                    <h2 className={styles.detailsCardName}>{app.name}</h2>
                     <span className={styles.detailsCardDeveloper}>
                         by {appDeveloper}
                     </span>
-                    <div>
-                        <span className={styles.detailsCardType}>
-                            {appType}
-                        </span>
-                        <EditButton>Edit app type</EditButton>
-                    </div>
+                    <span className={styles.detailsCardType}>{appType}</span>
                 </div>
             </section>
             <Divider />
             <section>
                 <h2 className={sharedStyles.cardHeader}>Description</h2>
-                <div style={{ display: 'flex' }}>
-                    <div style={{ maxWidth: 640, marginRight: 8 }}>
-                        {app.description ? (
-                            <AppDescription
-                                description={app.description}
-                                paragraphClassName={
-                                    styles.appDescriptionParagraph
-                                }
-                            />
-                        ) : (
-                            <em>No description provided</em>
-                        )}
-                    </div>
-                    <EditButton>Edit description</EditButton>
+                <div className={styles.descriptionContainer}>
+                    {app.description ? (
+                        <AppDescription
+                            description={app.description}
+                            paragraphClassName={styles.appDescriptionParagraph}
+                        />
+                    ) : (
+                        <em>No description provided</em>
+                    )}
                 </div>
             </section>
             <Divider />
             <section>
                 <h2 className={sharedStyles.cardHeader}>Source code URL</h2>
-                <span style={{ marginRight: 8 }}>
-                    {app.sourceUrl ? (
-                        <a
-                            href={`${app.sourceUrl}`}
-                            className={styles.sourceUrl}
-                        >
-                            {app.sourceUrl}
-                        </a>
-                    ) : (
-                        <em>No source code URL provided</em>
-                    )}
-                </span>
-                <EditButton>Edit source code URL</EditButton>
+                {app.sourceUrl ? (
+                    <a href={`${app.sourceUrl}`} className={styles.sourceUrl}>
+                        {app.sourceUrl}
+                    </a>
+                ) : (
+                    <em>No source code URL provided</em>
+                )}
             </section>
+            <Divider />
+            <Link to={`/user/app/${app.id}/edit`} tabIndex="-1">
+                <Button secondary>Edit app details</Button>
+            </Link>
         </Card>
     )
 }
