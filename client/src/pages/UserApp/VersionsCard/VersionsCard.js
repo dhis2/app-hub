@@ -1,7 +1,7 @@
 import {
     Card,
     Button,
-    NoticeBox,
+    ButtonStrip,
     Modal,
     ModalTitle,
     ModalContent,
@@ -43,24 +43,23 @@ const DeleteVersionModal = ({ appId, version, mutate, onClose }) => {
         <Modal onClose={onClose} small>
             <ModalTitle>Delete app version</ModalTitle>
             <ModalContent>
-                <NoticeBox warning>
-                    Are you sure you want to delete version {version.version}?
-                    This action cannot be undone.
-                </NoticeBox>
+                Deleting an app version cannot be undone.
+                <br />
+                Are you sure you want to delete app version {version.version}?
             </ModalContent>
             <ModalActions>
-                <div className={styles.modalActions}>
+                <ButtonStrip end>
+                    <Button onClick={onClose} disabled={isSubmitting}>
+                        No, cancel
+                    </Button>
                     <Button
                         destructive
                         onClick={handleDelete}
                         disabled={isSubmitting}
                     >
-                        Delete version
+                        Yes, delete
                     </Button>
-                    <Button secondary onClick={onClose} disabled={isSubmitting}>
-                        Cancel
-                    </Button>
-                </div>
+                </ButtonStrip>
             </ModalActions>
         </Modal>
     )
