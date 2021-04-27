@@ -9,7 +9,6 @@ import UserApp from 'src/pages/UserApp/UserApp'
 import UserAppEdit from 'src/pages/UserAppEdit/UserAppEdit'
 import UserApps from 'src/pages/UserApps/UserApps'
 import UserAppUpload from 'src/pages/UserAppUpload/UserAppUpload'
-import UserAppVersionEdit from 'src/pages/UserAppVersionEdit/UserAppVersionEdit'
 import UserAppVersionNew from 'src/pages/UserAppVersionNew/UserAppVersionNew'
 import UserOrganisation from 'src/pages/UserOrganisation/UserOrganisation'
 import UserOrganisationNew from 'src/pages/UserOrganisationNew/UserOrganisationNew'
@@ -64,11 +63,6 @@ const UserView = ({ loadUser, user, match }) => {
                 exact
                 path={`${match.url}/app/:appId/edit`}
                 component={UserAppEdit}
-            />
-            <Route
-                exact
-                path={`${match.url}/app/:appId/version/:versionId/edit`}
-                component={UserAppVersionEdit}
             />
             <Route exact path={`${match.url}/apikey`} component={UserApiKey} />
             <Route
