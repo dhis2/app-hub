@@ -1,5 +1,6 @@
 import {
     Button,
+    ButtonStrip,
     Modal,
     ModalTitle,
     ModalContent,
@@ -46,9 +47,13 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                 placeholder="My organisation"
                                 initialValue={organisation.name}
                                 component={InputFieldFF}
+                                className={styles.field}
                                 validate={hasValue}
                             />
-                            <div className={styles.actions}>
+                            <ButtonStrip end>
+                                <Button onClick={onClose} disabled={submitting}>
+                                    Cancel
+                                </Button>
                                 <Button
                                     type="submit"
                                     primary
@@ -56,14 +61,7 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                 >
                                     Update name
                                 </Button>
-                                <Button
-                                    onClick={onClose}
-                                    secondary
-                                    disabled={submitting}
-                                >
-                                    Cancel
-                                </Button>
-                            </div>
+                            </ButtonStrip>
                         </form>
                     )}
                 </ReactFinalForm.Form>

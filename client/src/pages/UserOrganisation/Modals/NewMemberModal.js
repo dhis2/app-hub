@@ -1,6 +1,7 @@
 import {
     NoticeBox,
     Button,
+    ButtonStrip,
     Modal,
     ModalTitle,
     ModalContent,
@@ -39,7 +40,7 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
         <Modal onClose={onClose} small>
             <ModalTitle>Add member</ModalTitle>
             <ModalContent>
-                <NoticeBox>
+                <NoticeBox className={styles.noticebox}>
                     The new member must have logged in with the email address at
                     least once before being able to be added to an organisation.
                 </NoticeBox>
@@ -53,9 +54,13 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
                                 label="Email of new member"
                                 placeholder="user@email.com"
                                 component={InputFieldFF}
+                                className={styles.field}
                                 validate={composeValidators(hasValue, email)}
                             />
-                            <div className={styles.actions}>
+                            <ButtonStrip end>
+                                <Button onClick={onClose} disabled={submitting}>
+                                    Cancel
+                                </Button>
                                 <Button
                                     type="submit"
                                     primary
@@ -63,14 +68,7 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
                                 >
                                     Add member
                                 </Button>
-                                <Button
-                                    onClick={onClose}
-                                    secondary
-                                    disabled={submitting}
-                                >
-                                    Cancel
-                                </Button>
-                            </div>
+                            </ButtonStrip>
                         </form>
                     )}
                 </ReactFinalForm.Form>
