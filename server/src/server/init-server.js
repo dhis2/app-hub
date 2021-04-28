@@ -15,7 +15,7 @@ const apiRoutes = require('../plugins/apiRoutes')
 const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
 const pagination = require('../plugins/pagination')
-const emailService = require('../services/EmailService')
+const { createEmailService } = require('../services/EmailService')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -89,7 +89,7 @@ exports.init = async (knex, config) => {
 
     await server.register(Schmervice)
 
-    await server.registerService(emailService)
+    await server.registerService(createEmailService)
 
     await server.register({
         plugin: staticFrontendRoutes,
