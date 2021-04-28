@@ -162,7 +162,7 @@ const newApp = action$ =>
             return api
                 .createApp({
                     ...action.payload,
-                    logo: action.payload.image
+                    logo: action.payload.image,
                 })
                 .catch(response => {
                     if (response.status === 400) {
