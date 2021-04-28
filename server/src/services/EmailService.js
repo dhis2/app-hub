@@ -38,7 +38,7 @@ class EmailService extends Schmervice.Service {
             text: `Hi!\n 
 You've been invited to join the organisation ${organisation} on DHIS2 App Hub. To accept the invitation, click the following link:\n
 ${link}\n
-This invitation expires in one week. If you accept you will be able to upload and manage apps on behalf of the organisation.`,
+This invitation expires in 48 hours. If you accept you will be able to upload and manage apps on behalf of the organisation.`,
         }
         return this.transporter.sendMail(sendTemplate)
     }

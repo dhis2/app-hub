@@ -192,7 +192,8 @@ const generateInvitationToken = ({ organisation, user, secret }, emailTo) => {
     }
 
     const token = JWT.sign(decoded, secret, {
-        expiresIn: 60 * 60 * 24 * 7, //one week
+        expiresIn: 5,
+        //expiresIn: 60 * 60 * 24 * 2, //48 hrs
     })
     return {
         decoded,
