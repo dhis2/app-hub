@@ -419,7 +419,14 @@ const UserAppUpload = ({ user }) => {
                             disabled={!valid || submitting}
                             className={styles.submitButton}
                         >
-                            Save and submit app
+                            {submitting ? (
+                                <>
+                                    Submitting app…
+                                    <CircularLoader small />
+                                </>
+                            ) : (
+                                'Save and submit app'
+                            )}
                         </Button>
                     </form>
                 )}
