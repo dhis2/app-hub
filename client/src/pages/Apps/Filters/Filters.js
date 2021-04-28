@@ -1,4 +1,10 @@
-import { Input, Checkbox, Divider } from '@dhis2/ui'
+import {
+    Input,
+    Checkbox,
+    Divider,
+    SingleSelect,
+    SingleSelectOption,
+} from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import styles from './Filters.module.css'
 
@@ -36,6 +42,9 @@ const Filters = ({
     types,
     typesFilter,
     onTypesFilterChange,
+    dhisVersions,
+    dhisVersionFilter,
+    onDhisVersionFilterChange,
     query,
     onQueryChange,
 }) => (
@@ -67,6 +76,28 @@ const Filters = ({
                     onChange={onChannelsFilterChange}
                 />
             </div>
+            <div className={styles.filterWrapper}>
+                <h3 className={styles.filterName}>DHIS2 Version</h3>
+                <SingleSelect
+                    className={styles.dhisVersionSelect}
+                    dense
+                    placeholder="Select a version"
+                    clearable
+                    clearText="Clear"
+                    selected={dhisVersionFilter}
+                    onChange={({ selected }) =>
+                        onDhisVersionFilterChange(selected)
+                    }
+                >
+                    {dhisVersions.map(dhisVersion => (
+                        <SingleSelectOption
+                            key={dhisVersion}
+                            label={dhisVersion}
+                            value={dhisVersion}
+                        />
+                    ))}
+                </SingleSelect>
+            </div>
         </div>
     </>
 )
@@ -74,11 +105,14 @@ const Filters = ({
 Filters.propTypes = {
     channels: PropTypes.object.isRequired,
     channelsFilter: PropTypes.object.isRequired,
+    dhisVersions: PropTypes.array.isRequired,
     types: PropTypes.object.isRequired,
     typesFilter: PropTypes.object.isRequired,
     onChannelsFilterChange: PropTypes.func.isRequired,
+    onDhisVersionFilterChange: PropTypes.func.isRequired,
     onQueryChange: PropTypes.func.isRequired,
     onTypesFilterChange: PropTypes.func.isRequired,
+    dhisVersionFilter: PropTypes.string,
     query: PropTypes.string,
 }
 

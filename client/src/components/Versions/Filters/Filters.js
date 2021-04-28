@@ -32,8 +32,8 @@ const Filters = ({
             <div className={styles.dhisVersionSelect}>
                 <SingleSelectField
                     dense
-                    placeholder={'Select a version'}
-                    label={'Compatible with DHIS2 version'}
+                    placeholder="Select a version"
+                    label="Compatible with DHIS2 version"
                     clearable
                     selected={dhisVersionFilter}
                     onChange={({ selected }) => setDhisVersionFilter(selected)}

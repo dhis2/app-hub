@@ -25,3 +25,8 @@
     font-size: 14px;
     font-weight: 500;
 }
+
+.dhisVersionSelect {
+    margin: 0;
+    max-width: 180px;
+}

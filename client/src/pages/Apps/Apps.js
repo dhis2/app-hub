@@ -15,8 +15,15 @@ import Filters from './Filters/Filters'
 import config from 'config'
 import { useQuery } from 'src/api'
 
-const defaultChannelsFilter = new Set([config.ui.defaultAppChannel])
-const defaultTypesFilter = new Set(Object.keys(config.ui.appTypeToDisplayName))
+const {
+    defaultAppChannel,
+    appChannelToDisplayName,
+    appTypeToDisplayName,
+    dhisVersions,
+} = config.ui
+
+const defaultChannelsFilter = new Set([defaultAppChannel])
+const defaultTypesFilter = new Set(Object.keys(appTypeToDisplayName))
 
 const SetParam = {
     encode(set) {
@@ -35,16 +42,20 @@ const Apps = () => {
     const [queryParams, setQueryParams] = useQueryParams({
         channels: withDefault(SetParam, defaultChannelsFilter),
         types: withDefault(SetParam, defaultTypesFilter),
+        dhisVersion: StringParam,
         query: withDefault(StringParam, ''),
         page: withDefault(NumberParam, 1),
     })
-    const { channels, types, query, page } = queryParams
+    const { channels, types, dhisVersion, query, page } = queryParams
     const [debouncedQuery] = useDebounce(query, 300)
     const setChannels = channels => {
         setQueryParams({ channels, page: 1 })
     }
     const setTypes = types => {
         setQueryParams({ types, page: 1 })
+    }
+    const setDhisVersion = dhisVersion => {
+        setQueryParams({ dhisVersion, page: 1 })
     }
     const setQuery = query => {
         setQueryParams({ query, page: 1 }, 'replaceIn')
@@ -57,11 +68,12 @@ const Apps = () => {
         () => ({
             channels,
             types,
+            dhis_version: dhisVersion,
             query,
             page,
             pageSize: 24,
         }),
-        [channels, types, debouncedQuery, page]
+        [channels, types, dhisVersion, debouncedQuery, page]
     )
     const { data, error } = useQuery('apps', params)
     const apps = data?.result
@@ -70,12 +82,15 @@ const Apps = () => {
         <div className={styles.container}>
             <div className={styles.filters}>
                 <Filters
-                    channels={config.ui.appChannelToDisplayName}
+                    channels={appChannelToDisplayName}
                     channelsFilter={channels}
                     onChannelsFilterChange={setChannels}
-                    types={config.ui.appTypeToDisplayName}
+                    types={appTypeToDisplayName}
                     typesFilter={types}
                     onTypesFilterChange={setTypes}
+                    dhisVersions={dhisVersions}
+                    dhisVersionFilter={dhisVersion}
+                    onDhisVersionFilterChange={setDhisVersion}
                     query={query}
                     onQueryChange={setQuery}
                 />
