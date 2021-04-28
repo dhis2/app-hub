@@ -358,9 +358,7 @@ module.exports = [
             )
             const isMember = await Organisation.hasUser(
                 org.id,
-
                 currentUser.id,
-
                 db
             )
             const isManager = currentUserIsManager(request)
@@ -384,6 +382,9 @@ module.exports = [
                 ''
             )
 
+            request.logger.info(
+                `User ${currentUser.id}: Sending organisation invitation to ${decoded.emailTo}`
+            )
             await emailService.sendOrganisationInvitation(
                 { emailTo: decoded.emailTo, organisation: org.name },
                 link
@@ -419,7 +420,10 @@ module.exports = [
                 payload = JWT.verify(token, secret)
             } catch (e) {
                 request.logger.error(e)
-                return Boom.badRequest('Invalid token')
+                if (e instanceof JWT.TokenExpiredError) {
+                    throw Boom.badRequest('Invitation has expired')
+                }
+                throw Boom.badRequest('Invalid token')
             }
             try {
                 await Organisation.addUserById(payload.sub, id, db)
