@@ -20,13 +20,13 @@ const paramsSchema = joi
         sourceUrl: joi
             .string()
             .allow('')
-            .max(500),
+            .max(500)
+            .uri({
+                scheme: ['http', 'https'],
+            }),
         languageCode: joi
             .string()
             .max(2)
-            .uri({
-                scheme: ['http', 'https'],
-            })
             .required(),
     })
     .options({ allowUnknown: true })
