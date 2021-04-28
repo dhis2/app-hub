@@ -31,7 +31,18 @@ const webpackConfig = {
                 test: /\.css$/,
                 use: [
                     { loader: 'style-loader' },
-                    { loader: 'css-loader', options: { modules: true } },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            // TODO: This option has moved to inside the
+                            // 'modules' config for later versions of css-loader
+                            localIdentName:
+                                nodeEnv === 'development'
+                                    ? '[path][name]__[local]'
+                                    : '[hash:base64]',
+                        },
+                    },
                 ],
             },
             {
