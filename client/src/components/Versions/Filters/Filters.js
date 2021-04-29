@@ -14,21 +14,24 @@ const Filters = ({
     setDhisVersionFilter,
 }) => {
     const hasChannel = channel => versions.some(v => v.channel === channel)
+    const channels = Object.keys(appChannelToDisplayName).filter(hasChannel)
 
     return (
         <div className={styles.versionsFilters}>
-            <h3 className={styles.subheader}>Channel</h3>
-            {Object.keys(appChannelToDisplayName)
-                .filter(hasChannel)
-                .map(channel => (
-                    <ChannelCheckbox
-                        key={channel}
-                        name={channel}
-                        label={appChannelToDisplayName[channel]}
-                        channelsFilter={channelsFilter}
-                        setChannelsFilter={setChannelsFilter}
-                    />
-                ))}
+            {channels.length > 1 && (
+                <div className={styles.channelsFilter}>
+                    <h3 className={styles.subheader}>Channel</h3>
+                    {channels.map(channel => (
+                        <ChannelCheckbox
+                            key={channel}
+                            name={channel}
+                            label={appChannelToDisplayName[channel]}
+                            channelsFilter={channelsFilter}
+                            setChannelsFilter={setChannelsFilter}
+                        />
+                    ))}
+                </div>
+            )}
             <div className={styles.dhisVersionSelect}>
                 <SingleSelectField
                     dense
