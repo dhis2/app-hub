@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useQueryParams, StringParam } from 'use-query-params'
-import JWT from 'jsonwebtoken'
-import { useAuth0 } from '@auth0/auth0-react'
 import { acceptOrganisationInvitation } from '../../api/api'
 
-const OrganisationInvitation = () => {
+const OrganisationInvitationCallback = () => {
     const [queryParams] = useQueryParams({
         invitationToken: StringParam,
     })
 
     const { invitationToken } = queryParams
-    const [invitationData, setInvitationData] = useState(false)
+    const [invitationData, setInvitationData] = useState(null)
     const [error, setError] = useState(null)
 
     useEffect(() => {
@@ -31,7 +29,6 @@ const OrganisationInvitation = () => {
 
     if (!invitationToken) {
         console.log('No invitationToken to parse, redirect to index')
-
         return <Redirect to="/" />
     }
 
@@ -44,7 +41,11 @@ const OrganisationInvitation = () => {
     if (!invitationData) {
         return 'Joining organisation...'
     }
-    return <div className="app">You've joined {invitationData.name}!</div>
+    return (
+        <div className="app">
+            You've joined {invitationData.organisation.name}!
+        </div>
+    )
 }
 
-export default OrganisationInvitation
+export default OrganisationInvitationCallback
