@@ -377,18 +377,24 @@ module.exports = [
                 request.payload.email
             )
 
-            const link = `http://localhost:8081/verify/org?invitationToken=${token}`.replace(
-                '/api',
+            let baseUrl = getServerUrl(request)
+            if (process.env.NODE_ENV === 'development') {
+                // use referrer as frontend might be running in webpack
+                baseUrl = request.info.referrer || baseUrl
+            }
+            baseUrl = baseUrl.replace(
+                /\/(api)*$/, // replace trailing /api and /
                 ''
             )
+            const link = `${baseUrl}/verify/org?invitationToken=${token}`
 
             request.logger.info(
                 `User ${currentUser.id}: Sending organisation invitation to ${decoded.emailTo}`
             )
-            await emailService.sendOrganisationInvitation(
-                { emailTo: decoded.emailTo, organisation: org.name },
-                link
-            )
+            // await emailService.sendOrganisationInvitation(
+            //     { emailTo: decoded.emailTo, organisation: org.name },
+            //     link
+            // )
 
             return {
                 token,
