@@ -26,3 +26,7 @@
 .uploadButton {
     margin-top: var(--spacers-dp16);
 }
+
+.deleteButton {
+    margin-top: var(--spacers-dp8);
+}

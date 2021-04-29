@@ -31,7 +31,7 @@ const DeleteVersionModal = ({ appId, version, mutate, onClose }) => {
                 versions: app.versions.filter(v => v.id != version.id),
             }))
             successAlert.show({
-                message: `Successfully delete version ${version.version}`,
+                message: `Successfully deleted version ${version.version}`,
             })
         } catch (error) {
             errorAlert.show({ error })

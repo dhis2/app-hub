@@ -1,10 +1,9 @@
-import { Button } from '@dhis2/ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import styles from './Screenshots.module.css'
 
-const Screenshots = ({ screenshots, onDelete }) => {
+const Screenshots = ({ screenshots, renderDeleteScreenshotButton }) => {
     const [currentScreenshotIndex, setCurrentScreenshotIndex] = useState(0)
     // Handle current screenshot being deleted in user app view
     const currentScreenshot =
@@ -17,17 +16,8 @@ const Screenshots = ({ screenshots, onDelete }) => {
                     className={styles.currentScreenshot}
                     src={currentScreenshot.imageUrl}
                 />
-
-                {onDelete && (
-                    <Button
-                        className={styles.deleteButton}
-                        destructive
-                        small
-                        onClick={() => onDelete(currentScreenshot.id)}
-                    >
-                        Delete screenshot
-                    </Button>
-                )}
+                {renderDeleteScreenshotButton &&
+                    renderDeleteScreenshotButton(currentScreenshot.id)}
             </div>
             <div>
                 {screenshots.map((screenshot, index) => (
@@ -54,7 +44,7 @@ Screenshots.propTypes = {
             imageUrl: PropTypes.string.isRequired,
         })
     ).isRequired,
-    onDelete: PropTypes.func,
+    renderDeleteScreenshotButton: PropTypes.func,
 }
 
 export default Screenshots

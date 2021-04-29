@@ -1,69 +1,46 @@
 import { Card, Button } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import { useState, useRef } from 'react'
 import sharedStyles from '../UserApp.module.css'
+import DeleteScreenshotModal from './DeleteScreenshotModal'
 import styles from './ScreenshotsCard.module.css'
-import * as api from 'src/api'
+import UploadScreenshot from './UploadScreenshot'
 import Screenshots from 'src/components/Screenshots/Screenshots'
-import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import { useModalState } from 'src/lib/use-modal-state'
+
+const DeleteScreenshotButton = ({ appId, imageId, mutate }) => {
+    const deleteScreenshotModal = useModalState()
+
+    return (
+        <>
+            {deleteScreenshotModal.isVisible && (
+                <DeleteScreenshotModal
+                    appId={appId}
+                    imageId={imageId}
+                    mutate={mutate}
+                    onClose={deleteScreenshotModal.hide}
+                />
+            )}
+            <Button
+                small
+                destructive
+                className={styles.deleteButton}
+                onClick={deleteScreenshotModal.show}
+            >
+                Delete screenshot
+            </Button>
+        </>
+    )
+}
 
 const ScreenshotsCard = ({ app, mutate }) => {
-    const [isUploading, setIsUploading] = useState(false)
-    const successAlert = useSuccessAlert()
-    const errorAlert = useErrorAlert()
-    const formEl = useRef(null)
-    const inputEl = useRef(null)
     const screenshots = app.images.filter(img => !img.logo)
-
-    const handleScreenshotDelete = async imageId => {
-        if (
-            !window.confirm('Are you sure you want to delete this screenshot?')
-        ) {
-            return
-        }
-
-        try {
-            await api.deleteImage(app.id, imageId)
-            mutate({
-                ...app,
-                images: app.images.filter(img => img.id != imageId),
-            })
-            successAlert.show({ message: 'Screenshot deleted' })
-        } catch (error) {
-            errorAlert.show({ error })
-        }
-    }
-    const handleUploadButtonClick = () => {
-        inputEl.current.click()
-    }
-    const handleUpload = async event => {
-        setIsUploading(true)
-        const files = Array.from(event.target.files)
-        const payloads = files.map(file => ({
-            image: {
-                caption: '',
-                description: '',
-                logo: false,
-            },
-            file,
-        }))
-        const requests = payloads.map(payload =>
-            api.createNewImage(app.id, payload)
-        )
-        try {
-            await Promise.all(requests)
-            await mutate()
-            formEl.current.reset()
-            successAlert.show({
-                message: `${files.length} screenshot${
-                    files.length !== 1 ? 's' : ''
-                } uploaded`,
-            })
-        } catch (error) {
-            errorAlert.show({ error })
-        }
-        setIsUploading(false)
-    }
+    const renderDeleteScreenshotButton = imageId => (
+        <DeleteScreenshotButton
+            appId={app.id}
+            imageId={imageId}
+            mutate={mutate}
+        />
+    )
 
     return (
         <Card className={sharedStyles.card}>
@@ -71,7 +48,7 @@ const ScreenshotsCard = ({ app, mutate }) => {
             {screenshots.length > 0 ? (
                 <Screenshots
                     screenshots={screenshots}
-                    onDelete={handleScreenshotDelete}
+                    renderDeleteScreenshotButton={renderDeleteScreenshotButton}
                 />
             ) : (
                 <>
@@ -91,23 +68,7 @@ const ScreenshotsCard = ({ app, mutate }) => {
                     </p>
                 </>
             )}
-            <form className={styles.hidden} ref={formEl}>
-                <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleUpload}
-                    ref={inputEl}
-                />
-            </form>
-            <div className={styles.uploadButton}>
-                <Button
-                    onClick={handleUploadButtonClick}
-                    disabled={isUploading}
-                >
-                    {isUploading ? 'Uploading...' : 'Upload screenshots'}
-                </Button>
-            </div>
+            <UploadScreenshot appId={app.id} mutate={mutate} />
         </Card>
     )
 }
