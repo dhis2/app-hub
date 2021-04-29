@@ -21,6 +21,7 @@ import { semverValidator } from 'src/lib/form-validators/semver-validator'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const { dhisVersions, defaultAppChannel, appChannelToDisplayName } = config.ui
+const oldestSupportedDhisVersion = dhisVersions[2]
 
 const dhisVersionOptions = dhisVersions.map(v => ({
     label: v,
@@ -109,6 +110,8 @@ const UserAppVersionNew = ({ match }) => {
                             required
                             name="minDhisVersion"
                             label="Minimum DHIS2 version"
+                            initialValue={oldestSupportedDhisVersion}
+                            placeholder="Select a version"
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={hasValue}
@@ -117,6 +120,7 @@ const UserAppVersionNew = ({ match }) => {
                         <ReactFinalForm.Field
                             name="maxDhisVersion"
                             label="Maximum DHIS2 version"
+                            placeholder="Select a version"
                             component={SingleSelectFieldFF}
                             className={styles.field}
                             validate={maxDhisVersionValidator}

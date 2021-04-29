@@ -32,6 +32,7 @@ const {
     appChannelToDisplayName,
     dhisVersions,
 } = config.ui
+const oldestSupportedDhisVersion = dhisVersions[2]
 
 const dhisVersionOptions = dhisVersions.map(v => ({
     label: v,
@@ -298,6 +299,7 @@ const UserAppUpload = ({ user }) => {
                                 required
                                 name="minDhisVersion"
                                 label="Minimum DHIS2 version"
+                                initialValue={oldestSupportedDhisVersion}
                                 placeholder="Select a version"
                                 component={SingleSelectFieldFF}
                                 className={styles.field}
