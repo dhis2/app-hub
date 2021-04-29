@@ -57,13 +57,15 @@ export default class AppHubAPI {
         }
 
         const response = await fetch(url, options)
+        const contentType = response.headers.get('content-type')
+        const isJson = contentType.includes('application/json')
         if (!response.ok) {
+            if (isJson) {
+                const json = await response.json()
+                throw new Error(json.message || json.error)
+            }
             throw new Error(response.statusText)
         }
-        const contentType = response.headers.get('content-type')
-        if (contentType.includes('application/json')) {
-            return await response.json()
-        }
-        return await response.text()
+        return await (isJson ? response.json() : response.text())
     }
 }

@@ -137,11 +137,18 @@ export async function fromApi(url, auth = false, extraOpts) {
     }
 
     return fetch(baseURL + url, opts)
-        .then(response =>
-            response.ok
-                ? response
-                : Promise.reject(new Error(response.statusText))
-        )
+        .then(async response => {
+            if (!response.ok) {
+                const contentType = response.headers.get('content-type')
+                const isJson = contentType.includes('application/json')
+                if (isJson) {
+                    const json = await response.json()
+                    throw new Error(json.message || json.error)
+                }
+                throw new Error(response.statusText)
+            }
+            return response
+        })
         .then(response => response.json())
 }
 
