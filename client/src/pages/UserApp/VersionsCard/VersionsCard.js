@@ -65,13 +65,14 @@ const DeleteVersionModal = ({ appId, version, mutate, onClose }) => {
     )
 }
 
-const DeleteVersionButton = ({ version, mutate }) => {
+const DeleteVersionButton = ({ appId, version, mutate }) => {
     const deleteVersionModal = useModalState()
 
     return (
         <>
             {deleteVersionModal.isVisible && (
                 <DeleteVersionModal
+                    appId={appId}
                     version={version}
                     mutate={mutate}
                     onClose={deleteVersionModal.hide}
