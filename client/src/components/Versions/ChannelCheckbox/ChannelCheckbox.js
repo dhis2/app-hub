@@ -23,7 +23,6 @@ const ChannelCheckbox = ({
             <Checkbox
                 dense
                 checked={channelsFilter.has(name)}
-                disabled={channelsFilter.size === 1 && channelsFilter.has(name)}
                 onChange={handleChange}
                 label={label}
             />

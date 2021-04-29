@@ -25,7 +25,6 @@ const CheckboxList = ({ checkboxes, selected, onChange }) =>
             }}
             checked={selected.has(value)}
             value={value}
-            disabled={selected.has(value) && selected.size == 1}
         />
     ))
 
