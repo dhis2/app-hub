@@ -8,7 +8,7 @@ const [
     betaOnlyTrackerWidgetVersions,
     canaryOnlyDashboardWidgetVersions,
 ] = appVersions
-const slugify = require('slugify')
+const { slugify } = require('../../src/utils/slugify')
 
 const versionuuids = []
 
@@ -21,7 +21,7 @@ const mockAppVersion = (id, sourceArr, index, languageCode, name, desc) => {
         created_by_user_id: sourceArr[index].created_by_user_id,
         name,
         description: desc,
-        slug: slugify(name, { lower: true }),
+        slug: slugify(name),
     }
 }
 
@@ -138,7 +138,7 @@ const pendingAppVersionsLocalized = [
         created_by_user_id: pendingAppVersions[0].created_by_user_id,
         name: 'Pending App app',
         description: 'This app is pending approval.',
-        slug: slugify('Pending App app', { lower: true }),
+        slug: slugify('Pending App app'),
     },
 ]
 
@@ -150,7 +150,7 @@ const rejectedAppVersionsLocalized = [
         created_by_user_id: rejectedAppVersions[0].created_by_user_id,
         name: 'Rejected App app',
         description: 'This app is in state rejected.',
-        slug: slugify('Rejected App app', { lower: true }),
+        slug: slugify('Rejected App app'),
     },
 ]
 
@@ -162,7 +162,7 @@ const betaOnlyTrackerWidgetLocalized = [
         created_by_user_id: betaOnlyTrackerWidgetVersions[0].created_by_user_id,
         name: 'Development only app',
         description: 'This app only got a version in the development channel',
-        slug: slugify('Development only app', { lower: true }),
+        slug: slugify('Development only app'),
     },
 ]
 
@@ -175,7 +175,7 @@ const canaryOnlyDashboardWidgetLocalized = [
             canaryOnlyDashboardWidgetVersions[0].created_by_user_id,
         name: 'Canary only app',
         description: 'This app only got a version in canary channel',
-        slug: slugify('Canary only app', { lower: true }),
+        slug: slugify('Canary only app'),
     },
 ]
 
