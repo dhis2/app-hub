@@ -256,7 +256,7 @@ const UserAppUpload = ({ user }) => {
                                 required
                                 name="version"
                                 label="Version"
-                                placeholder="e.g. 1.0"
+                                placeholder="e.g. 1.0.0"
                                 helpText={
                                     <>
                                         App versions must follow semantic
