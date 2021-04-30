@@ -139,14 +139,16 @@ module.exports = [
             }
 
             const { appType } = appJsonPayload
-            const app = await App.create(
-                {
-                    userId: currentUserId,
-                    organisationId,
-                    appType,
-                    status: AppStatus.PENDING,
-                },
-                db
+            const app = await db.transaction(trx =>
+                App.create(
+                    {
+                        userId: currentUserId,
+                        organisationId,
+                        appType,
+                        status: AppStatus.PENDING,
+                    },
+                    trx
+                )
             )
 
             return h.response(app).created(`/v2/apps/${app.id}`)
