@@ -160,7 +160,10 @@ const newApp = action$ =>
         ofType(actions.APP_ADD),
         concatMap(action => {
             return api
-                .createApp(action.payload)
+                .createApp({
+                    ...action.payload,
+                    logo: action.payload.image,
+                })
                 .catch(response => {
                     if (response.status === 400) {
                         return response.json()

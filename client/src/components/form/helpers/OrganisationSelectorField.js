@@ -68,7 +68,7 @@ class OrganisationSelectorField extends Component {
                         {organisations.map(org => (
                             <MenuItem
                                 key={org.id}
-                                value={org.name}
+                                value={org.id}
                                 primaryText={org.name}
                             />
                         ))}
