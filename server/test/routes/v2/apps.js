@@ -13,14 +13,14 @@ const {
 } = (exports.lab = Lab.script())
 
 const { expect } = require('@hapi/code')
-const knexConfig = require('../../knexfile')
+const knexConfig = require('../../../knexfile')
 const dbInstance = require('knex')(knexConfig)
-const users = require('../../seeds/mock/users')
-const { init } = require('../../src/server/init-server')
-const { config } = require('../../src/server/noauth-config')
-const { sampleApp } = require('./sample-app')
+const organisations = require('../../../seeds/mock/organisations')
+const users = require('../../../seeds/mock/users')
+const { init } = require('../../../src/server/init-server')
+const { config } = require('../../../src/server/noauth-config')
 
-describe('v1/apps', () => {
+describe('v2/apps', () => {
     let server
     let db
 
@@ -40,19 +40,16 @@ describe('v1/apps', () => {
         await db.rollback()
     })
 
+    const sampleApp = {
+        appType: 'APP',
+        developer: {
+            organisationId: organisations[0].id,
+        },
+    }
+
     const createFormForApp = app => {
         const form = new FormData()
         form.append('app', JSON.stringify(app))
-        form.append(
-            'file',
-            fs.createReadStream(path.join(__dirname, '../', 'sample-app.zip'))
-        )
-        form.append(
-            'logo',
-            fs.createReadStream(
-                path.join(__dirname, '../', 'sample-app-logo.png')
-            )
-        )
         return form
     }
 
@@ -61,7 +58,7 @@ describe('v1/apps', () => {
             const form = createFormForApp(sampleApp)
             const request = {
                 method: 'POST',
-                url: '/api/v1/apps',
+                url: '/api/v2/apps',
                 headers: form.getHeaders(),
                 payload: await streamToPromise(form),
             }
@@ -71,26 +68,6 @@ describe('v1/apps', () => {
             const receivedPayload = JSON.parse(res.payload)
             expect(receivedPayload).to.include(['id'])
             expect(receivedPayload.id).to.be.string()
-        })
-
-        it('should return 400 bad request if version is not valid', async () => {
-            const badVersionApp = {
-                ...sampleApp,
-                version: {
-                    ...sampleApp.version,
-                    version: 'not a version',
-                },
-            }
-            const form = createFormForApp(badVersionApp)
-            const request = {
-                method: 'POST',
-                url: '/api/v1/apps',
-                headers: form.getHeaders(),
-                payload: await streamToPromise(form),
-            }
-
-            const res = await server.inject(request)
-            expect(res.statusCode).to.equal(400)
         })
     })
 })

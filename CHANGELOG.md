@@ -1,3 +1,10 @@
+# [2.18.0](https://github.com/dhis2/app-hub/compare/v2.17.1...v2.18.0) (2021-04-30)
+
+
+### Features
+
+* backend changes required by redesign ([#467](https://github.com/dhis2/app-hub/issues/467)) ([4cc9e44](https://github.com/dhis2/app-hub/commit/4cc9e4491e743336fa78342f8b0e4102bc553176))
+
 ## [2.17.1](https://github.com/dhis2/app-hub/compare/v2.17.0...v2.17.1) (2021-04-20)
 
 
