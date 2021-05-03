@@ -48,6 +48,7 @@ const createEmailService = (server, schmerviceOptions) => {
     if (
         process.env.AWS_ACCESS_KEY_ID &&
         process.env.AWS_SECRET_ACCESS_KEY &&
+        aws &&
         aws.region
     ) {
         const ses = new AWS.SES({
