@@ -136,7 +136,7 @@ describe('@data::createOrganisation', () => {
         expect(org.id).to.be.a.string()
 
         expect(org.id.length).to.be.equal(36)
-        expect(org.slug).to.equal('xn-test-create-organisation-9ec0a9f3a20b')
+        expect(org.slug).to.equal('test-create-organisation-aaoee')
         expect(org.name).to.equal('Test create organisation åäöèé')
 
         const [shouldExist] = await getOrganisationsByName(org.name, db)
