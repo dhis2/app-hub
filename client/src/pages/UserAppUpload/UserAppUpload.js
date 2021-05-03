@@ -100,7 +100,7 @@ const UserAppUpload = ({ user }) => {
                         organisation to associate it with.
                     </p>
                     <Link
-                        to="/user/organisations/new"
+                        to="/user/organisations/new?redirect=userAppUpload"
                         className={styles.createOrganisationLink}
                         tabIndex="-1"
                     >
@@ -365,6 +365,11 @@ const UserAppUpload = ({ user }) => {
                                     component={SingleSelectFieldFF}
                                     className={styles.organisationField}
                                     validate={hasValue}
+                                    initialValue={
+                                        organisations.length === 1
+                                            ? organisations[0].id
+                                            : null
+                                    }
                                     options={organisationOptions}
                                 />
                                 <Button

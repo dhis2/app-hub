@@ -8,11 +8,13 @@ import {
     email,
 } from '@dhis2/ui'
 import { useHistory } from 'react-router-dom'
+import { useQueryParam, StringParam } from 'use-query-params'
 import styles from './UserOrganisationNew.module.css'
 import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const UserOrganisationNew = () => {
+    const [redirect] = useQueryParam('redirect', StringParam)
     const history = useHistory()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
@@ -23,7 +25,11 @@ const UserOrganisationNew = () => {
             successAlert.show({
                 message: `Successfully created organisation ${name}`,
             })
-            history.push(`/user/organisation/${id}`)
+            if (redirect === 'userAppUpload') {
+                history.push(`/user/upload`)
+            } else {
+                history.push(`/user/organisation/${id}`)
+            }
         } catch (error) {
             errorAlert.show({ error })
         }
