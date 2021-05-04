@@ -1,3 +1,10 @@
+## [2.18.2](https://github.com/dhis2/app-hub/compare/v2.18.1...v2.18.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* use punycode.toASCII instead of punycode.encode ([#471](https://github.com/dhis2/app-hub/issues/471)) ([857a180](https://github.com/dhis2/app-hub/commit/857a180ba13a80caa70a381f19a3cdbeee9c2b41))
+
 ## [2.18.1](https://github.com/dhis2/app-hub/compare/v2.18.0...v2.18.1) (2021-04-30)
 
 
