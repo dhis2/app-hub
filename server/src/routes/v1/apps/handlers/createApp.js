@@ -5,10 +5,11 @@ const {
     canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
-const { saveFile } = require('../../../../utils')
+const { saveFile, isDHIS2Organisation } = require('../../../../utils')
 const { validateImageMetadata } = require('../../../../utils/validateMime')
 
 module.exports = {
@@ -130,6 +131,13 @@ module.exports = {
             )
 
             const { file } = payload
+            verifyBundle({
+                buffer: file._data,
+                appId: app.id,
+                version,
+                organisationName: organisation.name,
+                canBeCoreApp: isDHIS2Organisation(organisation.id)
+            })
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
                 'app.zip',

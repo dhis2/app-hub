@@ -31,4 +31,5 @@ module.exports = {
     deleteFile,
     deleteDir,
     getServerUrl,
+    isDHIS2Organisation: require('./isDHIS2Organisation')
 }

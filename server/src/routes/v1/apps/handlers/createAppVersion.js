@@ -7,11 +7,12 @@ const Boom = require('@hapi/boom')
 const CreateAppVersionModel = require('../../../../models/v1/in/CreateAppVersionModel')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const { saveFile } = require('../../../../utils')
+const { saveFile, isDHIS2Organisation } = require('../../../../utils')
 
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 
 const createAppVersion = require('../../../../data/createAppVersion')
@@ -186,6 +187,16 @@ module.exports = {
         }
 
         try {
+            const organisationId = dbApp.organisation_id
+            const organisation = Organisation.findOne(organisationId, false, transaction)
+            verifyBundle({
+                buffer: file._data,
+                appId,
+                version,
+                organisationName: organisation.name,
+                canBeCoreApp: isDHIS2Organisation(organisationId)
+            })
+
             await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
         } catch (err) {
             await transaction.rollback()
