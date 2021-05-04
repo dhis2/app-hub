@@ -233,7 +233,7 @@ export function getOrganisation(orgId) {
 
 export function addOrganisationMember(orgId, email) {
     return apiV2.request(
-        `organisations/${orgId}/user`,
+        `organisations/${orgId}/invitation`,
         { useAuth: true },
         {
             method: 'POST',
