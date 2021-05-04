@@ -19,24 +19,26 @@ import * as userSelectors from '../../selectors/userSelectors'
 import ErrorOrLoading from '../utils/ErrorOrLoading'
 import DHISVersionItems from '../appVersion/VersionItems'
 
+const { appChannelToDisplayName, appTypeToDisplayName } = config.ui
+
 const FORM_NAME = 'uploadAppForm'
-const appTypes = Object.keys(config.ui.appTypeToDisplayName).map(key => ({
+const appTypes = Object.keys(appTypeToDisplayName).map(key => ({
     value: key,
-    label: config.ui.appTypeToDisplayName[key],
+    label: appTypeToDisplayName[key],
 }))
 
 const requiredFields = {
-    general: ['appName', 'appType'],
+    general: ['appName', 'description', 'appType', 'sourceUrl'],
     version: ['file', 'version', 'channel', 'minVer', 'maxVer'],
-    developer: ['developerOrg'],
-    image: [],
+    developer: ['developerOrgId'],
+    image: ['image'],
 }
 
 const varCharFields = {
     general: ['appName', 'appType', 'sourceUrl'],
     version: ['version'],
-    developer: ['contactEmail', 'developerOrg'],
-    image: ['imageCaption', 'imageDescription'],
+    developer: ['contactEmail', 'developerOrgId'],
+    image: [],
 }
 
 const validateSection = (values, section) => {
@@ -105,13 +107,13 @@ const AppGeneralSection = props => {
                 fullWidth
                 multiLine
                 rows={1}
-                label="App Description"
+                label="App Description *"
             />
             <Field
                 name="sourceUrl"
                 fullWidth
                 component={formUtils.renderTextField}
-                label="Source Code URL"
+                label="Source Code URL *"
                 validate={validateURL}
             />
             <Field
@@ -138,7 +140,7 @@ const AppVersionSection = props => {
         <MenuItem
             key={channel.name}
             value={channel.name}
-            primaryText={channel.name}
+            primaryText={appChannelToDisplayName[channel.name] || channel.name}
         />
     ))
     return (
@@ -217,7 +219,7 @@ const AppDeveloperSection = props => {
                 label="Contact Email"
             />
             <Field
-                name="developerOrg"
+                name="developerOrgId"
                 component={OrganisationSelector}
                 label="Organisation *"
                 organisations={props.organisations}
@@ -245,23 +247,9 @@ const AppImageSection = props => {
                 name="image"
                 component={formUtils.renderUploadField}
                 accept="image/*"
-                label="Upload logo"
+                label="Upload logo *"
                 validate={validateImageFile}
                 id="imageFile"
-            />
-            <br />
-            <Field
-                name="imageCaption"
-                component={formUtils.renderTextField}
-                label="Image caption"
-            />
-            <br />
-            <Field
-                name="imageDescription"
-                multiLine
-                fullWidth
-                component={formUtils.renderTextField}
-                label="Image description"
             />
             <br />
         </FormSection>
@@ -301,34 +289,26 @@ class UploadAppFormStepper extends Component {
             sourceUrl: values.general.sourceUrl,
             developer: {
                 email: values.developer.contactEmail,
-                address: values.developer.developerAddress || '',
-                organisation: values.developer.developerOrg,
+                organisationId: values.developer.developerOrgId,
             },
-            versions: [
-                {
-                    version: values.version.version,
-                    minDhisVersion: values.version.minVer,
-                    maxDhisVersion: values.version.maxVer,
-                    demoUrl: values.version.demoUrl,
-                    channel: values.version.channel,
-                },
-            ],
-            images: [
-                {
-                    caption: values.image ? values.image.imageCaption : '',
-                    description: values.image
-                        ? values.image.imageDescription
-                        : '',
-                },
-            ],
+            version: {
+                version: values.version.version,
+                minDhisVersion: values.version.minVer,
+                maxDhisVersion: values.version.maxVer,
+                demoUrl: values.version.demoUrl,
+                channel: values.version.channel,
+            },
         }
+
         const imageFile =
             values.image && values.image.image ? values.image.image[0] : null
-
-        data.images = imageFile ? data.images : []
         const appFile = values.version.file[0]
 
-        this.props.submitted({ data, file: appFile, image: imageFile })
+        this.props.submitted({
+            data,
+            file: appFile,
+            image: imageFile,
+        })
     }
 
     render() {

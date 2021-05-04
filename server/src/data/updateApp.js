@@ -1,6 +1,5 @@
-const slugify = require('slugify')
 const joi = require('@hapi/joi')
-
+const { slugify } = require('../utils/slugify')
 const { AppTypes } = require('../enums')
 
 const paramsSchema = joi
@@ -20,7 +19,10 @@ const paramsSchema = joi
         sourceUrl: joi
             .string()
             .allow('')
-            .max(500),
+            .max(500)
+            .uri({
+                scheme: ['http', 'https'],
+            }),
         languageCode: joi
             .string()
             .max(2)
@@ -90,7 +92,7 @@ const updateApp = async (params, knex) => {
         await knex('app_version_localised')
             .update({
                 name,
-                slug: slugify(name, { lower: true }),
+                slug: slugify(name),
                 description,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
