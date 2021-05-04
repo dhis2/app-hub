@@ -97,4 +97,5 @@ module.exports = {
     getCurrentUserFromRequest,
     currentUserIsManager,
     ROLES,
+    verifyBundle: require('./verifyBundle'),
 }
