@@ -4,4 +4,14 @@
 const punycode = require('punycode/')
 const slugify = require('slugify')
 
-exports.slugify = string => slugify(punycode.encode(string), { lower: true })
+const slugifyOptions = {
+    lower: true,
+    strict: true,
+}
+
+exports.slugify = string => {
+    const slug = slugify(string, slugifyOptions)
+    return slug.length > 1
+        ? slug
+        : slugify(punycode.toASCII(string), slugifyOptions)
+}
