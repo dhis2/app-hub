@@ -341,6 +341,7 @@ module.exports = [
                     email: Joi.string()
                         .email()
                         .required(),
+                    skipSend: Joi.boolean().default(false),
                 }),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
@@ -391,10 +392,17 @@ module.exports = [
             request.logger.info(
                 `User ${currentUser.id}: Sending organisation invitation to ${decoded.emailTo}`
             )
-            // await emailService.sendOrganisationInvitation(
-            //     { emailTo: decoded.emailTo, organisation: org.name },
-            //     link
-            // )
+
+            if (!request.payload.skipSend) {
+                await emailService.sendOrganisationInvitation(
+                    {
+                        emailTo: decoded.emailTo,
+                        organisation: org.name,
+                        fromName: currentUser.name,
+                    },
+                    link
+                )
+            }
 
             return {
                 token,

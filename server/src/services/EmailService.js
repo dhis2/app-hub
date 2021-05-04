@@ -27,13 +27,16 @@ class EmailService extends Schmervice.Service {
         }
     }
 
-    async sendOrganisationInvitation({ emailTo, organisation }, link) {
+    async sendOrganisationInvitation(
+        { emailTo, organisation, fromName },
+        link
+    ) {
         const sendTemplate = {
             from: FROM_INFO,
             to: emailTo,
             subject: 'You have been invited to an organisation',
             text: `Hi!\n 
-You've been invited to join the organisation ${organisation} on DHIS2 App Hub. To accept the invitation, click the following link:\n
+${fromName} has invited you to join the organisation ${organisation} on App Hub. To accept the invitation, click the following link:\n
 ${link}\n
 This invitation expires in 48 hours. If you accept you will be able to upload and manage apps on behalf of the organisation.`,
         }
