@@ -178,11 +178,8 @@ const hasUser = async (id, userId, knex) => {
     return hasUser.length > 0
 }
 
-const generateInvitationToken = ({ organisation, user, secret }, emailTo) => {
-    secret = process.env.INTERNAL_JWT_SECRET
-    if (!secret) {
-        throw new Error('No secret setup, set INTERNAL_JWT_SECRET')
-    }
+const generateInvitationToken = ({ organisation, user }, emailTo) => {
+    const secret = process.env.INTERNAL_JWT_SECRET
 
     const decoded = {
         from: { id: user.id, name: user.name },

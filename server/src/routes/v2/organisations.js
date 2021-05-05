@@ -426,7 +426,7 @@ module.exports = [
         handler: async (request, h) => {
             const { id } = await getCurrentUserFromRequest(request)
             const { db } = h.context
-            const token = request.params.token
+            const { token } = request.params
             const secret = h.context.config.server.jwtSecret
             let payload
 

@@ -40,9 +40,9 @@ module.exports = {
             currentUser.id,
             db
         )
-        const userCanEditApp =
-            appsUserCanEdit.filter(app => app.app_id === request.params.appId)
-                .length > 0
+        const userCanEditApp = appsUserCanEdit
+            .map(app => app.app_id)
+            .includes(request.params.appId)
         const isManager = currentUserIsManager(request)
 
         if (isManager || userCanEditApp) {

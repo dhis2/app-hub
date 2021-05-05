@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
-import { useQueryParams, StringParam } from 'use-query-params'
+import { useQueryParam, StringParam } from 'use-query-params'
 import { acceptOrganisationInvitation } from '../../api/api'
 
 const OrganisationInvitationCallback = () => {
-    const [queryParams] = useQueryParams({
-        invitationToken: StringParam,
-    })
+    const [invitationToken] = useQueryParam('invitationToken', StringParam)
 
-    const { invitationToken } = queryParams
     const [invitationData, setInvitationData] = useState(null)
     const [error, setError] = useState(null)
 
