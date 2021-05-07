@@ -3,6 +3,7 @@ const path = require('path')
 const packageJSON = require('./package.json')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const nodeEnv = process.env.NODE_ENV || 'development'
+const CopyPlugin = require('copy-webpack-plugin')
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 const config = require('./config/configResolver.js').default
@@ -67,6 +68,9 @@ const webpackConfig = {
             title: 'DHIS2 AppHub',
             filename: 'index.html',
             template: path.join(__dirname, 'indexbuild.html'),
+        }),
+        new CopyPlugin({
+            patterns: [{ from: path.join(__dirname, 'public'), to: 'assets' }],
         }),
     ],
 }
