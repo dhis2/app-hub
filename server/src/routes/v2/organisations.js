@@ -390,7 +390,7 @@ module.exports = [
             const link = `${baseUrl}/verify/org?invitationToken=${token}`
 
             request.logger.info(
-                `User ${currentUser.id}: Sending organisation invitation to ${decoded.emailTo}`
+                `User ${currentUser.id}: Sending organisation (${org.name}) invitation to ${decoded.emailTo}`
             )
 
             if (!request.payload.skipSend) {
