@@ -16,15 +16,25 @@ class EmailService extends Schmervice.Service {
         if (!serviceOptions.transport) {
             server.logger.warn(
                 ['init', 'EmailService'],
-                'EmailService is setup using "sendmail", this might cause issues when sending mail. Setup AWS-env to use AWS SES.'
+                'EmailService is setup using "JSONTransport", emails will not be sent. Setup AWS-env to use AWS SES.'
             )
-            this.transporter = Nodemailer.createTransport({ sendMail: true })
+            this.transporter = Nodemailer.createTransport({
+                jsonTransport: true,
+            })
         } else {
             this.transporter = serviceOptions.transport
             debug(
                 `EmailService initialized with transport ${this.transporter.transporter.name}`
             )
         }
+    }
+
+    async sendMail(sendTemplate) {
+        const res = await this.transporter.sendMail(sendTemplate)
+        if (this.transporter.transporter.name === 'JSONTransport') {
+            debug('Send mail', res.message)
+        }
+        return res
     }
 
     async sendOrganisationInvitation(
@@ -40,7 +50,8 @@ ${fromName} has invited you to join the organisation ${organisation} on App Hub.
 ${link}\n
 This invitation expires in 48 hours. If you accept you will be able to upload and manage apps on behalf of the organisation.`,
         }
-        return this.transporter.sendMail(sendTemplate)
+
+        return this.sendMail(sendTemplate)
     }
 }
 
