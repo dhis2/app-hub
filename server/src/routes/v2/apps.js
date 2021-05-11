@@ -30,7 +30,9 @@ module.exports = [
                     )
                         .description('Filter by channel')
                         .default(['stable']),
-                    core: Joi.filter(Joi.boolean()),
+                    core: Joi.filter(Joi.boolean()).description(
+                        'Filter by core app'
+                    ),
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
                     )
