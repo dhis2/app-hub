@@ -17,6 +17,7 @@ const config = {
     server: {
         port: process.env.PORT || 3000,
         host: process.env.HOST || 'localhost',
+        jwtSecret: getRequiredEnv('INTERNAL_JWT_SECRET'),
     },
     displayRoutesTable: process.env.NODE_ENV !== 'test',
     logging: {
@@ -24,6 +25,9 @@ const config = {
         redactAuthorization: process.env.NODE_ENV !== 'test',
         level: process.env.NODE_ENV !== 'test' ? 'info' : 'error',
         prettyPrint: process.env.NODE_ENV !== 'test',
+    },
+    aws: {
+        region: process.env.AWS_REGION || 'eu-west-1',
     },
     auth: {
         noAuthUserIdMapping: process.env.NO_AUTH_MAPPED_USER_ID,

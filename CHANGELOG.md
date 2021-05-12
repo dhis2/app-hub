@@ -1,3 +1,29 @@
+# [2.19.0](https://github.com/dhis2/app-hub/compare/v2.18.2...v2.19.0) (2021-05-07)
+
+
+### Bug Fixes
+
+* **version-api:** use server-package.json for version information ([#476](https://github.com/dhis2/app-hub/issues/476)) ([5a1e1be](https://github.com/dhis2/app-hub/commit/5a1e1be96bacb7bb4fba24211eeadbeda9ef10d0))
+
+
+### Features
+
+* add version API ([#473](https://github.com/dhis2/app-hub/issues/473)) ([dbc2732](https://github.com/dhis2/app-hub/commit/dbc2732dba8eb63b93cf9b5731087405da5a65e7))
+
+## [2.18.2](https://github.com/dhis2/app-hub/compare/v2.18.1...v2.18.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* use punycode.toASCII instead of punycode.encode ([#471](https://github.com/dhis2/app-hub/issues/471)) ([857a180](https://github.com/dhis2/app-hub/commit/857a180ba13a80caa70a381f19a3cdbeee9c2b41))
+
+## [2.18.1](https://github.com/dhis2/app-hub/compare/v2.18.0...v2.18.1) (2021-04-30)
+
+
+### Bug Fixes
+
+* encode strings with punycode before generating slug ([#468](https://github.com/dhis2/app-hub/issues/468)) ([26edb4b](https://github.com/dhis2/app-hub/commit/26edb4b3c8802c08b8967c0e6e519b3d4f0b4c47))
+
 # [2.18.0](https://github.com/dhis2/app-hub/compare/v2.17.1...v2.18.0) (2021-04-30)
 
 

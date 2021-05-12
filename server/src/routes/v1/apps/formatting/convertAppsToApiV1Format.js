@@ -23,13 +23,12 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
     //TODO: set address
     developer: {
         address: '',
-        email: app.developer_email,
+        email: app.contact_email,
         organisation: app.organisation,
-        name: app.developer_name,
     },
 
     //TODO: can we use developer_email here ? previous it was oauth token|id
-    owner: app.developer_email,
+    owner: app.owner_id,
     images: [],
 
     sourceUrl: app.source_url || '',
@@ -57,7 +56,11 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
         created: +new Date(app.version_created_at),
 
         demoUrl: app.demo_url || '',
-        downloadUrl: `${serverUrl}/v1/apps/download/${encodeURIComponent(app.organisation_slug)}/${encodeURIComponent(app.appver_slug)}_${encodeURIComponent(app.version)}.zip`,
+        downloadUrl: `${serverUrl}/v1/apps/download/${encodeURIComponent(
+            app.organisation_slug
+        )}/${encodeURIComponent(app.appver_slug)}_${encodeURIComponent(
+            app.version
+        )}.zip`,
         id: app.version_id,
         lastUpdated: +new Date(app.version_created_at),
         maxDhisVersion: app.max_dhis2_version,

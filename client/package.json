@@ -1,6 +1,6 @@
 {
     "name": "client",
-    "version": "2.18.0",
+    "version": "2.19.0",
     "description": "The App Hub Client",
     "repository": "https://github.com/dhis2/app-hub",
     "author": "Birk Johansson <birk@dhis2.org>",
@@ -24,6 +24,9 @@
         "core-js": "^3.4.8",
         "debug": "^4.1.1",
         "history": "^4.5.1",
+        "html-webpack-plugin": "^3.2.0",
+        "jsonwebtoken": "^8.5.1",
+        "jwt-decode": "^2.1.0",
         "lodash": "^4.17.19",
         "query-string": "^6.14.0",
         "react": "^17.0.2",

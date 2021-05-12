@@ -136,7 +136,7 @@ describe('@data::createOrganisation', () => {
         expect(org.id).to.be.a.string()
 
         expect(org.id.length).to.be.equal(36)
-        expect(org.slug).to.equal('test-create-organisation-9ec0a9f3a20b')
+        expect(org.slug).to.equal('test-create-organisation-aaoee')
         expect(org.name).to.equal('Test create organisation åäöèé')
 
         const [shouldExist] = await getOrganisationsByName(org.name, db)
@@ -219,7 +219,7 @@ describe('@data::updateApp', () => {
 
         const newData = {
             id: app_id,
-            userId: firstApp.developer_id,
+            userId: firstApp.owner_id,
             name: 'Changed name',
             sourceUrl: 'https://some/url',
             demoUrl: 'http://some/other/url',
@@ -266,7 +266,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: '123',
                 maxDhisVersion: '456',
                 version: '789',
@@ -291,7 +291,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: app.minDhisVersion,
                 maxDhisVersion: app.maxDhisVersion,
                 version: app.version,
