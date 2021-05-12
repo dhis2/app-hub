@@ -227,6 +227,14 @@ export function addOrganisationMember(orgId, email) {
     )
 }
 
+export function acceptOrganisationInvitation(token) {
+    return apiV2.request(
+        `organisations/invitation/${token}`,
+        { useAuth: true },
+        { method: 'POST' }
+    )
+}
+
 export function removeOrganisationMember(orgId, user) {
     return apiV2.request(
         `organisations/${orgId}/user`,
@@ -288,13 +296,5 @@ export function deleteApiKey() {
         {
             method: 'DELETE',
         }
-    )
-}
-
-export function acceptOrganisationInvitation(token) {
-    return apiV2.request(
-        `organisations/invitation/${token}`,
-        { useAuth: true },
-        { method: 'POST' }
     )
 }

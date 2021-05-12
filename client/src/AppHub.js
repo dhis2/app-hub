@@ -11,6 +11,8 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header/Header'
 import Apps from './pages/Apps/Apps'
 import AppView from './pages/AppView/AppView'
+import OrganisationInvitation from './pages/OrganisationInvitation/OrganisationInvitation'
+import OrganisationInvitationCallback from './pages/OrganisationInvitationCallback/OrganisationInvitationCallback'
 import UserView from './pages/UserView/UserView'
 import store from './store'
 import { history } from './utils/history'
@@ -38,6 +40,16 @@ const AppHub = () => (
                                     path="/user"
                                     auth={Auth}
                                     component={UserView}
+                                />
+                                <ProtectedRoute
+                                    path="/verify/org/callback"
+                                    auth={Auth}
+                                    component={OrganisationInvitationCallback}
+                                />
+                                <Route
+                                    exact
+                                    path="/verify/org"
+                                    component={OrganisationInvitation}
                                 />
                                 {/* No-match route - redirect to index */}
                                 <Route render={() => <Redirect to="/" />} />
