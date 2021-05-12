@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useQueryParam, StringParam } from 'use-query-params'
-import { acceptOrganisationInvitation } from '../../api/api'
+import { acceptOrganisationInvitation } from '../../api'
 
 const OrganisationInvitationCallback = () => {
     const [invitationToken] = useQueryParam('invitationToken', StringParam)
@@ -31,8 +31,9 @@ const OrganisationInvitationCallback = () => {
 
     if (error) {
         console.error(error)
-        return `Failed to join organisation${error.message &&
-            `: ${error.message}`}`
+        return `Failed to join organisation${
+            error.message && `: ${error.message}`
+        }`
     }
 
     if (!invitationData) {

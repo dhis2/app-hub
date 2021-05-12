@@ -1,7 +1,7 @@
+import { useAuth0 } from '@auth0/auth0-react'
+import JWT from 'jsonwebtoken'
 import React from 'react'
 import { useQueryParams, StringParam } from 'use-query-params'
-import JWT from 'jsonwebtoken'
-import { useAuth0 } from '@auth0/auth0-react'
 
 const OrganisationInvitation = () => {
     const [queryParams] = useQueryParams({
