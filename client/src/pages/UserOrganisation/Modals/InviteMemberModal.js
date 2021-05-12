@@ -16,19 +16,19 @@ import styles from './Modal.module.css'
 import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
-const NewMemberModal = ({ organisation, mutate, onClose }) => {
+const InviteMemberModal = ({ organisation, mutate, onClose }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
     const handleSubmit = async ({ email }) => {
         try {
-            await api.addOrganisationMember(organisation.id, email)
+            await api.inviteOrganisationMember(organisation.id, email)
             mutate({
                 ...organisation,
                 users: [...organisation.users, { email }],
             })
             successAlert.show({
-                message: `Successfully added ${email} to organisation`,
+                message: `Successfully invited ${email} to organisation '${organisation.name}'`,
             })
             onClose()
         } catch (error) {
@@ -38,7 +38,7 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
 
     return (
         <Modal onClose={onClose} small>
-            <ModalTitle>Add member</ModalTitle>
+            <ModalTitle>Invite member</ModalTitle>
             <ModalContent>
                 <NoticeBox className={styles.noticebox}>
                     The user will receive an email with an invitation link. If
@@ -67,7 +67,7 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
                                     primary
                                     disabled={!valid || submitting}
                                 >
-                                    Add member
+                                    Invite member
                                 </Button>
                             </ButtonStrip>
                         </form>
@@ -78,10 +78,10 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
     )
 }
 
-NewMemberModal.propTypes = {
+InviteMemberModal.propTypes = {
     mutate: PropTypes.object.isRequired,
     organisation: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
 }
 
-export default NewMemberModal
+export default InviteMemberModal

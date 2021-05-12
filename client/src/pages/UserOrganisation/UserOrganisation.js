@@ -7,7 +7,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import EditNameModal from './Modals/EditNameModal'
-import NewMemberModal from './Modals/NewMemberModal'
+import InviteMemberModal from './Modals/InviteMemberModal'
 import OrganisationUser from './OrganisationUser/OrganisationUser'
 import styles from './UserOrganisation.module.css'
 import { useQuery } from 'src/api'
@@ -27,7 +27,7 @@ const UserOrganisation = ({ match, user }) => {
         null,
         requestOpts
     )
-    const newMemberModal = useModalState()
+    const inviteMemberModal = useModalState()
     const editNameModal = useModalState()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
@@ -123,17 +123,17 @@ const UserOrganisation = ({ match, user }) => {
             </NoticeBox>
 
             <section>
-                {newMemberModal.isVisible && (
-                    <NewMemberModal
+                {inviteMemberModal.isVisible && (
+                    <InviteMemberModal
                         organisation={organisation}
                         mutate={mutate}
-                        onClose={newMemberModal.hide}
+                        onClose={inviteMemberModal.hide}
                     />
                 )}
                 <div>
                     <h3 className={styles.subheader}>Members</h3>
-                    <Button small primary onClick={newMemberModal.show}>
-                        Add member
+                    <Button small primary onClick={inviteMemberModal.show}>
+                        Invite member
                     </Button>
                 </div>
                 {organisation.users.map(ou => (

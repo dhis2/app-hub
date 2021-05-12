@@ -1,7 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react'
+import { CenteredContent, NoticeBox, Card, Button } from '@dhis2/ui'
 import JWT from 'jsonwebtoken'
 import React from 'react'
 import { useQueryParams, StringParam } from 'use-query-params'
+import styles from './OrganisationInvitation.module.css'
 
 const OrganisationInvitation = () => {
     const [queryParams] = useQueryParams({
@@ -12,23 +14,32 @@ const OrganisationInvitation = () => {
     const { invitationToken } = queryParams
     const decoded = JWT.decode(invitationToken)
     if (!decoded) {
-        return 'An error occurred while decoding token'
+        return (
+            <CenteredContent>
+                <NoticeBox error>Your invitation has expired</NoticeBox>
+            </CenteredContent>
+        )
+    }
+
+    const handleAcceptInvitation = () => {
+        loginWithRedirect({
+            redirectUri: `${window.location.protocol}//${window.location.host}/verify/org/callback?invitationToken=${invitationToken}`,
+        })
     }
 
     return (
-        <div className="app">
-            {decoded.from.name} has invited you to join organisation{' '}
-            {decoded.organisation}
-            <button
-                onClick={() =>
-                    loginWithRedirect({
-                        redirectUri: `${window.location.protocol}//${window.location.host}/verify/org/callback?invitationToken=${invitationToken}`,
-                    })
-                }
-            >
-                Join Organisation
-            </button>
-        </div>
+        <Card className={styles.card}>
+            <p className={styles.explanation}>
+                <strong>{decoded.from.name}</strong>
+                <span className={styles.middle}>
+                    has invited you to join organisation
+                </span>
+                <strong>{decoded.organisation}</strong>
+            </p>
+            <Button primary onClick={handleAcceptInvitation}>
+                Accept invitation
+            </Button>
+        </Card>
     )
 }
 

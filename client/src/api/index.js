@@ -213,7 +213,7 @@ export function getMe() {
     return apiV2.request('me', { useAuth: true })
 }
 
-export function addOrganisationMember(orgId, email) {
+export function inviteOrganisationMember(orgId, email) {
     return apiV2.request(
         `organisations/${orgId}/invitation`,
         { useAuth: true },
