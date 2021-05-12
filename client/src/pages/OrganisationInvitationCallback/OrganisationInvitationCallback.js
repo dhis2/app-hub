@@ -1,19 +1,26 @@
+import { CenteredContent, NoticeBox, CircularLoader } from '@dhis2/ui'
 import React, { useEffect, useState } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useQueryParam, StringParam } from 'use-query-params'
-import { acceptOrganisationInvitation } from '../../api'
+import * as api from '../../api'
+import { useSuccessAlert } from 'src/lib/use-alert'
 
 const OrganisationInvitationCallback = () => {
     const [invitationToken] = useQueryParam('invitationToken', StringParam)
-
-    const [invitationData, setInvitationData] = useState(null)
+    const successAlert = useSuccessAlert()
+    const [organisationId, setOrganisationId] = useState(null)
     const [error, setError] = useState(null)
 
     useEffect(() => {
         const acceptInvitation = async token => {
             try {
-                const res = await acceptOrganisationInvitation(token)
-                setInvitationData(res)
+                const { organisation } = await api.acceptOrganisationInvitation(
+                    token
+                )
+                setOrganisationId(organisation.id)
+                successAlert.show({
+                    message: `Successfully joined organisation ${organisation.name}`,
+                })
             } catch (e) {
                 console.error(e)
                 setError(e)
@@ -30,20 +37,24 @@ const OrganisationInvitationCallback = () => {
     }
 
     if (error) {
-        console.error(error)
-        return `Failed to join organisation${
-            error.message && `: ${error.message}`
-        }`
+        return (
+            <CenteredContent>
+                <NoticeBox title="Failed to join organisation" error>
+                    {error.message}
+                </NoticeBox>
+            </CenteredContent>
+        )
     }
 
-    if (!invitationData) {
-        return 'Joining organisation...'
+    if (!organisationId) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
     }
-    return (
-        <div className="app">
-            You've joined {invitationData.organisation.name}!
-        </div>
-    )
+
+    return <Redirect to={`/user/organisations/${organisationId}`} />
 }
 
 export default OrganisationInvitationCallback
