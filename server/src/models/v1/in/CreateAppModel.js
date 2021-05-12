@@ -8,7 +8,6 @@ const CreateModelAppData = Joi.object().keys({
     appType: Joi.string().valid(...AppTypes),
     sourceUrl: Joi.string().uri(),
     developer: Joi.object().keys({
-        name: Joi.string(),
         email: Joi.string().email(),
         organisationId: Joi.string(),
     }),

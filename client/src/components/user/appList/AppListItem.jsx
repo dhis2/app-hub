@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from 'prop-types'
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { ListItem } from 'material-ui/List'
@@ -117,7 +117,7 @@ const AppListItem = (props, state) => {
     const logo = images.filter(elem => elem.logo)[0]
     const secondaryText = (
         <p style={{ display: 'inline-block', height: 'auto' }}>
-            {developer.name} <br />
+            {developer.organisation} <br />
             {config.ui.appTypeToDisplayName[appType]}
             {!props.manager ? (
                 <span>

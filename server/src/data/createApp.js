@@ -11,10 +11,7 @@ const paramsSchema = joi
             .string()
             .uuid()
             .required(),
-        developerUserId: joi
-            .string()
-            .uuid()
-            .required(),
+        contactEmail: joi.string().email(),
         orgId: joi
             .string()
             .uuid()
@@ -51,7 +48,7 @@ const createApp = async (params, knex) => {
     }
 
     debug('params: ', params)
-    const { userId, developerUserId, orgId, appType } = params
+    const { userId, contactEmail, orgId, appType } = params
 
     //generate a new uuid to insert
 
@@ -60,7 +57,7 @@ const createApp = async (params, knex) => {
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,
-                developer_user_id: developerUserId,
+                contact_email: contactEmail,
                 organisation_id: orgId,
                 type: appType,
             })

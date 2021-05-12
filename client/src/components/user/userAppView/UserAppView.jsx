@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardText, CardTitle, CardHeader } from 'material-ui/Card'
 import FloatingActionButton from 'material-ui/FloatingActionButton'
@@ -275,7 +275,6 @@ const UserAppCardHeader = ({
     const subtitle = (
         <div>
             Type: {config.ui.appTypeToDisplayName[app.appType]} <br />
-            Author: {app.developer.name} <br />
             Organisation: {app.developer.organisation} <br />
             {app.status == APP_STATUS_PENDING ||
             app.status == APP_STATUS_REJECTED

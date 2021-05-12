@@ -14,7 +14,7 @@ export class AddOrganisationMemberDialog extends Component {
     submitForm() {
         //submit form manually as dialog actions work as submit button
         const res = this.form.submit()
-    
+
         if (this.form.valid) {
             return Promise.resolve(res)
         } else {
@@ -36,13 +36,13 @@ export class AddOrganisationMemberDialog extends Component {
                 approveLabel={'Add'}
                 approveAction={this.submitForm.bind(this)}
                 cancelAction={this.props.closeDialog}
-                contentStyle={{maxWidth: '600px'}}
+                contentStyle={{ maxWidth: '600px' }}
                 autoCloseOnApprove={false}
             >
                 <NoteBlock>
-                        The new member must have logged in with the
-                        email address at least once before being able to be added
-                        to an organisation.
+                    The user will receive an email with an invitation link. If
+                    accepted. the user will be able to upload and manage apps on
+                    behalf of the organisation.
                 </NoteBlock>
                 <AddOrganisationMemberForm
                     ref={ref => {

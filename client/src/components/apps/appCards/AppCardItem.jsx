@@ -32,9 +32,7 @@ const AppItem = ({ app }) => {
                     title={<Link to={`/app/${id}`}>{name}</Link>}
                     subtitle={
                         <span>
-                            {developer.organisation ||
-                                developer.name ||
-                                'Unspecified'}
+                            {developer.organisation || 'Unspecified'}
                             <br />
                             {config.ui.appTypeToDisplayName[appType]}{' '}
                         </span>

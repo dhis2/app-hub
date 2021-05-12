@@ -6,7 +6,6 @@ exports.sampleApp = {
     appType: 'APP',
     sourceUrl: 'http://github.com',
     developer: {
-        name: 'Foo Bar',
         email: 'foobar@dhis2.org',
         organisationId: mockOrganisations[0].id,
     },
