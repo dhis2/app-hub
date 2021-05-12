@@ -76,7 +76,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
 
 const DetailsCard = ({ app, mutate }) => {
     const logo = app.images.find(img => img.logo)
-    const appDeveloper = app.developer.organisation || app.developer.name
+    const appDeveloper = app.developer.organisation || 'Unspecified'
     const appType = appTypeToDisplayName[app.appType]
 
     return (

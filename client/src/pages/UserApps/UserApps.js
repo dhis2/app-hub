@@ -38,11 +38,9 @@ const filterApps = (apps, query) => {
         return apps
     }
     return apps.filter(app =>
-        [
-            app.name,
-            app.appType,
-            app.developer.organisation || app.developer.name,
-        ].some(prop => prop.toLowerCase().includes(query.toLowerCase()))
+        [app.name, app.appType, app.developer.organisation].some(prop =>
+            prop.toLowerCase().includes(query.toLowerCase())
+        )
     )
 }
 

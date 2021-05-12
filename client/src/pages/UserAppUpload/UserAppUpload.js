@@ -122,8 +122,7 @@ const UserAppUpload = ({ user }) => {
         sourceUrl,
         file,
         logo,
-        developerName,
-        developerEmail,
+        contactEmail,
         developerOrganisation,
         version,
         minDhisVersion,
@@ -141,8 +140,7 @@ const UserAppUpload = ({ user }) => {
                     appType,
                     sourceUrl,
                     developer: {
-                        name: developerName,
-                        email: developerEmail,
+                        email: contactEmail,
                         organisationId: developerOrganisation,
                     },
                     version: {
@@ -327,18 +325,8 @@ const UserAppUpload = ({ user }) => {
                             </p>
                             <ReactFinalForm.Field
                                 required
-                                name="developerName"
-                                label="Developer name"
-                                placeholder="Enter a name"
-                                initialValue={user.name}
-                                component={InputFieldFF}
-                                className={styles.field}
-                                validate={hasValue}
-                            />
-                            <ReactFinalForm.Field
-                                required
-                                name="developerEmail"
-                                label="Developer email"
+                                name="contactEmail"
+                                label="Developer contact email"
                                 type="email"
                                 placeholder="Enter an email address"
                                 initialValue={user.email}

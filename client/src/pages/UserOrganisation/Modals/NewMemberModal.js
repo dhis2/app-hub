@@ -41,8 +41,9 @@ const NewMemberModal = ({ organisation, mutate, onClose }) => {
             <ModalTitle>Add member</ModalTitle>
             <ModalContent>
                 <NoticeBox className={styles.noticebox}>
-                    The new member must have logged in with the email address at
-                    least once before being able to be added to an organisation.
+                    The user will receive an email with an invitation link. If
+                    accepted, the user will be able to upload and manage apps on
+                    behalf of this organisation.
                 </NoticeBox>
                 <ReactFinalForm.Form onSubmit={handleSubmit}>
                     {({ handleSubmit, valid, submitting }) => (

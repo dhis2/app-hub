@@ -98,7 +98,7 @@ const AppView = ({ match }) => {
         )
     }
 
-    const appDeveloper = app.developer.organisation || app.developer.name
+    const appDeveloper = app.developer.organisation || 'Unspecified'
     const logoSrc = app.images.find(img => img.logo)?.imageUrl
     const screenshots = app.images.filter(img => !img.logo)
     const versions = app.versions.sort((a, b) => b.created - a.created)
