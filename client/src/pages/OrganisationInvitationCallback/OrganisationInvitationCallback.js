@@ -54,7 +54,7 @@ const OrganisationInvitationCallback = () => {
         )
     }
 
-    return <Redirect to={`/user/organisations/${organisationId}`} />
+    return <Redirect to={`/user/organisation/${organisationId}`} />
 }
 
 export default OrganisationInvitationCallback
