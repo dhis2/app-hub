@@ -16,17 +16,13 @@ import styles from './Modal.module.css'
 import * as api from 'src/api'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
-const InviteMemberModal = ({ organisation, mutate, onClose }) => {
+const InviteMemberModal = ({ organisation, onClose }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
     const handleSubmit = async ({ email }) => {
         try {
             await api.inviteOrganisationMember(organisation.id, email)
-            mutate({
-                ...organisation,
-                users: [...organisation.users, { email }],
-            })
             successAlert.show({
                 message: `Successfully invited ${email} to organisation '${organisation.name}'`,
             })
@@ -79,7 +75,6 @@ const InviteMemberModal = ({ organisation, mutate, onClose }) => {
 }
 
 InviteMemberModal.propTypes = {
-    mutate: PropTypes.object.isRequired,
     organisation: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
 }

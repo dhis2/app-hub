@@ -126,7 +126,6 @@ const UserOrganisation = ({ match, user }) => {
                 {inviteMemberModal.isVisible && (
                     <InviteMemberModal
                         organisation={organisation}
-                        mutate={mutate}
                         onClose={inviteMemberModal.hide}
                     />
                 )}
