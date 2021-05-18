@@ -13,7 +13,6 @@ module.exports = {
     getAllAppsByLanguage: require('./getAllAppsByLanguage'),
     getAllAppsByDeveloperId: require('./getAllAppsByDeveloperId'),
     getAppById: require('./getAppById'),
-    getAppDeveloperId: require('./getAppDeveloperId'),
     getApps: require('./getApps'),
     getAppsByIdAndStatus: require('./getAppsByIdAndStatus'),
     getAppsById: require('./getAppsById'),

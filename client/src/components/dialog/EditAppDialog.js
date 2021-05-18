@@ -1,7 +1,7 @@
 // eslint-disable-next-line react/no-deprecated
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import DialogBase from './DialogBase'
 import { editApp } from '../../actions/actionCreators'
@@ -39,8 +39,7 @@ export class EditAppDialog extends Component {
                         description: app.description,
                         appType: app.appType,
                         sourceUrl: app.sourceUrl,
-                        developerName: app.developer.name,
-                        developerEmail: app.developer.email,
+                        contactEmail: app.developer.email,
                         developerAddress: app.developer.address,
                         developerOrg: app.developer.organisation,
                     }}

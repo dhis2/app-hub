@@ -32,10 +32,11 @@ const defaultNotFoundRoute = {
 const apiRoutesPlugin = {
     name: 'DHIS2 App Hub Backend',
     register: async (server, options) => {
-        const { knex, auth } = options
+        const { knex, auth, config } = options
 
         const bindContext = {
             db: knex,
+            config,
         }
 
         if (auth && auth.useAuth0()) {

@@ -30,14 +30,14 @@ const appTypes = Object.keys(appTypeToDisplayName).map(key => ({
 const requiredFields = {
     general: ['appName', 'description', 'appType', 'sourceUrl'],
     version: ['file', 'version', 'channel', 'minVer', 'maxVer'],
-    developer: ['developerName', 'developerEmail', 'developerOrgId'],
+    developer: ['developerOrgId'],
     image: ['image'],
 }
 
 const varCharFields = {
     general: ['appName', 'appType', 'sourceUrl'],
     version: ['version'],
-    developer: ['developerName', 'developerEmail', 'developerOrgId'],
+    developer: ['contactEmail', 'developerOrgId'],
     image: [],
 }
 
@@ -213,17 +213,10 @@ const AppDeveloperSection = props => {
     return (
         <FormSection name={props.name}>
             <Field
-                name="developerName"
-                fullWidth
-                autoFocus
-                component={formUtils.renderTextField}
-                label="Developer Name *"
-            />
-            <Field
-                name="developerEmail"
+                name="contactEmail"
                 fullWidth
                 component={formUtils.renderTextField}
-                label="Developer Email *"
+                label="Contact Email"
             />
             <Field
                 name="developerOrgId"
@@ -295,8 +288,7 @@ class UploadAppFormStepper extends Component {
             appType: values.general.appType,
             sourceUrl: values.general.sourceUrl,
             developer: {
-                name: values.developer.developerName,
-                email: values.developer.developerEmail,
+                email: values.developer.contactEmail,
                 organisationId: values.developer.developerOrgId,
             },
             version: {

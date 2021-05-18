@@ -66,7 +66,7 @@ const snackbarReducer = (state = initialState, action) => {
         case actionTypes.ORGANISATION_MEMBER_ADD_SUCCESS: {
             return {
                 ...state,
-                message: 'Member added',
+                message: 'Invitation sent',
             }
         }
 
