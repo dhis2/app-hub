@@ -7,7 +7,7 @@ const Boom = require('@hapi/boom')
 const CreateAppVersionModel = require('../../../../models/v1/in/CreateAppVersionModel')
 
 const defaultFailHandler = require('../../defaultFailHandler')
-const { saveFile, isDHIS2Organisation } = require('../../../../utils')
+const { saveFile } = require('../../../../utils')
 
 const {
     getCurrentUserFromRequest,
@@ -192,9 +192,9 @@ module.exports = {
             verifyBundle({
                 buffer: file._data,
                 appId,
+                appName: dbApp.name,
                 version,
                 organisationName: organisation.name,
-                canBeCoreApp: isDHIS2Organisation(organisationId)
             })
 
             await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)

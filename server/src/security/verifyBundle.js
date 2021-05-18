@@ -12,12 +12,16 @@ const isValidJSON = json => {
 const checkManifest = ({
     manifest,
     appId,
+    appName,
     version,
     organisationName,
     canBeCoreApp
 }) => {
     if (manifest.app_hub_id && manifest.app_hub_id !== appId) {
         throw new Error('Manifest App Hub ID does not match app ID')
+    }
+    if (manifest.name !== appName) {
+        throw new Error('Manifest name does not match app name')
     }
     if (manifest.version !== version) {
         throw new Error('Manifest version does not match app version')
@@ -34,12 +38,16 @@ const checkManifest = ({
 const checkD2Config = ({
     d2Config,
     appId,
+    appName,
     version,
     organisationName,
     canBeCoreApp
 }) => {
     if (d2Config.id && d2Config.id !== appId) {
         throw new Error('D2 config App Hub ID does not match app ID')
+    }
+    if (d2Config.title !== appName) {
+        throw new Error('D2 config title does not match app name')
     }
     if (d2Config.version !== version) {
         throw new Error('D2 config version does not match app version')
@@ -56,14 +64,15 @@ const checkD2Config = ({
 module.exports = ({
     buffer,
     appId,
+    appName,
     version,
     organisationName,
-    canBeCoreApp
 }) => {
     const zip = new AdmZip(buffer)
     const entries = zip.getEntries().map(e => e.entryName)
     const manifestPath = 'manifest.webapp'
     const d2ConfigPath = 'd2.config.json'
+    const canBeCoreApp = organisationName === 'DHIS2'
 
     if (!entries.includes(manifestPath)) {
         throw new Error('Manifest missing from bundle')
@@ -76,6 +85,7 @@ module.exports = ({
     checkManifest({
         manifest,
         appId,
+        appName,
         version,
         organisationName,
         canBeCoreApp
@@ -93,6 +103,7 @@ module.exports = ({
     checkD2Config({
         d2Config,
         appId,
+        appName,
         version,
         organisationName,
         canBeCoreApp

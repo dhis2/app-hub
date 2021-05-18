@@ -9,7 +9,7 @@ const {
 } = require('../../../../security')
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
-const { saveFile, isDHIS2Organisation } = require('../../../../utils')
+const { saveFile } = require('../../../../utils')
 const { validateImageMetadata } = require('../../../../utils/validateMime')
 
 module.exports = {
@@ -134,9 +134,9 @@ module.exports = {
             verifyBundle({
                 buffer: file._data,
                 appId: app.id,
+                appName: name,
                 version,
                 organisationName: organisation.name,
-                canBeCoreApp: isDHIS2Organisation(organisation.id)
             })
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
