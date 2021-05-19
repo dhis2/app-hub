@@ -1,0 +1,14 @@
+.table {
+    display: block;
+    overflow-x: scroll;
+}
+
+@media (min-width: 600px) {
+    .table {
+        display: table;
+    }
+}
+
+.channelNameCell {
+    color: var(--colors-grey700);
+}

@@ -8,13 +8,13 @@ const {
 } = require('../data')
 
 exports.create = async (
-    { userId: currentUserId, organisationId, appType, status },
+    { userId: currentUserId, contactEmail, organisationId, appType, status },
     db
 ) => {
     const app = await createApp(
         {
             userId: currentUserId,
-            developerUserId: currentUserId,
+            contactEmail,
             orgId: organisationId,
             appType: appType,
         },
