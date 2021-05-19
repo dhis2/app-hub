@@ -71,7 +71,7 @@
         "svg-loader": "^0.0.2",
         "transform-imports": "^2.0.0",
         "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.5",
+        "webpack-cli": "^4.7.0",
         "webpack-dev-server": "^3.8.2"
     },
     "files": [
