@@ -5,6 +5,7 @@ const {
     canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
@@ -131,6 +132,13 @@ module.exports = {
             )
 
             const { file } = payload
+            verifyBundle({
+                buffer: file._data,
+                appId: app.id,
+                appName: name,
+                version,
+                organisationName: organisation.name,
+            })
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
                 'app.zip',

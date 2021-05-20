@@ -26,6 +26,7 @@
         "@hapi/inert": "^6.0.1",
         "@hapi/joi": "^17.1.1",
         "@hapi/vision": "^6.0.0",
+        "adm-zip": "^0.5.5",
         "@hapipal/schmervice": "^2.0.0",
         "auth0": "^2.32.0",
         "aws-sdk": "^2.640.0",

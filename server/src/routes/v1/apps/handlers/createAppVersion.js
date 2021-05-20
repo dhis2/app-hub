@@ -12,6 +12,7 @@ const { saveFile } = require('../../../../utils')
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 
 const createAppVersion = require('../../../../data/createAppVersion')
@@ -186,6 +187,16 @@ module.exports = {
         }
 
         try {
+            const organisationId = dbApp.organisation_id
+            const organisation = Organisation.findOne(organisationId, false, transaction)
+            verifyBundle({
+                buffer: file._data,
+                appId,
+                appName: dbApp.name,
+                version,
+                organisationName: organisation.name,
+            })
+
             await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
         } catch (err) {
             await transaction.rollback()
