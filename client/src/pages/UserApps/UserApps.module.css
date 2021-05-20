@@ -1,0 +1,65 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
+@media m-medium {
+    .container {
+        padding-left: var(--spacers-dp8);
+    }
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    margin: var(--spacers-dp16) var(--spacers-dp4);
+}
+
+@media (min-width: 500px) {
+    .header {
+        grid-template-columns: auto 1fr;
+    }
+
+    .searchInput {
+        margin-left: var(--spacers-dp24);
+        min-width: 25%;
+        max-width: 380px;
+    }
+}
+
+@media m-medium {
+    .header {
+        margin: 0;
+        margin-bottom: var(--spacers-dp24);
+    }
+}
+
+.statusCard {
+    max-width: 960px;
+    margin-bottom: 40px;
+    padding: var(--spacers-dp16);
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.rejectedStatusCard {
+    border: 2px solid var(--colors-red700);
+    background: var(--colors-red050);
+}
+
+.statusCardHeader {
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp12);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--colors-grey800);
+}
+
+.rejectedStatusCardHeader {
+    color: var(--colors-red600);
+}
+
+.statusCardDescription {
+    color: var(--colors-grey800);
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp24);
+}

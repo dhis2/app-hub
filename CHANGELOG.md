@@ -1,3 +1,11 @@
+# [2.20.0](https://github.com/dhis2/app-hub/compare/v2.19.0...v2.20.0) (2021-05-19)
+
+
+### Features
+
+* emailservice and user email migration ([#463](https://github.com/dhis2/app-hub/issues/463)) ([27e91a5](https://github.com/dhis2/app-hub/commit/27e91a5a60014d3f471a12888082732d01531da0))
+* UI redesign ([#458](https://github.com/dhis2/app-hub/issues/458)) ([d4621ca](https://github.com/dhis2/app-hub/commit/d4621ca3ab58fe5f92f9be00bc17e3e3f3e732c5))
+
 # [2.19.0](https://github.com/dhis2/app-hub/compare/v2.18.2...v2.19.0) (2021-05-07)
 
 

@@ -1,0 +1,4 @@
+.field {
+    margin-bottom: var(--spacers-dp24);
+    max-width: 480px;
+}

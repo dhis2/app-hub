@@ -56,7 +56,7 @@ module.exports = {
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
-        const { organisationId } = appJsonPayload.developer
+        const { email: contactEmail, organisationId } = appJsonPayload.developer
         const organisation = await Organisation.findOne(
             organisationId,
             false,
@@ -82,6 +82,7 @@ module.exports = {
             const app = await App.create(
                 {
                     userId: currentUserId,
+                    contactEmail,
                     organisationId,
                     appType,
                     status: AppStatus.PENDING,

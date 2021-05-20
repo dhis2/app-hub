@@ -1,0 +1,11 @@
+.noticebox {
+    margin-bottom: var(--spacers-dp16);
+}
+
+.form {
+    margin-bottom: var(--spacers-dp8);
+}
+
+.field {
+    margin-bottom: var(--spacers-dp16);
+}
