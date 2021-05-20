@@ -1,3 +1,10 @@
+# [2.21.0](https://github.com/dhis2/app-hub/compare/v2.20.0...v2.21.0) (2021-05-20)
+
+
+### Features
+
+* verify metadata ([#466](https://github.com/dhis2/app-hub/issues/466)) ([196698e](https://github.com/dhis2/app-hub/commit/196698e68498aea9a2623761135e2c2aa902542b))
+
 # [2.20.0](https://github.com/dhis2/app-hub/compare/v2.19.0...v2.20.0) (2021-05-19)
 
 
