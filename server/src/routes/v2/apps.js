@@ -30,6 +30,9 @@ module.exports = [
                     )
                         .description('Filter by channel')
                         .default(['stable']),
+                    core: Joi.filter(Joi.boolean()).description(
+                        'Filter by core app'
+                    ),
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
                     )
@@ -47,9 +50,10 @@ module.exports = [
             },
         },
         handler: async (request, h) => {
-            const channels = request.plugins.queryFilter.getFilter('channels')
-                .value
-            const types = request.plugins.queryFilter.getFilter('types').value
+            const queryFilter = request.plugins.queryFilter
+            const channels = queryFilter.getFilter('channels').value
+            const types = queryFilter.getFilter('types').value
+            const coreAppFilter = queryFilter.getFilter('core')
 
             const apps = await getApps(
                 {
@@ -58,6 +62,7 @@ module.exports = [
                     channels,
                     types,
                     query: request.query.query,
+                    coreApp: coreAppFilter && coreAppFilter.value,
                 },
                 h.context.db
             )

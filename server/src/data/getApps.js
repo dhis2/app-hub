@@ -11,7 +11,7 @@ const debug = require('debug')('apphub:server:data:getApps')
  * @returns {Promise<Array>}
  */
 const getApps = (
-    { status, languageCode, channels = [], types = [], query },
+    { status, languageCode, channels = [], types = [], query, coreApp },
     knex
 ) => {
     debug('status:', status)
@@ -40,6 +40,13 @@ const getApps = (
                         builder.orWhere('type', type)
                     })
                 })
+            }
+
+            if (coreApp) {
+                builder.where('organisation', 'DHIS2')
+            }
+            if (coreApp === false) {
+                builder.whereNot('organisation', 'DHIS2')
             }
 
             if (query) {
