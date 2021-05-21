@@ -12,6 +12,7 @@ const { init } = require('../../src/server/init-server')
 const { flatten } = require('../../src/utils')
 
 const { config } = require('../../src/server/env-config')
+const appVersionMocks = require('../../seeds/mock/appversions')
 
 describe('Get all published apps [v1]', async () => {
     let server
@@ -46,7 +47,6 @@ describe('Get all published apps [v1]', async () => {
         expect(whoApp[0].developer.organisation).to.be.equal(
             'World Health Organization'
         )
-        expect(whoApp[0].developer.name).to.be.equal('Erik Arenhill')
 
         expect(whoApp[0].versions[0].version).to.be.equal('1.0')
         expect(whoApp[0].versions[0].demoUrl).to.be.equal(
@@ -187,13 +187,14 @@ describe('Get all published apps [v2]', () => {
         expect(whoApp[0].developer.organisation).to.be.equal(
             'World Health Organization'
         )
-        expect(whoApp[0].developer.name).to.be.equal('Erik Arenhill')
-
-        expect(whoApp[0].versions[0].version).to.be.equal('1.0')
-        expect(whoApp[0].versions[0].demoUrl).to.be.equal(
+        const version1App = whoApp[0].versions.find(
+            ver => ver.id === appVersionMocks[1][0].id
+        )
+        expect(version1App.version).to.be.equal('1.0')
+        expect(version1App.demoUrl).to.be.equal(
             'https://play.dhis2.org/2.30/api/apps/Immunization-analysis/index.html#!/report'
         )
-        expect(whoApp[0].versions[0].downloadUrl).to.be.equal(
+        expect(version1App.downloadUrl).to.be.equal(
             'http://localhost:3000/api/v1/apps/download/world-health-organization/a-nice-app-by-who_1.0.zip'
         )
 
@@ -250,7 +251,8 @@ describe('Get all published apps [v2]', () => {
     it('should only return apps supporting version 2.27', async () => {
         const injectOptions = {
             method: 'GET',
-            url: '/api/v2/apps?channels=stable,development,canary&dhis_version=2.27',
+            url:
+                '/api/v2/apps?channels=stable,development,canary&dhis_version=2.27',
         }
 
         const response = await server.inject(injectOptions)

@@ -10,7 +10,7 @@ const statuses = [
         id: 'e900f977-9b5d-496d-9576-cc704359bde1',
         app_id: apps[0].id,
         status: AppStatus.APPROVED,
-        created_by_user_id: users[0].id,
+        created_by_user_id: users[1].id,
     },
     {
         id: '4cb8e2cc-5e92-4b7d-90c4-4ef96e1ea337',

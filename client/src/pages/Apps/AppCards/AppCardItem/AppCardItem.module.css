@@ -1,0 +1,52 @@
+.appCard {
+    display: block;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 100ms;
+    padding: var(--spacers-dp16);
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.appCard:hover, .appCard:focus {
+    background: inherit;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
+                0 2px 4px -1px rgba(0, 0, 0, 0.06),
+                0 4px 6px -1px rgba(0, 0, 0, 0.10);
+}
+
+.appCardHeader {
+    display: grid;
+    grid-template-columns: 72px auto;
+    grid-gap: var(--spacers-dp12);
+}
+
+.appCardName {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp4);
+}
+
+.appCardDeveloper, .appCardType {
+    display: block;
+    margin: var(--spacers-dp4) 0;
+    font-size: 14px;
+}
+
+.appCardDeveloper {
+    color: var(--colors-grey800);
+}
+
+.appCardType {
+    color: var(--colors-grey700)
+}
+
+.appCardDescription {
+    margin-top: var(--spacers-dp12);
+    margin-bottom: 0;
+    min-height: 48px;
+    color: var(--colors-grey800);
+    font-size: 15px;
+    line-height: 21px;
+}

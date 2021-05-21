@@ -1,0 +1,11 @@
+.auth0-lock-header-bg {
+    background: rgb(39, 102, 150) !important;
+}
+
+.auth0-lock.auth0-lock.auth0-lock-opened .auth0-lock-header-bg .auth0-lock-header-bg-blur {
+    opacity: 0 !important;
+}
+
+.auth0-lock.auth0-lock .auth0-lock-header {
+    color: #ffffff !important;
+}

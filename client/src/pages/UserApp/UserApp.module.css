@@ -1,0 +1,14 @@
+.card {
+    display: block !important;
+    max-width: 960px;
+    margin: auto;
+    margin-bottom: var(--spacers-dp24);
+    padding: var(--spacers-dp16);
+}
+
+.cardHeader {
+    font-size: 18px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp12);
+}
