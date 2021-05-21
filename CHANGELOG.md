@@ -1,3 +1,10 @@
+# [2.22.0](https://github.com/dhis2/app-hub/compare/v2.21.0...v2.22.0) (2021-05-21)
+
+
+### Features
+
+* **apps:** add filter-option for core-apps ([#482](https://github.com/dhis2/app-hub/issues/482)) ([a7b27c8](https://github.com/dhis2/app-hub/commit/a7b27c855df956c319f1a4174dbde4c6f4adc3e3))
+
 # [2.21.0](https://github.com/dhis2/app-hub/compare/v2.20.0...v2.21.0) (2021-05-20)
 
 
