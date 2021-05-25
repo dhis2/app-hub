@@ -132,13 +132,17 @@ module.exports = {
             )
 
             const { file } = payload
-            verifyBundle({
-                buffer: file._data,
-                appId: app.id,
-                appName: name,
-                version,
-                organisationName: organisation.name,
-            })
+            try {
+                verifyBundle({
+                    buffer: file._data,
+                    appId: app.id,
+                    appName: name,
+                    version,
+                    organisationName: organisation.name,
+                })
+            } catch (error) {
+                throw Boom.badRequest(error)
+            }
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
                 'app.zip',

@@ -196,7 +196,12 @@ module.exports = {
                 version,
                 organisationName: organisation.name,
             })
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.badRequest(err)
+        }
 
+        try {
             await saveFile(`${appId}/${versionId}`, 'app.zip', file._data)
         } catch (err) {
             await transaction.rollback()
