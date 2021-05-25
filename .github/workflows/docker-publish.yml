@@ -5,7 +5,6 @@ on:
         branches:
             - master
             - next
-            - feat/ui-redesign
 
 env:
     ECR_REPOSITORY: dhis2/app-hub
@@ -60,7 +59,6 @@ jobs:
 
                   [ "$VERSION" == "master" ] && VERSION=latest
                   [ "$VERSION" == "next" ] && VERSION=staging
-                  [ "$VERSION" == "ui-redesign" ] && VERSION=redesign
 
                   echo VERSION=$VERSION
 
@@ -105,18 +103,6 @@ jobs:
                   application_name: app-hub
                   environment_name: prod
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
-                  region: ${{ env.AWS_REGION }}
-                  deployment_package: deploy.zip
-
-            - name: Deploy to Redesign
-              if: steps.build-image.outputs.version == 'redesign'
-              uses: einaregilsson/beanstalk-deploy@v6
-              with:
-                  aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-                  aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-                  application_name: app-hub
-                  environment_name: redesign
-                  version_label: app-hub-redesign-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
 
