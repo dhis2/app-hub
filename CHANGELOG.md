@@ -1,3 +1,10 @@
+# [2.23.0](https://github.com/dhis2/app-hub/compare/v2.22.0...v2.23.0) (2021-05-25)
+
+
+### Features
+
+* more informative user-facing errors regarding metadata verification ([#490](https://github.com/dhis2/app-hub/issues/490)) ([47fb951](https://github.com/dhis2/app-hub/commit/47fb951868aafc2c8fd236b38ffeda98437e30e5))
+
 # [2.22.0](https://github.com/dhis2/app-hub/compare/v2.21.0...v2.22.0) (2021-05-21)
 
 
