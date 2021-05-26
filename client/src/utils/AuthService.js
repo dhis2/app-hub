@@ -1,4 +1,7 @@
+
 export default class AuthService {
+
+
     setProfile(profile) {
         localStorage.setItem('profile', JSON.stringify(profile))
     }

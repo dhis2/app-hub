@@ -1,4 +1,4 @@
-const { slugify } = require('../utils/slugify')
+const slugify = require('slugify')
 
 /**
  * @typedef CreateLocalizedAppVersionResult
@@ -28,7 +28,7 @@ const createLocalizedAppVersion = async (params, knex) => {
                 created_by_user_id: userId, //todo: change to real id
                 description,
                 name,
-                slug: slugify(name),
+                slug: slugify(name, { lower: true }),
                 language_code: languageCode,
             })
             .returning('id')

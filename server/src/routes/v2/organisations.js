@@ -1,6 +1,4 @@
 const Boom = require('@hapi/boom')
-const Bounce = require('@hapi/bounce')
-const JWT = require('jsonwebtoken')
 const Joi = require('../../utils/CustomJoi')
 const {
     currentUserIsManager,
@@ -11,7 +9,6 @@ const { Organisation } = require('../../services')
 const OrgModel = require('../../models/v2/Organisation')
 // const debug = require('debug')('apphub:server:routes:handlers:organisations')
 const { wrapError, UniqueViolationError } = require('db-errors')
-const getServerUrl = require('../../utils/getServerUrl')
 
 module.exports = [
     {
@@ -328,134 +325,6 @@ module.exports = [
             return {
                 statusCode: 200,
             }
-        },
-    },
-    {
-        method: 'POST',
-        path: '/v2/organisations/{orgId}/invitation',
-        config: {
-            auth: 'token',
-            tags: ['api', 'v2'],
-            validate: {
-                payload: Joi.object({
-                    email: Joi.string()
-                        .email()
-                        .required(),
-                    skipSend: Joi.boolean().default(false),
-                }),
-                params: Joi.object({
-                    orgId: OrgModel.definition.extract('id').required(),
-                }),
-            },
-        },
-        handler: async (request, h) => {
-            const { db } = h.context
-            const currentUser = await getCurrentUserFromRequest(request)
-
-            const org = await Organisation.findOne(
-                request.params.orgId,
-                true,
-                db
-            )
-            const isMember = await Organisation.hasUser(
-                org.id,
-                currentUser.id,
-                db
-            )
-            const isManager = currentUserIsManager(request)
-            const canAdd = org.owner === currentUser.id || isMember || isManager
-
-            if (!canAdd) {
-                throw Boom.forbidden('You do not have permission to add users')
-            }
-
-            const { emailService } = request.services(true)
-            const { decoded, token } = Organisation.generateInvitationToken(
-                {
-                    organisation: org,
-                    user: currentUser,
-                },
-                request.payload.email
-            )
-
-            let baseUrl = getServerUrl(request)
-            if (process.env.NODE_ENV === 'development') {
-                // use referrer as frontend might be running in webpack
-                baseUrl = request.info.referrer || baseUrl
-            }
-            baseUrl = baseUrl.replace(
-                /\/(api)*$/, // replace trailing /api and /
-                ''
-            )
-            const link = `${baseUrl}/verify/org?invitationToken=${token}`
-
-            request.logger.info(
-                `User ${currentUser.id}: Sending organisation (${org.name}) invitation to ${decoded.emailTo}`
-            )
-
-            if (!request.payload.skipSend) {
-                await emailService.sendOrganisationInvitation(
-                    {
-                        emailTo: decoded.emailTo,
-                        organisation: org.name,
-                        fromName: currentUser.name,
-                    },
-                    link
-                )
-            }
-
-            return {
-                token,
-                link,
-            }
-        },
-    },
-    {
-        // accept invitation-endpoint
-        method: 'POST',
-        path: '/v2/organisations/invitation/{token}',
-        config: {
-            auth: 'token',
-            tags: ['api', 'v2'],
-            validate: {
-                params: Joi.object({
-                    token: Joi.string().required(),
-                }),
-            },
-        },
-        handler: async (request, h) => {
-            const { id } = await getCurrentUserFromRequest(request)
-            const { db } = h.context
-            const { token } = request.params
-            const secret = h.context.config.server.jwtSecret
-            let payload
-
-            try {
-                payload = JWT.verify(token, secret)
-            } catch (e) {
-                request.logger.error(e)
-                if (e instanceof JWT.TokenExpiredError) {
-                    throw Boom.badRequest('Invitation has expired')
-                }
-                throw Boom.badRequest('Invalid token')
-            }
-            try {
-                await Organisation.addUserById(payload.sub, id, db)
-            } catch (e) {
-                Bounce.ignore(wrapError(e), UniqueViolationError)
-                throw Boom.conflict(
-                    'You are already a member of that organisation'
-                )
-            }
-
-            return h
-                .response({
-                    organisation: {
-                        id: payload.sub,
-                        name: payload.organisation,
-                    },
-                })
-                .code(200)
         },
     },
 ]

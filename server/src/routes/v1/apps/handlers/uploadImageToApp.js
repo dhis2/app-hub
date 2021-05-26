@@ -9,8 +9,8 @@ const {
     getCurrentUserFromRequest,
     currentUserIsManager,
 } = require('../../../../security')
+
 const { addAppMedia, getOrganisationAppsByUserId } = require('../../../../data')
-const { validateImageMetadata } = require('../../../../utils/validateMime')
 
 module.exports = {
     method: 'POST',
@@ -60,7 +60,6 @@ module.exports = {
 
         const imageFile = request.payload.file
         const imageFileMetadata = imageFile.hapi
-        validateImageMetadata(request.server.mime, imageFileMetadata)
 
         const trx = await knex.transaction()
 

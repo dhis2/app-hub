@@ -7,6 +7,10 @@ Given('that a user clicks an app in the list', () => {
 })
 
 Then('the user can see details about that app', () => {
-    cy.get('[data-test="app-card-header"]').its('length').should('be', 1)
-    cy.get('.multiline-content').its('length').should('be', 1)
+    cy.get('[data-test="app-card-header"]')
+        .its('length')
+        .should('be', 1)
+    cy.get('.multiline-content')
+        .its('length')
+        .should('be', 1)
 })

@@ -1,8 +1,0 @@
-.deleteVersionButton {
-    margin-left: var(--spacers-dp8);
-}
-
-.newVersionButton {
-    display: inline-block;
-    margin-top: var(--spacers-dp12);
-}

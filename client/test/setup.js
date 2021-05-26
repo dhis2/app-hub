@@ -1,5 +1,3 @@
-/* eslint-disable import/order */
-
 require('isomorphic-fetch')
 import { JSDOM } from 'jsdom'
 

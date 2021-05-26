@@ -24,17 +24,15 @@
         "format": "yarn format:js && yarn format:text",
         "format:staged": "yarn format:js --staged && yarn format:text --staged",
         "format:js": "d2-style js apply",
-        "format:text": "d2-style text apply",
-        "format:client": "yarn workspace client format",
-        "format:server": "yarn workspace client format"
+        "format:text": "d2-style text apply"
     },
     "devDependencies": {
-        "@dhis2/cli-style": "^7.3.0",
+        "@dhis2/cli-style": "^6.0.0",
         "concurrently": "^4.1.2",
         "cross-env": "^6.0.3"
     },
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
     },
-    "version": "2.23.0"
+    "version": "2.14.0"
 }
