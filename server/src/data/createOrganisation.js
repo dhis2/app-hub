@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi')
-const { slugify } = require('../utils/slugify')
+const slugify = require('slugify')
 const { ensureUniqueSlug } = require('../services/organisation')
 
 const paramsSchema = joi.object().keys({
@@ -39,7 +39,7 @@ const createOrganisation = async (params, knex) => {
     }
 
     const { userId, name } = params
-    const originalSlug = slugify(name)
+    const originalSlug = slugify(name, { lower: true })
     const slug = await ensureUniqueSlug(originalSlug, knex)
 
     try {

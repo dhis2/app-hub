@@ -31,7 +31,6 @@ module.exports = {
 
         try {
             const apps = await getAllAppsByLanguage('en', h.context.db)
-
             return convertAppsToApiV1Format(apps, request)
         } catch (err) {
             debug(err)

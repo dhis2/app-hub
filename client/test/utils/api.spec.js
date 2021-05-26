@@ -1,4 +1,4 @@
-/*import __RewireAPI__, * as api from '../../src/api'
+import __RewireAPI__, * as api from '../../src/api/api.js'
 
 let fetchStub
 const randomToken = 'aRandomBearerToken'
@@ -112,4 +112,3 @@ describe('API', () => {
         })
     })
 })
-*/

@@ -1,11 +1,9 @@
-import { withAuthenticationRequired } from '@auth0/auth0-react'
-import { CenteredContent, CircularLoader } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Spinner from '../utils/Spinner'
 import { Route } from 'react-router-dom'
-import AuthService from 'src/utils/AuthService'
-
-/* eslint-disable react/display-name */
+import { withAuthenticationRequired } from '@auth0/auth0-react'
+import AuthService from '../../utils/AuthService'
 
 const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
@@ -15,11 +13,7 @@ const ProtectedRoute = ({ component, auth, ...rest }) => {
                 const ProtectedComponent = withAuthenticationRequired(
                     component,
                     {
-                        onRedirecting: () => (
-                            <CenteredContent>
-                                <CircularLoader />
-                            </CenteredContent>
-                        ),
+                        onRedirecting: () => <Spinner size="large" />,
                     }
                 )
 

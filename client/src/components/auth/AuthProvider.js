@@ -1,10 +1,10 @@
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'
-import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import config from 'config'
-import { userLoaded } from 'src/actions/actionCreators'
-import { Auth } from 'src/api'
+import config from '../../../config'
+import { Auth0Provider, useAuth0 } from '@auth0/auth0-react'
+import { Auth } from '../../api/api'
+import { userLoaded } from '../../actions/actionCreators'
 
 const AuthProvider = ({ children }) => (
     <Auth0Provider

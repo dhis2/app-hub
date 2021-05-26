@@ -219,7 +219,7 @@ describe('@data::updateApp', () => {
 
         const newData = {
             id: app_id,
-            userId: firstApp.owner_id,
+            userId: firstApp.developer_id,
             name: 'Changed name',
             sourceUrl: 'https://some/url',
             demoUrl: 'http://some/other/url',
@@ -266,7 +266,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.owner_id,
+                userId: app.developer_id,
                 minDhisVersion: '123',
                 maxDhisVersion: '456',
                 version: '789',
@@ -291,7 +291,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.owner_id,
+                userId: app.developer_id,
                 minDhisVersion: app.minDhisVersion,
                 maxDhisVersion: app.maxDhisVersion,
                 version: app.version,

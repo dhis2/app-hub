@@ -12,5 +12,5 @@ module.exports = {
     routes: {
         baseAppName: '/',
     },
-    ui: defaultConfig.ui,
+    ui: defaultConfig.ui
 }

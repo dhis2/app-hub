@@ -12,7 +12,6 @@ const { Organisation } = require('../../src/services')
 const UserMocks = require('../../seeds/mock/users')
 const OrganisationMocks = require('../../seeds/mock/organisations')
 const { Filters } = require('../../src/utils/Filter')
-const JWT = require('jsonwebtoken')
 
 describe('@services::Organisation', () => {
     let db
@@ -456,29 +455,6 @@ describe('@services::Organisation', () => {
             expect(updatedOrg).to.be.an.object()
             expect(updatedOrg.id).to.be.equal(dhis2Org.id)
             expect(updatedOrg.email).to.be.equal(email)
-        })
-    })
-
-    describe('generateInvitationToken', () => {
-        it('should generate a JWT token with secret', async () => {
-            const dhis2Org = OrganisationMocks[0]
-            const dhis2User = UserMocks[0]
-            const viktorUser = UserMocks[2]
-            const prevSecret = process.env.INTERNAL_JWT_SECRET
-            const secret = (process.env.INTERNAL_JWT_SECRET =
-                'S0meSecretIn4T3st')
-            const { decoded, token } = Organisation.generateInvitationToken(
-                { organisation: dhis2Org, user: dhis2User },
-                viktorUser.email
-            )
-            expect(token).to.be.a.string()
-            expect(decoded).to.be.an.object()
-            expect(decoded.sub).to.be.equal(dhis2Org.id)
-            expect(decoded.organisation).to.be.equal(dhis2Org.name)
-
-            const jwtDecoded = JWT.verify(token, secret)
-            expect(jwtDecoded).to.be.an.object()
-            expect(jwtDecoded).to.include(decoded)
         })
     })
 })

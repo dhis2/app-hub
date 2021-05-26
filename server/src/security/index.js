@@ -78,7 +78,6 @@ const getCurrentUserFromRequest = request => {
             }
             const user = {
                 id,
-                name: request.auth.credentials.name,
             }
             resolve(user)
         } catch (err) {
@@ -98,5 +97,4 @@ module.exports = {
     getCurrentUserFromRequest,
     currentUserIsManager,
     ROLES,
-    verifyBundle: require('./verifyBundle'),
 }

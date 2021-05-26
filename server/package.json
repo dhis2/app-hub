@@ -1,6 +1,6 @@
 {
     "name": "server",
-    "version": "2.23.0",
+    "version": "2.14.0",
     "description": "The App Hub Server",
     "main": "src/main.js",
     "repository": "https://github.com/dhis2/app-hub",
@@ -26,8 +26,6 @@
         "@hapi/inert": "^6.0.1",
         "@hapi/joi": "^17.1.1",
         "@hapi/vision": "^6.0.0",
-        "adm-zip": "^0.5.5",
-        "@hapipal/schmervice": "^2.0.0",
         "auth0": "^2.32.0",
         "aws-sdk": "^2.640.0",
         "blipp": "^4.0.1",
@@ -36,14 +34,11 @@
         "dotenv": "^6.2.0",
         "hapi-api-version": "^2.3.1",
         "hapi-auth-jwt2": "^10.2.0",
-        "hapi-pino": "8",
+        "hapi-pino": "^6.3.0",
         "hapi-swagger": "^12.0.0",
-        "jsonwebtoken": "^8.5.1",
-        "jwks-rsa": "^1.12.2",
         "knex": "^0.21.17",
-        "nodemailer": "^6.5.0",
+        "jwks-rsa": "^1.12.2",
         "pg": "^8.4.1",
-        "punycode": "^2.1.1",
         "rimraf": "^3.0.1",
         "semver": "^7.3.2",
         "slugify": "^1.4.0",
@@ -54,12 +49,10 @@
         "@hapi/lab": "^20.4.0",
         "eslint-config-hapi": "^12.0.0",
         "eslint-plugin-hapi": "^4.1.0",
-        "form-data": "^4.0.0",
         "mock-knex": "^0.4.4",
         "mock-local-storage": "^1.1.8",
         "nodemon": "^1.19.2",
         "request-promise": "^4.2.5",
-        "sinon": "^9.2.1",
-        "stream-to-promise": "^3.0.0"
+        "sinon": "^9.2.1"
     }
 }
