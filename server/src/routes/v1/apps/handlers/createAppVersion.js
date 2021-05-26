@@ -12,6 +12,7 @@ const { saveFile } = require('../../../../utils')
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 
 const createAppVersion = require('../../../../data/createAppVersion')
@@ -183,6 +184,21 @@ module.exports = {
         } catch (err) {
             await transaction.rollback()
             throw Boom.boomify(err)
+        }
+
+        try {
+            const organisationId = dbApp.organisation_id
+            const organisation = Organisation.findOne(organisationId, false, transaction)
+            verifyBundle({
+                buffer: file._data,
+                appId,
+                appName: dbApp.name,
+                version,
+                organisationName: organisation.name,
+            })
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.badRequest(err)
         }
 
         try {

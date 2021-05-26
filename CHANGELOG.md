@@ -1,3 +1,100 @@
+# [2.23.0](https://github.com/dhis2/app-hub/compare/v2.22.0...v2.23.0) (2021-05-25)
+
+
+### Features
+
+* more informative user-facing errors regarding metadata verification ([#490](https://github.com/dhis2/app-hub/issues/490)) ([47fb951](https://github.com/dhis2/app-hub/commit/47fb951868aafc2c8fd236b38ffeda98437e30e5))
+
+# [2.22.0](https://github.com/dhis2/app-hub/compare/v2.21.0...v2.22.0) (2021-05-21)
+
+
+### Features
+
+* **apps:** add filter-option for core-apps ([#482](https://github.com/dhis2/app-hub/issues/482)) ([a7b27c8](https://github.com/dhis2/app-hub/commit/a7b27c855df956c319f1a4174dbde4c6f4adc3e3))
+
+# [2.21.0](https://github.com/dhis2/app-hub/compare/v2.20.0...v2.21.0) (2021-05-20)
+
+
+### Features
+
+* verify metadata ([#466](https://github.com/dhis2/app-hub/issues/466)) ([196698e](https://github.com/dhis2/app-hub/commit/196698e68498aea9a2623761135e2c2aa902542b))
+
+# [2.20.0](https://github.com/dhis2/app-hub/compare/v2.19.0...v2.20.0) (2021-05-19)
+
+
+### Features
+
+* emailservice and user email migration ([#463](https://github.com/dhis2/app-hub/issues/463)) ([27e91a5](https://github.com/dhis2/app-hub/commit/27e91a5a60014d3f471a12888082732d01531da0))
+* UI redesign ([#458](https://github.com/dhis2/app-hub/issues/458)) ([d4621ca](https://github.com/dhis2/app-hub/commit/d4621ca3ab58fe5f92f9be00bc17e3e3f3e732c5))
+
+# [2.19.0](https://github.com/dhis2/app-hub/compare/v2.18.2...v2.19.0) (2021-05-07)
+
+
+### Bug Fixes
+
+* **version-api:** use server-package.json for version information ([#476](https://github.com/dhis2/app-hub/issues/476)) ([5a1e1be](https://github.com/dhis2/app-hub/commit/5a1e1be96bacb7bb4fba24211eeadbeda9ef10d0))
+
+
+### Features
+
+* add version API ([#473](https://github.com/dhis2/app-hub/issues/473)) ([dbc2732](https://github.com/dhis2/app-hub/commit/dbc2732dba8eb63b93cf9b5731087405da5a65e7))
+
+## [2.18.2](https://github.com/dhis2/app-hub/compare/v2.18.1...v2.18.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* use punycode.toASCII instead of punycode.encode ([#471](https://github.com/dhis2/app-hub/issues/471)) ([857a180](https://github.com/dhis2/app-hub/commit/857a180ba13a80caa70a381f19a3cdbeee9c2b41))
+
+## [2.18.1](https://github.com/dhis2/app-hub/compare/v2.18.0...v2.18.1) (2021-04-30)
+
+
+### Bug Fixes
+
+* encode strings with punycode before generating slug ([#468](https://github.com/dhis2/app-hub/issues/468)) ([26edb4b](https://github.com/dhis2/app-hub/commit/26edb4b3c8802c08b8967c0e6e519b3d4f0b4c47))
+
+# [2.18.0](https://github.com/dhis2/app-hub/compare/v2.17.1...v2.18.0) (2021-04-30)
+
+
+### Features
+
+* backend changes required by redesign ([#467](https://github.com/dhis2/app-hub/issues/467)) ([4cc9e44](https://github.com/dhis2/app-hub/commit/4cc9e4491e743336fa78342f8b0e4102bc553176))
+
+## [2.17.1](https://github.com/dhis2/app-hub/compare/v2.17.0...v2.17.1) (2021-04-20)
+
+
+### Bug Fixes
+
+* remove debug lines that spam logs ([#460](https://github.com/dhis2/app-hub/issues/460)) ([9059307](https://github.com/dhis2/app-hub/commit/9059307ececc7da600f0fd8a34a0b10afa952772))
+
+# [2.17.0](https://github.com/dhis2/app-hub/compare/v2.16.1...v2.17.0) (2021-04-15)
+
+
+### Features
+
+* validate mimetypes ([#461](https://github.com/dhis2/app-hub/issues/461)) ([0e8fba3](https://github.com/dhis2/app-hub/commit/0e8fba33ec6c1ce92eb72a51901ad22bca80b452))
+
+## [2.16.1](https://github.com/dhis2/app-hub/compare/v2.16.0...v2.16.1) (2021-04-06)
+
+
+### Bug Fixes
+
+* show query in input when returning from search result ([#456](https://github.com/dhis2/app-hub/issues/456)) ([3890057](https://github.com/dhis2/app-hub/commit/389005710a4fd32632ec66ea154083e52fe65e1f))
+
+# [2.16.0](https://github.com/dhis2/app-hub/compare/v2.15.0...v2.16.0) (2021-03-22)
+
+
+### Features
+
+* add env-var for skipping db-migration ([#455](https://github.com/dhis2/app-hub/issues/455)) ([b5e8aae](https://github.com/dhis2/app-hub/commit/b5e8aaeae5512b1cbf324d436af0baaed431faf4))
+
+# [2.15.0](https://github.com/dhis2/app-hub/compare/v2.14.0...v2.15.0) (2021-03-18)
+
+
+### Features
+
+* **apikey:** frontend for api key generation ([#454](https://github.com/dhis2/app-hub/issues/454)) ([4096b03](https://github.com/dhis2/app-hub/commit/4096b036947000599ad4bc6722f9b9e5e1e239de))
+
 # [2.14.0](https://github.com/dhis2/app-hub/compare/v2.13.1...v2.14.0) (2021-03-12)
 
 
