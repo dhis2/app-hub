@@ -1,7 +1,8 @@
-const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
+const { slugify } = require('../utils/slugify')
 const Organisation = require('../models/v2/Organisation')
 const Boom = require('@hapi/boom')
+const JWT = require('jsonwebtoken')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
@@ -45,7 +46,7 @@ const ensureUniqueSlug = async (slug, knex) => {
  * @param {*} db
  */
 const create = async ({ userId, name }, db) => {
-    const slug = await ensureUniqueSlug(slugify(name, { lower: true }), db)
+    const slug = await ensureUniqueSlug(slugify(name), db)
     const obj = {
         owner: userId,
         name,
@@ -121,7 +122,7 @@ const update = async (id, updateData, db) => {
 
     // update slug if name changed
     if (updateData.name) {
-        const slug = slugify(updateData.name, { lower: true })
+        const slug = slugify(updateData.name)
         // check if slug exists, but allow current org's slug to be the same (eg. case of name updated)
         const slugMatch = await db('organisation')
             .select('name')
@@ -177,6 +178,25 @@ const hasUser = async (id, userId, knex) => {
     return hasUser.length > 0
 }
 
+const generateInvitationToken = ({ organisation, user }, emailTo) => {
+    const secret = process.env.INTERNAL_JWT_SECRET
+
+    const decoded = {
+        from: { id: user.id, name: user.name },
+        emailTo,
+        sub: organisation.id,
+        organisation: organisation.name,
+    }
+
+    const token = JWT.sign(decoded, secret, {
+        expiresIn: 60 * 60 * 24 * 2, //48 hrs
+    })
+    return {
+        decoded,
+        token,
+    }
+}
+
 module.exports = {
     find,
     findOne,
@@ -188,5 +208,6 @@ module.exports = {
     removeUser,
     hasUser,
     getUsersInOrganisation,
+    generateInvitationToken,
     ensureUniqueSlug,
 }

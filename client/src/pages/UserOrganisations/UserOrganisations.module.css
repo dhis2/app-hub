@@ -1,0 +1,78 @@
+@value m-medium from 'src/styles/breakpoints.css';
+
+@media m-medium {
+    .container {
+        margin-left: var(--spacers-dp8);
+    }
+}
+
+.header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    margin: var(--spacers-dp16) var(--spacers-dp4);
+}
+
+@media (min-width: 500px) {
+    .header {
+        grid-template-columns: auto 1fr;
+    }
+
+    .searchInput {
+        margin-left: var(--spacers-dp24);
+        min-width: 25%;
+        max-width: 380px;
+    }
+}
+
+@media m-medium {
+    .header {
+        margin: 0;
+        margin-bottom: var(--spacers-dp24);
+    }
+}
+
+.card {
+    max-width: 960px;
+    padding: var(--spacers-dp16);
+}
+
+.cardHeader {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--colors-grey800);
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp16);
+}
+
+.organisationLink {
+    display: block;
+    max-width: 620px;
+    margin-bottom: var(--spacers-dp16);
+    padding: var(--spacers-dp16);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.organisationLink:hover, .organisationLink:focus {
+    background: var(--colors-grey200);
+}
+
+.organisationHeader {
+    margin-bottom: var(--spacers-dp8);
+}
+
+.organisationName {
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.organisationOwner {
+    margin-left: var(--spacers-dp8);
+}
+
+.organisationCreatedAt {
+    font-size: 13px;
+    color: var(--colors-grey700);
+}

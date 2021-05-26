@@ -1,0 +1,34 @@
+.screenshots {
+    display: grid;
+    grid-gap: var(--spacers-dp8);
+    grid-template-columns: 80% auto;
+}
+
+.screenshots img {
+    max-width: 100%;
+}
+
+.currentScreenshot {
+    display: block;
+    border: 1px solid var(--colors-grey200);
+}
+
+.otherScreenshot {
+    cursor: pointer;
+    margin-bottom: var(--spacers-dp8);
+    border: 4px solid var(--colors-grey200);
+}
+
+.otherScreenshot:hover, .otherScreenshot:focus {
+    border-color: var(--colors-grey400);
+    outline: none;
+}
+
+.otherScreenshotCurrent,
+.otherScreenshotCurrent:hover, .otherScreenshotCurrent:focus {
+    border-color: var(--colors-blue500);
+}
+
+.otherScreenshotCurrent:focus-visible {
+    box-shadow: 0 0 0 3px #2196f37d;
+}

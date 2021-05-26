@@ -50,7 +50,7 @@ const getUserIdByApiKey = async (apiKey, knex) => {
 
 const getApiKeyByUserId = async (userId, knex) => {
     return knex(userApiKeyTable)
-        .select('hashed_api_key')
+        .select('hashed_api_key', 'created_at')
         .where({
             user_id: userId,
         })

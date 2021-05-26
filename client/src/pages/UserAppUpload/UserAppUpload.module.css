@@ -1,0 +1,81 @@
+.card {
+    display: block !important;
+    max-width: 960px;
+    margin: auto;
+    padding: var(--spacers-dp16);
+}
+
+.smallCard {
+    composes: card;
+    max-width: 680px;
+}
+
+.header {
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--colors-grey800);
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp16);
+}
+
+.subheader {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--colors-grey800);
+    margin-top: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.description {
+    font-size: 14px;
+    color: var(--colors-grey800);
+    line-height: 19px;
+    max-width: 600px;
+    margin: 0;
+    margin-bottom: var(--spacers-dp8);
+}
+
+.subheader + .description {
+    margin-bottom: var(--spacers-dp24);
+}
+
+.formSection {
+    margin-top: var(--spacers-dp48);
+}
+
+.field {
+    margin-bottom: var(--spacers-dp24);
+    max-width: 480px;
+}
+
+.organisationFieldGroup {
+    composes: field;
+    display: flex;
+    align-items: end;
+}
+
+.organisationFieldGroup button {
+    /* Match height of input */
+    min-height: 40px;
+    margin-left: var(--spacers-dp16);
+}
+
+.organisationField {
+    flex: 1;
+}
+
+.createOrganisationLink {
+    margin-top: var(--spacers-dp16);
+}
+
+.helpTextLink {
+    text-decoration: underline;
+}
+
+.helpTextLink:hover, .helpTextLink:focus {
+    color: var(--colors-grey900);
+}
+
+.submitButton {
+    margin-top: var(--spacers-dp24);
+}
