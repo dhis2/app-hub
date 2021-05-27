@@ -9,14 +9,7 @@ const isValidJSON = json => {
     }
 }
 
-const checkManifest = ({
-    manifest,
-    appId,
-    appName,
-    version,
-    organisationName,
-    canBeCoreApp
-}) => {
+const checkManifest = ({ manifest, appId, appName, version, canBeCoreApp }) => {
     if (manifest.app_hub_id && manifest.app_hub_id !== appId) {
         throw new Error('Manifest App Hub ID does not match app ID')
     }
@@ -26,22 +19,12 @@ const checkManifest = ({
     if (manifest.version !== version) {
         throw new Error('Manifest version does not match app version')
     }
-    const manifestDeveloper = manifest.developer?.name
-    if (manifestDeveloper && manifestDeveloper !== organisationName) {
-        throw new Error('Manifest developer does not match app organisation')
-    }
     if (!canBeCoreApp && manifest.core_app) {
         throw new Error('Manifest incorrectly declares app as core app')
     }
 }
 
-const checkD2Config = ({
-    d2Config,
-    appId,
-    appName,
-    version,
-    canBeCoreApp
-}) => {
+const checkD2Config = ({ d2Config, appId, appName, version, canBeCoreApp }) => {
     if (d2Config.id && d2Config.id !== appId) {
         throw new Error('D2 config App Hub ID does not match app ID')
     }
@@ -56,13 +39,7 @@ const checkD2Config = ({
     }
 }
 
-module.exports = ({
-    buffer,
-    appId,
-    appName,
-    version,
-    organisationName,
-}) => {
+module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     const zip = new AdmZip(buffer)
     const entries = zip.getEntries().map(e => e.entryName)
     const manifestPath = 'manifest.webapp'
@@ -82,8 +59,7 @@ module.exports = ({
         appId,
         appName,
         version,
-        organisationName,
-        canBeCoreApp
+        canBeCoreApp,
     })
 
     // D2 config is optional
@@ -100,6 +76,6 @@ module.exports = ({
         appId,
         appName,
         version,
-        canBeCoreApp
+        canBeCoreApp,
     })
 }
