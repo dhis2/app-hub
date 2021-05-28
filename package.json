@@ -36,5 +36,5 @@
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
     },
-    "version": "2.23.1"
+    "version": "2.23.2"
 }
