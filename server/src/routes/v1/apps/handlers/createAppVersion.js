@@ -12,12 +12,14 @@ const { saveFile } = require('../../../../utils')
 const {
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 
 const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
+const Organisation = require('../../../../services/organisation')
 const { getOrganisationAppsByUserId, getAppsById } = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
@@ -183,6 +185,21 @@ module.exports = {
         } catch (err) {
             await transaction.rollback()
             throw Boom.boomify(err)
+        }
+
+        try {
+            const organisationSlug = dbApp.organisation_slug
+            const organisation = await Organisation.findOneBySlug(organisationSlug, false, transaction)
+            verifyBundle({
+                buffer: file._data,
+                appId,
+                appName: dbApp.name,
+                version,
+                organisationName: organisation.name,
+            })
+        } catch (err) {
+            await transaction.rollback()
+            throw Boom.badRequest(err)
         }
 
         try {

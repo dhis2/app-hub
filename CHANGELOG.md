@@ -1,3 +1,46 @@
+## [2.23.2](https://github.com/dhis2/app-hub/compare/v2.23.1...v2.23.2) (2021-05-28)
+
+
+### Bug Fixes
+
+* import Organisation service in app version handler ([#500](https://github.com/dhis2/app-hub/issues/500)) ([cb30dc6](https://github.com/dhis2/app-hub/commit/cb30dc67e3a7232538b1e1e3c64750e8fdf6f720))
+
+## [2.23.1](https://github.com/dhis2/app-hub/compare/v2.23.0...v2.23.1) (2021-05-27)
+
+
+### Bug Fixes
+
+* remove d2 config author/organisation name check ([#496](https://github.com/dhis2/app-hub/issues/496)) ([6ccaf07](https://github.com/dhis2/app-hub/commit/6ccaf0715baa9c748d9d209c661f13ea3849822b))
+
+# [2.23.0](https://github.com/dhis2/app-hub/compare/v2.22.0...v2.23.0) (2021-05-25)
+
+
+### Features
+
+* more informative user-facing errors regarding metadata verification ([#490](https://github.com/dhis2/app-hub/issues/490)) ([47fb951](https://github.com/dhis2/app-hub/commit/47fb951868aafc2c8fd236b38ffeda98437e30e5))
+
+# [2.22.0](https://github.com/dhis2/app-hub/compare/v2.21.0...v2.22.0) (2021-05-21)
+
+
+### Features
+
+* **apps:** add filter-option for core-apps ([#482](https://github.com/dhis2/app-hub/issues/482)) ([a7b27c8](https://github.com/dhis2/app-hub/commit/a7b27c855df956c319f1a4174dbde4c6f4adc3e3))
+
+# [2.21.0](https://github.com/dhis2/app-hub/compare/v2.20.0...v2.21.0) (2021-05-20)
+
+
+### Features
+
+* verify metadata ([#466](https://github.com/dhis2/app-hub/issues/466)) ([196698e](https://github.com/dhis2/app-hub/commit/196698e68498aea9a2623761135e2c2aa902542b))
+
+# [2.20.0](https://github.com/dhis2/app-hub/compare/v2.19.0...v2.20.0) (2021-05-19)
+
+
+### Features
+
+* emailservice and user email migration ([#463](https://github.com/dhis2/app-hub/issues/463)) ([27e91a5](https://github.com/dhis2/app-hub/commit/27e91a5a60014d3f471a12888082732d01531da0))
+* UI redesign ([#458](https://github.com/dhis2/app-hub/issues/458)) ([d4621ca](https://github.com/dhis2/app-hub/commit/d4621ca3ab58fe5f92f9be00bc17e3e3f3e732c5))
+
 # [2.19.0](https://github.com/dhis2/app-hub/compare/v2.18.2...v2.19.0) (2021-05-07)
 
 

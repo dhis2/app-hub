@@ -5,6 +5,7 @@ const {
     canCreateApp,
     getCurrentUserFromRequest,
     currentUserIsManager,
+    verifyBundle,
 } = require('../../../../security')
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
@@ -55,7 +56,7 @@ module.exports = {
             throw Boom.badRequest(appJsonValidationResult.error)
         }
 
-        const { organisationId } = appJsonPayload.developer
+        const { email: contactEmail, organisationId } = appJsonPayload.developer
         const organisation = await Organisation.findOne(
             organisationId,
             false,
@@ -81,6 +82,7 @@ module.exports = {
             const app = await App.create(
                 {
                     userId: currentUserId,
+                    contactEmail,
                     organisationId,
                     appType,
                     status: AppStatus.PENDING,
@@ -130,6 +132,17 @@ module.exports = {
             )
 
             const { file } = payload
+            try {
+                verifyBundle({
+                    buffer: file._data,
+                    appId: app.id,
+                    appName: name,
+                    version,
+                    organisationName: organisation.name,
+                })
+            } catch (error) {
+                throw Boom.badRequest(error)
+            }
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
                 'app.zip',
