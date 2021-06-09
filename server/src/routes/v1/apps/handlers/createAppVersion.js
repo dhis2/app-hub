@@ -19,7 +19,6 @@ const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
-const Organisation = require('../../../../services/organisation')
 const { getOrganisationAppsByUserId, getAppsById } = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
@@ -188,8 +187,8 @@ module.exports = {
         }
 
         try {
-            const organisationSlug = dbApp.organisation_slug
-            const organisation = await Organisation.findOneBySlug(organisationSlug, false, transaction)
+            const organisationId = dbApp.organisation_id
+            const organisation = Organisation.findOne(organisationId, false, transaction)
             verifyBundle({
                 buffer: file._data,
                 appId,

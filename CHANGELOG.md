@@ -1,17 +1,3 @@
-## [2.23.2](https://github.com/dhis2/app-hub/compare/v2.23.1...v2.23.2) (2021-05-28)
-
-
-### Bug Fixes
-
-* import Organisation service in app version handler ([#500](https://github.com/dhis2/app-hub/issues/500)) ([cb30dc6](https://github.com/dhis2/app-hub/commit/cb30dc67e3a7232538b1e1e3c64750e8fdf6f720))
-
-## [2.23.1](https://github.com/dhis2/app-hub/compare/v2.23.0...v2.23.1) (2021-05-27)
-
-
-### Bug Fixes
-
-* remove d2 config author/organisation name check ([#496](https://github.com/dhis2/app-hub/issues/496)) ([6ccaf07](https://github.com/dhis2/app-hub/commit/6ccaf0715baa9c748d9d209c661f13ea3849822b))
-
 # [2.23.0](https://github.com/dhis2/app-hub/compare/v2.22.0...v2.23.0) (2021-05-25)
 
 
