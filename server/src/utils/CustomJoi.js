@@ -22,7 +22,7 @@ const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
  * CustomJoi.operator(operatorSchema)
  *  * operatorSchema - The Joi-schema that the operator part of the filter should be validated against
  */
-const CustomJoi = Joi.extend({
+const Filter = {
     type: 'filter',
     messages: {
         'filter.base': '{{#label}} is not a valid filter',
@@ -112,6 +112,14 @@ const CustomJoi = Joi.extend({
             },
         },
     },
-})
+}
 
-module.exports = CustomJoi
+const StringArray = {
+    base: Joi.array(),
+    type: 'stringArray',
+    coerce: (value, state, options) => ({
+        value: value.split ? value.split(',') : value
+    })
+}
+
+module.exports = Joi.extend(Filter).extend(StringArray)

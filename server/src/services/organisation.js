@@ -1,16 +1,40 @@
-const slugify = require('slugify')
 const { NotFoundError } = require('../utils/errors')
+const { slugify } = require('../utils/slugify')
 const Organisation = require('../models/v2/Organisation')
+const Boom = require('@hapi/boom')
+const JWT = require('jsonwebtoken')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
         'organisation.id',
         'organisation.name',
+        'organisation.email',
         'organisation.slug',
         'organisation.created_by_user_id',
         'organisation.updated_at',
         'organisation.created_at'
     )
+
+const checkSlugExists = async (slug, knex) => {
+    const slugMatch = await knex('organisation')
+        .select('name')
+        .where('slug', slug)
+        .limit(1)
+    if (slugMatch.length > 0) {
+        return slugMatch[0].name
+    }
+    return false
+}
+
+const ensureUniqueSlug = async (slug, knex) => {
+    const matchedOrgName = await checkSlugExists(slug, knex)
+    if (matchedOrgName) {
+        throw Boom.conflict(
+            `Organisation already exists or is too similar to existing organisation (${matchedOrgName})`
+        )
+    }
+    return slug
+}
 
 /**
  * Creates an organisation.
@@ -22,7 +46,7 @@ const getOrganisationQuery = db =>
  * @param {*} db
  */
 const create = async ({ userId, name }, db) => {
-    const slug = await ensureUniqueSlug(slugify(name, { lower: true }), db)
+    const slug = await ensureUniqueSlug(slugify(name), db)
     const obj = {
         owner: userId,
         name,
@@ -34,25 +58,6 @@ const create = async ({ userId, name }, db) => {
         .returning(['id'])
 
     return Organisation.parseDatabaseJson(organisation)
-}
-
-const ensureUniqueSlug = async (originalSlug, db) => {
-    let slug = originalSlug
-    let slugUniqueness = 2
-    let foundUniqueSlug = false
-    while (!foundUniqueSlug) {
-        const [{ count }] = await db('organisation')
-            .count('id')
-            .where('slug', slug)
-        if (count > 0) {
-            slug = `${originalSlug}-${slugUniqueness}`
-            slugUniqueness++
-        } else {
-            foundUniqueSlug = true
-        }
-    }
-
-    return slug
 }
 
 const find = async ({ filters }, db) => {
@@ -115,6 +120,24 @@ const getUsersInOrganisation = async (orgId, knex) => {
 const update = async (id, updateData, db) => {
     const dbData = Organisation.formatDatabaseJson(updateData)
 
+    // update slug if name changed
+    if (updateData.name) {
+        const slug = slugify(updateData.name)
+        // check if slug exists, but allow current org's slug to be the same (eg. case of name updated)
+        const slugMatch = await db('organisation')
+            .select('name')
+            .where('slug', slug)
+            .whereNot('id', id)
+            .limit(1)
+        if (slugMatch.length > 0) {
+            throw Boom.conflict(
+                `Organisation already exists or is too similar to existing organisation (${slugMatch[0].name})`
+            )
+        }
+
+        dbData.slug = slug
+    }
+
     return db('organisation')
         .update(dbData)
         .where({ id })
@@ -155,6 +178,25 @@ const hasUser = async (id, userId, knex) => {
     return hasUser.length > 0
 }
 
+const generateInvitationToken = ({ organisation, user }, emailTo) => {
+    const secret = process.env.INTERNAL_JWT_SECRET
+
+    const decoded = {
+        from: { id: user.id, name: user.name },
+        emailTo,
+        sub: organisation.id,
+        organisation: organisation.name,
+    }
+
+    const token = JWT.sign(decoded, secret, {
+        expiresIn: 60 * 60 * 24 * 2, //48 hrs
+    })
+    return {
+        decoded,
+        token,
+    }
+}
+
 module.exports = {
     find,
     findOne,
@@ -166,4 +208,6 @@ module.exports = {
     removeUser,
     hasUser,
     getUsersInOrganisation,
+    generateInvitationToken,
+    ensureUniqueSlug,
 }

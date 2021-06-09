@@ -1,3 +1,5 @@
+const { v4: uuid } = require('uuid')
+
 exports.createApiUser = async knex => {
     if (!process.env.AUTH0_AUDIENCE) {
         return
@@ -27,7 +29,7 @@ exports.createApiUser = async knex => {
     if (externalUserId.length === 0) {
         await knex('user_external_id').insert([
             {
-                id: '46e00c3b-4668-4b93-bc6f-a46bc21f1e5d',
+                id: uuid(),
                 user_id: userId,
                 external_id: `${process.env.AUTH0_AUDIENCE}@clients`,
             },

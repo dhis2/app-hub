@@ -1,0 +1,11 @@
+.appIcon {
+    display: flex;
+    height: 72px;
+    width: 72px;
+}
+
+.appIcon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: scale-down;
+}

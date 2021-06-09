@@ -1,7 +1,8 @@
-const { flatten } = require('../../utils')
-
 module.exports = [
     require('./apps.js'),
     require('./channels.js'),
-    require('./organisations'),
+    require('./organisations.js'),
+    require('./me.js'),
+    require('./apikey.js'),
+    require('./version.js')
 ]

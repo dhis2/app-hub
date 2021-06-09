@@ -7,8 +7,8 @@ const {
 
 const {
     updateImageMeta,
-    getAppDeveloperId,
     setImageAsLogoForApp,
+    getOrganisationAppsByUserId,
 } = require('../../../../data')
 
 module.exports = {
@@ -36,11 +36,16 @@ module.exports = {
         const jsonPayload = request.payload
 
         const currentUser = await getCurrentUserFromRequest(request, db)
-        const appDeveloperId = await getAppDeveloperId(appId, db)
-
+        const appsUserCanEdit = await getOrganisationAppsByUserId(
+            currentUser.id,
+            db
+        )
+        const userCanEditApp = appsUserCanEdit
+            .map(app => app.app_id)
+            .includes(request.params.appId)
         const isManager = currentUserIsManager(request)
 
-        if (isManager || appDeveloperId === currentUser.id) {
+        if (isManager || userCanEditApp) {
             //can edit app
             const transaction = await db.transaction()
 

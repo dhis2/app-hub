@@ -1,19 +1,17 @@
-module.exports = function(api) {
+module.exports = function (api) {
     api.cache(true)
 
     return {
         presets: [
+            '@babel/preset-env',
             [
-                '@babel/preset-env',
+                '@babel/preset-react',
                 {
-                    useBuiltIns: 'entry',
-                    corejs: '3',
+                    runtime: 'automatic',
                 },
             ],
-            '@babel/preset-react',
         ],
         plugins: [
-            'babel-plugin-rewire',
             [
                 'transform-imports',
                 {
@@ -23,6 +21,13 @@ module.exports = function(api) {
                     },
                 },
             ],
+            '@babel/plugin-proposal-class-properties',
+            '@babel/plugin-proposal-optional-chaining',
         ],
+        env: {
+            test: {
+                plugins: ['babel-plugin-rewire'],
+            },
+        },
     }
 }

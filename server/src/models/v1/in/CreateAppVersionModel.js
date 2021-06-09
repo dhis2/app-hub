@@ -1,20 +1,20 @@
 const Joi = require('@hapi/joi')
-const { isSemver } =  require('../../helpers')
-
+const { isSemver } = require('../../helpers')
 
 /**
  * For client implementation see /client/src/api/api.js - createUploadVersionOptions
  */
 
 const CreateAppVersionModel = Joi.object().keys({
-    version: Joi.string().custom(isSemver, 'semver validate'),
-    minDhisVersion: Joi.string(),
+    version: Joi.string()
+        .required()
+        .custom(isSemver, 'semver validate'),
+    minDhisVersion: Joi.string().required(),
     maxDhisVersion: Joi.string().allow('', null),
     demoUrl: Joi.string()
         .uri()
         .allow('', null),
-    images: Joi.array(),
-    channel: Joi.string(),
+    channel: Joi.string().required(),
 })
 
 const payloadSchema = Joi.object({

@@ -1,111 +1,96 @@
-const Lab = require('@hapi/lab')
 const fs = require('fs')
 const path = require('path')
-const request = require('request-promise')
+const Lab = require('@hapi/lab')
+const FormData = require('form-data')
+const streamToPromise = require('stream-to-promise')
 
-const { it, describe, beforeEach, afterEach } = (exports.lab = Lab.script())
+const {
+    it,
+    describe,
+    afterEach,
+    beforeEach,
+    before,
+} = (exports.lab = Lab.script())
 
 const { expect } = require('@hapi/code')
-
 const knexConfig = require('../../knexfile')
-const db = require('knex')(knexConfig)
-
-const { init } = require('../../src/server/init-server')
-
+const dbInstance = require('knex')(knexConfig)
 const users = require('../../seeds/mock/users')
+const { init } = require('../../src/server/init-server')
+const { config } = require('../../src/server/noauth-config')
+const { sampleApp } = require('./sample-app')
 
-describe('test create app', () => {
-    const { config } = require('../../src/server/noauth-config')
+describe('v1/apps', () => {
     let server
-    beforeEach(async () => {
+    let db
+
+    before(() => {
         config.auth.noAuthUserIdMapping = users[0].id
+    })
+
+    beforeEach(async () => {
+        db = await dbInstance.transaction()
+
         server = await init(db, config)
     })
 
     afterEach(async () => {
         await server.stop()
+
+        await db.rollback()
     })
 
-    const sampleApp = {
-        name: 'DHIS2 Sample App',
-        description: 'A very nice sample description',
-        appType: 'APP',
-        sourceUrl: 'http://github.com',
-        developer: {
-            name: 'Foo Bar',
-            email: 'foobar@dhis2.org',
-            address: '',
-            organisation: 'The Largest Testing Organization In The World.',
-        },
-        versions: [
-            {
-                version: '1.0.0',
-                minDhisVersion: '2.25',
-                maxDhisVersion: '2.33',
-                demoUrl: 'https://www.dhis2.org',
-                channel: 'Stable',
-            },
-        ],
-        images: [],
+    const createFormForApp = app => {
+        const form = new FormData()
+        form.append('app', JSON.stringify(app))
+        form.append(
+            'file',
+            fs.createReadStream(path.join(__dirname, '../', 'sample-app.zip'))
+        )
+        form.append(
+            'logo',
+            fs.createReadStream(
+                path.join(__dirname, '../', 'sample-app-logo.png')
+            )
+        )
+        return form
     }
 
-    it('should create a test app without any images', async () => {
-        const form = {
-            app: JSON.stringify(sampleApp),
-            file: {
-                value: fs.createReadStream(
-                    path.join(__dirname, '../', 'sample-app.zip')
-                ),
-                options: {
-                    filename: 'sample-app.zip',
-                    contentType: 'application/zip',
-                },
-            },
-        }
+    describe('create app', () => {
+        it('should create an app', async () => {
+            const form = createFormForApp(sampleApp)
+            const request = {
+                method: 'POST',
+                url: '/api/v1/apps',
+                headers: form.getHeaders(),
+                payload: await streamToPromise(form),
+            }
 
-        const response = await request.post({
-            url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
-            json: true,
-            formData: form,
+            const res = await server.inject(request)
+            expect(res.statusCode).to.equal(201)
+            const receivedPayload = JSON.parse(res.payload)
+            expect(receivedPayload).to.include(['id'])
+            expect(receivedPayload.id).to.be.string()
         })
 
-        console.log('got response:', response)
-
-        expect(response.statusCode).to.equal(200)
-    })
-
-    it('should return 400 bad request if version is not valid', async () => {
-        const badVersionApp = {
-            ...sampleApp,
-            versions: [
-                {
-                    version: '2',
-                    minDhisVersion: '2.25',
-                    maxDhisVersion: '2.33',
-                    demoUrl: 'https://www.dhis2.org',
-                    channel: 'Stable',
+        it('should return 400 bad request if version is not valid', async () => {
+            const badVersionApp = {
+                ...sampleApp,
+                version: {
+                    ...sampleApp.version,
+                    version: 'not a version',
                 },
-            ],
-        }
-        const form = {
-            app: JSON.stringify(badVersionApp),
-            file: {
-                value: fs.createReadStream(
-                    path.join(__dirname, '../', 'sample-app.zip')
-                ),
-                options: {
-                    filename: 'sample-app.zip',
-                    contentType: 'application/zip',
-                },
-            },
-        }
+            }
+            const form = createFormForApp(badVersionApp)
+            const request = {
+                method: 'POST',
+                url: '/api/v1/apps',
+                headers: form.getHeaders(),
+                payload: await streamToPromise(form),
+            }
 
-        const response = await expect(request.post({
-            url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
-            json: true,
-            formData: form,
-        })).to.reject()
-
-        expect(response.statusCode).to.equal(400)
+            const res = await server.inject(request)
+            expect(res.statusCode).to.equal(400)
+        })
     })
 })

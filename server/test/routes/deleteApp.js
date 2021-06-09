@@ -1,15 +1,17 @@
+const fs = require('fs')
+const path = require('path')
 const Lab = require('@hapi/lab')
+const FormData = require('form-data')
+const streamToPromise = require('stream-to-promise')
 
 const { it, describe, beforeEach, afterEach } = (exports.lab = Lab.script())
 
 const { expect } = require('@hapi/code')
-
 const knexConfig = require('../../knexfile')
 const db = require('knex')(knexConfig)
-
-const { init } = require('../../src/server/init-server')
-
 const users = require('../../seeds/mock/users')
+const { init } = require('../../src/server/init-server')
+const { sampleApp } = require('./sample-app')
 
 describe('test delete app', () => {
     const { config } = require('../../src/server/noauth-config')
@@ -23,61 +25,40 @@ describe('test delete app', () => {
         await server.stop()
     })
 
-    const sampleApp = {
-        name: 'DHIS2 Sample App',
-        description: 'A very nice sample description',
-        appType: 'APP',
-        sourceUrl: 'http://github.com',
-        developer: {
-            name: 'Foo Bar',
-            email: 'foobar@dhis2.org',
-            address: '',
-            organisation: 'The Largest Testing Organization In The World.',
-        },
-        versions: [
-            {
-                version: '1.0.0',
-                minDhisVersion: '2.25',
-                maxDhisVersion: '2.33',
-                demoUrl: 'https://www.dhis2.org',
-                channel: 'Stable',
-            },
-        ],
-        images: [],
+    const createFormForApp = app => {
+        const form = new FormData()
+        form.append('app', JSON.stringify(app))
+        form.append(
+            'file',
+            fs.createReadStream(path.join(__dirname, '../', 'sample-app.zip'))
+        )
+        form.append(
+            'logo',
+            fs.createReadStream(
+                path.join(__dirname, '../', 'sample-app-logo.png')
+            )
+        )
+        return form
     }
 
     it('should be able to delete an app', async () => {
         //First upload the app, then delete it
-        const fs = require('fs')
-        const path = require('path')
-        const request = require('request-promise')
-
-        const form = {
-            app: JSON.stringify(sampleApp),
-            file: {
-                value: fs.createReadStream(
-                    path.join(__dirname, '../', 'sample-app.zip')
-                ),
-                options: {
-                    filename: 'sample-app.zip',
-                    contentType: 'application/zip',
-                },
-            },
+        const form = createFormForApp(sampleApp)
+        const request = {
+            method: 'POST',
+            url: '/api/v1/apps',
+            headers: form.getHeaders(),
+            payload: await streamToPromise(form),
         }
 
-        const response = await request.post({
-            url: `http://${server.settings.host}:${server.settings.port}/api/apps`,
-            json: true,
-            formData: form,
-        })
-        expect(response.statusCode).to.equal(200)
+        const res = await server.inject(request)
+        expect(res.statusCode).to.equal(201)
+        const { id: appId } = JSON.parse(res.payload)
 
-        const appId = response.uuid
         const deleteResponse = await server.inject({
             method: 'DELETE',
             url: '/api/v1/apps/' + appId,
         })
-
         expect(deleteResponse.statusCode).to.equal(200)
     })
 })
