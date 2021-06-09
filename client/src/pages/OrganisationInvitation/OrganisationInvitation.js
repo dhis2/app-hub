@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react'
 import { CenteredContent, NoticeBox, Card, Button } from '@dhis2/ui'
-import jwtDecode from 'jwt-decode'
+import JWT from 'jsonwebtoken'
 import React from 'react'
 import { useQueryParams, StringParam } from 'use-query-params'
 import styles from './OrganisationInvitation.module.css'
@@ -12,7 +12,7 @@ const OrganisationInvitation = () => {
     const { loginWithRedirect } = useAuth0()
 
     const { invitationToken } = queryParams
-    const decoded = jwtDecode(invitationToken)
+    const decoded = JWT.decode(invitationToken)
     if (!decoded) {
         return (
             <CenteredContent>

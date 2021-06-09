@@ -1,10 +1,8 @@
 import { Layer, Popper } from '@dhis2/ui'
-import ArrowDown from './ArrowDownIcon'
+import { ArrowDown } from '@dhis2/ui-core/build/es/Icons/Arrow'
 import PropTypes from 'prop-types'
 import { useState, useRef } from 'react'
 import styles from './DropdownButton.module.css'
-
-
 
 const DropdownButton = ({ icon, menu }) => {
     const [isOpen, setIsOpen] = useState(false)

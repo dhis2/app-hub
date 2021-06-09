@@ -1,6 +1,5 @@
-const path = require('path')
-const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const path = require('path')
 const webpack = require('webpack')
 const config = require('./config/configResolver.js').default
 const packageJSON = require('./package.json')
@@ -108,9 +107,6 @@ const webpackConfig = {
             title: 'DHIS2 AppHub',
             filename: 'index.html',
             template: path.join(__dirname, 'indexbuild.html'),
-        }),
-        new CopyPlugin({
-            patterns: [{ from: path.join(__dirname, 'public'), to: 'assets' }],
         }),
     ],
 }
