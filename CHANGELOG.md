@@ -1,3 +1,10 @@
+## [2.23.4](https://github.com/dhis2/app-hub/compare/v2.23.3...v2.23.4) (2021-06-21)
+
+
+### Bug Fixes
+
+* **favicons:** fix favicon path ([#514](https://github.com/dhis2/app-hub/issues/514)) ([c209aa4](https://github.com/dhis2/app-hub/commit/c209aa4e5fe40f495d1ac0380031a27aae9e4338))
+
 ## [2.23.3](https://github.com/dhis2/app-hub/compare/v2.23.2...v2.23.3) (2021-06-09)
 
 
