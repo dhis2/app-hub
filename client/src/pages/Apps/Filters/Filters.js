@@ -7,6 +7,7 @@ import {
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import styles from './Filters.module.css'
+import config from 'config'
 
 const CheckboxList = ({ checkboxes, selected, onChange }) =>
     Object.entries(checkboxes).map(([value, label]) => (
@@ -67,14 +68,16 @@ const Filters = ({
                     onChange={onTypesFilterChange}
                 />
             </div>
-            <div className={styles.filterWrapper}>
-                <h3 className={styles.filterName}>Release Channels</h3>
-                <CheckboxList
-                    checkboxes={channels}
-                    selected={channelsFilter}
-                    onChange={onChannelsFilterChange}
-                />
-            </div>
+            {!config.ui.feature.hideChannels && (
+                <div className={styles.filterWrapper}>
+                    <h3 className={styles.filterName}>Release Channels</h3>
+                    <CheckboxList
+                        checkboxes={channels}
+                        selected={channelsFilter}
+                        onChange={onChannelsFilterChange}
+                    />
+                </div>
+            )}
             <div className={styles.filterWrapper}>
                 <h3 className={styles.filterName}>DHIS2 Version</h3>
                 <SingleSelect

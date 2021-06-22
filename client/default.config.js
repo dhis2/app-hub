@@ -39,5 +39,8 @@ module.exports = {
             canary: 'Canary',
         },
         defaultAppChannel: 'stable',
+        feature: {
+            hideChannels: true,
+        },
     },
 }
