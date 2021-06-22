@@ -1,3 +1,10 @@
+## [2.23.5](https://github.com/dhis2/app-hub/compare/v2.23.4...v2.23.5) (2021-06-22)
+
+
+### Bug Fixes
+
+* add support for DHIS2 v37 ([8ad1f2f](https://github.com/dhis2/app-hub/commit/8ad1f2fcc51e9fea90887627d3be823bb42cf347))
+
 ## [2.23.4](https://github.com/dhis2/app-hub/compare/v2.23.3...v2.23.4) (2021-06-21)
 
 
