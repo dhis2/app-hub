@@ -1,3 +1,10 @@
+## [2.23.6](https://github.com/dhis2/app-hub/compare/v2.23.5...v2.23.6) (2021-06-22)
+
+
+### Bug Fixes
+
+* hide channels filter from index-page ([#518](https://github.com/dhis2/app-hub/issues/518)) ([2eb0a91](https://github.com/dhis2/app-hub/commit/2eb0a9159e8d257bfcec448a54a2fe361e2508f4))
+
 ## [2.23.5](https://github.com/dhis2/app-hub/compare/v2.23.4...v2.23.5) (2021-06-22)
 
 
