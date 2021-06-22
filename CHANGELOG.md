@@ -1,3 +1,18 @@
+## [2.23.4](https://github.com/dhis2/app-hub/compare/v2.23.3...v2.23.4) (2021-06-21)
+
+
+### Bug Fixes
+
+* **favicons:** fix favicon path ([#514](https://github.com/dhis2/app-hub/issues/514)) ([c209aa4](https://github.com/dhis2/app-hub/commit/c209aa4e5fe40f495d1ac0380031a27aae9e4338))
+
+## [2.23.3](https://github.com/dhis2/app-hub/compare/v2.23.2...v2.23.3) (2021-06-09)
+
+
+### Reverts
+
+* "chore: merge master into next ([#499](https://github.com/dhis2/app-hub/issues/499))" ([45fe507](https://github.com/dhis2/app-hub/commit/45fe507a607570fe39f2ce4a65c4964415bd9d16))
+* "revert: "fix: upgrade webpack and fix favicons ([#475](https://github.com/dhis2/app-hub/issues/475))"" ([7648ed4](https://github.com/dhis2/app-hub/commit/7648ed4029277e3da67bc673d572cad5f1a5e98b))
+
 ## [2.23.2](https://github.com/dhis2/app-hub/compare/v2.23.1...v2.23.2) (2021-05-28)
 
 
