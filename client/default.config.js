@@ -40,5 +40,8 @@ module.exports = {
             canary: 'Canary',
         },
         defaultAppChannel: 'stable',
+        feature: {
+            channels: false,
+        },
     },
 }
