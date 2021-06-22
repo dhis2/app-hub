@@ -68,7 +68,7 @@ const Filters = ({
                     onChange={onTypesFilterChange}
                 />
             </div>
-            {!config.ui.feature.hideChannels && (
+            {config.ui.feature.channels && (
                 <div className={styles.filterWrapper}>
                     <h3 className={styles.filterName}>Release Channels</h3>
                     <CheckboxList

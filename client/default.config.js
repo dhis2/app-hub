@@ -40,7 +40,7 @@ module.exports = {
         },
         defaultAppChannel: 'stable',
         feature: {
-            hideChannels: true,
+            channels: false,
         },
     },
 }

@@ -67,7 +67,7 @@ const Apps = () => {
 
     const params = useMemo(
         () => ({
-            channels: feature.hideChannels ? undefined : channels,
+            channels: feature.channels ? channels : undefined,
             types,
             dhis_version: dhisVersion,
             query,
