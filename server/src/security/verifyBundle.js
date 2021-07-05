@@ -14,7 +14,11 @@ const checkManifest = ({ manifest, appId, appName, version, canBeCoreApp }) => {
         throw new Error('Manifest App Hub ID does not match app ID')
     }
     if (manifest.name !== appName) {
-        throw new Error('Manifest name does not match app name')
+        if (manifest.appType === 'DASHBOARD_WIDGET') {
+            // ignore dashboard_widgets, see HUB-123
+        } else {
+            throw new Error('Manifest name does not match app name')
+        }
     }
     if (manifest.version !== version) {
         throw new Error('Manifest version does not match app version')

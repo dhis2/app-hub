@@ -1,3 +1,17 @@
+## [2.23.7](https://github.com/dhis2/app-hub/compare/v2.23.6...v2.23.7) (2021-07-05)
+
+
+### Bug Fixes
+
+* **verifybundle:** ignore name-check for dashboard_widget ([#521](https://github.com/dhis2/app-hub/issues/521)) ([f3a7479](https://github.com/dhis2/app-hub/commit/f3a7479c3ed582dffce391629b7befdf9c56f2ca))
+
+## [2.23.6](https://github.com/dhis2/app-hub/compare/v2.23.5...v2.23.6) (2021-06-22)
+
+
+### Bug Fixes
+
+* hide channels filter from index-page ([#518](https://github.com/dhis2/app-hub/issues/518)) ([2eb0a91](https://github.com/dhis2/app-hub/commit/2eb0a9159e8d257bfcec448a54a2fe361e2508f4))
+
 ## [2.23.5](https://github.com/dhis2/app-hub/compare/v2.23.4...v2.23.5) (2021-06-22)
 
 

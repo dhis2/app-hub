@@ -20,6 +20,7 @@ const {
     appChannelToDisplayName,
     appTypeToDisplayName,
     dhisVersions,
+    feature,
 } = config.ui
 
 const defaultChannelsFilter = new Set([defaultAppChannel])
@@ -66,7 +67,7 @@ const Apps = () => {
 
     const params = useMemo(
         () => ({
-            channels,
+            channels: feature.channels ? channels : undefined,
             types,
             dhis_version: dhisVersion,
             query,
