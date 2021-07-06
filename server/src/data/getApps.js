@@ -46,7 +46,7 @@ const getApps = (
                 builder.where('core_app', true)
             }
             if (coreApp === false) {
-                builder.whereNot('core_app', false)
+                builder.where('core_app', false)
             }
 
             if (query) {
