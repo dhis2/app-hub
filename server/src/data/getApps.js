@@ -43,10 +43,10 @@ const getApps = (
             }
 
             if (coreApp) {
-                builder.where('organisation', 'DHIS2')
+                builder.where('core_app', true)
             }
             if (coreApp === false) {
-                builder.whereNot('organisation', 'DHIS2')
+                builder.whereNot('core_app', false)
             }
 
             if (query) {
