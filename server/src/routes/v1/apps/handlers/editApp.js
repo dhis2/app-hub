@@ -75,7 +75,7 @@ module.exports = {
                         sourceUrl,
                         appType,
                         languageCode: 'en',
-                        coreApp: isManager ? coreApp : false
+                        coreApp: isManager ? coreApp : undefined
                     },
                     db,
                     transaction
