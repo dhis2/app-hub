@@ -42,11 +42,8 @@ const getApps = (
                 })
             }
 
-            if (coreApp) {
-                builder.where('core_app', true)
-            }
-            if (coreApp === false) {
-                builder.where('core_app', false)
+            if (typeof coreApp === 'boolean') {
+                builder.where('core_app', coreApp)
             }
 
             if (query) {
