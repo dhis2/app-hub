@@ -65,10 +65,9 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
         version,
         canBeCoreApp,
     })
-
     // D2 config is optional
     if (!entries.includes(d2ConfigPath)) {
-        return
+        return { manifest }
     }
     const d2ConfigJson = zip.readAsText(d2ConfigPath)
     if (!isValidJSON(d2ConfigJson)) {
@@ -85,6 +84,6 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
 
     return {
         manifest,
-        d2Config
+        d2Config,
     }
 }
