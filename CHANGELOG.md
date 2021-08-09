@@ -1,3 +1,10 @@
+# [2.24.0](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.24.0) (2021-08-09)
+
+
+### Features
+
+* add coreApp property ([#522](https://github.com/dhis2/app-hub/issues/522)) ([e22dafd](https://github.com/dhis2/app-hub/commit/e22dafdbb561bf248204079607727c933a6f58cd))
+
 ## [2.23.7](https://github.com/dhis2/app-hub/compare/v2.23.6...v2.23.7) (2021-07-05)
 
 
