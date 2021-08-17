@@ -31,13 +31,16 @@ const useFileFromInput = (fileData, fileName) => {
         }
         if (fileData) {
             getEntries()
-        } else {
+        } else { //reset
             setError()
+            setContents()
         }
     }, [fileData, fileName])
 
     return { data: contents, error }
 }
+
+const manifestKeys = ['name', 'description', 'version']
 
 const UploadFileSection = () => {
     const { input: fileInput } = ReactFinalForm.useField('file')
@@ -58,6 +61,7 @@ const UploadFileSection = () => {
             form.change('name', manifest.name)
             form.change('description', manifest.description)
             form.change('version', manifest.version)
+            form.change('appType', manifest.appType.toUpperCase())
         }
     }, [manifest])
 
@@ -81,8 +85,27 @@ const UploadFileSection = () => {
                     {manifestError}
                 </NoticeBox>
             )}
+            <UploadFileSummary manifest={manifest} />
         </section>
     )
+}
+
+
+
+const UploadFileSummary = ({manifest}) => {
+    if(!manifest) {
+        return null
+    }
+
+    return (<NoticeBox title="Gathered from manifest" >
+          <p className={styles.description}>
+        The following information was gathered from the manifest
+            </p>
+        <div>
+            {manifest.name && 'Name:' + manifest.name}
+        </div>
+    </NoticeBox>)
+
 }
 
 export default UploadFileSection
