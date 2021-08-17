@@ -7,7 +7,7 @@ const Vision = require('@hapi/vision')
 
 const HapiSwagger = require('hapi-swagger')
 const Pino = require('hapi-pino')
-
+const Schmervice = require('@hapipal/schmervice')
 const options = require('../options/index.js')
 
 const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
@@ -16,6 +16,7 @@ const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
 const pagination = require('../plugins/pagination')
 const { methods: appVersionMethods } = require('../services/appVersion')
+const { createEmailService } = require('../services/EmailService')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -87,6 +88,10 @@ exports.init = async (knex, config) => {
         })
     }
 
+    await server.register(Schmervice)
+
+    await server.registerService(createEmailService)
+
     await server.register({
         plugin: staticFrontendRoutes,
     })
@@ -104,6 +109,7 @@ exports.init = async (knex, config) => {
             options: {
                 knex,
                 auth: config.auth,
+                config,
             },
         },
         {

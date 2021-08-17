@@ -48,6 +48,15 @@ const getUserIdByApiKey = async (apiKey, knex) => {
     return res && res.user_id
 }
 
+const getApiKeyByUserId = async (userId, knex) => {
+    return knex(userApiKeyTable)
+        .select('hashed_api_key', 'created_at')
+        .where({
+            user_id: userId,
+        })
+        .first()
+}
+
 const deleteApiKeyForUser = async (userId, knex) => {
     const deletedRows = await knex(userApiKeyTable)
         .where({ user_id: userId })
@@ -65,5 +74,6 @@ module.exports = {
     deleteApiKeyForUser,
     generateApiKey,
     getUserIdByApiKey,
+    getApiKeyByUserId,
     hashKey,
 }

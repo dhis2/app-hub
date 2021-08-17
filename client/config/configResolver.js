@@ -22,20 +22,25 @@ function getConfig() {
     if (getConfig.config) {
         return getConfig.config
     }
+
     const production = process.env.NODE_ENV || (!isDevBuild && 'production')
     const nodeEnv = production || 'development'
     const config = {}
 
     //Get default config
-    let configs = defaultConfigs.map(filename => loadFile(filename))
-    configs = configs.filter(config => !!config).map(cfg => merge(config, cfg))
+    const configs = defaultConfigs
+        .map(filename => loadFile(filename))
+        .filter(config => !!config)
+    configs.forEach(cfg => merge(config, cfg))
+
     //Get environment specific config
     if (envConfigNames[nodeEnv]) {
-        const configs = envConfigNames[nodeEnv].map(filename =>
-            loadFile(filename)
-        )
-        configs.filter(config => !!config).map(cfg => merge(config, cfg))
+        const configs = envConfigNames[nodeEnv]
+            .map(filename => loadFile(filename))
+            .filter(config => !!config)
+        configs.forEach(cfg => merge(config, cfg))
     }
+
     getConfig.config = config
     return config
 }

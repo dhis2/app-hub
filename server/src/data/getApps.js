@@ -11,7 +11,7 @@ const debug = require('debug')('apphub:server:data:getApps')
  * @returns {Promise<Array>}
  */
 const getApps = (
-    { status, languageCode, channels = [], types = [], query },
+    { status, languageCode, channels = [], types = [], query, coreApp },
     knex
 ) => {
     debug('status:', status)
@@ -35,11 +35,15 @@ const getApps = (
 
             if (types.length > 0) {
                 builder.where(builder => {
-                    builder.where('type', types[0].toLowerCase())
+                    builder.where('type', types[0])
                     types.slice(1).forEach(type => {
-                        builder.orWhere('type', type.toLowerCase())
+                        builder.orWhere('type', type)
                     })
                 })
+            }
+
+            if (typeof coreApp === 'boolean') {
+                builder.where('core_app', coreApp)
             }
 
             if (query) {

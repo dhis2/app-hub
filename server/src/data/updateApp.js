@@ -1,32 +1,35 @@
-const slugify = require('slugify')
 const joi = require('@hapi/joi')
-
 const { AppTypes } = require('../enums')
+const { slugify } = require('../utils/slugify')
 
 const paramsSchema = joi
     .object()
     .keys({
-        id: joi
-            .string()
-            .uuid()
-            .required(),
-        userId: joi
-            .string()
-            .uuid()
-            .required(),
+        id: joi.string().uuid().required(),
+        userId: joi.string().uuid().required(),
         name: joi.string().max(100),
         description: joi.string().allow(''),
         appType: joi.string().valid(...AppTypes),
         sourceUrl: joi
             .string()
             .allow('')
-            .max(500),
-        languageCode: joi
-            .string()
-            .max(2)
-            .required(),
+            .max(500)
+            .uri({
+                scheme: ['http', 'https'],
+            }),
+        languageCode: joi.string().max(2).required(),
+        coreApp: joi.bool(),
     })
     .options({ allowUnknown: true })
+
+const isValidSourceUrl = sourceUrl => {
+    try {
+        const url = new URL(sourceUrl)
+        return url.protocol === 'http:' || url.protocol === 'https:'
+    } catch (error) {
+        return false
+    }
+}
 
 /**
  * Updates an app
@@ -60,6 +63,7 @@ const updateApp = async (params, knex) => {
         appType,
         description,
         languageCode,
+        coreApp,
     } = params
 
     try {
@@ -74,6 +78,7 @@ const updateApp = async (params, knex) => {
                 type: appType,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
+                core_app: coreApp,
             })
             .where({
                 id,
@@ -81,7 +86,7 @@ const updateApp = async (params, knex) => {
 
         await knex('app_version')
             .update({
-                source_url: sourceUrl,
+                source_url: isValidSourceUrl(sourceUrl) ? sourceUrl : null,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,
             })
@@ -90,7 +95,7 @@ const updateApp = async (params, knex) => {
         await knex('app_version_localised')
             .update({
                 name,
-                slug: slugify(name, { lower: true }),
+                slug: slugify(name),
                 description,
                 updated_at: knex.fn.now(),
                 updated_by_user_id: userId,

@@ -1,0 +1,9 @@
+body {
+    color: var(--colors-grey900);
+    background: var(--colors-grey100);
+}
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}

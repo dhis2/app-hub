@@ -1,0 +1,24 @@
+.item {
+    display: block;
+    width: 100%;
+    border: none;
+    text-align: start;
+    cursor: pointer;
+    user-select: none;
+    font-size: 14px;
+    line-height: 16px;
+    padding: var(--spacers-dp8) var(--spacers-dp12) 6px;
+    background: white;
+}
+
+.item:hover {
+    text-decoration: none;
+}
+
+.item:focus {
+    outline: none;
+}
+
+.item:hover, .item:focus-visible {
+    background-color: var(--colors-grey300);
+}

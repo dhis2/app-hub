@@ -12,6 +12,8 @@ module.exports = {
     },
     ui: {
         dhisVersions: [
+            '2.37',
+            '2.36',
             '2.35',
             '2.34',
             '2.33',
@@ -31,11 +33,15 @@ module.exports = {
             DASHBOARD_WIDGET: 'Dashboard',
             TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
         },
+        defaultAppType: 'APP',
         appChannelToDisplayName: {
             stable: 'Stable',
             development: 'Development',
             canary: 'Canary',
         },
-        defaultAppChannel: 'stable'
+        defaultAppChannel: 'stable',
+        feature: {
+            channels: false,
+        },
     },
 }

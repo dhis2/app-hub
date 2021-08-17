@@ -1,3 +1,194 @@
+# [2.24.0](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.24.0) (2021-08-09)
+
+
+### Features
+
+* add coreApp property ([#522](https://github.com/dhis2/app-hub/issues/522)) ([e22dafd](https://github.com/dhis2/app-hub/commit/e22dafdbb561bf248204079607727c933a6f58cd))
+
+## [2.23.7](https://github.com/dhis2/app-hub/compare/v2.23.6...v2.23.7) (2021-07-05)
+
+
+### Bug Fixes
+
+* **verifybundle:** ignore name-check for dashboard_widget ([#521](https://github.com/dhis2/app-hub/issues/521)) ([f3a7479](https://github.com/dhis2/app-hub/commit/f3a7479c3ed582dffce391629b7befdf9c56f2ca))
+
+## [2.23.6](https://github.com/dhis2/app-hub/compare/v2.23.5...v2.23.6) (2021-06-22)
+
+
+### Bug Fixes
+
+* hide channels filter from index-page ([#518](https://github.com/dhis2/app-hub/issues/518)) ([2eb0a91](https://github.com/dhis2/app-hub/commit/2eb0a9159e8d257bfcec448a54a2fe361e2508f4))
+
+## [2.23.5](https://github.com/dhis2/app-hub/compare/v2.23.4...v2.23.5) (2021-06-22)
+
+
+### Bug Fixes
+
+* add support for DHIS2 v37 ([8ad1f2f](https://github.com/dhis2/app-hub/commit/8ad1f2fcc51e9fea90887627d3be823bb42cf347))
+
+## [2.23.4](https://github.com/dhis2/app-hub/compare/v2.23.3...v2.23.4) (2021-06-21)
+
+
+### Bug Fixes
+
+* **favicons:** fix favicon path ([#514](https://github.com/dhis2/app-hub/issues/514)) ([c209aa4](https://github.com/dhis2/app-hub/commit/c209aa4e5fe40f495d1ac0380031a27aae9e4338))
+
+## [2.23.3](https://github.com/dhis2/app-hub/compare/v2.23.2...v2.23.3) (2021-06-09)
+
+
+### Reverts
+
+* "chore: merge master into next ([#499](https://github.com/dhis2/app-hub/issues/499))" ([45fe507](https://github.com/dhis2/app-hub/commit/45fe507a607570fe39f2ce4a65c4964415bd9d16))
+* "revert: "fix: upgrade webpack and fix favicons ([#475](https://github.com/dhis2/app-hub/issues/475))"" ([7648ed4](https://github.com/dhis2/app-hub/commit/7648ed4029277e3da67bc673d572cad5f1a5e98b))
+
+## [2.23.2](https://github.com/dhis2/app-hub/compare/v2.23.1...v2.23.2) (2021-05-28)
+
+
+### Bug Fixes
+
+* import Organisation service in app version handler ([#500](https://github.com/dhis2/app-hub/issues/500)) ([cb30dc6](https://github.com/dhis2/app-hub/commit/cb30dc67e3a7232538b1e1e3c64750e8fdf6f720))
+
+## [2.23.1](https://github.com/dhis2/app-hub/compare/v2.23.0...v2.23.1) (2021-05-27)
+
+
+### Bug Fixes
+
+* remove d2 config author/organisation name check ([#496](https://github.com/dhis2/app-hub/issues/496)) ([6ccaf07](https://github.com/dhis2/app-hub/commit/6ccaf0715baa9c748d9d209c661f13ea3849822b))
+
+# [2.23.0](https://github.com/dhis2/app-hub/compare/v2.22.0...v2.23.0) (2021-05-25)
+
+
+### Features
+
+* more informative user-facing errors regarding metadata verification ([#490](https://github.com/dhis2/app-hub/issues/490)) ([47fb951](https://github.com/dhis2/app-hub/commit/47fb951868aafc2c8fd236b38ffeda98437e30e5))
+
+# [2.22.0](https://github.com/dhis2/app-hub/compare/v2.21.0...v2.22.0) (2021-05-21)
+
+
+### Features
+
+* **apps:** add filter-option for core-apps ([#482](https://github.com/dhis2/app-hub/issues/482)) ([a7b27c8](https://github.com/dhis2/app-hub/commit/a7b27c855df956c319f1a4174dbde4c6f4adc3e3))
+
+# [2.21.0](https://github.com/dhis2/app-hub/compare/v2.20.0...v2.21.0) (2021-05-20)
+
+
+### Features
+
+* verify metadata ([#466](https://github.com/dhis2/app-hub/issues/466)) ([196698e](https://github.com/dhis2/app-hub/commit/196698e68498aea9a2623761135e2c2aa902542b))
+
+# [2.20.0](https://github.com/dhis2/app-hub/compare/v2.19.0...v2.20.0) (2021-05-19)
+
+
+### Features
+
+* emailservice and user email migration ([#463](https://github.com/dhis2/app-hub/issues/463)) ([27e91a5](https://github.com/dhis2/app-hub/commit/27e91a5a60014d3f471a12888082732d01531da0))
+* UI redesign ([#458](https://github.com/dhis2/app-hub/issues/458)) ([d4621ca](https://github.com/dhis2/app-hub/commit/d4621ca3ab58fe5f92f9be00bc17e3e3f3e732c5))
+
+# [2.19.0](https://github.com/dhis2/app-hub/compare/v2.18.2...v2.19.0) (2021-05-07)
+
+
+### Bug Fixes
+
+* **version-api:** use server-package.json for version information ([#476](https://github.com/dhis2/app-hub/issues/476)) ([5a1e1be](https://github.com/dhis2/app-hub/commit/5a1e1be96bacb7bb4fba24211eeadbeda9ef10d0))
+
+
+### Features
+
+* add version API ([#473](https://github.com/dhis2/app-hub/issues/473)) ([dbc2732](https://github.com/dhis2/app-hub/commit/dbc2732dba8eb63b93cf9b5731087405da5a65e7))
+
+## [2.18.2](https://github.com/dhis2/app-hub/compare/v2.18.1...v2.18.2) (2021-05-04)
+
+
+### Bug Fixes
+
+* use punycode.toASCII instead of punycode.encode ([#471](https://github.com/dhis2/app-hub/issues/471)) ([857a180](https://github.com/dhis2/app-hub/commit/857a180ba13a80caa70a381f19a3cdbeee9c2b41))
+
+## [2.18.1](https://github.com/dhis2/app-hub/compare/v2.18.0...v2.18.1) (2021-04-30)
+
+
+### Bug Fixes
+
+* encode strings with punycode before generating slug ([#468](https://github.com/dhis2/app-hub/issues/468)) ([26edb4b](https://github.com/dhis2/app-hub/commit/26edb4b3c8802c08b8967c0e6e519b3d4f0b4c47))
+
+# [2.18.0](https://github.com/dhis2/app-hub/compare/v2.17.1...v2.18.0) (2021-04-30)
+
+
+### Features
+
+* backend changes required by redesign ([#467](https://github.com/dhis2/app-hub/issues/467)) ([4cc9e44](https://github.com/dhis2/app-hub/commit/4cc9e4491e743336fa78342f8b0e4102bc553176))
+
+## [2.17.1](https://github.com/dhis2/app-hub/compare/v2.17.0...v2.17.1) (2021-04-20)
+
+
+### Bug Fixes
+
+* remove debug lines that spam logs ([#460](https://github.com/dhis2/app-hub/issues/460)) ([9059307](https://github.com/dhis2/app-hub/commit/9059307ececc7da600f0fd8a34a0b10afa952772))
+
+# [2.17.0](https://github.com/dhis2/app-hub/compare/v2.16.1...v2.17.0) (2021-04-15)
+
+
+### Features
+
+* validate mimetypes ([#461](https://github.com/dhis2/app-hub/issues/461)) ([0e8fba3](https://github.com/dhis2/app-hub/commit/0e8fba33ec6c1ce92eb72a51901ad22bca80b452))
+
+## [2.16.1](https://github.com/dhis2/app-hub/compare/v2.16.0...v2.16.1) (2021-04-06)
+
+
+### Bug Fixes
+
+* show query in input when returning from search result ([#456](https://github.com/dhis2/app-hub/issues/456)) ([3890057](https://github.com/dhis2/app-hub/commit/389005710a4fd32632ec66ea154083e52fe65e1f))
+
+# [2.16.0](https://github.com/dhis2/app-hub/compare/v2.15.0...v2.16.0) (2021-03-22)
+
+
+### Features
+
+* add env-var for skipping db-migration ([#455](https://github.com/dhis2/app-hub/issues/455)) ([b5e8aae](https://github.com/dhis2/app-hub/commit/b5e8aaeae5512b1cbf324d436af0baaed431faf4))
+
+# [2.15.0](https://github.com/dhis2/app-hub/compare/v2.14.0...v2.15.0) (2021-03-18)
+
+
+### Features
+
+* **apikey:** frontend for api key generation ([#454](https://github.com/dhis2/app-hub/issues/454)) ([4096b03](https://github.com/dhis2/app-hub/commit/4096b036947000599ad4bc6722f9b9e5e1e239de))
+
+# [2.14.0](https://github.com/dhis2/app-hub/compare/v2.13.1...v2.14.0) (2021-03-12)
+
+
+### Bug Fixes
+
+* make version-field required when uploading version ([03a12bd](https://github.com/dhis2/app-hub/commit/03a12bd8cbf6c286fc107dbe6dc20647b790dfdc))
+* **version:** fix a broken window - unnecessary check ([a0ffb95](https://github.com/dhis2/app-hub/commit/a0ffb95dcfd82fce15325b457ba4b5e107cca536))
+* **version:** make minDhisVersion required in API-model ([ab87504](https://github.com/dhis2/app-hub/commit/ab875048dd809fcc2acd95e50eb9c34079148746))
+* make channel required when uploading version ([eb3721a](https://github.com/dhis2/app-hub/commit/eb3721aa45468baacb99bd5ad7fb8167fcff8c41))
+* **version:** use transaction when creation version ([e3bbb2a](https://github.com/dhis2/app-hub/commit/e3bbb2af63866da401ea3130fbd16089b35b8069))
+
+
+### Features
+
+* **version:** allow uploading app-version with api-key ([fe06bee](https://github.com/dhis2/app-hub/commit/fe06bee3ffa0c38cc1d333de338fb885f7fc0475))
+
+## [2.13.1](https://github.com/dhis2/app-hub/compare/v2.13.0...v2.13.1) (2021-03-11)
+
+
+### Bug Fixes
+
+* **client:** update DHIS versions ([#453](https://github.com/dhis2/app-hub/issues/453)) ([0392f6f](https://github.com/dhis2/app-hub/commit/0392f6f22f03247c2bb3f22c79ea9e90ebb2c029))
+
+# [2.13.0](https://github.com/dhis2/app-hub/compare/v2.12.1...v2.13.0) (2021-03-09)
+
+
+### Features
+
+* apiKey generation ([#447](https://github.com/dhis2/app-hub/issues/447)) ([6cf035c](https://github.com/dhis2/app-hub/commit/6cf035caa3750b5db4ba26faad4c5855bc025862))
+
+## [2.12.1](https://github.com/dhis2/app-hub/compare/v2.12.0...v2.12.1) (2021-03-03)
+
+
+### Bug Fixes
+
+* **getApps:** don't call toLowerCase on app type ([#445](https://github.com/dhis2/app-hub/issues/445)) ([5ae1511](https://github.com/dhis2/app-hub/commit/5ae15116a2c55be0d84b052c4401c1a1d13a11e1))
+
 # [2.12.0](https://github.com/dhis2/app-hub/compare/v2.11.0...v2.12.0) (2021-03-03)
 
 

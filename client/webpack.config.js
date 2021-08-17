@@ -1,17 +1,18 @@
-const webpack = require('webpack')
 const path = require('path')
-const packageJSON = require('./package.json')
+const CopyPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const nodeEnv = process.env.NODE_ENV || 'development'
-
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
+const webpack = require('webpack')
 const config = require('./config/configResolver.js').default
+const packageJSON = require('./package.json')
+
+const nodeEnv = process.env.NODE_ENV || 'development'
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false'
 
 const appEntry = path.join(__dirname, 'src', 'app-hub.js')
 
 const webpackConfig = {
     entry: {
-        app: ['whatwg-fetch', appEntry],
+        app: appEntry,
     },
     mode: nodeEnv,
     output: {
@@ -29,10 +30,39 @@ const webpackConfig = {
             },
             {
                 test: /\.css$/,
-                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
+                use: [
+                    { loader: 'style-loader' },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true,
+                            // TODO: This option has moved to inside the
+                            // 'modules' config for later versions of css-loader
+                            localIdentName:
+                                nodeEnv === 'development'
+                                    ? '[path][name]__[local]'
+                                    : '[hash:base64]',
+                        },
+                    },
+                ],
             },
             {
-                test: /\.(jpe?g|png|gif|svg|woff(2)?|ttf|eot)$/i,
+                test: /\.svg$/,
+                use: [
+                    {
+                        loader: '@svgr/webpack',
+                        options: {
+                            svgoConfig: {
+                                plugins: {
+                                    removeViewBox: false,
+                                },
+                            },
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(jpe?g|png|gif|woff(2)?|ttf|eot)$/i,
                 use: [
                     {
                         loader: 'file-loader',
@@ -50,7 +80,18 @@ const webpackConfig = {
         historyApiFallback: true,
     },
     resolve: {
-        extensions: ['.js', '.jsx'],
+        extensions: ['.js'],
+        // If these cause issues with using nodejs for testing, see
+        // https://stackoverflow.com/questions/33793504/using-webpack-aliases-in-mocha-tests
+        alias: {
+            config: path.resolve(__dirname, 'config/'),
+            src: path.resolve(__dirname, 'src/'),
+            assets: path.resolve(__dirname, 'assets/'),
+            '@dhis2/app-runtime': path.resolve(
+                __dirname,
+                'app-runtime-mock.js'
+            ),
+        },
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -67,6 +108,9 @@ const webpackConfig = {
             title: 'DHIS2 AppHub',
             filename: 'index.html',
             template: path.join(__dirname, 'indexbuild.html'),
+        }),
+        new CopyPlugin({
+            patterns: [{ from: path.join(__dirname, 'public'), to: 'assets' }],
         }),
     ],
 }

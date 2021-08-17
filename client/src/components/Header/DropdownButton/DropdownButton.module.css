@@ -1,0 +1,16 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    border: none;
+    background: none;
+}
+
+.button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
+}
+
+.button svg {
+    fill: white !important;
+    margin-left: var(--spacers-dp4);
+}
