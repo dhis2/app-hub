@@ -37,7 +37,7 @@ const validateDescriptions = {}
 // renameDescriptions is used to rename the filter-Keys to the correct DB-column
 const renameDescriptions = {}
 
-const onPreHandler = function(request, h) {
+const onPreHandler = function (request, h) {
     const routeOptions = request.route.settings.plugins.queryFilter || {}
 
     const options = {
@@ -64,9 +64,8 @@ const onPreHandler = function(request, h) {
 
     if (rename && Joi.isSchema(rename)) {
         if (!renameDescription) {
-            renameDescription = renameDescriptions[
-                request.path
-            ] = rename.describe()
+            renameDescription = renameDescriptions[request.path] =
+                rename.describe()
         }
         renameMap = renameDescription.renames.reduce((acc, curr) => {
             const { from, to } = curr
@@ -77,9 +76,12 @@ const onPreHandler = function(request, h) {
 
     if (Joi.isSchema(routeQueryValidation)) {
         if (!validateDescription) {
-            validateDescription = validateDescriptions[
-                request.path
-            ] = routeQueryValidation.describe()
+            validateDescription = validateDescriptions[request.path] =
+                routeQueryValidation.describe()
+            // if schema has Joi.alternatives(), use first schema-alternative
+            if (validateDescription.matches) {
+                validateDescription = validateDescription.matches[0].schema
+            }
         }
         // only add validations with .filter()
         Object.keys(validateDescription.keys).forEach(k => {

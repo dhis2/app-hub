@@ -1,7 +1,10 @@
 //const Boom = require('@hapi/boom')
+const AppVersionModel = require('../../models/v2/AppVersion')
+const {
+    withPagingResultSchema,
+    withPagingQuerySchema,
+} = require('../../query/Pager')
 const Joi = require('../../utils/CustomJoi')
-
-// const AppVersionModel = require('../../models/v2/AppVersion')
 
 const CHANNELS = ['stable', 'development', 'canary']
 
@@ -12,20 +15,23 @@ module.exports = [
         config: {
             tags: ['api', 'v2'],
             response: {
-                // schema: Joi.array().items(AppVersionModel.def),
+                sample: 0, // schema used for swagger, don't check responses
+                schema: withPagingResultSchema(AppVersionModel.def),
             },
             validate: {
                 params: Joi.object({
                     appId: Joi.string().required(),
                 }),
-                query: Joi.object({
-                    version: Joi.filter(Joi.string()).description(
-                        'Version of the app'
-                    ),
-                    channel: Joi.filter(
-                        Joi.stringArray().items(Joi.valid(...CHANNELS))
-                    ).description('Filter by channel of the version'),
-                }),
+                query: withPagingQuerySchema(
+                    Joi.object({
+                        version: Joi.filter(Joi.string()).description(
+                            'Filter by version of the app'
+                        ),
+                        channel: Joi.filter(
+                            Joi.stringArray().items(Joi.valid(...CHANNELS))
+                        ).description('Filter by channel of the version'),
+                    })
+                ),
             },
             plugins: {
                 pagination: {

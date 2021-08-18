@@ -1,17 +1,38 @@
 const Joi = require('../utils/CustomJoi')
 
-const defaultPagingResultSchema = Joi.object({
-    pager: Joi.object({
-        page: Joi.number(),
-        pageCount: Joi.number(),
-        pageSize: Joi.number(),
-        total: Joi.number(),
-    }),
-    result: Joi.array(),
+const createDefaultPagingResultSchema = itemsSchema =>
+    Joi.object({
+        pager: Joi.object({
+            page: Joi.number(),
+            pageCount: Joi.number(),
+            pageSize: Joi.number(),
+            total: Joi.number(),
+        }),
+        result: itemsSchema ? Joi.array().items(itemsSchema) : Joi.array(),
+    })
+
+// Joi-schema for paging props
+// key-names can be changed by using .rename() - but you must renmame
+// to the original keys
+const defaultPagingQuerySchema = Joi.object({
+    paging: Joi.boolean().default(true),
+    page: Joi.number().default(1).min(1),
+    pageSize: Joi.number().default(25).min(1),
 })
 
+const withPagingQuerySchema = joiSchema =>
+    Joi.alternatives().try(
+        defaultPagingQuerySchema.concat(joiSchema),
+        joiSchema
+    )
+const withPagingResultSchema = joiSchema =>
+    Joi.alternatives().try(
+        createDefaultPagingResultSchema(joiSchema),
+        joiSchema
+    )
+
 const defaultOptions = {
-    schema: defaultPagingResultSchema,
+    schema: createDefaultPagingResultSchema(),
 }
 class Pager {
     constructor(pagingParams, options = defaultOptions) {
@@ -64,4 +85,11 @@ class Pager {
     }
 }
 
-module.exports = { default: Pager, Pager }
+module.exports = {
+    default: Pager,
+    Pager,
+    defaultPagingQuerySchema,
+    createDefaultPagingResultSchema,
+    withPagingQuerySchema,
+    withPagingResultSchema,
+}
