@@ -58,13 +58,8 @@ module.exports = {
             const transaction = await db.transaction()
 
             try {
-                const {
-                    name,
-                    description,
-                    appType,
-                    sourceUrl,
-                    coreApp
-                } = request.payload
+                const { name, description, appType, sourceUrl, coreApp } =
+                    request.payload
 
                 await updateApp(
                     {
@@ -75,7 +70,7 @@ module.exports = {
                         sourceUrl,
                         appType,
                         languageCode: 'en',
-                        coreApp: isManager ? coreApp : undefined
+                        coreApp: isManager ? coreApp : undefined,
                     },
                     db,
                     transaction

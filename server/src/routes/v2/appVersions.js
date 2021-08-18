@@ -1,8 +1,9 @@
 //const Boom = require('@hapi/boom')
-const Joi = require('@hapi/joi')
+const Joi = require('../../utils/CustomJoi')
 
 // const AppVersionModel = require('../../models/v2/AppVersion')
-// const AppVersionService = require('../../services/appVersion')
+
+const CHANNELS = ['stable', 'development', 'canary']
 
 module.exports = [
     {
@@ -17,9 +18,20 @@ module.exports = [
                 params: Joi.object({
                     appId: Joi.string().required(),
                 }),
+                query: Joi.object({
+                    version: Joi.filter(Joi.string()).description(
+                        'Version of the app'
+                    ),
+                    channel: Joi.filter(
+                        Joi.stringArray().items(Joi.valid(...CHANNELS))
+                    ).description('Filter by channel of the version'),
+                }),
             },
             plugins: {
                 pagination: {
+                    enabled: true,
+                },
+                queryFilter: {
                     enabled: true,
                 },
             },
@@ -27,20 +39,17 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { appId } = request.params
-            //            const filters = request.plugins.queryFilter
+            const filters = request.plugins.queryFilter
             const pager = request.plugins.pagination
-            const {
-                appVersion: appVersionMethods,
-            } = request.server.methods.services
+            const { appVersionService } = request.services(true)
 
-            const { value, cached } = await appVersionMethods.findByAppId(
+            const versions = await appVersionService.findByAppId(
                 appId,
-                { pager },
+                { pager, filters },
                 db
             )
-            const lastModified = cached ? new Date(cached.stored) : new Date()
 
-            return h.response(value).header('Last-modified', lastModified)
+            return h.response(versions)
         },
     },
 ]

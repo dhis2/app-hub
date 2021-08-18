@@ -7,12 +7,8 @@ const definition = defaultDefinition
         appId: Joi.string(),
         version: Joi.string(),
         channel: Joi.string().required(),
-        demoUrl: Joi.string()
-            .uri()
-            .allow(''),
-        downloadUrl: Joi.string()
-            .uri()
-            .allow(''),
+        demoUrl: Joi.string().uri().allow(''),
+        downloadUrl: Joi.string().uri().allow(''),
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
     })

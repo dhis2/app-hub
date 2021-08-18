@@ -21,11 +21,17 @@ const allOperatorsMap = {
     ...stringOperatorsMap,
 }
 
-const toSQLOperator = operatorStr => {
-    const operator = allOperatorsMap[operatorStr]
+const toSQLOperator = (operatorStr, value) => {
+    let operator = allOperatorsMap[operatorStr]
+
+    if (operator === '=' && Array.isArray(value)) {
+        operator = 'in'
+    }
+
     if (!operator) {
         throw new Error('Operator ', operatorStr, ' not supported.')
     }
+
     return operator
 }
 

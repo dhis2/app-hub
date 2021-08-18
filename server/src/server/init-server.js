@@ -16,6 +16,7 @@ const errorMapper = require('../plugins/errorMapper')
 const queryFilter = require('../plugins/queryFilter')
 const pagination = require('../plugins/pagination')
 const { createEmailService } = require('../services/EmailService')
+const { createAppVersionService } = require('../services/appVersion')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -90,6 +91,7 @@ exports.init = async (knex, config) => {
     await server.register(Schmervice)
 
     await server.registerService(createEmailService)
+    await server.registerService(createAppVersionService)
 
     await server.register({
         plugin: staticFrontendRoutes,
@@ -125,7 +127,6 @@ exports.init = async (knex, config) => {
     await server.register({
         plugin: pagination,
     })
-    server.method(appVersionMethods)
 
     await server.start()
 

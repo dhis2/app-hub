@@ -1,6 +1,6 @@
+const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
 const { parseFilterString, toSQLOperator } = require('./filterUtils')
-const debug = require('debug')('apphub:server:utils:Filter')
 
 class Filters {
     /**
@@ -108,14 +108,17 @@ class Filters {
 
     applyOneToQuery(query, fieldName, options) {
         const colName = this.getFilterColumn(fieldName)
-        const filter = this.filter[fieldName]
+        const filter = this.getFilter(fieldName)
+
         if (filter) {
+            const nameToUse =
+                options.overrideColumnName ||
+                (options.tableName
+                    ? `${options.tableName}.${colName}`
+                    : colName)
+            const { value, operator } = filter
             this.markApplied(fieldName)
-            query.where(
-                options.tableName ? `${options.tableName}.${colName}` : colName,
-                toSQLOperator(filter.operator),
-                filter.value
-            )
+            query.where(nameToUse, toSQLOperator(operator, value), value)
         } else {
             throw new Error(
                 `Failed to apply filter to query, ${colName} is not a valid filter.`
@@ -153,11 +156,12 @@ class Filters {
             if (this.appliedFilters.has(filterName)) {
                 continue
             }
+
             query.where(
                 settings.tableName
                     ? `${settings.tableName}.${colName}`
                     : colName,
-                toSQLOperator(operator),
+                toSQLOperator(operator, value),
                 value
             )
         }

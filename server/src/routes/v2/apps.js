@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 const Boom = require('@hapi/boom')
-=======
-const { AppStatus } = require('../../enums')
->>>>>>> feat: add appversion v2 api
 const { getApps } = require('../../data')
 const { AppStatus } = require('../../enums')
 const CreateAppModel = require('../../models/v2/in/CreateAppModel')
