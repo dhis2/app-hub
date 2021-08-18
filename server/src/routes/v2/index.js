@@ -5,5 +5,5 @@ module.exports = [
     require('./me.js'),
     require('./apikey.js'),
     require('./appVersions'),
-    require('./version.js')
+    require('./version.js'),
 ]

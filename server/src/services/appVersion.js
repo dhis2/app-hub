@@ -1,3 +1,4 @@
+const Schmervice = require('@hapipal/schmervice')
 const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
 
@@ -26,34 +27,44 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.max_dhis2_version')
         )
 
-//const find = async ({ filters, pager }, knex) => {}
+class AppVersionService extends Schmervice.Service {
+    constructor(server, schmerviceOptions) {
+        super(server, schmerviceOptions)
+    }
 
-async function findByAppId(appId, { filters, pager }, knex) {
-    // console.log('thiz2', this)
-    const query = getAppVersionQuery(knex).where('app_version.app_id', appId)
-    return executeQuery(query, { filters, pager, model: AppVersionModel })
+    async findByAppId(appId, { filters, pager }, knex) {
+        const query = getAppVersionQuery(knex).where(
+            'app_version.app_id',
+            appId
+        )
+
+        if (filters.getFilter('channel')) {
+            filters.applyOneToQuery(query, 'channel', {
+                overrideColumnName: 'channel.name',
+            })
+        }
+
+        const res = await executeQuery(query, {
+            filters,
+            pager,
+            model: AppVersionModel,
+        })
+
+        console.log('rez', res)
+        return res
+    }
 }
 
-const appendNamespace = name => 'services.appVersion.'.concat(name)
+const createAppVersionService = (server, schmerviceOptions) => {
+    const service = Schmervice.withName(
+        'appVersionService',
+        new AppVersionService(server, schmerviceOptions)
+    )
 
-// this can be used by hapi server.method for caching
-const methods = [
-    {
-        name: appendNamespace('findByAppId'),
-        method: findByAppId,
-        options: {
-            cache: {
-                //cache: 'appVersion',
-                expiresIn: 10 * 1000,
-                generateTimeout: 2000,
-                getDecoratedValue: true,
-            },
-            generateKey: appId => appId,
-        },
-    },
-]
+    return service
+}
 
 module.exports = {
-    findByAppId,
-    methods,
+    AppVersionService,
+    createAppVersionService,
 }

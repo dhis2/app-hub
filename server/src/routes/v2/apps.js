@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-const { AppStatus } = require('../../enums')
-=======
 const Boom = require('@hapi/boom')
->>>>>>> next
 const { getApps } = require('../../data')
 const { AppStatus } = require('../../enums')
 const CreateAppModel = require('../../models/v2/in/CreateAppModel')
@@ -34,12 +30,9 @@ module.exports = [
                     )
                         .description('Filter by channel')
                         .default(['stable']),
-<<<<<<< HEAD
-=======
                     core: Joi.filter(Joi.boolean()).description(
                         'Filter by core app'
                     ),
->>>>>>> next
                     types: Joi.filter(
                         Joi.stringArray().items(Joi.valid(...APPTYPES))
                     )
@@ -57,16 +50,10 @@ module.exports = [
             },
         },
         handler: async (request, h) => {
-<<<<<<< HEAD
-            const channels = request.plugins.queryFilter.getFilter('channels')
-                .value
-            const types = request.plugins.queryFilter.getFilter('types').value
-=======
             const queryFilter = request.plugins.queryFilter
             const channels = queryFilter.getFilter('channels').value
             const types = queryFilter.getFilter('types').value
             const coreAppFilter = queryFilter.getFilter('core')
->>>>>>> next
 
             const apps = await getApps(
                 {
