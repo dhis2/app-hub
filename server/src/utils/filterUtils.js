@@ -7,6 +7,7 @@ const SEPERATOR_CHAR = ':'
 const stringOperatorsMap = {
     ilike: 'ilike',
     like: 'like',
+    in: 'in',
 }
 
 const operatorMap = {

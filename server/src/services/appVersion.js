@@ -38,6 +38,7 @@ class AppVersionService extends Schmervice.Service {
             appId
         )
 
+        // needs to be manually applied due to different column-name
         if (filters.getFilter('channel')) {
             filters.applyOneToQuery(query, 'channel', {
                 overrideColumnName: 'channel.name',
