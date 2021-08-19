@@ -45,14 +45,11 @@ class AppVersionService extends Schmervice.Service {
             })
         }
 
-        const res = await executeQuery(query, {
+        return executeQuery(query, {
             filters,
             pager,
             model: AppVersionModel,
         })
-
-        console.log('rez', res)
-        return res
     }
 }
 
