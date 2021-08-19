@@ -13,7 +13,11 @@ const definition = defaultDefinition
         maxDhisVersion: Joi.string().allow(null, ''),
     })
     .alter({
-        db: s => s.rename('sourceUrl', 'source_url'),
+        db: s =>
+            s
+                .rename('sourceUrl', 'source_url')
+                .rename('minDhisVersion', 'min_dhis2_version')
+                .rename('maxDhisVersion', 'max_dhis2_version'),
     })
     .rename('source_url', 'sourceUrl')
     .rename('min_dhis2_version', 'minDhisVersion')

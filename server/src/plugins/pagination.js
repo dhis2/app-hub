@@ -35,14 +35,12 @@ const optionsSchema = Joi.object({
     resultSchema: Joi.object().schema().default(defaultPagingResultSchema),
     keepParams: Joi.bool().default(false),
     decorate: Joi.alternatives()
-
         .try(
             Joi.bool().valid(false),
             Joi.object({
                 slice: Joi.bool(),
             })
         )
-
         .default({ slice: true }),
 })
 

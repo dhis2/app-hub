@@ -30,6 +30,8 @@ module.exports = [
                         channel: Joi.filter(
                             Joi.stringArray().items(Joi.valid(...CHANNELS))
                         ).description('Filter by channel of the version'),
+                        minDhisVersion: Joi.filter(Joi.string()),
+                        maxDhisVersion: Joi.filter(Joi.string()),
                     })
                 ),
             },
@@ -39,6 +41,7 @@ module.exports = [
                 },
                 queryFilter: {
                     enabled: true,
+                    rename: AppVersionModel.dbDefinition,
                 },
             },
         },

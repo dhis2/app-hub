@@ -59,12 +59,12 @@ const onPreHandler = function (request, h) {
     const rename = routeOptions.rename
     const queryFilterKeys = new Set()
     let renameMap = rename
-    let validateDescription = validateDescriptions[request.path]
-    let renameDescription = renameDescriptions[request.path]
+    let validateDescription = validateDescriptions[request.route.path]
+    let renameDescription = renameDescriptions[request.route.path]
 
     if (rename && Joi.isSchema(rename)) {
         if (!renameDescription) {
-            renameDescription = renameDescriptions[request.path] =
+            renameDescription = renameDescriptions[request.route.path] =
                 rename.describe()
         }
         renameMap = renameDescription.renames.reduce((acc, curr) => {
@@ -76,12 +76,14 @@ const onPreHandler = function (request, h) {
 
     if (Joi.isSchema(routeQueryValidation)) {
         if (!validateDescription) {
-            validateDescription = validateDescriptions[request.path] =
-                routeQueryValidation.describe()
+            let schemaDescription = routeQueryValidation.describe()
             // if schema has Joi.alternatives(), use first schema-alternative
-            if (validateDescription.matches) {
-                validateDescription = validateDescription.matches[0].schema
+            if (schemaDescription.matches) {
+                schemaDescription = schemaDescription.matches[0].schema
             }
+
+            validateDescription = validateDescriptions[request.route.path] =
+                schemaDescription
         }
         // only add validations with .filter()
         Object.keys(validateDescription.keys).forEach(k => {
