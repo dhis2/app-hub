@@ -219,7 +219,7 @@ describe('@data::updateApp', () => {
 
         const newData = {
             id: app_id,
-            userId: firstApp.developer_id,
+            userId: firstApp.owner_id,
             name: 'Changed name',
             sourceUrl: 'https://some/url',
             demoUrl: 'http://some/other/url',
@@ -266,7 +266,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: '123',
                 maxDhisVersion: '456',
                 version: '789',
@@ -291,7 +291,7 @@ describe('@data::updateAppVersion', () => {
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                userId: app.developer_id,
+                userId: app.owner_id,
                 minDhisVersion: app.minDhisVersion,
                 maxDhisVersion: app.maxDhisVersion,
                 version: app.version,
@@ -314,12 +314,12 @@ describe('@data::updateAppVersion', () => {
             app => app.version_id === appVersionIdToUpdate
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
-        expect(app.channel_name).to.equal('Stable')
+        expect(app.channel_name).to.equal('stable')
 
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                channel: 'Development',
+                channel: 'development',
                 userId: users[0].id,
             },
             transaction
@@ -329,25 +329,25 @@ describe('@data::updateAppVersion', () => {
         ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
             app => app.version_id === appVersionIdToUpdate
         )
-        expect(app.channel_name).to.equal('Development')
+        expect(app.channel_name).to.equal('development')
 
         //Change back channel to not break following tests
         transaction = await db.transaction()
         await updateAppVersion(
             {
                 id: appVersionIdToUpdate,
-                channel: 'Stable',
+                channel: 'stable',
                 userId: users[0].id,
             },
             transaction
         )
         await transaction.commit()
 
-        //Check that the switch back to Stable worked
+        //Check that the switch back to stable worked
         ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
             app => app.version_id === appVersionIdToUpdate
         )
-        expect(app.channel_name).to.equal('Stable')
+        expect(app.channel_name).to.equal('stable')
     })
 
     it('shouldnt be able to switch to a release channel that doesnt exist', async () => {
@@ -360,7 +360,7 @@ describe('@data::updateAppVersion', () => {
             app => app.version_id === appVersionIdToUpdate
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
-        expect(app.channel_name).to.equal('Stable')
+        expect(app.channel_name).to.equal('stable')
 
         const transaction = await db.transaction()
 

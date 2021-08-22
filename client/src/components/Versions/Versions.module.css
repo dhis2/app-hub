@@ -1,0 +1,9 @@
+.versionsContainer {
+    border: 1px solid var(--colors-grey300);
+}
+
+.noVersions {
+    display: inline-block;
+    padding: var(--spacers-dp8);
+    padding-top: 0;
+}

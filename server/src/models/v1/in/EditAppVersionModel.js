@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi')
-const { isSemver } =  require('../../helpers')
+const { isSemver } = require('../../helpers')
 
 const payloadSchema = joi.object({
     demoUrl: joi

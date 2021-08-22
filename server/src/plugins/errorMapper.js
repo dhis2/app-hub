@@ -30,8 +30,23 @@ const dbErrorMap = {
     internal: [DBError],
 }
 
+const errorMessageMap = {
+    conflict: (wrappedError) => `${wrappedError.table} with that ${wrappedError.columns.join(',')} already exists.` 
+}
+
+const getErrorMessage = (wrappedError, httpError, options) => {
+    // this is returned regardless if preserveMessage is false
+    if(errorMessageMap[httpError]) {
+        return errorMessageMap[httpError](wrappedError)
+    }
+
+    return options.preserveMessage ? wrappedError.message : null
+}
+
+
 const onPreResponseHandler = function(request, h) {
     const { response: error } = request
+
     // not error or joi-error - ignore
     // Map Joi-errors to 400 bad-request errors
 
@@ -47,13 +62,13 @@ const onPreResponseHandler = function(request, h) {
 const mapError = (error, options) => {
     const wrappedError = wrapError(error)
     for (const key in dbErrorMap) {
-        const httpError = dbErrorMap[key].find(
+        const dbError = dbErrorMap[key].find(
             e => wrappedError.constructor.name === e.name
         )
-        if (httpError) {
-            const boomError = Boom[key](
-                options.preserveMessage ? error.message : null
-            )
+        if (dbError) {
+            const message = getErrorMessage(wrappedError, key, options)
+            const boomError = Boom[key](message)
+            
             if (options.preserveMessage) {
                 // Needed to show 500-errors
                 boomError.reformat(true)

@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
+import merge from 'lodash/merge'
 import ConfigImport, { getConfig } from '../../config/configResolver'
 import DirectDefaultConfig from '../../default.config.js'
-import merge from 'lodash/merge'
 const defaultConfigPath = '../../config/'
 const Config = ConfigImport.default
 
@@ -133,9 +133,7 @@ describe('ConfigResolver', () => {
             )
 
             expect(DirectDefaultConfig).to.not.have.property('another')
-            expect(conf)
-                .to.be.an('object')
-                .that.includes(addition)
+            expect(conf).to.be.an('object').that.includes(addition)
 
             ConfigImport.__ResetDependency__('loadFile')
         })

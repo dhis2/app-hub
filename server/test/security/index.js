@@ -9,6 +9,7 @@ const {
     canDeleteApp,
     canChangeAppStatus,
     canSeeAllApps,
+    ROLES,
 } = require('../../src/security')
 
 describe('@security::canDeleteApp', () => {
@@ -17,7 +18,7 @@ describe('@security::canDeleteApp', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    roles: ['ROLE_MANAGER'],
+                    roles: [ROLES.MANAGER],
                 },
             },
         }
@@ -58,7 +59,7 @@ describe('@security::canChangeAppStatus', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    roles: ['ROLE_MANAGER'],
+                    roles: [ROLES.MANAGER],
                 },
             },
         }
@@ -74,7 +75,7 @@ describe('@security::canSeeAllApps', () => {
             auth: {
                 isAuthenticated: true,
                 credentials: {
-                    roles: ['ROLE_MANAGER'],
+                    roles: [ROLES.MANAGER],
                 },
             },
         }

@@ -123,7 +123,7 @@ async function main() {
             minDhisVersion: v.minDhisVersion,
             maxDhisVersion: v.maxDhisVersion || '',
             demoUrl: v.demoUrl || '',
-            channel: 'Stable',
+            channel: 'stable',
         })
         await downloadVersions(dir, app)
         await downloadImages(dir, app)

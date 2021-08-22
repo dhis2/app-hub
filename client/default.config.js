@@ -3,7 +3,8 @@ module.exports = {
         baseURL: '/api/',
     },
     auth0: {
-        clientID: 'BTJ3iwPLO6hDC5w7JYWPlGd6461VNu81',
+        audience: 'apps.dhis2.org/api',
+        clientID: 'M7fOVRQlS4xI0Sf928IXXeLxBxRs4nQN',
         domain: 'dhis2.eu.auth0.com',
     },
     routes: {
@@ -11,6 +12,8 @@ module.exports = {
     },
     ui: {
         dhisVersions: [
+            '2.37',
+            '2.36',
             '2.35',
             '2.34',
             '2.33',
@@ -29,6 +32,16 @@ module.exports = {
             APP: 'Standard',
             DASHBOARD_WIDGET: 'Dashboard',
             TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
+        },
+        defaultAppType: 'APP',
+        appChannelToDisplayName: {
+            stable: 'Stable',
+            development: 'Development',
+            canary: 'Canary',
+        },
+        defaultAppChannel: 'stable',
+        feature: {
+            channels: false,
         },
     },
 }
