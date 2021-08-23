@@ -7,7 +7,7 @@ const definition = defaultDefinition
         appId: Joi.string(),
         version: Joi.string(),
         channel: Joi.string().required(),
-        demoUrl: Joi.string().uri().allow(''),
+        demoUrl: Joi.string().uri().allow(null, ''),
         downloadUrl: Joi.string().uri().allow(''),
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
@@ -16,10 +16,12 @@ const definition = defaultDefinition
         db: s =>
             s
                 .rename('minDhisVersion', 'min_dhis2_version')
-                .rename('maxDhisVersion', 'max_dhis2_version'),
+                .rename('maxDhisVersion', 'max_dhis2_version')
+                .rename('demoUrl', 'demo_url'),
     })
     .rename('min_dhis2_version', 'minDhisVersion')
     .rename('max_dhis2_version', 'maxDhisVersion')
+    .rename('demo_url', 'demoUrl')
     .label('AppVersion')
 // .error(errors => new Error('Failed to parse: ' + errors))
 
