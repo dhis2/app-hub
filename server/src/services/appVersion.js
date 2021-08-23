@@ -26,6 +26,7 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.min_dhis2_version'),
             knex.ref('ac.max_dhis2_version')
         )
+        .distinct() // app_version_localised may return multiple versions
 
 class AppVersionService extends Schmervice.Service {
     constructor(server, schmerviceOptions) {
