@@ -12,18 +12,7 @@ const definition = defaultDefinition
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
     })
-    .alter({
-        db: s =>
-            s
-                .rename('minDhisVersion', 'min_dhis2_version')
-                .rename('maxDhisVersion', 'max_dhis2_version')
-                .rename('demoUrl', 'demo_url'),
-    })
-    .rename('min_dhis2_version', 'minDhisVersion')
-    .rename('max_dhis2_version', 'maxDhisVersion')
-    .rename('demo_url', 'demoUrl')
     .label('AppVersion')
-// .error(errors => new Error('Failed to parse: ' + errors))
 
 const dbDefinition = definition.tailor('db')
 

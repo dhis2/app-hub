@@ -20,11 +20,11 @@ const getAppVersionQuery = knex =>
             'app_version.version',
             knex.ref('app_version.app_id').as('appId'),
             knex.ref('app_version.created_at').as('createdAt'),
-            knex.ref('app_version.source_url'),
-            knex.ref('app_version.demo_url'),
+            knex.ref('app_version.source_url').as('sourceUrl'),
+            knex.ref('app_version.demo_url').as('demoUrl'),
             knex.ref('channel.name').as('channel'),
-            knex.ref('ac.min_dhis2_version'),
-            knex.ref('ac.max_dhis2_version')
+            knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
+            knex.ref('ac.max_dhis2_version').as('maxDhisVersion')
         )
         .distinct() // app_version_localised may return multiple versions
 
