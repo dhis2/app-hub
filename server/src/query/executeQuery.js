@@ -1,3 +1,4 @@
+const debug = require('debug')('apphub:server:executeQuery')
 /**
  * Executes the knex-query, applying filters and paging if present
  *
@@ -22,7 +23,7 @@ async function executeQuery(
         pager.applyToQuery(query)
     }
 
-    // actually run query
+    debug('Executing query: ' + query.toString())
     const rawResult = await query
     let result = rawResult
 
