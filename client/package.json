@@ -9,7 +9,7 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production webpack --mode production --progress --config ./webpack.config.js",
         "start": "cross-env NODE_ENV=development webpack serve",
-        "test": "cross-env NODE_ENV=test mocha --opts test/mocha.opts",
+        "test": "cross-env NODE_ENV=test mocha --config test/.mocharc.js",
         "format": "yarn format:js && yarn format:text",
         "format:staged": "yarn format:js --staged && yarn format:text --staged",
         "format:js": "d2-style js apply",
