@@ -1,3 +1,10 @@
+# [2.25.0](https://github.com/dhis2/app-hub/compare/v2.24.0...v2.25.0) (2021-08-31)
+
+
+### Features
+
+* AppVersion API ([#528](https://github.com/dhis2/app-hub/issues/528)) ([b0d6899](https://github.com/dhis2/app-hub/commit/b0d689920c6a9721d4840d943228969e91f35b4e))
+
 # [2.24.0](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.24.0) (2021-08-09)
 
 
