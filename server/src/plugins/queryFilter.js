@@ -1,6 +1,6 @@
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { Filters } = require('../utils/Filter')
 const { parseFilterString } = require('../utils/filterUtils')
 

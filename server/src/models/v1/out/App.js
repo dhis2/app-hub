@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { AppStatuses, AppTypes } = require('../../../enums')
 const Image = require('./Image')
 const Developer = require('./User')

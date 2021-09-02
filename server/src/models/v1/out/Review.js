@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 
 module.exports = joi.object().keys({
     userId: joi.string(),

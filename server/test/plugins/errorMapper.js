@@ -13,7 +13,7 @@ const {
 } = require('db-errors')
 const { NotFoundError } = require('../../src/utils/errors')
 const ErrorMapperPlugin = require('../../src/plugins/errorMapper')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const Hapi = require('@hapi/hapi')
 
 describe('ErrorMapperPlugin', () => {

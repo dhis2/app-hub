@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const Bounce = require('@hapi/bounce')
 const { parseFilterString, allOperatorsMap } = require('./filterUtils')
 

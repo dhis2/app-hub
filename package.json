@@ -30,8 +30,8 @@
     },
     "devDependencies": {
         "@dhis2/cli-style": "^9.2.0",
-        "concurrently": "^4.1.2",
-        "cross-env": "^6.0.3"
+        "concurrently": "^6.2.1",
+        "cross-env": "^7.0.3"
     },
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
