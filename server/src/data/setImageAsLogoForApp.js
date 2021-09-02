@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const { MediaType } = require('../enums')
 
 const paramsSchema = joi.object().keys({

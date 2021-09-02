@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const { slugify } = require('../utils/slugify')
 const { ensureUniqueSlug } = require('../services/organisation')
 

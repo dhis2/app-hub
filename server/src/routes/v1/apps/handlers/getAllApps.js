@@ -1,6 +1,6 @@
 const debug = require('debug')('apphub:server:routes:handlers:v1:getAllApps')
 const Boom = require('@hapi/boom')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 const AppModel = require('../../../../models/v1/out/App')
 const defaultFailHandler = require('../../defaultFailHandler')

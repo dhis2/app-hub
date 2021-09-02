@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const { AppTypes } = require('../enums')
 const { slugify } = require('../utils/slugify')
 

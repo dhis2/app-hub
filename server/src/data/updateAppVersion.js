@@ -1,5 +1,5 @@
 const debug = require('debug')('apphub:data:updateAppVersion')
-const joi = require('@hapi/joi')
+const joi = require('joi')
 
 const paramsSchema = joi
     .object()

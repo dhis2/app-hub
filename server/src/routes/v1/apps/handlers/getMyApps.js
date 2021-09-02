@@ -1,5 +1,5 @@
 const debug = require('debug')('apphub:server:routes:handlers:v1:getMyApps')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 
 const { getOrganisationAppsByUserId } = require('../../../../data')
 const { convertAppsToApiV1Format } = require('../formatting')

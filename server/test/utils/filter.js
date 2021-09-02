@@ -3,7 +3,7 @@ const Lab = require('@hapi/lab')
 const { it, describe } = (exports.lab = Lab.script())
 const Joi = require('../../src/utils/CustomJoi')
 const { Filters } = require('../../src/utils/Filter')
-const { ValidationError } = require('@hapi/joi')
+const { ValidationError } = require('joi')
 
 describe('Filters', () => {
     describe('createFromQueryFilters', () => {
