@@ -48,7 +48,7 @@
         "rimraf": "^3.0.1",
         "semver": "^7.3.2",
         "slugify": "^1.6.0",
-        "uuid": "^3.3.2"
+        "uuid": "^8.3.2"
     },
     "devDependencies": {
         "@hapi/code": "^8.0.3",

@@ -1,4 +1,3 @@
-const uuid = require('uuid/v4')
 const appVersions = require('./mock/appversions')
 
 const [

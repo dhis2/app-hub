@@ -1,6 +1,5 @@
-const apps = require('./mock/apps')
+const { v4: uuid } = require('uuid')
 const appVersions = require('./mock/appversions')
-const uuid = require('uuid/v4')
 
 const [dhis2AppVersions, whoAppVersions] = appVersions
 
