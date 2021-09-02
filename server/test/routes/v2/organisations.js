@@ -91,7 +91,7 @@ describe('v2/organisations', () => {
         })
     })
 
-    describe('create organisation', async () => {
+    describe('create organisation', () => {
         it('should create successfully', async () => {
             const orgName = 'HISP Tanzania'
             const opts = {
