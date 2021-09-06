@@ -26,12 +26,20 @@ async function executeQuery(
     debug('Executing query: ' + query.toString())
     const rawResult = await query
     let result = rawResult
+    let totalCount = result.length
+
+    if (pager) {
+        const countQuery = pager.getTotalCountQuery(query)
+        debug('Executing totalCount-query', countQuery.toString)
+        const totalRes = await countQuery
+        totalCount = totalRes.total_count
+    }
 
     if (options.formatter) {
         result = options.formatter(rawResult)
     } else if (model) {
         // parse if it's a "getter" - ie is a select-query
-        // else we format it do db-format
+        // else we format it to db-format
         if (query._method === 'select') {
             result = model.parseDatabaseJson(result)
         } else {
@@ -40,8 +48,6 @@ async function executeQuery(
     }
 
     if (pager) {
-        const totalCount =
-            rawResult.length > 0 ? rawResult[0].total_count || result.length : 0
         result = pager.formatResult(result, totalCount)
     }
 

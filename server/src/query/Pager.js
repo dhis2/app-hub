@@ -43,16 +43,33 @@ class Pager {
         this.schema = options.schema
     }
 
+    /**
+     * Applies limit and offset to the query
+     * Note that this is a simple implementation, and will not work on
+     * eg. distinct queries, as the window function over() does not support distinct.
+     * @param {*} query
+     */
     applyToQuery(query) {
         if (!this.enabled) {
             return
         }
-
-        const knex = query.client
         const offset = (this.page - 1) * this.pageSize
-        query.select(knex.raw('count(*) over() as total_count'))
         query.limit(this.pageSize)
         query.offset(offset)
+    }
+
+    /**
+     * Creates a knex-query that can be executed to retrieve the total_count
+     * of the query (without limit and offsets)
+     *
+     * @param {*} query knex query to use for counting
+     * @returns a knex-query which retrieves the total_count of the query.
+     * only one row with column-key "total_count" is returned
+     */
+    getTotalCountQuery(query) {
+        const cloned = query.clone().clear('limit').clear('offset')
+        const knex = query.client.queryBuilder()
+        return knex.count('* as total_count').from(cloned.as('dt')).first()
     }
 
     enable() {
