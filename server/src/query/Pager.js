@@ -45,8 +45,6 @@ class Pager {
 
     /**
      * Applies limit and offset to the query
-     * Note that this is a simple implementation, and will not work on
-     * eg. distinct queries, as the window function over() does not support distinct.
      * @param {*} query
      */
     applyToQuery(query) {

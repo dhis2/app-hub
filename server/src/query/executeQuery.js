@@ -1,4 +1,5 @@
 const debug = require('debug')('apphub:server:executeQuery')
+
 /**
  * Executes the knex-query, applying filters and paging if present
  *
@@ -30,7 +31,7 @@ async function executeQuery(
 
     if (pager) {
         const countQuery = pager.getTotalCountQuery(query)
-        debug('Executing totalCount-query', countQuery.toString)
+        debug('Executing totalCount-query', countQuery.toString())
         const totalRes = await countQuery
         totalCount = totalRes.total_count
     }
