@@ -1,6 +1,6 @@
 {
     "name": "server",
-    "version": "2.25.0",
+    "version": "2.25.1",
     "description": "The App Hub Server",
     "main": "src/main.js",
     "repository": "https://github.com/dhis2/app-hub",

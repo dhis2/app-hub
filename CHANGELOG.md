@@ -1,3 +1,10 @@
+## [2.25.1](https://github.com/dhis2/app-hub/compare/v2.25.0...v2.25.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* **appversion:** add renames for query-filters ([#544](https://github.com/dhis2/app-hub/issues/544)) ([40223b8](https://github.com/dhis2/app-hub/commit/40223b89da6ff2a23c53e17b5cb8f8f780b02ff1))
+
 # [2.25.0](https://github.com/dhis2/app-hub/compare/v2.24.0...v2.25.0) (2021-08-31)
 
 
