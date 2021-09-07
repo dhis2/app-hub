@@ -12,6 +12,13 @@ const definition = defaultDefinition
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
     })
+    .alter({
+        db: s =>
+            s
+                .rename('minDhisVersion', 'min_dhis2_version')
+                .rename('maxDhisVersion', 'max_dhis2_version')
+                .rename('demoUrl', 'demo_url'),
+    })
     .label('AppVersion')
 
 const dbDefinition = definition.tailor('db')

@@ -41,6 +41,7 @@ module.exports = [
                 },
                 queryFilter: {
                     enabled: true,
+                    rename: AppVersionModel.dbDefinition,
                 },
             },
         },
