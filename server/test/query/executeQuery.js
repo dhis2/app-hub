@@ -207,4 +207,41 @@ describe('executeQuery', () => {
         expect(result.pager).to.exist()
         expect(totalCountQuerySpy.calledWith(organisationQuery)).to.be.true()
     })
+
+    it('should should call sliceAndFormatResult if pager is present and slice is true', async () => {
+        const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
+        const sliceAndFormatResultSpy = sinon.spy(
+            oneItemPager,
+            'sliceAndFormatResult'
+        )
+        const result = await executeQuery(
+            organisationQuery,
+            {
+                pager: oneItemPager,
+            },
+            { slice: true }
+        )
+
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array().length(1)
+        expect(result.pager).to.exist()
+        expect(sliceAndFormatResultSpy.called).to.be.true()
+    })
+
+    it('should should not call applyToQuery if pager is present and slice is true', async () => {
+        const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
+        const applyToQuerySpy = sinon.spy(oneItemPager, 'applyToQuery')
+        const result = await executeQuery(
+            organisationQuery,
+            {
+                pager: oneItemPager,
+            },
+            { slice: true }
+        )
+
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array().length(1)
+        expect(result.pager).to.exist()
+        expect(applyToQuerySpy.called).to.be.false()
+    })
 })

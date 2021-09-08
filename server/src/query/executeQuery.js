@@ -10,7 +10,8 @@ const debug = require('debug')('apphub:server:executeQuery')
  * @param {*} queryHelpers.model a "model" object that can be used to format the output.
  * @param {*} options Options object
  * @param {*} options.formatter a function with signature `function(result)` that overrides format-logic from model, should return formatted result
- */
+ * @param {Boolean} options.slice if true and pager is present, the result will be sliced in memory, without using a second SQL-query.
+ * */
 async function executeQuery(
     query,
     { filters, pager, model } = {},
@@ -20,21 +21,13 @@ async function executeQuery(
         filters.applyAllToQuery(query)
     }
 
-    if (pager) {
+    if (pager && !options.slice) {
         pager.applyToQuery(query)
     }
 
     debug('Executing query: ' + query.toString())
     const rawResult = await query
     let result = rawResult
-    let totalCount = result.length
-
-    if (pager) {
-        const countQuery = pager.getTotalCountQuery(query)
-        debug('Executing totalCount-query', countQuery.toString())
-        const totalRes = await countQuery
-        totalCount = totalRes.total_count
-    }
 
     if (options.formatter) {
         result = options.formatter(rawResult)
@@ -49,7 +42,15 @@ async function executeQuery(
     }
 
     if (pager) {
-        result = pager.formatResult(result, totalCount)
+        if (options.slice) {
+            result = pager.sliceAndFormatResult(result)
+        } else {
+            const countQuery = pager.getTotalCountQuery(query)
+            debug('Executing totalCount-query', countQuery.toString())
+            const totalRes = await countQuery
+            const totalCount = totalRes.total_count
+            result = pager.formatResult(result, totalCount)
+        }
     }
 
     return result

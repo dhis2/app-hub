@@ -70,6 +70,21 @@ class Pager {
         return knex.count('* as total_count').from(cloned.as('dt')).first()
     }
 
+    sliceResult(result) {
+        const startIndex = (this.page - 1) * this.pageSize
+        const endIndex = startIndex + this.pageSize
+        return result.slice(startIndex, endIndex)
+    }
+
+    getPagerObject(total) {
+        return {
+            page: this.page,
+            pageSize: this.pageSize,
+            pageCount: Math.ceil(total / this.pageSize),
+            total,
+        }
+    }
+
     enable() {
         this.enabled = true
     }
@@ -83,17 +98,22 @@ class Pager {
             return queryResult
         }
 
-        const pagerObject = {
-            page: this.page,
-            pageSize: this.pageSize,
-            pageCount: Math.ceil(total / this.pageSize),
-            total,
-        }
-
         return Joi.attempt(
             {
-                pager: pagerObject,
+                pager: this.getPagerObject(total),
                 result: queryResult,
+            },
+            this.schema
+        )
+    }
+
+    sliceAndFormatResult(originalResult) {
+        console.log('slice!')
+        const result = this.sliceResult(originalResult)
+        return Joi.attempt(
+            {
+                pager: this.getPagerObject(result.length),
+                result,
             },
             this.schema
         )
