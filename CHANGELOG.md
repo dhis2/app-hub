@@ -1,3 +1,10 @@
+## [2.25.2](https://github.com/dhis2/app-hub/compare/v2.25.1...v2.25.2) (2021-09-13)
+
+
+### Bug Fixes
+
+* **pagination:** separate total count query ([#543](https://github.com/dhis2/app-hub/issues/543)) ([877b76d](https://github.com/dhis2/app-hub/commit/877b76d88b2da518a60b96b113eb450fcf88377e))
+
 ## [2.25.1](https://github.com/dhis2/app-hub/compare/v2.25.0...v2.25.1) (2021-09-07)
 
 
