@@ -39,7 +39,6 @@ const AppCards = ({ isLoading, error, apps }) => {
                     type={app.appType}
                     description={app.description}
                     images={app.images}
-                    isCoreApp={app.coreApp}
                 />
             ))}
         </div>
