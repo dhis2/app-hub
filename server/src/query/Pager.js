@@ -108,7 +108,6 @@ class Pager {
     }
 
     sliceAndFormatResult(originalResult) {
-        console.log('slice!')
         const result = this.sliceResult(originalResult)
         return Joi.attempt(
             {
