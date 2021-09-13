@@ -74,5 +74,30 @@ describe('v2/appVersions', () => {
                 expect(v.minDhisVersion).to.be.a.string()
             })
         })
+
+        it('should work with paging params', async () => {
+            const request = {
+                method: 'GET',
+                url: `/api/v2/apps/${dhis2App.id}/versions?pageSize=2`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+
+            const result = res.result
+            const versions = res.result.result
+
+            Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+            expect(result.pager).to.be.an.object()
+            expect(result.pager.pageSize).to.equal(2)
+            expect(versions.length).to.equal(2)
+            // check some keys as well
+            versions.map(v => {
+                expect(v.appId).to.be.a.string()
+                expect(v.version).to.be.a.string()
+                expect(v.minDhisVersion).to.be.a.string()
+            })
+        })
     })
 })

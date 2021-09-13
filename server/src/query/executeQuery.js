@@ -1,4 +1,5 @@
 const debug = require('debug')('apphub:server:executeQuery')
+
 /**
  * Executes the knex-query, applying filters and paging if present
  *
@@ -9,7 +10,8 @@ const debug = require('debug')('apphub:server:executeQuery')
  * @param {*} queryHelpers.model a "model" object that can be used to format the output.
  * @param {*} options Options object
  * @param {*} options.formatter a function with signature `function(result)` that overrides format-logic from model, should return formatted result
- */
+ * @param {Boolean} options.slice if true and pager is present, the result will be sliced in memory, without using a second SQL-query.
+ * */
 async function executeQuery(
     query,
     { filters, pager, model } = {},
@@ -19,7 +21,7 @@ async function executeQuery(
         filters.applyAllToQuery(query)
     }
 
-    if (pager) {
+    if (pager && !options.slice) {
         pager.applyToQuery(query)
     }
 
@@ -31,7 +33,7 @@ async function executeQuery(
         result = options.formatter(rawResult)
     } else if (model) {
         // parse if it's a "getter" - ie is a select-query
-        // else we format it do db-format
+        // else we format it to db-format
         if (query._method === 'select') {
             result = model.parseDatabaseJson(result)
         } else {
@@ -40,9 +42,15 @@ async function executeQuery(
     }
 
     if (pager) {
-        const totalCount =
-            rawResult.length > 0 ? rawResult[0].total_count || result.length : 0
-        result = pager.formatResult(result, totalCount)
+        if (options.slice) {
+            result = pager.sliceAndFormatResult(result)
+        } else {
+            const countQuery = pager.getTotalCountQuery(query)
+            debug('Executing totalCount-query', countQuery.toString())
+            const totalRes = await countQuery
+            const totalCount = totalRes.total_count
+            result = pager.formatResult(result, totalCount)
+        }
     }
 
     return result

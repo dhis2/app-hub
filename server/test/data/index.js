@@ -180,7 +180,9 @@ describe('@data::createUser', () => {
     })
 })
 
-describe('@data::addUserToOrganisation', () => {
+// this is deprecated, moved to Organisation-service
+// also makes tests not idempotent due to no rollback
+describe.skip('@data::addUserToOrganisation', () => {
     const {
         addUserToOrganisation,
         createOrganisation,
