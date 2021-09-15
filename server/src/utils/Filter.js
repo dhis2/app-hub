@@ -103,13 +103,18 @@ class Filters {
      * Applies the filter
      * @param {*} query
      * @param {*} fieldName
-     * @param {*} options
+     * @param {*} options options object, merged with options to Filters object
+     * @param {*} overrideColumn overrides the column name, takes precedence over tableName
+     * @param {*} includeEmpty includes empty values (null or '') for the filter
      */
 
     applyOneToQuery(query, fieldName, options) {
         const colName = this.getFilterColumn(fieldName)
         const filter = this.getFilter(fieldName)
-
+        const settings = {
+            ...this.options,
+            ...options,
+        }
         if (filter) {
             const nameToUse =
                 options.overrideColumnName ||
@@ -117,8 +122,14 @@ class Filters {
                     ? `${options.tableName}.${colName}`
                     : colName)
             const { value, operator } = filter
+
+            query.where(builder => {
+                builder.where(nameToUse, toSQLOperator(operator, value), value)
+                if (settings.includeEmpty) {
+                    builder.orWhereRaw(`nullif(${nameToUse}, ' ') is null`)
+                }
+            })
             this.markApplied(fieldName)
-            query.where(nameToUse, toSQLOperator(operator, value), value)
         } else {
             throw new Error(
                 `Failed to apply filter to query, ${colName} is not a valid filter.`

@@ -46,6 +46,13 @@ class AppVersionService extends Schmervice.Service {
             })
         }
 
+        // null-values are allowed for maxDhisVersion, so include these if filter is present
+        if (filters.getFilter('maxDhisVersion')) {
+            filters.applyOneToQuery(query, 'maxDhisVersion', {
+                includeEmpty: true,
+            })
+        }
+
         return executeQuery(query, {
             filters,
             pager,
