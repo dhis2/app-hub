@@ -15,6 +15,7 @@ const operatorMap = {
     lt: '<',
     gt: '>',
     lte: '<=',
+    gte: '>=',
     ne: '<>',
 }
 const allOperatorsMap = {
