@@ -104,7 +104,7 @@ class Filters {
      * @param {*} query
      * @param {*} fieldName
      * @param {*} options options object, merged with options to Filters object
-     * @param {*} overrideColumn overrides the column name, takes precedence over tableName
+     * @param {*} overrideColumnName overrides the column name, takes precedence over tableName
      * @param {*} includeEmpty includes empty values (null or '') for the filter
      */
 
@@ -122,7 +122,6 @@ class Filters {
                     ? `${settings.tableName}.${colName}`
                     : colName)
             const { value, operator } = filter
-
             query.where(builder => {
                 builder.where(nameToUse, toSQLOperator(operator, value), value)
                 if (settings.includeEmpty) {
@@ -135,6 +134,35 @@ class Filters {
                 `Failed to apply filter to query, ${colName} is not a valid filter.`
             )
         }
+    }
+
+    /** Applies a filter for comparing versions
+     * eg. this will match correctly for for 1.9.0 < 1.10.0,
+     * opposed to normal string matching.
+     */
+    applyVersionFilter(query, filterName, options) {
+        const filter = this.getFilter(filterName)
+        const colName =
+            options.overrideColumnName || this.getFilterColumn(filterName)
+
+        if (!filter) {
+            throw new Error(
+                `Failed to apply filter to query, ${colName} is not a valid filter.`
+            )
+        }
+
+        query.where(builder => {
+            builder.whereRaw(
+                `string_to_array( ??, '.')::int[] ${toSQLOperator(
+                    filter.operator
+                )} string_to_array( ?, '.')::int[]`,
+                [colName, filter.value]
+            )
+            if (options.includeEmpty) {
+                builder.orWhereRaw(`nullif( ??, ' ') is null`, colName)
+            }
+        })
+        this.markApplied(filterName)
     }
 
     /**

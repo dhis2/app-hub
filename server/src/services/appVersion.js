@@ -26,7 +26,7 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion')
         )
-        .distinct() // app_version_localised may return multiple versions
+        .where('language_code', 'en') // only english is supported for now
 
 class AppVersionService extends Schmervice.Service {
     constructor(server, schmerviceOptions) {
@@ -48,9 +48,13 @@ class AppVersionService extends Schmervice.Service {
 
         // null-values are allowed for maxDhisVersion, so include these if filter is present
         if (filters.getFilter('maxDhisVersion')) {
-            filters.applyOneToQuery(query, 'maxDhisVersion', {
+            filters.applyVersionFilter(query, 'maxDhisVersion', {
                 includeEmpty: true,
             })
+        }
+
+        if (filters.getFilter('minDhisVersion')) {
+            filters.applyVersionFilter(query, 'minDhisVersion')
         }
 
         return executeQuery(query, {
