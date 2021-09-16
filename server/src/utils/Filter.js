@@ -118,15 +118,15 @@ class Filters {
         if (filter) {
             const nameToUse =
                 options.overrideColumnName ||
-                (options.tableName
-                    ? `${options.tableName}.${colName}`
+                (settings.tableName
+                    ? `${settings.tableName}.${colName}`
                     : colName)
             const { value, operator } = filter
 
             query.where(builder => {
                 builder.where(nameToUse, toSQLOperator(operator, value), value)
                 if (settings.includeEmpty) {
-                    builder.orWhereRaw(`nullif(${nameToUse}, ' ') is null`)
+                    builder.orWhereRaw(`nullif( ??, ' ') is null`, nameToUse)
                 }
             })
             this.markApplied(fieldName)
