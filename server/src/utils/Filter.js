@@ -140,7 +140,7 @@ class Filters {
      * eg. this will match correctly for for 1.9.0 < 1.10.0,
      * opposed to normal string matching.
      */
-    applyVersionFilter(query, filterName, options) {
+    applyVersionFilter(query, filterName, options = {}) {
         const filter = this.getFilter(filterName)
         const colName =
             options.overrideColumnName || this.getFilterColumn(filterName)
