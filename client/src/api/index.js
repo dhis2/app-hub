@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+import useSWRInfinite from 'swr/infinite'
 import AuthService from '../utils/AuthService'
 import AppHubAPI from './AppHubAPI'
 import config from 'config'
@@ -38,6 +39,64 @@ export const useQuery = (url, params, requestOpts) =>
 
 export const useQueryV1 = (url, options = { auth: false }) =>
     useSWR([url, options.auth], (url, auth) => fromApi(`v1/${url}`, auth))
+
+/**
+ *
+ * @param {} url - url for the request
+ * @param {*} params - params object passed to AppHubAPI.request
+ * @param {*} options - options object with request-options and swr-options
+ * @param {*} options.request - options object passed to ApphubAPI.request
+ * @param {*} options.swr - options object passed to useSWR
+ * @returns
+ */
+export const usePagination = (
+    url,
+    params,
+    { request: requestOpts, swr: swrOpts } = {}
+) => {
+    const { data, error, size, ...rest } = useSWRInfinite(
+        (index, prevResults) => {
+            const pageCount = prevResults?.pager.pageCount
+            if (pageCount === index || pageCount === 0) {
+                return null
+            }
+            // we cannot change params orbject here, as it needs to be stable
+            return [url, params, index + 1, requestOpts]
+        },
+        // eslint-disable-next-line max-params
+        (url, params, page, requestOpts) =>
+            apiV2.request(url, {
+                ...requestOpts,
+                params: {
+                    ...params,
+                    page,
+                },
+            }),
+        {
+            ...swrOpts,
+            persistSize: true,
+        }
+    )
+
+    const isEmpty = data?.[0].pager.total === 0
+    // useSWRInfinite gathers all responses with an array entry per request - flatten it
+    const resultData = data?.flatMap(d => d?.result)
+    const isAtEnd = isEmpty || data?.[0].pager.total === resultData?.length
+    const isLoadingInitial = !data && !error
+    const isLoadingMore = size > 0 && typeof data?.[size - 1] === 'undefined'
+    const isLoading = isLoadingInitial || isLoadingMore
+
+    return {
+        ...rest,
+        data: resultData,
+        pager: data?.[data.length - 1].pager,
+        isEmpty,
+        isAtEnd,
+        isLoading,
+        error,
+        size,
+    }
+}
 
 export function getUser() {
     return fromApi('v1/users/me', true)
