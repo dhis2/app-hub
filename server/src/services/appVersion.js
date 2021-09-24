@@ -27,6 +27,7 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion')
         )
         .where('language_code', 'en') // only english is supported for now
+        .orderBy('app_version.created_at', 'desc')
 
 class AppVersionService extends Schmervice.Service {
     constructor(server, schmerviceOptions) {
