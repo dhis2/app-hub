@@ -40,8 +40,8 @@ const VersionsTable = ({ versions, renderDeleteVersionButton }) => (
                         )}
                     </TableCell>
                     <TableCell>
-                        <span title={new Date(version.created)}>
-                            {new Date(version.created).toLocaleDateString()}
+                        <span title={new Date(version.createdAt)}>
+                            {new Date(version.createdAt).toLocaleDateString()}
                         </span>
                     </TableCell>
                     <TableCell>

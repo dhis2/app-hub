@@ -1,11 +1,12 @@
+import { Button, CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
-import semver from 'semver'
+import { useState, useMemo } from 'react'
+import { laggySWRMiddleware } from '../../api/utils'
 import Filters from './Filters/Filters'
 import styles from './Versions.module.css'
 import VersionsTable from './VersionsTable/VersionsTable'
 import config from 'config'
-
+import { usePagination } from 'src/api'
 const { defaultAppChannel, appChannelToDisplayName } = config.ui
 
 const initialChannelsFilter = versions => {
@@ -22,32 +23,49 @@ const initialChannelsFilter = versions => {
     )
 }
 
-const Versions = ({ versions, renderDeleteVersionButton }) => {
-    const [channelsFilter, setChannelsFilter] = useState(() =>
-        initialChannelsFilter(versions)
+const Versions = ({ appId, renderDeleteVersionButton }) => {
+    const [channelsFilter, setChannelsFilter] = useState(
+        new Set([defaultAppChannel])
     )
     const [dhisVersionFilter, setDhisVersionFilter] = useState('')
-    const dhisVersionFilterSemver = semver.coerce(dhisVersionFilter)
-    const satisfiesDhisVersion = ({
-        minDhisVersion: min,
-        maxDhisVersion: max,
-    }) => {
-        if (!dhisVersionFilter || (!min && !max)) {
-            return true
-        } else if (min && max) {
-            const range = new semver.Range(`${min} - ${max}`)
-            return semver.satisfies(dhisVersionFilterSemver, range)
-        } else if (!min && max) {
-            const range = new semver.Range(`<=${max}`)
-            return semver.satisfies(dhisVersionFilterSemver, range)
-        } else if (min && !max) {
-            const range = new semver.Range(`>=${min}`)
-            return semver.satisfies(dhisVersionFilterSemver, range)
-        }
+    const params = useMemo(
+        () => ({
+            pageSize: 5,
+            minDhisVersion: dhisVersionFilter
+                ? `lte:${dhisVersionFilter}`
+                : undefined,
+            maxDhisVersion: dhisVersionFilter
+                ? `gte:${dhisVersionFilter}`
+                : undefined,
+            channel: Array.from(channelsFilter).join(),
+        }),
+        [dhisVersionFilter, channelsFilter]
+    )
+
+    const { data, error, setSize, size, isAtEnd, isLoadingInitial } =
+        usePagination(`apps/${appId}/versions`, params, {
+            swr: {
+                use: [laggySWRMiddleware], // keep previous results when changing filters
+            },
+        })
+
+    const versions = data ?? []
+
+    if (error) {
+        return (
+            <NoticeBox title={'Error loading versions'} error>
+                {error.message}
+            </NoticeBox>
+        )
     }
-    const filteredVersions = versions
-        .filter(({ channel }) => channelsFilter.has(channel))
-        .filter(satisfiesDhisVersion)
+
+    if (isLoadingInitial) {
+        return (
+            <CenteredContent>
+                <CircularLoader />
+            </CenteredContent>
+        )
+    }
 
     return (
         <div className={styles.versionsContainer}>
@@ -58,9 +76,9 @@ const Versions = ({ versions, renderDeleteVersionButton }) => {
                 dhisVersionFilter={dhisVersionFilter}
                 setDhisVersionFilter={setDhisVersionFilter}
             />
-            {filteredVersions.length > 0 ? (
+            {versions.length > 0 ? (
                 <VersionsTable
-                    versions={filteredVersions}
+                    versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                 />
             ) : (
@@ -68,12 +86,24 @@ const Versions = ({ versions, renderDeleteVersionButton }) => {
                     No versions found. Try adjusting your search.
                 </em>
             )}
+            {!isAtEnd && (
+                <div className={styles.loadMore}>
+                    <Button
+                        onClick={() => {
+                            setSize(size + 1)
+                        }}
+                        disabled={isLoadingInitial}
+                    >
+                        Load more
+                    </Button>
+                </div>
+            )}
         </div>
     )
 }
 
 Versions.propTypes = {
-    versions: PropTypes.array.isRequired,
+    appId: PropTypes.string.isRequired,
     renderDeleteVersionButton: PropTypes.func,
 }
 

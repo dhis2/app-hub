@@ -14,7 +14,7 @@ const Filters = ({
     setDhisVersionFilter,
 }) => {
     const hasChannel = channel => versions.some(v => v.channel === channel)
-    const channels = Object.keys(appChannelToDisplayName).filter(hasChannel)
+    const channels = Object.keys(appChannelToDisplayName) //.filter(hasChannel)
 
     return (
         <div className={styles.versionsFilters}>

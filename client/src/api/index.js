@@ -60,6 +60,7 @@ export const usePagination = (
             if (pageCount === index || pageCount === 0) {
                 return null
             }
+
             // we cannot change params orbject here, as it needs to be stable
             return [url, params, index + 1, requestOpts]
         },
@@ -83,16 +84,13 @@ export const usePagination = (
     const resultData = data?.flatMap(d => d?.result)
     const isAtEnd = isEmpty || data?.[0].pager.total === resultData?.length
     const isLoadingInitial = !data && !error
-    const isLoadingMore = size > 0 && typeof data?.[size - 1] === 'undefined'
-    const isLoading = isLoadingInitial || isLoadingMore
-
     return {
         ...rest,
         data: resultData,
         pager: data?.[data.length - 1].pager,
         isEmpty,
         isAtEnd,
-        isLoading,
+        isLoadingInitial,
         error,
         size,
     }

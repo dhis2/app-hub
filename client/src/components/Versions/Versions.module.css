@@ -7,3 +7,9 @@
     padding: var(--spacers-dp8);
     padding-top: 0;
 }
+
+.loadMore {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
