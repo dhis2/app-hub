@@ -20,6 +20,7 @@ const getAppVersionQuery = knex =>
             'app_version.version',
             knex.ref('app_version.app_id').as('appId'),
             knex.ref('app_version.created_at').as('createdAt'),
+            knex.ref('app_version.updated_at').as('updatedAt'),
             knex.ref('app_version.source_url').as('sourceUrl'),
             knex.ref('app_version.demo_url').as('demoUrl'),
             knex.ref('channel.name').as('channel'),
