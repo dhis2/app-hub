@@ -13,6 +13,7 @@ const { config } = require('../../../src/server/noauth-config')
 const Joi = require('../../../src/utils/CustomJoi')
 
 const dbInstance = knex(knexConfig)
+
 describe('v2/appVersions', () => {
     let server
     let db
@@ -248,6 +249,41 @@ describe('v2/appVersions', () => {
                     }
                 })
             })
+        })
+    })
+
+    describe('getAvailableChannels', () => {
+        it('should only return channels that have versions published', async () => {
+            const canaryOnlyApp = appsMocks[5]
+            const request = {
+                method: 'GET',
+                url: `/api/v2/apps/${canaryOnlyApp.id}/channels`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+            const result = res.result
+            expect(result).to.be.an.array()
+            expect(result[0]).to.be.equal('canary')
+        })
+
+        it('should return unique channels', async () => {
+            const request = {
+                method: 'GET',
+                url: `/api/v2/apps/${dhis2App.id}/channels`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+            const result = res.result
+
+            expect(result).to.be.an.array().length(3)
+            expect(result).to.include('stable')
+
+            const unique = [...new Set(result)]
+            expect(unique.length).to.equal(result.length)
         })
     })
 })

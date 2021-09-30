@@ -60,6 +60,19 @@ class AppVersionService extends Schmervice.Service {
             model: AppVersionModel,
         })
     }
+
+    async getAvailableChannels(appId, knex) {
+        const query = getAppVersionQuery(knex)
+            .clear('select')
+            .clear('order')
+            .select('channel.name')
+            .where('app_version.app_id', appId)
+            .distinct()
+
+        const result = await executeQuery(query)
+
+        return result.map(c => c.name)
+    }
 }
 
 const createAppVersionService = (server, schmerviceOptions) => {
