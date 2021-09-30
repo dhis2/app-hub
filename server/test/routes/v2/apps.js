@@ -1,25 +1,18 @@
-const fs = require('fs')
-const path = require('path')
+const { expect } = require('@hapi/code')
 const Lab = require('@hapi/lab')
 const FormData = require('form-data')
+const Knex = require('knex')
 const streamToPromise = require('stream-to-promise')
-
-const {
-    it,
-    describe,
-    afterEach,
-    beforeEach,
-    before,
-} = (exports.lab = Lab.script())
-
-const { expect } = require('@hapi/code')
+const { it, describe, afterEach, beforeEach, before } = (exports.lab =
+    Lab.script())
 const knexConfig = require('../../../knexfile')
-const dbInstance = require('knex')(knexConfig)
-const organisations = require('../../../seeds/mock/organisations')
 const appsMocks = require('../../../seeds/mock/apps')
+const organisations = require('../../../seeds/mock/organisations')
 const users = require('../../../seeds/mock/users')
 const { init } = require('../../../src/server/init-server')
 const { config } = require('../../../src/server/noauth-config')
+
+const dbInstance = Knex(knexConfig)
 
 describe('v2/apps', () => {
     let server
@@ -47,6 +40,7 @@ describe('v2/apps', () => {
             organisationId: organisations[0].id,
         },
     }
+    const dhis2App = appsMocks[0]
 
     const createFormForApp = app => {
         const form = new FormData()
@@ -106,6 +100,41 @@ describe('v2/apps', () => {
             )
 
             expect(notCore).to.have.length(0)
+        })
+    })
+
+    describe('get channels for app', () => {
+        it('should only return channels that have versions published', async () => {
+            const canaryOnlyApp = appsMocks[5]
+            const request = {
+                method: 'GET',
+                url: `/api/v2/apps/${canaryOnlyApp.id}/channels`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+            const result = res.result
+            expect(result).to.be.an.array().length(1)
+            expect(result[0]).to.be.equal('canary')
+        })
+
+        it('should return unique channels', async () => {
+            const request = {
+                method: 'GET',
+                url: `/api/v2/apps/${dhis2App.id}/channels`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+            const result = res.result
+
+            expect(result).to.be.an.array().length(3)
+            expect(result).to.include('stable')
+
+            const unique = [...new Set(result)]
+            expect(unique.length).to.equal(result.length)
         })
     })
 })
