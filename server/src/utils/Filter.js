@@ -142,6 +142,11 @@ class Filters {
      */
     applyVersionFilter(query, filterName, options = {}) {
         const filter = this.getFilter(filterName)
+
+        if (!filter) {
+            return
+        }
+
         const colName =
             options.overrideColumnName || this.getFilterColumn(filterName)
 
