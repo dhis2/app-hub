@@ -175,9 +175,8 @@ module.exports = [
             const { appVersionService } = request.services(true)
 
             const { appId } = request.params
-            const channels = appVersionService.getAvailableChannels(appId, db)
 
-            return channels
+            return appVersionService.getAvailableChannels(appId, db)
         },
     },
 ]
