@@ -221,6 +221,33 @@ describe('v2/appVersions', () => {
                     }
                 })
             })
+
+            it('should not fail when version include valid semver characters', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=lte:2.34-beta&minDhisVersion=gte:2.29-alpha`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.between(28, 35)
+                    }
+                })
+            })
         })
     })
 })

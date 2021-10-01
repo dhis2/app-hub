@@ -158,9 +158,9 @@ class Filters {
 
         query.where(builder => {
             builder.whereRaw(
-                `string_to_array( ??, '.')::int[] ${toSQLOperator(
+                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${toSQLOperator(
                     filter.operator
-                )} string_to_array( ?, '.')::int[]`,
+                )} string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
                 [colName, filter.value]
             )
             if (options.includeEmpty) {
