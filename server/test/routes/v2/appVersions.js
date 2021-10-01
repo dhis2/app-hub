@@ -99,5 +99,155 @@ describe('v2/appVersions', () => {
                 expect(v.minDhisVersion).to.be.a.string()
             })
         })
+
+        describe('with filters', () => {
+            it('should handle channel filter', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?channel=development`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = res.result.result
+
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                expect(result.pager).to.be.an.object()
+                // check some keys as well
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    expect(v.channel).to.be.equal('development')
+                })
+            })
+
+            it('should handle minDhisVersion', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=eq:2.29`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                console.log(result)
+                const versions = result.result
+
+                console.log(versions)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    expect(v.minDhisVersion).to.be.equal('2.29')
+                })
+            })
+
+            it('should handle minDhisVersion with lte and gte', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=lte:2.28`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    expect(v.minDhisVersion).to.be.below('2.29')
+                })
+            })
+
+            it('should handle maxDhisVersion', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=lte:2.34`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.lessThan(35)
+                    }
+                })
+            })
+
+            it('should handle both minDhisVersion and maxDhisVersion', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=lte:2.34&minDhisVersion=gte:2.29`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.between(28, 35)
+                    }
+                })
+            })
+
+            it('should not fail when version include valid semver characters', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=lte:2.34-beta&minDhisVersion=gte:2.29-alpha`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.between(28, 35)
+                    }
+                })
+            })
+        })
     })
 })
