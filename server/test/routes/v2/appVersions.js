@@ -13,6 +13,7 @@ const { config } = require('../../../src/server/noauth-config')
 const Joi = require('../../../src/utils/CustomJoi')
 
 const dbInstance = knex(knexConfig)
+
 describe('v2/appVersions', () => {
     let server
     let db

@@ -114,9 +114,8 @@ module.exports = [
 
             const { payload } = request
             const appJsonPayload = JSON.parse(payload.app)
-            const appJsonValidationResult = CreateAppModel.def.validate(
-                appJsonPayload
-            )
+            const appJsonValidationResult =
+                CreateAppModel.def.validate(appJsonPayload)
 
             if (appJsonValidationResult.error) {
                 throw Boom.badRequest(appJsonValidationResult.error)
@@ -157,6 +156,27 @@ module.exports = [
             )
 
             return h.response(app).created(`/v2/apps/${app.id}`)
+        },
+    },
+    {
+        method: 'GET',
+        path: '/v2/apps/{appId}/channels',
+        config: {
+            auth: false,
+            tags: ['api', 'v2'],
+            validate: {
+                params: Joi.object({
+                    appId: Joi.string().required(),
+                }),
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { appVersionService } = request.services(true)
+
+            const { appId } = request.params
+
+            return appVersionService.getAvailableChannels(appId, db)
         },
     },
 ]
