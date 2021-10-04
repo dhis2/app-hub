@@ -1,3 +1,16 @@
+# [2.26.0](https://github.com/dhis2/app-hub/compare/v2.25.2...v2.26.0) (2021-10-04)
+
+
+### Bug Fixes
+
+* **appversion:** fix version filtering and comparison ([#551](https://github.com/dhis2/app-hub/issues/551)) ([854f32b](https://github.com/dhis2/app-hub/commit/854f32b2e8d7251e17bb92167316b2a3e7dc4056))
+* remove core-app tag ([#550](https://github.com/dhis2/app-hub/issues/550)) ([3e92a90](https://github.com/dhis2/app-hub/commit/3e92a909de46aec2d7881a5e0d9a91726b675484))
+
+
+### Features
+
+* **apps:** availableChannels API ([#559](https://github.com/dhis2/app-hub/issues/559)) ([6a09f97](https://github.com/dhis2/app-hub/commit/6a09f972ff795b1f74e75dd420ed8df8598c13de))
+
 ## [2.25.2](https://github.com/dhis2/app-hub/compare/v2.25.1...v2.25.2) (2021-09-13)
 
 
