@@ -24,6 +24,6 @@ WORKDIR /srv
 COPY --from=build /src ./apphub
 
 # run the app
-WORKDIR apphub
+WORKDIR apphub/server
 EXPOSE 3000
-CMD ["node", "server/src/main.js"]
+CMD ["node", "src/main.js"]
