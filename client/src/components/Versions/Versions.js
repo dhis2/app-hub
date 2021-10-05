@@ -9,13 +9,14 @@ import config from 'config'
 import { usePagination, useQuery } from 'src/api'
 
 const { defaultAppChannel } = config.ui
-const defaultChannelsFilter = new Set([defaultAppChannel])
 
 const useChannels = appId => {
-    const [availableChannels, setAvailableChannels] = useState(
-        defaultChannelsFilter
+    const [availableChannels, setAvailableChannels] = useState([
+        defaultAppChannel,
+    ])
+    const [channelsFilter, setChannelsFilter] = useState(
+        new Set([defaultAppChannel])
     )
-    const [channelsFilter, setChannelsFilter] = useState(defaultChannelsFilter)
     const { data, error } = useQuery(`apps/${appId}/channels`)
 
     useEffect(() => {
@@ -29,6 +30,7 @@ const useChannels = appId => {
         }
 
         if (error) {
+            // in this case it should be enough to just log it, and fallback to default-channel
             console.error('Failed to get channels', error.message)
         }
     }, [data])
