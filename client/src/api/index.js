@@ -57,6 +57,7 @@ export const usePagination = (
     const { data, error, size, ...rest } = useSWRInfinite(
         (index, prevResults) => {
             const pageCount = prevResults?.pager.pageCount
+
             if (pageCount === index || pageCount === 0) {
                 return null
             }
@@ -84,6 +85,7 @@ export const usePagination = (
     const resultData = data?.flatMap(d => d?.result)
     const isAtEnd = isEmpty || data?.[0].pager.total === resultData?.length
     const isLoadingInitial = !data && !error
+
     return {
         ...rest,
         data: resultData,

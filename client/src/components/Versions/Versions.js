@@ -1,32 +1,45 @@
 import { Button, CenteredContent, CircularLoader, NoticeBox } from '@dhis2/ui'
 import PropTypes from 'prop-types'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { laggySWRMiddleware } from '../../api/utils'
 import Filters from './Filters/Filters'
 import styles from './Versions.module.css'
 import VersionsTable from './VersionsTable/VersionsTable'
 import config from 'config'
-import { usePagination } from 'src/api'
-const { defaultAppChannel, appChannelToDisplayName } = config.ui
+import { usePagination, useQuery } from 'src/api'
 
-const initialChannelsFilter = versions => {
-    const hasChannel = (versions, channel) =>
-        versions.find(v => v.channel === channel)
+const { defaultAppChannel } = config.ui
+const defaultChannelsFilter = new Set([defaultAppChannel])
 
-    if (hasChannel(versions, defaultAppChannel)) {
-        return new Set([defaultAppChannel])
-    }
-    return new Set(
-        Object.keys(appChannelToDisplayName).filter(channel =>
-            hasChannel(versions, channel)
-        )
+const useChannels = appId => {
+    const [availableChannels, setAvailableChannels] = useState(
+        defaultChannelsFilter
     )
+    const [channelsFilter, setChannelsFilter] = useState(defaultChannelsFilter)
+    const { data, error } = useQuery(`apps/${appId}/channels`)
+
+    useEffect(() => {
+        if (data) {
+            setAvailableChannels(data)
+
+            // if default-channel is not present, set to available-channels
+            if (data.filter(c => c === defaultAppChannel).length < 1) {
+                setChannelsFilter(new Set(data))
+            }
+        }
+
+        if (error) {
+            console.error('Failed to get channels', error.message)
+        }
+    }, [data])
+
+    return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
 const Versions = ({ appId, renderDeleteVersionButton }) => {
-    const [channelsFilter, setChannelsFilter] = useState(
-        new Set([defaultAppChannel])
-    )
+    const { availableChannels, channelsFilter, setChannelsFilter } =
+        useChannels(appId)
+
     const [dhisVersionFilter, setDhisVersionFilter] = useState('')
     const params = useMemo(
         () => ({
@@ -39,15 +52,22 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
                 : undefined,
             channel: Array.from(channelsFilter).join(),
         }),
-        [dhisVersionFilter, channelsFilter]
+        [dhisVersionFilter, Array.from(channelsFilter).join()]
     )
 
-    const { data, error, setSize, size, isAtEnd, isLoadingInitial } =
-        usePagination(`apps/${appId}/versions`, params, {
-            swr: {
-                use: [laggySWRMiddleware], // keep previous results when changing filters
-            },
-        })
+    const {
+        data,
+        error,
+        setSize,
+        size,
+        isAtEnd,
+        isLoadingInitial,
+        isValidating,
+    } = usePagination(`apps/${appId}/versions`, params, {
+        swr: {
+            use: [laggySWRMiddleware], // keep previous results when changing filters
+        },
+    })
 
     const versions = data ?? []
 
@@ -70,7 +90,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
     return (
         <div className={styles.versionsContainer}>
             <Filters
-                versions={versions}
+                availableChannels={availableChannels}
                 channelsFilter={channelsFilter}
                 setChannelsFilter={setChannelsFilter}
                 dhisVersionFilter={dhisVersionFilter}
@@ -92,7 +112,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
                         onClick={() => {
                             setSize(size + 1)
                         }}
-                        disabled={isLoadingInitial}
+                        loading={isValidating}
                     >
                         Load more
                     </Button>
