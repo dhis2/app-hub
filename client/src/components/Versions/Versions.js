@@ -24,7 +24,7 @@ const useChannels = appId => {
             setAvailableChannels(data)
 
             // if default-channel is not present, set to available-channels
-            if (data.filter(c => c === defaultAppChannel).length < 1) {
+            if (!data.includes(defaultAppChannel)) {
                 setChannelsFilter(new Set(data))
             }
         }
@@ -52,7 +52,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
             maxDhisVersion: dhisVersionFilter
                 ? `gte:${dhisVersionFilter}`
                 : undefined,
-            channel: Array.from(channelsFilter).join(),
+            channel: channelsFilter,
         }),
         [dhisVersionFilter, Array.from(channelsFilter).join()]
     )
