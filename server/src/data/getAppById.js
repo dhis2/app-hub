@@ -26,6 +26,7 @@ const getAppById = async (appId, languageCode, knex) => {
                 app_id: appId,
                 language_code: languageCode,
             })
+            .orderBy('version_created_at', 'desc')
     } catch (err) {
         throw new Error(`Could not get app with id: ${appId}. ${err.message}`)
     }
