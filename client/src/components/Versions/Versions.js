@@ -52,7 +52,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
             maxDhisVersion: dhisVersionFilter
                 ? `gte:${dhisVersionFilter}`
                 : undefined,
-            channel: channelsFilter,
+            channel: Array.from(channelsFilter).join(),
         }),
         [dhisVersionFilter, Array.from(channelsFilter).join()]
     )
