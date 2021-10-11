@@ -70,6 +70,7 @@ module.exports = [
                 apps,
                 request.query.dhis_version
             )
+
             const pager = request.plugins.pagination
             const result = convertAppsToApiV1Format(filteredApps, request)
             return h.paginate(pager, {
