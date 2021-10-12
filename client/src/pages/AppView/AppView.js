@@ -132,7 +132,7 @@ const AppView = ({ match }) => {
                 <h2 className={styles.appCardHeading}>
                     All versions of this application
                 </h2>
-                <Versions versions={versions} />
+                <Versions versions={versions} appId={appId} />
             </section>
         </Card>
     )
