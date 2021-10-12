@@ -1,3 +1,10 @@
+# [2.27.0](https://github.com/dhis2/app-hub/compare/v2.26.0...v2.27.0) (2021-10-12)
+
+
+### Features
+
+* client version pagination ([#555](https://github.com/dhis2/app-hub/issues/555)) ([26a521d](https://github.com/dhis2/app-hub/commit/26a521d1b7ffa8417a43e530225adf07597db71b))
+
 # [2.26.0](https://github.com/dhis2/app-hub/compare/v2.25.2...v2.26.0) (2021-10-04)
 
 
