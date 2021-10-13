@@ -1,3 +1,10 @@
+## [2.27.1](https://github.com/dhis2/app-hub/compare/v2.27.0...v2.27.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* limit versions returned from /apps endpoints ([#570](https://github.com/dhis2/app-hub/issues/570)) ([74550df](https://github.com/dhis2/app-hub/commit/74550df55f2ed076ea09aa3d798feafc0e37b50f))
+
 # [2.27.0](https://github.com/dhis2/app-hub/compare/v2.26.0...v2.27.0) (2021-10-12)
 
 
