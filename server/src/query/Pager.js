@@ -47,11 +47,17 @@ class Pager {
      * Applies limit and offset to the query
      * @param {*} query
      */
-    applyToQuery(query) {
+    applyToQuery(query, includeTotal) {
         if (!this.enabled) {
             return
         }
         const offset = (this.page - 1) * this.pageSize
+
+        if (includeTotal) {
+            const knex = query.client
+            query.select(knex.raw('count(*) over() as total_count'))
+        }
+
         query.limit(this.pageSize)
         query.offset(offset)
     }
