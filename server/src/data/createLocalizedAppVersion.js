@@ -40,7 +40,7 @@ const createLocalizedAppVersion = async (params, knex) => {
         return { id }
     } catch (err) {
         throw new Error(
-            `Could not create localized appversion for: ${appVersionId}, ${userId}, ${description}, ${name}, ${languageCode}`
+            `Could not create localized appversion for: ${appVersionId}, ${name}: ${err}`
         )
     }
 }
