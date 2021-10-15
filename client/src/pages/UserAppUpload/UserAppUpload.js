@@ -10,7 +10,6 @@ import {
     SingleSelectFieldFF,
     FileInputFieldFF,
     composeValidators,
-    createCharacterLengthRange,
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
@@ -21,8 +20,11 @@ import styles from './UserAppUpload.module.css'
 import config from 'config'
 import { useQuery } from 'src/api'
 import * as api from 'src/api'
-import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
-import { semverValidator } from 'src/lib/form-validators/semver-validator'
+import {
+    maxDhisVersionValidator,
+    nameLengthValidator,
+    semverValidator,
+} from 'src/lib/form-validators'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 import { useModalState } from 'src/lib/use-modal-state'
 
@@ -57,7 +59,6 @@ const channelOptions = Object.entries(appChannelToDisplayName).map(
 const requestOpts = {
     useAuth: true,
 }
-const nameLengthValidator = createCharacterLengthRange(2, 100)
 
 const UserAppUpload = ({ user }) => {
     const {
