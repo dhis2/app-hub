@@ -1,3 +1,10 @@
+## [2.23.8](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.23.8) (2021-10-15)
+
+
+### Bug Fixes
+
+* validate app-name length ([#572](https://github.com/dhis2/app-hub/issues/572)) ([c6857eb](https://github.com/dhis2/app-hub/commit/c6857ebafd51bf198764aff6df2166a083e83b45))
+
 ## [2.23.7](https://github.com/dhis2/app-hub/compare/v2.23.6...v2.23.7) (2021-07-05)
 
 
