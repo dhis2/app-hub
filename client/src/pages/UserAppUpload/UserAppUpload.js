@@ -10,6 +10,7 @@ import {
     SingleSelectFieldFF,
     FileInputFieldFF,
     composeValidators,
+    createCharacterLengthRange,
     hasValue,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
@@ -56,9 +57,14 @@ const channelOptions = Object.entries(appChannelToDisplayName).map(
 const requestOpts = {
     useAuth: true,
 }
+const nameLengthValidator = createCharacterLengthRange(2, 100)
 
 const UserAppUpload = ({ user }) => {
-    const { data: organisations, error, mutate } = useQuery(
+    const {
+        data: organisations,
+        error,
+        mutate,
+    } = useQuery(
         'organisations',
         useMemo(
             () => ({
@@ -212,7 +218,7 @@ const UserAppUpload = ({ user }) => {
                                 placeholder="e.g. 'Data Visualizer' or 'Interactive Scorecards'"
                                 component={InputFieldFF}
                                 className={styles.field}
-                                validate={hasValue}
+                                validate={nameLengthValidator}
                             />
                             <ReactFinalForm.Field
                                 required
