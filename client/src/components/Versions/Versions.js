@@ -38,7 +38,7 @@ const useChannels = appId => {
     return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
-const Versions = ({ appId, renderDeleteVersionButton }) => {
+const Versions = ({ accessToken, appId, renderDeleteVersionButton }) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
@@ -100,6 +100,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
             />
             {versions.length > 0 ? (
                 <VersionsTable
+                    accessToken={accessToken}
                     versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                 />

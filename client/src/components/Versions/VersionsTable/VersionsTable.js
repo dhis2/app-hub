@@ -15,7 +15,16 @@ import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-co
 
 const { appChannelToDisplayName } = config.ui
 
-const VersionsTable = ({ versions, renderDeleteVersionButton }) => (
+const getDownloadUrl = (url, token) => {
+    console.log('get download', url)
+    token ? url.concat(`?token=${token}`) : url
+}
+
+const VersionsTable = ({
+    accessToken,
+    versions,
+    renderDeleteVersionButton,
+}) => (
     <Table className={styles.table}>
         <TableHead>
             <TableRowHead>
@@ -45,7 +54,11 @@ const VersionsTable = ({ versions, renderDeleteVersionButton }) => (
                         </span>
                     </TableCell>
                     <TableCell>
-                        <a download href={version.downloadUrl} tabIndex="-1">
+                        <a
+                            download
+                            href={getDownloadUrl(version.downloadUrl)}
+                            tabIndex="-1"
+                        >
                             <Button small secondary>
                                 Download
                             </Button>
