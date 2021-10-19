@@ -19,7 +19,7 @@ const Screenshots = ({ screenshots, renderDeleteScreenshotButton }) => {
                 {renderDeleteScreenshotButton &&
                     renderDeleteScreenshotButton(currentScreenshot.id)}
             </div>
-            <div>
+            <div className={styles.thumbnails}>
                 {screenshots.map((screenshot, index) => (
                     <button
                         key={index}
