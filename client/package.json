@@ -18,7 +18,7 @@
     "dependencies": {
         "@auth0/auth0-react": "^1.6.0",
         "@dhis2/d2-i18n": "^1.1.0",
-        "@dhis2/ui": "^6.20.0",
+        "@dhis2/ui": "^7.4.1",
         "classnames": "^2.3.1",
         "copy-text-to-clipboard": "^3.0.1",
         "core-js": "^3.16.4",
