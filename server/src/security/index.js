@@ -87,11 +87,16 @@ const getCurrentUserFromRequest = request => {
     })
 }
 
-// used with server.decorate to be able to do
-// request.getUser()
+// used with server.decorate to make request.getUser() available
+// this-context is the request-object
 const getUserDecoration = function () {
     try {
         const { userId, name } = this.auth.credentials
+
+        if (userId == null) {
+            return null
+        }
+
         return {
             id: userId,
             name,

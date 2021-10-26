@@ -11,6 +11,7 @@ const definition = defaultDefinition
         downloadUrl: Joi.string().uri().allow(''),
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
+        slug: Joi.string(),
     })
     .alter({
         db: s =>
@@ -18,6 +19,7 @@ const definition = defaultDefinition
                 .rename('minDhisVersion', 'min_dhis2_version')
                 .rename('maxDhisVersion', 'max_dhis2_version')
                 .rename('demoUrl', 'demo_url'),
+        external: s => s.strip('slug'),
     })
     .label('AppVersion')
 

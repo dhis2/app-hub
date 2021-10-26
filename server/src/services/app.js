@@ -5,6 +5,7 @@ const {
     createLocalizedAppVersion,
     addAppVersionToChannel,
     addAppMedia,
+    getOrganisationAppsByUserId,
 } = require('../data')
 
 exports.create = async (
@@ -110,3 +111,9 @@ exports.createMediaForApp = (
         },
         db
     )
+
+exports.canEditApp = async (userId, appId, knex) => {
+    const appsUserCanEdit = await getOrganisationAppsByUserId(userId, knex)
+
+    return appsUserCanEdit.find(app => app.app_id === appId) != null
+}
