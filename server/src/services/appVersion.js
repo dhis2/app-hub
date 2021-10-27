@@ -1,6 +1,7 @@
 const Schmervice = require('@hapipal/schmervice')
 const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
+const { getClientBaseUrl } = require('../utils')
 
 const getAppVersionQuery = knex =>
     knex('app_version')
@@ -80,6 +81,26 @@ class AppVersionService extends Schmervice.Service {
         const result = await executeQuery(query)
 
         return result.map(c => c.name)
+    }
+
+    getDownloadUrl(request, appVersion) {
+        const { appId, appSlug, version } = appVersion
+        const url = getClientBaseUrl(request)
+
+        return `${url}/v2/apps/${appId}/download/${appSlug}_${version}.zip`
+    }
+
+    /**
+     * Helper method to set the downloadUrl of appversion
+     * Curried to be used directly in .map()
+     * @param {*} request to use to get the server-url
+     * @returns a function with signature (appVersion) => appVersionWithDownloadUrl
+     */
+    createSetDownloadUrl(request) {
+        return appVersion => {
+            appVersion.downloadUrl = this.getDownloadUrl(request, appVersion)
+            return appVersion
+        }
     }
 }
 
