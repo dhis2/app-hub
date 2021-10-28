@@ -19,6 +19,7 @@ const getAllAppsByDeveloperId = (id, knex) => {
         .where({
             developer_id: id,
         })
+        .orderBy('version_created_at', 'desc')
 }
 
 module.exports = getAllAppsByDeveloperId
