@@ -18,6 +18,7 @@ const getAppsByIdAndStatus = (id, status, languageCode, knex) => {
             status,
             language_code: languageCode,
         })
+        .orderBy('version_created_at', 'desc')
 }
 
 module.exports = getAppsByIdAndStatus
