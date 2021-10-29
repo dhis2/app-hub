@@ -1,3 +1,10 @@
+## [2.23.9](https://github.com/dhis2/app-hub/compare/v2.23.8...v2.23.9) (2021-10-29)
+
+
+### Bug Fixes
+
+* sort versions by created-date ([#577](https://github.com/dhis2/app-hub/issues/577)) ([0addf38](https://github.com/dhis2/app-hub/commit/0addf38dd7c20e6072fbb75258a6c3c0e0cfe534))
+
 ## [2.23.8](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.23.8) (2021-10-15)
 
 
