@@ -16,7 +16,6 @@ env:
     GIT_AUTHOR_EMAIL: 'apps@dhis2.org'
     GIT_COMMITTER_NAME: '@dhis2-bot'
     GIT_COMMITTER_EMAIL: 'apps@dhis2.org'
-    GH_TOKEN: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
 
 jobs:
     publish:
@@ -27,7 +26,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               with:
-                  token: ${{env.GH_TOKEN}}
+                  token: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
