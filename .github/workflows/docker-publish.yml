@@ -106,5 +106,7 @@ jobs:
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
 
-            - name: Publish to GitHub
-              run: npx @dhis2/cli-utils release
+            - use: dhis2/action-semantic-release@master
+              with:
+                  publish-github: true
+                  github-token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
