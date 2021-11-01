@@ -54,9 +54,14 @@ module.exports = [
 
             const setDownloadUrl =
                 appVersionService.createSetDownloadUrl(request)
-            const versions = await appVersionService
-                .findByAppId(appId, { pager, filters }, db)
-                .map(setDownloadUrl)
+
+            const versions = await appVersionService.findByAppId(
+                appId,
+                { pager, filters },
+                db
+            )
+
+            versions.result.map(setDownloadUrl)
 
             return h.response(versions)
         },

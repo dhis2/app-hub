@@ -228,15 +228,17 @@ module.exports = [
             const appVersionFilter =
                 Filters.createFromQueryFilters(filterObject)
 
-            const appVersion = await appVersionService.findByAppId(
+            const { result } = await appVersionService.findByAppId(
                 appId,
                 { filters: appVersionFilter },
                 db
             )
 
-            if (appVersion.length < 1) {
+            if (result.length < 1) {
                 throw Boom.notFound()
             }
+
+            const [appVersion] = result
 
             const file = await getFile(
                 `${appVersion.appId}/${appVersion.id}`,
@@ -245,7 +247,7 @@ module.exports = [
 
             request.log(
                 'getFile',
-                `Fetching file for ${appVersion.appId / appVersion.id}`
+                `Fetching file for ${appVersion.appId} / ${appVersion.id}`
             )
 
             return h

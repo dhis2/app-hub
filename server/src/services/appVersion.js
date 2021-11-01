@@ -1,7 +1,7 @@
 const Schmervice = require('@hapipal/schmervice')
 const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
-const { getClientBaseUrl } = require('../utils')
+const { getServerUrl } = require('../utils')
 
 const getAppVersionQuery = knex =>
     knex('app_version')
@@ -84,10 +84,10 @@ class AppVersionService extends Schmervice.Service {
     }
 
     getDownloadUrl(request, appVersion) {
-        const { appId, appSlug, version } = appVersion
-        const url = getClientBaseUrl(request)
+        const { appId, slug, version } = appVersion
+        const url = getServerUrl(request)
 
-        return `${url}/v2/apps/${appId}/download/${appSlug}_${version}.zip`
+        return `${url}/v2/apps/${appId}/download/${slug}_${version}.zip`
     }
 
     /**
