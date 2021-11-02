@@ -1,4 +1,3 @@
-import { useAuth0 } from '@auth0/auth0-react'
 import {
     Card,
     Button,
@@ -96,8 +95,6 @@ const VersionsCard = ({ app, mutate }) => {
     const renderDeleteVersionButton = version => (
         <DeleteVersionButton appId={app.id} version={version} mutate={mutate} />
     )
-    const { getAccessTokenSilently } = useAuth0()
-    const accessToken = getAccessTokenSilently()
 
     return (
         <Card className={sharedStyles.card}>
@@ -106,7 +103,6 @@ const VersionsCard = ({ app, mutate }) => {
                 appId={app.id}
                 versions={versions}
                 renderDeleteVersionButton={renderDeleteVersionButton}
-                accessToken={accessToken}
             />
             <Link
                 className={styles.newVersionButton}
