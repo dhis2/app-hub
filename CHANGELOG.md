@@ -1,3 +1,10 @@
+# [2.28.0](https://github.com/dhis2/app-hub/compare/v2.27.2...v2.28.0) (2021-11-03)
+
+
+### Features
+
+* configurable total-results strategy ([#571](https://github.com/dhis2/app-hub/issues/571)) ([af594ab](https://github.com/dhis2/app-hub/commit/af594abf7b0c6fc9bae6e012531d9dbe6426d863))
+
 ## [2.27.2](https://github.com/dhis2/app-hub/compare/v2.27.1...v2.27.2) (2021-10-19)
 
 
