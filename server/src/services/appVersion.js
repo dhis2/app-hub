@@ -69,7 +69,7 @@ class AppVersionService extends Schmervice.Service {
             .where('app_version.app_id', appId)
             .distinct()
 
-        const result = await executeQuery(query)
+        const { result } = await executeQuery(query)
 
         return result.map(c => c.name)
     }
