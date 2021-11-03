@@ -74,6 +74,11 @@ async function executeQuery(
             const totalCount = totalRes.total_count
             result = pager.formatResult(result, totalCount)
         }
+    } else {
+        // keep same API if no pager
+        result = {
+            result,
+        }
     }
 
     return result
