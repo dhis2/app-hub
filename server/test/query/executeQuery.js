@@ -6,7 +6,10 @@ const { it, describe, afterEach, beforeEach } = (exports.lab = Lab.script())
 const knexConfig = require('../../knexfile')
 const appMocks = require('../../seeds/mock/apps')
 const organisationMocks = require('../../seeds/mock/organisations')
-const { executeQuery } = require('../../src/query/executeQuery')
+const {
+    executeQuery,
+    pagingStrategies,
+} = require('../../src/query/executeQuery')
 const { Pager } = require('../../src/query/Pager')
 const Joi = require('../../src/utils/CustomJoi')
 const { Filters } = require('../../src/utils/Filter')
@@ -76,8 +79,9 @@ describe('executeQuery', () => {
     it('should execute the query and return result', async () => {
         const result = await executeQuery(organisationQuery)
 
-        expect(result).to.be.an.array().length(organisationMocks.length)
-        result.forEach(org => {
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array().length(organisationMocks.length)
+        result.result.forEach(org => {
             expect(
                 organisationMocks.find(o => o.id === org.id)
             ).to.not.be.undefined()
@@ -91,9 +95,10 @@ describe('executeQuery', () => {
             formatter: formatterSpy,
         })
 
-        expect(result).to.not.shallow.equal(appMocksWithTotal)
+        expect(result).to.be.an.object()
+        expect(result.result).to.not.shallow.equal(appMocksWithTotal)
         expect(formatterSpy.calledOnce).to.be.true()
-        result.forEach(a => {
+        result.result.forEach(a => {
             expect(a).to.not.be.an.object()
             expect(a).to.be.a.string()
         })
@@ -103,7 +108,8 @@ describe('executeQuery', () => {
         sinon.spy(appModelMock, 'parseDatabaseJson')
         const result = await executeQuery(getQueryMock, { model: appModelMock })
 
-        expect(result).to.be.an.array()
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array()
         expect(
             appModelMock.parseDatabaseJson.calledWith(appMocksWithTotal)
         ).to.be.true()
@@ -115,7 +121,8 @@ describe('executeQuery', () => {
             model: appModelMock,
         })
 
-        expect(result).to.be.an.array()
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array()
         expect(
             appModelMock.formatDatabaseJson.calledWith(appMocksWithTotal)
         ).to.be.true()
@@ -133,7 +140,8 @@ describe('executeQuery', () => {
             }
         )
 
-        expect(result).to.not.shallow.equal(appMocksWithTotal)
+        expect(result).to.be.an.object()
+        expect(result.result).to.not.shallow.equal(appMocksWithTotal)
         expect(formatterSpy.calledWith(appMocksWithTotal)).to.be.true()
         expect(appModelMock.parseDatabaseJson.notCalled).to.be.true()
     })
@@ -144,44 +152,45 @@ describe('executeQuery', () => {
             filters,
         })
 
-        expect(result).to.be.an.array()
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array()
         expect(funcStub.calledOnce).to.be.true()
         expect(funcStub.calledWith(getQueryMock)).to.be.true()
     })
 
     it('should call pager.applyToQuery and pager.formatResult if pager is present', async () => {
         const applyStub = sinon.stub(pager, 'applyToQuery')
-        const formatResultStub = sinon
-            .stub(pager, 'formatResult')
-            .callsFake(result => result)
+        const formatResultSpy = sinon.spy(pager, 'formatResult')
+
         const result = await executeQuery(organisationQuery, {
             pager,
         })
 
-        expect(result).to.be.an.array()
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array()
         expect(applyStub.calledOnce).to.be.true()
-        expect(applyStub.calledWith(organisationQuery)).to.be.true()
-        expect(formatResultStub.called).to.be.true()
+        expect(applyStub.calledWith(organisationQuery, true)).to.be.true()
+        expect(formatResultSpy.called).to.be.true()
     })
 
     it('should call both pager and filters if both are present', async () => {
         const pagerStub = sinon.stub(pager, 'applyToQuery')
-        const formatResultStub = sinon
-            .stub(pager, 'formatResult')
-            .callsFake(result => result)
+
+        const formatResultSpy = sinon.spy(pager, 'formatResult')
 
         const filtersStub = sinon.stub(filters, 'applyAllToQuery')
         const result = await executeQuery(organisationQuery, {
             pager,
             filters,
         })
-        expect(result).to.be.an.array()
+        expect(result).to.be.an.object()
+        expect(result.result).to.be.an.array()
         expect(filtersStub.calledOnce).to.be.true()
         expect(filtersStub.calledWith(organisationQuery)).to.be.true()
 
         expect(pagerStub.calledOnce).to.be.true()
-        expect(pagerStub.calledWith(organisationQuery)).to.be.true()
-        expect(formatResultStub.called).to.be.true()
+        expect(pagerStub.calledWith(organisationQuery, true)).to.be.true()
+        expect(formatResultSpy.called).to.be.true()
     })
 
     it('should return formatted result', async () => {
@@ -195,11 +204,12 @@ describe('executeQuery', () => {
         expect(result.pager).to.exist()
     })
 
-    it('should should call getTotalCountQuery if pager is present', async () => {
+    it('should call getTotalCountQuery if pager is present and pagingStrategy is "separate"', async () => {
         const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
         const totalCountQuerySpy = sinon.spy(oneItemPager, 'getTotalCountQuery')
         const result = await executeQuery(organisationQuery, {
             pager: oneItemPager,
+            pagingStrategy: pagingStrategies.SEPARATE,
         })
 
         expect(result).to.be.an.object()
@@ -208,7 +218,7 @@ describe('executeQuery', () => {
         expect(totalCountQuerySpy.calledWith(organisationQuery)).to.be.true()
     })
 
-    it('should should call sliceAndFormatResult if pager is present and slice is true', async () => {
+    it('should call sliceAndFormatResult if pager is present and pagingStrategy is "slice"', async () => {
         const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
         const sliceAndFormatResultSpy = sinon.spy(
             oneItemPager,
@@ -219,7 +229,7 @@ describe('executeQuery', () => {
             {
                 pager: oneItemPager,
             },
-            { slice: true }
+            { pagingStrategy: 'slice' }
         )
 
         expect(result).to.be.an.object()
@@ -228,7 +238,7 @@ describe('executeQuery', () => {
         expect(sliceAndFormatResultSpy.called).to.be.true()
     })
 
-    it('should should not call applyToQuery if pager is present and slice is true', async () => {
+    it('should not call applyToQuery if pager is present and pagingStrategy is "slice"', async () => {
         const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
         const applyToQuerySpy = sinon.spy(oneItemPager, 'applyToQuery')
         const result = await executeQuery(
@@ -236,7 +246,7 @@ describe('executeQuery', () => {
             {
                 pager: oneItemPager,
             },
-            { slice: true }
+            { pagingStrategy: 'slice' }
         )
 
         expect(result).to.be.an.object()
