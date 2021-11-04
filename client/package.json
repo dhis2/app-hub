@@ -1,6 +1,6 @@
 {
     "name": "client",
-    "version": "2.27.1",
+    "version": "2.28.0",
     "description": "The App Hub Client",
     "repository": "https://github.com/dhis2/app-hub",
     "author": "Birk Johansson <birk@dhis2.org>",

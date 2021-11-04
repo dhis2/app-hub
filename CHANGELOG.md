@@ -1,3 +1,17 @@
+# [2.28.0](https://github.com/dhis2/app-hub/compare/v2.27.2...v2.28.0) (2021-11-03)
+
+
+### Features
+
+* configurable total-results strategy ([#571](https://github.com/dhis2/app-hub/issues/571)) ([af594ab](https://github.com/dhis2/app-hub/commit/af594abf7b0c6fc9bae6e012531d9dbe6426d863))
+
+## [2.27.2](https://github.com/dhis2/app-hub/compare/v2.27.1...v2.27.2) (2021-10-19)
+
+
+### Bug Fixes
+
+* **client:** limit max height of screenshot thumbnails ([#574](https://github.com/dhis2/app-hub/issues/574)) ([7a7ea33](https://github.com/dhis2/app-hub/commit/7a7ea3302e8b4767492a069b8e4b302ca9a9643f))
+
 ## [2.27.1](https://github.com/dhis2/app-hub/compare/v2.27.0...v2.27.1) (2021-10-13)
 
 
