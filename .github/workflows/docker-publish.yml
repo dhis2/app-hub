@@ -105,7 +105,7 @@ jobs:
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
 
-            - use: dhis2/action-semantic-release@master
+            - uses: dhis2/action-semantic-release@master
               with:
                   publish-github: true
                   github-token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
