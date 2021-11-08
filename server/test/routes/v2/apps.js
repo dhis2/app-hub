@@ -7,7 +7,7 @@ const streamToPromise = require('stream-to-promise')
 const { it, describe, afterEach, beforeEach, after, before } = (exports.lab =
     Lab.script())
 const {
-    createAppVersion,
+    createAppVersionForm,
 } = require('../../../../tools/helpers/generateAppVersion')
 const knexConfig = require('../../../knexfile')
 const appsMocks = require('../../../seeds/mock/apps')
@@ -153,22 +153,8 @@ describe('v2/apps', () => {
         before(async () => {
             // create a new version to ensure file-exists
             const promises = appsToCreate.map(async app => {
-                const { version, file, manifest } = await createAppVersion(
-                    app,
-                    {
-                        version: '1.2.3',
-                    },
-                    null
-                )
-
-                const form = new FormData()
-                const fileBuffer = file.toBuffer()
-                form.append('version', JSON.stringify(version), {
-                    contentType: 'application/json',
-                })
-                form.append('file', fileBuffer, {
-                    filename: `App_${version.version}.zip`,
-                    contentType: 'application/zip',
+                const form = await createAppVersionForm(app, {
+                    version: '1.2.3',
                 })
                 const req = await server.inject({
                     method: 'POST',
@@ -236,7 +222,6 @@ describe('v2/apps', () => {
                 .getEntries()
                 .find(e => e.entryName === 'manifest.webapp')
             expect(manifest).to.not.be.undefined()
-
         })
 
         describe('unapproved', () => {
