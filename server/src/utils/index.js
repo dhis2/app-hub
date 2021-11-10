@@ -1,5 +1,4 @@
 const createBackingStorageInstance = require('./createBackingStorageInstance')
-const { getClientBaseUrl } = require('./getClientBaseUrl')
 const getServerUrl = require('./getServerUrl')
 
 function flatten(arr, result = []) {
@@ -31,5 +30,4 @@ module.exports = {
     deleteFile,
     deleteDir,
     getServerUrl,
-    getClientBaseUrl,
 }
