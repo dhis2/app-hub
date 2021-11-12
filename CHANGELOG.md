@@ -1,3 +1,10 @@
+## [2.28.1](https://github.com/dhis2/app-hub/compare/v2.28.0...v2.28.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* download unapproved apps ([#578](https://github.com/dhis2/app-hub/issues/578)) ([b49597e](https://github.com/dhis2/app-hub/commit/b49597e8faa58be40a594ce3f973dd8778af3e75))
+
 # [2.28.0](https://github.com/dhis2/app-hub/compare/v2.27.2...v2.28.0) (2021-11-03)
 
 
