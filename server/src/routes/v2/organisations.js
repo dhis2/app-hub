@@ -1,16 +1,16 @@
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
+const { wrapError, UniqueViolationError } = require('db-errors')
 const JWT = require('jsonwebtoken')
-const Joi = require('../../utils/CustomJoi')
+const getUserByEmail = require('../../data/getUserByEmail')
+const OrgModel = require('../../models/v2/Organisation')
 const {
     currentUserIsManager,
     getCurrentUserFromRequest,
 } = require('../../security')
-const getUserByEmail = require('../../data/getUserByEmail')
 const { Organisation } = require('../../services')
-const OrgModel = require('../../models/v2/Organisation')
+const Joi = require('../../utils/CustomJoi')
 // const debug = require('debug')('apphub:server:routes:handlers:organisations')
-const { wrapError, UniqueViolationError } = require('db-errors')
 const getServerUrl = require('../../utils/getServerUrl')
 
 module.exports = [
@@ -87,9 +87,7 @@ module.exports = [
             const { orgIdOrSlug } = request.params
 
             const isUuid =
-                Joi.string()
-                    .uuid()
-                    .validate(orgIdOrSlug).error === undefined
+                Joi.string().uuid().validate(orgIdOrSlug).error === undefined
 
             let organisation
             if (isUuid) {
@@ -132,7 +130,11 @@ module.exports = [
 
             const createOrgAndAddUser = async trx => {
                 const organisation = await Organisation.create(
-                    { userId, name: request.payload.name },
+                    {
+                        userId,
+                        name: request.payload.name,
+                        email: request.payload.email,
+                    },
                     trx
                 )
                 await Organisation.addUserById(organisation.id, userId, trx)
@@ -200,9 +202,7 @@ module.exports = [
             tags: ['api', 'v2'],
             validate: {
                 payload: Joi.object({
-                    email: Joi.string()
-                        .email()
-                        .required(),
+                    email: Joi.string().email().required(),
                 }),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
@@ -338,9 +338,7 @@ module.exports = [
             tags: ['api', 'v2'],
             validate: {
                 payload: Joi.object({
-                    email: Joi.string()
-                        .email()
-                        .required(),
+                    email: Joi.string().email().required(),
                     skipSend: Joi.boolean().default(false),
                 }),
                 params: Joi.object({
