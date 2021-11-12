@@ -3,8 +3,8 @@ const apps = require('./apps')
 const [
     dhis2App,
     whoApp,
-    pendingApp,
     rejectedApp,
+    pendingApp,
     betaOnlyTrackerWidget,
     canaryOnlyDashboardWidget,
 ] = apps

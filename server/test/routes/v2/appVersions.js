@@ -73,6 +73,7 @@ describe('v2/appVersions', () => {
                 expect(v.appId).to.be.a.string()
                 expect(v.version).to.be.a.string()
                 expect(v.minDhisVersion).to.be.a.string()
+                expect(v.downloadUrl).to.be.a.string()
             })
         })
 

@@ -1,36 +1,35 @@
 const { expect } = require('@hapi/code')
 const Lab = require('@hapi/lab')
+const AdmZip = require('adm-zip')
 const FormData = require('form-data')
 const Knex = require('knex')
 const streamToPromise = require('stream-to-promise')
-const { it, describe, afterEach, beforeEach, before } = (exports.lab =
+const { it, describe, afterEach, beforeEach, after, before } = (exports.lab =
     Lab.script())
+const {
+    createAppVersionForm,
+} = require('../../../../tools/helpers/generateAppVersion')
 const knexConfig = require('../../../knexfile')
 const appsMocks = require('../../../seeds/mock/apps')
 const organisations = require('../../../seeds/mock/organisations')
 const users = require('../../../seeds/mock/users')
 const { init } = require('../../../src/server/init-server')
 const { config } = require('../../../src/server/noauth-config')
-
 const dbInstance = Knex(knexConfig)
 
 describe('v2/apps', () => {
     let server
     let db
 
-    before(() => {
+    before(async () => {
         config.auth.noAuthUserIdMapping = users[0].id
-    })
-
-    beforeEach(async () => {
         db = await dbInstance.transaction()
 
         server = await init(db, config)
     })
 
-    afterEach(async () => {
+    after(async () => {
         await server.stop()
-
         await db.rollback()
     })
 
@@ -135,6 +134,203 @@ describe('v2/apps', () => {
 
             const unique = [...new Set(result)]
             expect(unique.length).to.equal(result.length)
+        })
+    })
+
+    describe('download app', () => {
+        const pendingApp = {
+            name: 'Pending App app',
+            id: '02cb663c-5112-400b-8a93-0353187d337b',
+            createdVersionId: null,
+        }
+        const whoApp = {
+            name: 'A nice app by WHO',
+            id: '600c70ef-032e-4ea8-bb49-8a3bf7d166eb',
+            createdVersionId: null,
+        }
+        const appsToCreate = [pendingApp, whoApp]
+
+        before(async () => {
+            // create a new version to ensure file-exists
+            const promises = appsToCreate.map(async app => {
+                const form = await createAppVersionForm(app, {
+                    version: '1.2.3',
+                })
+                const req = await server.inject({
+                    method: 'POST',
+                    url: `/api/v1/apps/${app.id}/versions`,
+                    headers: form.getHeaders(),
+                    payload: form.getBuffer(),
+                })
+                app.createdVersionId = req.result.id
+                return req
+            })
+
+            await Promise.all(promises)
+        })
+
+        after(async () => {
+            const promises = appsToCreate.map(app => {
+                console.log(
+                    'deleting app version',
+                    app.createdVersionId,
+                    app.id,
+                    app.name
+                )
+                return server.inject({
+                    method: 'delete',
+                    url: `/api/v1/apps/${app.id}/versions/${app.createdVersionId}`,
+                })
+            })
+
+            const resolved = (await Promise.all(promises)).map(res =>
+                expect(res.statusCode).to.equal(200)
+            )
+        })
+
+        it('should download file successfully', async () => {
+            const versionsReq = await server.inject({
+                method: 'GET',
+                url: `/api/v2/apps/${whoApp.id}/versions`,
+            })
+
+            const { result } = versionsReq.result
+            expect(result).to.be.an.array()
+
+            const createdVer = result.find(
+                v => v.id === whoApp.createdVersionId
+            )
+            expect(createdVer).to.be.an.object()
+
+            const downloadUrl = createdVer.downloadUrl
+            expect(downloadUrl).to.be.a.string()
+
+            const injUrl = downloadUrl.substring(downloadUrl.indexOf('/api'))
+
+            const downloadRes = await server.inject({
+                method: 'GET',
+                url: injUrl,
+            })
+
+            expect(downloadRes.statusCode).to.equal(200)
+            const zipBuffer = downloadRes.rawPayload
+
+            expect(zipBuffer).to.be.buffer()
+            const zip = new AdmZip(zipBuffer)
+
+            const manifest = zip
+                .getEntries()
+                .find(e => e.entryName === 'manifest.webapp')
+            expect(manifest).to.not.be.undefined()
+        })
+
+        describe('unapproved', () => {
+            it('should prevent download if user is not logged in', async () => {
+                const versionsReq = await server.inject({
+                    method: 'GET',
+                    url: `/api/v2/apps/${pendingApp.id}/versions`,
+                })
+
+                const { result } = versionsReq.result
+                expect(result).to.be.an.array()
+
+                const createdVer = result.find(
+                    v => v.id === pendingApp.createdVersionId
+                )
+                expect(createdVer).to.be.an.object()
+
+                const downloadUrl = createdVer.downloadUrl
+                expect(downloadUrl).to.be.a.string()
+
+                const injUrl = downloadUrl.substring(
+                    downloadUrl.indexOf('/api')
+                )
+
+                const downloadRes = await server.inject({
+                    method: 'GET',
+                    url: injUrl,
+                    auth: {
+                        strategy: 'no-auth',
+                        credentials: {
+                            userId: null,
+                            roles: [],
+                        },
+                    },
+                })
+                expect(downloadRes.statusCode).to.equal(404)
+            })
+
+            it('should prevent download if user does not have access to app or is not a manager', async () => {
+                const versionsReq = await server.inject({
+                    method: 'GET',
+                    url: `/api/v2/apps/${pendingApp.id}/versions`,
+                })
+
+                const { result } = versionsReq.result
+                expect(result).to.be.an.array()
+
+                const createdVer = result.find(
+                    v => v.id === pendingApp.createdVersionId
+                )
+                expect(createdVer).to.be.an.object()
+
+                const downloadUrl = createdVer.downloadUrl
+                expect(downloadUrl).to.be.a.string()
+
+                const injUrl = downloadUrl.substring(
+                    downloadUrl.indexOf('/api')
+                )
+
+                const downloadRes = await server.inject({
+                    method: 'GET',
+                    url: injUrl,
+                    auth: {
+                        strategy: 'no-auth',
+                        credentials: {
+                            // some user that does not exist
+                            userId: '2557234e-38d8-4037-9429-80c986632800',
+                            roles: [],
+                        },
+                    },
+                })
+                expect(downloadRes.statusCode).to.equal(403)
+            })
+
+            it('should allow managers to download if unapproved', async () => {
+                const versionsReq = await server.inject({
+                    method: 'GET',
+                    url: `/api/v2/apps/${pendingApp.id}/versions`,
+                })
+
+                const { result } = versionsReq.result
+                expect(result).to.be.an.array()
+
+                const createdVer = result.find(
+                    v => v.id === pendingApp.createdVersionId
+                )
+                expect(createdVer).to.be.an.object()
+
+                const downloadUrl = createdVer.downloadUrl
+                expect(downloadUrl).to.be.a.string()
+
+                const injUrl = downloadUrl.substring(
+                    downloadUrl.indexOf('/api')
+                )
+
+                const downloadRes = await server.inject({
+                    method: 'GET',
+                    url: injUrl,
+                    auth: {
+                        strategy: 'no-auth',
+                        credentials: {
+                            // some user that does not exist but have role
+                            userId: '3557237e-38d8-4037-9429-80c986632800',
+                            roles: ['App Hub Manager'], // TODO: Fix circular dependncy and import this
+                        },
+                    },
+                })
+                expect(downloadRes.statusCode).to.equal(200)
+            })
         })
     })
 })

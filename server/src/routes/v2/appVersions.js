@@ -52,11 +52,16 @@ module.exports = [
             const pager = request.plugins.pagination
             const { appVersionService } = request.services(true)
 
+            const setDownloadUrl =
+                appVersionService.createSetDownloadUrl(request)
+
             const versions = await appVersionService.findByAppId(
                 appId,
                 { pager, filters },
                 db
             )
+
+            versions.result.map(setDownloadUrl)
 
             return h.response(versions)
         },

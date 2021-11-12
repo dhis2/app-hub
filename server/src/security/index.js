@@ -87,6 +87,25 @@ const getCurrentUserFromRequest = request => {
     })
 }
 
+// used with server.decorate to make request.getUser() available
+// this-context is the request-object
+const getUserDecoration = function () {
+    try {
+        const { userId, name } = this.auth.credentials
+
+        if (userId == null) {
+            return null
+        }
+
+        return {
+            id: userId,
+            name,
+        }
+    } catch (e) {
+        return null
+    }
+}
+
 module.exports = {
     canDeleteApp,
     canChangeAppStatus,
@@ -96,6 +115,7 @@ module.exports = {
     createUserValidationFunc: require('./createUserValidationFunc'),
     createApiKeyValidationFunc: require('./createApiKeyValidationFunc'),
     getCurrentUserFromRequest,
+    getUserDecoration,
     currentUserIsManager,
     ROLES,
     verifyBundle: require('./verifyBundle'),
