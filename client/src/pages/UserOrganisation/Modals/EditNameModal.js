@@ -7,6 +7,8 @@ import {
     ReactFinalForm,
     InputFieldFF,
     hasValue,
+    composeValidators,
+    email,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import styles from './Modal.module.css'
@@ -17,12 +19,13 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
-    const handleSubmit = async ({ name }) => {
+    const handleSubmit = async ({ name, email }) => {
         try {
-            await api.editOrganisation(organisation.id, { name })
+            await api.editOrganisation(organisation.id, { name, email })
             mutate({
                 ...organisation,
                 name,
+                email,
             })
             successAlert.show({
                 message: `Successfully updated organisation name to ${name}`,
@@ -49,6 +52,17 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                 component={InputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
+                            />
+                            <ReactFinalForm.Field
+                                required
+                                name="email"
+                                label="Contact email"
+                                placeholder="Enter an email address"
+                                type="email"
+                                component={InputFieldFF}
+                                initialValue={organisation.email}
+                                className={styles.field}
+                                validate={composeValidators(hasValue, email)}
                             />
                             <ButtonStrip end>
                                 <Button onClick={onClose} disabled={submitting}>
