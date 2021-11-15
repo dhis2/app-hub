@@ -1,8 +1,8 @@
-const { NotFoundError } = require('../utils/errors')
-const { slugify } = require('../utils/slugify')
-const Organisation = require('../models/v2/Organisation')
 const Boom = require('@hapi/boom')
 const JWT = require('jsonwebtoken')
+const Organisation = require('../models/v2/Organisation')
+const { NotFoundError } = require('../utils/errors')
+const { slugify } = require('../utils/slugify')
 
 const getOrganisationQuery = db =>
     db('organisation').select(
@@ -45,12 +45,13 @@ const ensureUniqueSlug = async (slug, knex) => {
  * @param {string} data.userId User id creating the data
  * @param {*} db
  */
-const create = async ({ userId, name }, db) => {
+const create = async ({ userId, name, email }, db) => {
     const slug = await ensureUniqueSlug(slugify(name), db)
     const obj = {
         owner: userId,
         name,
         slug,
+        email,
     }
     const dbData = Organisation.formatDatabaseJson(obj)
     const [organisation] = await db('organisation')
@@ -138,9 +139,7 @@ const update = async (id, updateData, db) => {
         dbData.slug = slug
     }
 
-    return db('organisation')
-        .update(dbData)
-        .where({ id })
+    return db('organisation').update(dbData).where({ id })
 }
 
 const addUserById = async (id, userId, db) => {
@@ -162,9 +161,7 @@ const removeUser = async (id, userId, db) => {
     return query
 }
 const remove = async (id, db) => {
-    await db('organisation')
-        .where({ id })
-        .delete()
+    await db('organisation').where({ id }).delete()
 }
 
 const hasUser = async (id, userId, knex) => {
