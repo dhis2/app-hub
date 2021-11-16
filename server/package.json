@@ -29,7 +29,7 @@
         "adm-zip": "^0.5.5",
         "@hapipal/schmervice": "^2.0.0",
         "auth0": "^2.32.0",
-        "aws-sdk": "^2.640.0",
+        "aws-sdk": "^2.814.0",
         "blipp": "^4.0.1",
         "db-errors": "^0.2.3",
         "debug": "^4.1.1",
