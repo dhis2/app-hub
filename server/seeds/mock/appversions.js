@@ -42,6 +42,22 @@ const dhis2AppVersions = [
         version: '0.3-dev',
         created_at: createdAtDate(),
     },
+    {
+        id: '2812d245-96de-42c4-b651-25cb313414d6',
+        app_id: dhis2App.id,
+        created_by_user_id: dhis2App.created_by_user_id,
+        version: '1.0.0',
+        created_at: createdAtDate(),
+    },
+    {
+        id: '7be62020-5bcf-4d32-a83b-b2412bcd01bb',
+        app_id: dhis2App.id,
+        created_by_user_id: dhis2App.created_by_user_id,
+        version: '1.1.0',
+        created_at: createdAtDate(),
+    },
+
+
 ]
 const whoAppVersions = [
     {

@@ -224,7 +224,7 @@ describe('v2/appVersions', () => {
                 })
             })
 
-            it('should not fail when version include valid semver characters', async () => {
+            it('should not fail when version include valid semver tags', async () => {
                 const request = {
                     method: 'GET',
                     url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=lte:2.34-beta&minDhisVersion=gte:2.29-alpha`,
@@ -249,6 +249,109 @@ describe('v2/appVersions', () => {
                         expect(major).to.be.between(28, 35)
                     }
                 })
+            })
+
+            it('should work with same version, returning a range', async () => {
+                const compatVersion = '2.30'
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=lte:${compatVersion}&maxDhisVersion=gte:${compatVersion}`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    expect(v.minDhisVersion).to.be.below(31)
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.greaterThan(29)
+                    }
+                })
+            })
+
+            it('should work with patch versions', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=gte:2.31.10&maxDhisVersion=gte:2.33.0`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                console.log('verz', versions)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach(v => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    console.log('maxz', v.maxDhisVersion)
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        major && expect(major).to.be.above(32)
+                    }
+                })
+            })
+
+            it('should work with maxDhisVersion if app has empty maxDhisVersion', async () => {
+                const allVersionsReq = {
+                    url: `/api/v2/apps/${dhis2App.id}/versions`,
+                }
+
+                const allVersionRes = await server.inject(allVersionsReq)
+
+                expect(allVersionRes.statusCode).to.equal(200)
+                const allVersions = allVersionRes.result.result
+                expect(allVersions.length).to.above(3) // should have at atleast 4 versions
+
+                const emptyMax = [null, '']
+                const totalEmptyCount = allVersions.reduce(
+                    (acc, curr) =>
+                        emptyMax.includes(curr.maxDhisVersion) ? acc + 1 : acc,
+                    0
+                )
+
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?maxDhisVersion=gte:2.37`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                console.log('maxRes', result)
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+
+                // check that it still returns empty maxDhisVersions
+                const emptyCount = versions.reduce(
+                    (acc, curr) =>
+                        emptyMax.includes(curr.maxDhisVersion) ? acc + 1 : acc,
+                    0
+                )
+                expect(emptyCount).to.equal(totalEmptyCount)
             })
         })
     })

@@ -76,6 +76,22 @@ const dhis2AppVersionsLocalized = [
         'En fin WHO app',
         'Detta är en mycket fin applikation, ostabil utvecklings-version.'
     ),
+    mockAppVersion(
+        'b6ce3233-90d1-40fa-a1cf-d148e3025616',
+        dhis2AppVersions,
+        3,
+        'en',
+        'A nice app',
+        'This is a really nice app by DHIS2!'
+    ),
+    mockAppVersion(
+        '564e6388-5d7e-4bac-a093-d80e3471ad1a',
+        dhis2AppVersions,
+        4,
+        'en',
+        'A nice app',
+        'This is a really nice app by DHIS2!'
+    ),
 ]
 
 const whoAppVersionsLocalized = [
