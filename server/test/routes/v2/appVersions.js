@@ -321,10 +321,12 @@ describe('v2/appVersions', () => {
                 const allVersions = allVersionRes.result.result
                 expect(allVersions.length).to.above(3) // should have at atleast 4 versions
 
-                const emptyMax = [null, '']
+                const emptyValues = [null, '']
                 const totalEmptyCount = allVersions.reduce(
                     (acc, curr) =>
-                        emptyMax.includes(curr.maxDhisVersion) ? acc + 1 : acc,
+                        emptyValues.includes(curr.maxDhisVersion)
+                            ? acc + 1
+                            : acc,
                     0
                 )
 
@@ -338,7 +340,6 @@ describe('v2/appVersions', () => {
                 expect(res.statusCode).to.equal(200)
 
                 const result = res.result
-                console.log('maxRes', result)
                 const versions = result.result
 
                 expect(versions.length).to.be.above(0)
@@ -348,7 +349,9 @@ describe('v2/appVersions', () => {
                 // check that it still returns empty maxDhisVersions
                 const emptyCount = versions.reduce(
                     (acc, curr) =>
-                        emptyMax.includes(curr.maxDhisVersion) ? acc + 1 : acc,
+                        emptyValues.includes(curr.maxDhisVersion)
+                            ? acc + 1
+                            : acc,
                     0
                 )
                 expect(emptyCount).to.equal(totalEmptyCount)
