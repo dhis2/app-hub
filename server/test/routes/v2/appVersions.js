@@ -137,10 +137,8 @@ describe('v2/appVersions', () => {
                 expect(res.statusCode).to.equal(200)
 
                 const result = res.result
-                console.log(result)
                 const versions = result.result
 
-                console.log(versions)
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
                 versions.forEach(v => {
                     expect(v.appId).to.be.a.string()
@@ -295,12 +293,11 @@ describe('v2/appVersions', () => {
                 const versions = result.result
 
                 expect(versions.length).to.be.above(0)
-                console.log('verz', versions)
+
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
                 versions.forEach(v => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
-                    console.log('maxz', v.maxDhisVersion)
                     if (v.maxDhisVersion) {
                         const [, major] = v.maxDhisVersion
                             .split('.')
@@ -322,11 +319,11 @@ describe('v2/appVersions', () => {
                 expect(allVersions.length).to.above(3) // should have at atleast 4 versions
 
                 const emptyValues = [null, '']
+                const countEmptyMaxVersion = (acc, curr) =>
+                    emptyValues.includes(curr.maxDhisVersion) ? acc + 1 : acc
+
                 const totalEmptyCount = allVersions.reduce(
-                    (acc, curr) =>
-                        emptyValues.includes(curr.maxDhisVersion)
-                            ? acc + 1
-                            : acc,
+                    countEmptyMaxVersion,
                     0
                 )
 
@@ -347,13 +344,7 @@ describe('v2/appVersions', () => {
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
 
                 // check that it still returns empty maxDhisVersions
-                const emptyCount = versions.reduce(
-                    (acc, curr) =>
-                        emptyValues.includes(curr.maxDhisVersion)
-                            ? acc + 1
-                            : acc,
-                    0
-                )
+                const emptyCount = versions.reduce(countEmptyMaxVersion, 0)
                 expect(emptyCount).to.equal(totalEmptyCount)
             })
         })
