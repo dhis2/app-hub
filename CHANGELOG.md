@@ -1,3 +1,10 @@
+## [2.28.2](https://github.com/dhis2/app-hub/compare/v2.28.1...v2.28.2) (2021-11-30)
+
+
+### Bug Fixes
+
+* save org-email ([#587](https://github.com/dhis2/app-hub/issues/587)) ([e76ed33](https://github.com/dhis2/app-hub/commit/e76ed33048da03a69504b2c02929680f3427d8e6))
+
 ## [2.28.1](https://github.com/dhis2/app-hub/compare/v2.28.0...v2.28.1) (2021-11-12)
 
 
