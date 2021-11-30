@@ -1,6 +1,7 @@
 const Joi = require('../../utils/CustomJoi')
+const { isValidDHIS2Version } = require('../helpers')
 const { definition: defaultDefinition } = require('./Default')
-const { createDefaultValidator } = require('./helpers')
+const { createDefaultValidator, createDefaultFormatter } = require('./helpers')
 
 const definition = defaultDefinition
     .append({
@@ -9,8 +10,12 @@ const definition = defaultDefinition
         channel: Joi.string().required(),
         demoUrl: Joi.string().uri().allow(null, ''),
         downloadUrl: Joi.string().uri().allow(''),
-        minDhisVersion: Joi.string().required(),
-        maxDhisVersion: Joi.string().allow(null, ''),
+        minDhisVersion: Joi.string()
+            .required()
+            .custom(isValidDHIS2Version, 'DHIS2 validate version'),
+        maxDhisVersion: Joi.string()
+            .allow(null, '')
+            .custom(isValidDHIS2Version, 'DHIS2 validate version'),
         slug: Joi.string(),
     })
     .alter({
@@ -29,7 +34,7 @@ const dbDefinition = definition.tailor('db')
 const externalDefinition = definition.tailor('external')
 
 // database -> internal
-const parseDatabaseJson = createDefaultValidator(definition)
+const parseDatabaseJson = createDefaultFormatter(definition)
 
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)

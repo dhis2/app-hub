@@ -1,6 +1,6 @@
 const Joi = require('joi')
 const { AppTypes } = require('../../../enums')
-const { isSemver } = require('../../helpers')
+const { isSemver, isValidDHIS2Version } = require('../../helpers')
 
 const CreateModelAppData = Joi.object().keys({
     name: Joi.string(),
@@ -13,8 +13,13 @@ const CreateModelAppData = Joi.object().keys({
     }),
     version: Joi.object().keys({
         version: Joi.string().custom(isSemver, 'semver validate'),
-        minDhisVersion: Joi.string(),
-        maxDhisVersion: Joi.string().allow(''),
+        minDhisVersion: Joi.string().custom(
+            isValidDHIS2Version,
+            'DHIS2 validate version'
+        ),
+        maxDhisVersion: Joi.string()
+            .allow('')
+            .custom(isValidDHIS2Version, 'DHIS2 validate version'),
         demoUrl: Joi.string().uri().allow(''),
         channel: Joi.string(),
     }),
