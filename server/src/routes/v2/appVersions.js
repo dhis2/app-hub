@@ -1,11 +1,11 @@
 //const Boom = require('@hapi/boom')
+const { isValidDHIS2Version } = require('../../models/helpers')
 const AppVersionModel = require('../../models/v2/AppVersion')
 const {
     withPagingResultSchema,
     withPagingQuerySchema,
 } = require('../../query/Pager')
 const Joi = require('../../utils/CustomJoi')
-
 const CHANNELS = ['stable', 'development', 'canary']
 
 module.exports = [
@@ -30,8 +30,12 @@ module.exports = [
                         channel: Joi.filter(
                             Joi.stringArray().items(Joi.valid(...CHANNELS))
                         ).description('Filter by channel of the version'),
-                        minDhisVersion: Joi.filter(Joi.string()),
-                        maxDhisVersion: Joi.filter(Joi.string()),
+                        minDhisVersion: Joi.filter(
+                            Joi.string().custom(isValidDHIS2Version)
+                        ),
+                        maxDhisVersion: Joi.filter(
+                            Joi.string().custom(isValidDHIS2Version)
+                        ),
                     })
                 ),
             },
