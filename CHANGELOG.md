@@ -1,3 +1,10 @@
+## [2.28.3](https://github.com/dhis2/app-hub/compare/v2.28.2...v2.28.3) (2021-12-01)
+
+
+### Bug Fixes
+
+* **filter:** properly include version if maxDhisVersion is empty ([#593](https://github.com/dhis2/app-hub/issues/593)) ([c4ce7c8](https://github.com/dhis2/app-hub/commit/c4ce7c80a1bdd515151001994c02a6e296786983))
+
 ## [2.28.2](https://github.com/dhis2/app-hub/compare/v2.28.1...v2.28.2) (2021-11-30)
 
 
