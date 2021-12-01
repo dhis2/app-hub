@@ -46,7 +46,20 @@ exports.seed = async knex => {
             min_dhis2_version: '2.32',
             created_by_user_id: dhis2AppVersions[2].created_by_user_id,
         },
-
+        {
+            app_version_id: dhis2AppVersions[3].id,
+            channel_id: canaryId,
+            min_dhis2_version: '2.33',
+            max_dhis2_version: '2.40',
+            created_by_user_id: dhis2AppVersions[3].created_by_user_id,
+        },
+        {
+            app_version_id: dhis2AppVersions[4].id,
+            channel_id: canaryId,
+            min_dhis2_version: '2.33',
+            max_dhis2_version: '',
+            created_by_user_id: dhis2AppVersions[4].created_by_user_id,
+        },
         {
             app_version_id: whoAppVersions[0].id,
             channel_id: stableId,

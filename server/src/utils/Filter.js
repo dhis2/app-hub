@@ -125,7 +125,7 @@ class Filters {
             query.where(builder => {
                 builder.where(nameToUse, toSQLOperator(operator, value), value)
                 if (settings.includeEmpty) {
-                    builder.orWhereRaw(`nullif( ??, ' ') is null`, nameToUse)
+                    builder.orWhereRaw(`nullif( ??, '') is null`, nameToUse)
                 }
             })
             this.markApplied(fieldName)
@@ -164,7 +164,7 @@ class Filters {
                 [colName, filter.value]
             )
             if (options.includeEmpty) {
-                builder.orWhereRaw(`nullif( ??, ' ') is null`, colName)
+                builder.orWhereRaw(`nullif( ??, '') is null`, colName)
             }
         })
         this.markApplied(filterName)
