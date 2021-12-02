@@ -53,13 +53,7 @@ const getApps = (
                 })
             }
         })
-        .orderBy([
-            'name',
-            {
-                column: 'version_created_at',
-                order: 'desc',
-            },
-        ])
+        .orderBy(['name', { column: 'version_created_at', order: 'desc' }])
 }
 
 module.exports = getApps
