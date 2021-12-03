@@ -1,3 +1,11 @@
+## [2.28.4](https://github.com/dhis2/app-hub/compare/v2.28.3...v2.28.4) (2021-12-03)
+
+
+### Bug Fixes
+
+* sort versions by created-date ([#577](https://github.com/dhis2/app-hub/issues/577)) ([0addf38](https://github.com/dhis2/app-hub/commit/0addf38dd7c20e6072fbb75258a6c3c0e0cfe534))
+* validate app-name length ([#572](https://github.com/dhis2/app-hub/issues/572)) ([c6857eb](https://github.com/dhis2/app-hub/commit/c6857ebafd51bf198764aff6df2166a083e83b45))
+
 ## [2.28.3](https://github.com/dhis2/app-hub/compare/v2.28.2...v2.28.3) (2021-12-01)
 
 
