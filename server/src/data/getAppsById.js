@@ -26,6 +26,7 @@ const getAppsById = async (id, languageCode, knex) => {
                 app_id: id,
                 language_code: languageCode,
             })
+            .orderBy('version_created_at', 'desc')
 
         return apps
     } catch (err) {

@@ -3,7 +3,9 @@ const { AppTypes } = require('../../../enums')
 const { isSemver } = require('../../helpers')
 
 const CreateModelAppData = Joi.object().keys({
-    name: Joi.string(),
+    name: Joi.string()
+        .max(100)
+        .message('App name cannot exceed 100 characters'),
     description: Joi.string(),
     appType: Joi.string().valid(...AppTypes),
     sourceUrl: Joi.string().uri(),

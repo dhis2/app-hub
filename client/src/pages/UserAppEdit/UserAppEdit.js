@@ -17,6 +17,7 @@ import { useHistory } from 'react-router-dom'
 import styles from './UserAppEdit.module.css'
 import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
+import { nameLengthValidator } from 'src/lib/form-validators'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 import { isManager as isManagerSelector } from 'src/selectors/userSelectors'
 
@@ -80,7 +81,7 @@ const UserAppEdit = ({ match }) => {
                             initialValue={app.name}
                             component={InputFieldFF}
                             className={styles.field}
-                            validate={hasValue}
+                            validate={nameLengthValidator}
                         />
                         <ReactFinalForm.Field
                             required
