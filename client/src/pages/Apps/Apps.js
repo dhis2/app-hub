@@ -1,4 +1,4 @@
-import { Pagination } from '@dhis2/ui'
+import { Divider, Pagination } from '@dhis2/ui'
 import { useMemo } from 'react'
 import { useDebounce } from 'use-debounce'
 import {
@@ -12,6 +12,7 @@ import {
 import AppCards from './AppCards/AppCards'
 import styles from './Apps.module.css'
 import Filters from './Filters/Filters'
+import { SidebarInfo } from './SidebarInfo/SidebarInfo'
 import config from 'config'
 import { useQuery } from 'src/api'
 
@@ -95,6 +96,10 @@ const Apps = () => {
                     query={query}
                     onQueryChange={setQuery}
                 />
+                <div className={styles.dividerContainer}>
+                    <Divider />
+                    <SidebarInfo />
+                </div>
             </div>
             <div className={styles.apps}>
                 <AppCards
