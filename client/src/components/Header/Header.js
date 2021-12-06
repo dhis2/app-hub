@@ -84,30 +84,35 @@ const NavLink = props => (
     <NavLink_ activeClassName={styles.activeNavLink} {...props}></NavLink_>
 )
 
-const Header = () => (
-    <header className={styles.header}>
-        <nav className={styles.nav}>
-            <Link to="/" className={styles.brand}>
-                <LogoIconWhite className={styles.brandLogo} />
-                <h1 className={styles.brandText}>DHIS2 App Hub</h1>
-            </Link>
+const Header = () => {
+    const { isAuthenticated } = useAuth0()
+    return (
+        <header className={styles.header}>
+            <nav className={styles.nav}>
+                <Link to="/" className={styles.brand}>
+                    <LogoIconWhite className={styles.brandLogo} />
+                    <h1 className={styles.brandText}>DHIS2 App Hub</h1>
+                </Link>
 
-            <ul className={styles.navLinks}>
-                <li className={styles.navLink}>
-                    <NavLink exact to="/">
-                        All apps
-                    </NavLink>
-                </li>
-                <li className={styles.yourAppsLink}>
-                    <NavLink exact to="/user">
-                        Your apps
-                    </NavLink>
-                </li>
-            </ul>
-        </nav>
+                <ul className={styles.navLinks}>
+                    <li className={styles.navLink}>
+                        <NavLink exact to="/">
+                            All apps
+                        </NavLink>
+                    </li>
+                    <li className={styles.yourAppsLink}>
+                        {isAuthenticated && (
+                            <NavLink exact to="/user">
+                                My apps
+                            </NavLink>
+                        )}
+                    </li>
+                </ul>
+            </nav>
 
-        <ProfileButton />
-    </header>
-)
+            <ProfileButton />
+        </header>
+    )
+}
 
 export default Header
