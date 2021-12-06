@@ -103,7 +103,7 @@ const Header = () => {
                     <li className={styles.yourAppsLink}>
                         {isAuthenticated && (
                             <NavLink exact to="/user">
-                                My apps
+                                Your apps
                             </NavLink>
                         )}
                     </li>
