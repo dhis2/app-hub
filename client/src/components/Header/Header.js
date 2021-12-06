@@ -16,7 +16,7 @@ const NotLoggedInIcon = () => {
 
     return (
         <button className={styles.signInButton} onClick={loginWithRedirect}>
-            Sign in
+            Developer Sign in
         </button>
     )
 }
@@ -65,12 +65,12 @@ const ProfileButton = () => {
                 </span>
             </DropdownMenuItemLink>
             <Divider dense />
-            <DropdownMenuItemLink to="/user">Your apps</DropdownMenuItemLink>
+            <DropdownMenuItemLink to="/user">My apps</DropdownMenuItemLink>
             <DropdownMenuItemLink to="/user/organisations">
-                Your organisations
+                My organisations
             </DropdownMenuItemLink>
             <DropdownMenuItemLink to="/user/apikey">
-                Your API keys
+                My API keys
             </DropdownMenuItemLink>
             <Divider dense />
             <DropdownMenuItem onClick={handleLogout}>Sign out</DropdownMenuItem>
