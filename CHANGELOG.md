@@ -1,3 +1,10 @@
+## [2.29.1](https://github.com/dhis2/app-hub/compare/v2.29.0...v2.29.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* hide apps in header-menu when not logged in ([#603](https://github.com/dhis2/app-hub/issues/603)) ([47eab75](https://github.com/dhis2/app-hub/commit/47eab75133e3527d052b1b216210960194748205))
+
 # [2.29.0](https://github.com/dhis2/app-hub/compare/v2.28.4...v2.29.0) (2021-12-06)
 
 
