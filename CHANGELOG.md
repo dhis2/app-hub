@@ -1,3 +1,10 @@
+# [2.29.0](https://github.com/dhis2/app-hub/compare/v2.28.4...v2.29.0) (2021-12-06)
+
+
+### Features
+
+* **sidebar:** add information links to sidebar ([#601](https://github.com/dhis2/app-hub/issues/601)) ([2c014fd](https://github.com/dhis2/app-hub/commit/2c014fd7aaa12e1636e6989fd9326a47cc876e87))
+
 ## [2.28.4](https://github.com/dhis2/app-hub/compare/v2.28.3...v2.28.4) (2021-12-03)
 
 
