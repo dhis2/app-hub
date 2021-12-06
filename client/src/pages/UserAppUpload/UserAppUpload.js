@@ -20,8 +20,11 @@ import styles from './UserAppUpload.module.css'
 import config from 'config'
 import { useQuery } from 'src/api'
 import * as api from 'src/api'
-import { maxDhisVersionValidator } from 'src/lib/form-validators/max-dhis-version-validator'
-import { semverValidator } from 'src/lib/form-validators/semver-validator'
+import {
+    maxDhisVersionValidator,
+    nameLengthValidator,
+    semverValidator,
+} from 'src/lib/form-validators'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 import { useModalState } from 'src/lib/use-modal-state'
 
@@ -58,7 +61,11 @@ const requestOpts = {
 }
 
 const UserAppUpload = ({ user }) => {
-    const { data: organisations, error, mutate } = useQuery(
+    const {
+        data: organisations,
+        error,
+        mutate,
+    } = useQuery(
         'organisations',
         useMemo(
             () => ({
@@ -212,7 +219,7 @@ const UserAppUpload = ({ user }) => {
                                 placeholder="e.g. 'Data Visualizer' or 'Interactive Scorecards'"
                                 component={InputFieldFF}
                                 className={styles.field}
-                                validate={hasValue}
+                                validate={nameLengthValidator}
                             />
                             <ReactFinalForm.Field
                                 required

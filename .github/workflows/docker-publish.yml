@@ -16,7 +16,6 @@ env:
     GIT_AUTHOR_EMAIL: 'apps@dhis2.org'
     GIT_COMMITTER_NAME: '@dhis2-bot'
     GIT_COMMITTER_EMAIL: 'apps@dhis2.org'
-    GH_TOKEN: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
 
 jobs:
     publish:
@@ -27,7 +26,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
               with:
-                  token: ${{env.GH_TOKEN}}
+                  token: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
 
             - name: Configure AWS credentials
               uses: aws-actions/configure-aws-credentials@v1
@@ -106,5 +105,7 @@ jobs:
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
 
-            - name: Publish to GitHub
-              run: npx @dhis2/cli-utils release
+            - uses: dhis2/action-semantic-release@master
+              with:
+                  publish-github: true
+                  github-token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}

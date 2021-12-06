@@ -19,6 +19,7 @@ const getAllAppsByLanguage = (languageCode, knex) => {
         .where({
             language_code: languageCode,
         })
+        .orderBy('version_created_at', 'desc')
 }
 
 module.exports = getAllAppsByLanguage
