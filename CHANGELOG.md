@@ -1,3 +1,10 @@
+## [2.29.2](https://github.com/dhis2/app-hub/compare/v2.29.1...v2.29.2) (2021-12-07)
+
+
+### Bug Fixes
+
+* fix sidebarInfo divider margin ([#604](https://github.com/dhis2/app-hub/issues/604)) ([a808ab9](https://github.com/dhis2/app-hub/commit/a808ab9b93572b72b03a54eca2d7cdb6048871d4))
+
 ## [2.29.1](https://github.com/dhis2/app-hub/compare/v2.29.0...v2.29.1) (2021-12-06)
 
 
