@@ -1,5 +1,5 @@
 .container {
-    
+    margin: var(--spacers-dp16) 0;
 }
 
 .entry {
@@ -9,7 +9,7 @@
 }
 
 .icon {
-    margin-right: var(--spacers-dp8)
+    margin-right: var(--spacers-dp8);
 }
 
 .link {
