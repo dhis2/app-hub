@@ -1,3 +1,122 @@
+## [2.29.2](https://github.com/dhis2/app-hub/compare/v2.29.1...v2.29.2) (2021-12-07)
+
+
+### Bug Fixes
+
+* fix sidebarInfo divider margin ([#604](https://github.com/dhis2/app-hub/issues/604)) ([a808ab9](https://github.com/dhis2/app-hub/commit/a808ab9b93572b72b03a54eca2d7cdb6048871d4))
+
+## [2.29.1](https://github.com/dhis2/app-hub/compare/v2.29.0...v2.29.1) (2021-12-06)
+
+
+### Bug Fixes
+
+* hide apps in header-menu when not logged in ([#603](https://github.com/dhis2/app-hub/issues/603)) ([47eab75](https://github.com/dhis2/app-hub/commit/47eab75133e3527d052b1b216210960194748205))
+
+# [2.29.0](https://github.com/dhis2/app-hub/compare/v2.28.4...v2.29.0) (2021-12-06)
+
+
+### Features
+
+* **sidebar:** add information links to sidebar ([#601](https://github.com/dhis2/app-hub/issues/601)) ([2c014fd](https://github.com/dhis2/app-hub/commit/2c014fd7aaa12e1636e6989fd9326a47cc876e87))
+
+## [2.28.4](https://github.com/dhis2/app-hub/compare/v2.28.3...v2.28.4) (2021-12-03)
+
+
+### Bug Fixes
+
+* sort versions by created-date ([#577](https://github.com/dhis2/app-hub/issues/577)) ([0addf38](https://github.com/dhis2/app-hub/commit/0addf38dd7c20e6072fbb75258a6c3c0e0cfe534))
+* validate app-name length ([#572](https://github.com/dhis2/app-hub/issues/572)) ([c6857eb](https://github.com/dhis2/app-hub/commit/c6857ebafd51bf198764aff6df2166a083e83b45))
+
+## [2.28.3](https://github.com/dhis2/app-hub/compare/v2.28.2...v2.28.3) (2021-12-01)
+
+
+### Bug Fixes
+
+* **filter:** properly include version if maxDhisVersion is empty ([#593](https://github.com/dhis2/app-hub/issues/593)) ([c4ce7c8](https://github.com/dhis2/app-hub/commit/c4ce7c80a1bdd515151001994c02a6e296786983))
+
+## [2.28.2](https://github.com/dhis2/app-hub/compare/v2.28.1...v2.28.2) (2021-11-30)
+
+
+### Bug Fixes
+
+* save org-email ([#587](https://github.com/dhis2/app-hub/issues/587)) ([e76ed33](https://github.com/dhis2/app-hub/commit/e76ed33048da03a69504b2c02929680f3427d8e6))
+
+## [2.28.1](https://github.com/dhis2/app-hub/compare/v2.28.0...v2.28.1) (2021-11-12)
+
+
+### Bug Fixes
+
+* download unapproved apps ([#578](https://github.com/dhis2/app-hub/issues/578)) ([b49597e](https://github.com/dhis2/app-hub/commit/b49597e8faa58be40a594ce3f973dd8778af3e75))
+
+# [2.28.0](https://github.com/dhis2/app-hub/compare/v2.27.2...v2.28.0) (2021-11-03)
+
+
+### Features
+
+* configurable total-results strategy ([#571](https://github.com/dhis2/app-hub/issues/571)) ([af594ab](https://github.com/dhis2/app-hub/commit/af594abf7b0c6fc9bae6e012531d9dbe6426d863))
+
+## [2.27.2](https://github.com/dhis2/app-hub/compare/v2.27.1...v2.27.2) (2021-10-19)
+
+
+### Bug Fixes
+
+* **client:** limit max height of screenshot thumbnails ([#574](https://github.com/dhis2/app-hub/issues/574)) ([7a7ea33](https://github.com/dhis2/app-hub/commit/7a7ea3302e8b4767492a069b8e4b302ca9a9643f))
+
+## [2.27.1](https://github.com/dhis2/app-hub/compare/v2.27.0...v2.27.1) (2021-10-13)
+
+
+### Bug Fixes
+
+* limit versions returned from /apps endpoints ([#570](https://github.com/dhis2/app-hub/issues/570)) ([74550df](https://github.com/dhis2/app-hub/commit/74550df55f2ed076ea09aa3d798feafc0e37b50f))
+
+# [2.27.0](https://github.com/dhis2/app-hub/compare/v2.26.0...v2.27.0) (2021-10-12)
+
+
+### Features
+
+* client version pagination ([#555](https://github.com/dhis2/app-hub/issues/555)) ([26a521d](https://github.com/dhis2/app-hub/commit/26a521d1b7ffa8417a43e530225adf07597db71b))
+
+# [2.26.0](https://github.com/dhis2/app-hub/compare/v2.25.2...v2.26.0) (2021-10-04)
+
+
+### Bug Fixes
+
+* **appversion:** fix version filtering and comparison ([#551](https://github.com/dhis2/app-hub/issues/551)) ([854f32b](https://github.com/dhis2/app-hub/commit/854f32b2e8d7251e17bb92167316b2a3e7dc4056))
+* remove core-app tag ([#550](https://github.com/dhis2/app-hub/issues/550)) ([3e92a90](https://github.com/dhis2/app-hub/commit/3e92a909de46aec2d7881a5e0d9a91726b675484))
+
+
+### Features
+
+* **apps:** availableChannels API ([#559](https://github.com/dhis2/app-hub/issues/559)) ([6a09f97](https://github.com/dhis2/app-hub/commit/6a09f972ff795b1f74e75dd420ed8df8598c13de))
+
+## [2.25.2](https://github.com/dhis2/app-hub/compare/v2.25.1...v2.25.2) (2021-09-13)
+
+
+### Bug Fixes
+
+* **pagination:** separate total count query ([#543](https://github.com/dhis2/app-hub/issues/543)) ([877b76d](https://github.com/dhis2/app-hub/commit/877b76d88b2da518a60b96b113eb450fcf88377e))
+
+## [2.25.1](https://github.com/dhis2/app-hub/compare/v2.25.0...v2.25.1) (2021-09-07)
+
+
+### Bug Fixes
+
+* **appversion:** add renames for query-filters ([#544](https://github.com/dhis2/app-hub/issues/544)) ([40223b8](https://github.com/dhis2/app-hub/commit/40223b89da6ff2a23c53e17b5cb8f8f780b02ff1))
+
+# [2.25.0](https://github.com/dhis2/app-hub/compare/v2.24.0...v2.25.0) (2021-08-31)
+
+
+### Features
+
+* AppVersion API ([#528](https://github.com/dhis2/app-hub/issues/528)) ([b0d6899](https://github.com/dhis2/app-hub/commit/b0d689920c6a9721d4840d943228969e91f35b4e))
+
+# [2.24.0](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.24.0) (2021-08-09)
+
+
+### Features
+
+* add coreApp property ([#522](https://github.com/dhis2/app-hub/issues/522)) ([e22dafd](https://github.com/dhis2/app-hub/commit/e22dafdbb561bf248204079607727c933a6f58cd))
+
 ## [2.23.9](https://github.com/dhis2/app-hub/compare/v2.23.8...v2.23.9) (2021-10-29)
 
 
@@ -6,7 +125,6 @@
 * sort versions by created-date ([#577](https://github.com/dhis2/app-hub/issues/577)) ([0addf38](https://github.com/dhis2/app-hub/commit/0addf38dd7c20e6072fbb75258a6c3c0e0cfe534))
 
 ## [2.23.8](https://github.com/dhis2/app-hub/compare/v2.23.7...v2.23.8) (2021-10-15)
-
 
 ### Bug Fixes
 

@@ -1,6 +1,6 @@
 const debug = require('debug')('apphub:server:data:createChannel')
 
-const joi = require('@hapi/joi')
+const joi = require('joi')
 
 const paramsSchema = joi
     .object()

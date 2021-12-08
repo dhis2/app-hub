@@ -14,7 +14,7 @@ const { flatten } = require('../../src/utils')
 const { config } = require('../../src/server/env-config')
 const appVersionMocks = require('../../seeds/mock/appversions')
 
-describe('Get all published apps [v1]', async () => {
+describe('Get all published apps [v1]', () => {
     let server
     beforeEach(async () => {
         server = await init(db, config)

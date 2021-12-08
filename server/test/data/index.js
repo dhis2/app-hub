@@ -180,7 +180,9 @@ describe('@data::createUser', () => {
     })
 })
 
-describe('@data::addUserToOrganisation', () => {
+// this is deprecated, moved to Organisation-service
+// also makes tests not idempotent due to no rollback
+describe.skip('@data::addUserToOrganisation', () => {
     const {
         addUserToOrganisation,
         createOrganisation,
@@ -259,7 +261,7 @@ describe('@data::updateAppVersion', () => {
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.version).to.equal('0.1')
-        expect(app.max_dhis2_version).to.equal(null)
+        expect(app.max_dhis2_version).to.equal('2.30')
         expect(app.min_dhis2_version).to.equal('2.28')
         expect(app.demo_url).to.equal(null)
 

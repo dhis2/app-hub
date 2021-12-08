@@ -1,4 +1,4 @@
-const joi = require('@hapi/joi')
+const joi = require('joi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
 

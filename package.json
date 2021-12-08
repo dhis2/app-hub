@@ -29,12 +29,12 @@
         "format:server": "yarn workspace client format"
     },
     "devDependencies": {
-        "@dhis2/cli-style": "^8.4.0",
-        "concurrently": "^4.1.2",
-        "cross-env": "^6.0.3"
+        "@dhis2/cli-style": "^9.2.0",
+        "concurrently": "^6.2.1",
+        "cross-env": "^7.0.3"
     },
     "cypress-cucumber-preprocessor": {
         "nonGlobalStepDefinitions": true
     },
-    "version": "2.23.9"
+    "version": "2.29.2"
 }

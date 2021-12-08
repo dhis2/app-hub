@@ -152,7 +152,7 @@ describe('@services::Organisation', () => {
         })
     })
 
-    describe('addUserById', async () => {
+    describe('addUserById', () => {
         it('should successfully add user to organisation', async () => {
             const userMock = UserMocks[2]
             const userId = userMock.id //Viktor, in DHIS2

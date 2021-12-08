@@ -1,3 +1,4 @@
+const createBackingStorageInstance = require('./createBackingStorageInstance')
 const getServerUrl = require('./getServerUrl')
 
 function flatten(arr, result = []) {
@@ -13,8 +14,6 @@ function flatten(arr, result = []) {
 
     return result
 }
-
-const createBackingStorageInstance = require('./createBackingStorageInstance')
 
 const saveFile = (path, filename, buffer) =>
     createBackingStorageInstance().saveFile(path, filename, buffer)

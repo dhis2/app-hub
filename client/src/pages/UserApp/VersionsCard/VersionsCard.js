@@ -100,6 +100,7 @@ const VersionsCard = ({ app, mutate }) => {
         <Card className={sharedStyles.card}>
             <h2 className={sharedStyles.cardHeader}>Versions</h2>
             <Versions
+                appId={app.id}
                 versions={versions}
                 renderDeleteVersionButton={renderDeleteVersionButton}
             />

@@ -1,5 +1,5 @@
 const Boom = require('@hapi/boom')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const Path = require('path')
 
 const allowedImageMimeTypes = ['image/jpeg', 'image/png', 'image/svg+xml']

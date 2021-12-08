@@ -1,0 +1,17 @@
+.container {
+    margin: var(--spacers-dp16) 0;
+}
+
+.entry {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--spacers-dp16);
+}
+
+.icon {
+    margin-right: var(--spacers-dp8);
+}
+
+.link {
+    text-decoration: underline;
+}

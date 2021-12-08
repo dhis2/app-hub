@@ -1,20 +1,19 @@
-const debug = require('debug')('apphub:server:boot:api')
-
-const Blipp = require('blipp')
 const Hapi = require('@hapi/hapi')
 const Inert = require('@hapi/inert')
 const Vision = require('@hapi/vision')
-
-const HapiSwagger = require('hapi-swagger')
-const Pino = require('hapi-pino')
 const Schmervice = require('@hapipal/schmervice')
+const Blipp = require('blipp')
+const debug = require('debug')('apphub:server:boot:api')
+const Pino = require('hapi-pino')
+const HapiSwagger = require('hapi-swagger')
 const options = require('../options/index.js')
-
-const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const apiRoutes = require('../plugins/apiRoutes')
 const errorMapper = require('../plugins/errorMapper')
-const queryFilter = require('../plugins/queryFilter')
 const pagination = require('../plugins/pagination')
+const queryFilter = require('../plugins/queryFilter')
+const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
+const { getUserDecoration } = require('../security')
+const { createAppVersionService } = require('../services/appVersion')
 const { createEmailService } = require('../services/EmailService')
 
 exports.init = async (knex, config) => {
@@ -90,6 +89,7 @@ exports.init = async (knex, config) => {
     await server.register(Schmervice)
 
     await server.registerService(createEmailService)
+    await server.registerService(createAppVersionService)
 
     await server.register({
         plugin: staticFrontendRoutes,
@@ -126,6 +126,7 @@ exports.init = async (knex, config) => {
         plugin: pagination,
     })
 
+    server.decorate('request', 'getUser', getUserDecoration)
     await server.start()
 
     debug(`Server running at: ${server.info.uri}`)

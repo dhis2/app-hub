@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { AppTypes } = require('../../../enums')
 
 const CreateModelAppData = Joi.object().keys({
@@ -6,6 +6,7 @@ const CreateModelAppData = Joi.object().keys({
     developer: Joi.object().keys({
         organisationId: Joi.string(),
     }),
+    coreApp: Joi.bool(),
 })
 
 const payloadSchema = Joi.object({

@@ -7,21 +7,18 @@ import config from 'config'
 const { dhisVersions, appChannelToDisplayName } = config.ui
 
 const Filters = ({
-    versions,
+    availableChannels,
     channelsFilter,
     setChannelsFilter,
     dhisVersionFilter,
     setDhisVersionFilter,
 }) => {
-    const hasChannel = channel => versions.some(v => v.channel === channel)
-    const channels = Object.keys(appChannelToDisplayName).filter(hasChannel)
-
     return (
         <div className={styles.versionsFilters}>
-            {channels.length > 1 && (
+            {availableChannels.length > 1 && (
                 <div className={styles.channelsFilter}>
                     <h3 className={styles.subheader}>Channel</h3>
-                    {channels.map(channel => (
+                    {availableChannels.map(channel => (
                         <ChannelCheckbox
                             key={channel}
                             name={channel}
@@ -55,11 +52,11 @@ const Filters = ({
 }
 
 Filters.propTypes = {
+    availableChannels: PropTypes.arrayOf(PropTypes.string).isRequired,
     channelsFilter: PropTypes.object.isRequired,
     dhisVersionFilter: PropTypes.string.isRequired,
     setChannelsFilter: PropTypes.func.isRequired,
     setDhisVersionFilter: PropTypes.func.isRequired,
-    versions: PropTypes.array.isRequired,
 }
 
 export default Filters

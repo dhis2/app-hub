@@ -1,6 +1,6 @@
 const Boom = require('@hapi/boom')
 const Bounce = require('@hapi/bounce')
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { Filters } = require('../utils/Filter')
 const { parseFilterString } = require('../utils/filterUtils')
 
@@ -37,7 +37,7 @@ const validateDescriptions = {}
 // renameDescriptions is used to rename the filter-Keys to the correct DB-column
 const renameDescriptions = {}
 
-const onPreHandler = function(request, h) {
+const onPreHandler = function (request, h) {
     const routeOptions = request.route.settings.plugins.queryFilter || {}
 
     const options = {
@@ -59,14 +59,13 @@ const onPreHandler = function(request, h) {
     const rename = routeOptions.rename
     const queryFilterKeys = new Set()
     let renameMap = rename
-    let validateDescription = validateDescriptions[request.path]
-    let renameDescription = renameDescriptions[request.path]
+    let validateDescription = validateDescriptions[request.route.path]
+    let renameDescription = renameDescriptions[request.route.path]
 
     if (rename && Joi.isSchema(rename)) {
         if (!renameDescription) {
-            renameDescription = renameDescriptions[
-                request.path
-            ] = rename.describe()
+            renameDescription = renameDescriptions[request.route.path] =
+                rename.describe()
         }
         renameMap = renameDescription.renames.reduce((acc, curr) => {
             const { from, to } = curr
@@ -77,9 +76,14 @@ const onPreHandler = function(request, h) {
 
     if (Joi.isSchema(routeQueryValidation)) {
         if (!validateDescription) {
-            validateDescription = validateDescriptions[
-                request.path
-            ] = routeQueryValidation.describe()
+            let schemaDescription = routeQueryValidation.describe()
+            // if schema has Joi.alternatives(), use first schema-alternative
+            if (schemaDescription.matches) {
+                schemaDescription = schemaDescription.matches[0].schema
+            }
+
+            validateDescription = validateDescriptions[request.route.path] =
+                schemaDescription
         }
         // only add validations with .filter()
         Object.keys(validateDescription.keys).forEach(k => {

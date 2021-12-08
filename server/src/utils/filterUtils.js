@@ -7,6 +7,7 @@ const SEPERATOR_CHAR = ':'
 const stringOperatorsMap = {
     ilike: 'ilike',
     like: 'like',
+    in: 'in',
 }
 
 const operatorMap = {
@@ -14,6 +15,7 @@ const operatorMap = {
     lt: '<',
     gt: '>',
     lte: '<=',
+    gte: '>=',
     ne: '<>',
 }
 const allOperatorsMap = {
@@ -21,11 +23,17 @@ const allOperatorsMap = {
     ...stringOperatorsMap,
 }
 
-const toSQLOperator = operatorStr => {
-    const operator = allOperatorsMap[operatorStr]
+const toSQLOperator = (operatorStr, value) => {
+    let operator = allOperatorsMap[operatorStr]
+
+    if (operator === '=' && Array.isArray(value)) {
+        operator = 'in'
+    }
+
     if (!operator) {
         throw new Error('Operator ', operatorStr, ' not supported.')
     }
+
     return operator
 }
 

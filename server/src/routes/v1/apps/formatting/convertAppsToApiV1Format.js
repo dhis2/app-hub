@@ -1,10 +1,8 @@
 const debug = require('debug')(
     'apphub:server:routes:v1:apps:formatting:convertAppsToApiV1Format'
 )
-
-const getServerUrl = require('../../../../utils/getServerUrl')
-
 const { MediaType } = require('../../../../enums')
+const getServerUrl = require('../../../../utils/getServerUrl')
 
 const convertDbAppViewRowToAppApiV1Object = app => ({
     appType: app.type,
@@ -17,7 +15,7 @@ const convertDbAppViewRowToAppApiV1Object = app => ({
 
     name: app.name,
     description: app.description || '',
-
+    coreApp: app.core_app,
     versions: [],
 
     //TODO: set address
@@ -80,7 +78,8 @@ const convertAll = (apps, request) => {
     debug(`Using serverUrl: ${serverUrl}`)
 
     const formattedApps = {}
-
+    // use api/v2 for paginated response, only return 5 latest versions
+    const maxVersions = 5
     apps.forEach(app => {
         let currentApp = formattedApps[app.app_id]
 
@@ -105,6 +104,7 @@ const convertAll = (apps, request) => {
 
         //Prevent duplicate versions
         if (
+            currentApp.versions.length < maxVersions &&
             !currentApp.versions.find(version => version.id === app.version_id)
         ) {
             currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))

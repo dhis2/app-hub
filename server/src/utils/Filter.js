@@ -1,6 +1,6 @@
+const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
 const { parseFilterString, toSQLOperator } = require('./filterUtils')
-const debug = require('debug')('apphub:server:utils:Filter')
 
 class Filters {
     /**
@@ -103,24 +103,71 @@ class Filters {
      * Applies the filter
      * @param {*} query
      * @param {*} fieldName
-     * @param {*} options
+     * @param {*} options options object, merged with options to Filters object
+     * @param {*} overrideColumnName overrides the column name, takes precedence over tableName
+     * @param {*} includeEmpty includes empty values (null or '') for the filter
      */
 
     applyOneToQuery(query, fieldName, options) {
         const colName = this.getFilterColumn(fieldName)
-        const filter = this.filter[fieldName]
+        const filter = this.getFilter(fieldName)
+        const settings = {
+            ...this.options,
+            ...options,
+        }
         if (filter) {
+            const nameToUse =
+                options.overrideColumnName ||
+                (settings.tableName
+                    ? `${settings.tableName}.${colName}`
+                    : colName)
+            const { value, operator } = filter
+            query.where(builder => {
+                builder.where(nameToUse, toSQLOperator(operator, value), value)
+                if (settings.includeEmpty) {
+                    builder.orWhereRaw(`nullif( ??, '') is null`, nameToUse)
+                }
+            })
             this.markApplied(fieldName)
-            query.where(
-                options.tableName ? `${options.tableName}.${colName}` : colName,
-                toSQLOperator(filter.operator),
-                filter.value
-            )
         } else {
             throw new Error(
                 `Failed to apply filter to query, ${colName} is not a valid filter.`
             )
         }
+    }
+
+    /** Applies a filter for comparing versions
+     * eg. this will match correctly for for 1.9.0 < 1.10.0,
+     * opposed to normal string matching.
+     */
+    applyVersionFilter(query, filterName, options = {}) {
+        const filter = this.getFilter(filterName)
+
+        if (!filter) {
+            return
+        }
+
+        const colName =
+            options.overrideColumnName || this.getFilterColumn(filterName)
+
+        if (!filter) {
+            throw new Error(
+                `Failed to apply filter to query, ${colName} is not a valid filter.`
+            )
+        }
+
+        query.where(builder => {
+            builder.whereRaw(
+                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${toSQLOperator(
+                    filter.operator
+                )} string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
+                [colName, filter.value]
+            )
+            if (options.includeEmpty) {
+                builder.orWhereRaw(`nullif( ??, '') is null`, colName)
+            }
+        })
+        this.markApplied(filterName)
     }
 
     /**
@@ -153,11 +200,12 @@ class Filters {
             if (this.appliedFilters.has(filterName)) {
                 continue
             }
+
             query.where(
                 settings.tableName
                     ? `${settings.tableName}.${colName}`
                     : colName,
-                toSQLOperator(operator),
+                toSQLOperator(operator, value),
                 value
             )
         }

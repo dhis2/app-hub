@@ -1,4 +1,4 @@
-const Joi = require('@hapi/joi')
+const Joi = require('joi')
 const { AppTypes } = require('../../../enums')
 const { isSemver } = require('../../helpers')
 
@@ -20,6 +20,7 @@ const CreateModelAppData = Joi.object().keys({
         demoUrl: Joi.string().uri().allow(''),
         channel: Joi.string(),
     }),
+    coreApp: Joi.bool(),
 })
 
 const payloadSchema = Joi.object({
