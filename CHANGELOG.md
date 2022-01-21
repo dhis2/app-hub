@@ -1,3 +1,10 @@
+## [2.29.3](https://github.com/dhis2/app-hub/compare/v2.29.2...v2.29.3) (2022-01-21)
+
+
+### Bug Fixes
+
+* remove svg from list of allowed image mime types ([#619](https://github.com/dhis2/app-hub/issues/619)) ([bf9ac27](https://github.com/dhis2/app-hub/commit/bf9ac27230c8a18483d879d3eafa2743b3563d81))
+
 ## [2.29.2](https://github.com/dhis2/app-hub/compare/v2.29.1...v2.29.2) (2021-12-07)
 
 
