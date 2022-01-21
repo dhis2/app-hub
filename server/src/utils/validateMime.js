@@ -2,7 +2,7 @@ const Boom = require('@hapi/boom')
 const Joi = require('joi')
 const Path = require('path')
 
-const allowedImageMimeTypes = ['image/jpeg', 'image/png', 'image/svg+xml']
+const allowedImageMimeTypes = ['image/jpeg', 'image/png']
 const imageMetadataSchema = Joi.object({
     headers: Joi.object({
         'content-type': Joi.string().valid(...allowedImageMimeTypes),
