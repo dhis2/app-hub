@@ -53,7 +53,7 @@ const UploadScreenshot = ({ appId, mutate }) => {
                 <input
                     type="file"
                     multiple
-                    accept="image/*"
+                    accept="image/jpeg,image/png"
                     onChange={handleUpload}
                     ref={inputEl}
                 />
