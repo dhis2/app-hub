@@ -30,7 +30,7 @@ export const useSuccessAlert = () =>
 
 export const useErrorAlert = () =>
     useAlert(
-        ({ error }) => `An error occured: ${error.message}`,
+        ({ error }) => `An error occurred: ${error.message}`,
         options => ({
             ...options,
             critical: true,
