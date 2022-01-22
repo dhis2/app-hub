@@ -5,7 +5,7 @@ const Path = require('path')
 const allowedImageMimeTypes = ['image/jpeg', 'image/png']
 const imageMetadataSchema = Joi.object({
     headers: Joi.object({
-        'content-type': Joi.string().valid(...allowedImageMimeTypes),
+        'content-type': Joi.string(),
     }).unknown(),
     filename: Joi.string(),
 }).unknown()
@@ -28,7 +28,7 @@ const validateExtensionForMimeType = (mimos, filePath, mimeTypes) => {
     if (mimeExtensions.includes(ext)) {
         return true
     }
-    throw Boom.badRequest(`File extension must be one of [${mimeExtensions}]`)
+    throw Boom.badRequest(`File extension must be one of [${mimeExtensions.join(', ')}]`)
 }
 
 module.exports = {

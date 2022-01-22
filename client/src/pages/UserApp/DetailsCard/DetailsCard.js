@@ -52,7 +52,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
             <form style={{ display: 'none' }} ref={formEl}>
                 <input
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/png"
                     onChange={handleUpload}
                     ref={inputEl}
                 />

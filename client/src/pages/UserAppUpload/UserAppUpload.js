@@ -407,8 +407,8 @@ const UserAppUpload = ({ user }) => {
                                 required
                                 name="logo"
                                 buttonLabel="Upload a logo"
-                                accept="image/*"
-                                helpText="Only .jpg, .png and .gif files, 2MB max size"
+                                accept="image/jpeg,image/png"
+                                helpText="Only .jpg and .png files, 2MB max size"
                                 component={FileInputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
