@@ -1,3 +1,12 @@
+## [2.29.4](https://github.com/dhis2/app-hub/compare/v2.29.3...v2.29.4) (2022-02-21)
+
+
+### Bug Fixes
+
+* **appupload:** remove channel field ([#630](https://github.com/dhis2/app-hub/issues/630)) ([78eaf24](https://github.com/dhis2/app-hub/commit/78eaf24209950b304ac23eae2db04ff56d469557))
+* **userappview:** move rejected apps to bottom ([27033e0](https://github.com/dhis2/app-hub/commit/27033e001a374531fcf4abe1b20f430783184dcd))
+* improve UX of invalid image filetype errors ([#621](https://github.com/dhis2/app-hub/issues/621)) ([b8e7a5b](https://github.com/dhis2/app-hub/commit/b8e7a5b06a6be2fc28ab2fdd8897e397111bb1a5))
+
 ## [2.29.3](https://github.com/dhis2/app-hub/compare/v2.29.2...v2.29.3) (2022-02-21)
 
 
