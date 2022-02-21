@@ -1,3 +1,12 @@
+## [2.29.3](https://github.com/dhis2/app-hub/compare/v2.29.2...v2.29.3) (2022-02-21)
+
+
+### Bug Fixes
+
+* **userappview:** move rejected apps to bottom ([27033e0](https://github.com/dhis2/app-hub/commit/27033e001a374531fcf4abe1b20f430783184dcd))
+* improve UX of invalid image filetype errors ([#621](https://github.com/dhis2/app-hub/issues/621)) ([b8e7a5b](https://github.com/dhis2/app-hub/commit/b8e7a5b06a6be2fc28ab2fdd8897e397111bb1a5))
+* remove svg from list of allowed image mime types ([#619](https://github.com/dhis2/app-hub/issues/619)) ([bf9ac27](https://github.com/dhis2/app-hub/commit/bf9ac27230c8a18483d879d3eafa2743b3563d81))
+
 ## [2.29.3](https://github.com/dhis2/app-hub/compare/v2.29.2...v2.29.3) (2022-01-22)
 
 
