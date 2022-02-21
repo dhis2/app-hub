@@ -172,48 +172,6 @@ const UserApps = ({ user }) => {
                     <em>No apps found. Try adjusting your search.</em>
                 </section>
             )}
-            {rejectedApps.length > 0 && (
-                <section
-                    className={classnames(
-                        styles.statusCard,
-                        styles.rejectedStatusCard
-                    )}
-                >
-                    <h2
-                        className={classnames(
-                            styles.statusCardHeader,
-                            styles.rejectedStatusCardHeader
-                        )}
-                    >
-                        Rejected
-                    </h2>
-                    <p className={styles.statusCardDescription}>
-                        Apps can be rejected if they don't meet the{' '}
-                        <a
-                            style={{ textDecoration: 'underline' }}
-                            href="https://developers.dhis2.org/docs/guides/apphub-guidelines"
-                        >
-                            App Hub guidelines
-                        </a>
-                        . Upload a new version to resubmit your app for
-                        approval.
-                    </p>
-
-                    {rejectedApps.map(app => (
-                        <AppCard
-                            key={app.id}
-                            app={app}
-                            showUploadButton={!user.isManager}
-                            onApprove={
-                                user.isManager && (() => handleApprove(app))
-                            }
-                            onDelete={
-                                user.isManager && (() => handleDelete(app))
-                            }
-                        />
-                    ))}
-                </section>
-            )}
             {pendingApps.length > 0 && (
                 <section className={styles.statusCard}>
                     <h2 className={styles.statusCardHeader}>
@@ -260,6 +218,48 @@ const UserApps = ({ user }) => {
                             showUploadButton={!user.isManager}
                             onReject={
                                 user.isManager && (() => handleReject(app))
+                            }
+                            onDelete={
+                                user.isManager && (() => handleDelete(app))
+                            }
+                        />
+                    ))}
+                </section>
+            )}
+            {rejectedApps.length > 0 && (
+                <section
+                    className={classnames(
+                        styles.statusCard,
+                        styles.rejectedStatusCard
+                    )}
+                >
+                    <h2
+                        className={classnames(
+                            styles.statusCardHeader,
+                            styles.rejectedStatusCardHeader
+                        )}
+                    >
+                        Rejected
+                    </h2>
+                    <p className={styles.statusCardDescription}>
+                        Apps can be rejected if they don't meet the{' '}
+                        <a
+                            style={{ textDecoration: 'underline' }}
+                            href="https://developers.dhis2.org/docs/guides/apphub-guidelines"
+                        >
+                            App Hub guidelines
+                        </a>
+                        . Upload a new version to resubmit your app for
+                        approval.
+                    </p>
+
+                    {rejectedApps.map(app => (
+                        <AppCard
+                            key={app.id}
+                            app={app}
+                            showUploadButton={!user.isManager}
+                            onApprove={
+                                user.isManager && (() => handleApprove(app))
                             }
                             onDelete={
                                 user.isManager && (() => handleDelete(app))
