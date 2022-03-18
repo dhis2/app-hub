@@ -1,3 +1,10 @@
+## [2.29.5](https://github.com/dhis2/app-hub/compare/v2.29.4...v2.29.5) (2022-03-18)
+
+
+### Bug Fixes
+
+* add support for dhis 2.38 ([#640](https://github.com/dhis2/app-hub/issues/640)) ([28e1c84](https://github.com/dhis2/app-hub/commit/28e1c849df18ea295d12eed28df08d2c2d8c9397))
+
 ## [2.29.4](https://github.com/dhis2/app-hub/compare/v2.29.3...v2.29.4) (2022-02-21)
 
 
