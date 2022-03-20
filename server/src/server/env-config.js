@@ -29,6 +29,9 @@ const config = {
     aws: {
         region: process.env.AWS_REGION || 'eu-west-1',
     },
+    sentry: {
+        dsn: process.env.SENTRY_DSN,
+    },
     auth: {
         noAuthUserIdMapping: process.env.NO_AUTH_MAPPED_USER_ID,
         config: {

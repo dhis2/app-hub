@@ -5,6 +5,7 @@ const Schmervice = require('@hapipal/schmervice')
 const Blipp = require('blipp')
 const debug = require('debug')('apphub:server:boot:api')
 const Pino = require('hapi-pino')
+const HapiSentry = require('hapi-sentry')
 const HapiSwagger = require('hapi-swagger')
 const options = require('../options/index.js')
 const apiRoutes = require('../plugins/apiRoutes')
@@ -46,6 +47,16 @@ exports.init = async (knex, config) => {
         config,
         db: knex,
     })
+
+    if (config.sentry.dsn) {
+        debug('Starting Hapi-Sentry')
+        await server.register({
+            plugin: HapiSentry,
+            options: {
+                client: { dsn: config.sentry.dsn },
+            },
+        })
+    }
 
     await server.register({
         plugin: require('hapi-api-version'),
