@@ -32,7 +32,7 @@ const {
     defaultAppType,
     appTypeToDisplayName,
     defaultAppChannel,
-    appChannelToDisplayName,
+   // appChannelToDisplayName,
     dhisVersions,
 } = config.ui
 const oldestSupportedDhisVersion = dhisVersions[2]
@@ -49,12 +49,14 @@ const appTypeOptions = Object.entries(appTypeToDisplayName).map(
     })
 )
 
-const channelOptions = Object.entries(appChannelToDisplayName).map(
+/** TODO: Re-visit channels
+ * const channelOptions = Object.entries(appChannelToDisplayName).map(
     ([value, label]) => ({
         value,
         label,
     })
-)
+ */
+
 
 const requestOpts = {
     useAuth: true,
@@ -135,6 +137,7 @@ const UserAppUpload = ({ user }) => {
         minDhisVersion,
         maxDhisVersion,
         demoUrl,
+        // eslint-disable-next-line no-unused-vars
         channel,
     }) => {
         try {
@@ -155,7 +158,7 @@ const UserAppUpload = ({ user }) => {
                         minDhisVersion,
                         maxDhisVersion,
                         demoUrl,
-                        channel,
+                        channel: defaultAppChannel,
                     },
                 },
             })
@@ -282,6 +285,7 @@ const UserAppUpload = ({ user }) => {
                                     semverValidator
                                 )}
                             />
+                            {/* TODO: Re-visit channels
                             <ReactFinalForm.Field
                                 required
                                 name="channel"
@@ -291,7 +295,7 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={hasValue}
                                 options={channelOptions}
-                            />
+                            /> */}
                         </section>
 
                         <section className={styles.formSection}>
@@ -407,8 +411,8 @@ const UserAppUpload = ({ user }) => {
                                 required
                                 name="logo"
                                 buttonLabel="Upload a logo"
-                                accept="image/*"
-                                helpText="Only .jpg, .png and .gif files, 2MB max size"
+                                accept="image/jpeg,image/png"
+                                helpText="Only .jpg and .png files, 2MB max size"
                                 component={FileInputFieldFF}
                                 className={styles.field}
                                 validate={hasValue}
