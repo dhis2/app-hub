@@ -50,10 +50,14 @@ exports.init = async (knex, config) => {
 
     if (config.sentry.dsn) {
         debug('Starting Hapi-Sentry')
+        const { dsn, environment } = config.sentry
         await server.register({
             plugin: HapiSentry,
             options: {
-                client: { dsn: config.sentry.dsn },
+                client: {
+                    dsn,
+                    environment,
+                },
             },
         })
     }

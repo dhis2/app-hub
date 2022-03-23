@@ -31,6 +31,7 @@ const config = {
     },
     sentry: {
         dsn: process.env.SENTRY_DSN,
+        environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
     },
     auth: {
         noAuthUserIdMapping: process.env.NO_AUTH_MAPPED_USER_ID,
