@@ -16,6 +16,10 @@ const config = {
             return false
         },
     },
+    aws: {
+        region: 'eu-west-1',
+    },
+    sentry: {},
 }
 
 exports.config = config
