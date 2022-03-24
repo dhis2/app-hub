@@ -1,19 +1,19 @@
 const Joi = require('joi')
-const { isSemver } = require('../../helpers')
+const { isSemver, isValidDHIS2Version } = require('../../helpers')
 
 /**
  * For client implementation see /client/src/api/api.js - createUploadVersionOptions
  */
 
 const CreateAppVersionModel = Joi.object().keys({
-    version: Joi.string()
+    version: Joi.string().required().custom(isSemver, 'semver validate'),
+    minDhisVersion: Joi.string()
         .required()
-        .custom(isSemver, 'semver validate'),
-    minDhisVersion: Joi.string().required(),
-    maxDhisVersion: Joi.string().allow('', null),
-    demoUrl: Joi.string()
-        .uri()
-        .allow('', null),
+        .custom(isValidDHIS2Version, 'DHIS2 validate version'),
+    maxDhisVersion: Joi.string()
+        .allow('', null)
+        .custom(isValidDHIS2Version, 'DHIS2 validate version'),
+    demoUrl: Joi.string().uri().allow('', null),
     channel: Joi.string().required(),
 })
 
