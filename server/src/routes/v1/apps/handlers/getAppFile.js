@@ -1,19 +1,16 @@
 const Boom = require('@hapi/boom')
-
 const debug = require('debug')('apphub:server:routes:handlers:v1:getAppFile')
-const { AppStatus } = require('../../../../enums')
-const { getFile } = require('../../../../utils')
-
 const { getOrganisationAppsByUserId } = require('../../../../data')
+const { AppStatus } = require('../../../../enums')
 const {
     currentUserIsManager,
     getCurrentUserFromRequest,
 } = require('../../../../security')
+const { getFile } = require('../../../../utils')
 
 module.exports = {
     method: 'GET',
-    path:
-        '/v1/apps/download/{organisation_slug}/{appver_slug}_{app_version}.zip',
+    path: '/v1/apps/download/{organisation_slug}/{appver_slug}_{app_version}.zip',
     config: {
         auth: { strategy: 'token', mode: 'try' },
         tags: ['api', 'v1'],
@@ -24,6 +21,7 @@ module.exports = {
         const { organisation_slug, appver_slug, app_version } = request.params
 
         const knex = h.context.db
+        const { appVersionService } = request.services(true)
 
         const isAdmin = currentUserIsManager(request)
         let user = null
@@ -34,36 +32,25 @@ module.exports = {
             debug('no user in request')
         }
 
-        debug('user:', user)
-        debug('isAdmin:', isAdmin)
-
         let appRows = null
 
         if (!user) {
             //anonymous, only allow downloading approved apps
-            debug('anonymous')
-            appRows = await knex
-                .select()
-                .from('apps_view')
-                .where({
-                    organisation_slug,
-                    appver_slug,
-                    version: app_version,
-                    status: AppStatus.APPROVED,
-                    language_code: 'en',
-                })
+            appRows = await knex.select().from('apps_view').where({
+                organisation_slug,
+                appver_slug,
+                version: app_version,
+                status: AppStatus.APPROVED,
+                language_code: 'en',
+            })
         } else if (isAdmin) {
             //no filter on status if admin
-            debug('admin')
-            appRows = await knex
-                .select()
-                .from('apps_view')
-                .where({
-                    organisation_slug,
-                    appver_slug,
-                    version: app_version,
-                    language_code: 'en',
-                })
+            appRows = await knex.select().from('apps_view').where({
+                organisation_slug,
+                appver_slug,
+                version: app_version,
+                language_code: 'en',
+            })
         } else {
             //show all apps that a user has access to through it organisation connections
             debug('developer/user:', user)
@@ -86,6 +73,7 @@ module.exports = {
             `${item.app_id}/${item.version_id}`,
             'app.zip'
         )
+        appVersionService.incrementDownloadCount(item.version_id, knex)
 
         return h
             .response(file.Body)
