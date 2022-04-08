@@ -1,3 +1,10 @@
+## [2.29.6](https://github.com/dhis2/app-hub/compare/v2.29.5...v2.29.6) (2022-04-08)
+
+
+### Bug Fixes
+
+* add migration file ([d70eddb](https://github.com/dhis2/app-hub/commit/d70eddb259ce87a850e2fb257b224ff5fb5602f5))
+
 ## [2.29.5](https://github.com/dhis2/app-hub/compare/v2.29.4...v2.29.5) (2022-03-18)
 
 
