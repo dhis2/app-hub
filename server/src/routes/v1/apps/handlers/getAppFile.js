@@ -73,7 +73,12 @@ module.exports = {
             `${item.app_id}/${item.version_id}`,
             'app.zip'
         )
-        appVersionService.incrementDownloadCount(item.version_id, knex)
+
+        try {
+            appVersionService.incrementDownloadCount(item.version_id, knex)
+        } catch (e) {
+            request.logger.error('Failed to increment download', e)
+        }
 
         return h
             .response(file.Body)
