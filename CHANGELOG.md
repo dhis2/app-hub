@@ -1,3 +1,10 @@
+## [2.30.1](https://github.com/dhis2/app-hub/compare/v2.30.0...v2.30.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* **version:** revert v1-api version limit ([8c0d72d](https://github.com/dhis2/app-hub/commit/8c0d72d112cb64fe02cd38e7f1916dd301a95861))
+
 # [2.30.0](https://github.com/dhis2/app-hub/compare/v2.29.6...v2.30.0) (2022-05-05)
 
 
