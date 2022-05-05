@@ -1,3 +1,16 @@
+# [2.30.0](https://github.com/dhis2/app-hub/compare/v2.29.6...v2.30.0) (2022-05-05)
+
+
+### Bug Fixes
+
+* log error ([27d5417](https://github.com/dhis2/app-hub/commit/27d5417de369e0fb16a806a2c6154def5559fe8e))
+* use catch over try-catch to handle err ([851a681](https://github.com/dhis2/app-hub/commit/851a6813284e74c4775b353bcee7ac66b8fcd5f9))
+
+
+### Features
+
+* add download-counter ([d90ba4a](https://github.com/dhis2/app-hub/commit/d90ba4abe0dbaebe9a250b72a9101a53c2aad29e))
+
 ## [2.29.6](https://github.com/dhis2/app-hub/compare/v2.29.5...v2.29.6) (2022-04-08)
 
 
