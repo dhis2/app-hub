@@ -250,6 +250,12 @@ module.exports = [
                 `Fetching file for ${appVersion.appId} / ${appVersion.id}`
             )
 
+            appVersionService
+                .incrementDownloadCount(appVersion.id, db)
+                .catch(e =>
+                    request.logger.error('Failed to increment download', e)
+                )
+
             return h
                 .response(file.Body)
                 .type('application/zip')
