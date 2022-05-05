@@ -9,6 +9,7 @@ const definition = defaultDefinition
         channel: Joi.string().required(),
         demoUrl: Joi.string().uri().allow(null, ''),
         downloadUrl: Joi.string().uri().allow(''),
+        downloadCount: Joi.number().greater(-1),
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
         slug: Joi.string(),

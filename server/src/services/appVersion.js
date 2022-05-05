@@ -32,7 +32,8 @@ const getAppVersionQuery = knex =>
             knex.ref('channel.name').as('channel'),
             knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion'),
-            knex.ref('avl.slug')
+            knex.ref('avl.slug'),
+            knex.ref('app_version.download_count').as('downloadCount')
         )
         .where('language_code', 'en') // only english is supported for now
         .orderBy('app_version.created_at', 'desc')
@@ -101,6 +102,12 @@ class AppVersionService extends Schmervice.Service {
             appVersion.downloadUrl = this.getDownloadUrl(request, appVersion)
             return appVersion
         }
+    }
+
+    async incrementDownloadCount(appVersionId, knex) {
+        return knex('app_version')
+            .increment('download_count', 1)
+            .where('id', appVersionId)
     }
 }
 

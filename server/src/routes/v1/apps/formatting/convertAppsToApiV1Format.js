@@ -78,8 +78,6 @@ const convertAll = (apps, request) => {
     debug(`Using serverUrl: ${serverUrl}`)
 
     const formattedApps = {}
-    // use api/v2 for paginated response, only return 5 latest versions
-    const maxVersions = 5
     apps.forEach(app => {
         let currentApp = formattedApps[app.app_id]
 
@@ -104,7 +102,6 @@ const convertAll = (apps, request) => {
 
         //Prevent duplicate versions
         if (
-            currentApp.versions.length < maxVersions &&
             !currentApp.versions.find(version => version.id === app.version_id)
         ) {
             currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
