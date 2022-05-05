@@ -11,6 +11,36 @@ const CHANNELS = ['stable', 'development', 'canary']
 module.exports = [
     {
         method: 'GET',
+        path: '/v2/appVersions/{appVersionId}',
+        config: {
+            tags: ['api', 'v2'],
+            response: {
+                sample: 0, // schema used for swagger, don't check responses
+                schema: AppVersionModel.def,
+            },
+            validate: {
+                params: Joi.object({
+                    appVersionId: Joi.string().required(),
+                }),
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { appVersionId } = request.params
+            const { appVersionService } = request.services(true)
+
+            const setDownloadUrl =
+                appVersionService.createSetDownloadUrl(request)
+
+            const version = await appVersionService.findOne(appVersionId, db)
+
+            setDownloadUrl(version)
+
+            return h.response(version)
+        },
+    },
+    {
+        method: 'GET',
         path: '/v2/apps/{appId}/versions',
         config: {
             tags: ['api', 'v2'],

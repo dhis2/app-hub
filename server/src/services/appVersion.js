@@ -43,6 +43,13 @@ class AppVersionService extends Schmervice.Service {
         super(server, schmerviceOptions)
     }
 
+    async findOne(id, knex) {
+        const query = getAppVersionQuery(knex).where('app_version.id', id)
+
+        const { result } = await executeQuery(query, { model: AppVersionModel })
+        return result[0]
+    }
+
     async findByAppId(appId, { filters, pager } = {}, knex) {
         const query = getAppVersionQuery(knex).where(
             'app_version.app_id',
