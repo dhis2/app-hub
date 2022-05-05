@@ -1,3 +1,10 @@
+## [2.30.2](https://github.com/dhis2/app-hub/compare/v2.30.1...v2.30.2) (2022-05-05)
+
+
+### Bug Fixes
+
+* **download-count:** increment in v2 api ([805754d](https://github.com/dhis2/app-hub/commit/805754db04753b22e3b50aa757323530d8bc425e))
+
 ## [2.30.1](https://github.com/dhis2/app-hub/compare/v2.30.0...v2.30.1) (2022-05-05)
 
 
