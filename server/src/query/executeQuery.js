@@ -68,10 +68,18 @@ async function executeQuery(
         if (options.pagingStrategy === pagingStrategies.SLICE) {
             result = pager.sliceAndFormatResult(result)
         } else {
-            const countQuery = pager.getTotalCountQuery(query)
-            debug('Executing totalCount-query', countQuery.toString())
-            const totalRes = await countQuery
-            const totalCount = totalRes.total_count
+            let totalCount = result.length
+            if (options.pagingStrategy === pagingStrategies.SEPARATE) {
+                const countQuery = pager.getTotalCountQuery(query)
+                debug('Executing totalCount-query', countQuery.toString())
+                const totalRes = await countQuery
+                totalCount = totalRes.total_count
+            } else if (
+                options.pagingStrategy === pagingStrategies.WINDOW &&
+                rawResult.length
+            ) {
+                totalCount = rawResult[0] && rawResult[0].total_count
+            }
             result = pager.formatResult(result, totalCount)
         }
     } else {
