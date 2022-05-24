@@ -61,3 +61,8 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* This is needed for line-clamp to work in Safari */
+.summarise > p {
+    display: inline;
+}
