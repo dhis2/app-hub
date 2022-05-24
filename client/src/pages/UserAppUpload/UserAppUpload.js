@@ -6,7 +6,6 @@ import {
     NoticeBox,
     ReactFinalForm,
     InputFieldFF,
-    TextAreaFieldFF,
     SingleSelectFieldFF,
     FileInputFieldFF,
     composeValidators,
@@ -15,6 +14,7 @@ import {
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import DescriptionEdit from '../UserAppEdit/DescriptionEdit'
 import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 import styles from './UserAppUpload.module.css'
 import config from 'config'
@@ -32,7 +32,7 @@ const {
     defaultAppType,
     appTypeToDisplayName,
     defaultAppChannel,
-   // appChannelToDisplayName,
+    // appChannelToDisplayName,
     dhisVersions,
 } = config.ui
 const oldestSupportedDhisVersion = dhisVersions[2]
@@ -56,7 +56,6 @@ const appTypeOptions = Object.entries(appTypeToDisplayName).map(
         label,
     })
  */
-
 
 const requestOpts = {
     useAuth: true,
@@ -224,15 +223,7 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={nameLengthValidator}
                             />
-                            <ReactFinalForm.Field
-                                required
-                                name="description"
-                                label="Description"
-                                placeholder="What is the purpose of this app?"
-                                component={TextAreaFieldFF}
-                                className={styles.field}
-                                validate={hasValue}
-                            />
+                            <DescriptionEdit />
                             <ReactFinalForm.Field
                                 required
                                 name="appType"
