@@ -1,17 +1,10 @@
 import PropTypes from 'prop-types'
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 import { Link } from 'react-router-dom'
 import styles from './AppCardItem.module.css'
 import config from 'config'
 import AppIcon from 'src/components/AppIcon/AppIcon'
-
-const summarise = text => {
-    const maxLength = 120
-    if (text.length > maxLength) {
-        return text.slice(0, maxLength) + '…'
-    }
-    return text
-}
 
 const AppCardItem = ({ id, name, developer, type, description, images }) => {
     const logo = images.find(elem => elem.logo)
@@ -32,10 +25,25 @@ const AppCardItem = ({ id, name, developer, type, description, images }) => {
             </header>
 
             <p className={styles.appCardDescription}>
-                {summarise(description)}
+                <Summarise>
+                    <ReactMarkdown
+                        allowedElements={['p']}
+                        unwrapDisallowed={false}
+                    >
+                        {description}
+                    </ReactMarkdown>
+                </Summarise>
             </p>
         </Link>
     )
+}
+
+const Summarise = ({ children }) => {
+    return <div className={styles.summarise}>{children}</div>
+}
+
+Summarise.propTypes = {
+    children: PropTypes.node,
 }
 
 AppCardItem.propTypes = {
