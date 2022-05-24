@@ -6,14 +6,13 @@ import {
     Button,
     ReactFinalForm,
     InputFieldFF,
-    TextAreaFieldFF,
     SwitchFieldFF,
-    hasValue,
     url,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import DescriptionEdit from './DescriptionEdit'
 import styles from './UserAppEdit.module.css'
 import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
@@ -83,18 +82,7 @@ const UserAppEdit = ({ match }) => {
                             className={styles.field}
                             validate={nameLengthValidator}
                         />
-                        <ReactFinalForm.Field
-                            required
-                            name="description"
-                            label="App description"
-                            placeholder="What is the purpose of this app?"
-                            helpText="A good app description helps users of the App Hub quickly understand what the purpose of an app is and any requirements to using it."
-                            initialValue={app.description}
-                            component={TextAreaFieldFF}
-                            className={styles.field}
-                            validate={hasValue}
-                            autoGrow
-                        />
+                        <DescriptionEdit description={app.description} />
                         <ReactFinalForm.Field
                             name="sourceUrl"
                             label="Source code URL"
