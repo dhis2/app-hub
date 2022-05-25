@@ -36,11 +36,12 @@
 }
 
 .descriptionContainer {
+    max-width: 480px;
     margin-bottom: var(--spacers-dp24);
 }
 
 .writeContent {
-    max-width: 480px;
+    margin-top: 8px;
     border: 1px solid var(--colors-grey500);
     border-radius: 3px;
     background-color: var(--colors-grey100);
@@ -49,6 +50,8 @@
 .writeContent :global(textarea) {
     border: 0 !important;
     border-bottom: 1px dashed var(--colors-grey600) !important;
+    border-bottom-left-radius: 0 !important;
+    box-shadow: none !important;
 }
 
 /* 
@@ -60,10 +63,6 @@
     display: none;
 }
 
-.previewContent {
-    max-width: 550px;
-}
-
 .markdownSupported {
     font-size: 12px;
     padding: 4px 8px;
@@ -73,6 +72,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-radius: 3px;
 }
 
 .markdownLink {
@@ -82,8 +82,4 @@
 .markdownLink:hover,
 .markdownLink:focus {
     fill: var(--colors-grey900);
-}
-
-.helpText {
-    max-width: 480px;
 }
