@@ -6,12 +6,14 @@ import {
     hasValue,
     Divider,
     Label,
+    Help,
 } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useField } from 'react-final-form'
 import AppDescription from '../../components/AppDescription/AppDescription'
 import styles from './UserAppEdit.module.css'
+import MarkdownIcon from 'assets/icons/markdown_icon.svg'
 
 const tabs = {
     WRITE: 'WRITE',
@@ -28,7 +30,7 @@ const DescriptionEdit = ({ description }) => {
     }
 
     return (
-        <div>
+        <div className={styles.descriptionContainer}>
             <Label required>App description</Label>
             <TabBar>
                 <Tab
@@ -49,6 +51,11 @@ const DescriptionEdit = ({ description }) => {
                 <WriteContent description={description} />
             )}
             {selectedTab === tabs.PREVIEW && <PreviewContent />}
+            <Help className={styles.helpText}>
+                A good app description helps users of the App Hub quickly
+                understand what the purpose of an app is and any requirements to
+                using it.
+            </Help>
         </div>
     )
 }
@@ -59,17 +66,28 @@ DescriptionEdit.propTypes = {
 
 const WriteContent = ({ description }) => {
     return (
-        <ReactFinalForm.Field
-            required
-            name="description"
-            placeholder="What is the purpose of this app?"
-            helpText="A good app description helps users of the App Hub quickly understand what the purpose of an app is and any requirements to using it."
-            initialValue={description}
-            component={TextAreaFieldFF}
-            className={styles.field}
-            validate={hasValue}
-            autoGrow
-        />
+        <div className={styles.writeContent}>
+            <ReactFinalForm.Field
+                required
+                name="description"
+                placeholder="What is the purpose of this app?"
+                initialValue={description}
+                component={TextAreaFieldFF}
+                className={styles.descriptionField}
+                validate={hasValue}
+                autoGrow
+            />
+            <label className={styles.markdownSupported}>
+                <span>Styling with Markdown is supported.</span>
+                <a
+                    href="https://www.markdownguide.org/cheat-sheet/"
+                    target={'_blank'}
+                    className={styles.markdownLink}
+                >
+                    <MarkdownIcon />
+                </a>
+            </label>
+        </div>
     )
 }
 
@@ -83,7 +101,7 @@ const PreviewContent = () => {
     } = useField('description')
 
     return (
-        <div>
+        <div className={styles.previewContent}>
             <AppDescription description={value} />
             <Divider />
         </div>

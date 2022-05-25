@@ -25,11 +25,65 @@
     text-decoration: underline;
 }
 
-.guidelinesLink:hover, .guidelinesLink:focus {
+.guidelinesLink:hover,
+.guidelinesLink:focus {
     color: var(--colors-grey900);
 }
 
 .field {
     margin-bottom: var(--spacers-dp24);
+    max-width: 480px;
+}
+
+.descriptionContainer {
+    margin-bottom: var(--spacers-dp24);
+}
+
+.writeContent {
+    max-width: 480px;
+    border: 1px solid var(--colors-grey500);
+    border-radius: 3px;
+    background-color: var(--colors-grey100);
+}
+
+.writeContent :global(textarea) {
+    border: 0 !important;
+    border-bottom: 1px dashed var(--colors-grey600) !important;
+}
+
+/* 
+    TODO: Can remove when UI-library is updated
+    Fix for status-icon margin 
+    This is fixed in latest UI
+    https://github.com/dhis2/ui/commit/3f23cc541e52ed02e4846dadb7a8e54baa92aef6 */
+.writeContent :global(.status-icon) {
+    display: none;
+}
+
+.previewContent {
+    max-width: 550px;
+}
+
+.markdownSupported {
+    font-size: 12px;
+    padding: 4px 8px;
+    background-color: var(--colors-grey100);
+    color: var(--colors-grey700);
+    border-top: 1px dashed var(--colors-grey100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.markdownLink {
+    fill: var(--colors-grey700);
+}
+
+.markdownLink:hover,
+.markdownLink:focus {
+    fill: var(--colors-grey900);
+}
+
+.helpText {
     max-width: 480px;
 }
