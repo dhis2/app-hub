@@ -1,19 +1,10 @@
-import {
-    Tab,
-    TabBar,
-    ReactFinalForm,
-    TextAreaFieldFF,
-    hasValue,
-    Divider,
-    Label,
-    Help,
-} from '@dhis2/ui'
+import { Tab, TabBar, hasValue, Divider, Label, Help } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useField } from 'react-final-form'
 import AppDescription from '../../components/AppDescription/AppDescription'
 import styles from './UserAppEdit.module.css'
-import MarkdownIcon from 'assets/icons/markdown_icon.svg'
+import MarkdownEditor from '../../components/MarkdownEditor/MarkdownEditor'
 
 const tabs = {
     WRITE: 'WRITE',
@@ -67,26 +58,13 @@ DescriptionEdit.propTypes = {
 const WriteContent = ({ description }) => {
     return (
         <div className={styles.writeContent}>
-            <ReactFinalForm.Field
-                required
+            <MarkdownEditor
                 name="description"
-                placeholder="What is the purpose of this app?"
                 initialValue={description}
-                component={TextAreaFieldFF}
-                className={styles.descriptionField}
                 validate={hasValue}
-                autoGrow
+                placeholder={'What is the purpose of this app?'}
+                required
             />
-            <label className={styles.markdownSupported}>
-                <span>Styling with Markdown is supported.</span>
-                <a
-                    href="https://www.markdownguide.org/cheat-sheet/"
-                    target={'_blank'}
-                    className={styles.markdownLink}
-                >
-                    <MarkdownIcon />
-                </a>
-            </label>
         </div>
     )
 }
