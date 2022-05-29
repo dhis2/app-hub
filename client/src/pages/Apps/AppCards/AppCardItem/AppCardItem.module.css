@@ -55,7 +55,7 @@
     width: 25px
 }
 
-.summarise {
+.summary {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -63,6 +63,6 @@
 }
 
 /* This is needed for line-clamp to work in Safari */
-.summarise > p {
+.summary > p {
     display: inline;
 }

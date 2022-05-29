@@ -7,7 +7,7 @@ import config from 'config'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 
 const AppCardItem = ({ id, name, developer, type, description, images }) => {
-    const logo = images.find(elem => elem.logo)
+    const logo = images.find((elem) => elem.logo)
 
     return (
         <Link to={`/app/${id}`} className={styles.appCard}>
@@ -25,24 +25,24 @@ const AppCardItem = ({ id, name, developer, type, description, images }) => {
             </header>
 
             <p className={styles.appCardDescription}>
-                <Summarise>
+                <Summary>
                     <ReactMarkdown
                         allowedElements={['p']}
                         unwrapDisallowed={false}
                     >
                         {description}
                     </ReactMarkdown>
-                </Summarise>
+                </Summary>
             </p>
         </Link>
     )
 }
 
-const Summarise = ({ children }) => {
-    return <div className={styles.summarise}>{children}</div>
+const Summary = ({ children }) => {
+    return <div className={styles.summary}>{children}</div>
 }
 
-Summarise.propTypes = {
+Summary.propTypes = {
     children: PropTypes.node,
 }
 
