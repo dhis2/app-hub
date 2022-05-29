@@ -14,7 +14,7 @@ import {
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import DescriptionEdit from '../UserAppEdit/DescriptionEdit'
+import DescriptionEditor from '../UserAppEdit/DescriptionEditor'
 import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 import styles from './UserAppUpload.module.css'
 import config from 'config'
@@ -37,7 +37,7 @@ const {
 } = config.ui
 const oldestSupportedDhisVersion = dhisVersions[2]
 
-const dhisVersionOptions = dhisVersions.map(v => ({
+const dhisVersionOptions = dhisVersions.map((v) => ({
     label: v,
     value: v,
 }))
@@ -119,7 +119,7 @@ const UserAppUpload = ({ user }) => {
         )
     }
 
-    const organisationOptions = organisations.map(organisation => ({
+    const organisationOptions = organisations.map((organisation) => ({
         label: organisation.name,
         value: organisation.id,
     }))
@@ -223,7 +223,7 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={nameLengthValidator}
                             />
-                            <DescriptionEdit />
+                            <DescriptionEditor />
                             <ReactFinalForm.Field
                                 required
                                 name="appType"

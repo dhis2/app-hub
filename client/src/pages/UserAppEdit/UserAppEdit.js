@@ -12,7 +12,7 @@ import {
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import DescriptionEdit from './DescriptionEdit'
+import DescriptionEditor from './DescriptionEditor'
 import styles from './UserAppEdit.module.css'
 import { useQueryV1 } from 'src/api'
 import * as api from 'src/api'
@@ -28,7 +28,7 @@ const UserAppEdit = ({ match }) => {
     const errorAlert = useErrorAlert()
     const isManager = useSelector(isManagerSelector)
 
-    const handleSubmit = async values => {
+    const handleSubmit = async (values) => {
         try {
             await api.updateApp(app.id, values)
             successAlert.show({ message: 'App updated successfully' })
@@ -82,7 +82,7 @@ const UserAppEdit = ({ match }) => {
                             className={styles.field}
                             validate={nameLengthValidator}
                         />
-                        <DescriptionEdit description={app.description} />
+                        <DescriptionEditor description={app.description} />
                         <ReactFinalForm.Field
                             name="sourceUrl"
                             label="Source code URL"
