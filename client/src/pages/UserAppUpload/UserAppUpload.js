@@ -6,7 +6,6 @@ import {
     NoticeBox,
     ReactFinalForm,
     InputFieldFF,
-    TextAreaFieldFF,
     SingleSelectFieldFF,
     FileInputFieldFF,
     composeValidators,
@@ -15,6 +14,7 @@ import {
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { Link, useHistory } from 'react-router-dom'
+import DescriptionEditor from '../UserAppEdit/DescriptionEditor'
 import CreateOrganisationModal from './CreateOrganisationModal/CreateOrganisationModal'
 import styles from './UserAppUpload.module.css'
 import config from 'config'
@@ -32,12 +32,12 @@ const {
     defaultAppType,
     appTypeToDisplayName,
     defaultAppChannel,
-   // appChannelToDisplayName,
+    // appChannelToDisplayName,
     dhisVersions,
 } = config.ui
 const oldestSupportedDhisVersion = dhisVersions[2]
 
-const dhisVersionOptions = dhisVersions.map(v => ({
+const dhisVersionOptions = dhisVersions.map((v) => ({
     label: v,
     value: v,
 }))
@@ -56,7 +56,6 @@ const appTypeOptions = Object.entries(appTypeToDisplayName).map(
         label,
     })
  */
-
 
 const requestOpts = {
     useAuth: true,
@@ -120,7 +119,7 @@ const UserAppUpload = ({ user }) => {
         )
     }
 
-    const organisationOptions = organisations.map(organisation => ({
+    const organisationOptions = organisations.map((organisation) => ({
         label: organisation.name,
         value: organisation.id,
     }))
@@ -224,15 +223,7 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={nameLengthValidator}
                             />
-                            <ReactFinalForm.Field
-                                required
-                                name="description"
-                                label="Description"
-                                placeholder="What is the purpose of this app?"
-                                component={TextAreaFieldFF}
-                                className={styles.field}
-                                validate={hasValue}
-                            />
+                            <DescriptionEditor />
                             <ReactFinalForm.Field
                                 required
                                 name="appType"

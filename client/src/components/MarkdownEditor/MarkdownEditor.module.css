@@ -1,0 +1,43 @@
+
+.markdownFieldWrapper {
+    border: 1px solid var(--colors-grey500);
+    border-radius: 3px;
+    background-color: var(--colors-grey100);
+}
+
+.markdownFieldWrapper :global(textarea) {
+    border: 0 !important;
+    border-bottom: 1px dashed var(--colors-grey600) !important;
+    border-bottom-left-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* 
+    TODO: Can remove when UI-library is updated
+    Fix for status-icon margin 
+    This is fixed in latest UI
+    https://github.com/dhis2/ui/commit/3f23cc541e52ed02e4846dadb7a8e54baa92aef6 */
+.markdownFieldWrapper :global(.status-icon) {
+    display: none;
+}
+
+.markdownSupportedText {
+    font-size: 12px;
+    padding: 4px 8px;
+    background-color: var(--colors-grey100);
+    color: var(--colors-grey700);
+    border-top: 1px dashed var(--colors-grey100);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 3px;
+}
+
+.markdownLink {
+    fill: var(--colors-grey700);
+}
+
+.markdownLink:hover,
+.markdownLink:focus {
+    fill: var(--colors-grey900);
+}

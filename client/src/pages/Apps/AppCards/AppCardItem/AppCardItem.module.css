@@ -54,3 +54,15 @@
 .coreAppIcon {
     width: 25px
 }
+
+.summary {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* This is needed for line-clamp to work in Safari */
+.summary > p {
+    display: inline;
+}
