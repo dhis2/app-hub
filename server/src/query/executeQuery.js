@@ -64,7 +64,7 @@ async function executeQuery(
         }
     }
 
-    if (pager) {
+    if (pager && pager.enabled) {
         if (options.pagingStrategy === pagingStrategies.SLICE) {
             result = pager.sliceAndFormatResult(result)
         } else {
