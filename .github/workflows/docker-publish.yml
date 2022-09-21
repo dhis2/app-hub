@@ -18,9 +18,22 @@ env:
     GIT_COMMITTER_EMAIL: 'apps@dhis2.org'
 
 jobs:
-    publish:
+    release:
         runs-on: ubuntu-latest
 
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  token: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
+            - uses: dhis2/action-semantic-release@update-deps
+              with:
+                  publish-github: true
+                  github-token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
+    publish:
+        runs-on: ubuntu-latest
+        needs: [release]
         if: "!contains(github.event.head_commit.message, '[skip ci]')"
 
         steps:
@@ -104,16 +117,3 @@ jobs:
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
-    release:
-        runs-on: ubuntu-latest
-
-        if: "!contains(github.event.head_commit.message, '[skip ci]')"
-
-        steps:
-            - uses: actions/checkout@v2
-              with:
-                  token: ${{secrets.DHIS2_BOT_GITHUB_TOKEN}}
-            - uses: dhis2/action-semantic-release@update-deps
-              with:
-                  publish-github: true
-                  github-token: ${{ secrets.DHIS2_BOT_GITHUB_TOKEN }}
