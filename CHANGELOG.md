@@ -1,3 +1,24 @@
+# [2.31.0](https://github.com/dhis2/app-hub/compare/v2.30.2...v2.31.0) (2022-09-21)
+
+
+### Bug Fixes
+
+* add missing file ([35caab5](https://github.com/dhis2/app-hub/commit/35caab5d4923b4fc0eafec1003c194890bc12c30))
+* add missing markdown icon ([3f36fdf](https://github.com/dhis2/app-hub/commit/3f36fdf95c15923efac128e14bc8ac147e1d7fa1))
+* add note about markdown support ([e31443e](https://github.com/dhis2/app-hub/commit/e31443ec5cfb0dc9585fdc04eb63b158d27ddd3f))
+* add support for DHIS2 2.39 ([dc6958d](https://github.com/dhis2/app-hub/commit/dc6958d7805af05235cd779cc25cef11f6b5ac9b))
+* **appdescription:** css and style cleanup ([0b7758f](https://github.com/dhis2/app-hub/commit/0b7758f68adb5e6ffd348a65c29940c08961266e))
+* line-clamp in safari ([b9382bd](https://github.com/dhis2/app-hub/commit/b9382bd87b806390bbdaad1693a2ccf62f083566))
+* update markdown-guide url ([fb10680](https://github.com/dhis2/app-hub/commit/fb10680bbbeb9df4aecf4807525ea6123424ea0a))
+* **version:** close modal when deleting version ([b17a33f](https://github.com/dhis2/app-hub/commit/b17a33f1bb5a2304382267973279dc2079a5388d))
+
+
+### Features
+
+* **appupload:** add markdown-preview for description ([c0434fe](https://github.com/dhis2/app-hub/commit/c0434fe5576b67d6dad5b3cde70b5a0c57965980))
+* **description:** support for markdown ([11548ee](https://github.com/dhis2/app-hub/commit/11548eed6cea5289a82067512d30d6f87534ee23))
+* **editapp:** add preview for markdown ([313fc6e](https://github.com/dhis2/app-hub/commit/313fc6ede1fe16524edcc107481062d6377ab5c6))
+
 ## [2.30.2](https://github.com/dhis2/app-hub/compare/v2.30.1...v2.30.2) (2022-05-05)
 
 
