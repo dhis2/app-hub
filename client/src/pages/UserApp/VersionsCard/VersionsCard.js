@@ -26,13 +26,14 @@ const DeleteVersionModal = ({ appId, version, mutate, onClose }) => {
         setIsSubmitting(true)
         try {
             await api.deleteVersion(appId, version.id)
-            mutate(app => ({
+            mutate((app) => ({
                 ...app,
-                versions: app.versions.filter(v => v.id != version.id),
+                versions: app.versions.filter((v) => v.id != version.id),
             }))
             successAlert.show({
                 message: `Successfully deleted version ${version.version}`,
             })
+            onClose()
         } catch (error) {
             errorAlert.show({ error })
         }
@@ -92,7 +93,7 @@ const DeleteVersionButton = ({ appId, version, mutate }) => {
 
 const VersionsCard = ({ app, mutate }) => {
     const versions = app.versions.sort((a, b) => b.created - a.created)
-    const renderDeleteVersionButton = version => (
+    const renderDeleteVersionButton = (version) => (
         <DeleteVersionButton appId={app.id} version={version} mutate={mutate} />
     )
 
