@@ -104,7 +104,12 @@ jobs:
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
+    release:
+        runs-on: ubuntu-latest
 
+        if: "!contains(github.event.head_commit.message, '[skip ci]')"
+
+        steps:
             - uses: dhis2/action-semantic-release@update-deps
               with:
                   publish-github: true
