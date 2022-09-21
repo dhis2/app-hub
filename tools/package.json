@@ -6,7 +6,7 @@
     "repository": "https://github.com/dhis2/app-hub",
     "dependencies": {
         "dotenv": "^10.0.0",
-        "knex": "^0.95.10",
+        "knex": "^2.3.0",
         "request": "^2.88.2",
         "request-promise-native": "^1.0.9",
         "slugify": "^1.6.0"
