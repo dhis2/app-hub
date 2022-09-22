@@ -5,6 +5,7 @@ import { useField } from 'react-final-form'
 import AppDescription from '../../components/AppDescription/AppDescription'
 import styles from './UserAppEdit.module.css'
 import MarkdownEditor from '../../components/MarkdownEditor/MarkdownEditor'
+import cx from 'classnames'
 
 const tabs = {
     WRITE: 'WRITE',
@@ -38,9 +39,11 @@ const DescriptionEditor = ({ description }) => {
                     Preview
                 </Tab>
             </TabBar>
-            {selectedTab === tabs.WRITE && (
-                <WriteContent description={description} />
-            )}
+
+            <WriteContent
+                description={description}
+                hidden={selectedTab !== tabs.WRITE}
+            />
             {selectedTab === tabs.PREVIEW && <PreviewContent />}
             <Help className={styles.helpText}>
                 A good app description helps users of the App Hub quickly
@@ -55,9 +58,9 @@ DescriptionEditor.propTypes = {
     description: PropTypes.string,
 }
 
-const WriteContent = ({ description }) => {
+const WriteContent = ({ description, hidden }) => {
     return (
-        <div className={styles.writeContent}>
+        <div className={cx(styles.writeContent, { [styles.hidden]: hidden })}>
             <MarkdownEditor
                 name="description"
                 initialValue={description}
