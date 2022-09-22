@@ -1,0 +1,19 @@
+.markdownDescription h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.markdownDescription a {
+    color: var(--colors-blue600);
+}
+
+.markdownDescription a:hover,
+.markdownDescription a:focus {
+    color: var(--colors-blue700);
+    text-decoration: underline;
+}

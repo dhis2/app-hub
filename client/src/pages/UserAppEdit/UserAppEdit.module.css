@@ -25,11 +25,21 @@
     text-decoration: underline;
 }
 
-.guidelinesLink:hover, .guidelinesLink:focus {
+.guidelinesLink:hover,
+.guidelinesLink:focus {
     color: var(--colors-grey900);
 }
 
 .field {
     margin-bottom: var(--spacers-dp24);
     max-width: 480px;
+}
+
+.descriptionContainer {
+    max-width: 480px;
+    margin-bottom: var(--spacers-dp24);
+}
+
+.writeContent {
+    margin-top: 8px;
 }
