@@ -1,3 +1,10 @@
+## [2.31.2](https://github.com/dhis2/app-hub/compare/v2.31.1...v2.31.2) (2022-11-15)
+
+
+### Bug Fixes
+
+* **add app:** allow clearing optional select field ([#694](https://github.com/dhis2/app-hub/issues/694)) ([24bd6bc](https://github.com/dhis2/app-hub/commit/24bd6bc55221d3fbb06d55dd637fc2d79738a4ab))
+
 ## [2.31.1](https://github.com/dhis2/app-hub/compare/v2.31.0...v2.31.1) (2022-11-15)
 
 
