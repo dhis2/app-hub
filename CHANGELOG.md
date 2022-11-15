@@ -1,3 +1,10 @@
+## [2.31.1](https://github.com/dhis2/app-hub/compare/v2.31.0...v2.31.1) (2022-11-15)
+
+
+### Bug Fixes
+
+* **description-editor:** fix some styling issues ([1835663](https://github.com/dhis2/app-hub/commit/1835663afa6ddc970e5f695fdaef645e3ebff5d6))
+
 # [2.31.0](https://github.com/dhis2/app-hub/compare/v2.30.2...v2.31.0) (2022-09-21)
 
 
