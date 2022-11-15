@@ -4,7 +4,7 @@ const debug = require('debug')(
 const { MediaType } = require('../../../../enums')
 const getServerUrl = require('../../../../utils/getServerUrl')
 
-const convertDbAppViewRowToAppApiV1Object = app => ({
+const convertDbAppViewRowToAppApiV1Object = (app) => ({
     appType: app.type,
 
     status: app.status,
@@ -78,7 +78,7 @@ const convertAll = (apps, request) => {
     debug(`Using serverUrl: ${serverUrl}`)
 
     const formattedApps = {}
-    apps.forEach(app => {
+    apps.forEach((app) => {
         let currentApp = formattedApps[app.app_id]
 
         if (!currentApp) {
@@ -90,7 +90,7 @@ const convertAll = (apps, request) => {
         if (app.media_id !== null) {
             const media = convertAppToV1Media(app, serverUrl)
 
-            if (!currentApp.images.find(img => img.id === media.id)) {
+            if (!currentApp.images.find((img) => img.id === media.id)) {
                 currentApp.images.push(media)
             }
 
@@ -100,9 +100,17 @@ const convertAll = (apps, request) => {
             })
         }
 
+        // some app-version may not have a version set
+        // sourceUrl really should be in 'app'-table, not 'app_version'
+        if (app.source_url && !currentApp.sourceUrl) {
+            currentApp.sourceUrl = app.source_url
+        }
+
         //Prevent duplicate versions
         if (
-            !currentApp.versions.find(version => version.id === app.version_id)
+            !currentApp.versions.find(
+                (version) => version.id === app.version_id
+            )
         ) {
             currentApp.versions.push(convertAppToV1AppVersion(app, serverUrl))
         }
