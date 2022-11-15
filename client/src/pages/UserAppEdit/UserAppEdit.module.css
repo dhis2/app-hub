@@ -43,3 +43,15 @@
 .writeContent {
     margin-top: 8px;
 }
+
+.writeContent :global(textarea) {
+    min-height: 48px;
+}
+
+.writeContent :global(p.error) {
+    margin-left: 8px;
+}
+
+.hidden {
+    display: none;
+}
