@@ -1,3 +1,10 @@
+## [2.31.3](https://github.com/dhis2/app-hub/compare/v2.31.2...v2.31.3) (2022-11-16)
+
+
+### Bug Fixes
+
+* **apps:** fix source-url being cleared when new version is uploaded ([#697](https://github.com/dhis2/app-hub/issues/697)) ([4ff7525](https://github.com/dhis2/app-hub/commit/4ff7525e89083dcf6154964762755d38dee65b3d))
+
 ## [2.31.2](https://github.com/dhis2/app-hub/compare/v2.31.1...v2.31.2) (2022-11-15)
 
 
