@@ -314,6 +314,7 @@ const UserAppUpload = ({ user }) => {
                                 className={styles.field}
                                 validate={maxDhisVersionValidator}
                                 options={dhisVersionOptions}
+                                clearable
                             />
                         </section>
 

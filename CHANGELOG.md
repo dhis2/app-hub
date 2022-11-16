@@ -1,3 +1,24 @@
+## [2.31.3](https://github.com/dhis2/app-hub/compare/v2.31.2...v2.31.3) (2022-11-16)
+
+
+### Bug Fixes
+
+* **apps:** fix source-url being cleared when new version is uploaded ([#697](https://github.com/dhis2/app-hub/issues/697)) ([4ff7525](https://github.com/dhis2/app-hub/commit/4ff7525e89083dcf6154964762755d38dee65b3d))
+
+## [2.31.2](https://github.com/dhis2/app-hub/compare/v2.31.1...v2.31.2) (2022-11-15)
+
+
+### Bug Fixes
+
+* **add app:** allow clearing optional select field ([#694](https://github.com/dhis2/app-hub/issues/694)) ([24bd6bc](https://github.com/dhis2/app-hub/commit/24bd6bc55221d3fbb06d55dd637fc2d79738a4ab))
+
+## [2.31.1](https://github.com/dhis2/app-hub/compare/v2.31.0...v2.31.1) (2022-11-15)
+
+
+### Bug Fixes
+
+* **description-editor:** fix some styling issues ([1835663](https://github.com/dhis2/app-hub/commit/1835663afa6ddc970e5f695fdaef645e3ebff5d6))
+
 # [2.31.0](https://github.com/dhis2/app-hub/compare/v2.30.2...v2.31.0) (2022-09-21)
 
 
