@@ -64,9 +64,14 @@ const VersionsTable = ({ versions, renderDeleteVersionButton }) => {
                         </TableCell>
                         <TableCell>
                             <span title={new Date(version.createdAt)}>
-                                {new Date(
-                                    version.createdAt
-                                ).toLocaleDateString()}
+                                {new Date(version.createdAt).toLocaleDateString(
+                                    'en-GB',
+                                    {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                    }
+                                )}
                             </span>
                         </TableCell>
                         <TableCell>
