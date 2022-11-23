@@ -1,3 +1,4 @@
+import { useAuth0 } from '@auth0/auth0-react'
 import {
     CenteredContent,
     CircularLoader,
@@ -17,14 +18,14 @@ import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
-const HeaderSection = ({ appName, appDeveloper, appType, logoSrc }) => (
+const HeaderSection = ({ appName, appDeveloper, appType, email, logoSrc }) => (
     <section
         className={classnames(styles.appCardSection, styles.appCardHeader)}
     >
         <AppIcon src={logoSrc} />
         <div>
             <h2 className={styles.appCardName}>{appName}</h2>
-            <span className={styles.appCardDeveloper}>by {appDeveloper}</span>
+            <span className={styles.appCardDeveloper}>by {appDeveloper} {email ? ` (${email})` : ''}</span>
             <span className={styles.appCardType}>{appType}</span>
         </div>
     </section>
@@ -34,6 +35,7 @@ HeaderSection.propTypes = {
     appDeveloper: PropTypes.string.isRequired,
     appName: PropTypes.string.isRequired,
     appType: PropTypes.string.isRequired,
+    email: PropTypes.string,
     logoSrc: PropTypes.string,
 }
 
@@ -79,6 +81,7 @@ const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
 const AppView = ({ match }) => {
     const { appId } = match.params
     const { data: app, error } = useQueryV1(`apps/${appId}`)
+    const { isAuthenticated } = useAuth0()
 
     if (error) {
         return (
@@ -99,6 +102,7 @@ const AppView = ({ match }) => {
     }
 
     const appDeveloper = app.developer.organisation || 'Unspecified'
+    const email = isAuthenticated ? app.developer?.email : null
     const logoSrc = app.images.find(img => img.logo)?.imageUrl
     const screenshots = app.images.filter(img => !img.logo)
     const versions = app.versions.sort((a, b) => b.created - a.created)
@@ -110,6 +114,7 @@ const AppView = ({ match }) => {
                 appName={app.name}
                 appDeveloper={appDeveloper}
                 appType={config.ui.appTypeToDisplayName[app.appType]}
+                email={email}
                 logoSrc={logoSrc}
             />
             <Divider />
