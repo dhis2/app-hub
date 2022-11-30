@@ -56,14 +56,19 @@ const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
             <a download href={latestVersion.downloadUrl} tabIndex="-1">
                 <Button primary>Download latest version</Button>
             </a>
-            <p className={styles.latestVersionDescription}>
-                {config.ui.appChannelToDisplayName[latestVersion.channel]}{' '}
-                release v{latestVersion.version}. Compatible with DHIS2{' '}
-                {renderDhisVersionsCompatibility(
-                    latestVersion.minDhisVersion,
-                    latestVersion.maxDhisVersion
-                )}
-            </p>
+            <div className={styles.latestVersionDescription}>
+                <span>
+                    {config.ui.appChannelToDisplayName[latestVersion.channel]}{' '}
+                    release v{latestVersion.version}.
+                </span>
+                <span>
+                    Compatible with DHIS2{' '}
+                    {renderDhisVersionsCompatibility(
+                        latestVersion.minDhisVersion,
+                        latestVersion.maxDhisVersion
+                    )}.
+                </span>
+            </div>
             {sourceUrl && (
                 <>
                     <Divider margin="12px 0" className={styles.divider} />
