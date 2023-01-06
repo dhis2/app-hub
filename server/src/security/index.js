@@ -8,7 +8,7 @@ const ROLES = {
  * This returns true if the request is authenticated (e.g. contains a valid token)
  * @param {*} request
  */
-const isAuthenticated = request => {
+const isAuthenticated = (request) => {
     try {
         debug('isAuthenticated:', request.auth)
         return request.auth.isAuthenticated === true
@@ -36,7 +36,7 @@ const hasRole = (request, role) => {
  * Checks if the user on the request has permissions to delete an app
  * @param {*} request
  */
-const canDeleteApp = request =>
+const canDeleteApp = (request) =>
     isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 /**
@@ -44,32 +44,32 @@ const canDeleteApp = request =>
  * @param {*} request
  * @param {*} hapi
  */
-const canChangeAppStatus = request =>
+const canChangeAppStatus = (request) =>
     isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
 /**
  * Checks if the user on the request has permissions to create an app version
  * @param {*} request
  */
-const canCreateAppVersion = request => isAuthenticated(request)
+const canCreateAppVersion = (request) => isAuthenticated(request)
 
 /**
  * Checks if the user on the request has permissions to create an app
  * @param {*} request
  */
-const canCreateApp = request => isAuthenticated(request)
+const canCreateApp = (request) => isAuthenticated(request)
 
 /**
  * Checks if the user on the request has permissions to see all apps
  * @param {*} request
  */
-const canSeeAllApps = request =>
+const canSeeAllApps = (request) =>
     isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
-const currentUserIsManager = request =>
+const currentUserIsManager = (request) =>
     isAuthenticated(request) && hasRole(request, ROLES.MANAGER)
 
-const getCurrentUserFromRequest = request => {
+const getCurrentUserFromRequest = (request) => {
     return new Promise((resolve, reject) => {
         try {
             const id = request.auth.credentials.userId
@@ -100,6 +100,7 @@ const getUserDecoration = function () {
         return {
             id: userId,
             name,
+            isManager: currentUserIsManager(this),
         }
     } catch (e) {
         return null

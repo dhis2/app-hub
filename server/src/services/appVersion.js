@@ -3,7 +3,7 @@ const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
 const { getServerUrl } = require('../utils')
 
-const getAppVersionQuery = knex =>
+const getAppVersionQuery = (knex) =>
     knex('app_version')
         .innerJoin(
             knex.ref('app_version_localised').as('avl'),
@@ -33,7 +33,8 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion'),
             knex.ref('avl.slug'),
-            knex.ref('app_version.download_count').as('downloadCount')
+            knex.ref('app_version.download_count').as('downloadCount'),
+            knex.ref('as.status').as('status')
         )
         .where('language_code', 'en') // only english is supported for now
         .orderBy('app_version.created_at', 'desc')
@@ -43,12 +44,19 @@ class AppVersionService extends Schmervice.Service {
         super(server, schmerviceOptions)
     }
 
-    async findOne(id, knex) {
+    async findOne(id, { filters }, knex) {
         const query = getAppVersionQuery(knex).where('app_version.id', id)
 
-        const { result } = await executeQuery(query, { model: AppVersionModel })
+        const { result } = await executeQuery(query, {
+            filters,
+            model: AppVersionModel,
+        })
         return result[0]
     }
+
+    // async findOneByColumn(columnValue, { filters }, knex) {
+    //     const query = getAppVersionQuery(knex).where(``)
+    // }
 
     async findByAppId(appId, { filters, pager } = {}, knex) {
         const query = getAppVersionQuery(knex).where(
@@ -88,7 +96,7 @@ class AppVersionService extends Schmervice.Service {
 
         const { result } = await executeQuery(query)
 
-        return result.map(c => c.name)
+        return result.map((c) => c.name)
     }
 
     getDownloadUrl(request, appVersion) {
@@ -105,7 +113,7 @@ class AppVersionService extends Schmervice.Service {
      * @returns a function with signature (appVersion) => appVersionWithDownloadUrl
      */
     createSetDownloadUrl(request) {
-        return appVersion => {
+        return (appVersion) => {
             appVersion.downloadUrl = this.getDownloadUrl(request, appVersion)
             return appVersion
         }

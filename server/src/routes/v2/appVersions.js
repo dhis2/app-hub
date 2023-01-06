@@ -1,10 +1,13 @@
-//const Boom = require('@hapi/boom')
+const Boom = require('@hapi/boom')
 const AppVersionModel = require('../../models/v2/AppVersion')
 const {
     withPagingResultSchema,
     withPagingQuerySchema,
 } = require('../../query/Pager')
 const Joi = require('../../utils/CustomJoi')
+const { Filters } = require('../../utils/Filter')
+const App = require('../../services/app')
+const { AppStatus } = require('../../enums')
 
 const CHANNELS = ['stable', 'development', 'canary']
 
@@ -15,8 +18,8 @@ module.exports = [
         config: {
             tags: ['api', 'v2'],
             response: {
-                sample: 0, // schema used for swagger, don't check responses
-                schema: AppVersionModel.def,
+                modify: true,
+                schema: AppVersionModel.externalDefinition,
             },
             validate: {
                 params: Joi.object({
@@ -32,7 +35,17 @@ module.exports = [
             const setDownloadUrl =
                 appVersionService.createSetDownloadUrl(request)
 
-            const version = await appVersionService.findOne(appVersionId, db)
+            const version = await appVersionService.findOne(
+                appVersionId,
+                {},
+                db
+            )
+
+            if (!version) {
+                return Boom.notFound()
+            }
+
+            await checkVersionAccess(version, request, db)
 
             setDownloadUrl(version)
 
@@ -44,9 +57,12 @@ module.exports = [
         path: '/v2/apps/{appId}/versions',
         config: {
             tags: ['api', 'v2'],
+            auth: { strategy: 'token', mode: 'try' },
             response: {
-                sample: 0, // schema used for swagger, don't check responses
-                schema: withPagingResultSchema(AppVersionModel.def),
+                modify: true,
+                schema: withPagingResultSchema(
+                    AppVersionModel.externalDefinition
+                ),
             },
             validate: {
                 params: Joi.object({
@@ -85,15 +101,37 @@ module.exports = [
             const setDownloadUrl =
                 appVersionService.createSetDownloadUrl(request)
 
-            const versions = await appVersionService.findByAppId(
+            const result = await appVersionService.findByAppId(
                 appId,
                 { pager, filters },
                 db
             )
+            const versions = result.result
 
-            versions.result.map(setDownloadUrl)
+            if (versions && versions.length > 0) {
+                await checkVersionAccess(versions[0], request, db)
+            }
 
-            return h.response(versions)
+            versions.map(setDownloadUrl)
+
+            return h.response(result)
         },
     },
 ]
+
+async function checkVersionAccess(version, request, db) {
+    const user = request.getUser()
+    // check if the user is allowed to see the app
+    if (version.status !== AppStatus.APPROVED) {
+        const canSeeApp =
+            user &&
+            (user.isManager ||
+                (await App.canEditApp(user.id, version.appId, db)))
+
+        console.log('canSeeApp', canSeeApp)
+        if (!canSeeApp) {
+            // TODO: should this return a 404 instead of a 403? (to avoid leaking info)
+            throw Boom.forbidden()
+        }
+    }
+}

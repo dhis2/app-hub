@@ -1,6 +1,7 @@
 const Joi = require('../../utils/CustomJoi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
+const { AppStatuses } = require('../../enums/index.js')
 
 const definition = defaultDefinition
     .append({
@@ -13,14 +14,16 @@ const definition = defaultDefinition
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
         slug: Joi.string(),
+        status: Joi.string().valid(...AppStatuses),
     })
     .alter({
-        db: s =>
+        db: (s) =>
             s
                 .rename('minDhisVersion', 'min_dhis2_version')
                 .rename('maxDhisVersion', 'max_dhis2_version')
                 .rename('demoUrl', 'demo_url'),
-        external: s => s.strip('slug'),
+        // remove fields from external-response
+        external: (s) => s.fork(['slug', 'status'], (s) => s.strip()),
     })
     .label('AppVersion')
 
