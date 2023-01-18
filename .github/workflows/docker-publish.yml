@@ -101,7 +101,7 @@ jobs:
                   aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   application_name: app-hub
-                  environment_name: staging
+                  environment_name: staging-v2
                   version_label: app-hub-staging-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
@@ -113,7 +113,7 @@ jobs:
                   aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
                   aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
                   application_name: app-hub
-                  environment_name: prod
+                  environment_name: prod-v2
                   version_label: app-hub-prod-${{ github.run_id }}_${{ github.run_number}}
                   region: ${{ env.AWS_REGION }}
                   deployment_package: deploy.zip
