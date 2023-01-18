@@ -92,7 +92,7 @@ jobs:
 
                   sed -i "s|AUTOINJECTED_GH_ACTIONS|$ECR_REGISTRY/$ECR_REPOSITORY:$SHA_TAG|g" Dockerrun.aws.json
                   cat Dockerrun.aws.json
-                  zip -r deploy.zip .ebextensions Dockerrun.aws.json
+                  zip -r deploy.zip Dockerrun.aws.json
 
             - name: Deploy to Staging
               if: steps.build-image.outputs.version == 'staging'
