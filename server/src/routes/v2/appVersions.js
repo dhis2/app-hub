@@ -128,7 +128,6 @@ async function checkVersionAccess(version, request, db) {
             (user.isManager ||
                 (await App.canEditApp(user.id, version.appId, db)))
 
-        console.log('canSeeApp', canSeeApp)
         if (!canSeeApp) {
             // TODO: should this return a 404 instead of a 403? (to avoid leaking info)
             throw Boom.forbidden()
