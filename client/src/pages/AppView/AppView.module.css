@@ -70,12 +70,17 @@
 }
 
 .latestVersionDescription {
-    max-width: 168px;
     margin-top: var(--spacers-dp8);
     margin-bottom: 0;
+}
+
+.latestVersionDescription span {
+    display: block;
+    margin-bottom: 2px;
     font-size: 11px;
     color: var(--colors-grey700);
 }
+
 
 .divider {
     max-width: 80%;

@@ -1,3 +1,10 @@
+## [2.31.4](https://github.com/dhis2/app-hub/compare/v2.31.3...v2.31.4) (2022-11-30)
+
+
+### Bug Fixes
+
+* break version sentences [HUB-150] ([#700](https://github.com/dhis2/app-hub/issues/700)) ([e59bd4e](https://github.com/dhis2/app-hub/commit/e59bd4e862c601a72882137e8f7a50b1b015a2cd))
+
 ## [2.31.3](https://github.com/dhis2/app-hub/compare/v2.31.2...v2.31.3) (2022-11-16)
 
 
