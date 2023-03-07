@@ -45,13 +45,13 @@ class AppVersionService extends Schmervice.Service {
     }
 
     async findOne(id, { filters }, knex) {
-        const query = getAppVersionQuery(knex).where('app_version.id', id)
+        const query = getAppVersionQuery(knex).where('app_version.id', id).first()
 
         const { result } = await executeQuery(query, {
             filters,
             model: AppVersionModel,
         })
-        return result[0]
+        return result
     }
 
     // async findOneByColumn(columnValue, { filters }, knex) {
