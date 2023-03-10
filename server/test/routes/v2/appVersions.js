@@ -352,19 +352,19 @@ describe('v2/appVersions', () => {
 
     describe('get single appVersion', () => {
         it('should successfully return an appVersion if it exist', async () => {
+            const versionId = dhis2AppVersions[0].id
             const request = {
                 method: 'GET',
-                url: `/api/v2/appVersions/${dhis2App.id}`,
+                url: `/api/v2/appVersions/${versionId}`,
             }
 
             const res = await server.inject(request)
 
             expect(res.statusCode).to.equal(200)
 
-            const result = res.result.result
+            const result = res.result
 
-            const resIds = result.map((r) => r.id)
-            expect(resIds).to.include(dhis2AppVersions.map((v) => v.id))
+            expect(result.id).to.equal(versionId)
         })
 
         it('should return 404 if appVersion does not exist', async () => {
@@ -376,12 +376,7 @@ describe('v2/appVersions', () => {
 
             const res = await server.inject(request)
 
-            expect(res.statusCode).to.equal(200)
-
-            const result = res.result.result
-
-            const resIds = result.map((r) => r.id)
-            expect(resIds).to.include(dhis2AppVersions.map((v) => v.id))
+            expect(res.statusCode).to.equal(404)
         })
 
         it('should return 400: bad request if id is not an uuid', async () => {
