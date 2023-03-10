@@ -2,7 +2,7 @@ const Joi = require('../../utils/CustomJoi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
 const { AppStatuses } = require('../../enums/index.js')
-const { operatorMap } = require('./../../utils/filterUtils')
+const { versionOperatorMap } = require('./../../utils/filterUtils')
 
 const definition = defaultDefinition
     .append({
@@ -39,7 +39,7 @@ const parseDatabaseJson = createDefaultValidator(definition)
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
-const filterOperators = Object.keys(operatorMap).concat('in').join(', ')
+const filterOperators = Object.keys(versionOperatorMap)
 
 const versionFilterSchema = Joi.filter(
     Joi.alternatives().try(Joi.stringArray(), Joi.string())

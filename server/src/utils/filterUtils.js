@@ -21,6 +21,18 @@ const operatorMap = {
     gte: '>=',
     ne: '<>',
 }
+
+// operators valid for version comparison
+const versionOperatorMap = {
+    ...operatorMap,
+    in: 'in',
+}
+
+const isVersionOperator = (operator) =>
+    Object.entries(versionOperatorMap)
+        .flatMap((e) => e)
+        .includes(operator)
+
 const allOperatorsMap = {
     ...operatorMap,
     ...stringOperatorsMap,
@@ -59,8 +71,10 @@ const parseFilterString = (filterStr) => {
 module.exports = {
     allOperatorsMap,
     operatorMap,
-    isStringOperator,
     stringOperatorsMap,
+    versionOperatorMap,
+    isStringOperator,
+    isVersionOperator,
     toSQLOperator,
     parseFilterString,
 }

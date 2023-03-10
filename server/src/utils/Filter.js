@@ -4,6 +4,8 @@ const {
     parseFilterString,
     toSQLOperator,
     isStringOperator,
+    isVersionOperator,
+    allOperatorsMap,
 } = require('./filterUtils')
 
 class Filters {
@@ -160,19 +162,38 @@ class Filters {
             )
         }
 
-        let operator = toSQLOperator(filter.operator, filter.value)
+        const operator = toSQLOperator(filter.operator, filter.value)
 
-        // array comparison below does not support string-operators, treat as equal
-        if (isStringOperator(operator)) {
-            operator = '='
+        if (!isVersionOperator(operator)) {
+            throw new Error(
+                `Operator ${operator} is not supported for version-filter`
+            )
             // return this.applyOneToQuery(query, filterName, options)
         }
+
+        // convert versions to arrays of ints, and compare them
+        const identifierRawSQL =
+            "string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[]"
+        const valueRawSQL =
+            "string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]"
+
         query.where((builder) => {
-            builder.whereRaw(
-                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${operator}
-                 string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
-                [colName, filter.value]
-            )
+            if (operator === allOperatorsMap.in) {
+                // no support for array-bindings in knex, so include them directly in the query
+                // see https://knexjs.org/guide/raw.html#raw-parameter-binding
+                builder.whereRaw(
+                    `${identifierRawSQL} in ( ${filter.value
+                        .map((_) => `${valueRawSQL}`)
+                        .join(',')} )`,
+                    [colName, ...filter.value]
+                )
+            } else {
+                builder.whereRaw(
+                    `${identifierRawSQL} ${operator} ${valueRawSQL}`,
+                    [colName, filter.value]
+                )
+            }
+
             if (options.includeEmpty) {
                 builder.orWhereRaw(`nullif( ??, '') is null`, colName)
             }

@@ -104,7 +104,7 @@ module.exports = [
                 await checkVersionAccess(versions[0], request, db)
             }
 
-            versions.result.map(setDownloadUrl)
+            versions.map(setDownloadUrl)
 
             return h.response(result)
         },
