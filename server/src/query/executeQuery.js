@@ -10,6 +10,12 @@ const defaultOptions = {
     pagingStrategy: pagingStrategies.WINDOW,
 }
 
+const selectMethods = {
+    select: 'select',
+    first: 'first',
+    pluck: 'pluck',
+}
+
 /**
  * Executes the knex-query, applying filters and paging if present
  *
@@ -49,6 +55,7 @@ async function executeQuery(
     }
 
     debug('Executing query: ' + query.toString())
+
     const rawResult = await query
     let result = rawResult
 
@@ -57,7 +64,7 @@ async function executeQuery(
     } else if (model) {
         // parse if it's a "getter" - ie is a select-query
         // else we format it to db-format
-        if (query._method === 'select') {
+        if (selectMethods[query._method]) {
             result = model.parseDatabaseJson(result)
         } else {
             result = model.formatDatabaseJson(result)

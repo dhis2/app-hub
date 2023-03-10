@@ -1,6 +1,10 @@
 const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
-const { parseFilterString, toSQLOperator } = require('./filterUtils')
+const {
+    parseFilterString,
+    toSQLOperator,
+    isStringOperator,
+} = require('./filterUtils')
 
 class Filters {
     /**
@@ -50,7 +54,7 @@ class Filters {
     static createFromQueryFilters(filters, { validate, rename } = {}, options) {
         let result = filters
         let renameMap = null
-        Object.keys(filters).map(key => {
+        Object.keys(filters).map((key) => {
             try {
                 const filter = parseFilterString(filters[key])
                 result[key] = filter
@@ -122,7 +126,7 @@ class Filters {
                     ? `${settings.tableName}.${colName}`
                     : colName)
             const { value, operator } = filter
-            query.where(builder => {
+            query.where((builder) => {
                 builder.where(nameToUse, toSQLOperator(operator, value), value)
                 if (settings.includeEmpty) {
                     builder.orWhereRaw(`nullif( ??, '') is null`, nameToUse)
@@ -156,11 +160,17 @@ class Filters {
             )
         }
 
-        query.where(builder => {
+        let operator = toSQLOperator(filter.operator, filter.value)
+
+        // array comparison below does not support string-operators, treat as equal
+        if (isStringOperator(operator)) {
+            operator = '='
+            // return this.applyOneToQuery(query, filterName, options)
+        }
+        query.where((builder) => {
             builder.whereRaw(
-                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${toSQLOperator(
-                    filter.operator
-                )} string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
+                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${operator}
+                 string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
                 [colName, filter.value]
             )
             if (options.includeEmpty) {

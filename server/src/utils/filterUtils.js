@@ -10,6 +10,9 @@ const stringOperatorsMap = {
     in: 'in',
 }
 
+const isStringOperator = (operator) =>
+    Object.keys(stringOperatorsMap).includes(operator)
+
 const operatorMap = {
     eq: '=',
     lt: '<',
@@ -37,7 +40,7 @@ const toSQLOperator = (operatorStr, value) => {
     return operator
 }
 
-const parseFilterString = filterStr => {
+const parseFilterString = (filterStr) => {
     let operator
     const seperatorIdx = filterStr.indexOf(SEPERATOR_CHAR)
     if (seperatorIdx < 0) {
@@ -56,6 +59,7 @@ const parseFilterString = filterStr => {
 module.exports = {
     allOperatorsMap,
     operatorMap,
+    isStringOperator,
     stringOperatorsMap,
     toSQLOperator,
     parseFilterString,

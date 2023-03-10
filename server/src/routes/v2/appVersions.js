@@ -23,7 +23,9 @@ module.exports = [
             },
             validate: {
                 params: Joi.object({
-                    appVersionId: Joi.string().required(),
+                    appVersionId: Joi.string()
+                        .guid({ version: 'uuidv4' })
+                        .required(),
                 }),
             },
         },
@@ -35,21 +37,11 @@ module.exports = [
             const setDownloadUrl =
                 appVersionService.createSetDownloadUrl(request)
 
-            const version = await appVersionService.findOne(
-                appVersionId,
-                {},
-                db
-            )
-
-            if (!version) {
-                return Boom.notFound()
-            }
-
+            const version = await appVersionService.findOne(appVersionId, db)
             await checkVersionAccess(version, request, db)
 
             setDownloadUrl(version)
-
-            return h.response(version)
+            return version
         },
     },
     {
@@ -76,8 +68,8 @@ module.exports = [
                         channel: Joi.filter(
                             Joi.stringArray().items(Joi.valid(...CHANNELS))
                         ).description('Filter by channel of the version'),
-                        minDhisVersion: Joi.filter(Joi.string()),
-                        maxDhisVersion: Joi.filter(Joi.string()),
+                        minDhisVersion: AppVersionModel.versionFilterSchema,
+                        maxDhisVersion: AppVersionModel.versionFilterSchema,
                     })
                 ),
             },
@@ -112,7 +104,7 @@ module.exports = [
                 await checkVersionAccess(versions[0], request, db)
             }
 
-            versions.map(setDownloadUrl)
+            versions.result.map(setDownloadUrl)
 
             return h.response(result)
         },

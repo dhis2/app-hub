@@ -2,6 +2,7 @@ const Schmervice = require('@hapipal/schmervice')
 const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
 const { getServerUrl } = require('../utils')
+const { NotFoundError } = require('../utils/errors')
 
 const getAppVersionQuery = (knex) =>
     knex('app_version')
@@ -39,24 +40,39 @@ const getAppVersionQuery = (knex) =>
         .where('language_code', 'en') // only english is supported for now
         .orderBy('app_version.created_at', 'desc')
 
+const TABLE_NAME = 'app_version'
+
 class AppVersionService extends Schmervice.Service {
     constructor(server, schmerviceOptions) {
         super(server, schmerviceOptions)
     }
 
-    async findOne(id, { filters }, knex) {
-        const query = getAppVersionQuery(knex).where('app_version.id', id).first()
+    async findOneByColumn(
+        columnValue,
+        { tableName = TABLE_NAME, columnName = 'id' } = {},
+        knex
+    ) {
+        const whereColumn = `${tableName}.${columnName}`
+        const query = getAppVersionQuery(knex)
+            .where(whereColumn, columnValue)
+            .first()
 
-        const { result } = await executeQuery(query, {
-            filters,
-            model: AppVersionModel,
-        })
+        const { result } = await executeQuery(query, { model: AppVersionModel })
+
+        if (!result) {
+            throw new NotFoundError('App Version Not Found.')
+        }
+
         return result
     }
 
-    // async findOneByColumn(columnValue, { filters }, knex) {
-    //     const query = getAppVersionQuery(knex).where(``)
-    // }
+    async findOne(id, knex) {
+        return this.findOneByColumn(id, { columnName: 'id' }, knex)
+    }
+
+    async findOneByVersion(version, knex) {
+        return this.findOneByColumn(version, { columnName: 'version' }, knex)
+    }
 
     async findByAppId(appId, { filters, pager } = {}, knex) {
         const query = getAppVersionQuery(knex).where(

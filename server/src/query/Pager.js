@@ -1,6 +1,6 @@
 const Joi = require('../utils/CustomJoi')
 
-const createDefaultPagingResultSchema = itemsSchema =>
+const createDefaultPagingResultSchema = (itemsSchema) =>
     Joi.object({
         pager: Joi.object({
             page: Joi.number(),
@@ -20,12 +20,11 @@ const defaultPagingQuerySchema = Joi.object({
     pageSize: Joi.number().default(25).min(1),
 })
 
-const withPagingQuerySchema = joiSchema =>
-    Joi.alternatives().try(
-        defaultPagingQuerySchema.concat(joiSchema),
-        joiSchema
-    )
-const withPagingResultSchema = joiSchema =>
+const withPagingQuerySchema = (joiSchema) => {
+    return defaultPagingQuerySchema.concat(joiSchema)
+}
+
+const withPagingResultSchema = (joiSchema) =>
     Joi.alternatives().try(
         createDefaultPagingResultSchema(joiSchema),
         joiSchema

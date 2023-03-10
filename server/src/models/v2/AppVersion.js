@@ -2,10 +2,11 @@ const Joi = require('../../utils/CustomJoi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
 const { AppStatuses } = require('../../enums/index.js')
+const { operatorMap } = require('./../../utils/filterUtils')
 
 const definition = defaultDefinition
     .append({
-        appId: Joi.string(),
+        appId: Joi.string().guid({ version: 'uuidv4' }),
         version: Joi.string(),
         channel: Joi.string().required(),
         demoUrl: Joi.string().uri().allow(null, ''),
@@ -38,6 +39,16 @@ const parseDatabaseJson = createDefaultValidator(definition)
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
+const filterOperators = Object.keys(operatorMap).concat('in').join(', ')
+
+const versionFilterSchema = Joi.filter(
+    Joi.alternatives().try(Joi.stringArray(), Joi.string())
+)
+    .operator(Joi.string().valid(...filterOperators))
+    .description(
+        `Filter by version. Supports filter operators: \`${filterOperators}\``
+    )
+
 module.exports = {
     def: definition,
     definition,
@@ -45,4 +56,5 @@ module.exports = {
     externalDefinition,
     parseDatabaseJson,
     formatDatabaseJson,
+    versionFilterSchema,
 }
