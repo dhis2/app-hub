@@ -41,9 +41,7 @@ const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
 const filterOperators = Object.keys(versionOperatorMap)
 
-const versionFilterSchema = Joi.filter(
-    Joi.alternatives().try(Joi.stringArray(), Joi.string())
-)
+const versionFilterSchema = Joi.filter()
     .operator(Joi.string().valid(...filterOperators))
     .description(
         `Filter by version. Supports filter operators: \`${filterOperators}\``

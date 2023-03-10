@@ -3,7 +3,6 @@ const Joi = require('./CustomJoi')
 const {
     parseFilterString,
     toSQLOperator,
-    isStringOperator,
     isVersionOperator,
     allOperatorsMap,
 } = require('./filterUtils')
@@ -187,6 +186,13 @@ class Filters {
                         .join(',')} )`,
                     [colName, ...filter.value]
                 )
+            } else if (Array.isArray(filter.value)) {
+                filter.value.forEach((value) => {
+                    builder.whereRaw(
+                        `${identifierRawSQL} ${operator} ${valueRawSQL}`,
+                        [colName, value]
+                    )
+                })
             } else {
                 builder.whereRaw(
                     `${identifierRawSQL} ${operator} ${valueRawSQL}`,

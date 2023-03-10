@@ -195,6 +195,52 @@ describe('v2/appVersions', () => {
                 })
             })
 
+            it('should handle "in" filter operator', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=in:2.28,2.32`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach((v) => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    const [, major] = v.minDhisVersion.split('.').map(Number)
+                    expect([28, 32]).to.include(major)
+                })
+            })
+
+            it('should handle multiple values for filter operators', async () => {
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?minDhisVersion=ne:2.28,2.32`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach((v) => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    const [, major] = v.minDhisVersion.split('.').map(Number)
+                    expect([28, 32]).to.not.include(major)
+                })
+            })
+
             it('should handle both minDhisVersion and maxDhisVersion', async () => {
                 const request = {
                     method: 'GET',

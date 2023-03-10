@@ -54,7 +54,7 @@ const Filter = {
         const result = { ...filter }
         const errors = []
 
-        const valueSchema = helpers.schema._flags.value || Joi.string()
+        const valueSchema = helpers.schema._flags.value || defaultValueSchema
         const operatorSchema =
             helpers.schema._flags.operator || stringOperatorSchema
 
@@ -67,7 +67,7 @@ const Filter = {
             result.value = valueResult.value
 
             if (valueResult.errors) {
-                const errs = valueResult.errors.map(e =>
+                const errs = valueResult.errors.map((e) =>
                     helpers.error('filter.value', { err: e })
                 )
                 errors.push(...errs)
@@ -79,11 +79,12 @@ const Filter = {
                 .$_validate(filter.operator, helpers.state, helpers.prefs)
             result.operator = opResult.value
             if (opResult.errors) {
-                const errs = opResult.errors.map(e =>
+                const errs = opResult.errors.map((e) =>
                     helpers.error('filter.operator', { err: e })
                 )
                 errors.push(...errs)
             }
+            10
         }
 
         return {
@@ -118,8 +119,16 @@ const StringArray = {
     base: Joi.array(),
     type: 'stringArray',
     coerce: (value, state, options) => ({
-        value: value.split ? value.split(',') : value
-    })
+        value: value.split ? value.split(',') : value,
+    }),
 }
+
+const ExtendedJoi = Joi.extend(StringArray).extend(Filter)
+// supports single versions and a list of versions
+// 2.34 and 2.34,2.35,2.36
+const defaultValueSchema = ExtendedJoi.alternatives().try(
+    ExtendedJoi.stringArray(),
+    ExtendedJoi.string()
+)
 
 module.exports = Joi.extend(Filter).extend(StringArray)
