@@ -7,11 +7,12 @@ on:
 jobs:
     lint-pr-title:
         runs-on: ubuntu-latest
-        container:
-            image: node:14-buster
         steps:
             - uses: actions/checkout@v2
-            - uses: c-hive/gha-yarn-cache@v1
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+                  cache: 'yarn'
             - run: yarn install --frozen-lockfile
             - id: commitlint
               run: echo ::set-output name=config_path::$(node -e "process.stdout.write(require('@dhis2/cli-style').config.commitlint)")
@@ -21,13 +22,14 @@ jobs:
 
     lint-commits:
         runs-on: ubuntu-latest
-        container:
-            image: node:14-buster
         steps:
             - uses: actions/checkout@v2
               with:
                   fetch-depth: 0
-            - uses: c-hive/gha-yarn-cache@v1
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+                  cache: 'yarn'
             - run: yarn install --frozen-lockfile
             - id: commitlint
               run: echo ::set-output name=config_path::$(node -e "process.stdout.write(require('@dhis2/cli-style').config.commitlint)")
