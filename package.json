@@ -29,7 +29,7 @@
         "format:server": "yarn workspace client format"
     },
     "devDependencies": {
-        "@dhis2/cli-style": "^10.4.1",
+        "@dhis2/cli-style": "^10.5.1",
         "concurrently": "^6.2.1",
         "cross-env": "^7.0.3"
     },
