@@ -435,5 +435,58 @@ describe('v2/appVersions', () => {
 
             expect(res.statusCode).to.equal(400)
         })
+
+        it('should return 403: forbidden if user is not authorized to view app', async () => {
+            // pending app so version should not be public
+            const pendingAppId = '02cb663c-5112-400b-8a93-0353187d337b'
+            const pendingVersions = appVersions.find((versions) =>
+                versions.find((v) => v.app_id === pendingAppId)
+            )
+
+            expect(pendingVersions).to.be.an.array()
+            const pendingVersion = pendingVersions[0]
+            expect(pendingVersion.id).to.be.a.string()
+            expect(pendingVersion.app_id).to.be.equal(pendingAppId)
+
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${pendingVersion.id}`,
+                auth: {
+                    strategy: 'no-auth',
+                    credentials: {
+                        // some user that does not exist
+                        userId: '2557234e-38d8-4037-9429-80c986632800',
+                        roles: [],
+                    },
+                },
+            }
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(403)
+        })
+        it('should return 403: forbidden if user is not logged in and app is not public', async () => {
+            // pending app so version should not be public
+            const pendingAppId = '02cb663c-5112-400b-8a93-0353187d337b'
+            const pendingVersions = appVersions.find((versions) =>
+                versions.find((v) => v.app_id === pendingAppId)
+            )
+
+            expect(pendingVersions).to.be.an.array()
+            const pendingVersion = pendingVersions[0]
+            expect(pendingVersion.id).to.be.a.string()
+            expect(pendingVersion.app_id).to.be.equal(pendingAppId)
+
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${pendingVersion.id}`,
+                auth: {
+                    strategy: 'no-auth',
+                    credentials: {},
+                },
+            }
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(403)
+        })
     })
 })
