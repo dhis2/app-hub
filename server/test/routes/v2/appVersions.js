@@ -408,9 +408,10 @@ describe('v2/appVersions', () => {
 
             expect(res.statusCode).to.equal(200)
 
-            const result = res.result
+            const version = res.result
 
-            expect(result.id).to.equal(versionId)
+            expect(version.id).to.equal(versionId)
+            Joi.assert(version, AppVersionModel.def)
         })
 
         it('should return 404 if appVersion does not exist', async () => {
