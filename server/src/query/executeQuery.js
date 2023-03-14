@@ -51,11 +51,12 @@ const isSelectQuery = (query) => {
  *
  * Note that this only has an effect if `pager` is present.
  * */
-async function executeQuery(
-    query,
-    { filters, pager, model } = {},
-    options = defaultOptions
-) {
+async function executeQuery(query, { filters, pager, model } = {}, options) {
+    options = {
+        ...defaultOptions,
+        ...options,
+    }
+
     if (filters) {
         filters.applyAllToQuery(query)
     }
@@ -88,10 +89,21 @@ async function executeQuery(
         if (options.pagingStrategy === pagingStrategies.SLICE) {
             result = pager.sliceAndFormatResult(result)
         } else {
-            const countQuery = pager.getTotalCountQuery(query)
-            debug('Executing totalCount-query', countQuery.toString())
-            const totalRes = await countQuery
-            const totalCount = totalRes.total_count
+            let totalCount = 0
+            if (
+                rawResult.length > 0 &&
+                options.pagingStrategy === pagingStrategies.WINDOW
+            ) {
+                totalCount = rawResult[0].total_count
+            } else if (
+                rawResult.length > 0 &&
+                options.pagingStrategy === pagingStrategies.SEPARATE
+            ) {
+                const countQuery = pager.getTotalCountQuery(query)
+                debug('Executing totalCount-query', countQuery.toString())
+                const totalRes = await countQuery
+                totalCount = totalRes.total_count
+            }
             result = pager.formatResult(result, totalCount)
         }
     } else {

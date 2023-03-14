@@ -47,6 +47,7 @@ class Pager {
      * @param {*} query
      */
     applyToQuery(query, includeTotal) {
+        console.log('APPLY PAGING TO QUERY', this.enabled, includeTotal)
         if (!this.enabled) {
             return
         }
@@ -55,6 +56,7 @@ class Pager {
         if (includeTotal) {
             const knex = query.client
             query.select(knex.raw('count(*) over() as total_count'))
+            console.log('APPLY TOTAL TO QUERY')
         }
 
         query.limit(this.pageSize)

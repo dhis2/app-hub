@@ -27,7 +27,7 @@ describe('executeQuery', () => {
         await db.rollback()
     })
 
-    const appMocksWithTotal = appMocks.map(a => ({
+    const appMocksWithTotal = appMocks.map((a) => ({
         ...a,
         total_count: appMocks.length,
     }))
@@ -42,12 +42,12 @@ describe('executeQuery', () => {
         'organisation.created_at'
     )
 
-    const getQueryMock = new Promise(resolve => {
+    const getQueryMock = new Promise((resolve) => {
         resolve(appMocksWithTotal)
     })
     getQueryMock._method = 'select'
 
-    const insertQueryMock = new Promise(resolve => resolve(appMocksWithTotal))
+    const insertQueryMock = new Promise((resolve) => resolve(appMocksWithTotal))
     insertQueryMock._method = 'insert'
 
     const appDefinition = Joi.object({
@@ -64,9 +64,9 @@ describe('executeQuery', () => {
 
     const appModelMock = {
         definition: appDefinition,
-        parseDatabaseJson: apps =>
+        parseDatabaseJson: (apps) =>
             Joi.attempt(apps, Joi.array().items(appDefinition)),
-        formatDatabaseJson: apps =>
+        formatDatabaseJson: (apps) =>
             Joi.attempt(apps, Joi.array().items(appDefinition)),
     }
 
@@ -81,15 +81,15 @@ describe('executeQuery', () => {
 
         expect(result).to.be.an.object()
         expect(result.result).to.be.an.array().length(organisationMocks.length)
-        result.result.forEach(org => {
+        result.result.forEach((org) => {
             expect(
-                organisationMocks.find(o => o.id === org.id)
+                organisationMocks.find((o) => o.id === org.id)
             ).to.not.be.undefined()
         })
     })
 
     it('should execute the query and format it if options.formatter is present', async () => {
-        const formatter = apps => apps.map(a => a.id)
+        const formatter = (apps) => apps.map((a) => a.id)
         const formatterSpy = sinon.spy(formatter)
         const result = await executeQuery(getQueryMock, undefined, {
             formatter: formatterSpy,
@@ -98,7 +98,7 @@ describe('executeQuery', () => {
         expect(result).to.be.an.object()
         expect(result.result).to.not.shallow.equal(appMocksWithTotal)
         expect(formatterSpy.calledOnce).to.be.true()
-        result.result.forEach(a => {
+        result.result.forEach((a) => {
             expect(a).to.not.be.an.object()
             expect(a).to.be.a.string()
         })
@@ -130,7 +130,7 @@ describe('executeQuery', () => {
 
     it('should prioritise formatter if both model and options.formatter is present', async () => {
         sinon.spy(appModelMock, 'parseDatabaseJson')
-        const formatter = apps => apps.map(a => a.id)
+        const formatter = (apps) => apps.map((a) => a.id)
         const formatterSpy = sinon.spy(formatter)
         const result = await executeQuery(
             getQueryMock,
@@ -159,7 +159,7 @@ describe('executeQuery', () => {
     })
 
     it('should call pager.applyToQuery and pager.formatResult if pager is present', async () => {
-        const applyStub = sinon.stub(pager, 'applyToQuery')
+        const applyStub = sinon.spy(pager, 'applyToQuery')
         const formatResultSpy = sinon.spy(pager, 'formatResult')
 
         const result = await executeQuery(organisationQuery, {
@@ -204,54 +204,162 @@ describe('executeQuery', () => {
         expect(result.pager).to.exist()
     })
 
-    it('should call getTotalCountQuery if pager is present and pagingStrategy is "separate"', async () => {
-        const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
-        const totalCountQuerySpy = sinon.spy(oneItemPager, 'getTotalCountQuery')
-        const result = await executeQuery(organisationQuery, {
-            pager: oneItemPager,
-            pagingStrategy: pagingStrategies.SEPARATE,
+    describe('pagingStrategies', () => {
+        describe('window', () => {
+            it('should call pager.applyToQuery and pager.formatResult if pager is present', async () => {
+                const applyStub = sinon.spy(pager, 'applyToQuery')
+                const formatResultSpy = sinon.spy(pager, 'formatResult')
+
+                const result = await executeQuery(
+                    organisationQuery,
+                    {
+                        pager,
+                    },
+                    { pagingStrategy: pagingStrategies.WINDOW }
+                )
+
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array()
+                expect(applyStub.calledOnce).to.be.true()
+                expect(
+                    applyStub.calledWith(organisationQuery, true)
+                ).to.be.true()
+                expect(formatResultSpy.called).to.be.true()
+
+                expect(result.pager).to.exist()
+                expect(result.pager.total).to.be.a.number()
+                expect(result.pager.pageSize).to.be.equal(pager.pageSize)
+            })
+
+            it('should handle empty response', async () => {
+                const emptyResultQuery = organisationQuery
+                    .clone()
+                    .where('id', 'a1bd6b5b-de8c-4998-8d34-56c18a139683')
+
+                const result = await executeQuery(
+                    // some ID that does not exist
+                    emptyResultQuery,
+                    {
+                        pager,
+                    },
+                    { pagingStrategy: pagingStrategies.WINDOW }
+                )
+
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array().length(0)
+                expect(result.pager).to.exist()
+                expect(result.pager.total).to.be.equal(0)
+            })
         })
 
-        expect(result).to.be.an.object()
-        expect(result.result).to.be.an.array().length(1)
-        expect(result.pager).to.exist()
-        expect(totalCountQuerySpy.calledWith(organisationQuery)).to.be.true()
-    })
+        describe('separate', () => {
+            it('should call getTotalCountQuery if pager is present', async () => {
+                const oneItemPager = new Pager({
+                    paging: true,
+                    pageSize: 1,
+                    page: 1,
+                })
+                const totalCountQuerySpy = sinon.spy(
+                    oneItemPager,
+                    'getTotalCountQuery'
+                )
+                const applyToQuerySpy = sinon.spy(oneItemPager, 'applyToQuery')
+                const result = await executeQuery(
+                    organisationQuery,
+                    {
+                        pager: oneItemPager,
+                    },
+                    {
+                        pagingStrategy: pagingStrategies.SEPARATE,
+                    }
+                )
+                expect(
+                    totalCountQuerySpy.calledWith(organisationQuery)
+                ).to.be.true()
+                expect(
+                    applyToQuerySpy.calledWith(organisationQuery, false)
+                ).to.be.true()
 
-    it('should call sliceAndFormatResult if pager is present and pagingStrategy is "slice"', async () => {
-        const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
-        const sliceAndFormatResultSpy = sinon.spy(
-            oneItemPager,
-            'sliceAndFormatResult'
-        )
-        const result = await executeQuery(
-            organisationQuery,
-            {
-                pager: oneItemPager,
-            },
-            { pagingStrategy: 'slice' }
-        )
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array().length(1)
 
-        expect(result).to.be.an.object()
-        expect(result.result).to.be.an.array().length(1)
-        expect(result.pager).to.exist()
-        expect(sliceAndFormatResultSpy.called).to.be.true()
-    })
+                expect(result.pager).to.exist()
+                expect(result.pager.pageSize).to.be.equal(oneItemPager.pageSize)
+            })
 
-    it('should not call applyToQuery if pager is present and pagingStrategy is "slice"', async () => {
-        const oneItemPager = new Pager({ paging: true, pageSize: 1, page: 1 })
-        const applyToQuerySpy = sinon.spy(oneItemPager, 'applyToQuery')
-        const result = await executeQuery(
-            organisationQuery,
-            {
-                pager: oneItemPager,
-            },
-            { pagingStrategy: 'slice' }
-        )
+            it('should handle empty response', async () => {
+                const emptyResultQuery = organisationQuery
+                    .clone()
+                    .where('id', 'a1bd6b5b-de8c-4998-8d34-56c18a139683')
 
-        expect(result).to.be.an.object()
-        expect(result.result).to.be.an.array().length(1)
-        expect(result.pager).to.exist()
-        expect(applyToQuerySpy.called).to.be.false()
+                const result = await executeQuery(
+                    emptyResultQuery,
+                    {
+                        pager,
+                    },
+                    {
+                        pagingStrategy: pagingStrategies.SEPARATE,
+                    }
+                )
+
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array().length(0)
+
+                expect(result.pager).to.exist()
+                expect(result.pager.total).to.be.equal(0)
+                expect(result.pager.pageSize).to.be.equal(pager.pageSize)
+            })
+        })
+
+        describe('slice', () => {
+            it('should call sliceAndFormatResult if pager is present', async () => {
+                const oneItemPager = new Pager({
+                    paging: true,
+                    pageSize: 1,
+                    page: 1,
+                })
+                const sliceAndFormatResultSpy = sinon.spy(
+                    oneItemPager,
+                    'sliceAndFormatResult'
+                )
+                const applyToQuerySpy = sinon.spy(oneItemPager, 'applyToQuery')
+                const result = await executeQuery(
+                    organisationQuery,
+                    {
+                        pager: oneItemPager,
+                    },
+                    { pagingStrategy: 'slice' }
+                )
+
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array().length(1)
+                expect(result.pager).to.exist()
+                expect(sliceAndFormatResultSpy.called).to.be.true()
+                expect(applyToQuerySpy.called).to.be.false()
+            })
+
+            it('should handle empty response', async () => {
+                const emptyResultQuery = organisationQuery
+                    .clone()
+                    .where('id', 'a1bd6b5b-de8c-4998-8d34-56c18a139683')
+
+                const result = await executeQuery(
+                    emptyResultQuery,
+                    {
+                        pager,
+                    },
+                    {
+                        pagingStrategy: pagingStrategies.SLICE,
+                    }
+                )
+
+                expect(result).to.be.an.object()
+                expect(result.result).to.be.an.array().length(0)
+
+                expect(result.pager).to.exist()
+                expect(result.pager.total).to.be.equal(0)
+                expect(result.pager.pageSize).to.be.equal(pager.pageSize)
+            })
+        })
     })
 })
