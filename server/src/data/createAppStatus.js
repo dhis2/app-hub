@@ -23,7 +23,7 @@ const createAppStatus = async (params, knex) => {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
-        const [id] = await knex('app_status')
+        const [{ id }] = await knex('app_status')
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,

@@ -3,10 +3,7 @@ const joi = require('joi')
 const paramsSchema = joi
     .object()
     .keys({
-        email: joi
-            .string()
-            .email()
-            .required(),
+        email: joi.string().email().required(),
         name: joi.string(),
     })
     .options({ allowUnknown: true })
@@ -42,7 +39,7 @@ const createUser = async (params, knex) => {
     const { email, name } = params
 
     try {
-        const [id] = await knex
+        const [{ id }] = await knex
             .insert({
                 email,
                 name,
