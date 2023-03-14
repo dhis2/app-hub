@@ -92,11 +92,15 @@ exports.init = async (knex, config) => {
         await server.register({
             plugin: Pino,
             options: {
-                prettyPrint: config.logging.prettyPrint,
                 redact: config.logging.redactAuthorization
                     ? []
                     : ['req.headers.authorization'],
                 level: config.logging.level,
+                transport: config.logging.prettyPrint
+                    ? {
+                          target: 'pino-pretty',
+                      }
+                    : undefined,
             },
         })
     }
