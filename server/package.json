@@ -19,6 +19,9 @@
         "db:reload": "yarn db:reset && yarn db:seed",
         "generate:migration": "knex migrate:make"
     },
+    "engines": {
+        "node": ">=14.0.0"
+    },
     "dependencies": {
         "@hapi/boom": "^9.1.4",
         "@hapi/bounce": "^2.0.0",
