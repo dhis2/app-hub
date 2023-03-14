@@ -39,7 +39,7 @@
         "hapi-sentry": "^3.2.0",
         "hapi-swagger": "^14.2.4",
         "joi": "^17.4.2",
-        "jsonwebtoken": "^8.5.1",
+        "jsonwebtoken": "^9.0.0",
         "jwks-rsa": "^2.0.4",
         "knex": "^0.95.10",
         "nodemailer": "^6.6.3",
