@@ -131,4 +131,4 @@ const defaultValueSchema = ExtendedJoi.alternatives().try(
     ExtendedJoi.string()
 )
 
-module.exports = Joi.extend(Filter).extend(StringArray)
+module.exports = ExtendedJoi
