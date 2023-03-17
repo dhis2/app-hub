@@ -1,6 +1,7 @@
 const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
 const {
+    parseFilterString,
     toSQLOperator,
     isVersionOperator,
     versionOperatorMap,
