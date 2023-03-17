@@ -50,8 +50,8 @@ describe('v2/appVersions', () => {
 
             const result = res.result.result
 
-            const resIds = result.map(r => r.id)
-            expect(resIds).to.include(dhis2AppVersions.map(v => v.id))
+            const resIds = result.map((r) => r.id)
+            expect(resIds).to.include(dhis2AppVersions.map((v) => v.id))
         })
 
         it('should return a result that complies with AppVersionModel', async () => {
@@ -69,7 +69,7 @@ describe('v2/appVersions', () => {
             Joi.assert(result, Joi.array().items(AppVersionModel.def))
 
             // check some keys as well
-            result.map(v => {
+            result.map((v) => {
                 expect(v.appId).to.be.a.string()
                 expect(v.version).to.be.a.string()
                 expect(v.minDhisVersion).to.be.a.string()
@@ -95,7 +95,7 @@ describe('v2/appVersions', () => {
             expect(result.pager.pageSize).to.equal(2)
             expect(versions.length).to.equal(2)
             // check some keys as well
-            versions.map(v => {
+            versions.map((v) => {
                 expect(v.appId).to.be.a.string()
                 expect(v.version).to.be.a.string()
                 expect(v.minDhisVersion).to.be.a.string()
@@ -119,7 +119,7 @@ describe('v2/appVersions', () => {
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
                 expect(result.pager).to.be.an.object()
                 // check some keys as well
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     expect(v.channel).to.be.equal('development')
@@ -140,7 +140,7 @@ describe('v2/appVersions', () => {
                 const versions = result.result
 
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     expect(v.minDhisVersion).to.be.equal('2.29')
@@ -161,7 +161,7 @@ describe('v2/appVersions', () => {
                 const versions = result.result
 
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     expect(v.minDhisVersion).to.be.below('2.29')
@@ -183,7 +183,7 @@ describe('v2/appVersions', () => {
 
                 expect(versions.length).to.be.above(0)
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     if (v.maxDhisVersion) {
@@ -210,7 +210,7 @@ describe('v2/appVersions', () => {
 
                 expect(versions.length).to.be.above(0)
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     if (v.maxDhisVersion) {
@@ -237,7 +237,7 @@ describe('v2/appVersions', () => {
 
                 expect(versions.length).to.be.above(0)
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     if (v.maxDhisVersion) {
@@ -266,7 +266,7 @@ describe('v2/appVersions', () => {
                 expect(versions.length).to.be.above(0)
 
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     expect(v.minDhisVersion).to.be.below(31)
@@ -295,7 +295,7 @@ describe('v2/appVersions', () => {
                 expect(versions.length).to.be.above(0)
 
                 Joi.assert(versions, Joi.array().items(AppVersionModel.def))
-                versions.forEach(v => {
+                versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
                     if (v.maxDhisVersion) {
@@ -347,6 +347,101 @@ describe('v2/appVersions', () => {
                 const emptyCount = versions.reduce(countEmptyMaxVersion, 0)
                 expect(emptyCount).to.equal(totalEmptyCount)
             })
+        })
+    })
+
+    describe('get single appVersion', () => {
+        it('should successfully return an appVersion if it exist', async () => {
+            const versionId = dhis2AppVersions[0].id
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${versionId}`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(200)
+
+            const version = res.result
+
+            expect(version.id).to.equal(versionId)
+            Joi.assert(version, AppVersionModel.def)
+        })
+
+        it('should return 404 if appVersion does not exist', async () => {
+            const validRandomUuid = '7f282e24-2d16-44f5-bd38-a7e708b84735'
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${validRandomUuid}`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(404)
+        })
+
+        it('should return 400: bad request if id is not an uuid', async () => {
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/not-an-uuid`,
+            }
+
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(400)
+        })
+
+        it('should return 403: forbidden if user is not authorized to view app', async () => {
+            // pending app so version should not be public
+            const pendingAppId = '02cb663c-5112-400b-8a93-0353187d337b'
+            const pendingVersions = appVersions.find((versions) =>
+                versions.find((v) => v.app_id === pendingAppId)
+            )
+
+            expect(pendingVersions).to.be.an.array()
+            const pendingVersion = pendingVersions[0]
+            expect(pendingVersion.id).to.be.a.string()
+            expect(pendingVersion.app_id).to.be.equal(pendingAppId)
+
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${pendingVersion.id}`,
+                auth: {
+                    strategy: 'no-auth',
+                    credentials: {
+                        // some user that does not exist
+                        userId: '2557234e-38d8-4037-9429-80c986632800',
+                        roles: [],
+                    },
+                },
+            }
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(403)
+        })
+        it('should return 403: forbidden if user is not logged in and app is not public', async () => {
+            // pending app so version should not be public
+            const pendingAppId = '02cb663c-5112-400b-8a93-0353187d337b'
+            const pendingVersions = appVersions.find((versions) =>
+                versions.find((v) => v.app_id === pendingAppId)
+            )
+
+            expect(pendingVersions).to.be.an.array()
+            const pendingVersion = pendingVersions[0]
+            expect(pendingVersion.id).to.be.a.string()
+            expect(pendingVersion.app_id).to.be.equal(pendingAppId)
+
+            const request = {
+                method: 'GET',
+                url: `/api/v2/appVersions/${pendingVersion.id}`,
+                auth: {
+                    strategy: 'no-auth',
+                    credentials: {},
+                },
+            }
+            const res = await server.inject(request)
+
+            expect(res.statusCode).to.equal(403)
         })
     })
 })
