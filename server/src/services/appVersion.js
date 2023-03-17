@@ -70,10 +70,6 @@ class AppVersionService extends Schmervice.Service {
         return this.findOneByColumn(id, { columnName: 'id' }, knex)
     }
 
-    async findOneByVersion(version, knex) {
-        return this.findOneByColumn(version, { columnName: 'version' }, knex)
-    }
-
     async findByAppId(appId, { filters, pager } = {}, knex) {
         const query = getAppVersionQuery(knex).where(
             'app_version.app_id',

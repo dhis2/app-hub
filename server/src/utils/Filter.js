@@ -1,10 +1,9 @@
 const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
 const {
-    parseFilterString,
     toSQLOperator,
     isVersionOperator,
-    allOperatorsMap,
+    versionOperatorMap,
 } = require('./filterUtils')
 
 class Filters {
@@ -177,7 +176,7 @@ class Filters {
             "string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]"
 
         query.where((builder) => {
-            if (operator === allOperatorsMap.in) {
+            if (operator === versionOperatorMap.in) {
                 // no support for array-bindings for raw-queries in knex, so include them directly in the query
                 // see https://knexjs.org/guide/raw.html#raw-parameter-binding
                 builder.whereRaw(

@@ -112,9 +112,9 @@ module.exports = [
 ]
 
 async function checkVersionAccess(version, request, db) {
-    const user = request.getUser()
     // check if the user is allowed to see the app
     if (version.status !== AppStatus.APPROVED) {
+        const user = request.getUser()
         const canSeeApp =
             user &&
             (user.isManager ||
