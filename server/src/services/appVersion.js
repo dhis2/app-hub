@@ -93,6 +93,8 @@ class AppVersionService extends Schmervice.Service {
             })
 
             filters.applyVersionFilter(query, 'minDhisVersion')
+
+            filters.applyVersionFilter(query, 'version')
         }
 
         return executeQuery(query, {

@@ -178,7 +178,7 @@ class Filters {
 
         query.where((builder) => {
             if (operator === allOperatorsMap.in) {
-                // no support for array-bindings in knex, so include them directly in the query
+                // no support for array-bindings for raw-queries in knex, so include them directly in the query
                 // see https://knexjs.org/guide/raw.html#raw-parameter-binding
                 builder.whereRaw(
                     `${identifierRawSQL} in ( ${filter.value

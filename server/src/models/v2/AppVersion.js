@@ -24,7 +24,7 @@ const definition = defaultDefinition
                 .rename('maxDhisVersion', 'max_dhis2_version')
                 .rename('demoUrl', 'demo_url'),
         // remove fields from external-response
-        external: (s) => s.fork(['slug', 'status'], (s) => s.strip()),
+        external: (s) => s.fork(['slug'], (s) => s.strip()),
     })
     .label('AppVersion')
 
@@ -41,8 +41,20 @@ const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
 const filterOperators = Object.keys(versionOperatorMap)
 
-const versionFilterSchema = Joi.filter()
-    .operator(Joi.string().valid(...filterOperators))
+const baseVersionFilterSchema = Joi.filter().operator(
+    Joi.string().valid(...filterOperators)
+)
+const versionFilterSchema = baseVersionFilterSchema
+    .when(Joi.filter().operator(Joi.string().valid('eq')), {
+        // error message if eq is used with multiple values
+        then: baseVersionFilterSchema.value(
+            Joi.stringArray()
+                .length(1)
+                .message(
+                    "operator does not support multiple values, use 'in' instead."
+                )
+        ),
+    })
     .description(
         `Filter by version. Supports filter operators: \`${filterOperators}\``
     )

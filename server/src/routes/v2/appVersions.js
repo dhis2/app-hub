@@ -62,7 +62,7 @@ module.exports = [
                 }),
                 query: withPagingQuerySchema(
                     Joi.object({
-                        version: Joi.filter(Joi.string()).description(
+                        version: Joi.filter().description(
                             'Filter by version of the app'
                         ),
                         channel: Joi.filter(

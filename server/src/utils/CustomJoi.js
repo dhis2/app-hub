@@ -84,7 +84,6 @@ const Filter = {
                 )
                 errors.push(...errs)
             }
-            10
         }
 
         return {

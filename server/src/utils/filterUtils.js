@@ -39,11 +39,7 @@ const allOperatorsMap = {
 }
 
 const toSQLOperator = (operatorStr, value) => {
-    let operator = allOperatorsMap[operatorStr]
-
-    if (operator === '=' && Array.isArray(value)) {
-        operator = 'in'
-    }
+    const operator = allOperatorsMap[operatorStr]
 
     if (!operator) {
         throw new Error('Operator ', operatorStr, ' not supported.')
