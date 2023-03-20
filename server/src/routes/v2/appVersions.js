@@ -5,7 +5,6 @@ const {
     withPagingQuerySchema,
 } = require('../../query/Pager')
 const Joi = require('../../utils/CustomJoi')
-const { Filters } = require('../../utils/Filter')
 const App = require('../../services/app')
 const { AppStatus } = require('../../enums')
 

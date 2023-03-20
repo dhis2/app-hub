@@ -4,6 +4,7 @@ module.exports = {
     extends: [config.eslint],
 
     parserOptions: {
+        ecmaVersion: 2020,
         ecmaFeatures: {
             globalReturn: true,
             experimentalObjectRestSpread: true,
