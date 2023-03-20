@@ -1,14 +1,48 @@
-//const Boom = require('@hapi/boom')
+const Boom = require('@hapi/boom')
 const AppVersionModel = require('../../models/v2/AppVersion')
 const {
     withPagingResultSchema,
     withPagingQuerySchema,
 } = require('../../query/Pager')
 const Joi = require('../../utils/CustomJoi')
+const App = require('../../services/app')
+const { AppStatus } = require('../../enums')
 
 const CHANNELS = ['stable', 'development', 'canary']
 
 module.exports = [
+    {
+        method: 'GET',
+        path: '/v2/appVersions/{appVersionId}',
+        config: {
+            tags: ['api', 'v2'],
+            response: {
+                modify: true,
+                schema: AppVersionModel.externalDefinition,
+            },
+            validate: {
+                params: Joi.object({
+                    appVersionId: Joi.string()
+                        .guid({ version: 'uuidv4' })
+                        .required(),
+                }),
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { appVersionId } = request.params
+            const { appVersionService } = request.services(true)
+
+            const setDownloadUrl =
+                appVersionService.createSetDownloadUrl(request)
+
+            const version = await appVersionService.findOne(appVersionId, db)
+            await checkVersionAccess(version, request, db)
+
+            setDownloadUrl(version)
+            return version
+        },
+    },
     {
         method: 'GET',
         path: '/v2/apps/{appId}/versions',
@@ -67,3 +101,19 @@ module.exports = [
         },
     },
 ]
+
+async function checkVersionAccess(version, request, db) {
+    // check if the user is allowed to see the app
+    if (version.status !== AppStatus.APPROVED) {
+        const user = request.getUser()
+        const canSeeApp =
+            user &&
+            (user.isManager ||
+                (await App.canEditApp(user.id, version.appId, db)))
+
+        if (!canSeeApp) {
+            // TODO: should this return a 404 instead of a 403? (to avoid leaking info)
+            throw Boom.forbidden()
+        }
+    }
+}
