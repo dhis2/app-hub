@@ -2,8 +2,9 @@ const Schmervice = require('@hapipal/schmervice')
 const AppVersionModel = require('../models/v2/AppVersion')
 const { executeQuery } = require('../query/executeQuery')
 const { getServerUrl } = require('../utils')
+const { NotFoundError } = require('../utils/errors')
 
-const getAppVersionQuery = knex =>
+const getAppVersionQuery = (knex) =>
     knex('app_version')
         .innerJoin(
             knex.ref('app_version_localised').as('avl'),
@@ -33,14 +34,40 @@ const getAppVersionQuery = knex =>
             knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion'),
             knex.ref('avl.slug'),
-            knex.ref('app_version.download_count').as('downloadCount')
+            knex.ref('app_version.download_count').as('downloadCount'),
+            knex.ref('as.status').as('status')
         )
         .where('language_code', 'en') // only english is supported for now
         .orderBy('app_version.created_at', 'desc')
 
+const TABLE_NAME = 'app_version'
+
 class AppVersionService extends Schmervice.Service {
     constructor(server, schmerviceOptions) {
         super(server, schmerviceOptions)
+    }
+
+    async findOneByColumn(
+        columnValue,
+        { tableName = TABLE_NAME, columnName = 'id' } = {},
+        knex
+    ) {
+        const whereColumn = `${tableName}.${columnName}`
+        const query = getAppVersionQuery(knex)
+            .where(whereColumn, columnValue)
+            .first()
+
+        const { result } = await executeQuery(query, { model: AppVersionModel })
+
+        if (!result) {
+            throw new NotFoundError('App Version Not Found.')
+        }
+
+        return result
+    }
+
+    async findOne(id, knex) {
+        return this.findOneByColumn(id, { columnName: 'id' }, knex)
     }
 
     async findByAppId(appId, { filters, pager } = {}, knex) {
@@ -81,7 +108,7 @@ class AppVersionService extends Schmervice.Service {
 
         const { result } = await executeQuery(query)
 
-        return result.map(c => c.name)
+        return result.map((c) => c.name)
     }
 
     getDownloadUrl(request, appVersion) {
@@ -98,7 +125,7 @@ class AppVersionService extends Schmervice.Service {
      * @returns a function with signature (appVersion) => appVersionWithDownloadUrl
      */
     createSetDownloadUrl(request) {
-        return appVersion => {
+        return (appVersion) => {
             appVersion.downloadUrl = this.getDownloadUrl(request, appVersion)
             return appVersion
         }

@@ -1,3 +1,19 @@
+# [2.32.0](https://github.com/dhis2/app-hub/compare/v2.31.5...v2.32.0) (2023-03-20)
+
+
+### Features
+
+* **appversions:** add endpoint for getting a single app-version ([b5ec694](https://github.com/dhis2/app-hub/commit/b5ec6941704d3d47b8ff09344c29654473df931b))
+
+## [2.31.5](https://github.com/dhis2/app-hub/compare/v2.31.4...v2.31.5) (2023-02-07)
+
+
+### Bug Fixes
+
+* **deps:** update deps, downgrade react@16 ([4ae4806](https://github.com/dhis2/app-hub/commit/4ae4806eec78a0d8dec6175e9ab772b9e3e46968))
+* increase nginx client_max_body_size ([8ece671](https://github.com/dhis2/app-hub/commit/8ece6713801c3a0217d3d5b0836a734c296ae6e3))
+* prop-types import ([aa4107a](https://github.com/dhis2/app-hub/commit/aa4107a1f19da32319b53fad0446d6e6d83f9d90))
+
 ## [2.31.4](https://github.com/dhis2/app-hub/compare/v2.31.3...v2.31.4) (2022-11-30)
 
 

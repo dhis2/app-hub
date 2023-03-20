@@ -1,10 +1,11 @@
 const Joi = require('../../utils/CustomJoi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
+const { AppStatuses } = require('../../enums/index.js')
 
 const definition = defaultDefinition
     .append({
-        appId: Joi.string(),
+        appId: Joi.string().guid({ version: 'uuidv4' }),
         version: Joi.string(),
         channel: Joi.string().required(),
         demoUrl: Joi.string().uri().allow(null, ''),
@@ -13,14 +14,15 @@ const definition = defaultDefinition
         minDhisVersion: Joi.string().required(),
         maxDhisVersion: Joi.string().allow(null, ''),
         slug: Joi.string(),
+        status: Joi.string().valid(...AppStatuses),
     })
     .alter({
-        db: s =>
+        db: (s) =>
             s
                 .rename('minDhisVersion', 'min_dhis2_version')
                 .rename('maxDhisVersion', 'max_dhis2_version')
                 .rename('demoUrl', 'demo_url'),
-        external: s => s.strip('slug'),
+        external: (s) => s.strip('slug'),
     })
     .label('AppVersion')
 
