@@ -44,17 +44,22 @@ const filterOperators = Object.keys(versionOperatorMap)
 const baseVersionFilterSchema = Joi.filter().operator(
     Joi.string().valid(...filterOperators)
 )
+
+// pretty loose version matching
+// ensures that
+//    a version starts with a digit or a letter    ^[\w\d]+
+//    a version is only made up of alphanumeric characters, dots and dashes
+//    a digit follows a dot   (\.\d[\w-]*)*
+const versionRegex = /^[\w\d]+(\.\d[\w-]*)*$/
+const versionValueSchema = Joi.string()
+    .trim()
+    .pattern(versionRegex)
+    .message('"{{#value}}" is not a valid version')
+
 const versionFilterSchema = baseVersionFilterSchema
-    .when(Joi.filter().operator(Joi.string().valid('eq')), {
-        // error message if eq is used with multiple values
-        then: baseVersionFilterSchema.value(
-            Joi.stringArray()
-                .length(1)
-                .message(
-                    "operator does not support multiple values, use 'in' instead."
-                )
-        ),
-    })
+    .operator(Joi.string().valid(...filterOperators))
+    .value(versionValueSchema)
+    .operatorValue('in', Joi.stringArray().items(versionValueSchema))
     .description(
         `Filter by version. Supports filter operators: \`${filterOperators}\``
     )

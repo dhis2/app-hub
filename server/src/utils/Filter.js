@@ -178,13 +178,16 @@ class Filters {
 
         query.where((builder) => {
             if (operator === versionOperatorMap.in) {
+                const values = Array.isArray(filter.value)
+                    ? filter.value
+                    : [filter.value]
                 // no support for array-bindings for raw-queries in knex, so include them directly in the query
                 // see https://knexjs.org/guide/raw.html#raw-parameter-binding
                 builder.whereRaw(
-                    `${identifierRawSQL} in ( ${filter.value
+                    `${identifierRawSQL} in ( ${values
                         .map((_) => `${valueRawSQL}`)
                         .join(',')} )`,
-                    [colName, ...filter.value]
+                    [colName, ...values]
                 )
             } else if (Array.isArray(filter.value)) {
                 filter.value.forEach((value) => {
