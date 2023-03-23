@@ -59,7 +59,9 @@ const versionValueSchema = Joi.string()
 const versionFilterSchema = baseVersionFilterSchema
     .operator(Joi.string().valid(...filterOperators))
     .value(versionValueSchema)
-    .operatorValue('in', Joi.stringArray().items(versionValueSchema))
+    .value(Joi.stringArray().items(versionValueSchema), {
+        operators: ['in', 'ne'],
+    })
     .description(
         `Filter by version. Supports filter operators: \`${filterOperators}\``
     )

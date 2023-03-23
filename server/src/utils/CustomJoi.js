@@ -45,6 +45,9 @@ const Filter = {
         },
     },
     terms: {
+        // terms is used to store "custom"-data for the schema
+        // this is used to store a valueSchema per "operator"
+        // so the value can be validated differently depending on the operator
         operatorValues: { init: [] },
     },
     args(schema, arg) {
@@ -122,12 +125,33 @@ const Filter = {
 
     rules: {
         value: {
-            method(value = Joi.string()) {
+            method(value = Joi.string(), options) {
                 if (!Joi.isSchema(value)) {
                     throw new Error('Value must be a schema')
                 }
-                const obj = this.$_setFlag('value', value)
-                return obj
+
+                // only apply value-schema to operators if present
+                if (options?.operators) {
+                    const operatorSchema = this.$_getFlag('operator')
+
+                    const obj = this.clone()
+                    const extendedJoi = this.$_root
+                    // check that operator is valid
+                    const operator = extendedJoi.attempt(
+                        options.operators,
+                        extendedJoi.array().items(operatorSchema).single()
+                    )
+                    operator.forEach((operator) =>
+                        obj.$_terms.operatorValues.push({
+                            operator,
+                            valueSchema: value,
+                        })
+                    )
+                    return obj
+                } else {
+                    // apply to rest of operators
+                    return this.$_setFlag('value', value)
+                }
             },
         },
 
@@ -137,24 +161,6 @@ const Filter = {
                     throw new Error('Operator must be a schema')
                 }
                 return this.$_setFlag('operator', value)
-            },
-        },
-        operatorValue: {
-            method(operator, valueSchema) {
-                console.log({ operator, valueSchema })
-                if (!Joi.isSchema(valueSchema)) {
-                    throw new Error('valueSchema must be a schema')
-                }
-                const operatorSchema = this.$_getFlag('operator')
-
-                // check that operator is valid
-                Joi.assert(operator, operatorSchema)
-
-                const obj = this.clone()
-                // $_terms is used to store "custom"-data for the schema
-                obj.$_terms.operatorValues.push({ operator, valueSchema })
-                // need to call this when internal state is changed (eg. $_terms)
-                return obj.$_mutateRebuild()
             },
         },
     },
@@ -169,7 +175,5 @@ const StringArray = {
 }
 
 const ExtendedJoi = Joi.extend(StringArray).extend(Filter)
-// supports single versions and a list of versions
-// 2.34 and 2.34,2.35,2.36
 
 module.exports = ExtendedJoi
