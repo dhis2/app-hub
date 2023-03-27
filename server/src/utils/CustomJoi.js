@@ -19,9 +19,10 @@ const defaultValueSchema = Joi.string()
  *
  * Usage:
  * CustomJoi.filter(valueSchema)
- * CustomJoi.filter().value(valueSchema)
+ * CustomJoi.filter().value(valueSchema, options)
  *  * valueSchema - The Joi-schema that the value part of the filter should be validated against
- *
+ *  * options - Options to pass to the valueSchema
+ *  * options.operators - A string or array of strings with the operators that the valueSchema should be applied to
  * CustomJoi.operator(operatorSchema)
  *  * operatorSchema - The Joi-schema that the operator part of the filter should be validated against
  */
@@ -73,7 +74,6 @@ const Filter = {
         const result = { ...filter }
         const errors = []
 
-        let valueSchema = helpers.schema._flags.value || defaultValueSchema
         const operatorSchema =
             helpers.schema._flags.operator || defaultOperatorsSchema
 
@@ -81,7 +81,9 @@ const Filter = {
             ({ operator: op }) => op === filter.operator
         )
         // use operatorValue() over .value() schema if it exists
-        valueSchema = operatorValue ? operatorValue.valueSchema : valueSchema
+        const valueSchema = operatorValue
+            ? operatorValue.valueSchema
+            : helpers.schema._flags.value || defaultValueSchema
 
         // Internal validate needed to pass down the state, which is used to generate correct error-message
         // eg. showing the correct key
@@ -125,14 +127,14 @@ const Filter = {
 
     rules: {
         value: {
-            method(value = Joi.string(), options) {
+            method(value = defaultValueSchema, options) {
                 if (!Joi.isSchema(value)) {
                     throw new Error('Value must be a schema')
                 }
-
                 // only apply value-schema to operators if present
                 if (options?.operators) {
-                    const operatorSchema = this.$_getFlag('operator')
+                    const operatorSchema =
+                        this.$_getFlag('operator') || defaultOperatorsSchema
 
                     const obj = this.clone()
                     const extendedJoi = this.$_root
