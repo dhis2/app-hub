@@ -88,6 +88,14 @@ class Filters {
         return new Filters(result, { renameMap }, options)
     }
 
+    addFilter(fieldName, value) {
+        this.filters[fieldName] = value
+    }
+
+    removeFilter(fieldName) {
+        delete this.filters[fieldName]
+    }
+
     getFilter(fieldName) {
         return this.filters[fieldName]
     }

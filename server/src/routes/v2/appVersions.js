@@ -69,6 +69,16 @@ module.exports = [
                         ).description('Filter by channel of the version'),
                         minDhisVersion: AppVersionModel.versionFilterSchema,
                         maxDhisVersion: AppVersionModel.versionFilterSchema,
+                        dhis2Version: Joi.filter()
+                            .operator(Joi.string().valid('eq'))
+                            .value(
+                                AppVersionModel.versionFilterSchema.extract(
+                                    'versionValue'
+                                )
+                            )
+                            .description(
+                                'Filter by DHIS2 version. Returning app-versions compatible with specified DHIS2 version.'
+                            ),
                     })
                 ),
             },

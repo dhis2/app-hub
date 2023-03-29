@@ -55,6 +55,7 @@ const versionValueSchema = Joi.string()
     .trim()
     .pattern(versionRegex)
     .message('"{{#value}}" is not a valid version')
+    .id('versionValue')
 
 const versionFilterSchema = baseVersionFilterSchema
     .operator(Joi.string().valid(...filterOperators))

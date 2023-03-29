@@ -315,7 +315,7 @@ describe('v2/appVersions', () => {
                 versions.forEach((v) => {
                     expect(v.appId).to.be.a.string()
                     expect(v.version).to.be.a.string()
-                    expect(v.minDhisVersion).to.be.below(31)
+                    expect(v.minDhisVersion.split('.')[1]).to.be.below(31)
                     if (v.maxDhisVersion) {
                         const [, major] = v.maxDhisVersion
                             .split('.')
@@ -392,6 +392,35 @@ describe('v2/appVersions', () => {
                 // check that it still returns empty maxDhisVersions
                 const emptyCount = versions.reduce(countEmptyMaxVersion, 0)
                 expect(emptyCount).to.equal(totalEmptyCount)
+            })
+            it('should handle dhis2Version filter, returning compatible versions', async () => {
+                const compatVersion = '2.30'
+                const request = {
+                    method: 'GET',
+                    url: `/api/v2/apps/${dhis2App.id}/versions?dhis2Version=eq${compatVersion}`,
+                }
+
+                const res = await server.inject(request)
+
+                expect(res.statusCode).to.equal(200)
+
+                const result = res.result
+                const versions = result.result
+
+                expect(versions.length).to.be.above(0)
+
+                Joi.assert(versions, Joi.array().items(AppVersionModel.def))
+                versions.forEach((v) => {
+                    expect(v.appId).to.be.a.string()
+                    expect(v.version).to.be.a.string()
+                    expect(v.minDhisVersion.split('.')[1]).to.be.below(31)
+                    if (v.maxDhisVersion) {
+                        const [, major] = v.maxDhisVersion
+                            .split('.')
+                            .map(Number)
+                        expect(major).to.be.greaterThan(29)
+                    }
+                })
             })
         })
     })

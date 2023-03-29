@@ -83,6 +83,18 @@ class AppVersionService extends Schmervice.Service {
                     overrideColumnName: 'channel.name',
                 })
             }
+            if (filters.getFilter('dhis2Version')) {
+                // translate dhis2Version to minDhisVersion and maxDhisVersion
+                filters.addFilter('minDhisVersion', {
+                    operator: 'lte',
+                    value: filters.getFilter('dhis2Version').value,
+                })
+                filters.addFilter('maxDhisVersion', {
+                    operator: 'gte',
+                    value: filters.getFilter('dhis2Version').value,
+                })
+                filters.removeFilter('dhis2Version')
+            }
             // null-values are allowed for maxDhisVersion, so include these if filter is present
             filters.applyVersionFilter(query, 'maxDhisVersion', {
                 includeEmpty: true,
