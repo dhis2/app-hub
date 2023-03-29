@@ -48,9 +48,12 @@ module.exports = [
         path: '/v2/apps/{appId}/versions',
         config: {
             tags: ['api', 'v2'],
+            auth: { strategy: 'token', mode: 'try' },
             response: {
-                sample: 0, // schema used for swagger, don't check responses
-                schema: withPagingResultSchema(AppVersionModel.def),
+                modify: true,
+                schema: withPagingResultSchema(
+                    AppVersionModel.externalDefinition
+                ),
             },
             validate: {
                 params: Joi.object({
@@ -58,14 +61,24 @@ module.exports = [
                 }),
                 query: withPagingQuerySchema(
                     Joi.object({
-                        version: Joi.filter(Joi.string()).description(
+                        version: Joi.filter().description(
                             'Filter by version of the app'
                         ),
                         channel: Joi.filter(
                             Joi.stringArray().items(Joi.valid(...CHANNELS))
                         ).description('Filter by channel of the version'),
-                        minDhisVersion: Joi.filter(Joi.string()),
-                        maxDhisVersion: Joi.filter(Joi.string()),
+                        minDhisVersion: AppVersionModel.versionFilterSchema,
+                        maxDhisVersion: AppVersionModel.versionFilterSchema,
+                        dhis2Version: Joi.filter()
+                            .operator(Joi.string().valid('eq'))
+                            .value(
+                                AppVersionModel.versionFilterSchema.extract(
+                                    'versionValue'
+                                )
+                            )
+                            .description(
+                                'Filter by DHIS2 version. Returning app-versions compatible with specified DHIS2 version.'
+                            ),
                     })
                 ),
             },
@@ -89,15 +102,20 @@ module.exports = [
             const setDownloadUrl =
                 appVersionService.createSetDownloadUrl(request)
 
-            const versions = await appVersionService.findByAppId(
+            const result = await appVersionService.findByAppId(
                 appId,
                 { pager, filters },
                 db
             )
+            const versions = result.result
 
-            versions.result.map(setDownloadUrl)
+            if (versions && versions.length > 0) {
+                await checkVersionAccess(versions[0], request, db)
+            }
 
-            return h.response(versions)
+            versions.map(setDownloadUrl)
+
+            return h.response(result)
         },
     },
 ]

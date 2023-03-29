@@ -2,6 +2,7 @@ const Joi = require('../../utils/CustomJoi')
 const { definition: defaultDefinition } = require('./Default')
 const { createDefaultValidator } = require('./helpers')
 const { AppStatuses } = require('../../enums/index.js')
+const { versionOperatorMap } = require('./../../utils/filterUtils')
 
 const definition = defaultDefinition
     .append({
@@ -22,7 +23,8 @@ const definition = defaultDefinition
                 .rename('minDhisVersion', 'min_dhis2_version')
                 .rename('maxDhisVersion', 'max_dhis2_version')
                 .rename('demoUrl', 'demo_url'),
-        external: (s) => s.strip('slug'),
+        // remove fields from external-response
+        external: (s) => s.fork(['slug'], (s) => s.strip()),
     })
     .label('AppVersion')
 
@@ -37,6 +39,34 @@ const parseDatabaseJson = createDefaultValidator(definition)
 // internal -> database
 const formatDatabaseJson = createDefaultValidator(dbDefinition)
 
+const filterOperators = Object.keys(versionOperatorMap)
+
+const baseVersionFilterSchema = Joi.filter().operator(
+    Joi.string().valid(...filterOperators)
+)
+
+// pretty loose version matching
+// ensures that
+//    a version starts with a digit or a letter    ^[\w\d]+
+//    a version is only made up of alphanumeric characters, dots and dashes
+//    a digit follows a dot   (\.\d[\w-]*)*
+const versionRegex = /^[\w\d]+(\.\d[\w-]*)*$/
+const versionValueSchema = Joi.string()
+    .trim()
+    .pattern(versionRegex)
+    .message('"{{#value}}" is not a valid version')
+    .id('versionValue')
+
+const versionFilterSchema = baseVersionFilterSchema
+    .operator(Joi.string().valid(...filterOperators))
+    .value(versionValueSchema)
+    .value(Joi.stringArray().items(versionValueSchema), {
+        operators: ['in', 'ne'],
+    })
+    .description(
+        `Filter by version. Supports filter operators: \`${filterOperators}\``
+    )
+
 module.exports = {
     def: definition,
     definition,
@@ -44,4 +74,5 @@ module.exports = {
     externalDefinition,
     parseDatabaseJson,
     formatDatabaseJson,
+    versionFilterSchema,
 }

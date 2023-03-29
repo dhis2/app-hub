@@ -10,6 +10,9 @@ const stringOperatorsMap = {
     in: 'in',
 }
 
+const isStringOperator = (operator) =>
+    Object.keys(stringOperatorsMap).includes(operator)
+
 const operatorMap = {
     eq: '=',
     lt: '<',
@@ -18,17 +21,25 @@ const operatorMap = {
     gte: '>=',
     ne: '<>',
 }
+
+// operators valid for version comparison
+const versionOperatorMap = {
+    ...operatorMap,
+    in: 'in',
+}
+
+const isVersionOperator = (operator) =>
+    Object.entries(versionOperatorMap)
+        .flatMap((e) => e)
+        .includes(operator)
+
 const allOperatorsMap = {
     ...operatorMap,
     ...stringOperatorsMap,
 }
 
 const toSQLOperator = (operatorStr, value) => {
-    let operator = allOperatorsMap[operatorStr]
-
-    if (operator === '=' && Array.isArray(value)) {
-        operator = 'in'
-    }
+    const operator = allOperatorsMap[operatorStr]
 
     if (!operator) {
         throw new Error('Operator ', operatorStr, ' not supported.')
@@ -37,7 +48,7 @@ const toSQLOperator = (operatorStr, value) => {
     return operator
 }
 
-const parseFilterString = filterStr => {
+const parseFilterString = (filterStr) => {
     let operator
     const seperatorIdx = filterStr.indexOf(SEPERATOR_CHAR)
     if (seperatorIdx < 0) {
@@ -57,6 +68,9 @@ module.exports = {
     allOperatorsMap,
     operatorMap,
     stringOperatorsMap,
+    versionOperatorMap,
+    isStringOperator,
+    isVersionOperator,
     toSQLOperator,
     parseFilterString,
 }

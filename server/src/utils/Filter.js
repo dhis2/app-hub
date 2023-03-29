@@ -1,6 +1,11 @@
 const debug = require('debug')('apphub:server:utils:Filter')
 const Joi = require('./CustomJoi')
-const { parseFilterString, toSQLOperator } = require('./filterUtils')
+const {
+    parseFilterString,
+    toSQLOperator,
+    isVersionOperator,
+    versionOperatorMap,
+} = require('./filterUtils')
 
 class Filters {
     /**
@@ -50,7 +55,7 @@ class Filters {
     static createFromQueryFilters(filters, { validate, rename } = {}, options) {
         let result = filters
         let renameMap = null
-        Object.keys(filters).map(key => {
+        Object.keys(filters).map((key) => {
             try {
                 const filter = parseFilterString(filters[key])
                 result[key] = filter
@@ -81,6 +86,14 @@ class Filters {
             }
         }
         return new Filters(result, { renameMap }, options)
+    }
+
+    addFilter(fieldName, value) {
+        this.filters[fieldName] = value
+    }
+
+    removeFilter(fieldName) {
+        delete this.filters[fieldName]
     }
 
     getFilter(fieldName) {
@@ -122,7 +135,7 @@ class Filters {
                     ? `${settings.tableName}.${colName}`
                     : colName)
             const { value, operator } = filter
-            query.where(builder => {
+            query.where((builder) => {
                 builder.where(nameToUse, toSQLOperator(operator, value), value)
                 if (settings.includeEmpty) {
                     builder.orWhereRaw(`nullif( ??, '') is null`, nameToUse)
@@ -156,13 +169,48 @@ class Filters {
             )
         }
 
-        query.where(builder => {
-            builder.whereRaw(
-                `string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[] ${toSQLOperator(
-                    filter.operator
-                )} string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]`,
-                [colName, filter.value]
+        const operator = toSQLOperator(filter.operator, filter.value)
+
+        if (!isVersionOperator(operator)) {
+            throw new Error(
+                `Operator ${operator} is not supported for version-filter`
             )
+            // return this.applyOneToQuery(query, filterName, options)
+        }
+
+        // convert versions to arrays of ints, and compare them
+        const identifierRawSQL =
+            "string_to_array( regexp_replace(??, '[^0-9.]+', '', 'g'), '.')::int[]"
+        const valueRawSQL =
+            "string_to_array( regexp_replace(?, '[^0-9.]+', '', 'g'), '.')::int[]"
+
+        query.where((builder) => {
+            if (operator === versionOperatorMap.in) {
+                const values = Array.isArray(filter.value)
+                    ? filter.value
+                    : [filter.value]
+                // no support for array-bindings for raw-queries in knex, so include them directly in the query
+                // see https://knexjs.org/guide/raw.html#raw-parameter-binding
+                builder.whereRaw(
+                    `${identifierRawSQL} in ( ${values
+                        .map((_) => `${valueRawSQL}`)
+                        .join(',')} )`,
+                    [colName, ...values]
+                )
+            } else if (Array.isArray(filter.value)) {
+                filter.value.forEach((value) => {
+                    builder.whereRaw(
+                        `${identifierRawSQL} ${operator} ${valueRawSQL}`,
+                        [colName, value]
+                    )
+                })
+            } else {
+                builder.whereRaw(
+                    `${identifierRawSQL} ${operator} ${valueRawSQL}`,
+                    [colName, filter.value]
+                )
+            }
+
             if (options.includeEmpty) {
                 builder.orWhereRaw(`nullif( ??, '') is null`, colName)
             }

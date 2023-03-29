@@ -23,8 +23,8 @@
         "clone": "yarn workspace tools clone",
         "format": "yarn format:js && yarn format:text",
         "format:staged": "yarn format:js --staged && yarn format:text --staged",
-        "format:js": "d2-style js apply",
-        "format:text": "d2-style text apply",
+        "format:js": "d2-style apply js",
+        "format:text": "d2-style apply text",
         "format:client": "yarn workspace client format",
         "format:server": "yarn workspace client format"
     },

@@ -68,6 +68,7 @@ async function executeQuery(
     }
 
     debug('Executing query: ' + query.toString())
+
     const rawResult = await query
     let result = rawResult
 
@@ -83,7 +84,7 @@ async function executeQuery(
         }
     }
 
-    if (pager) {
+    if (pager && pager.enabled) {
         if (options.pagingStrategy === pagingStrategies.SLICE) {
             result = pager.sliceAndFormatResult(result)
         } else {

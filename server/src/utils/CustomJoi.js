@@ -2,7 +2,10 @@ const Joi = require('joi')
 const Bounce = require('@hapi/bounce')
 const { parseFilterString, allOperatorsMap } = require('./filterUtils')
 
-const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
+const defaultOperatorsSchema = Joi.string().valid(
+    ...Object.keys(allOperatorsMap)
+)
+const defaultValueSchema = Joi.string()
 
 /**
  * Adds filter as a new type in Joi.
@@ -16,9 +19,10 @@ const stringOperatorSchema = Joi.string().valid(...Object.keys(allOperatorsMap))
  *
  * Usage:
  * CustomJoi.filter(valueSchema)
- * CustomJoi.filter().value(valueSchema)
+ * CustomJoi.filter().value(valueSchema, options)
  *  * valueSchema - The Joi-schema that the value part of the filter should be validated against
- *
+ *  * options - Options to pass to the valueSchema
+ *  * options.operators - A string or array of strings with the operators that the valueSchema should be applied to
  * CustomJoi.operator(operatorSchema)
  *  * operatorSchema - The Joi-schema that the operator part of the filter should be validated against
  */
@@ -27,9 +31,25 @@ const Filter = {
     messages: {
         'filter.base': '{{#label}} is not a valid filter',
         'filter.string': '{{#label}} must be a string',
-        'filter.value': 'value in filter "{{#label}}" not valid: {{#err}}',
+        'filter.value': 'value not valid in filter {{#label}}: {{#err}}',
         'filter.operator':
             'operator in filter "{{#label}}" not valid: {{#err}}',
+        'filter.operatorValue':
+            'value not valid for operator [{{#operator}}] in filter {{#label}}: {{#err}}',
+    },
+    flags: {
+        operator: {
+            default: defaultOperatorsSchema,
+        },
+        value: {
+            default: defaultValueSchema,
+        },
+    },
+    terms: {
+        // terms is used to store "custom"-data for the schema
+        // this is used to store a valueSchema per "operator"
+        // so the value can be validated differently depending on the operator
+        operatorValues: { init: [] },
     },
     args(schema, arg) {
         return schema.value(arg)
@@ -54,36 +74,49 @@ const Filter = {
         const result = { ...filter }
         const errors = []
 
-        const valueSchema = helpers.schema._flags.value || Joi.string()
         const operatorSchema =
-            helpers.schema._flags.operator || stringOperatorSchema
+            helpers.schema._flags.operator || defaultOperatorsSchema
 
-        if (valueSchema) {
-            // Internal validate needed to pass down the state, which is used to generate correct error-message
-            // eg. showing the correct key
-            const valueResult = valueSchema
-                .label('value')
-                .$_validate(filter.value, helpers.state, helpers.prefs)
-            result.value = valueResult.value
+        const operatorValue = helpers.schema.$_terms.operatorValues.find(
+            ({ operator: op }) => op === filter.operator
+        )
+        // use operatorValue() over .value() schema if it exists
+        const valueSchema = operatorValue
+            ? operatorValue.valueSchema
+            : helpers.schema._flags.value || defaultValueSchema
 
-            if (valueResult.errors) {
-                const errs = valueResult.errors.map(e =>
-                    helpers.error('filter.value', { err: e })
-                )
-                errors.push(...errs)
-            }
+        // Internal validate needed to pass down the state, which is used to generate correct error-message
+        // eg. showing the correct key
+        const valueResult = valueSchema.$_validate(
+            filter.value,
+            helpers.state,
+            helpers.prefs
+        )
+        result.value = valueResult.value
+
+        if (valueResult.errors) {
+            const errorMessage = operatorValue
+                ? 'filter.operatorValue'
+                : 'filter.value'
+            const errs = valueResult.errors.map((e) =>
+                helpers.error(errorMessage, {
+                    err: e,
+                    operator: filter.operator,
+                })
+            )
+            errors.push(...errs)
         }
-        if (operatorSchema) {
-            const opResult = operatorSchema
-                .label('operator')
-                .$_validate(filter.operator, helpers.state, helpers.prefs)
-            result.operator = opResult.value
-            if (opResult.errors) {
-                const errs = opResult.errors.map(e =>
-                    helpers.error('filter.operator', { err: e })
-                )
-                errors.push(...errs)
-            }
+
+        const opResult = operatorSchema
+            .label('operator')
+            .$_validate(filter.operator, helpers.state, helpers.prefs)
+        result.operator = opResult.value
+
+        if (opResult.errors) {
+            const errs = opResult.errors.map((e) =>
+                helpers.error('filter.operator', { err: e })
+            )
+            errors.push(...errs)
         }
 
         return {
@@ -94,19 +127,40 @@ const Filter = {
 
     rules: {
         value: {
-            method(value = Joi.string()) {
+            method(value = defaultValueSchema, options) {
                 if (!Joi.isSchema(value)) {
-                    return this.error(new Error('Value must be a schema'))
+                    throw new Error('Value must be a schema')
                 }
-                const obj = this.$_setFlag('value', value)
-                return obj
+                // only apply value-schema to operators if present
+                if (options?.operators) {
+                    const operatorSchema =
+                        this.$_getFlag('operator') || defaultOperatorsSchema
+
+                    const obj = this.clone()
+                    const extendedJoi = this.$_root
+                    // check that operator is valid
+                    const operator = extendedJoi.attempt(
+                        options.operators,
+                        extendedJoi.array().items(operatorSchema).single()
+                    )
+                    operator.forEach((operator) =>
+                        obj.$_terms.operatorValues.push({
+                            operator,
+                            valueSchema: value,
+                        })
+                    )
+                    return obj
+                } else {
+                    // apply to rest of operators
+                    return this.$_setFlag('value', value)
+                }
             },
         },
 
         operator: {
-            method(value) {
+            method(value = defaultOperatorsSchema) {
                 if (!Joi.isSchema(value)) {
-                    return this.error(new Error('Operator must be a schema'))
+                    throw new Error('Operator must be a schema')
                 }
                 return this.$_setFlag('operator', value)
             },
@@ -118,8 +172,10 @@ const StringArray = {
     base: Joi.array(),
     type: 'stringArray',
     coerce: (value, state, options) => ({
-        value: value.split ? value.split(',') : value
-    })
+        value: value.split ? value.split(',') : value,
+    }),
 }
 
-module.exports = Joi.extend(Filter).extend(StringArray)
+const ExtendedJoi = Joi.extend(StringArray).extend(Filter)
+
+module.exports = ExtendedJoi

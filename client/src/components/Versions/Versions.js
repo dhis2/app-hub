@@ -10,7 +10,7 @@ import { usePagination, useQuery } from 'src/api'
 
 const { defaultAppChannel } = config.ui
 
-const useChannels = appId => {
+const useChannels = (appId) => {
     const [availableChannels, setAvailableChannels] = useState([
         defaultAppChannel,
     ])
@@ -36,6 +36,10 @@ const useChannels = appId => {
     }, [data])
 
     return { availableChannels, channelsFilter, setChannelsFilter }
+}
+
+const versionsRequestOpts = {
+    useAuth: true,
 }
 
 const Versions = ({ appId, renderDeleteVersionButton }) => {
@@ -66,6 +70,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
         isLoadingInitial,
         isValidating,
     } = usePagination(`apps/${appId}/versions`, params, {
+        request: versionsRequestOpts,
         swr: {
             use: [laggySWRMiddleware], // keep previous results when changing filters
         },
