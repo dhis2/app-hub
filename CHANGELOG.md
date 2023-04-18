@@ -1,3 +1,10 @@
+## [2.32.1](https://github.com/dhis2/app-hub/compare/v2.32.0...v2.32.1) (2023-04-18)
+
+
+### Bug Fixes
+
+* add 2.40 to available versions ([53513ec](https://github.com/dhis2/app-hub/commit/53513ec805a64aaf84dc4ef21e535d9f752431cc))
+
 # [2.32.0](https://github.com/dhis2/app-hub/compare/v2.31.5...v2.32.0) (2023-03-20)
 
 
