@@ -78,7 +78,7 @@ const addAppMedia = async (params, knex) => {
             created_by_user_id: userId,
         }
 
-        const [{ mediaId }] = await knex('media')
+        const [{ id: mediaId }] = await knex('media')
             .insert(mediaToInsert)
             .returning('id')
 
