@@ -1,6 +1,9 @@
-/***
- * Returns the server url for the backend itself based on the request. If we're running behind a proxy, try to fetch the forwarded protocol
- * @param {object} request incoming hapijs request
+/**
+ * Returns the server API url for the backend itself based on the request. If we're running behind a proxy, try to fetch the forwarded protocol
+ * If { base: true } is passed, return the server base url (without /api)
+ * @param {Object} request incoming hapijs request
+ * @param {Object} options options objects
+ * @param {boolean} options.base if true, return server base url (without /api)
  */
 const getServerUrl = (request, { base } = { base: false }) => {
     const protocol =
@@ -36,5 +39,4 @@ const getServerUrl = (request, { base } = { base: false }) => {
 
     return `${protocol}://${host}${portToUseInUrl}${apiPart}`
 }
-
 module.exports = getServerUrl

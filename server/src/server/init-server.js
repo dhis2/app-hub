@@ -113,6 +113,7 @@ exports.init = async (knex, config) => {
     await server.registerService(createEmailService)
     await server.registerService(createAppVersionService)
     await server.registerService(createNotificationService)
+
     await server.register({
         plugin: staticFrontendRoutes,
     })
