@@ -1,3 +1,14 @@
+## [2.32.2](https://github.com/dhis2/app-hub/compare/v2.32.1...v2.32.2) (2023-05-16)
+
+
+### Bug Fixes
+
+* **addappmedia:** fix adding media after knex upgrade ([2e8ff4c](https://github.com/dhis2/app-hub/commit/2e8ff4ca545763b575c8893d5ed804e77bb2d53a))
+* **dependencies:** upgrade to knex@2 ([39f43ac](https://github.com/dhis2/app-hub/commit/39f43acfef3b7011c580662fbc22ba4aed6ef56f))
+* **deps:** update hapi-sentry ([192e56e](https://github.com/dhis2/app-hub/commit/192e56e76453dd3ad31dc335b131b7a423745665))
+* **deps:** update jwt deps ([cc6cef4](https://github.com/dhis2/app-hub/commit/cc6cef46f95ea40fdab550f95171da25c71906ee))
+* upgrade hapi deps ([1a3a6b6](https://github.com/dhis2/app-hub/commit/1a3a6b60f2f7d0b08eb87d10f8771a37a08b9f6f))
+
 ## [2.32.1](https://github.com/dhis2/app-hub/compare/v2.32.0...v2.32.1) (2023-04-18)
 
 
