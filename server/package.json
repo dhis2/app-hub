@@ -9,7 +9,7 @@
     "private": true,
     "scripts": {
         "start": "cross-env NODE_ENV=production node ./src/main.js",
-        "start:dev": "cross-env DEBUG=knex:tx,apphub* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
+        "start:dev": "cross-env DEBUG=* NODE_ENV=development nodemon --watch ./src --inspect src/main.js",
         "test": "cross-env NODE_ENV=test yarn db:reload && lab -a @hapi/code -v --leaks",
         "test-only": "cross-env NODE_ENV=test lab -a @hapi/code -v --leaks",
         "test:coverage": "cross-env NODE_ENV=test yarn db:reload && lab -c -a @hapi/code -t 80 -r html -o coverage/coverage.html",
@@ -29,6 +29,7 @@
         "@hapi/inert": "^7.1.0",
         "@hapi/vision": "^7.0.1",
         "@hapipal/schmervice": "^2.1.0",
+        "@slack/webhook": "^6.1.0",
         "adm-zip": "^0.5.5",
         "auth0": "^2.36.1",
         "aws-sdk": "^2.981.0",

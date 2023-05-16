@@ -2,7 +2,7 @@
  * Returns the server url for the backend itself based on the request. If we're running behind a proxy, try to fetch the forwarded protocol
  * @param {object} request incoming hapijs request
  */
-const getServerUrl = request => {
+const getServerUrl = (request, { base } = { base: false }) => {
     const protocol =
         request.headers['x-forwarded-proto'] || request.server.info.protocol
     const host = request.headers['x-forwarded-host'] || request.info.hostname
@@ -32,7 +32,9 @@ const getServerUrl = request => {
         portToUseInUrl = `:${port}`
     }
 
-    return `${protocol}://${host}${portToUseInUrl}/api`
+    const apiPart = base ? '' : '/api'
+
+    return `${protocol}://${host}${portToUseInUrl}${apiPart}`
 }
 
 module.exports = getServerUrl

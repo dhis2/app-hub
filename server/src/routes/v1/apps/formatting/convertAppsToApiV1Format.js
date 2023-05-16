@@ -33,9 +33,17 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
     reviews: [],
 })
 
+const getMediaUrl = ({ serverUrl, organisationSlug, appId, mediaId }) =>
+    `${serverUrl}/v1/apps/media/${organisationSlug}/${appId}/${mediaId}`
+
 const convertAppToV1Media = (app, serverUrl) => {
     return {
-        imageUrl: `${serverUrl}/v1/apps/media/${app.organisation_slug}/${app.app_id}/${app.media_id}`,
+        imageUrl: getMediaUrl({
+            serverUrl,
+            organisationSlug: app.organisation_slug,
+            appId: app.app_id,
+            mediaId: app.media_id,
+        }),
         caption: '',
         created: +new Date(app.media_created_at),
         description: '',
@@ -122,4 +130,5 @@ const convertAll = (apps, request) => {
 module.exports = {
     convertAppsToApiV1Format: convertAll,
     convertAppToV1AppVersion,
+    getMediaUrl,
 }

@@ -33,6 +33,9 @@ const config = {
         dsn: process.env.SENTRY_DSN,
         environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
     },
+    slack: {
+        webhookUrl: process.env.SLACK_WEBHOOK_URL,
+    },
     auth: {
         noAuthUserIdMapping: process.env.NO_AUTH_MAPPED_USER_ID,
         config: {
