@@ -1,4 +1,7 @@
 const { IncomingWebhook } = require('@slack/webhook')
+const debug = require('debug')(
+    'apphub:server:services:NotificationService:SlackWebhookMessager'
+)
 const {
     NotificationMessager,
     messagerTypes,
@@ -11,6 +14,10 @@ class SlackWebhookMessager extends NotificationMessager {
     }
 
     async send(slackWebHookSendArguments) {
+        debug(
+            'Sending notification',
+            JSON.stringify(slackWebHookSendArguments, null, 2)
+        )
         return this.webhook.send(slackWebHookSendArguments)
     }
 
@@ -34,7 +41,7 @@ class SlackWebhookMessager extends NotificationMessager {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `*Name:*\n${appName}\n*Organisation:*\n${organisationName}\n*Source Code*:\n <${sourceUrl}>`,
+                    text: `*Name:*\n${appName}\n*Organisation:*\n${organisationName}`,
                 },
                 accessory: {
                     type: 'image',
@@ -43,17 +50,19 @@ class SlackWebhookMessager extends NotificationMessager {
                 },
             },
             {
-                type: 'actions',
-                elements: [
-                    {
-                        type: 'button',
-                        text: {
-                            type: 'plain_text',
-                            text: 'Review now',
-                        },
-                        url: link,
+                type: 'section',
+                text: {
+                    type: 'mrkdwn',
+                    text: `*Source Code*:\n <${sourceUrl}>`,
+                },
+                accessory: {
+                    type: 'button',
+                    text: {
+                        type: 'plain_text',
+                        text: 'Review now',
                     },
-                ],
+                    url: link,
+                },
             },
         ]
 
