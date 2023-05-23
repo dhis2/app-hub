@@ -14,7 +14,7 @@ class NotificationMessager {
         this.type = type
     }
 
-    sendNotification() {
+    send() {
         throw new Error('Method "sendNotification" must be implemented.')
     }
 }

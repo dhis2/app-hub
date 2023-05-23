@@ -1,5 +1,5 @@
 const Schmervice = require('@hapipal/schmervice')
-const { SlackWebhookMessager } = require('./SlackWebHookMessager.js')
+const { SlackWebhookMessager } = require('./SlackWebhookMessager.js')
 
 class NotificationService extends Schmervice.Service {
     constructor(server, schmerviceOptions, { messagers }) {

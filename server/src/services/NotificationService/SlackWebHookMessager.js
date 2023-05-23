@@ -13,6 +13,28 @@ class SlackWebhookMessager extends NotificationMessager {
         this.webhook = new IncomingWebhook(slackWebhookURL)
     }
 
+    /**
+     * @param slackWebHookSendArguments
+     * see https://github.com/slackapi/node-slack-sdk/blob/3498055d6c86beb82d51ddd583e123461379f5b7/packages/webhook/src/IncomingWebhook.ts#L99
+     * shape of {
+        username?: string;
+        icon_emoji?: string;
+        icon_url?: string;
+        channel?: string;
+        text?: string;
+        link_names?: boolean;
+        agent?: Agent;
+        timeout?: number;
+        attachments?: MessageAttachment[];
+        blocks?: (KnownBlock | Block)[];
+        unfurl_links?: boolean;
+        unfurl_media?: boolean;
+        metadata?: {
+            event_type: string;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            event_payload: Record<string, any>;
+        }
+     */
     async send(slackWebHookSendArguments) {
         debug(
             'Sending notification',
@@ -53,7 +75,7 @@ class SlackWebhookMessager extends NotificationMessager {
                 type: 'section',
                 text: {
                     type: 'mrkdwn',
-                    text: `*Source Code*:\n <${sourceUrl}>`,
+                    text: `*Source code*:\n <${sourceUrl}>`,
                 },
                 accessory: {
                     type: 'button',
