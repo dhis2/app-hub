@@ -10,8 +10,10 @@ const {
 } = require('../../../../security')
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
-const { saveFile } = require('../../../../utils')
+const { saveFile, getServerUrl } = require('../../../../utils')
 const { validateImageMetadata } = require('../../../../utils/validateMime')
+const { getMediaUrl } = require('../../apps/formatting')
+const { server } = require('@hapi/hapi')
 
 module.exports = {
     method: 'POST',
@@ -39,6 +41,7 @@ module.exports = {
         if (!canCreateApp(request, h)) {
             throw Boom.unauthorized()
         }
+        const { notificationService } = request.services(true)
 
         const { db } = h.context
         const { id: currentUserId } = await getCurrentUserFromRequest(
@@ -77,11 +80,12 @@ module.exports = {
             )
         }
 
-        const app = await db.transaction(async trx => {
-            const { appType } = appJsonPayload
+        const { appType } = appJsonPayload
+        const { name, description, sourceUrl } = appJsonPayload
+        let logoMediaId
+        const app = await db.transaction(async (trx) => {
             const { file } = payload
 
-            const { name, description, sourceUrl } = appJsonPayload
             const {
                 version,
                 demoUrl,
@@ -142,7 +146,7 @@ module.exports = {
             const logoMetadata = logo.hapi
             validateImageMetadata(request.server.mime, logoMetadata)
 
-            const { id: logoId } = await App.createMediaForApp(
+            const { id: logoId, media_id } = await App.createMediaForApp(
                 app.id,
                 {
                     userId: currentUserId,
@@ -154,6 +158,7 @@ module.exports = {
                 },
                 trx
             )
+            logoMediaId = logoId
 
             const appUpload = saveFile(
                 `${app.id}/${appVersion.id}`,
@@ -165,6 +170,27 @@ module.exports = {
 
             return app
         })
+
+        const imageUrl = getMediaUrl({
+            serverUrl: getServerUrl(request),
+            organisationSlug: organisation.slug,
+            appId: app.id,
+            mediaId: logoMediaId,
+        })
+        notificationService
+            .sendNewAppNotifications({
+                appName: name,
+                organisationName: organisation.name,
+                imageUrl,
+                sourceUrl,
+                link: `${getServerUrl(request, { base: true })}/user/app/${
+                    app.id
+                }`,
+            })
+            .catch((e) => {
+                //.catch() so we don't have to await
+                request.logger.error('Failed to send notification %o', e)
+            })
 
         return h.response(app).created(`/v2/apps/${app.id}`)
     },
