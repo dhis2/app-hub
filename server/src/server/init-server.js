@@ -16,6 +16,9 @@ const staticFrontendRoutes = require('../plugins/staticFrontendRoutes')
 const { getUserDecoration } = require('../security')
 const { createAppVersionService } = require('../services/appVersion')
 const { createEmailService } = require('../services/EmailService')
+const {
+    createNotificationService,
+} = require('../services/NotificationService/NotificationService.js')
 
 exports.init = async (knex, config) => {
     debug('Starting server...')
@@ -92,11 +95,15 @@ exports.init = async (knex, config) => {
         await server.register({
             plugin: Pino,
             options: {
-                prettyPrint: config.logging.prettyPrint,
                 redact: config.logging.redactAuthorization
                     ? []
                     : ['req.headers.authorization'],
                 level: config.logging.level,
+                transport: config.logging.prettyPrint
+                    ? {
+                          target: 'pino-pretty',
+                      }
+                    : undefined,
             },
         })
     }
@@ -105,6 +112,7 @@ exports.init = async (knex, config) => {
 
     await server.registerService(createEmailService)
     await server.registerService(createAppVersionService)
+    await server.registerService(createNotificationService)
 
     await server.register({
         plugin: staticFrontendRoutes,

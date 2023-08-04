@@ -1,3 +1,29 @@
+# [2.33.0](https://github.com/dhis2/app-hub/compare/v2.32.2...v2.33.0) (2023-08-01)
+
+
+### Bug Fixes
+
+* add docs for slack arguments ([de11f5b](https://github.com/dhis2/app-hub/commit/de11f5bb899f6ecf616c9b81076961c95b7e62f5))
+* debug log ([5188baf](https://github.com/dhis2/app-hub/commit/5188baf7dfb569e989e590b5d46b633fc02243aa))
+* **slackmessager:** update review now link ([4b9875d](https://github.com/dhis2/app-hub/commit/4b9875dba49b60370ff86023244121da8da9e121))
+* slackwebhookmessager rename ([d86ba80](https://github.com/dhis2/app-hub/commit/d86ba80fc6fbc4d6e317b4ca4371c52056a45f1b))
+
+
+### Features
+
+* **notifications:** add slack webhook for new apps ([2f222ee](https://github.com/dhis2/app-hub/commit/2f222ee7a89c3259889d956444cbd2ba91aaa8f6))
+
+## [2.32.2](https://github.com/dhis2/app-hub/compare/v2.32.1...v2.32.2) (2023-05-16)
+
+
+### Bug Fixes
+
+* **addappmedia:** fix adding media after knex upgrade ([2e8ff4c](https://github.com/dhis2/app-hub/commit/2e8ff4ca545763b575c8893d5ed804e77bb2d53a))
+* **dependencies:** upgrade to knex@2 ([39f43ac](https://github.com/dhis2/app-hub/commit/39f43acfef3b7011c580662fbc22ba4aed6ef56f))
+* **deps:** update hapi-sentry ([192e56e](https://github.com/dhis2/app-hub/commit/192e56e76453dd3ad31dc335b131b7a423745665))
+* **deps:** update jwt deps ([cc6cef4](https://github.com/dhis2/app-hub/commit/cc6cef46f95ea40fdab550f95171da25c71906ee))
+* upgrade hapi deps ([1a3a6b6](https://github.com/dhis2/app-hub/commit/1a3a6b60f2f7d0b08eb87d10f8771a37a08b9f6f))
+
 ## [2.32.1](https://github.com/dhis2/app-hub/compare/v2.32.0...v2.32.1) (2023-04-18)
 
 

@@ -3,26 +3,11 @@ const joi = require('joi')
 const paramSchema = joi
     .object()
     .keys({
-        appVersionId: joi
-            .string()
-            .uuid()
-            .required(),
-        createdByUserId: joi
-            .string()
-            .uuid()
-            .required(),
-        channelName: joi
-            .string()
-            .required()
-            .max(50),
-        minDhisVersion: joi
-            .string()
-            .required()
-            .min(1),
-        maxDhisVersion: joi
-            .string()
-            .required()
-            .allow(''),
+        appVersionId: joi.string().uuid().required(),
+        createdByUserId: joi.string().uuid().required(),
+        channelName: joi.string().required().max(50),
+        minDhisVersion: joi.string().required().min(1),
+        maxDhisVersion: joi.string().required().allow(''),
     })
     .options({ allowUnknown: true })
 
@@ -62,7 +47,7 @@ const addAppVersionToChannel = async (params, knex) => {
             .select('id')
             .where({ name: channelName })
 
-        const [id] = await knex('app_channel')
+        const [{ id }] = await knex('app_channel')
             .insert({
                 app_version_id: appVersionId,
                 channel_id: channel.id,
