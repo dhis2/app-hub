@@ -10,7 +10,7 @@ import { usePagination, useQuery } from 'src/api'
 
 const { defaultAppChannel } = config.ui
 
-const useChannels = appId => {
+const useChannels = (appId) => {
     const [availableChannels, setAvailableChannels] = useState([
         defaultAppChannel,
     ])
@@ -38,7 +38,7 @@ const useChannels = appId => {
     return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
-const Versions = ({ appId, renderDeleteVersionButton }) => {
+const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
@@ -102,6 +102,7 @@ const Versions = ({ appId, renderDeleteVersionButton }) => {
                 <VersionsTable
                     versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
+                    showDownloadCount={showDownloadCount}
                 />
             ) : (
                 <em className={styles.noVersions}>
