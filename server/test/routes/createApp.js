@@ -4,13 +4,8 @@ const Lab = require('@hapi/lab')
 const FormData = require('form-data')
 const streamToPromise = require('stream-to-promise')
 
-const {
-    it,
-    describe,
-    afterEach,
-    beforeEach,
-    before,
-} = (exports.lab = Lab.script())
+const { it, describe, afterEach, beforeEach, before } = (exports.lab =
+    Lab.script())
 
 const { expect } = require('@hapi/code')
 const knexConfig = require('../../knexfile')
@@ -40,7 +35,7 @@ describe('v1/apps', () => {
         await db.rollback()
     })
 
-    const createFormForApp = app => {
+    const createFormForApp = (app) => {
         const form = new FormData()
         form.append('app', JSON.stringify(app))
         form.append(
@@ -91,6 +86,35 @@ describe('v1/apps', () => {
 
             const res = await server.inject(request)
             expect(res.statusCode).to.equal(400)
+        })
+
+        it('should create app when app-bundle is in top-level directory', async () => {
+            const form = new FormData()
+            form.append('app', JSON.stringify(sampleApp))
+            form.append(
+                'file',
+                fs.createReadStream(
+                    path.join(__dirname, '../', 'sample-app-top-level.zip')
+                )
+            )
+            form.append(
+                'logo',
+                fs.createReadStream(
+                    path.join(__dirname, '../', 'sample-app-logo.png')
+                )
+            )
+            const request = {
+                method: 'POST',
+                url: '/api/v1/apps',
+                headers: form.getHeaders(),
+                payload: await streamToPromise(form),
+            }
+
+            const res = await server.inject(request)
+            expect(res.statusCode).to.equal(201)
+            const receivedPayload = JSON.parse(res.payload)
+            expect(receivedPayload).to.include(['id'])
+            expect(receivedPayload.id).to.be.string()
         })
     })
 })

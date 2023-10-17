@@ -1,6 +1,7 @@
 const AdmZip = require('adm-zip')
+const path = require('path')
 
-const isValidJSON = json => {
+const isValidJSON = (json) => {
     try {
         JSON.parse(json)
         return true
@@ -43,11 +44,28 @@ const checkD2Config = ({ d2Config, appId, appName, version, canBeCoreApp }) => {
     }
 }
 
+const getTopLevelDirectoryPath = (entryNames) => {
+    try {
+        const prefix = path.dirname(entryNames[0])
+        const allMatch = entryNames.every((entryName) =>
+            entryName.startsWith(prefix)
+        )
+        return allMatch ? prefix : ''
+    } catch (e) {
+        return ''
+    }
+}
+
 module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     const zip = new AdmZip(buffer)
-    const entries = zip.getEntries().map(e => e.entryName)
-    const manifestPath = 'manifest.webapp'
-    const d2ConfigPath = 'd2.config.json'
+    const entries = zip
+        .getEntries()
+        .filter((e) => !e.isDirectory)
+        .map((e) => e.entryName)
+
+    const prefix = getTopLevelDirectoryPath(entries)
+    const manifestPath = path.join(prefix, 'manifest.webapp')
+    const d2ConfigPath = path.join(prefix, 'd2.config.json')
     const canBeCoreApp = organisationName === 'DHIS2'
 
     if (!entries.includes(manifestPath)) {
