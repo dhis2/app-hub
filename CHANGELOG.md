@@ -1,3 +1,10 @@
+## [2.33.1](https://github.com/dhis2/app-hub/compare/v2.33.0...v2.33.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* support DHIS2 version 2.41 ([d268981](https://github.com/dhis2/app-hub/commit/d268981444bdd35d73fae3ec2dcfd2c54b71ba5a))
+
 # [2.33.0](https://github.com/dhis2/app-hub/compare/v2.32.2...v2.33.0) (2023-08-01)
 
 
