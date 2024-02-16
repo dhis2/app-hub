@@ -1,3 +1,10 @@
+# [2.34.0](https://github.com/dhis2/app-hub/compare/v2.33.1...v2.34.0) (2024-02-16)
+
+
+### Features
+
+* show version download count ([#739](https://github.com/dhis2/app-hub/issues/739)) ([1135152](https://github.com/dhis2/app-hub/commit/1135152227e31e83c0a65fdafaf2acbbafb3a272))
+
 ## [2.33.1](https://github.com/dhis2/app-hub/compare/v2.33.0...v2.33.1) (2024-02-14)
 
 

@@ -104,6 +104,7 @@ const VersionsCard = ({ app, mutate }) => {
                 appId={app.id}
                 versions={versions}
                 renderDeleteVersionButton={renderDeleteVersionButton}
+                showDownloadCount={true}
             />
             <Link
                 className={styles.newVersionButton}
