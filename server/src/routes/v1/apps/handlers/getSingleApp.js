@@ -55,7 +55,7 @@ module.exports = {
                 db
             )
             isDeveloper =
-                appsUserCanEdit.map(app => app.app_id).indexOf(appId) !== -1
+                appsUserCanEdit.map((app) => app.app_id).indexOf(appId) !== -1
         } catch (err) {
             //no user on request
             debug('No user in request')

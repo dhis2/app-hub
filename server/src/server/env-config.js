@@ -1,6 +1,6 @@
 const debug = require('debug')('apphub:server:env-config:')
 
-const getRequiredEnv = envVar => {
+const getRequiredEnv = (envVar) => {
     const value = process.env[envVar]
     if (!value && process.env.NODE_ENV === 'production') {
         throw new Error(`Expected env ${envVar} to be present.`)
@@ -24,7 +24,7 @@ const config = {
         enabled: true,
         redactAuthorization: process.env.NODE_ENV !== 'test',
         level: process.env.NODE_ENV !== 'test' ? 'info' : 'error',
-        prettyPrint: process.env.NODE_ENV !== 'test',
+        prettyPrint: process.env.NODE_ENV === 'development',
     },
     aws: {
         region: process.env.AWS_REGION || 'eu-west-1',
@@ -32,6 +32,9 @@ const config = {
     sentry: {
         dsn: process.env.SENTRY_DSN,
         environment: process.env.SENTRY_ENVIRONMENT || process.env.NODE_ENV,
+    },
+    slack: {
+        webhookUrl: process.env.SLACK_WEBHOOK_URL,
     },
     auth: {
         noAuthUserIdMapping: process.env.NO_AUTH_MAPPED_USER_ID,

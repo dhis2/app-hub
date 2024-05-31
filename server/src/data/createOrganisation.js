@@ -4,10 +4,7 @@ const { ensureUniqueSlug } = require('../services/organisation')
 
 const paramsSchema = joi.object().keys({
     userId: joi.string().uuid(),
-    name: joi
-        .string()
-        .min(1)
-        .max(100),
+    name: joi.string().min(1).max(100),
 })
 
 /**
@@ -43,7 +40,7 @@ const createOrganisation = async (params, knex) => {
     const slug = await ensureUniqueSlug(originalSlug, knex)
 
     try {
-        const [id] = await knex('organisation')
+        const [{ id }] = await knex('organisation')
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,

@@ -1,3 +1,66 @@
+# [2.34.0](https://github.com/dhis2/app-hub/compare/v2.33.1...v2.34.0) (2024-02-16)
+
+
+### Features
+
+* show version download count ([#739](https://github.com/dhis2/app-hub/issues/739)) ([1135152](https://github.com/dhis2/app-hub/commit/1135152227e31e83c0a65fdafaf2acbbafb3a272))
+
+## [2.33.1](https://github.com/dhis2/app-hub/compare/v2.33.0...v2.33.1) (2024-02-14)
+
+
+### Bug Fixes
+
+* support DHIS2 version 2.41 ([d268981](https://github.com/dhis2/app-hub/commit/d268981444bdd35d73fae3ec2dcfd2c54b71ba5a))
+
+# [2.33.0](https://github.com/dhis2/app-hub/compare/v2.32.2...v2.33.0) (2023-08-01)
+
+
+### Bug Fixes
+
+* add docs for slack arguments ([de11f5b](https://github.com/dhis2/app-hub/commit/de11f5bb899f6ecf616c9b81076961c95b7e62f5))
+* debug log ([5188baf](https://github.com/dhis2/app-hub/commit/5188baf7dfb569e989e590b5d46b633fc02243aa))
+* **slackmessager:** update review now link ([4b9875d](https://github.com/dhis2/app-hub/commit/4b9875dba49b60370ff86023244121da8da9e121))
+* slackwebhookmessager rename ([d86ba80](https://github.com/dhis2/app-hub/commit/d86ba80fc6fbc4d6e317b4ca4371c52056a45f1b))
+
+
+### Features
+
+* **notifications:** add slack webhook for new apps ([2f222ee](https://github.com/dhis2/app-hub/commit/2f222ee7a89c3259889d956444cbd2ba91aaa8f6))
+
+## [2.32.2](https://github.com/dhis2/app-hub/compare/v2.32.1...v2.32.2) (2023-05-16)
+
+
+### Bug Fixes
+
+* **addappmedia:** fix adding media after knex upgrade ([2e8ff4c](https://github.com/dhis2/app-hub/commit/2e8ff4ca545763b575c8893d5ed804e77bb2d53a))
+* **dependencies:** upgrade to knex@2 ([39f43ac](https://github.com/dhis2/app-hub/commit/39f43acfef3b7011c580662fbc22ba4aed6ef56f))
+* **deps:** update hapi-sentry ([192e56e](https://github.com/dhis2/app-hub/commit/192e56e76453dd3ad31dc335b131b7a423745665))
+* **deps:** update jwt deps ([cc6cef4](https://github.com/dhis2/app-hub/commit/cc6cef46f95ea40fdab550f95171da25c71906ee))
+* upgrade hapi deps ([1a3a6b6](https://github.com/dhis2/app-hub/commit/1a3a6b60f2f7d0b08eb87d10f8771a37a08b9f6f))
+
+## [2.32.1](https://github.com/dhis2/app-hub/compare/v2.32.0...v2.32.1) (2023-04-18)
+
+
+### Bug Fixes
+
+* add 2.40 to available versions ([53513ec](https://github.com/dhis2/app-hub/commit/53513ec805a64aaf84dc4ef21e535d9f752431cc))
+
+# [2.32.0](https://github.com/dhis2/app-hub/compare/v2.31.5...v2.32.0) (2023-03-20)
+
+
+### Features
+
+* **appversions:** add endpoint for getting a single app-version ([b5ec694](https://github.com/dhis2/app-hub/commit/b5ec6941704d3d47b8ff09344c29654473df931b))
+
+## [2.31.5](https://github.com/dhis2/app-hub/compare/v2.31.4...v2.31.5) (2023-02-07)
+
+
+### Bug Fixes
+
+* **deps:** update deps, downgrade react@16 ([4ae4806](https://github.com/dhis2/app-hub/commit/4ae4806eec78a0d8dec6175e9ab772b9e3e46968))
+* increase nginx client_max_body_size ([8ece671](https://github.com/dhis2/app-hub/commit/8ece6713801c3a0217d3d5b0836a734c296ae6e3))
+* prop-types import ([aa4107a](https://github.com/dhis2/app-hub/commit/aa4107a1f19da32319b53fad0446d6e6d83f9d90))
+
 ## [2.31.4](https://github.com/dhis2/app-hub/compare/v2.31.3...v2.31.4) (2022-11-30)
 
 

@@ -5,26 +5,14 @@ const { MediaTypes } = require('../enums')
 const paramSchema = joi
     .object()
     .keys({
-        appId: joi
-            .string()
-            .uuid()
-            .required(),
-        userId: joi
-            .string()
-            .uuid()
-            .required(),
+        appId: joi.string().uuid().required(),
+        userId: joi.string().uuid().required(),
         mediaType: joi
             .number()
             .required()
             .valid(...MediaTypes),
-        fileName: joi
-            .string()
-            .required()
-            .max(255),
-        mime: joi
-            .string()
-            .required()
-            .max(255),
+        fileName: joi.string().required().max(255),
+        mime: joi.string().required().max(255),
     })
     .options({ allowUnknown: true })
 
@@ -66,7 +54,7 @@ const addAppMedia = async (params, knex) => {
             .where('mime', mime)
 
         if (!mimeTypes || mimeTypes.length === 0) {
-            const [id] = await knex('mime_type')
+            const [{ id }] = await knex('mime_type')
                 .insert({
                     mime,
                 })
@@ -90,7 +78,7 @@ const addAppMedia = async (params, knex) => {
             created_by_user_id: userId,
         }
 
-        const [mediaId] = await knex('media')
+        const [{ id: mediaId }] = await knex('media')
             .insert(mediaToInsert)
             .returning('id')
 
@@ -102,7 +90,7 @@ const addAppMedia = async (params, knex) => {
             media_id: mediaId,
         }
 
-        const [id] = await knex('app_media')
+        const [{ id }] = await knex('app_media')
             .insert(insertData)
             .returning('id')
 

@@ -46,7 +46,7 @@ const createApp = async (params, knex) => {
     //generate a new uuid to insert
 
     try {
-        const [id] = await knex('app')
+        const [result] = await knex('app')
             .insert({
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,
@@ -57,7 +57,7 @@ const createApp = async (params, knex) => {
             })
             .returning('id')
 
-        return { id }
+        return result
     } catch (err) {
         throw new Error(`Could not insert app to database. ${err.message}`)
     }

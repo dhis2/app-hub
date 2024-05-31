@@ -7,22 +7,10 @@ const appExists = require('./appExists')
 const paramsSchema = joi
     .object()
     .keys({
-        userId: joi
-            .string()
-            .uuid()
-            .required(),
-        appId: joi
-            .string()
-            .uuid()
-            .required(),
-        demoUrl: joi
-            .string()
-            .uri()
-            .allow('', null),
-        sourceUrl: joi
-            .string()
-            .uri()
-            .allow('', null),
+        userId: joi.string().uuid().required(),
+        appId: joi.string().uuid().required(),
+        demoUrl: joi.string().uri().allow('', null),
+        sourceUrl: joi.string().uri().allow('', null),
         version: joi.string().allow(''),
     })
     .options({ allowUnknown: true })
@@ -61,7 +49,7 @@ const createAppVersion = async (params, knex) => {
             throw new Error(`Invalid appId, app does not exist.`)
         }
 
-        const [id] = await knex('app_version')
+        const [{ id }] = await knex('app_version')
             .insert({
                 app_id: appId,
                 created_at: knex.fn.now(),

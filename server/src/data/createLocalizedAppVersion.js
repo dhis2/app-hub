@@ -21,7 +21,7 @@ const createLocalizedAppVersion = async (params, knex) => {
     //TODO: add validation of params with joi
     const { userId, appVersionId, description, name, languageCode } = params
     try {
-        const [id] = await knex('app_version_localised')
+        const [{ id }] = await knex('app_version_localised')
             .insert({
                 app_version_id: appVersionId,
                 created_at: knex.fn.now(),

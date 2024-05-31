@@ -17,7 +17,7 @@ import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-co
 
 const { appChannelToDisplayName } = config.ui
 
-const useCreateGetDownloadUrl = url => {
+const useCreateGetDownloadUrl = (url) => {
     const [token, setToken] = useState()
     const { getAccessTokenSilently } = useAuth0()
 
@@ -30,12 +30,16 @@ const useCreateGetDownloadUrl = url => {
     }, [url, getAccessTokenSilently])
 
     return useCallback(
-        url => (token ? url.concat(`?token=${token}`) : url),
+        (url) => (token ? url.concat(`?token=${token}`) : url),
         [token]
     )
 }
 
-const VersionsTable = ({ versions, renderDeleteVersionButton }) => {
+const VersionsTable = ({
+    versions,
+    renderDeleteVersionButton,
+    showDownloadCount,
+}) => {
     const getDownloadUrl = useCreateGetDownloadUrl()
 
     return (
@@ -46,11 +50,14 @@ const VersionsTable = ({ versions, renderDeleteVersionButton }) => {
                     <TableCellHead>Channel</TableCellHead>
                     <TableCellHead>DHIS2 version compatibility</TableCellHead>
                     <TableCellHead>Upload date</TableCellHead>
+                    {showDownloadCount && (
+                        <TableCellHead>Downloads</TableCellHead>
+                    )}
                     <TableCellHead></TableCellHead>
                 </TableRowHead>
             </TableHead>
             <TableBody>
-                {versions.map(version => (
+                {versions.map((version) => (
                     <TableRow key={version.id}>
                         <TableCell>{version.version}</TableCell>
                         <TableCell className={styles.channelNameCell}>
@@ -74,6 +81,11 @@ const VersionsTable = ({ versions, renderDeleteVersionButton }) => {
                                 )}
                             </span>
                         </TableCell>
+                        {showDownloadCount && (
+                            <TableCell>
+                                <span>{version.downloadCount}</span>
+                            </TableCell>
+                        )}
                         <TableCell>
                             <a
                                 download
