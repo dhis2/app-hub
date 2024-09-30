@@ -29,7 +29,7 @@ module.exports = {
         debug(`deleteApp : ${request.params.appId}`)
 
         if (!canDeleteApp(request, h)) {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
         //todo: validate
 

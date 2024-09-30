@@ -59,7 +59,7 @@ module.exports = {
                 throw Boom.internal(err)
             }
         } else {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
 
         //What the old v1 api responds with on this endpoint if all works out
