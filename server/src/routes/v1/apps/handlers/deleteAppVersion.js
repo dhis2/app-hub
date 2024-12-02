@@ -42,7 +42,7 @@ module.exports = {
         const isManager = currentUserIsManager(request)
         const userApps = await getOrganisationAppsByUserId(currentUser.id, db)
         const userCanDeleteVersion =
-            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         debug('isManager:', isManager)
         debug('userCanDeleteVersion:', userCanDeleteVersion)

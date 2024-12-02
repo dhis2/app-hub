@@ -1,10 +1,7 @@
 const joi = require('joi')
 
 const schema = joi.object({
-    id: joi
-        .string()
-        .uuid()
-        .required(),
+    id: joi.string().uuid().required(),
 })
 
 /**

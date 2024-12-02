@@ -1,4 +1,4 @@
-exports.up = async knex => {
+exports.up = async (knex) => {
     await knex.raw('DROP VIEW users_with_organisations')
     await knex.raw(`
         CREATE VIEW users_with_organisations  
@@ -10,7 +10,7 @@ exports.up = async knex => {
         `)
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.raw('DROP VIEW users_with_organisations')
     await knex.raw(`
     CREATE VIEW users_with_organisations  

@@ -145,7 +145,7 @@ module.exports = [
             }
 
             const { appType } = appJsonPayload
-            const app = await db.transaction(trx =>
+            const app = await db.transaction((trx) =>
                 App.create(
                     {
                         userId: currentUserId,
@@ -252,7 +252,7 @@ module.exports = [
 
             appVersionService
                 .incrementDownloadCount(appVersion.id, db)
-                .catch(e =>
+                .catch((e) =>
                     request.logger.error('Failed to increment download', e)
                 )
 

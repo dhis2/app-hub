@@ -38,7 +38,7 @@ module.exports = class LocalFileSystemHandler {
             fs.writeFile(
                 path.join(this._uploadDirectory, directoryPath, filename),
                 buffer,
-                err => {
+                (err) => {
                     if (err) {
                         reject(err)
                     } else {
@@ -93,7 +93,7 @@ module.exports = class LocalFileSystemHandler {
 
             fs.unlink(
                 path.join(this._uploadDirectory, directoryPath, filename),
-                err => {
+                (err) => {
                     if (err) {
                         reject(err)
                     } else {
@@ -113,7 +113,7 @@ module.exports = class LocalFileSystemHandler {
                 return
             }
 
-            rimraf(path.join(this._uploadDirectory, directoryPath), err => {
+            rimraf(path.join(this._uploadDirectory, directoryPath), (err) => {
                 if (err) {
                     reject(err)
                 } else {

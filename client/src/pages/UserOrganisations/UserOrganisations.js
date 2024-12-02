@@ -18,7 +18,7 @@ const filterOrganisations = (organisations, query) => {
     if (!query) {
         return organisations
     }
-    return organisations.filter(organisation =>
+    return organisations.filter((organisation) =>
         organisation.name.toLowerCase().includes(query.toLowerCase())
     )
 }
@@ -115,7 +115,7 @@ const UserOrganisations = ({ user }) => {
                             No organisations found. Try adjusting your search.
                         </em>
                     )}
-                {filteredOrganisations.map(organisation => (
+                {filteredOrganisations.map((organisation) => (
                     <OrganisationCard
                         key={organisation.id}
                         organisation={organisation}

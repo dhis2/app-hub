@@ -11,7 +11,7 @@ const ProtectedRoute = ({ component, auth, ...rest }) => {
     return (
         <Route
             {...rest}
-            render={props => {
+            render={(props) => {
                 const ProtectedComponent = withAuthenticationRequired(
                     component,
                     {

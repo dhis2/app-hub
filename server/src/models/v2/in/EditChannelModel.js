@@ -9,5 +9,5 @@ const EditChannelModel = payloadSchema
 module.exports = {
     payloadSchema,
     def: EditChannelModel,
-    validate: objectToValidate => EditChannelModel.validate(objectToValidate),
+    validate: (objectToValidate) => EditChannelModel.validate(objectToValidate),
 }

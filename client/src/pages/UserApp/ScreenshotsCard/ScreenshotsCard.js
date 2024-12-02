@@ -33,8 +33,8 @@ const DeleteScreenshotButton = ({ appId, imageId, mutate }) => {
 }
 
 const ScreenshotsCard = ({ app, mutate }) => {
-    const screenshots = app.images.filter(img => !img.logo)
-    const renderDeleteScreenshotButton = imageId => (
+    const screenshots = app.images.filter((img) => !img.logo)
+    const renderDeleteScreenshotButton = (imageId) => (
         <DeleteScreenshotButton
             appId={app.id}
             imageId={imageId}

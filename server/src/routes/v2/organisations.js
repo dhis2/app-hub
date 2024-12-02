@@ -22,7 +22,7 @@ module.exports = [
             response: {
                 schema: Joi.array()
                     .items(
-                        OrgModel.externalDefinition.fork('users', s =>
+                        OrgModel.externalDefinition.fork('users', (s) =>
                             s.forbidden()
                         )
                     )
@@ -128,7 +128,7 @@ module.exports = [
             const { id: userId } = await getCurrentUserFromRequest(request, db)
             //TODO: should everyone be able to create new organisations?
 
-            const createOrgAndAddUser = async trx => {
+            const createOrgAndAddUser = async (trx) => {
                 const organisation = await Organisation.create(
                     {
                         userId,
@@ -175,7 +175,7 @@ module.exports = [
 
             const updateObj = request.payload
 
-            const updateOrganisation = async trx => {
+            const updateOrganisation = async (trx) => {
                 const organisation = await Organisation.findOne(
                     request.params.orgId,
                     false,
@@ -218,7 +218,7 @@ module.exports = [
             const { db } = h.context
             const { id } = await getCurrentUserFromRequest(request, db)
 
-            const addUserToOrganisation = async trx => {
+            const addUserToOrganisation = async (trx) => {
                 const org = await Organisation.findOne(
                     request.params.orgId,
                     true,
@@ -226,7 +226,7 @@ module.exports = [
                 )
 
                 const isManager = currentUserIsManager(request)
-                const isMember = org.users.findIndex(u => u.id === id) > -1
+                const isMember = org.users.findIndex((u) => u.id === id) > -1
                 const canAdd = org.owner === id || isMember || isManager
 
                 if (!canAdd) {
@@ -290,7 +290,7 @@ module.exports = [
 
             const userIdToRemove = request.payload.user
 
-            const removeUserFromOrganisation = async trx => {
+            const removeUserFromOrganisation = async (trx) => {
                 const org = await Organisation.findOne(
                     request.params.orgId,
                     true,
@@ -298,7 +298,7 @@ module.exports = [
                 )
 
                 const isManager = currentUserIsManager(request)
-                const isMember = org.users.findIndex(u => u.id === id) > -1
+                const isMember = org.users.findIndex((u) => u.id === id) > -1
                 const canRemove = org.owner === id || isMember || isManager
 
                 if (org.owner === userIdToRemove) {

@@ -36,10 +36,10 @@ describe('Get all published apps [v1]', () => {
         const apps = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
 
-        const approvedApps = apps.filter(app => app.status === 'APPROVED')
+        const approvedApps = apps.filter((app) => app.status === 'APPROVED')
         expect(approvedApps.length).to.be.equal(apps.length)
 
-        const whoApp = apps.filter(app => app.name === 'A nice app by WHO')
+        const whoApp = apps.filter((app) => app.name === 'A nice app by WHO')
 
         expect(whoApp).to.be.array()
 
@@ -74,9 +74,9 @@ describe('Get all published apps [v1]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
         const filteredVersions = versions.filter(
-            version => version.channel === 'stable'
+            (version) => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
     })
@@ -94,10 +94,10 @@ describe('Get all published apps [v1]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
 
         const filteredVersions = versions.filter(
-            version => version.channel === 'stable'
+            (version) => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
 
@@ -119,7 +119,7 @@ describe('Get all published apps [v1]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
         expect(versions.length).to.equal(1)
 
         //the 'a nice app by who' version 1.0 with support for 2.27
@@ -176,10 +176,10 @@ describe('Get all published apps [v2]', () => {
         const { result: apps } = JSON.parse(response.payload)
         expect(apps).to.not.be.empty()
 
-        const approvedApps = apps.filter(app => app.status === 'APPROVED')
+        const approvedApps = apps.filter((app) => app.status === 'APPROVED')
         expect(approvedApps.length).to.be.equal(apps.length)
 
-        const whoApp = apps.filter(app => app.name === 'A nice app by WHO')
+        const whoApp = apps.filter((app) => app.name === 'A nice app by WHO')
 
         expect(whoApp).to.be.array()
 
@@ -188,7 +188,7 @@ describe('Get all published apps [v2]', () => {
             'World Health Organization'
         )
         const version1App = whoApp[0].versions.find(
-            ver => ver.id === appVersionMocks[1][0].id
+            (ver) => ver.id === appVersionMocks[1][0].id
         )
         expect(version1App.version).to.be.equal('1.0')
         expect(version1App.demoUrl).to.be.equal(
@@ -216,9 +216,9 @@ describe('Get all published apps [v2]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
         const filteredVersions = versions.filter(
-            version => version.channel === 'stable'
+            (version) => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
     })
@@ -236,10 +236,10 @@ describe('Get all published apps [v2]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
 
         const filteredVersions = versions.filter(
-            version => version.channel === 'stable'
+            (version) => version.channel === 'stable'
         )
         expect(filteredVersions.length).to.equal(versions.length)
 
@@ -251,8 +251,7 @@ describe('Get all published apps [v2]', () => {
     it('should only return apps supporting version 2.27', async () => {
         const injectOptions = {
             method: 'GET',
-            url:
-                '/api/v2/apps?channels=stable,development,canary&dhis_version=2.27',
+            url: '/api/v2/apps?channels=stable,development,canary&dhis_version=2.27',
         }
 
         const response = await server.inject(injectOptions)
@@ -262,7 +261,7 @@ describe('Get all published apps [v2]', () => {
         expect(apps).to.not.be.empty()
         expect(apps).to.be.array()
 
-        const versions = flatten(apps.map(app => app.versions))
+        const versions = flatten(apps.map((app) => app.versions))
         expect(versions.length).to.equal(1)
 
         //the 'a nice app by who' version 1.0 with support for 2.27

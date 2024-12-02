@@ -13,9 +13,7 @@ module.exports = async (uuid, knex) => {
     }
 
     debug('trying to delete the channel')
-    const deletedRows = await knex('channel')
-        .where('id', uuid)
-        .del()
+    const deletedRows = await knex('channel').where('id', uuid).del()
 
     debug(`deleted ${deletedRows} rows in table channel for uuid ${uuid}`)
 

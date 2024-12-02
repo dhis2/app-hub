@@ -84,7 +84,7 @@ module.exports = class AWSFileHandler {
                 },
             }
 
-            objectsInPath.Contents.forEach(obj => {
+            objectsInPath.Contents.forEach((obj) => {
                 debug('Will try to delete: ', obj.Key)
                 deleteParams.Delete.Objects.push({ Key: obj.Key })
             })

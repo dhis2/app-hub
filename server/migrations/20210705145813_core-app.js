@@ -1,5 +1,5 @@
 exports.up = async function (knex) {
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.boolean('core_app').defaultTo(false)
     })
     await knex.raw('DROP VIEW apps_view')
@@ -49,7 +49,7 @@ exports.up = async function (knex) {
 
 exports.down = async function (knex) {
     await knex.raw('DROP VIEW apps_view')
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.dropColumn('core_app')
     })
 

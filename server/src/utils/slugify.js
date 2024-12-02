@@ -9,7 +9,7 @@ const slugifyOptions = {
     strict: true,
 }
 
-exports.slugify = string => {
+exports.slugify = (string) => {
     const slug = slugify(string, slugifyOptions)
     return slug.length > 1
         ? slug

@@ -13,7 +13,7 @@ const tables = [
     'organisation',
 ]
 
-exports.up = async knex => {
+exports.up = async (knex) => {
     try {
         const rawResult = await knex.raw(
             `select usesuper from pg_user where usename = CURRENT_USER;`
@@ -34,11 +34,11 @@ exports.up = async knex => {
     }
 
     //requires this to be run with correct privileges on the database: create extension if not exists "uuid-ossp"
-    await Promise.all(tables.map(async table => setDefault(table, knex)))
+    await Promise.all(tables.map(async (table) => setDefault(table, knex)))
 }
 
-exports.down = async knex => {
-    await Promise.all(tables.map(async table => dropDefault(table, knex)))
+exports.down = async (knex) => {
+    await Promise.all(tables.map(async (table) => dropDefault(table, knex)))
 
     try {
         const rawResult = await knex.raw(

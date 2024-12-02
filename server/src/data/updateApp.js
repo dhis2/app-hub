@@ -22,7 +22,7 @@ const paramsSchema = joi
     })
     .options({ allowUnknown: true })
 
-const isValidSourceUrl = sourceUrl => {
+const isValidSourceUrl = (sourceUrl) => {
     try {
         const url = new URL(sourceUrl)
         return url.protocol === 'http:' || url.protocol === 'https:'

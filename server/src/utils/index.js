@@ -21,7 +21,7 @@ const getFile = (path, filename) =>
     createBackingStorageInstance().getFile(path, filename)
 const deleteFile = (path, filename) =>
     createBackingStorageInstance().deleteFile(path, filename)
-const deleteDir = path => createBackingStorageInstance().deleteDir(path)
+const deleteDir = (path) => createBackingStorageInstance().deleteDir(path)
 
 module.exports = {
     flatten,

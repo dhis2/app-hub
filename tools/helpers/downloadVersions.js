@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports = async (dir, app) => {
-    const versionDownloadPromises = app.versions.map(appVersion => {
+    const versionDownloadPromises = app.versions.map((appVersion) => {
         return new Promise((resolve, reject) => {
             const appVersionFile = fs.createWriteStream(
                 path.join(dir, appVersion.version + '.zip')
@@ -16,7 +16,7 @@ module.exports = async (dir, app) => {
                     )
                     resolve()
                 })
-                .on('error', error => {
+                .on('error', (error) => {
                     reject(error)
                 })
         })

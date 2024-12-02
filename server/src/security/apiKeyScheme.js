@@ -9,14 +9,11 @@ const optionsSchema = Joi.object({
     keySchema: Joi.object()
         .schema()
         .default(
-            Joi.string()
-                .required()
-                .length(36)
-                .message('Invalid API key format')
+            Joi.string().required().length(36).message('Invalid API key format')
         ),
 })
 
-const scheme = function(server, schemeOptions) {
+const scheme = function (server, schemeOptions) {
     const options = Joi.attempt(schemeOptions, optionsSchema)
     debug('API-key scheme setup')
     return {
@@ -48,7 +45,7 @@ const scheme = function(server, schemeOptions) {
 }
 
 const plugin = {
-    register: function(server, pluginOptions) {
+    register: function (server, pluginOptions) {
         server.auth.scheme(schemeName, scheme)
     },
 }

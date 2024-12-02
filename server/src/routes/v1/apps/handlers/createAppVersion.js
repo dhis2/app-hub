@@ -70,7 +70,7 @@ module.exports = {
         const isManager = currentUserIsManager(request)
         const userApps = await getOrganisationAppsByUserId(currentUserId, db)
         const userCanEditApp =
-            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         if (!userCanEditApp) {
             throw Boom.unauthorized()
@@ -85,9 +85,8 @@ module.exports = {
             throw Boom.badRequest(e)
         }
 
-        const validationResult = CreateAppVersionModel.def.validate(
-            appVersionJson
-        )
+        const validationResult =
+            CreateAppVersionModel.def.validate(appVersionJson)
         const file = request.payload.file
 
         if (validationResult.error !== undefined) {
@@ -112,7 +111,7 @@ module.exports = {
 
         //check if that version already exists on this app
         const existingAppVersions = dbAppRows.filter(
-            row => row.version === appVersionJson.version
+            (row) => row.version === appVersionJson.version
         )
         if (existingAppVersions.length > 0) {
             throw Boom.badRequest(
@@ -189,7 +188,11 @@ module.exports = {
 
         try {
             const organisationSlug = dbApp.organisation_slug
-            const organisation = await Organisation.findOneBySlug(organisationSlug, false, transaction)
+            const organisation = await Organisation.findOneBySlug(
+                organisationSlug,
+                false,
+                transaction
+            )
             verifyBundle({
                 buffer: file._data,
                 appId,
@@ -214,7 +217,7 @@ module.exports = {
         //fetch the new version rows and filter out the one we've just created data for
         dbAppRows = await getAppsById(appId, languageCode, db)
         const [appWithVersion] = dbAppRows.filter(
-            app => app.version === appVersionJson.version
+            (app) => app.version === appVersionJson.version
         )
 
         const serverUrl = `${request.server.info.protocol}://${request.info.host}/api`

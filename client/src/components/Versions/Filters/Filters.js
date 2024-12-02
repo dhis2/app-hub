@@ -18,7 +18,7 @@ const Filters = ({
             {availableChannels.length > 1 && (
                 <div className={styles.channelsFilter}>
                     <h3 className={styles.subheader}>Channel</h3>
-                    {availableChannels.map(channel => (
+                    {availableChannels.map((channel) => (
                         <ChannelCheckbox
                             key={channel}
                             name={channel}
@@ -38,7 +38,7 @@ const Filters = ({
                     selected={dhisVersionFilter}
                     onChange={({ selected }) => setDhisVersionFilter(selected)}
                 >
-                    {dhisVersions.map(dhisVersion => (
+                    {dhisVersions.map((dhisVersion) => (
                         <SingleSelectOption
                             key={dhisVersion}
                             label={dhisVersion}

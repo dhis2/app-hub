@@ -67,7 +67,7 @@ const Filter = {
             result.value = valueResult.value
 
             if (valueResult.errors) {
-                const errs = valueResult.errors.map(e =>
+                const errs = valueResult.errors.map((e) =>
                     helpers.error('filter.value', { err: e })
                 )
                 errors.push(...errs)
@@ -79,7 +79,7 @@ const Filter = {
                 .$_validate(filter.operator, helpers.state, helpers.prefs)
             result.operator = opResult.value
             if (opResult.errors) {
-                const errs = opResult.errors.map(e =>
+                const errs = opResult.errors.map((e) =>
                     helpers.error('filter.operator', { err: e })
                 )
                 errors.push(...errs)
@@ -118,8 +118,8 @@ const StringArray = {
     base: Joi.array(),
     type: 'stringArray',
     coerce: (value, state, options) => ({
-        value: value.split ? value.split(',') : value
-    })
+        value: value.split ? value.split(',') : value,
+    }),
 }
 
 module.exports = Joi.extend(Filter).extend(StringArray)

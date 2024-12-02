@@ -12,7 +12,7 @@ const OrganisationInvitationCallback = () => {
     const [error, setError] = useState(null)
 
     useEffect(() => {
-        const acceptInvitation = async token => {
+        const acceptInvitation = async (token) => {
             try {
                 const { organisation } = await api.acceptOrganisationInvitation(
                     token

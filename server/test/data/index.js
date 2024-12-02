@@ -237,7 +237,7 @@ describe('@data::updateApp', () => {
 
         expect(allAppVersionsWithUuid.length).to.be.min(1)
 
-        allAppVersionsWithUuid.forEach(app => {
+        allAppVersionsWithUuid.forEach((app) => {
             expect(app.name).to.be.equal(newData.name)
             expect(app.source_url).to.be.equal(newData.sourceUrl)
             expect(app.description).to.be.equal(newData.description)
@@ -257,7 +257,7 @@ describe('@data::updateAppVersion', () => {
 
         //First check that we fetch the correct object to change
         const [app] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.version).to.equal('0.1')
@@ -280,7 +280,7 @@ describe('@data::updateAppVersion', () => {
         await transaction.commit()
 
         const [updatedApp] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(updatedApp.version_id).to.equal(appVersionIdToUpdate)
         expect(updatedApp.min_dhis2_version).to.equal('123')
@@ -313,7 +313,7 @@ describe('@data::updateAppVersion', () => {
 
         //First check that we fetch the correct object to change
         let [app] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.channel_name).to.equal('stable')
@@ -329,7 +329,7 @@ describe('@data::updateAppVersion', () => {
 
         await transaction.commit()
         ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(app.channel_name).to.equal('development')
 
@@ -347,7 +347,7 @@ describe('@data::updateAppVersion', () => {
 
         //Check that the switch back to stable worked
         ;[app] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(app.channel_name).to.equal('stable')
     })
@@ -359,7 +359,7 @@ describe('@data::updateAppVersion', () => {
 
         //First check that we fetch the correct object to change
         const [app] = (await getAppsById(mockAppId, 'en', db)).filter(
-            app => app.version_id === appVersionIdToUpdate
+            (app) => app.version_id === appVersionIdToUpdate
         )
         expect(app.version_id).to.equal(appVersionIdToUpdate)
         expect(app.channel_name).to.equal('stable')

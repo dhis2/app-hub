@@ -46,7 +46,7 @@ module.exports = {
             db
         )
         const userCanEditApp =
-            appsUserCanEdit.filter(app => app.app_id === request.params.appId)
+            appsUserCanEdit.filter((app) => app.app_id === request.params.appId)
                 .length > 0
 
         debug('appsUserCanEdit:', appsUserCanEdit)

@@ -50,19 +50,19 @@ const Apps = () => {
     })
     const { channels, types, dhisVersion, query, page } = queryParams
     const [debouncedQuery] = useDebounce(query, 300)
-    const setChannels = channels => {
+    const setChannels = (channels) => {
         setQueryParams({ channels, page: 1 })
     }
-    const setTypes = types => {
+    const setTypes = (types) => {
         setQueryParams({ types, page: 1 })
     }
-    const setDhisVersion = dhisVersion => {
+    const setDhisVersion = (dhisVersion) => {
         setQueryParams({ dhisVersion, page: 1 })
     }
-    const setQuery = query => {
+    const setQuery = (query) => {
         setQueryParams({ query, page: 1 }, 'replaceIn')
     }
-    const setPage = page => {
+    const setPage = (page) => {
         setQueryParams({ page })
     }
 

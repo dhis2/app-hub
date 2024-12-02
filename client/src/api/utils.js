@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from 'react'
 
-const encodeQueryParameter = param => {
+const encodeQueryParameter = (param) => {
     if (Array.isArray(param)) {
         return param.map(encodeQueryParameter).join(',')
     }
@@ -20,7 +20,7 @@ const encodeQueryParameter = param => {
 }
 
 export const joinUrlPath = (...paths) => {
-    const truePaths = paths.filter(path => !!path)
+    const truePaths = paths.filter((path) => !!path)
     return truePaths
         .map((path, i) => {
             path = typeof path === 'string' ? path : String(path)
@@ -35,7 +35,7 @@ export const joinUrlPath = (...paths) => {
         .join('/')
 }
 
-export const queryParametersToQueryString = params =>
+export const queryParametersToQueryString = (params) =>
     Object.entries(params)
         .filter(([, value]) => value)
         .map(
@@ -46,7 +46,7 @@ export const queryParametersToQueryString = params =>
 
 // This is a SWR middleware for keeping the data even if key changes.
 // See https://swr.vercel.app/docs/middleware#keep-previous-result
-export const laggySWRMiddleware = useSWRNext => {
+export const laggySWRMiddleware = (useSWRNext) => {
     return (key, fetcher, config) => {
         // Use a ref to store previous returned data
         const laggyDataRef = useRef()

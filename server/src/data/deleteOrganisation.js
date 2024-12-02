@@ -24,9 +24,7 @@ const deleteOrganisation = async (params, knex) => {
     }
 
     try {
-        const deletedRows = await knex('organisation')
-            .where(params)
-            .delete()
+        const deletedRows = await knex('organisation').where(params).delete()
 
         return deletedRows > 0
     } catch (err) {

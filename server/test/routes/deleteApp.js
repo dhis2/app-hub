@@ -25,7 +25,7 @@ describe('test delete app', () => {
         await server.stop()
     })
 
-    const createFormForApp = app => {
+    const createFormForApp = (app) => {
         const form = new FormData()
         form.append('app', JSON.stringify(app))
         form.append(

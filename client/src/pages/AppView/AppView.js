@@ -66,7 +66,8 @@ const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
                     {renderDhisVersionsCompatibility(
                         latestVersion.minDhisVersion,
                         latestVersion.maxDhisVersion
-                    )}.
+                    )}
+                    .
                 </span>
             </div>
             {sourceUrl && (
@@ -104,8 +105,8 @@ const AppView = ({ match }) => {
     }
 
     const appDeveloper = app.developer.organisation || 'Unspecified'
-    const logoSrc = app.images.find(img => img.logo)?.imageUrl
-    const screenshots = app.images.filter(img => !img.logo)
+    const logoSrc = app.images.find((img) => img.logo)?.imageUrl
+    const screenshots = app.images.filter((img) => !img.logo)
     const versions = app.versions.sort((a, b) => b.created - a.created)
     const latestVersion = versions[0]
 

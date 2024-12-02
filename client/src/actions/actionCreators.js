@@ -2,7 +2,7 @@ import * as actions from '../constants/actionTypes'
 
 export const loadUser = actionCreator(actions.USER_LOAD)
 
-export const userLoaded = profile =>
+export const userLoaded = (profile) =>
     actionCreator(actions.USER_LOAD_SUCCESS)({
         profile,
     })

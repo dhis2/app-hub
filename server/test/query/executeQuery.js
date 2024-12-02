@@ -27,7 +27,7 @@ describe('executeQuery', () => {
         await db.rollback()
     })
 
-    const appMocksWithTotal = appMocks.map(a => ({
+    const appMocksWithTotal = appMocks.map((a) => ({
         ...a,
         total_count: appMocks.length,
     }))
@@ -42,12 +42,12 @@ describe('executeQuery', () => {
         'organisation.created_at'
     )
 
-    const getQueryMock = new Promise(resolve => {
+    const getQueryMock = new Promise((resolve) => {
         resolve(appMocksWithTotal)
     })
     getQueryMock._method = 'select'
 
-    const insertQueryMock = new Promise(resolve => resolve(appMocksWithTotal))
+    const insertQueryMock = new Promise((resolve) => resolve(appMocksWithTotal))
     insertQueryMock._method = 'insert'
 
     const appDefinition = Joi.object({
@@ -64,9 +64,9 @@ describe('executeQuery', () => {
 
     const appModelMock = {
         definition: appDefinition,
-        parseDatabaseJson: apps =>
+        parseDatabaseJson: (apps) =>
             Joi.attempt(apps, Joi.array().items(appDefinition)),
-        formatDatabaseJson: apps =>
+        formatDatabaseJson: (apps) =>
             Joi.attempt(apps, Joi.array().items(appDefinition)),
     }
 
@@ -81,15 +81,15 @@ describe('executeQuery', () => {
 
         expect(result).to.be.an.object()
         expect(result.result).to.be.an.array().length(organisationMocks.length)
-        result.result.forEach(org => {
+        result.result.forEach((org) => {
             expect(
-                organisationMocks.find(o => o.id === org.id)
+                organisationMocks.find((o) => o.id === org.id)
             ).to.not.be.undefined()
         })
     })
 
     it('should execute the query and format it if options.formatter is present', async () => {
-        const formatter = apps => apps.map(a => a.id)
+        const formatter = (apps) => apps.map((a) => a.id)
         const formatterSpy = sinon.spy(formatter)
         const result = await executeQuery(getQueryMock, undefined, {
             formatter: formatterSpy,
@@ -98,7 +98,7 @@ describe('executeQuery', () => {
         expect(result).to.be.an.object()
         expect(result.result).to.not.shallow.equal(appMocksWithTotal)
         expect(formatterSpy.calledOnce).to.be.true()
-        result.result.forEach(a => {
+        result.result.forEach((a) => {
             expect(a).to.not.be.an.object()
             expect(a).to.be.a.string()
         })
@@ -130,7 +130,7 @@ describe('executeQuery', () => {
 
     it('should prioritise formatter if both model and options.formatter is present', async () => {
         sinon.spy(appModelMock, 'parseDatabaseJson')
-        const formatter = apps => apps.map(a => a.id)
+        const formatter = (apps) => apps.map((a) => a.id)
         const formatterSpy = sinon.spy(formatter)
         const result = await executeQuery(
             getQueryMock,

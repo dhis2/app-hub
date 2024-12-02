@@ -6,14 +6,10 @@ const { isSemver } = require('../../helpers')
  */
 
 const CreateAppVersionModel = Joi.object().keys({
-    version: Joi.string()
-        .required()
-        .custom(isSemver, 'semver validate'),
+    version: Joi.string().required().custom(isSemver, 'semver validate'),
     minDhisVersion: Joi.string().required(),
     maxDhisVersion: Joi.string().allow('', null),
-    demoUrl: Joi.string()
-        .uri()
-        .allow('', null),
+    demoUrl: Joi.string().uri().allow('', null),
     channel: Joi.string().required(),
 })
 
@@ -26,5 +22,5 @@ const payloadSchema = Joi.object({
 module.exports = {
     payloadSchema,
     def: CreateAppVersionModel,
-    validate: obj => CreateAppVersionModel.validate(obj),
+    validate: (obj) => CreateAppVersionModel.validate(obj),
 }

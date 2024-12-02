@@ -185,11 +185,11 @@ async function main() {
 
     if (errors && errors.length > 0) {
         console.log(' === WARNING: Found errors during run === ')
-        errors.map(err => console.error(err))
+        errors.map((err) => console.error(err))
     }
 
     console.log('Cleaning up...')
-    await rimraf('./apps', function() {
+    await rimraf('./apps', function () {
         console.log('Done.')
     })
 }

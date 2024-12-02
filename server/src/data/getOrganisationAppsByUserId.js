@@ -30,9 +30,7 @@ const getOrganisationAppsByUserId = async (id, knex) => {
 
     debug('The user has access to apps:', appIds)
 
-    return knex('apps_view')
-        .select()
-        .where('app_id', 'in', appIds)
+    return knex('apps_view').select().where('app_id', 'in', appIds)
 }
 
 module.exports = getOrganisationAppsByUserId

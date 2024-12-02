@@ -27,7 +27,7 @@ describe('@plugins::PaginationPlugin', () => {
                 },
             },
 
-            handler: request => {
+            handler: (request) => {
                 const pager = request.plugins.pagination
                 return pager
             },
@@ -273,12 +273,8 @@ describe('@plugins::PaginationPlugin', () => {
                 options: {
                     querySchema: Joi.object({
                         paging: Joi.boolean().default(true),
-                        page: Joi.number()
-                            .default(1)
-                            .min(1),
-                        pageSize: Joi.number()
-                            .default(15)
-                            .min(1),
+                        page: Joi.number().default(1).min(1),
+                        pageSize: Joi.number().default(15).min(1),
                     }).rename('limit', 'pageSize'),
                     resultSchema: Joi.object({
                         pager: Joi.object({
@@ -303,7 +299,7 @@ describe('@plugins::PaginationPlugin', () => {
                         },
                     },
 
-                    handler: request => {
+                    handler: (request) => {
                         const pager = request.plugins.pagination
                         const res = [...Array(30).keys()]
                         const formatted = pager.formatResult(res, res.length)
@@ -321,18 +317,14 @@ describe('@plugins::PaginationPlugin', () => {
                             enabled: true,
                             querySchema: Joi.object({
                                 paging: Joi.boolean().default(true),
-                                page: Joi.number()
-                                    .default(1)
-                                    .min(1),
-                                pageSize: Joi.number()
-                                    .default(15)
-                                    .min(1),
+                                page: Joi.number().default(1).min(1),
+                                pageSize: Joi.number().default(15).min(1),
                             }).rename('size', 'pageSize'),
                         },
                     },
                 },
 
-                handler: request => {
+                handler: (request) => {
                     const pager = request.plugins.pagination
                     const res = [...Array(30).keys()]
                     const formatted = pager.formatResult(res, res.length)

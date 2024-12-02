@@ -117,17 +117,17 @@ describe('ConfigResolver', () => {
             expect(conf.routes.baseAppName).to.equal('baseAppName')
             //should deep merge
             expect(
-                Object.keys(conf.ui).every(k =>
+                Object.keys(conf.ui).every((k) =>
                     Object.prototype.hasOwnProperty.call(DirectDefaultConfig, k)
                 )
             )
             expect(
-                DirectDefaultConfig.ui.dhisVersions.every(v =>
+                DirectDefaultConfig.ui.dhisVersions.every((v) =>
                     conf.ui.dhisVersions.includes(v)
                 )
             )
             expect(
-                conf.ui.dhisVersions.every(v =>
+                conf.ui.dhisVersions.every((v) =>
                     override.ui.dhisVersions.includes(v)
                 )
             )

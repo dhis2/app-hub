@@ -56,8 +56,6 @@ const dhis2AppVersions = [
         version: '1.1.0',
         created_at: createdAtDate(),
     },
-
-
 ]
 const whoAppVersions = [
     {

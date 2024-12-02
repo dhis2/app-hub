@@ -43,17 +43,18 @@ const UserView = ({ loadUser, user, match }) => {
     }
 
     // eslint-disable-next-line react/display-name
-    const provideUser = Component => props => (
-        <Component
-            {...props}
-            user={{
-                id: user.userId,
-                isManager: user.profile.manager,
-                name: user.profile.name,
-                email: user.profile.email,
-            }}
-        />
-    )
+    const provideUser = (Component) => (props) =>
+        (
+            <Component
+                {...props}
+                user={{
+                    id: user.userId,
+                    isManager: user.profile.manager,
+                    name: user.profile.name,
+                    email: user.profile.email,
+                }}
+            />
+        )
 
     return (
         <Switch>
@@ -100,7 +101,7 @@ UserView.propTypes = {
     user: PropTypes.object.isRequired,
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
     user: getUserInfo(state),
 })
 

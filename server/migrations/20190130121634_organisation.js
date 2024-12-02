@@ -1,5 +1,5 @@
-exports.up = async knex => {
-    await knex.schema.createTable('organisation', table => {
+exports.up = async (knex) => {
+    await knex.schema.createTable('organisation', (table) => {
         table.uuid('id').primary()
 
         table
@@ -9,10 +9,7 @@ exports.up = async knex => {
 
         table.uuid('created_by_user_id').notNullable()
 
-        table
-            .foreign('created_by_user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('created_by_user_id').references('id').inTable('users')
 
         table.timestamp('updated_at', true)
 
@@ -22,6 +19,6 @@ exports.up = async knex => {
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.schema.dropTable('organisation')
 }

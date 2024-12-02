@@ -25,7 +25,7 @@ module.exports = [
 
             const organisations = (
                 await Organisation.find({ filters }, h.context.db)
-            ).map(org => org.id)
+            ).map((org) => org.id)
 
             return {
                 organisations,

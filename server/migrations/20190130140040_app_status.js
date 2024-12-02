@@ -1,7 +1,7 @@
 const { AppStatus } = require('../src/enums')
 
-exports.up = async knex => {
-    await knex.schema.createTable('app_status', table => {
+exports.up = async (knex) => {
+    await knex.schema.createTable('app_status', (table) => {
         table.uuid('id').primary()
 
         table.uuid('app_id').notNullable()
@@ -26,13 +26,10 @@ exports.up = async knex => {
             .inTable('app')
             .onDelete('CASCADE')
 
-        table
-            .foreign('created_by_user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('created_by_user_id').references('id').inTable('users')
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.schema.dropTable('app_status')
 }

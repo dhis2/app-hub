@@ -1,6 +1,6 @@
 const { v4: uuid } = require('uuid')
 
-exports.createApiUser = async knex => {
+exports.createApiUser = async (knex) => {
     if (!process.env.AUTH0_AUDIENCE) {
         return
     }
