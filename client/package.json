@@ -18,7 +18,7 @@
     "dependencies": {
         "@auth0/auth0-react": "^1.6.0",
         "@dhis2/d2-i18n": "^1.1.0",
-        "@dhis2/ui": "^8.9.0",
+        "@dhis2/ui": "^10.1.6",
         "classnames": "^2.3.1",
         "copy-text-to-clipboard": "^3.0.1",
         "core-js": "^3.16.4",
@@ -58,7 +58,7 @@
         "copy-webpack-plugin": "^9.0.1",
         "css-loader": "^6.2.0",
         "cypress-cucumber-preprocessor": "^4.2.0",
-        "eslint-import-resolver-webpack": "^0.13.1",
+        "eslint-import-resolver-webpack": "^0.13.9",
         "file-loader": "^6.2.0",
         "html-webpack-plugin": "^5.3.2",
         "isomorphic-fetch": "^3.0.0",
@@ -69,9 +69,9 @@
         "style-loader": "^3.2.1",
         "svg-loader": "^0.0.2",
         "transform-imports": "^2.0.0",
-        "webpack": "^5.51.1",
-        "webpack-cli": "^4.8.0",
-        "webpack-dev-server": "^4.1.0"
+        "webpack": "^5.96.1",
+        "webpack-cli": "^5.1.4",
+        "webpack-dev-server": "^5.1.0"
     },
     "files": [
         "build"
