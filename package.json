@@ -21,6 +21,8 @@
         "test:server": "yarn workspace server test",
         "test:client": "yarn workspace client test",
         "clone": "yarn workspace tools clone",
+        "lint": "d2-style check",
+        "lint:staged": "d2-style check --staged",
         "format": "yarn format:js && yarn format:text",
         "format:staged": "yarn format:js --staged && yarn format:text --staged",
         "format:js": "d2-style apply js",
