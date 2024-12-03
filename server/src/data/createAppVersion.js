@@ -12,6 +12,8 @@ const paramsSchema = joi
         demoUrl: joi.string().uri().allow('', null),
         sourceUrl: joi.string().uri().allow('', null),
         version: joi.string().allow(''),
+        changelog: joi.string().allow('', null),
+        d2config: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
@@ -41,7 +43,8 @@ const createAppVersion = async (params, knex) => {
         throw paramsValidation.error
     }
 
-    const { userId, appId, demoUrl, sourceUrl, version } = params
+    const { userId, appId, demoUrl, sourceUrl, version, changelog, d2config } =
+        params
     debug('got params: ', params)
 
     try {
@@ -57,6 +60,8 @@ const createAppVersion = async (params, knex) => {
                 demo_url: demoUrl || '',
                 source_url: sourceUrl || '',
                 version: version || '',
+                changelog,
+                d2config,
             })
             .returning('id')
 
@@ -67,6 +72,8 @@ const createAppVersion = async (params, knex) => {
             demoUrl,
             sourceUrl,
             version,
+            changelog,
+            d2config,
         }
     } catch (err) {
         throw new Error(
