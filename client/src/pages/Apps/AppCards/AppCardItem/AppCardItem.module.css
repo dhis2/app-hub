@@ -29,9 +29,18 @@
 }
 
 .appCardDeveloper, .appCardType {
-    display: block;
     margin: var(--spacers-dp4) 0;
     font-size: 14px;
+}
+
+.appTypeContainer {
+    flex-direction: 'row';
+    display: 'flex';
+    align-items: 'center';
+}
+
+.appTypeContainer .appCardType {
+    margin-right: 5px;
 }
 
 .appCardDeveloper {

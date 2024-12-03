@@ -15,6 +15,7 @@ const {
     verifyBundle,
 } = require('../../../../security')
 
+const parseAppDetails = require('../../../../utils/parseAppDetails')
 const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
@@ -136,6 +137,18 @@ module.exports = {
         debug(`Adding version to app ${dbApp.name}`)
         let appVersion = null
 
+        const { changelog, d2config } = await parseAppDetails({
+            buffer: file._data,
+            appRepo: sourceUrl,
+        })
+
+        verifyBundle({
+            buffer: file._data,
+            appId: dbApp.app_id, // null, // this can never be identical on first upload
+            appName: dbApp.name,
+            version,
+        })
+
         try {
             appVersion = await createAppVersion(
                 {
@@ -144,6 +157,8 @@ module.exports = {
                     demoUrl,
                     sourceUrl,
                     version,
+                    changelog,
+                    d2config: JSON.stringify(d2config),
                 },
                 transaction
             )

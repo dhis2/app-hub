@@ -37,9 +37,15 @@
 }
 
 .appCardType {
-    display: block;
     font-size: 13px;
     color: var(--colors-grey700);
+    margin-right: 5px;
+}
+
+.appCardTypeContainer {
+    flex-direction: 'row';
+    display: 'flex';
+    align-items: 'center';
 }
 
 .appCardHeading {
@@ -48,6 +54,7 @@
     margin-top: 0;
     margin-bottom: var(--spacers-dp12);
 }
+
 
 .appCardParagraph {
     font-size: 15px;
