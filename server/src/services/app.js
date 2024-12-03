@@ -55,6 +55,8 @@ exports.createVersionForApp = async (
         channel,
         appName,
         description,
+        d2config,
+        changelog,
     },
     db
 ) => {
@@ -65,6 +67,8 @@ exports.createVersionForApp = async (
             sourceUrl,
             demoUrl,
             version,
+            d2config,
+            changelog,
         },
         db
     )

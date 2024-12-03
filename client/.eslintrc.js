@@ -7,6 +7,7 @@ module.exports = {
         'no-unused-vars': ['error', { ignoreRestSiblings: true }],
         'react/no-unescaped-entities': 'off',
         'react/react-in-jsx-scope': 'off',
+        'import/extensions': 'off',
     },
     globals: {
         __APP_INFO__: 'readonly',

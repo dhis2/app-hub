@@ -11,9 +11,9 @@ const {
 const App = require('../../../../services/app')
 const Organisation = require('../../../../services/organisation')
 const { saveFile, getServerUrl } = require('../../../../utils')
+const parseAppDetails = require('../../../../utils/parseAppDetails')
 const { validateImageMetadata } = require('../../../../utils/validateMime')
 const { getMediaUrl } = require('../../apps/formatting')
-const { server } = require('@hapi/hapi')
 
 module.exports = {
     method: 'POST',
@@ -95,6 +95,12 @@ module.exports = {
             } = appJsonPayload.version
 
             let isCoreApp
+
+            const { changelog, d2config } = await parseAppDetails({
+                buffer: file._data,
+                appRepo: sourceUrl,
+            })
+
             try {
                 const { manifest } = verifyBundle({
                     buffer: file._data,
@@ -105,6 +111,7 @@ module.exports = {
                 })
 
                 isCoreApp = manifest.core_app
+
                 if (isCoreApp && !isManager) {
                     throw Boom.unauthorized(
                         `You don't have permission to upload core apps`
@@ -138,6 +145,8 @@ module.exports = {
                     channel,
                     appName: name,
                     description: description || '',
+                    d2config,
+                    changelog,
                 },
                 trx
             )
@@ -146,7 +155,7 @@ module.exports = {
             const logoMetadata = logo.hapi
             validateImageMetadata(request.server.mime, logoMetadata)
 
-            const { id: logoId, media_id } = await App.createMediaForApp(
+            const { id: logoId } = await App.createMediaForApp(
                 app.id,
                 {
                     userId: currentUserId,
