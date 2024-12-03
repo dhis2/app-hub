@@ -3,6 +3,7 @@ import {
     CircularLoader,
     NoticeBox,
     Card,
+    Tag,
     Divider,
     Button,
 } from '@dhis2/ui'
@@ -17,7 +18,13 @@ import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
-const HeaderSection = ({ appName, appDeveloper, appType, logoSrc }) => (
+const HeaderSection = ({
+    appName,
+    appDeveloper,
+    appType,
+    logoSrc,
+    hasPlugin,
+}) => (
     <section
         className={classnames(styles.appCardSection, styles.appCardHeader)}
     >
@@ -25,7 +32,10 @@ const HeaderSection = ({ appName, appDeveloper, appType, logoSrc }) => (
         <div>
             <h2 className={styles.appCardName}>{appName}</h2>
             <span className={styles.appCardDeveloper}>by {appDeveloper}</span>
-            <span className={styles.appCardType}>{appType}</span>
+            <div className={styles.appCardTypeContainer}>
+                <span className={styles.appCardType}>{appType}</span>
+                {hasPlugin && <Tag neutral>Plugin</Tag>}
+            </div>
         </div>
     </section>
 )
@@ -34,6 +44,7 @@ HeaderSection.propTypes = {
     appDeveloper: PropTypes.string.isRequired,
     appName: PropTypes.string.isRequired,
     appType: PropTypes.string.isRequired,
+    hasPlugin: PropTypes.bool,
     logoSrc: PropTypes.string,
 }
 
@@ -117,6 +128,7 @@ const AppView = ({ match }) => {
                 appDeveloper={appDeveloper}
                 appType={config.ui.appTypeToDisplayName[app.appType]}
                 logoSrc={logoSrc}
+                hasPlugin={app.hasPlugin}
             />
             <Divider />
             <AboutSection

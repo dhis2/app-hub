@@ -15,6 +15,9 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
 
     name: app.name,
     description: app.description || '',
+
+    hasChangelog: app.has_changelog,
+    hasPlugin: app.has_plugin,
     coreApp: app.core_app,
     versions: [],
 

@@ -50,6 +50,9 @@ const getApps = (
                 builder.where((builder) => {
                     builder.where('name', 'ilike', `%${query}%`)
                     builder.orWhere('organisation', 'ilike', `%${query}%`)
+                    if (query.match(/plugin/i)) {
+                        builder.orWhere('has_plugin', true)
+                    }
                 })
             }
         })
