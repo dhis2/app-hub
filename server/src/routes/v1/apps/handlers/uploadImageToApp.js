@@ -55,7 +55,7 @@ module.exports = {
         if (!canUploadMedia) {
             return h
                 .response({ message: `You don't have access to edit that app` })
-                .code(401)
+                .code(403)
         }
 
         const imageFile = request.payload.file

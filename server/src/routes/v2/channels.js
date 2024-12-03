@@ -35,7 +35,7 @@ module.exports = [
             request.logger.info('In handler %s', request.path)
 
             if (!currentUserIsManager(request)) {
-                throw Boom.unauthorized()
+                throw Boom.forbidden()
             }
 
             const { name } = request.payload
@@ -79,7 +79,7 @@ module.exports = [
             console.log(request.auth)
 
             if (!currentUserIsManager(request)) {
-                throw Boom.unauthorized()
+                throw Boom.forbidden()
             }
 
             const { name } = request.payload
@@ -146,7 +146,7 @@ module.exports = [
 
             if (!currentUserIsManager(request)) {
                 debug('unauthorized')
-                throw Boom.unauthorized()
+                throw Boom.forbidden()
             }
 
             const { uuid } = request.params

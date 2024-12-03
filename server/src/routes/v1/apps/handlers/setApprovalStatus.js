@@ -23,7 +23,7 @@ module.exports = {
         //request.logger.info('In handler %s', request.path)
 
         if (!canChangeAppStatus(request, h)) {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
 
         const { status } = request.query
