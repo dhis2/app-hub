@@ -1,6 +1,6 @@
 const AdmZip = require('adm-zip')
 
-const isValidJSON = json => {
+const isValidJSON = (json) => {
     try {
         JSON.parse(json)
         return true
@@ -45,7 +45,7 @@ const checkD2Config = ({ d2Config, appId, appName, version, canBeCoreApp }) => {
 
 module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     const zip = new AdmZip(buffer)
-    const entries = zip.getEntries().map(e => e.entryName)
+    const entries = zip.getEntries().map((e) => e.entryName)
     const manifestPath = 'manifest.webapp'
     const d2ConfigPath = 'd2.config.json'
     const canBeCoreApp = organisationName === 'DHIS2'

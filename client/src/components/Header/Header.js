@@ -80,7 +80,7 @@ const ProfileButton = () => {
     return <DropdownButton icon={icon} menu={menu} />
 }
 
-const NavLink = props => (
+const NavLink = (props) => (
     <NavLink_ activeClassName={styles.activeNavLink} {...props}></NavLink_>
 )
 

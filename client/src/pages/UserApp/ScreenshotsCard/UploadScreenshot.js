@@ -17,10 +17,10 @@ const UploadScreenshot = ({ appId, mutate }) => {
     const handleUploadButtonClick = () => {
         inputEl.current.click()
     }
-    const handleUpload = async event => {
+    const handleUpload = async (event) => {
         setIsUploading(true)
         const files = Array.from(event.target.files)
-        const payloads = files.map(file => ({
+        const payloads = files.map((file) => ({
             image: {
                 caption: '',
                 description: '',
@@ -28,7 +28,7 @@ const UploadScreenshot = ({ appId, mutate }) => {
             },
             file,
         }))
-        const requests = payloads.map(payload =>
+        const requests = payloads.map((payload) =>
             api.createNewImage(appId, payload)
         )
         try {

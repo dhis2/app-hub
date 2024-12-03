@@ -37,7 +37,7 @@ const toSQLOperator = (operatorStr, value) => {
     return operator
 }
 
-const parseFilterString = filterStr => {
+const parseFilterString = (filterStr) => {
     let operator
     const seperatorIdx = filterStr.indexOf(SEPERATOR_CHAR)
     if (seperatorIdx < 0) {

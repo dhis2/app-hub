@@ -3,12 +3,12 @@ import { useRef, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from '../DropdownMenuItem/DropdownMenuItem.module.css'
 
-const isModifiedEvent = event =>
+const isModifiedEvent = (event) =>
     event.metaKey || event.altKey || event.ctrlKey || event.shiftKey
 
 const DropdownMenuItemLink = ({ to, children, initialFocus }) => {
     const history = useHistory()
-    const handleClick = event => {
+    const handleClick = (event) => {
         if (!isModifiedEvent(event)) {
             event.preventDefault()
             history.push(to)

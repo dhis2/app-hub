@@ -11,20 +11,17 @@ const getUserByApiKey = async (apiKey, trx) => {
     }
 
     // TODO: this should probably be in some User-service
-    const userInfo = await trx('users')
-        .select()
-        .where({ id: userId })
-        .first()
+    const userInfo = await trx('users').select().where({ id: userId }).first()
 
     return userInfo
 }
 
-const createApiKeyValidationFunc = db => {
-    return async apiKey => {
+const createApiKeyValidationFunc = (db) => {
+    return async (apiKey) => {
         debug('Validate api-key')
         const credentials = {}
         try {
-            const user = await db.transaction(trx =>
+            const user = await db.transaction((trx) =>
                 getUserByApiKey(apiKey, trx)
             )
 

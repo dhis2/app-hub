@@ -8,9 +8,7 @@ const debug = require('debug')('apphub:server:data:deleteApp')
  */
 const deleteApp = async (id, knex) => {
     try {
-        await knex('app')
-            .where('id', id)
-            .del()
+        await knex('app').where('id', id).del()
         debug('deleted app', id)
     } catch (err) {
         debug(err)

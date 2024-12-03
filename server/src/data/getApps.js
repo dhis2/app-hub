@@ -20,23 +20,23 @@ const getApps = (
 
     return knex('apps_view')
         .select()
-        .where(builder => {
+        .where((builder) => {
             builder.where('status', status)
             builder.where('language_code', languageCode)
 
             if (channels.length > 0) {
-                builder.where(builder => {
+                builder.where((builder) => {
                     builder.where('channel_name', channels[0].toLowerCase())
-                    channels.slice(1).forEach(channel => {
+                    channels.slice(1).forEach((channel) => {
                         builder.orWhere('channel_name', channel.toLowerCase())
                     })
                 })
             }
 
             if (types.length > 0) {
-                builder.where(builder => {
+                builder.where((builder) => {
                     builder.where('type', types[0])
-                    types.slice(1).forEach(type => {
+                    types.slice(1).forEach((type) => {
                         builder.orWhere('type', type)
                     })
                 })
@@ -47,7 +47,7 @@ const getApps = (
             }
 
             if (query) {
-                builder.where(builder => {
+                builder.where((builder) => {
                     builder.where('name', 'ilike', `%${query}%`)
                     builder.orWhere('organisation', 'ilike', `%${query}%`)
                 })

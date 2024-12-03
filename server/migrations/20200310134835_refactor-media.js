@@ -1,10 +1,10 @@
-exports.up = async knex => {
+exports.up = async (knex) => {
     await knex.raw('DROP VIEW apps_view')
 
     await knex.raw('ALTER TABLE media_type RENAME TO mime_type')
 
     //Create the new separate media table
-    await knex.schema.createTable('media', table => {
+    await knex.schema.createTable('media', (table) => {
         table.uuid('id').primary()
 
         table.string('original_filename', 255).notNullable()
@@ -21,22 +21,16 @@ exports.up = async knex => {
         table.string('caption', 255)
         table.string('description', 255)
 
-        table
-            .foreign('mime_type_id')
-            .references('id')
-            .inTable('mime_type')
+        table.foreign('mime_type_id').references('id').inTable('mime_type')
     })
 
     //Link between app and media
-    await knex.schema.createTable('app_media', table => {
+    await knex.schema.createTable('app_media', (table) => {
         table.uuid('id').primary()
 
         table.uuid('media_id')
 
-        table
-            .foreign('media_id')
-            .references('id')
-            .inTable('media')
+        table.foreign('media_id').references('id').inTable('media')
 
         table
             .integer('media_type') //enum/integer from code so no uuid here. Logo or Screenshot
@@ -144,11 +138,11 @@ exports.up = async knex => {
     `)
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.raw('ALTER TABLE mime_type RENAME TO media_type')
 
     //create a new app_version_media table to match the previous version
-    await knex.schema.createTable('app_version_media', table => {
+    await knex.schema.createTable('app_version_media', (table) => {
         table.uuid('id').primary()
 
         table
@@ -169,10 +163,7 @@ exports.down = async knex => {
 
         table.uuid('media_type_id').notNullable()
 
-        table
-            .foreign('media_type_id')
-            .references('id')
-            .inTable('media_type')
+        table.foreign('media_type_id').references('id').inTable('media_type')
 
         table.uuid('app_version_id').notNullable()
 

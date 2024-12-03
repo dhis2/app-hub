@@ -29,12 +29,10 @@ const updateImageMeta = async (params, knex) => {
     const { id, caption, description } = params
 
     try {
-        await knex('media')
-            .where('id', id)
-            .update({
-                caption,
-                description,
-            })
+        await knex('media').where('id', id).update({
+            caption,
+            description,
+        })
     } catch (err) {
         throw new Error(`Could not update media meta: ${id}. ${err.message}`)
     }

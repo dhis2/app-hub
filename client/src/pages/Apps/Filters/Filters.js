@@ -91,7 +91,7 @@ const Filters = ({
                         onDhisVersionFilterChange(selected)
                     }
                 >
-                    {dhisVersions.map(dhisVersion => (
+                    {dhisVersions.map((dhisVersion) => (
                         <SingleSelectOption
                             key={dhisVersion}
                             label={dhisVersion}

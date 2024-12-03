@@ -4,10 +4,7 @@ const paramsSchema = joi
     .object()
     .keys({
         name: joi.string().required(),
-        id: joi
-            .string()
-            .uuid()
-            .required(),
+        id: joi.string().uuid().required(),
     })
     .options({ allowUnknown: true })
 

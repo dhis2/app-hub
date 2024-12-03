@@ -5,7 +5,7 @@ const { createUser } = require('../data')
 const { ROLES } = require('./index')
 
 const customClaimsNamespace = 'https://apps.dhis2.org'
-const getNamespacedClaimKey = key => `${customClaimsNamespace}/${key}`
+const getNamespacedClaimKey = (key) => `${customClaimsNamespace}/${key}`
 
 const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
     return async (decoded, request, h) => {
@@ -55,7 +55,7 @@ const createUserValidationFunc = (db, audience, auth0ManagementClient) => {
                         throw Boom.conflict('Email not verified')
                     }
                     //create the user if it doesn't exist
-                    const createUserTransaction = async trx => {
+                    const createUserTransaction = async (trx) => {
                         const dbUser = await createUser(
                             {
                                 email: userInfo.email,

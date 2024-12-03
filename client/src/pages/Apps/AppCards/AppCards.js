@@ -30,7 +30,7 @@ const AppCards = ({ isLoading, error, apps }) => {
 
     return (
         <div className={styles.appCards}>
-            {apps.map(app => (
+            {apps.map((app) => (
                 <AppCardItem
                     key={app.id}
                     id={app.id}

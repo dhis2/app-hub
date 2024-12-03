@@ -8,9 +8,7 @@ const debug = require('debug')('apphub:server:data:deleteMedia')
  */
 const deleteAppMedia = async (id, knex) => {
     try {
-        await knex('app_media')
-            .where('id', id)
-            .del()
+        await knex('app_media').where('id', id).del()
         debug('deleted app_media', id)
     } catch (err) {
         debug(err)

@@ -68,7 +68,9 @@ const onPreHandler = function (request, h) {
         })
 
         if (!options.keepParams) {
-            Object.keys(pagingParams).forEach(key => delete request.query[key])
+            Object.keys(pagingParams).forEach(
+                (key) => delete request.query[key]
+            )
         }
         request.plugins.pagination = pager
     } catch (e) {
@@ -131,8 +133,8 @@ const paginationPlugin = {
         // validate plugin settings so that we don't need to do this during runtime
         server
             .table()
-            .filter(r => r.settings.plugins && r.settings.plugins.pagination)
-            .map(r =>
+            .filter((r) => r.settings.plugins && r.settings.plugins.pagination)
+            .map((r) =>
                 Joi.assert(
                     r.settings.plugins.pagination,
                     optionsSchema,

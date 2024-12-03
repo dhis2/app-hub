@@ -13,11 +13,8 @@ const generateApiKey = () => {
     return { apiKey, hashedKey }
 }
 
-const hashKey = apiKey =>
-    crypto
-        .createHash('sha256')
-        .update(apiKey)
-        .digest('hex')
+const hashKey = (apiKey) =>
+    crypto.createHash('sha256').update(apiKey).digest('hex')
 
 const createApiKeyForUser = async (userId, knex) => {
     const { apiKey, hashedKey } = generateApiKey()

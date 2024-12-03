@@ -4,7 +4,7 @@ const Organisation = require('../models/v2/Organisation')
 const { NotFoundError } = require('../utils/errors')
 const { slugify } = require('../utils/slugify')
 
-const getOrganisationQuery = db =>
+const getOrganisationQuery = (db) =>
     db('organisation').select(
         'organisation.id',
         'organisation.name',

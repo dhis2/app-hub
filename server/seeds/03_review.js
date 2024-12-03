@@ -3,7 +3,7 @@ const appVersions = require('./mock/appversions')
 
 const [dhis2AppVersions, whoAppVersions] = appVersions
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
     console.log('Seeding reviews')
 
     const reviews = [

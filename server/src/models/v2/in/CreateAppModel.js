@@ -16,5 +16,5 @@ const payloadSchema = Joi.object({
 module.exports = {
     payloadSchema,
     def: CreateModelAppData,
-    validate: obj => CreateModelAppData.validate(obj),
+    validate: (obj) => CreateModelAppData.validate(obj),
 }

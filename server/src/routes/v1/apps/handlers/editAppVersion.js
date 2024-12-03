@@ -43,7 +43,7 @@ module.exports = {
         const currentUser = await getCurrentUserFromRequest(request, db)
         const apps = await getOrganisationAppsByUserId(currentUser.id, db)
 
-        const hasDeveloperAccessToApp = apps.map(app => app.id).indexOf(appId)
+        const hasDeveloperAccessToApp = apps.map((app) => app.id).indexOf(appId)
 
         if (currentUserIsManager(request) || hasDeveloperAccessToApp) {
             //can edit appversion

@@ -18,10 +18,7 @@ const getUserByEmail = async (email, knex) => {
     }
 
     try {
-        user = await knex('users')
-            .select()
-            .where('email', email)
-            .first()
+        user = await knex('users').select().where('email', email).first()
         debug('found user', user)
     } catch (err) {
         //TODO: log, re-throw or something other than silent fail?

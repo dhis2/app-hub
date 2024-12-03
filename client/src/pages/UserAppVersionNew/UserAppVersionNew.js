@@ -23,7 +23,7 @@ import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 const { dhisVersions, defaultAppChannel, appChannelToDisplayName } = config.ui
 const oldestSupportedDhisVersion = dhisVersions[2]
 
-const dhisVersionOptions = dhisVersions.map(v => ({
+const dhisVersionOptions = dhisVersions.map((v) => ({
     label: v,
     value: v,
 }))
@@ -42,7 +42,7 @@ const UserAppVersionNew = ({ match }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
-    const handleSubmit = async values => {
+    const handleSubmit = async (values) => {
         try {
             await api.createNewVersion(appId, {
                 file: values.file[0],

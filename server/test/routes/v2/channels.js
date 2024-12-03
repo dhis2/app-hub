@@ -46,9 +46,7 @@ describe('api/v2/channels', () => {
 
         const json = JSON.parse(response.payload)
         expect(json).to.be.an.array()
-        expect(json.length)
-            .to.be.a.number()
-            .and.greaterThan(0)
+        expect(json.length).to.be.a.number().and.greaterThan(0)
     })
 
     it('should return unauthorized trying to update a channel with no auth', async () => {
@@ -106,9 +104,7 @@ describe('api/v2/channels without configured auth', () => {
 
         const json = JSON.parse(response.payload)
         expect(json).to.be.an.array()
-        expect(json.length)
-            .to.be.a.number()
-            .and.greaterThan(0)
+        expect(json.length).to.be.a.number().and.greaterThan(0)
     })
 
     it('should create a channel followed by updating the name of it', async () => {

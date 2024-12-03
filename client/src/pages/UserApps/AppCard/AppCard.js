@@ -10,7 +10,7 @@ import {
 } from 'src/constants/apiConstants'
 import { relativeTimeFormat } from 'src/lib/relative-time-format'
 
-const appCardActionForStatus = appStatus => {
+const appCardActionForStatus = (appStatus) => {
     switch (appStatus) {
         case APP_STATUS_APPROVED:
             return 'Updated'
@@ -21,7 +21,7 @@ const appCardActionForStatus = appStatus => {
     }
 }
 
-const appStatusToCardText = appStatus => {
+const appStatusToCardText = (appStatus) => {
     switch (appStatus) {
         case APP_STATUS_APPROVED:
             return 'Available'
@@ -33,9 +33,9 @@ const appStatusToCardText = appStatus => {
 }
 
 const AppCard = ({ app, showUploadButton, onApprove, onReject, onDelete }) => {
-    const logo = app.images.find(i => i.logo)
+    const logo = app.images.find((i) => i.logo)
     const actionForStatus = appCardActionForStatus(app.status)
-    const actionTime = new Date(Math.max(...app.versions.map(v => v.created)))
+    const actionTime = new Date(Math.max(...app.versions.map((v) => v.created)))
     const actionRelativeTime = relativeTimeFormat(actionTime)
 
     return (

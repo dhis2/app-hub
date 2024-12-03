@@ -22,7 +22,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
     const handleUploadButtonClick = () => {
         inputEl.current.click()
     }
-    const handleUpload = async event => {
+    const handleUpload = async (event) => {
         setIsUploading(true)
         try {
             // TODO: Implement backend API to replace logo so that it can be
@@ -75,7 +75,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
 }
 
 const DetailsCard = ({ app, mutate }) => {
-    const logo = app.images.find(img => img.logo)
+    const logo = app.images.find((img) => img.logo)
     const appDeveloper = app.developer.organisation || 'Unspecified'
     const appType = appTypeToDisplayName[app.appType]
 

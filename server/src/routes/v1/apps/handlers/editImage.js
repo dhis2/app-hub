@@ -41,7 +41,7 @@ module.exports = {
             db
         )
         const userCanEditApp = appsUserCanEdit
-            .map(app => app.app_id)
+            .map((app) => app.app_id)
             .includes(request.params.appId)
         const isManager = currentUserIsManager(request)
 

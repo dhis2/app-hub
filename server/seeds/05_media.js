@@ -6,7 +6,7 @@ const users = require('./mock/users')
 
 const mediaTypeSeedData = require('./mock/mime_type')
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
     console.log('Seeding media')
 
     const mediaIds = [

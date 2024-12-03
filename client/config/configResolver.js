@@ -29,16 +29,16 @@ function getConfig() {
 
     //Get default config
     const configs = defaultConfigs
-        .map(filename => loadFile(filename))
-        .filter(config => !!config)
-    configs.forEach(cfg => merge(config, cfg))
+        .map((filename) => loadFile(filename))
+        .filter((config) => !!config)
+    configs.forEach((cfg) => merge(config, cfg))
 
     //Get environment specific config
     if (envConfigNames[nodeEnv]) {
         const configs = envConfigNames[nodeEnv]
-            .map(filename => loadFile(filename))
-            .filter(config => !!config)
-        configs.forEach(cfg => merge(config, cfg))
+            .map((filename) => loadFile(filename))
+            .filter((config) => !!config)
+        configs.forEach((cfg) => merge(config, cfg))
     }
 
     getConfig.config = config

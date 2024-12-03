@@ -3,14 +3,8 @@ const joi = require('joi')
 const paramsSchema = joi
     .object()
     .keys({
-        userId: joi
-            .string()
-            .uuid()
-            .required(),
-        organisationId: joi
-            .string()
-            .uuid()
-            .required(),
+        userId: joi.string().uuid().required(),
+        organisationId: joi.string().uuid().required(),
     })
     .options({ allowUnknown: true })
 

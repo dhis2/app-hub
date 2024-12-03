@@ -23,7 +23,7 @@ import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
 
 const { appStatusToDisplayName } = config.ui
 
-const sortApps = apps =>
+const sortApps = (apps) =>
     apps.sort((a, b) => {
         if (a.name < b.name) {
             return -1
@@ -37,8 +37,8 @@ const filterApps = (apps, query) => {
     if (!query) {
         return apps
     }
-    return apps.filter(app =>
-        [app.name, app.appType, app.developer.organisation].some(prop =>
+    return apps.filter((app) =>
+        [app.name, app.appType, app.developer.organisation].some((prop) =>
             prop.toLowerCase().includes(query.toLowerCase())
         )
     )
@@ -46,12 +46,13 @@ const filterApps = (apps, query) => {
 
 const UserApps = ({ user }) => {
     const [query, setQuery] = useState('')
-    const { data: appsById, error, mutate } = useQueryV1(
-        user.isManager ? 'apps/all' : 'apps/myapps',
-        {
-            auth: true,
-        }
-    )
+    const {
+        data: appsById,
+        error,
+        mutate,
+    } = useQueryV1(user.isManager ? 'apps/all' : 'apps/myapps', {
+        auth: true,
+    })
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
@@ -76,24 +77,24 @@ const UserApps = ({ user }) => {
     const apps = sortApps(Object.values(appsById))
     const filteredApps = filterApps(apps, query)
     const approvedApps = filteredApps.filter(
-        app => app.status === APP_STATUS_APPROVED
+        (app) => app.status === APP_STATUS_APPROVED
     )
     const pendingApps = filteredApps
-        .filter(app => app.status === APP_STATUS_PENDING)
+        .filter((app) => app.status === APP_STATUS_PENDING)
         .sort((a, b) => {
-            const aLatestVersion = Math.max(...a.versions.map(v => v.created))
-            const bLatestVersion = Math.max(...b.versions.map(v => v.created))
+            const aLatestVersion = Math.max(...a.versions.map((v) => v.created))
+            const bLatestVersion = Math.max(...b.versions.map((v) => v.created))
             return bLatestVersion - aLatestVersion
         })
     const rejectedApps = filteredApps.filter(
-        app => app.status === APP_STATUS_REJECTED
+        (app) => app.status === APP_STATUS_REJECTED
     )
 
     const setAppStatus = async (app, status) => {
         try {
             await api.setAppApproval(app.id, status)
             mutate(
-                apps.map(a => {
+                apps.map((a) => {
                     if (a.id === app.id) {
                         return { ...a, status }
                     }
@@ -118,20 +119,20 @@ const UserApps = ({ user }) => {
         }
     }
 
-    const handleApprove = app => {
+    const handleApprove = (app) => {
         setAppStatus(app, APP_STATUS_APPROVED)
     }
-    const handleReject = app => {
+    const handleReject = (app) => {
         setAppStatus(app, APP_STATUS_REJECTED)
     }
-    const handleDelete = async app => {
+    const handleDelete = async (app) => {
         if (!window.confirm(`Are you sure you want to delete ${app.name}?`)) {
             return
         }
 
         try {
             await api.deleteApp(app.id)
-            mutate(apps.filter(a => a.id !== app.id))
+            mutate(apps.filter((a) => a.id !== app.id))
             successAlert.show({
                 message: `${app.name} has been deleted`,
             })
@@ -183,7 +184,7 @@ const UserApps = ({ user }) => {
                         waiting for approval.
                     </p>
 
-                    {pendingApps.map(app => (
+                    {pendingApps.map((app) => (
                         <AppCard
                             key={app.id}
                             app={app}
@@ -211,7 +212,7 @@ const UserApps = ({ user }) => {
                         Hub.
                     </p>
 
-                    {approvedApps.map(app => (
+                    {approvedApps.map((app) => (
                         <AppCard
                             key={app.id}
                             app={app}
@@ -253,7 +254,7 @@ const UserApps = ({ user }) => {
                         approval.
                     </p>
 
-                    {rejectedApps.map(app => (
+                    {rejectedApps.map((app) => (
                         <AppCard
                             key={app.id}
                             app={app}

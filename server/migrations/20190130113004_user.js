@@ -1,5 +1,5 @@
-exports.up = async knex => {
-    await knex.schema.createTable('users', table => {
+exports.up = async (knex) => {
+    await knex.schema.createTable('users', (table) => {
         table.uuid('id').primary()
 
         table
@@ -15,7 +15,7 @@ exports.up = async knex => {
         table.string('name', 255)
     })
 
-    await knex.schema.createTable('user_external_id', table => {
+    await knex.schema.createTable('user_external_id', (table) => {
         table.uuid('id').primary()
 
         table
@@ -27,16 +27,13 @@ exports.up = async knex => {
 
         table.uuid('user_id').notNullable()
 
-        table
-            .foreign('user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('user_id').references('id').inTable('users')
 
         table.timestamp('updated_at', true)
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.schema.dropTable('user_external_id')
     await knex.schema.dropTable('users')
 }
