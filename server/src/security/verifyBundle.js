@@ -48,7 +48,6 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     const entries = zip.getEntries().map((e) => e.entryName)
     const manifestPath = 'manifest.webapp'
     const d2ConfigPath = 'd2.config.json'
-    const changelogPath = 'CHANGELOG.md'
     const canBeCoreApp = organisationName === 'DHIS2'
 
     if (!entries.includes(manifestPath)) {
@@ -59,7 +58,6 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
         throw new Error(`${manifestPath} is not valid JSON`)
     }
     const manifest = JSON.parse(manifestJson)
-
     checkManifest({
         manifest,
         appId,
@@ -76,9 +74,6 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     if (!isValidJSON(d2ConfigJson)) {
         throw new Error(`${d2ConfigPath} is not valid JSON`)
     }
-
-    const changeLog = zip.readAsText(changelogPath)
-
     const d2Config = JSON.parse(d2ConfigJson)
     checkD2Config({
         d2Config,
@@ -91,6 +86,5 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
     return {
         manifest,
         d2Config,
-        changeLog,
     }
 }

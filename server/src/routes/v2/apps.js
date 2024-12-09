@@ -166,9 +166,9 @@ module.exports = [
         config: {
             auth: false,
             tags: ['api', 'v2'],
-            // cache: {
-            //     expiresIn: 24 * 3600 * 1000,
-            // },
+            cache: {
+                expiresIn: 6 * 3600 * 1000,
+            },
             validate: {
                 params: Joi.object({
                     appId: Joi.string().required(),

@@ -22,10 +22,12 @@ const getAppVersionQuery = (knex) =>
             'app_version.app_id'
         )
         .innerJoin(knex.ref('channel'), 'ac.channel_id', 'channel.id')
+        .innerJoin(knex.ref('app'), 'app.id', 'app_version.app_id')
+
         .select(
             'app_version.id',
             'app_version.version',
-            knex.raw('app_version.changelog<>\'\' as "hasChangelog"'),
+            knex.raw('app.changelog<>\'\' as "hasChangelog"'),
             knex.ref('app_version.app_id').as('appId'),
             knex.ref('app_version.created_at').as('createdAt'),
             knex.ref('app_version.updated_at').as('updatedAt'),
@@ -113,15 +115,9 @@ class AppVersionService extends Schmervice.Service {
     }
 
     async getChangelog(appId, knex) {
-        const query = knex('app_version')
-            .select(
-                'app_version.id',
-                'app_version.version',
-                'app_version.changelog'
-            )
-            .where('app_version.app_id', appId)
-            .where('app_version.changelog', '<>', '')
-        // .distinct()
+        const query = knex('app')
+            .first('app.id', 'app.changelog')
+            .where('app.id', appId)
 
         const { result } = await executeQuery(query)
 
