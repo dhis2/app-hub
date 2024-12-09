@@ -129,6 +129,8 @@ module.exports = {
                     appType,
                     status: AppStatus.PENDING,
                     coreApp: isCoreApp,
+                    changelog,
+                    d2config: JSON.stringify(d2config),
                 },
                 trx
             )
@@ -145,8 +147,6 @@ module.exports = {
                     channel,
                     appName: name,
                     description: description || '',
-                    d2config,
-                    changelog,
                 },
                 trx
             )

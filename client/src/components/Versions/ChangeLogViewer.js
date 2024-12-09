@@ -1,22 +1,12 @@
-import { Modal, ModalContent } from '@dhis2/ui'
+import { CircularLoader, Modal, ModalContent } from '@dhis2/ui'
 import { useQuery } from 'src/api'
 
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
 // ToDo: this is a just a placeholder for a  basic Changelog viewer
-const ChangeLogViewer = ({
-    appId,
-    versionId,
-    modalShown,
-    onCloseChangelog,
-}) => {
-    const { data, error } = useQuery(`apps/${appId}/changelog`)
-
-    // ToDo: fall back to any version?
-    const matchedVersion =
-        data?.find((v) => v.version == versionId) ??
-        data?.find((v) => !!v.changelog)
+const ChangeLogViewer = ({ appId, modalShown, onCloseChangelog }) => {
+    const { data, loading } = useQuery(`apps/${appId}/changelog`)
 
     if (!modalShown) {
         return null
@@ -24,7 +14,10 @@ const ChangeLogViewer = ({
     return (
         <Modal onClose={onCloseChangelog}>
             <ModalContent>
-                <ReactMarkdown>{matchedVersion?.changelog}</ReactMarkdown>
+                <div>
+                    {loading && <CircularLoader large />}
+                    <ReactMarkdown>{data?.changelog}</ReactMarkdown>
+                </div>
             </ModalContent>
         </Modal>
     )

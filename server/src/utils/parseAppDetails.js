@@ -7,12 +7,15 @@ const getChangeLog = async (appRepo) => {
     try {
         const targetUrl =
             appRepo
-                .replace(/\/$/, '')
-                .replace(
+                ?.replace(/\/$/, '')
+                ?.replace(
                     'https://github.com',
                     'https://raw.githubusercontent.com'
-                ) + '/refs/heads/main/CHANGELOG.md'
+                ) + '/refs/heads/master/CHANGELOG.md' // todo: check main branch as well?
 
+        if (!targetUrl) {
+            return null
+        }
         debug(`Getting changelog from: ${targetUrl}`)
         const response = await request.get({
             url: targetUrl,
@@ -42,17 +45,15 @@ module.exports = async ({ buffer, appRepo }) => {
             }
         }
 
-        const d2Config = JSON.parse(d2ConfigJson)
+        const d2config = JSON.parse(d2ConfigJson)
 
         return {
-            d2Config,
+            d2config,
             changelog,
         }
     } catch (err) {
-        // throw err
-        // console.error(err)
         return {
-            d2Config: null,
+            d2config: null,
             changelog: null,
         }
     }

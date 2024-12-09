@@ -1,22 +1,22 @@
 exports.up = async (knex) => {
     await knex.schema.table('app_version', (table) => {
-        table.json('d2config').notNullable().default('{}')
+        table.text('change_summary').nullable()
+    })
+    await knex.schema.table('app', (table) => {
+        table.jsonb('d2config').nullable().notNullable().default('{}')
         table.text('changelog').nullable()
     })
-    // await knex.schema.table('app', (table) => {
-    //     table.text('d2config').nullable().notNullable().default('{}')
-    //     table.text('changelog').nullable()
-    // })
 
-    await knex.raw('DROP VIEW apps_view')
     // update app-view with column
     await knex.raw(`
+        DROP VIEW apps_view;
         CREATE VIEW apps_view AS
         SELECT  app.id AS app_id,
                 app.type,
                 app.core_app,
-                appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url, appver.d2config, appver.changelog,
-                json_extract_path(d2config , 'entryPoints', 'plugin') AS plugin,
+                appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,  appver.change_summary,
+                app.d2config, app.changelog,
+                jsonb_extract_path_text(d2config , 'entryPoints', 'plugin') <> '' AS has_plugin,
                 media.app_media_id AS media_id, media.original_filename, media.created_at AS media_created_at, media.media_type,
                 localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug,
                 s.status, s.created_at AS status_created_at,
@@ -56,14 +56,13 @@ exports.up = async (knex) => {
 
 exports.down = async (knex) => {
     await knex.schema.table('app_version', (table) => {
+        table.dropColumn('version_change_summary')
+    })
+
+    await knex.schema.table('app', (table) => {
         table.dropColumn('d2config')
         table.dropColumn('changelog')
     })
-
-    // await knex.schema.table('app', (table) => {
-    //     table.dropColumn('d2config')
-    //     table.dropColumn('changelog')
-    // })
 
     await knex.raw('DROP VIEW apps_view')
     await knex.raw(`
