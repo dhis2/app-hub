@@ -52,16 +52,15 @@ const VersionsTable = ({
         setChangelogVisible(false)
     }
 
-    // ToDO: we can infer change log from one change log
-    // const anyVersionHasChanges = !!versions.find((v) => v.hasChangelog)
-
     return (
         <>
-            <ChangeLogViewer
-                appId={appId}
-                modalShown={changelogVisible}
-                onCloseChangelog={onCloseChangelog}
-            />
+            {changelogVisible && (
+                <ChangeLogViewer
+                    appId={appId}
+                    modalShown={changelogVisible}
+                    onCloseChangelog={onCloseChangelog}
+                />
+            )}
             <Table className={styles.table}>
                 <TableHead>
                     <TableRowHead>
