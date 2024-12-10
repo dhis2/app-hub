@@ -1,4 +1,4 @@
-FROM node:14-bullseye as build
+FROM node:20-bullseye as build
 
 ENV NODE_ENV=development
 
@@ -14,7 +14,7 @@ RUN tar zxvf client/app-hub-client.tgz --directory server/
 RUN mv server/package/build server/static && rm -rf server/package
 
 # runtime image
-FROM node:14-bullseye-slim
+FROM node:20-bullseye-slim
 
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
