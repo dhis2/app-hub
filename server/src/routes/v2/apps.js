@@ -162,6 +162,30 @@ module.exports = [
     },
     {
         method: 'GET',
+        path: '/v2/apps/{appId}/changelog',
+        config: {
+            auth: false,
+            tags: ['api', 'v2'],
+            // cache: {
+            //     expiresIn: 24 * 3600 * 1000,
+            // },
+            validate: {
+                params: Joi.object({
+                    appId: Joi.string().required(),
+                }),
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { appVersionService } = request.services(true)
+
+            const { appId } = request.params
+
+            return appVersionService.getChangelog(appId, db)
+        },
+    },
+    {
+        method: 'GET',
         path: '/v2/apps/{appId}/channels',
         config: {
             auth: false,

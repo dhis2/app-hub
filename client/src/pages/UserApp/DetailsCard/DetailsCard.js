@@ -1,4 +1,4 @@
-import { Card, Button, Divider } from '@dhis2/ui'
+import { Card, Button, Divider, Tag } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -91,6 +91,7 @@ const DetailsCard = ({ app, mutate }) => {
                         by {appDeveloper}
                     </span>
                     <span className={styles.detailsCardType}>{appType}</span>
+                    {app.hasPlugin && <Tag neutral>Plugin</Tag>}
                 </div>
             </section>
             <Divider />

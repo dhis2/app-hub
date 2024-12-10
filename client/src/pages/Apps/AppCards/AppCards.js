@@ -39,6 +39,7 @@ const AppCards = ({ isLoading, error, apps }) => {
                     type={app.appType}
                     description={app.description}
                     images={app.images}
+                    hasPlugin={app.hasPlugin}
                 />
             ))}
         </div>

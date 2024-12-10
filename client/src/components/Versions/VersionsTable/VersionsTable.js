@@ -14,6 +14,7 @@ import { useCallback, useEffect, useState } from 'react'
 import styles from './VersionsTable.module.css'
 import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
+import ChangeLogViewer from '../ChangeLogViewer'
 
 const { appChannelToDisplayName } = config.ui
 
@@ -39,65 +40,98 @@ const VersionsTable = ({
     versions,
     renderDeleteVersionButton,
     showDownloadCount,
+    appId,
 }) => {
     const getDownloadUrl = useCreateGetDownloadUrl()
+    const [changelogVisible, setChangelogVisible] = useState(false)
+    const showChangeLog = () => {
+        setChangelogVisible(!changelogVisible)
+    }
+
+    const onCloseChangelog = () => {
+        setChangelogVisible(false)
+    }
+
+    // ToDO: we can infer change log from one change log
+    // const anyVersionHasChanges = !!versions.find((v) => v.hasChangelog)
 
     return (
-        <Table className={styles.table}>
-            <TableHead>
-                <TableRowHead>
-                    <TableCellHead>Version</TableCellHead>
-                    <TableCellHead>Channel</TableCellHead>
-                    <TableCellHead>DHIS2 version compatibility</TableCellHead>
-                    <TableCellHead>Upload date</TableCellHead>
-                    {showDownloadCount && (
-                        <TableCellHead>Downloads</TableCellHead>
-                    )}
-                    <TableCellHead></TableCellHead>
-                </TableRowHead>
-            </TableHead>
-            <TableBody>
-                {versions.map((version) => (
-                    <TableRow key={version.id}>
-                        <TableCell>{version.version}</TableCell>
-                        <TableCell className={styles.channelNameCell}>
-                            {appChannelToDisplayName[version.channel]}
-                        </TableCell>
-                        <TableCell>
-                            {renderDhisVersionsCompatibility(
-                                version.minDhisVersion,
-                                version.maxDhisVersion
-                            )}
-                        </TableCell>
-                        <TableCell>
-                            <span title={new Date(version.createdAt)}>
-                                {new Date(
-                                    version.createdAt
-                                ).toLocaleDateString()}
-                            </span>
-                        </TableCell>
+        <>
+            <ChangeLogViewer
+                appId={appId}
+                modalShown={changelogVisible}
+                onCloseChangelog={onCloseChangelog}
+            />
+            <Table className={styles.table}>
+                <TableHead>
+                    <TableRowHead>
+                        <TableCellHead>Version</TableCellHead>
+                        <TableCellHead>Channel</TableCellHead>
+                        <TableCellHead>
+                            DHIS2 version compatibility
+                        </TableCellHead>
+                        <TableCellHead>Upload date</TableCellHead>
                         {showDownloadCount && (
-                            <TableCell>
-                                <span>{version.downloadCount}</span>
-                            </TableCell>
+                            <TableCellHead>Downloads</TableCellHead>
                         )}
-                        <TableCell>
-                            <a
-                                download
-                                href={getDownloadUrl(version.downloadUrl)}
-                                tabIndex="-1"
-                            >
-                                <Button small secondary>
-                                    Download
-                                </Button>
-                            </a>
-                            {renderDeleteVersionButton &&
-                                renderDeleteVersionButton(version)}
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                        <TableCellHead></TableCellHead>
+                    </TableRowHead>
+                </TableHead>
+                <TableBody>
+                    {versions.map((version) => (
+                        <TableRow key={version.id}>
+                            <TableCell>{version.version}</TableCell>
+                            <TableCell className={styles.channelNameCell}>
+                                {appChannelToDisplayName[version.channel]}
+                            </TableCell>
+                            <TableCell>
+                                {renderDhisVersionsCompatibility(
+                                    version.minDhisVersion,
+                                    version.maxDhisVersion
+                                )}
+                            </TableCell>
+                            <TableCell>
+                                <span title={new Date(version.createdAt)}>
+                                    {new Date(
+                                        version.createdAt
+                                    ).toLocaleDateString()}
+                                </span>
+                            </TableCell>
+                            {showDownloadCount && (
+                                <TableCell>
+                                    <span>{version.downloadCount}</span>
+                                </TableCell>
+                            )}
+                            <TableCell>
+                                <a
+                                    download
+                                    href={getDownloadUrl(version.downloadUrl)}
+                                    tabIndex="-1"
+                                >
+                                    <Button small secondary>
+                                        Download
+                                    </Button>
+                                </a>
+                                {renderDeleteVersionButton &&
+                                    renderDeleteVersionButton(version)}
+                                {version.hasChangelog && (
+                                    <>
+                                        {' '}
+                                        <Button
+                                            small
+                                            secondary
+                                            onClick={() => showChangeLog(appId)}
+                                        >
+                                            View Changes
+                                        </Button>
+                                    </>
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </>
     )
 }
 VersionsTable.propTypes = {

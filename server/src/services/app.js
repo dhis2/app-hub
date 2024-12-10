@@ -16,6 +16,8 @@ exports.create = async (
         appType,
         status,
         coreApp,
+        changelog,
+        d2config,
     },
     db
 ) => {
@@ -26,6 +28,8 @@ exports.create = async (
             orgId: organisationId,
             appType: appType,
             coreApp,
+            changelog,
+            d2config,
         },
         db
     )

@@ -34,5 +34,6 @@ module.exports = {
         'hapi/hapi-capitalize-modules': 0,
         'hapi/hapi-for-you': 0,
         'hapi/hapi-scope-start': 0,
+        'import/extensions': 0,
     },
 }

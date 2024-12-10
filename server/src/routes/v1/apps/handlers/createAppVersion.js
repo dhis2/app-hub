@@ -15,12 +15,17 @@ const {
     verifyBundle,
 } = require('../../../../security')
 
+const parseAppDetails = require('../../../../utils/parseAppDetails')
 const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
 const Organisation = require('../../../../services/organisation')
-const { getOrganisationAppsByUserId, getAppsById } = require('../../../../data')
+const {
+    getOrganisationAppsByUserId,
+    getAppsById,
+    patchApp,
+} = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
 
@@ -133,8 +138,17 @@ module.exports = {
         } = appVersionJson
 
         const [dbApp] = dbAppRows
+
+        // Todo: FIXME a workround - seems like the source url is at app version level but it doesn't get saved after the very first time
+        const appSourceUrl = dbAppRows?.find((a) => !!a.source_url)?.source_url
+
         debug(`Adding version to app ${dbApp.name}`)
         let appVersion = null
+
+        const { changelog, d2config } = await parseAppDetails({
+            buffer: file._data,
+            appRepo: appSourceUrl,
+        })
 
         try {
             appVersion = await createAppVersion(
@@ -152,6 +166,16 @@ module.exports = {
             await transaction.rollback()
             throw Boom.boomify(err)
         }
+
+        await patchApp(
+            {
+                id: dbApp.app_id,
+                changelog,
+                d2config: JSON.stringify(d2config),
+            },
+            db,
+            transaction
+        )
 
         //Add the texts as english language, only supported for now
         try {
