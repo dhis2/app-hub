@@ -12,6 +12,7 @@ const paramsSchema = joi
         demoUrl: joi.string().uri().allow('', null),
         sourceUrl: joi.string().uri().allow('', null),
         version: joi.string().allow(''),
+        change_summary: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 

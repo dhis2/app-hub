@@ -70,6 +70,7 @@ module.exports = ({ buffer, appId, appName, version, organisationName }) => {
         return { manifest }
     }
     const d2ConfigJson = zip.readAsText(d2ConfigPath)
+
     if (!isValidJSON(d2ConfigJson)) {
         throw new Error(`${d2ConfigPath} is not valid JSON`)
     }

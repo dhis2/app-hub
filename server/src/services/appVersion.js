@@ -22,9 +22,12 @@ const getAppVersionQuery = (knex) =>
             'app_version.app_id'
         )
         .innerJoin(knex.ref('channel'), 'ac.channel_id', 'channel.id')
+        .innerJoin(knex.ref('app'), 'app.id', 'app_version.app_id')
+
         .select(
             'app_version.id',
             'app_version.version',
+            knex.raw('app.changelog<>\'\' as "hasChangelog"'),
             knex.ref('app_version.app_id').as('appId'),
             knex.ref('app_version.created_at').as('createdAt'),
             knex.ref('app_version.updated_at').as('updatedAt'),
@@ -109,6 +112,16 @@ class AppVersionService extends Schmervice.Service {
         const { result } = await executeQuery(query)
 
         return result.map((c) => c.name)
+    }
+
+    async getChangelog(appId, knex) {
+        const query = knex('app')
+            .first('app.id', 'app.changelog')
+            .where('app.id', appId)
+
+        const { result } = await executeQuery(query)
+
+        return result
     }
 
     getDownloadUrl(request, appVersion) {

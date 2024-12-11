@@ -15,6 +15,7 @@ const definition = defaultDefinition
         maxDhisVersion: Joi.string().allow(null, ''),
         slug: Joi.string(),
         status: Joi.string().valid(...AppStatuses),
+        hasChangelog: Joi.boolean().allow(null),
     })
     .alter({
         db: (s) =>

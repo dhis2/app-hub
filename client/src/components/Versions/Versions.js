@@ -103,6 +103,7 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
                     versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                     showDownloadCount={showDownloadCount}
+                    appId={appId}
                 />
             ) : (
                 <em className={styles.noVersions}>
