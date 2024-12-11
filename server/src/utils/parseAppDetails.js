@@ -4,28 +4,31 @@ const request = require('request-promise-native')
 
 const getChangeLog = async (appRepo) => {
     debug(`Getting changelog from: ${appRepo}`)
-    try {
+    const possibleBranches = ['master', 'main']
+
+    for (const branch of possibleBranches) {
         const targetUrl =
             appRepo
                 ?.replace(/\/$/, '')
                 ?.replace(
                     'https://github.com',
                     'https://raw.githubusercontent.com'
-                ) + '/refs/heads/master/CHANGELOG.md' // todo: check main branch as well?
+                ) + `/refs/heads/${branch}/CHANGELOG.md`
 
-        if (!targetUrl) {
-            return null
-        }
         debug(`Getting changelog from: ${targetUrl}`)
-        const response = await request.get({
-            url: targetUrl,
-            contentType: 'plain/text',
-        })
-        return response
-    } catch (err) {
-        console.error(err)
-        return null
+
+        try {
+            const response = await request.get({
+                url: targetUrl,
+                contentType: 'plain/text',
+            })
+            return response
+        } catch (err) {
+            console.error(err)
+        }
     }
+
+    return null
 }
 
 module.exports = async ({ buffer, appRepo }) => {
