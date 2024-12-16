@@ -322,7 +322,7 @@ export function addOrganisation({ name, email }) {
     )
 }
 
-export function editOrganisation(id, { name, owner, email }) {
+export function editOrganisation(id, { name, owner, email, description }) {
     return apiV2.request(
         `organisations/${id}`,
         {
@@ -330,7 +330,7 @@ export function editOrganisation(id, { name, owner, email }) {
         },
         {
             method: 'PATCH',
-            body: JSON.stringify({ name, owner, email }),
+            body: JSON.stringify({ name, owner, email, description }),
             headers: {
                 'content-type': 'application/json',
             },

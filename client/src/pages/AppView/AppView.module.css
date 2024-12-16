@@ -98,12 +98,15 @@
     content: "";
 }
 
-.sourceUrl {
+.link, .sourceUrl {
     font-size: 14px;
     color: var(--colors-blue700);
     text-decoration: underline;
 }
 
-.sourceUrl:hover, .sourceUrl:focus {
+.link:hover, .sourceUrl:hover,
+.link:focus, .sourceUrl:focus {
     color: var(--colors-grey900);
 }
+
+

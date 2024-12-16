@@ -26,6 +26,7 @@ const HeaderSection = ({
     logoSrc,
     hasPlugin,
     pluginType,
+    organisationSlug,
 }) => (
     <section
         className={classnames(styles.appCardSection, styles.appCardHeader)}
@@ -33,7 +34,15 @@ const HeaderSection = ({
         <AppIcon src={logoSrc} />
         <div>
             <h2 className={styles.appCardName}>{appName}</h2>
-            <span className={styles.appCardDeveloper}>by {appDeveloper}</span>
+            <span className={styles.appCardDeveloper}>
+                by{' '}
+                <a
+                    className={styles.link}
+                    href={`/organisation/${organisationSlug}/view`}
+                >
+                    {appDeveloper}
+                </a>
+            </span>
             <div className={styles.appCardTypeContainer}>
                 <span className={styles.appCardType}>{appType}</span>
                 {hasPlugin && (
@@ -51,6 +60,7 @@ HeaderSection.propTypes = {
     pluginType: PropTypes.string,
     hasPlugin: PropTypes.bool,
     logoSrc: PropTypes.string,
+    organisationSlug: PropTypes.string.isRequired,
 }
 
 const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
@@ -131,6 +141,7 @@ const AppView = ({ match }) => {
             <HeaderSection
                 appName={app.name}
                 appDeveloper={appDeveloper}
+                organisationSlug={app.developer?.organisation_slug}
                 appType={config.ui.appTypeToDisplayName[app.appType]}
                 logoSrc={logoSrc}
                 hasPlugin={app.hasPlugin}
