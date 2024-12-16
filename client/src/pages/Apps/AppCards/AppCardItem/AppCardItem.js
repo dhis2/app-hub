@@ -1,4 +1,3 @@
-import { Tag } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -6,15 +5,17 @@ import { Link } from 'react-router-dom'
 import styles from './AppCardItem.module.css'
 import config from 'config'
 import AppIcon from 'src/components/AppIcon/AppIcon'
+import PluginTag from '../../../../components/PluginTag/PluginTag'
 
 const AppCardItem = ({
     id,
     name,
     developer,
-    type,
+    appType,
     description,
     images,
     hasPlugin,
+    pluginType,
 }) => {
     const logo = images.find((elem) => elem.logo)
 
@@ -30,10 +31,15 @@ const AppCardItem = ({
                     </span>
                     <div className={styles.appTypeContainer}>
                         <span className={styles.appCardType}>
-                            {config.ui.appTypeToDisplayName[type]}
+                            {config.ui.appTypeToDisplayName[appType]}
                         </span>
 
-                        {hasPlugin && <Tag neutral>Plugin</Tag>}
+                        {hasPlugin && (
+                            <PluginTag
+                                hasPlugin={hasPlugin}
+                                pluginType={pluginType}
+                            />
+                        )}
                     </div>
                 </div>
             </header>
@@ -66,9 +72,10 @@ AppCardItem.propTypes = {
         organisation: PropTypes.string,
     }).isRequired,
     id: PropTypes.string.isRequired,
-    hasPlugin: PropTypes.bool.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    hasPlugin: PropTypes.bool.isRequired,
+    pluginType: PropTypes.string.isRequired,
+    appType: PropTypes.string.isRequired,
     description: PropTypes.string,
     images: PropTypes.array,
 }
