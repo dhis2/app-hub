@@ -27,6 +27,7 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
         address: '',
         email: app.contact_email,
         organisation: app.organisation,
+        organisation_slug: app.organisation_slug,
     },
 
     //TODO: can we use developer_email here ? previous it was oauth token|id

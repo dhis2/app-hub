@@ -88,8 +88,15 @@ const DetailsCard = ({ app, mutate }) => {
                 </div>
                 <div>
                     <h2 className={styles.detailsCardName}>{app.name}</h2>
+
                     <span className={styles.detailsCardDeveloper}>
-                        by {appDeveloper}
+                        by{' '}
+                        <a
+                            className={styles.link}
+                            href={`/organisation/${app.developer?.organisation_slug}/view`}
+                        >
+                            {appDeveloper}
+                        </a>
                     </span>
                     <span className={styles.detailsCardType}>{appType}</span>
                     {app.hasPlugin && (
