@@ -9,9 +9,13 @@ const {
     getCurrentUserFromRequest,
 } = require('../../security')
 const { Organisation } = require('../../services')
+const { getAppsInOrganisation } = require('../../services/organisation')
 const Joi = require('../../utils/CustomJoi')
 // const debug = require('debug')('apphub:server:routes:handlers:organisations')
 const getServerUrl = require('../../utils/getServerUrl')
+const {
+    convertAppsToApiV1Format,
+} = require('../v1/apps/formatting/convertAppsToApiV1Format')
 
 module.exports = [
     {
@@ -85,19 +89,29 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { orgIdOrSlug } = request.params
+            const { includeApps, includeUsers = true } = request.query
 
             const isUuid =
                 Joi.string().uuid().validate(orgIdOrSlug).error === undefined
 
             let organisation
             if (isUuid) {
-                organisation = await Organisation.findOne(orgIdOrSlug, true, db)
+                organisation = await Organisation.findOne(
+                    orgIdOrSlug,
+                    includeUsers,
+                    db
+                )
             } else {
                 organisation = await Organisation.findOneBySlug(
                     orgIdOrSlug,
-                    true,
+                    includeUsers,
                     db
                 )
+            }
+
+            if (includeApps) {
+                const apps = await getAppsInOrganisation(orgIdOrSlug, db)
+                organisation.apps = convertAppsToApiV1Format(apps, request)
             }
 
             return organisation
@@ -159,6 +173,7 @@ module.exports = [
                     name: OrgModel.definition.extract('name'),
                     email: OrgModel.definition.extract('email'),
                     owner: OrgModel.definition.extract('owner'),
+                    description: OrgModel.definition.extract('description'),
                 }).min(1),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),

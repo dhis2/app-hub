@@ -16,27 +16,17 @@
     margin-right: var(--spacers-dp8);
 }
 
-.description {
-    font-size: 0.8em;
-}
-
 .createdAt, .description {
     margin-top: var(--spacers-dp8);
-    color: var(--colors-grey800);
-}
+    margin-bottom: var(--spacers-dp8);
 
-.notice {
-    margin: var(--spacers-dp32) 0;
+    color: var(--colors-grey700);
+    font-size: 0.7em;
 }
+.description {
+    color: var(--colors-grey900);
+    line-height: 1.6em;
 
-.subheader {
-    display: inline-block;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--colors-grey800);
-    margin-top: 0;
-    margin-bottom: var(--spacers-dp12);
-    margin-right: var(--spacers-dp8);
 }
 
 .flex {
