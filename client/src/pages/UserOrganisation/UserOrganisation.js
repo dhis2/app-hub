@@ -102,10 +102,13 @@ const UserOrganisation = ({ match, user }) => {
                                 secondary
                                 onClick={editNameModal.show}
                             >
-                                Edit name
+                                Edit
                             </Button>
                         </>
                     )}
+                </div>
+                <div className={styles.description}>
+                    {organisation.description || 'no description'}
                 </div>
                 <div className={styles.createdAt}>
                     Created{' '}

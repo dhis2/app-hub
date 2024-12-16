@@ -11,6 +11,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute'
 import Header from './components/Header/Header'
 import Apps from './pages/Apps/Apps'
 import AppView from './pages/AppView/AppView'
+import OrganisationView from './pages/OrganisationView/OrganisationView'
 import OrganisationInvitation from './pages/OrganisationInvitation/OrganisationInvitation'
 import OrganisationInvitationCallback from './pages/OrganisationInvitationCallback/OrganisationInvitationCallback'
 import UserView from './pages/UserView/UserView'
@@ -36,6 +37,10 @@ const AppHub = () => (
                             <Switch>
                                 <Route exact path="/" component={Apps} />
                                 <Route path="/app/:appId" component={AppView} />
+                                <Route
+                                    path="/organisation/:organisationSlug/view"
+                                    component={OrganisationView}
+                                />
                                 <ProtectedRoute
                                     path="/user"
                                     auth={Auth}
