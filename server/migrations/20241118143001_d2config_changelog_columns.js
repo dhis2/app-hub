@@ -1,9 +1,9 @@
 exports.up = async (knex) => {
     await knex.schema.table('app_version', (table) => {
         table.text('change_summary').nullable()
+        table.jsonb('d2config').nullable().notNullable().default('{}')
     })
     await knex.schema.table('app', (table) => {
-        table.jsonb('d2config').nullable().notNullable().default('{}')
         table.text('changelog').nullable()
     })
 
@@ -14,9 +14,11 @@ exports.up = async (knex) => {
         SELECT  app.id AS app_id,
                 app.type,
                 app.core_app,
-                appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,  appver.change_summary,
-                app.d2config, app.changelog,
+                app.changelog,
+                appver.version, appver.id AS version_id, appver.created_at AS version_created_at, appver.source_url, appver.demo_url,
+                appver.d2config, appver.change_summary,
                 jsonb_extract_path_text(d2config , 'entryPoints', 'plugin') <> '' AS has_plugin,
+                jsonb_extract_path_text(d2config , 'pluginType') AS plugin_type,
                 media.app_media_id AS media_id, media.original_filename, media.created_at AS media_created_at, media.media_type,
                 localisedapp.language_code, localisedapp.name, localisedapp.description, localisedapp.slug AS appver_slug,
                 s.status, s.created_at AS status_created_at,
@@ -57,10 +59,10 @@ exports.up = async (knex) => {
 exports.down = async (knex) => {
     await knex.schema.table('app_version', (table) => {
         table.dropColumn('version_change_summary')
+        table.dropColumn('d2config')
     })
 
     await knex.schema.table('app', (table) => {
-        table.dropColumn('d2config')
         table.dropColumn('changelog')
     })
 
