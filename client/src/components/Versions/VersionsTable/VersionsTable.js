@@ -57,7 +57,6 @@ const VersionsTable = ({
             {changelogVisible && (
                 <ChangeLogViewer
                     appId={appId}
-                    modalShown={changelogVisible}
                     onCloseChangelog={onCloseChangelog}
                 />
             )}
