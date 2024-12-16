@@ -14,7 +14,6 @@ const paramsSchema = joi
             .valid(...AppTypes),
         coreApp: joi.bool(),
         changelog: joi.string().allow('', null),
-        d2config: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
@@ -43,15 +42,7 @@ const createApp = async (params, knex) => {
     }
 
     debug('params: ', params)
-    const {
-        userId,
-        contactEmail,
-        orgId,
-        appType,
-        coreApp,
-        d2config,
-        changelog,
-    } = params
+    const { userId, contactEmail, orgId, appType, coreApp, changelog } = params
 
     //generate a new uuid to insert
 
@@ -64,7 +55,6 @@ const createApp = async (params, knex) => {
                 organisation_id: orgId,
                 type: appType,
                 core_app: coreApp,
-                d2config,
                 changelog,
             })
             .returning('id')

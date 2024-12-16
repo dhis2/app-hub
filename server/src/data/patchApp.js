@@ -4,7 +4,6 @@ const paramsSchema = joi
     .object()
     .keys({
         changelog: joi.string().allow('', null),
-        d2config: joi.string().allow('', null),
         id: joi.string().uuid().required(),
     })
     .options({ allowUnknown: false })
@@ -14,8 +13,7 @@ const paramsSchema = joi
  *
  * @param {object} params
  * @param {string} params.id id of the app to update
- * @param {number} params.changelog The changelog of the app
- * @param {string} params.d2config The latest d2config of the app
+ * @param {string} params.changelog The changelog of the app
  * @returns {Promise<CreateUserResult>}
  */
 const patchApp = async (params, knex) => {
