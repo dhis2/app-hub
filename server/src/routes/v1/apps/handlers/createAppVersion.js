@@ -158,6 +158,7 @@ module.exports = {
                     demoUrl,
                     sourceUrl,
                     version,
+                    d2config: JSON.stringify(d2config),
                 },
                 transaction
             )
@@ -167,15 +168,18 @@ module.exports = {
             throw Boom.boomify(err)
         }
 
-        await patchApp(
-            {
-                id: dbApp.app_id,
-                changelog,
-                d2config: JSON.stringify(d2config),
-            },
-            db,
-            transaction
-        )
+        try {
+            await patchApp(
+                {
+                    id: dbApp.app_id,
+                    changelog,
+                },
+                db,
+                transaction
+            )
+        } catch (_) {
+            // ignore if we can not update the changelog at the app level
+        }
 
         //Add the texts as english language, only supported for now
         try {

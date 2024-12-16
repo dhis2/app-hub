@@ -17,7 +17,6 @@ exports.create = async (
         status,
         coreApp,
         changelog,
-        d2config,
     },
     db
 ) => {
@@ -29,7 +28,6 @@ exports.create = async (
             appType: appType,
             coreApp,
             changelog,
-            d2config,
         },
         db
     )
@@ -59,6 +57,7 @@ exports.createVersionForApp = async (
         channel,
         appName,
         description,
+        d2config,
     },
     db
 ) => {
@@ -69,6 +68,7 @@ exports.createVersionForApp = async (
             sourceUrl,
             demoUrl,
             version,
+            d2config,
         },
         db
     )
