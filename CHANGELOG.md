@@ -1,3 +1,16 @@
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2024-12-16)
+
+
+### Bug Fixes
+
+* bump node version in docker image ([bad227d](https://github.com/dhis2/app-hub/commit/bad227d29991b4a266855d9f46bb8026c00973b2))
+
+
+### Features
+
+* add organisation overview page ([94b5dfb](https://github.com/dhis2/app-hub/commit/94b5dfb26b355ba0a69910623e5e1d58b65a2f7a))
+* expose plugins and changelog in the API and app ([0d0fec8](https://github.com/dhis2/app-hub/commit/0d0fec85d416d9617f6219e57e63b2e32c4b059f))
+
 # [2.34.0](https://github.com/dhis2/app-hub/compare/v2.33.1...v2.34.0) (2024-02-16)
 
 
