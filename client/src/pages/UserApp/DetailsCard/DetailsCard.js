@@ -9,6 +9,7 @@ import * as api from 'src/api'
 import AppDescription from 'src/components/AppDescription/AppDescription'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import PluginTag from '../../../components/PluginTag/PluginTag'
 
 const { appTypeToDisplayName } = config.ui
 
@@ -91,7 +92,12 @@ const DetailsCard = ({ app, mutate }) => {
                         by {appDeveloper}
                     </span>
                     <span className={styles.detailsCardType}>{appType}</span>
-                    {app.hasPlugin && <Tag neutral>Plugin</Tag>}
+                    {app.hasPlugin && (
+                        <PluginTag
+                            hasPlugin={app.hasPlugin}
+                            pluginType={app.pluginType}
+                        />
+                    )}
                 </div>
             </section>
             <Divider />

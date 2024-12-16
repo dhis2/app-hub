@@ -17,6 +17,7 @@ import AppIcon from 'src/components/AppIcon/AppIcon'
 import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
+import PluginTag from '../../components/PluginTag/PluginTag'
 
 const HeaderSection = ({
     appName,
@@ -24,6 +25,7 @@ const HeaderSection = ({
     appType,
     logoSrc,
     hasPlugin,
+    pluginType,
 }) => (
     <section
         className={classnames(styles.appCardSection, styles.appCardHeader)}
@@ -34,7 +36,9 @@ const HeaderSection = ({
             <span className={styles.appCardDeveloper}>by {appDeveloper}</span>
             <div className={styles.appCardTypeContainer}>
                 <span className={styles.appCardType}>{appType}</span>
-                {hasPlugin && <Tag neutral>Plugin</Tag>}
+                {hasPlugin && (
+                    <PluginTag hasPlugin={hasPlugin} pluginType={pluginType} />
+                )}
             </div>
         </div>
     </section>
@@ -44,6 +48,7 @@ HeaderSection.propTypes = {
     appDeveloper: PropTypes.string.isRequired,
     appName: PropTypes.string.isRequired,
     appType: PropTypes.string.isRequired,
+    pluginType: PropTypes.string,
     hasPlugin: PropTypes.bool,
     logoSrc: PropTypes.string,
 }
@@ -129,6 +134,7 @@ const AppView = ({ match }) => {
                 appType={config.ui.appTypeToDisplayName[app.appType]}
                 logoSrc={logoSrc}
                 hasPlugin={app.hasPlugin}
+                pluginType={app.pluginType}
             />
             <Divider />
             <AboutSection
