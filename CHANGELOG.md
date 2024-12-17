@@ -1,3 +1,10 @@
+## [2.35.1](https://github.com/dhis2/app-hub/compare/v2.35.0...v2.35.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* update yarn.lock ([126d001](https://github.com/dhis2/app-hub/commit/126d0013cacfb2f0fc4992ec4d4258b6d4a08a7d))
+
 # [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2024-12-16)
 
 
