@@ -1,6 +1,6 @@
 .cardContainer {
-    margin: var(--spacers-dp8);;
-    padding: var(--spacers-dp8);;
+    margin: var(--spacers-dp8);
+    padding: var(--spacers-dp8);
 }
 
 .header {

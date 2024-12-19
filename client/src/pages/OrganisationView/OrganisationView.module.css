@@ -16,7 +16,8 @@
     margin-right: var(--spacers-dp8);
 }
 
-.createdAt, .description {
+.createdAt,
+.description {
     margin-top: var(--spacers-dp8);
     margin-bottom: var(--spacers-dp8);
 
@@ -26,7 +27,6 @@
 .description {
     color: var(--colors-grey900);
     line-height: 1.6em;
-
 }
 
 .flex {

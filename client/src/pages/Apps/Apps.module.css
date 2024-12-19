@@ -2,13 +2,13 @@
 
 .container {
     display: grid;
-    grid-template-areas: "filters" "apps";
+    grid-template-areas: 'filters' 'apps';
     padding: var(--spacers-dp16) var(--spacers-dp12);
 }
 
 @media m-medium {
     .container {
-        grid-template-areas: "filters apps";
+        grid-template-areas: 'filters apps';
         grid-template-columns: 224px auto;
         grid-gap: var(--spacers-dp24);
         padding: 0;
