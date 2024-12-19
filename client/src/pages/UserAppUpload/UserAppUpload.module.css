@@ -72,7 +72,8 @@
     text-decoration: underline;
 }
 
-.helpTextLink:hover, .helpTextLink:focus {
+.helpTextLink:hover,
+.helpTextLink:focus {
     color: var(--colors-grey900);
 }
 

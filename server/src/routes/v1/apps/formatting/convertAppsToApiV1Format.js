@@ -94,6 +94,10 @@ const convertAll = (apps, request) => {
     apps.forEach((app) => {
         let currentApp = formattedApps[app.app_id]
 
+        if (app.changelog) {
+            app.has_changelog = true
+        }
+
         if (!currentApp) {
             const v1App = convertDbAppViewRowToAppApiV1Object(app)
             formattedApps[app.app_id] = v1App

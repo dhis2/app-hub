@@ -8,7 +8,8 @@
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-.appCardLink, .appCardActions {
+.appCardLink,
+.appCardActions {
     padding: var(--spacers-dp16);
 }
 

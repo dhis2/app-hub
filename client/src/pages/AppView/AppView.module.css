@@ -55,7 +55,6 @@
     margin-bottom: var(--spacers-dp12);
 }
 
-
 .appCardParagraph {
     font-size: 15px;
     line-height: 19px;
@@ -88,25 +87,25 @@
     color: var(--colors-grey700);
 }
 
-
 .divider {
     max-width: 80%;
 }
 
 .sourceUrl:before {
     display: block;
-    content: "";
+    content: '';
 }
 
-.link, .sourceUrl {
+.link,
+.sourceUrl {
     font-size: 14px;
     color: var(--colors-blue700);
     text-decoration: underline;
 }
 
-.link:hover, .sourceUrl:hover,
-.link:focus, .sourceUrl:focus {
+.link:hover,
+.sourceUrl:hover,
+.link:focus,
+.sourceUrl:focus {
     color: var(--colors-grey900);
 }
-
-

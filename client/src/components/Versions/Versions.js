@@ -7,6 +7,7 @@ import styles from './Versions.module.css'
 import VersionsTable from './VersionsTable/VersionsTable'
 import config from 'config'
 import { usePagination, useQuery } from 'src/api'
+import ChangeLogViewer from './ChangeLogViewer'
 
 const { defaultAppChannel } = config.ui
 
@@ -38,7 +39,12 @@ const useChannels = (appId) => {
     return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
-const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
+const Versions = ({
+    appId,
+    renderDeleteVersionButton,
+    showDownloadCount,
+    hasChangelog,
+}) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
@@ -73,6 +79,23 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
 
     const versions = data ?? []
 
+    const [changelogVisible, setChangelogVisible] = useState(false)
+    const showChangeLog = () => {
+        setChangelogVisible(!changelogVisible)
+    }
+
+    const onCloseChangelog = () => {
+        setChangelogVisible(false)
+    }
+
+    const [compareVersion, setCompareVersion] = useState()
+    const [baseVersion, setBaseVersion] = useState(versions?.[0]?.version)
+
+    const changeBaseVersion = (version) => {
+        setBaseVersion(version)
+        setCompareVersion()
+    }
+
     if (error) {
         return (
             <NoticeBox title={'Error loading versions'} error>
@@ -97,6 +120,8 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
                 setChannelsFilter={setChannelsFilter}
                 dhisVersionFilter={dhisVersionFilter}
                 setDhisVersionFilter={setDhisVersionFilter}
+                showChangeLog={showChangeLog}
+                hasChangelog={hasChangelog}
             />
             {versions.length > 0 ? (
                 <VersionsTable
@@ -122,6 +147,16 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
                     </Button>
                 </div>
             )}
+            {changelogVisible && (
+                <ChangeLogViewer
+                    appId={appId}
+                    onCloseChangelog={onCloseChangelog}
+                    baseVersion={baseVersion ?? versions?.[0]?.version}
+                    setCompareVersion={setCompareVersion}
+                    setBaseVersion={changeBaseVersion}
+                    compareVersion={compareVersion}
+                />
+            )}
         </div>
     )
 }
@@ -129,6 +164,7 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
 Versions.propTypes = {
     appId: PropTypes.string.isRequired,
     renderDeleteVersionButton: PropTypes.func,
+    hasChangelog: PropTypes.bool,
 }
 
 export default Versions

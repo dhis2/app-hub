@@ -19,6 +19,7 @@
     outline: none;
 }
 
-.item:hover, .item:focus-visible {
+.item:hover,
+.item:focus-visible {
     background-color: var(--colors-grey300);
 }

@@ -38,6 +38,7 @@ const def = Joi.object().keys({
     versions: Joi.array().items(Version).min(1),
 
     hasPlugin: Joi.boolean().allow(null, false),
+    hasChangelog: Joi.boolean().allow(null, false),
 
     pluginType: Joi.string().allow(null),
 

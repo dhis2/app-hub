@@ -14,7 +14,6 @@ import { useCallback, useEffect, useState } from 'react'
 import styles from './VersionsTable.module.css'
 import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
-import ChangeLogViewer from '../ChangeLogViewer'
 
 const { appChannelToDisplayName } = config.ui
 
@@ -43,93 +42,63 @@ const VersionsTable = ({
     appId,
 }) => {
     const getDownloadUrl = useCreateGetDownloadUrl()
-    const [changelogVisible, setChangelogVisible] = useState(false)
-    const showChangeLog = () => {
-        setChangelogVisible(!changelogVisible)
-    }
-
-    const onCloseChangelog = () => {
-        setChangelogVisible(false)
-    }
 
     return (
-        <>
-            {changelogVisible && (
-                <ChangeLogViewer
-                    appId={appId}
-                    onCloseChangelog={onCloseChangelog}
-                />
-            )}
-            <Table className={styles.table}>
-                <TableHead>
-                    <TableRowHead>
-                        <TableCellHead>Version</TableCellHead>
-                        <TableCellHead>Channel</TableCellHead>
-                        <TableCellHead>
-                            DHIS2 version compatibility
-                        </TableCellHead>
-                        <TableCellHead>Upload date</TableCellHead>
-                        {showDownloadCount && (
-                            <TableCellHead>Downloads</TableCellHead>
-                        )}
-                        <TableCellHead></TableCellHead>
-                    </TableRowHead>
-                </TableHead>
-                <TableBody>
-                    {versions.map((version) => (
-                        <TableRow key={version.id}>
-                            <TableCell>{version.version}</TableCell>
-                            <TableCell className={styles.channelNameCell}>
-                                {appChannelToDisplayName[version.channel]}
-                            </TableCell>
-                            <TableCell>
-                                {renderDhisVersionsCompatibility(
-                                    version.minDhisVersion,
-                                    version.maxDhisVersion
-                                )}
-                            </TableCell>
-                            <TableCell>
-                                <span title={new Date(version.createdAt)}>
-                                    {new Date(
-                                        version.createdAt
-                                    ).toLocaleDateString()}
-                                </span>
-                            </TableCell>
-                            {showDownloadCount && (
-                                <TableCell>
-                                    <span>{version.downloadCount}</span>
-                                </TableCell>
+        <Table className={styles.table}>
+            <TableHead>
+                <TableRowHead>
+                    <TableCellHead>Version</TableCellHead>
+                    <TableCellHead>Channel</TableCellHead>
+                    <TableCellHead>DHIS2 version compatibility</TableCellHead>
+                    <TableCellHead>Upload date</TableCellHead>
+                    {showDownloadCount && (
+                        <TableCellHead>Downloads</TableCellHead>
+                    )}
+                    <TableCellHead></TableCellHead>
+                </TableRowHead>
+            </TableHead>
+            <TableBody>
+                {versions.map((version) => (
+                    <TableRow key={version.id}>
+                        <TableCell>{version.version}</TableCell>
+                        <TableCell className={styles.channelNameCell}>
+                            {appChannelToDisplayName[version.channel]}
+                        </TableCell>
+                        <TableCell>
+                            {renderDhisVersionsCompatibility(
+                                version.minDhisVersion,
+                                version.maxDhisVersion
                             )}
+                        </TableCell>
+                        <TableCell>
+                            <span title={new Date(version.createdAt)}>
+                                {new Date(
+                                    version.createdAt
+                                ).toLocaleDateString()}
+                            </span>
+                        </TableCell>
+                        {showDownloadCount && (
                             <TableCell>
-                                <a
-                                    download
-                                    href={getDownloadUrl(version.downloadUrl)}
-                                    tabIndex="-1"
-                                >
-                                    <Button small secondary>
-                                        Download
-                                    </Button>
-                                </a>
-                                {renderDeleteVersionButton &&
-                                    renderDeleteVersionButton(version)}
-                                {version.hasChangelog && (
-                                    <>
-                                        {' '}
-                                        <Button
-                                            small
-                                            secondary
-                                            onClick={() => showChangeLog(appId)}
-                                        >
-                                            View Changes
-                                        </Button>
-                                    </>
-                                )}
+                                <span>{version.downloadCount}</span>
                             </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </>
+                        )}
+                        <TableCell>
+                            <a
+                                download
+                                href={getDownloadUrl(version.downloadUrl)}
+                                tabIndex="-1"
+                            >
+                                <Button small secondary>
+                                    Download
+                                </Button>
+                            </a>
+                            {renderDeleteVersionButton &&
+                                renderDeleteVersionButton(version)}
+                        </TableCell>
+                    </TableRow>
+                ))}
+            </TableBody>
+        </Table>
     )
 }
 VersionsTable.propTypes = {
