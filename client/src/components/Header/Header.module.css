@@ -1,7 +1,7 @@
 @value m-medium from 'src/styles/breakpoints.css';
 
 :root {
-    --header-bg: #1C2431;
+    --header-bg: #1c2431;
     --header-height: 48px;
 }
 
@@ -109,7 +109,9 @@
     font-size: inherit;
 }
 
-.navLink a:hover, .navLink a:focus, .activeNavLink {
+.navLink a:hover,
+.navLink a:focus,
+.activeNavLink {
     color: var(--colors-grey050);
     background: black;
 }

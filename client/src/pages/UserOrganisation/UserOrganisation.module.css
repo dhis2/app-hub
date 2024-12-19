@@ -20,7 +20,8 @@
     font-size: 0.8em;
 }
 
-.createdAt, .description {
+.createdAt,
+.description {
     margin-top: var(--spacers-dp8);
     color: var(--colors-grey800);
 }
