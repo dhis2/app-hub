@@ -1,0 +1,54 @@
+.cardContainer {
+    margin: var(--spacers-dp8);;
+    padding: var(--spacers-dp8);;
+}
+
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.headerTitle {
+    font-weight: bold;
+}
+
+.list {
+    list-style: none;
+    padding-inline-start: 0px;
+}
+
+.changelogContainer {
+    line-height: 1.4em;
+    /* max-height: 250px; */
+    /* overflow-y: auto;  */
+}
+
+.changeType {
+    font-style: italic;
+}
+
+.breaking {
+    color: var(--colors-red600);
+    font-weight: bolder;
+}
+
+.versionHeader {
+    font-size: 1.1em;
+}
+
+.translation {
+    font-style: italic;
+}
+
+a.changeLink {
+    color: var(--colors-blue600);
+}
+
+a.changeLink:hover,
+a.changeLink:focus {
+    color: var(--colors-blue700);
+    text-decoration: underline;
+}
