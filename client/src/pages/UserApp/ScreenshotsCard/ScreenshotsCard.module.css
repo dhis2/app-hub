@@ -15,7 +15,8 @@
     text-decoration: underline;
 }
 
-.screenshotsGuidelinesLink:hover, .screenshotsGuidelinesLink:focus {
+.screenshotsGuidelinesLink:hover,
+.screenshotsGuidelinesLink:focus {
     color: var(--colors-grey900);
 }
 
