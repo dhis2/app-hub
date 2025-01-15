@@ -48,9 +48,9 @@ const VersionsTable = ({
             <TableHead>
                 <TableRowHead>
                     <TableCellHead>Version</TableCellHead>
-                    <TableCellHead>Channel</TableCellHead>
-                    <TableCellHead>DHIS2 version compatibility</TableCellHead>
-                    <TableCellHead>Upload date</TableCellHead>
+                    <TableCellHead>Date released</TableCellHead>
+                    <TableCellHead>DHIS2 compatibility</TableCellHead>
+                    <TableCellHead>Release channel</TableCellHead>
                     {showDownloadCount && (
                         <TableCellHead>Downloads</TableCellHead>
                     )}
@@ -61,15 +61,6 @@ const VersionsTable = ({
                 {versions.map((version) => (
                     <TableRow key={version.id}>
                         <TableCell>{version.version}</TableCell>
-                        <TableCell className={styles.channelNameCell}>
-                            {appChannelToDisplayName[version.channel]}
-                        </TableCell>
-                        <TableCell>
-                            {renderDhisVersionsCompatibility(
-                                version.minDhisVersion,
-                                version.maxDhisVersion
-                            )}
-                        </TableCell>
                         <TableCell>
                             <span title={new Date(version.createdAt)}>
                                 {new Date(
@@ -77,6 +68,16 @@ const VersionsTable = ({
                                 ).toLocaleDateString()}
                             </span>
                         </TableCell>
+                        <TableCell>
+                            {renderDhisVersionsCompatibility(
+                                version.minDhisVersion,
+                                version.maxDhisVersion
+                            )}
+                        </TableCell>
+                        <TableCell className={styles.channelNameCell}>
+                            {appChannelToDisplayName[version.channel]}
+                        </TableCell>
+
                         {showDownloadCount && (
                             <TableCell>
                                 <span>{version.downloadCount}</span>
@@ -84,13 +85,12 @@ const VersionsTable = ({
                         )}
                         <TableCell>
                             <a
+                                className={styles.link}
                                 download
                                 href={getDownloadUrl(version.downloadUrl)}
                                 tabIndex="-1"
                             >
-                                <Button small secondary>
-                                    Download
-                                </Button>
+                                Download
                             </a>
                             {renderDeleteVersionButton &&
                                 renderDeleteVersionButton(version)}

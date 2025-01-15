@@ -1,6 +1,13 @@
-.cardContainer {
-    margin: var(--spacers-dp8);
-    padding: var(--spacers-dp8);
+@value m-medium from 'src/styles/breakpoints.css';
+
+.container {
+    padding: var(--spacers-dp12);
+}
+
+@media m-medium {
+    .container {
+        padding: var(--spacers-dp24);
+    }
 }
 
 .header {
@@ -37,6 +44,7 @@
 
 .versionHeader {
     font-size: 1.1em;
+    font-weight: bold;
 }
 
 .translation {
@@ -45,10 +53,19 @@
 
 a.changeLink {
     color: var(--colors-blue600);
+    text-decoration: underline;
 }
 
 a.changeLink:hover,
 a.changeLink:focus {
     color: var(--colors-blue700);
-    text-decoration: underline;
+    text-decoration: none;
+}
+
+.disabledText {
+    color: var(--colors-grey700);
+}
+
+.changelogContainer :global(table) {
+    border: 0 !important;
 }

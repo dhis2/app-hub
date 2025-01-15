@@ -6,7 +6,7 @@ const PluginTag = ({ hasPlugin, pluginType }) => {
     }
     const tagString = pluginType ? `Plugin: ${pluginType}` : 'Plugin'
 
-    return <Tag neutral>{tagString}</Tag>
+    return <Tag>{tagString}</Tag>
 }
 
 export default PluginTag

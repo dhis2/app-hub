@@ -12,3 +12,14 @@
 .channelNameCell {
     color: var(--colors-grey700);
 }
+
+a.link {
+    color: var(--colors-blue600);
+    text-decoration: underline;
+}
+
+a.link:hover,
+a.link:focus {
+    color: var(--colors-blue700);
+    text-decoration: none;
+}
