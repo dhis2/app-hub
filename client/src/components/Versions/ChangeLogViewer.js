@@ -1,45 +1,29 @@
 import {
     CircularLoader,
-    DataTable,
-    DataTableCell,
-    DataTableColumnHeader,
-    DataTableHead,
-    DataTableRow,
-    Modal,
-    ModalContent,
-    ModalTitle,
+    Table,
+    TableCell,
+    TableRow,
     SingleSelectField,
     SingleSelectOption,
 } from '@dhis2/ui'
+import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import Changelog from '../../utils/changelog'
+import styles from './ChangeLogViewer.module.css'
 import { useQuery } from 'src/api'
 
-import React from 'react'
-import Changelog from '../../utils/changelog'
-import classnames from 'classnames'
-import styles from './ChangeLogViewer.module.css'
-
-const ChangeLogViewer = ({
-    appId,
-    onCloseChangelog,
-    baseVersion,
-    setBaseVersion,
-    setCompareVersion,
-    compareVersion,
-}) => {
+const ChangeLogViewer = ({ appId, latestVersion }) => {
     const { data, loading } = useQuery(`apps/${appId}/changelog`)
 
-    if (!data || loading) {
-        return <CircularLoader large />
-    }
+    const changelog = new Changelog(data?.changelog)
 
-    if (!data.changelog) {
-        return null
-    }
+    const allVersions = changelog?.data?.map(({ version }) => version)
+    const changesCount = allVersions?.length
 
-    const changelog = new Changelog(data.changelog)
+    const [baseVersion, setBaseVersion] = useState(latestVersion)
 
-    const allVersions = changelog.data.map(({ version }) => version)
-    const changesCount = allVersions.length
+    const [compareVersion, setCompareVersion] = useState()
 
     const firstVersionToShow = changelog.data.findIndex(
         (change) => change.version === baseVersion
@@ -63,50 +47,47 @@ const ChangeLogViewer = ({
     )
 
     const availableVersionsToCompareWith = allVersions.slice(
-        firstVersionToShow + 1,
-        changelog.data?.length - firstVersionToShow
+        firstVersionToShow + 1
     )
 
-    const getType = (type) => {
+    const getFormattedChangeType = ({ type, isTranslation }) => {
+        if (isTranslation) {
+            return null
+        }
         if (type === 'Bug Fixes') {
-            return 'Fix'
+            return 'Fix: '
         }
         if (type == 'Features') {
-            return 'Feature'
+            return 'Feature: '
         }
-        return type
+        return type + ': '
     }
+
+    if (!data || loading || !baseVersion) {
+        return <CircularLoader large />
+    }
+
+    if (!data.changelog) {
+        return (
+            <div className={styles.container}>
+                <div className={styles.disabledText}>
+                    No change log available for this app.
+                </div>
+            </div>
+        )
+    }
+
     return (
-        <Modal onClose={onCloseChangelog}>
-            <ModalTitle>
-                <div className={styles.header}>
-                    <div>Changes in</div>
-                    <div className={styles.headerTitle}>
-                        <SingleSelectField
-                            onChange={({ selected }) =>
-                                setBaseVersion(selected)
-                            }
-                            selected={baseVersion}
-                            dense
-                        >
-                            {allVersions.map((version) => {
-                                return (
-                                    <SingleSelectOption
-                                        key={version}
-                                        label={version}
-                                        value={version}
-                                    />
-                                )
-                            })}
-                        </SingleSelectField>
-                    </div>
+        <div className={styles.container}>
+            <div className={styles.header}>
+                <div>Show changes included from: </div>
+                <div className={styles.headerTitle}>
                     <SingleSelectField
-                        prefix="compared to"
-                        onChange={({ selected }) => setCompareVersion(selected)}
-                        selected={versionToCompareWith}
+                        onChange={({ selected }) => setBaseVersion(selected)}
+                        selected={baseVersion}
                         dense
                     >
-                        {availableVersionsToCompareWith.map((version) => {
+                        {allVersions.map((version) => {
                             return (
                                 <SingleSelectOption
                                     key={version}
@@ -117,92 +98,96 @@ const ChangeLogViewer = ({
                         })}
                     </SingleSelectField>
                 </div>
-            </ModalTitle>
-            <ModalContent>
-                <div className={styles.cardContainer}>
-                    <div className={styles.changelogContainer}>
-                        <DataTable>
-                            <DataTableHead>
-                                <DataTableColumnHeader>
-                                    Version
-                                </DataTableColumnHeader>
-                                <DataTableColumnHeader>
-                                    Changes
-                                </DataTableColumnHeader>
-                            </DataTableHead>
-                            {changesToShow.map((entry) => {
-                                const { version } = entry
+                <div>to</div>
+                <SingleSelectField
+                    onChange={({ selected }) => setCompareVersion(selected)}
+                    selected={versionToCompareWith}
+                    dense
+                >
+                    {availableVersionsToCompareWith.map((version) => {
+                        return (
+                            <SingleSelectOption
+                                key={version}
+                                label={version}
+                                value={version}
+                            />
+                        )
+                    })}
+                </SingleSelectField>
+            </div>
+            <div className={styles.changelogContainer}>
+                <Table suppressZebraStriping>
+                    {changesToShow.map((entry) => {
+                        const { version } = entry
 
-                                return (
-                                    <DataTableRow
-                                        key={version}
-                                        className={classnames({
-                                            [styles.breaking]: entry.isBreaking,
-                                        })}
-                                    >
-                                        <DataTableCell
-                                            className={styles.versionHeader}
-                                        >
-                                            {version}
-                                        </DataTableCell>
-                                        <DataTableCell>
-                                            <ul className={styles.list}>
-                                                {entry.changeSummary.map(
-                                                    (change, i) => {
-                                                        if (
-                                                            change.isTranslation
-                                                        ) {
-                                                            return (
-                                                                <li
-                                                                    key={i} // ToDo: find a better key
+                        return (
+                            <TableRow
+                                key={version}
+                                className={classnames({
+                                    [styles.breaking]: entry.isBreaking,
+                                })}
+                            >
+                                <TableCell className={styles.versionHeader}>
+                                    Version {version}
+                                </TableCell>
+                                <TableCell>
+                                    <ul className={styles.list}>
+                                        {entry.changeSummary.map(
+                                            (change, i) => {
+                                                return (
+                                                    // todo: find a better key than i
+                                                    <li key={i}>
+                                                        <strong>
+                                                            {getFormattedChangeType(
+                                                                change
+                                                            )}
+                                                        </strong>
+                                                        {change.isTranslation ? (
+                                                            <span
+                                                                className={
+                                                                    styles.translation
+                                                                }
+                                                            >
+                                                                Translations
+                                                                sync
+                                                            </span>
+                                                        ) : (
+                                                            change.text
+                                                        )}
+                                                        {change.link ? (
+                                                            <>
+                                                                {' | '}
+                                                                <a
                                                                     className={
-                                                                        styles.translation
+                                                                        styles.changeLink
+                                                                    }
+                                                                    rel="noreferrer"
+                                                                    target="_blank"
+                                                                    href={
+                                                                        change.link
                                                                     }
                                                                 >
-                                                                    Translations
-                                                                    update
-                                                                </li>
-                                                            )
-                                                        }
-                                                        return (
-                                                            <li key={i}>
-                                                                <strong>
-                                                                    {getType(
-                                                                        change.type
-                                                                    )}
-                                                                </strong>
-                                                                : {change.text}
-                                                                {change.link ? (
-                                                                    <>
-                                                                        {' | '}
-                                                                        <a
-                                                                            className={
-                                                                                styles.changeLink
-                                                                            }
-                                                                            target="_blank"
-                                                                            href={
-                                                                                change.link
-                                                                            }
-                                                                        >
-                                                                            link
-                                                                        </a>
-                                                                    </>
-                                                                ) : null}
-                                                            </li>
-                                                        )
-                                                    }
-                                                )}
-                                            </ul>
-                                        </DataTableCell>
-                                    </DataTableRow>
-                                )
-                            })}
-                        </DataTable>
-                    </div>
-                </div>
-            </ModalContent>
-        </Modal>
+                                                                    link
+                                                                </a>
+                                                            </>
+                                                        ) : null}
+                                                    </li>
+                                                )
+                                            }
+                                        )}
+                                    </ul>
+                                </TableCell>
+                            </TableRow>
+                        )
+                    })}
+                </Table>
+            </div>
+        </div>
     )
 }
 
+ChangeLogViewer.propTypes = {
+    appId: PropTypes.string,
+    latestVersion: PropTypes.string,
+}
 export default ChangeLogViewer
