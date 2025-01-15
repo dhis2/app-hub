@@ -37,17 +37,26 @@ const Filters = ({
                 </div>
             )}
             <div className={styles.filtersWrapper}>
-                <div className={styles.dhisVersionSelect}>
+                <div className={styles.dhisVersionsSelect}>
                     <SingleSelectField
                         dense
                         placeholder="Select a version"
-                        label="Compatible with DHIS2 version"
+                        prefix="DHIS2 compatibility"
                         clearable
                         selected={dhisVersionFilter}
-                        onChange={({ selected }) =>
-                            setDhisVersionFilter(selected)
-                        }
+                        onChange={({ selected }) => {
+                            if (!selected) {
+                                setDhisVersionFilter('-1')
+                            } else {
+                                setDhisVersionFilter(selected)
+                            }
+                        }}
                     >
+                        <SingleSelectOption
+                            key={-1}
+                            label="All versions"
+                            value="-1"
+                        />
                         {dhisVersions.map((dhisVersion) => (
                             <SingleSelectOption
                                 key={dhisVersion}

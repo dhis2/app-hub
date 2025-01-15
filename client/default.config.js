@@ -33,7 +33,7 @@ module.exports = {
             APPROVED: 'Approved',
         },
         appTypeToDisplayName: {
-            APP: 'Standard',
+            APP: 'Application',
             DASHBOARD_WIDGET: 'Dashboard',
             TRACKER_DASHBOARD_WIDGET: 'Tracker Dashboard',
         },

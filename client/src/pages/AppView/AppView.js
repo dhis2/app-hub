@@ -3,12 +3,18 @@ import {
     CircularLoader,
     NoticeBox,
     Card,
-    Tag,
     Divider,
     Button,
+    TabBar,
+    Tab,
+    IconUser16,
+    IconTerminalWindow16,
 } from '@dhis2/ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
+import { useHistory } from 'react-router-dom'
+import PluginTag from '../../components/PluginTag/PluginTag'
+import ChangeLogViewer from '../../components/Versions/ChangeLogViewer'
 import styles from './AppView.module.css'
 import config from 'config'
 import { useQueryV1 } from 'src/api'
@@ -17,7 +23,6 @@ import AppIcon from 'src/components/AppIcon/AppIcon'
 import Screenshots from 'src/components/Screenshots/Screenshots'
 import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
-import PluginTag from '../../components/PluginTag/PluginTag'
 
 const HeaderSection = ({
     appName,
@@ -27,43 +32,93 @@ const HeaderSection = ({
     hasPlugin,
     pluginType,
     organisationSlug,
-}) => (
-    <section
-        className={classnames(styles.appCardSection, styles.appCardHeader)}
-    >
-        <AppIcon src={logoSrc} />
-        <div>
-            <h2 className={styles.appCardName}>{appName}</h2>
-            <span className={styles.appCardDeveloper}>
-                by{' '}
-                <a
-                    className={styles.link}
-                    href={`/organisation/${organisationSlug}/view`}
-                >
-                    {appDeveloper}
-                </a>
-            </span>
-            <div className={styles.appCardTypeContainer}>
-                <span className={styles.appCardType}>{appType}</span>
-                {hasPlugin && (
-                    <PluginTag hasPlugin={hasPlugin} pluginType={pluginType} />
+    latestVersion,
+    sourceUrl,
+}) => {
+    const history = useHistory()
+    return (
+        <section
+            className={classnames(styles.appCardSection, styles.appCardHeader)}
+        >
+            <AppIcon src={logoSrc} />
+            <div>
+                <h2 className={styles.appCardName}>{appName}</h2>
+                <div className={styles.appTags}>
+                    <div className={styles.tagWithIcon}>
+                        <IconUser16 />
+                        <a
+                            className={styles.organisationLink}
+                            href={`/organisation/${organisationSlug}/view`}
+                        >
+                            {appDeveloper}
+                        </a>
+                    </div>
+                    <div className={styles.tagWithIcon}>
+                        <IconTerminalWindow16 />
+                        {appType}
+                    </div>
+                    {hasPlugin && (
+                        <PluginTag
+                            hasPlugin={hasPlugin}
+                            pluginType={pluginType}
+                        />
+                    )}
+                </div>
+            </div>
+            <div>
+                <div className={styles.topActionButtons}>
+                    <a download href={latestVersion.downloadUrl} tabIndex="-1">
+                        <Button primary>Download latest version</Button>
+                    </a>
+                    <Button
+                        onClick={() => history.push('?tab=previous-releases')}
+                    >
+                        See previous releases
+                    </Button>
+                </div>
+                <div className={styles.latestVersionDescription}>
+                    <span>
+                        {
+                            config.ui.appChannelToDisplayName[
+                                latestVersion.channel
+                            ]
+                        }{' '}
+                        release v{latestVersion.version}.
+                    </span>
+                    <span>
+                        Compatible with DHIS2{' '}
+                        {renderDhisVersionsCompatibility(
+                            latestVersion.minDhisVersion,
+                            latestVersion.maxDhisVersion
+                        )}
+                        .
+                    </span>
+                </div>
+                {sourceUrl && (
+                    <>
+                        <a href={sourceUrl} className={styles.sourceUrl}>
+                            Source code
+                        </a>
+                    </>
                 )}
             </div>
-        </div>
-    </section>
-)
+        </section>
+    )
+}
 
 HeaderSection.propTypes = {
     appDeveloper: PropTypes.string.isRequired,
     appName: PropTypes.string.isRequired,
     appType: PropTypes.string.isRequired,
-    pluginType: PropTypes.string,
-    hasPlugin: PropTypes.bool,
-    logoSrc: PropTypes.string,
     organisationSlug: PropTypes.string.isRequired,
+    hasPlugin: PropTypes.bool,
+    latestVersion: PropTypes.object,
+    logoSrc: PropTypes.string,
+    pluginType: PropTypes.string,
+    sourceUrl: PropTypes.string,
 }
 
-const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
+const AboutSection = ({ appDescription }) => (
     <section className={classnames(styles.appCardSection, styles.aboutSection)}>
         <div>
             <h2 className={styles.appCardHeading}>About this app</h2>
@@ -78,39 +133,21 @@ const AboutSection = ({ appDescription, latestVersion, sourceUrl }) => (
                 </em>
             )}
         </div>
-        <div>
-            <a download href={latestVersion.downloadUrl} tabIndex="-1">
-                <Button primary>Download latest version</Button>
-            </a>
-            <div className={styles.latestVersionDescription}>
-                <span>
-                    {config.ui.appChannelToDisplayName[latestVersion.channel]}{' '}
-                    release v{latestVersion.version}.
-                </span>
-                <span>
-                    Compatible with DHIS2{' '}
-                    {renderDhisVersionsCompatibility(
-                        latestVersion.minDhisVersion,
-                        latestVersion.maxDhisVersion
-                    )}
-                    .
-                </span>
-            </div>
-            {sourceUrl && (
-                <>
-                    <Divider margin="12px 0" className={styles.divider} />
-                    <a href={sourceUrl} className={styles.sourceUrl}>
-                        Source code
-                    </a>
-                </>
-            )}
-        </div>
     </section>
 )
+
+AboutSection.propTypes = {
+    appDescription: PropTypes.string,
+}
 
 const AppView = ({ match }) => {
     const { appId } = match.params
     const { data: app, error } = useQueryV1(`apps/${appId}`)
+
+    const history = useHistory()
+
+    const selectedTab =
+        new URLSearchParams(window.location.search).get('tab') ?? 'about'
 
     if (error) {
         return (
@@ -136,6 +173,10 @@ const AppView = ({ match }) => {
     const versions = app.versions.sort((a, b) => b.created - a.created)
     const latestVersion = versions[0]
 
+    const selectTab = (tabName) => () => {
+        history.push('?tab=' + tabName)
+    }
+
     return (
         <Card className={styles.appCard}>
             <HeaderSection
@@ -146,33 +187,73 @@ const AppView = ({ match }) => {
                 logoSrc={logoSrc}
                 hasPlugin={app.hasPlugin}
                 pluginType={app.pluginType}
-            />
-            <Divider />
-            <AboutSection
-                appDescription={app.description}
                 latestVersion={latestVersion}
                 sourceUrl={app.sourceUrl}
             />
-            <Divider />
-            {screenshots.length > 0 && (
+            <TabBar>
+                <Tab
+                    onClick={selectTab('about')}
+                    selected={selectedTab == 'about'}
+                >
+                    About
+                </Tab>
+                <Tab
+                    onClick={selectTab('previous-releases')}
+                    selected={selectedTab == 'previous-releases'}
+                >
+                    Previous releases
+                </Tab>
+                <Tab
+                    onClick={selectTab('changelog')}
+                    selected={selectedTab == 'changelog'}
+                >
+                    Change log
+                </Tab>
+                {/* <Tab
+                    onClick={selectTab('moreapps')}
+                    selected={selectedTab == 'moreapps'}
+                >
+                    More apps by {appDeveloper}
+                </Tab> */}
+            </TabBar>
+            {selectedTab === 'about' && (
                 <>
-                    <section className={styles.appCardSection}>
-                        <h2 className={styles.appCardHeading}>Screenshots</h2>
-                        <Screenshots screenshots={screenshots} />
-                    </section>
-                    <Divider />
+                    {screenshots.length > 0 && (
+                        <>
+                            <section className={styles.appCardSection}>
+                                <h2 className={styles.appCardHeading}>
+                                    Screenshots
+                                </h2>
+                                <Screenshots screenshots={screenshots} />
+                            </section>
+                        </>
+                    )}
+                    <AboutSection
+                        appDescription={app.description}
+                        latestVersion={latestVersion}
+                        sourceUrl={app.sourceUrl}
+                    />
                 </>
             )}
-            <section className={styles.appCardSection}>
-                <h2 className={styles.appCardHeading}>
-                    All versions of this application
-                </h2>
-                <Versions
-                    versions={versions}
-                    appId={appId}
-                    hasChangelog={app.hasChangelog}
-                />
-            </section>
+
+            {selectedTab === 'previous-releases' && (
+                <section className={styles.appCardSection}>
+                    <Versions
+                        versions={versions}
+                        appId={appId}
+                        hasChangelog={app.hasChangelog}
+                    />
+                </section>
+            )}
+
+            {selectedTab === 'changelog' && (
+                <div>
+                    <ChangeLogViewer
+                        latestVersion={latestVersion.version}
+                        appId={appId}
+                    />
+                </div>
+            )}
         </Card>
     )
 }
