@@ -10,7 +10,7 @@ describe('changelog', () => {
     it('should parse the log', () => {
         const result = new Changelog(changelogContents)
 
-        expect(result.data[0]).to.deep.equal({
+        expect(result.data[0]).toEqual({
             version: '100.2.0',
             changeSummary: [
                 {
@@ -37,20 +37,20 @@ describe('changelog', () => {
         const translations = result.data.filter((r) =>
             r.changeSummary.find((e) => e.isTranslation)
         )
-        expect(translations).to.have.length(9)
+        expect(translations).toHaveLength(9)
     })
     it('should highlight breaking changes', () => {
         const result = new Changelog(changelogContents)
         const changes = result.data.filter((r) => r.isBreaking)
-        expect(changes).to.have.length(1)
-        expect(changes[0].version).to.equal('100.0.0')
+        expect(changes).toHaveLength(1)
+        expect(changes[0].version).toEqual('100.0.0')
     })
     it('should not fail with invalid changelog', () => {
         const result = new Changelog('invalid changelog')
-        expect(result.data).to.have.length(0)
+        expect(result.data).toHaveLength(0)
     })
     it('should not fail with undefine changelog', () => {
         const result = new Changelog(undefined)
-        expect(result.data).to.have.length(0)
+        expect(result.data).toHaveLength(0)
     })
 })
