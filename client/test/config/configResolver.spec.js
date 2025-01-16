@@ -7,20 +7,20 @@ const Config = ConfigImport.default
 
 describe('ConfigResolver', () => {
     describe('exports', () => {
-        before(() => {})
+        beforeAll(() => {})
 
-        after(() => {})
+        afterAll(() => {})
 
         it('should export the default config object as if it was imported directly', () => {
-            expect(Config).to.deep.equal(DirectDefaultConfig)
+            expect(Config).toEqual(DirectDefaultConfig)
         })
 
         it('should return the same object-reference if imported multiple times', () => {
             const newConfig = require(defaultConfigPath.concat(
                 'configResolver.js'
             )).default
-            expect(newConfig).to.equal(Config)
-            expect(newConfig).to.deep.equal(DirectDefaultConfig)
+            expect(newConfig).toBe(Config)
+            expect(newConfig).toEqual(DirectDefaultConfig)
         })
     })
 
@@ -39,7 +39,7 @@ describe('ConfigResolver', () => {
         let prodConfig
         let devConfig
         let prevConfig
-        before(() => {
+        beforeAll(() => {
             configOverride = merge({}, DirectDefaultConfig, override, addition)
             prodConfig = {
                 api: {
@@ -53,24 +53,23 @@ describe('ConfigResolver', () => {
                 },
             }
             //sanity check
-            expect(configOverride).to.not.deep.equal(DirectDefaultConfig)
-            loadOverrideFileStub = sinon.stub().returns(configOverride)
+            expect(configOverride).not.toEqual(DirectDefaultConfig)
 
-            loadProdFileStub = sinon
-                .stub()
-                .onFirstCall()
-                .returns(DirectDefaultConfig)
-                .onSecondCall()
-                .returns(prodConfig)
-            loadDevFileStub = sinon
-                .stub()
-                .onFirstCall()
-                .returns(DirectDefaultConfig)
-                .onSecondCall()
-                .returns(devConfig)
+            loadOverrideFileStub = jest.fn()
+            loadOverrideFileStub.mockImplementationOnce(() => configOverride)
+
+            loadProdFileStub = jest.fn()
+            loadProdFileStub
+                .mockImplementationOnce(() => DirectDefaultConfig)
+                .mockImplementationOnce(() => prodConfig)
+
+            loadDevFileStub = jest.fn()
+            loadDevFileStub
+                .mockImplementationOnce(() => DirectDefaultConfig)
+                .mockImplementationOnce(() => devConfig)
         })
 
-        after(() => {})
+        afterAll(() => {})
 
         beforeEach(() => {
             prevConfig = Config
@@ -82,28 +81,28 @@ describe('ConfigResolver', () => {
         })
 
         it('should return the default config object as if it was imported directly', () => {
-            expect(getConfig()).to.deep.equal(DirectDefaultConfig)
+            expect(getConfig()).toEqual(DirectDefaultConfig)
         })
 
         it('should should return the same as default export', () => {
-            expect(getConfig()).to.deep.equal(Config)
+            expect(getConfig()).toEqual(Config)
         })
 
         it('should return the same object-reference as default export', () => {
-            expect(getConfig()).to.equal(Config)
+            expect(getConfig()).toBe(Config)
         })
 
         it('should return the same object and object-reference if called multiple times', () => {
-            expect(getConfig()).to.equal(Config)
-            expect(getConfig()).to.equal(getConfig())
-            expect(getConfig()).to.equal(Config)
+            expect(getConfig()).toBe(Config)
+            expect(getConfig()).toBe(getConfig())
+            expect(getConfig()).toBe(Config)
         })
 
         it('should store last config on the function if its not already', () => {
             getConfig.config = null
             const conf = getConfig()
-            expect(conf).to.deep.equal(DirectDefaultConfig)
-            expect(getConfig.config).to.be.equal(conf)
+            expect(conf).toEqual(DirectDefaultConfig)
+            expect(getConfig.config).toEqual(conf)
         })
 
         it('should merge the default.config.js with config.js, and override if exists', () => {
@@ -112,9 +111,9 @@ describe('ConfigResolver', () => {
 
             const conf = getConfig()
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig)
-            expect(DirectDefaultConfig.routes.baseAppName).to.be.equal('/')
-            expect(conf.routes.baseAppName).to.equal('baseAppName')
+            expect(conf).not.toEqual(DirectDefaultConfig)
+            expect(DirectDefaultConfig.routes.baseAppName).toEqual('/')
+            expect(conf.routes.baseAppName).toBe('baseAppName')
             //should deep merge
             expect(
                 Object.keys(conf.ui).every((k) =>
@@ -132,8 +131,8 @@ describe('ConfigResolver', () => {
                 )
             )
 
-            expect(DirectDefaultConfig).to.not.have.property('another')
-            expect(conf).to.be.an('object').that.includes(addition)
+            expect(DirectDefaultConfig).not.toHaveProperty('another')
+            expect(conf).toMatchObject(expect.objectContaining(addition))
 
             ConfigImport.__ResetDependency__('loadFile')
         })
@@ -145,16 +144,12 @@ describe('ConfigResolver', () => {
             process.env.NODE_ENV = 'production'
 
             const conf = getConfig()
-            expect(conf.api.baseURL).to.equal(prodConfig.api.baseURL)
+            expect(conf.api.baseURL).toBe(prodConfig.api.baseURL)
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig)
+            expect(conf).not.toEqual(DirectDefaultConfig)
 
-            expect(conf)
-                .to.have.property('auth0')
-                .that.is.deep.equal(DirectDefaultConfig.auth0)
-            expect(conf)
-                .to.have.property('ui')
-                .that.is.deep.equal(DirectDefaultConfig.ui)
+            expect(conf.auth0).toEqual(DirectDefaultConfig.auth0)
+            expect(conf.ui).toEqual(DirectDefaultConfig.ui)
             ConfigImport.__ResetDependency__('loadFile')
             process.env.NODE_ENV = prevEnv
         })
@@ -167,12 +162,12 @@ describe('ConfigResolver', () => {
             process.env.NODE_ENV = 'development'
             const conf = getConfig()
             //should override api object
-            expect(conf.api).to.deep.equal(devConfig.api)
+            expect(conf.api).toEqual(devConfig.api)
 
-            expect(conf).to.not.deep.equal(DirectDefaultConfig)
+            expect(conf).not.toEqual(DirectDefaultConfig)
             //should keep the same properties that are not overriden
-            expect(conf.ui).to.deep.equal(DirectDefaultConfig.ui)
-            expect(conf.auth0).to.deep.equal(DirectDefaultConfig.auth0)
+            expect(conf.ui).toEqual(DirectDefaultConfig.ui)
+            expect(conf.auth0).toEqual(DirectDefaultConfig.auth0)
             ConfigImport.__ResetDependency__('loadFile')
             process.env.NODE_ENV = prevEnv
         })

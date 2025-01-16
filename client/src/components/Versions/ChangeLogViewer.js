@@ -83,6 +83,7 @@ const ChangeLogViewer = ({ appId, latestVersion }) => {
                 <div>Show changes included from: </div>
                 <div className={styles.headerTitle}>
                     <SingleSelectField
+                        dataTest="select-baseversion"
                         onChange={({ selected }) => setBaseVersion(selected)}
                         selected={baseVersion}
                         dense
@@ -100,6 +101,7 @@ const ChangeLogViewer = ({ appId, latestVersion }) => {
                 </div>
                 <div>to</div>
                 <SingleSelectField
+                    dataTest="select-compareversion"
                     onChange={({ selected }) => setCompareVersion(selected)}
                     selected={versionToCompareWith}
                     dense

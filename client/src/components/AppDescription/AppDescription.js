@@ -4,7 +4,7 @@ import styles from './AppDescription.module.css'
 
 const AppDescription = ({ description, paragraphClassName }) => {
     return (
-        <div className={paragraphClassName}>
+        <div className={paragraphClassName} data-test="app-description">
             <ReactMarkdown
                 className={styles.markdownDescription}
                 linkTarget={'_blank'}

@@ -3,7 +3,6 @@ import {
     CircularLoader,
     NoticeBox,
     Card,
-    Divider,
     Button,
     TabBar,
     Tab,
@@ -47,13 +46,14 @@ const HeaderSection = ({
                     <div className={styles.tagWithIcon}>
                         <IconUser16 />
                         <a
+                            data-test="organisation-link"
                             className={styles.organisationLink}
                             href={`/organisation/${organisationSlug}/view`}
                         >
                             {appDeveloper}
                         </a>
                     </div>
-                    <div className={styles.tagWithIcon}>
+                    <div data-test="app-type" className={styles.tagWithIcon}>
                         <IconTerminalWindow16 />
                         {appType}
                     </div>
@@ -67,7 +67,12 @@ const HeaderSection = ({
             </div>
             <div>
                 <div className={styles.topActionButtons}>
-                    <a download href={latestVersion.downloadUrl} tabIndex="-1">
+                    <a
+                        data-test="button-download-latest-version"
+                        download
+                        href={latestVersion.downloadUrl}
+                        tabIndex="-1"
+                    >
                         <Button primary>Download latest version</Button>
                     </a>
                     <Button
@@ -76,7 +81,10 @@ const HeaderSection = ({
                         See previous releases
                     </Button>
                 </div>
-                <div className={styles.latestVersionDescription}>
+                <div
+                    data-test="latest-version-description"
+                    className={styles.latestVersionDescription}
+                >
                     <span>
                         {
                             config.ui.appChannelToDisplayName[
@@ -96,7 +104,11 @@ const HeaderSection = ({
                 </div>
                 {sourceUrl && (
                     <>
-                        <a href={sourceUrl} className={styles.sourceUrl}>
+                        <a
+                            data-test="link-source-code"
+                            href={sourceUrl}
+                            className={styles.sourceUrl}
+                        >
                             Source code
                         </a>
                     </>
@@ -190,7 +202,7 @@ const AppView = ({ match }) => {
                 latestVersion={latestVersion}
                 sourceUrl={app.sourceUrl}
             />
-            <TabBar>
+            <TabBar dataTest="tabbar-appview">
                 <Tab
                     onClick={selectTab('about')}
                     selected={selectedTab == 'about'}
