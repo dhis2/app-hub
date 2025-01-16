@@ -20,13 +20,18 @@ const AppCardItem = ({
     const logo = images.find((elem) => elem.logo)
 
     return (
-        <Link to={`/app/${id}`} className={styles.appCard}>
+        <Link data-test="appcard" to={`/app/${id}`} className={styles.appCard}>
             <header className={styles.appCardHeader}>
                 <AppIcon src={logo?.imageUrl} />
 
                 <div>
-                    <h2 className={styles.appCardName}>{name}</h2>
-                    <span className={styles.appCardDeveloper}>
+                    <h2 data-test="appcard-name" className={styles.appCardName}>
+                        {name}
+                    </h2>
+                    <span
+                        data-test="appcard-organisation"
+                        className={styles.appCardDeveloper}
+                    >
                         {developer.organisation || 'Unspecified'}
                     </span>
                     <div className={styles.appTypeContainer}>
@@ -44,7 +49,10 @@ const AppCardItem = ({
                 </div>
             </header>
 
-            <p className={styles.appCardDescription}>
+            <p
+                data-test="appcard-description"
+                className={styles.appCardDescription}
+            >
                 <Summary>
                     <ReactMarkdown
                         allowedElements={['p']}
@@ -67,17 +75,17 @@ Summary.propTypes = {
 }
 
 AppCardItem.propTypes = {
+    appType: PropTypes.string.isRequired,
     developer: PropTypes.shape({
         name: PropTypes.string,
         organisation: PropTypes.string,
     }).isRequired,
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    hasPlugin: PropTypes.bool.isRequired,
-    pluginType: PropTypes.string.isRequired,
-    appType: PropTypes.string.isRequired,
     description: PropTypes.string,
+    hasPlugin: PropTypes.bool,
     images: PropTypes.array,
+    pluginType: PropTypes.string,
 }
 
 export default AppCardItem
