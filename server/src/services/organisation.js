@@ -113,6 +113,14 @@ const findOneBySlug = async (slug, includeUsers = false, knex) => {
     return findOneByColumn(slug, { columnName: 'slug', includeUsers }, knex)
 }
 
+const getOrganisationsWithApps = async (knex) => {
+    return knex.raw(`select organisation, organisation_slug, count(k.*) app_count from 
+        (select distinct app_id, name, organisation, organisation_slug from apps_view) k 
+        group by organisation, organisation_slug
+        order by app_count desc, organisation asc
+    `)
+}
+
 const getAppsInOrganisation = async (orgSlug, knex) => {
     return knex('apps_view')
         .innerJoin(
@@ -230,4 +238,5 @@ module.exports = {
     getUsersInOrganisation,
     generateInvitationToken,
     ensureUniqueSlug,
+    getOrganisationsWithApps,
 }
