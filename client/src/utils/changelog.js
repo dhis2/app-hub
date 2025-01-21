@@ -116,4 +116,17 @@ class Changelog {
     }
 }
 
-module.exports = Changelog
+export const getFormattedChangeType = ({ type, isTranslation }) => {
+    if (isTranslation) {
+        return null
+    }
+    if (type === 'Bug Fixes') {
+        return 'Fix: '
+    }
+    if (type == 'Features') {
+        return 'Feature: '
+    }
+    return type + ': '
+}
+
+export default Changelog

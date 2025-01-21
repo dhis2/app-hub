@@ -1,22 +1,10 @@
-import { render } from '@testing-library/react'
 import '../../../test/mocks/setup.js'
-import { Router, Route } from 'react-router-dom'
-import { QueryParamProvider } from 'use-query-params'
-import { history } from '../../utils/history'
+import { renderWithRoute } from '../../../test/test-utils.jsx'
 import Apps from './Apps.js'
 
 describe('Apps list (Homepage)', () => {
     it('should render all app cards', async () => {
-        const { findByText, getAllByTestId } = render(
-            <Router history={history}>
-                <QueryParamProvider
-                    ReactRouterRoute={Route}
-                    stringifyOptions={{ skipEmptyString: true }}
-                >
-                    <Apps />
-                </QueryParamProvider>
-            </Router>
-        )
+        const { findByText, getAllByTestId } = renderWithRoute(<Apps />)
 
         await findByText('Analytics Info')
         expect(getAllByTestId('appcard').length).toEqual(24)

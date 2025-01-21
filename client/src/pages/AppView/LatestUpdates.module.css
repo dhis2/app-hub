@@ -1,0 +1,28 @@
+.latestUpdatesWrapper {
+    font-size: 0.8em;
+}
+
+.latestUpdates {
+    padding: var(--spacers-dp16);
+    background-color: var(--colors-blue100);
+}
+
+.latestUpdatesHeader {
+    margin: 0;
+}
+
+.latestUpdatesVersionHeading {
+    font-size: 1em;
+    margin-bottom: var(--spacers-dp4);
+    font-weight: bold;
+}
+
+.showAllLink {
+    margin-top: var(--spacers-dp8);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.showAllLink:hover,
+.showAllLink:focus {
+    text-decoration: none;
+}

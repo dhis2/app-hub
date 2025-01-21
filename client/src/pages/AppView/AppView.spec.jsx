@@ -1,12 +1,21 @@
-import { render } from '@testing-library/react'
-import AppView from './AppView.js'
+import { useAuth0 } from '@auth0/auth0-react'
+import { fireEvent, within } from '@testing-library/react'
+import { renderWithRoute } from '../../../test/test-utils.jsx'
 import '../../../test/mocks/setup.js'
+import AppView from './AppView.js'
+
+jest.mock('@auth0/auth0-react')
 
 describe('AppView', () => {
+    beforeEach(() => {
+        useAuth0.mockReturnValue({
+            getAccessTokenSilently: jest.fn(),
+        })
+    })
     it('should render app details', async () => {
         const appId = '08c48425-abd3-410e-8802-8f9ada971c03'
 
-        const { findByText, getByTestId } = render(
+        const { findByText, getByTestId } = renderWithRoute(
             <AppView
                 match={{
                     params: { appId },
@@ -52,7 +61,68 @@ describe('AppView', () => {
         expect(sourceCodeLink).toHaveTextContent('Source code')
 
         expect(getByTestId('tabbar-appview')).toHaveTextContent(
-            'About' + 'Previous releases' + 'Change log'
+            'About' + 'Previous releases'
         )
+    })
+
+    describe('previous release tab', () => {
+        const renderChangelogTab = async () => {
+            // Data Visualizer
+            const appId = '6f656971-c392-42d8-8363-eb37d9287f3d'
+
+            const app = renderWithRoute(
+                <AppView
+                    match={{
+                        params: { appId },
+                    }}
+                />
+            )
+
+            await fireEvent.click(await app.findByText('Previous releases'))
+
+            expect(await app.findByText('100.8.6')).toBeDefined()
+
+            return app
+        }
+        it('should show versions numbers headers', async () => {
+            const { getByText } = await renderChangelogTab()
+            getByText('100.8.5')
+            getByText('100.8.4')
+            getByText('100.8.3')
+            getByText('100.8.2')
+        })
+        it('should show versions info with download link', async () => {
+            const { getAllByTestId } = await renderChangelogTab()
+            const [firstVersion] = getAllByTestId('version-list-item')
+
+            expect(firstVersion).toHaveTextContent('17')
+            expect(firstVersion).toHaveTextContent('December')
+            expect(firstVersion).toHaveTextContent('2024')
+            expect(firstVersion).toHaveTextContent(
+                '0 downloads' + 'Stable' + 'DHIS2 2.39 and above'
+            )
+
+            expect(within(firstVersion).getByText('Download')).toHaveAttribute(
+                'href',
+                expect.stringMatching(
+                    '/api/v2/apps/6f656971-c392-42d8-8363-eb37d9287f3d/download/data-visualizer_100.8.6.zip'
+                )
+            )
+        })
+        it('should each version changelog', async () => {
+            const { getAllByTestId } = await renderChangelogTab()
+            const [firstVersion, secondVersion, ...otherVersions] =
+                getAllByTestId('version-list-item')
+
+            expect(firstVersion).toHaveTextContent(
+                'Fix: enable ou tree and levels/groups with user orgunits and display translated title (link)'
+            )
+
+            expect(secondVersion).toHaveTextContent(
+                'Fix: handle single value vis-type as highcharts chart instance (link)'
+            )
+
+            expect(otherVersions).toHaveLength(3)
+        })
     })
 })

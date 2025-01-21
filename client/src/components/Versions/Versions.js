@@ -38,7 +38,12 @@ const useChannels = (appId) => {
     return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
-const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
+const Versions = ({
+    appId,
+    renderDeleteVersionButton,
+    showDownloadCount,
+    changelogData,
+}) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
@@ -106,6 +111,7 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
                     renderDeleteVersionButton={renderDeleteVersionButton}
                     showDownloadCount={showDownloadCount}
                     appId={appId}
+                    changelogData={changelogData}
                 />
             ) : (
                 <em className={styles.noVersions}>
