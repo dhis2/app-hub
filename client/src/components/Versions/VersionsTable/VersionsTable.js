@@ -1,16 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react'
-import {
-    Button,
-    Table,
-    TableHead,
-    TableRowHead,
-    TableCellHead,
-    TableBody,
-    TableRow,
-    TableCell,
-} from '@dhis2/ui'
+import { Divider } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useState } from 'react'
+import { getFormattedChangeType } from '../../../utils/changelog'
 import styles from './VersionsTable.module.css'
 import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
@@ -39,66 +31,100 @@ const VersionsTable = ({
     versions,
     renderDeleteVersionButton,
     showDownloadCount,
-    appId,
+    changelogData,
 }) => {
     const getDownloadUrl = useCreateGetDownloadUrl()
 
     return (
-        <Table className={styles.table}>
-            <TableHead>
-                <TableRowHead>
-                    <TableCellHead>Version</TableCellHead>
-                    <TableCellHead>Date released</TableCellHead>
-                    <TableCellHead>DHIS2 compatibility</TableCellHead>
-                    <TableCellHead>Release channel</TableCellHead>
-                    {showDownloadCount && (
-                        <TableCellHead>Downloads</TableCellHead>
-                    )}
-                    <TableCellHead></TableCellHead>
-                </TableRowHead>
-            </TableHead>
-            <TableBody>
-                {versions.map((version) => (
-                    <TableRow key={version.id}>
-                        <TableCell>{version.version}</TableCell>
-                        <TableCell>
-                            <span title={new Date(version.createdAt)}>
-                                {new Date(
-                                    version.createdAt
-                                ).toLocaleDateString()}
-                            </span>
-                        </TableCell>
-                        <TableCell>
-                            {renderDhisVersionsCompatibility(
-                                version.minDhisVersion,
-                                version.maxDhisVersion
-                            )}
-                        </TableCell>
-                        <TableCell className={styles.channelNameCell}>
-                            {appChannelToDisplayName[version.channel]}
-                        </TableCell>
+        <ol className={styles.versionList}>
+            {versions.map((version) => {
+                const changes = changelogData?.[version.version] ?? []
 
-                        {showDownloadCount && (
-                            <TableCell>
-                                <span>{version.downloadCount}</span>
-                            </TableCell>
-                        )}
-                        <TableCell>
-                            <a
-                                className={styles.link}
-                                download
-                                href={getDownloadUrl(version.downloadUrl)}
-                                tabIndex="-1"
-                            >
-                                Download
-                            </a>
-                            {renderDeleteVersionButton &&
-                                renderDeleteVersionButton(version)}
-                        </TableCell>
-                    </TableRow>
-                ))}
-            </TableBody>
-        </Table>
+                return (
+                    <li data-test="version-list-item" key={version.version}>
+                        <h2 className={styles.versionHeading}>
+                            {version.version}
+                        </h2>
+
+                        <div className={styles.versionSubheading}>
+                            <div>
+                                {new Date(version.createdAt).toLocaleDateString(
+                                    undefined,
+                                    { dateStyle: 'long' }
+                                )}
+                            </div>
+                            {showDownloadCount && (
+                                <div>
+                                    <span>{version.downloadCount}</span>{' '}
+                                    downloads
+                                </div>
+                            )}
+                            <div>
+                                {appChannelToDisplayName[version.channel]}
+                            </div>
+                            <div>
+                                DHIS2{' '}
+                                {renderDhisVersionsCompatibility(
+                                    version.minDhisVersion,
+                                    version.maxDhisVersion
+                                )}
+                            </div>
+
+                            <div>
+                                <a
+                                    className={styles.link}
+                                    download
+                                    href={getDownloadUrl(version.downloadUrl)}
+                                    tabIndex="-1"
+                                >
+                                    Download
+                                </a>
+                                {renderDeleteVersionButton &&
+                                    renderDeleteVersionButton(version)}
+                            </div>
+                        </div>
+
+                        <ul className={styles.changesBullets}>
+                            {changes?.map((change, i) => {
+                                return (
+                                    // todo: find a better key than i
+                                    <li key={i}>
+                                        <strong>
+                                            {getFormattedChangeType(change)}
+                                        </strong>
+                                        {change.isTranslation ? (
+                                            <span
+                                                className={styles.translation}
+                                            >
+                                                Translations sync
+                                            </span>
+                                        ) : (
+                                            change.text
+                                        )}
+                                        {change.link ? (
+                                            <>
+                                                {' '}
+                                                (
+                                                <a
+                                                    className={styles.link}
+                                                    rel="noreferrer"
+                                                    target="_blank"
+                                                    href={change.link}
+                                                >
+                                                    {'link'}
+                                                </a>
+                                                )
+                                            </>
+                                        ) : null}
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                        <Divider className={styles.versionDivider} />
+                    </li>
+                )
+            })}
+        </ol>
     )
 }
 VersionsTable.propTypes = {

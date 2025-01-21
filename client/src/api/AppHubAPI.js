@@ -40,6 +40,10 @@ export default class AppHubAPI {
         { useAuth = false, external = false, params = {} } = {},
         fetchOptions
     ) {
+        if (!path) {
+            return
+        }
+
         const options = {
             ...this.defaultFetchOptions,
             ...fetchOptions,

@@ -49,7 +49,7 @@ const AppCardItem = ({
                 </div>
             </header>
 
-            <p
+            <div
                 data-test="appcard-description"
                 className={styles.appCardDescription}
             >
@@ -61,7 +61,7 @@ const AppCardItem = ({
                         {description}
                     </ReactMarkdown>
                 </Summary>
-            </p>
+            </div>
         </Link>
     )
 }
