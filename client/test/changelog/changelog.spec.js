@@ -1,5 +1,5 @@
-const fs = require('fs')
-const Changelog = require('../../src/utils/changelog')
+import fs from 'fs'
+import Changelog from '../../src/utils/changelog'
 
 const changelogContents = fs.readFileSync(
     __dirname + '/changelog_sample.txt',
