@@ -7,44 +7,66 @@ const changelogContents = fs.readFileSync(
 )
 
 describe('changelog', () => {
-    it('should parse the log', () => {
-        const result = new Changelog(changelogContents)
+    it('should parse the change log and save the raw changes in a version', () => {
+        const result =
+            new Changelog(`# [100.2.0](https://github.com/dhis2/login-app/compare/v100.1.15...v100.2.0) (2024-12-16)
 
-        expect(result.data[0]).toEqual({
-            version: '100.2.0',
-            changeSummary: [
-                {
-                    type: 'Bug Fixes',
-                    text: 'use form container component for styling consistency',
-                    linkText: 'c74a4ca',
-                    link: 'https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d',
-                },
-                { type: 'Bug Fixes', text: 'second bug fix' },
-                {
-                    type: 'Features',
-                    text: 'add email verification pages',
-                    linkText: '916dac3',
-                    link: 'https://github.com/dhis2/login-app/commit/916dac36a03ade4a05383af0be454517a165ed8c',
-                },
-                { type: 'Features', text: 'second feature' },
-                { type: 'Features', text: 'third feature' },
-            ],
-        })
-    })
+### Bug Fixes
 
-    it('should highlight translation changes', () => {
-        const result = new Changelog(changelogContents)
-        const translations = result.data.filter((r) =>
-            r.changeSummary.find((e) => e.isTranslation)
+* first bug fix ([c74a4ca](https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d))
+* second bug fix
+
+### Features
+
+* first feature ([916dac3](https://github.com/dhis2/login-app/commit/916dac36a03ade4a05383af0be454517a165ed8c))
+* second feature
+* third feature
+
+## [100.1.15](https://github.com/dhis2/login-app/compare/v100.1.14...v100.1.15) (2024-12-08)
+
+
+### Bug Fixes
+
+* **translations:** sync translations from transifex (main) ([0da02ed](https://github.com/dhis2/login-app/commit/0da02edc0dcd82067180549c0c726b817990a5c7))
+
+## [100.1.14](https://github.com/dhis2/login-app/compare/v100.1.13...v100.1.14) (2024-10-06)
+
+
+### Bug Fixes
+
+* another bug
+                `)
+
+        expect(result.data[0].rawChangeSummary.replace(/\n/gm, '')).toMatch(
+            '### Bug Fixes* first bug fix ([c74a4ca](https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d))* second bug fix### Features* first feature ([916dac3](https://github.com/dhis2/login-app/commit/916dac36a03ade4a05383af0be454517a165ed8c))* second feature* third feature'
         )
-        expect(translations).toHaveLength(9)
+        expect(result.data[1].rawChangeSummary.replace(/\n/gm, '')).toMatch(
+            '### Bug Fixes* **translations:** sync translations from transifex (main) ([0da02ed](https://github.com/dhis2/login-app/commit/0da02edc0dcd82067180549c0c726b817990a5c7))'
+        )
+        expect(result.data[2].rawChangeSummary.replace(/\n/gm, '')).toMatch(
+            '### Bug Fixes* another bug'
+        )
+        expect(result.data.length).toEqual(3)
     })
-    it('should highlight breaking changes', () => {
+
+    it('should parse the version and the log', () => {
         const result = new Changelog(changelogContents)
-        const changes = result.data.filter((r) => r.isBreaking)
-        expect(changes).toHaveLength(1)
-        expect(changes[0].version).toEqual('100.0.0')
+
+        expect(result.data[0].version).toEqual('100.2.0')
+        expect(result.data[0].rawChangeSummary).toMatch(`
+### Bug Fixes
+
+* use form container component for styling consistency ([c74a4ca](https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d))
+* second bug fix
+
+### Features
+
+* add email verification pages ([916dac3](https://github.com/dhis2/login-app/commit/916dac36a03ade4a05383af0be454517a165ed8c))
+* second feature
+* third feature
+`)
     })
+
     it('should not fail with invalid changelog', () => {
         const result = new Changelog('invalid changelog')
         expect(result.data).toHaveLength(0)

@@ -1,8 +1,8 @@
+import ReactMarkdown from 'react-markdown'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Divider } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useState } from 'react'
-import { getFormattedChangeType } from '../../../utils/changelog'
 import styles from './VersionsTable.module.css'
 import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
@@ -84,42 +84,9 @@ const VersionsTable = ({
                             </div>
                         </div>
 
-                        <ul className={styles.changesBullets}>
-                            {changes?.map((change, i) => {
-                                return (
-                                    // todo: find a better key than i
-                                    <li key={i}>
-                                        <strong>
-                                            {getFormattedChangeType(change)}
-                                        </strong>
-                                        {change.isTranslation ? (
-                                            <span
-                                                className={styles.translation}
-                                            >
-                                                Translations sync
-                                            </span>
-                                        ) : (
-                                            change.text
-                                        )}
-                                        {change.link ? (
-                                            <>
-                                                {' '}
-                                                (
-                                                <a
-                                                    className={styles.link}
-                                                    rel="noreferrer"
-                                                    target="_blank"
-                                                    href={change.link}
-                                                >
-                                                    {'link'}
-                                                </a>
-                                                )
-                                            </>
-                                        ) : null}
-                                    </li>
-                                )
-                            })}
-                        </ul>
+                        <div className={styles.changeSummary}>
+                            <ReactMarkdown>{changes}</ReactMarkdown>
+                        </div>
                         <Divider className={styles.versionDivider} />
                     </li>
                 )
