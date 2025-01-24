@@ -8,21 +8,12 @@ class Changelog {
      * 
      * @example [{
             version: '100.2.0',
-            changeSummary: [
-                {
-                    type: 'Bug Fixes',
-                    text: 'use form container component for styling consistency',
-                    linkText: 'c74a4ca',
-                    link: 'https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d',
-                },
-                {
-                    type: 'Features',
-                    text: 'add email verification pages',
-                    linkText: '916dac3',
-                    link: 'https://github.com/dhis2/login-app/commit/916dac36a03ade4a05383af0be454517a165ed8c',
-                }
-            ],
-        ] 
+            rawChangeSummary: `
+                ### Bug Fixes
+
+                * first bug fix ([c74a4ca](https://github.com/dhis2/login-app/commit/c74a4ca08f102e8f8c27065e079a066315577a7d))
+                * second bug fix`
+            }] 
      */
     data = []
 
@@ -55,45 +46,22 @@ class Changelog {
 
         const versions = []
 
-        let lastLogType = ''
+        let lastVersion
+
         lines.forEach((line) => {
             // version header
-            if (line.match(/^\#{1,2}\s/)) {
-                const versionName = this.#getVersion(line)
-                versions.push({ version: versionName, changeSummary: [] })
-            }
-
-            // logType: Features, Bug Fixes etc...
-
-            if (line.match(/^\#{3}\s/)) {
-                const logType = this.#getLogType(line)
-
-                lastLogType = logType
-
-                if (logType === 'BREAKING CHANGES') {
-                    const lastVersion = versions[versions.length - 1]
-                    lastVersion.isBreaking = true
-                    versions[versions.length - 1] = lastVersion
+            if (line.match(/^#{1,2}\s/)) {
+                lastVersion = {
+                    version: this.#getVersion(line),
+                    changeSummary: [],
+                    rawChangeSummary: '',
                 }
-            }
-
-            // single *: commit description
-            if (line.match(/^\*\s/)) {
-                const link = this.#getLink(line)
-                const changeSummary = {
-                    type: lastLogType,
-                    text: line
-                        ?.replace(/^\*\s/, '')
-                        .replace(/\(.+\)$/, '')
-                        .trim(),
-                    ...link,
+                versions.push(lastVersion)
+            } else {
+                if (lastVersion) {
+                    lastVersion.rawChangeSummary =
+                        lastVersion.rawChangeSummary + '\n' + line
                 }
-
-                if (line.includes('**translations:**')) {
-                    changeSummary.isTranslation = true
-                }
-
-                versions[versions.length - 1].changeSummary.push(changeSummary)
             }
         })
 
@@ -103,16 +71,6 @@ class Changelog {
     #getVersion = (line) => {
         const matches = /(?<version>\d+\.\d+\.\d+)/.exec(line)
         return matches?.groups?.version
-    }
-
-    #getLogType = (line) => {
-        const matches = /^\#{3} (?<logType>.+)/.exec(line)
-        return matches?.groups?.logType
-    }
-
-    #getLink = (line) => {
-        const matches = /\(\[(?<linkText>.+)\]\((?<link>.+)\)\)$/.exec(line)
-        return matches?.groups
     }
 }
 

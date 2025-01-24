@@ -115,11 +115,11 @@ describe('AppView', () => {
                 getAllByTestId('version-list-item')
 
             expect(firstVersion).toHaveTextContent(
-                'Fix: enable ou tree and levels/groups with user orgunits and display translated title (link)'
+                '### Bug Fixes * enable ou tree and levels/groups with user orgunits and display translated title (DHIS2-18066) ([#3241](https://github.com/dhis2/data-visualizer-app/issues/3241)) ([ef314a5](https://github.com/dhis2/data-visualizer-app/commit/ef314a594ce9cb6146755c52291f72135052d397))'
             )
 
             expect(secondVersion).toHaveTextContent(
-                'Fix: handle single value vis-type as highcharts chart instance (link)'
+                '### Bug Fixes * handle single value vis-type as highcharts chart instance ([#3289](https://github.com/dhis2/data-visualizer-app/issues/3289)) ([83d0e6c](https://github.com/dhis2/data-visualizer-app/commit/83d0e6c33ea5314e849fb1f5842d4b3b61e74c41))'
             )
 
             expect(otherVersions).toHaveLength(3)
