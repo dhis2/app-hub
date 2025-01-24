@@ -13,12 +13,15 @@
     color: var(--colors-grey700);
 }
 
+.changeSummary :global(a),
 a.link {
     text-decoration: underline;
 }
 
 a.link:hover,
-a.link:focus {
+.changeSummary :global(a):hover,
+a.link:focus,
+.changeSummary :global(a):focus {
     text-decoration: none;
 }
 
@@ -46,12 +49,12 @@ a.link:focus {
     margin-bottom: var(--spacers-dp16) !important;
 }
 
-.changesBullets {
-    margin-top: var(--spacers-dp12);
-    padding-left: var(--spacers-dp24);
-    font-size: 0.9em;
+.changeSummary :global(ul) {
+    font-size: 0.8em;
+    list-style: disc;
+    padding-inline-start: var(--spacers-dp24);
 }
-.changesBullets :global(li) {
-    list-style-type: disc;
-    margin-bottom: var(--spacers-dp8);
+.changeSummary :global(h3) {
+    font-size: 0.8em;
+    margin-bottom: 0.5em;
 }

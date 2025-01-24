@@ -164,7 +164,8 @@ const AppView = ({ match }) => {
     })
 
     const changelogByVersion = changelog?.data?.reduce?.((acc, item) => {
-        acc[item.version] = item.changeSummary
+        acc[item.version] = item.rawChangeSummary
+
         return acc
     }, {})
 
