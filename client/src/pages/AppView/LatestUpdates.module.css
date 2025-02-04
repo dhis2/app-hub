@@ -11,12 +11,6 @@
     margin: 0;
 }
 
-.latestUpdatesVersionHeading {
-    font-size: 1em;
-    margin-bottom: var(--spacers-dp4);
-    font-weight: bold;
-}
-
 .showAllLink {
     margin-top: var(--spacers-dp8);
     text-decoration: underline;
@@ -25,4 +19,25 @@
 .showAllLink:hover,
 .showAllLink:focus {
     text-decoration: none;
+}
+
+.versionList {
+    list-style: none;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.latestUpdatesVersionHeading {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+.changeSummary :global(ul) {
+    list-style: disc;
+    padding-inline-start: var(--spacers-dp24);
+}
+
+.changeSummary :global(h3) {
+    font-size: 0.9em;
+    margin-bottom: 0.5em;
 }

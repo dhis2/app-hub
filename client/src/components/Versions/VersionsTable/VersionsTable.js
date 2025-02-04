@@ -1,8 +1,8 @@
-import ReactMarkdown from 'react-markdown'
 import { useAuth0 } from '@auth0/auth0-react'
 import { Divider } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import styles from './VersionsTable.module.css'
 import config from 'config'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
@@ -11,15 +11,17 @@ const { appChannelToDisplayName } = config.ui
 
 const useCreateGetDownloadUrl = (url) => {
     const [token, setToken] = useState()
-    const { getAccessTokenSilently } = useAuth0()
+    const { getAccessTokenSilently, isAuthenticated } = useAuth0()
 
     useEffect(() => {
         const getToken = async () => {
-            const token = await getAccessTokenSilently()
-            setToken(token)
+            if (isAuthenticated) {
+                const token = await getAccessTokenSilently()
+                setToken(token)
+            }
         }
         getToken()
-    }, [url, getAccessTokenSilently])
+    }, [url, getAccessTokenSilently, isAuthenticated])
 
     return useCallback(
         (url) => (token ? url.concat(`?token=${token}`) : url),
