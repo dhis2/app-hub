@@ -1,6 +1,5 @@
-import { Button } from '@dhis2/ui'
+import ReactMarkdown from 'react-markdown'
 import { useHistory } from 'react-router-dom'
-import { getFormattedChangeType } from '../../utils/changelog'
 import styles from './LatestUpdates.module.css'
 
 export const LatestUpdates = ({ changelog }) => {
@@ -13,47 +12,26 @@ export const LatestUpdates = ({ changelog }) => {
             <div className={styles.latestUpdates}>
                 <h2 className={styles.latestUpdatesHeader}>Latest updates:</h2>
 
-                {changelog?.slice(0, 3).map((version, i) => {
-                    return (
-                        <div key={version.version}>
-                            <h3 className={styles.latestUpdatesVersionHeading}>
-                                {version.version}
-                            </h3>
-                            {version.changeSummary.map((change) => {
-                                return (
-                                    // todo: find a better key than i
-                                    <div key={i}>
-                                        {getFormattedChangeType(change)}
-                                        {change.isTranslation ? (
-                                            <span
-                                                className={styles.translation}
-                                            >
-                                                Translations sync
-                                            </span>
-                                        ) : (
-                                            change.text
-                                        )}
-                                        {change.link ? (
-                                            <>
-                                                {' '}
-                                                (
-                                                <a
-                                                    className={styles.link}
-                                                    rel="noreferrer"
-                                                    target="_blank"
-                                                    href={change.link}
-                                                >
-                                                    {'link'}
-                                                </a>
-                                                )
-                                            </>
-                                        ) : null}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    )
-                })}
+                <ol className={styles.versionList}>
+                    {changelog?.slice(0, 3).map((version, i) => {
+                        return (
+                            <li key={version.version}>
+                                <h3
+                                    className={
+                                        styles.latestUpdatesVersionHeading
+                                    }
+                                >
+                                    {version.version}
+                                </h3>
+                                <div className={styles.changeSummary}>
+                                    <ReactMarkdown>
+                                        {version.rawChangeSummary}
+                                    </ReactMarkdown>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ol>
             </div>
             <div className={styles.showAllLink}>
                 <span
