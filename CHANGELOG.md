@@ -1,3 +1,17 @@
+# [2.36.0](https://github.com/dhis2/app-hub/compare/v2.35.1...v2.36.0) (2025-02-05)
+
+
+### Bug Fixes
+
+* **ui:** merge changelog and previous release tabs ([717aaeb](https://github.com/dhis2/app-hub/commit/717aaeb81a18266c3eb8c24801f53451d71e6e72))
+* update latest updates text ([6e8160a](https://github.com/dhis2/app-hub/commit/6e8160a0e1a2ef4009f6f714c0cc914097589d42))
+
+
+### Features
+
+* implement tabbed app view design [not finished] ([e420222](https://github.com/dhis2/app-hub/commit/e42022283b71aa78ab9aa1f6795d48c110e52d48))
+* view changes between app versions ([921cc45](https://github.com/dhis2/app-hub/commit/921cc45fcbbd5646d313dae66409d89a9dd8382f))
+
 ## [2.35.1](https://github.com/dhis2/app-hub/compare/v2.35.0...v2.35.1) (2024-12-17)
 
 
