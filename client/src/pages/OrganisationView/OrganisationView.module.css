@@ -1,6 +1,6 @@
 .card {
     display: block !important;
-    max-width: 680px;
+    max-width: 80%;
     margin: auto;
     padding: var(--spacers-dp16);
 }

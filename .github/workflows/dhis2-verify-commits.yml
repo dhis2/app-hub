@@ -32,6 +32,14 @@ jobs:
               uses: codecov/codecov-action@v4.0.1
               with:
                   token: ${{ secrets.CODECOV_TOKEN }}
+            - name: SonarQube Scan
+              uses: SonarSource/sonarqube-scan-action@v4
+              with:
+                  projectBaseDir: client/src
+                  args: >
+                      -X
+              env:
+                  SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
     lint-pr-title:
         runs-on: ubuntu-latest
         steps:

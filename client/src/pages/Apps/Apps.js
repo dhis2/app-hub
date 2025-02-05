@@ -48,6 +48,7 @@ const Apps = () => {
         query: withDefault(StringParam, ''),
         page: withDefault(NumberParam, 1),
     })
+
     const { channels, types, dhisVersion, query, page } = queryParams
     const [debouncedQuery] = useDebounce(query, 300)
     const setChannels = (channels) => {
@@ -78,12 +79,16 @@ const Apps = () => {
         [channels, types, dhisVersion, debouncedQuery, page]
     )
     const { data, error } = useQuery('apps', params)
+
+    const { data: organisations } = useQuery('organisations-with-apps')
+
     const apps = data?.result
 
     return (
         <div className={styles.container}>
             <div className={styles.filters}>
                 <Filters
+                    organisations={organisations}
                     channels={appChannelToDisplayName}
                     channelsFilter={channels}
                     onChannelsFilterChange={setChannels}

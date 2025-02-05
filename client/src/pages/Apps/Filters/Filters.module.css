@@ -30,3 +30,41 @@
     margin: 0;
     max-width: 180px;
 }
+
+.organisationLinkWrapper {
+    margin-bottom: var(--spacers-dp4);
+    max-width: 80%;
+    font-size: 14px;
+}
+
+.organisationLink {
+    text-decoration: none;
+}
+
+.organisationLink:hover,
+.organisationLink:focus {
+    text-decoration: underline;
+}
+
+.organisationLink:hover .organisationAppCount,
+.organisationLink:focus .organisationAppCount {
+    text-decoration: none;
+}
+
+.organisationAppCount {
+    text-decoration: none;
+    font-size: 0.8em;
+    color:var(--colors-grey800);
+}
+
+.showMoreLink {
+    display: flex;
+    align-items: center;
+    font-size: 0.9em;
+    cursor: pointer;
+    color:var(--colors-grey800);
+}
+
+.showMoreLink:hover {
+    text-decoration: underline;
+}

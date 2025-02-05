@@ -71,6 +71,24 @@ module.exports = [
     },
     {
         method: 'GET',
+        path: '/v2/organisations-with-apps',
+        config: {
+            auth: false,
+            tags: ['api', 'v2'],
+            cache: {
+                expiresIn: 24 * 3600 * 1000,
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { rows: orgs } = await Organisation.getOrganisationsWithApps(
+                db
+            )
+            return orgs
+        },
+    },
+    {
+        method: 'GET',
         path: '/v2/organisations/{orgIdOrSlug}',
         config: {
             auth: 'token',
