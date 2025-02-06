@@ -20,6 +20,7 @@ import { history } from './utils/history'
 
 import './styles/auth0-overrides.css'
 import './styles/styles.css'
+import AppViewTabs from './pages/AppView/AppViewTabs'
 
 const AppHub = () => (
     <ReduxProvider store={store}>
@@ -32,34 +33,54 @@ const AppHub = () => (
                     <AlertsProvider>
                         <CssReset />
                         <CssVariables colors spacers />
-                        <Header />
-                        <main className={styles.main}>
-                            <Switch>
-                                <Route exact path="/" component={Apps} />
-                                <Route path="/app/:appId" component={AppView} />
-                                <Route
-                                    path="/organisation/:organisationSlug/view"
-                                    component={OrganisationView}
-                                />
-                                <ProtectedRoute
-                                    path="/user"
-                                    auth={Auth}
-                                    component={UserView}
-                                />
-                                <ProtectedRoute
-                                    path="/verify/org/callback"
-                                    auth={Auth}
-                                    component={OrganisationInvitationCallback}
-                                />
-                                <Route
-                                    exact
-                                    path="/verify/org"
-                                    component={OrganisationInvitation}
-                                />
-                                {/* No-match route - redirect to index */}
-                                <Route render={() => <Redirect to="/" />} />
-                            </Switch>
-                        </main>
+                        <Switch>
+                            <Route
+                                exact
+                                path="/static/app/:appId"
+                                component={AppViewTabs}
+                            />
+                            <>
+                                <Header />
+                                <main className={styles.main}>
+                                    <Switch>
+                                        <Route
+                                            exact
+                                            path="/"
+                                            component={Apps}
+                                        />
+                                        <Route
+                                            path="/app/:appId"
+                                            component={AppView}
+                                        />
+                                        <Route
+                                            path="/organisation/:organisationSlug/view"
+                                            component={OrganisationView}
+                                        />
+                                        <ProtectedRoute
+                                            path="/user"
+                                            auth={Auth}
+                                            component={UserView}
+                                        />
+                                        <ProtectedRoute
+                                            path="/verify/org/callback"
+                                            auth={Auth}
+                                            component={
+                                                OrganisationInvitationCallback
+                                            }
+                                        />
+                                        <Route
+                                            exact
+                                            path="/verify/org"
+                                            component={OrganisationInvitation}
+                                        />
+                                        {/* No-match route - redirect to index */}
+                                        <Route
+                                            render={() => <Redirect to="/" />}
+                                        />
+                                    </Switch>
+                                </main>
+                            </>
+                        </Switch>
                     </AlertsProvider>
                 </QueryParamProvider>
             </Router>
