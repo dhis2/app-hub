@@ -19,26 +19,26 @@
 .appCardHeader {
     display: grid;
     grid-template-columns: 72px auto 267px;
-    grid-gap: var(--spacers-dp12);
+    grid-gap: var(--spacers-dp16);
+    padding: 40px var(--spacers-dp24) var(--spacers-dp4) var(--spacers-dp24);
 }
 
 .appCardName {
     font-size: 24px;
     font-weight: 700;
-    margin-top: var(--spacers-dp8);
-    margin-bottom: 6px;
+    margin: var(--spacers-dp8) 0;
 }
 
 .appTags {
     flex-direction: row;
     display: flex;
     align-items: center;
-    gap: var(--spacers-dp16);
+    gap: var(--spacers-dp24);
 }
 
 .tagWithIcon {
     display: flex;
-    gap: var(--spacers-dp4);
+    gap: 6px;
     font-size: 16px;
     color: var(--colors-grey800);
 }
@@ -88,14 +88,14 @@
 }
 
 .latestVersionDescription {
-    margin-top: var(--spacers-dp8);
-    margin-bottom: var(--spacers-dp8);
+    margin-top: var(--spacers-dp12);
+    margin-bottom: var(--spacers-dp4);
 }
 
 .latestVersionDescription span {
     display: block;
     margin-bottom: 2px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--colors-grey700);
 }
 

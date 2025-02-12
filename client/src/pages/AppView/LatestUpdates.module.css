@@ -4,7 +4,8 @@
 
 .latestUpdates {
     padding: var(--spacers-dp16);
-    background-color: var(--colors-blue100);
+    background-color: var(--colors-blue050);
+    border-radius: 5px;
 }
 
 .latestUpdatesHeader {
@@ -24,12 +25,13 @@
 .versionList {
     list-style: none;
     padding: 0;
-    font-size: 0.8rem;
+    font-size: 0.875rem;
 }
 
 .latestUpdatesVersionHeading {
-    font-size: 1.1em;
-    font-weight: bold;
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
 }
 
 .changeSummary :global(ul) {
@@ -38,6 +40,6 @@
 }
 
 .changeSummary :global(h3) {
-    font-size: 0.9em;
-    margin-bottom: 0.5em;
+    font-size: 1em;
+    margin: 0.5rem 0.25rem;
 }
