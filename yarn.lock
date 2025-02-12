@@ -5369,7 +5369,7 @@ cli-width@^4.1.0:
   integrity sha512-ouuZd4/dm2Sw5Gmqy6bGyNNNe1qt9RpmxveLSO7KcgsTnU7RXfsw+/bukWGo1abgBiMAic068rclZsO4IWmmxQ==
 
 "client@file:/home/runner/work/app-hub/app-hub/client":
-  version "2.36.0"
+  version "2.36.1"
   resolved "file:client"
   dependencies:
     "@auth0/auth0-react" "^1.6.0"
@@ -13228,7 +13228,7 @@ serve-static@1.16.2:
     send "0.19.0"
 
 "server@file:/home/runner/work/app-hub/app-hub/server":
-  version "2.36.0"
+  version "2.36.1"
   resolved "file:server"
   dependencies:
     "@hapi/boom" "^10.0.1"
@@ -14412,7 +14412,7 @@ toidentifier@1.0.1:
   integrity sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==
 
 "tools@file:/home/runner/work/app-hub/app-hub/tools":
-  version "2.36.0"
+  version "2.36.1"
   resolved "file:tools"
   dependencies:
     dotenv "^10.0.0"

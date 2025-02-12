@@ -1,3 +1,10 @@
+## [2.36.1](https://github.com/dhis2/app-hub/compare/v2.36.0...v2.36.1) (2025-02-12)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([c356e6c](https://github.com/dhis2/app-hub/commit/c356e6c86a5b704f1e839657920e6abd6e9a7212))
+
 # [2.36.0](https://github.com/dhis2/app-hub/compare/v2.35.1...v2.36.0) (2025-02-05)
 
 
