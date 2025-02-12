@@ -77,6 +77,7 @@ const HeaderSection = ({
                         <Button primary>Download latest version</Button>
                     </a>
                     <Button
+                        secondary
                         onClick={() => {
                             history.push('?tab=previous-releases')
                         }}
