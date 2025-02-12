@@ -20,9 +20,8 @@
 .description {
     margin-top: var(--spacers-dp8);
     margin-bottom: var(--spacers-dp8);
-
     color: var(--colors-grey700);
-    font-size: 0.7em;
+    font-size: 0.875em;
 }
 .description {
     color: var(--colors-grey900);
