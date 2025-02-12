@@ -73,7 +73,7 @@ module.exports = [
         method: 'GET',
         path: '/v2/organisations/{orgIdOrSlug}',
         config: {
-            auth: 'token',
+            auth: { strategy: 'token', mode: 'optional' },
             validate: {
                 params: Joi.object({
                     orgIdOrSlug: Joi.string().required(),
@@ -89,7 +89,13 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { orgIdOrSlug } = request.params
-            const { includeApps, includeUsers = true } = request.query
+            const { includeApps } = request.query
+            let { includeUsers = true } = request.query
+
+            const userId = request?.auth?.credentials?.userId
+            if (!userId) {
+                includeUsers = false
+            }
 
             const isUuid =
                 Joi.string().uuid().validate(orgIdOrSlug).error === undefined
