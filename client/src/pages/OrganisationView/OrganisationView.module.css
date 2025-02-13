@@ -32,7 +32,7 @@
 .description {
     color: var(--colors-grey900);
     line-height: 1.6em;
-    margin-block-end: var(--spacers-dp24); 
+    margin-block-end: var(--spacers-dp24);
 }
 
 .flex {
