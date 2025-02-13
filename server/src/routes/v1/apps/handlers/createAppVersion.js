@@ -78,7 +78,7 @@ module.exports = {
             isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         if (!userCanEditApp) {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
 
         const versionPayload = request.payload.version
