@@ -28,6 +28,10 @@
     font-size: 0.875rem;
 }
 
+.versionList > li:not(:last-of-type) {
+    margin-block-end: var(--spacers-dp24);
+}
+
 .latestUpdatesVersionHeading {
     font-size: 1rem;
     font-weight: 700;
