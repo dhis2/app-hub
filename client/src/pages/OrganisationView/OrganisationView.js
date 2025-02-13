@@ -29,9 +29,9 @@ const OrganisationView = ({ match }) => {
                     </div>
                     <div className={styles.createdAt}>
                         <span>{organisation?.apps?.length} apps</span>
-                        <span> | </span>
+                        <span> · </span>
                         <span>
-                            profile created{' '}
+                            Profile created{' '}
                             {relativeTimeFormat(
                                 organisation?.createdAt ?? Date.now()
                             )}
