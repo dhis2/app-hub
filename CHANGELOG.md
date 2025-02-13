@@ -70,6 +70,30 @@
 * implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
 * view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
 
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
 ## [2.36.3](https://github.com/dhis2/app-hub/compare/v2.36.2...v2.36.3) (2025-02-13)
 
 
