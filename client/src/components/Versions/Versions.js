@@ -43,11 +43,17 @@ const Versions = ({
     renderDeleteVersionButton,
     showDownloadCount,
     changelogData,
+    onInstall,
+    compareWithVersion,
 }) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
-    const [dhisVersionFilter, setDhisVersionFilter] = useState('-1')
+    const [dhisVersionFilter, setDhisVersionFilter] = useState(
+        compareWithVersion ?? '-1'
+    )
+
+    console.log('>>>>dhis', dhisVersionFilter)
     const params = useMemo(
         () => ({
             pageSize: 5,
@@ -112,6 +118,7 @@ const Versions = ({
                     showDownloadCount={showDownloadCount}
                     appId={appId}
                     changelogData={changelogData}
+                    onInstall={onInstall}
                 />
             ) : (
                 <em className={styles.noVersions}>

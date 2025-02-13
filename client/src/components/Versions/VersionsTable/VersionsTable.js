@@ -34,6 +34,7 @@ const VersionsTable = ({
     renderDeleteVersionButton,
     showDownloadCount,
     changelogData,
+    onInstall,
 }) => {
     const getDownloadUrl = useCreateGetDownloadUrl()
 
@@ -84,6 +85,18 @@ const VersionsTable = ({
                                 {renderDeleteVersionButton &&
                                     renderDeleteVersionButton(version)}
                             </div>
+                            {onInstall && (
+                                <div>
+                                    <a
+                                        className={styles.link}
+                                        href="#"
+                                        onClick={() => onInstall(version)}
+                                        tabIndex="-1"
+                                    >
+                                        Install
+                                    </a>
+                                </div>
+                            )}
                         </div>
 
                         <div className={styles.changeSummary}>
