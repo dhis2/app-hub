@@ -1,3 +1,12 @@
+## [2.36.2](https://github.com/dhis2/app-hub/compare/v2.36.1...v2.36.2) (2025-02-13)
+
+
+### Bug Fixes
+
+* app card hover state ([a171505](https://github.com/dhis2/app-hub/commit/a17150503a2d6f385964040d1d3cccfb87efac2a))
+* app view design changes ([5b8b454](https://github.com/dhis2/app-hub/commit/5b8b45408a4a12261be5352d212e7fc97249a600))
+* organisation view design changes ([19daea8](https://github.com/dhis2/app-hub/commit/19daea8ee4c245cd61a968548dffa99e6c77fcdb))
+
 ## [2.36.1](https://github.com/dhis2/app-hub/compare/v2.36.0...v2.36.1) (2025-02-12)
 
 
