@@ -1,7 +1,7 @@
 exports.up = async (knex) => {
     await knex.schema.table('app_version', (table) => {
         table.text('change_summary').nullable()
-        table.jsonb('d2config').nullable().notNullable().default('{}')
+        table.jsonb('d2config').notNullable().defaultTo('{}')
     })
     await knex.schema.table('app', (table) => {
         table.text('changelog').nullable()

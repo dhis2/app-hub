@@ -38,13 +38,12 @@ const def = Joi.object().keys({
     versions: Joi.array().items(Version).min(1),
 
     hasPlugin: Joi.boolean().allow(null, false),
-    hasChangelog: Joi.boolean().allow(null, false),
-
-    pluginType: Joi.string().allow(null),
 
     // only indicating if there is a changelog or not here
     // to avoid addding a masssive changelog to the payload
     hasChangelog: Joi.boolean().allow(null, false),
+
+    pluginType: Joi.string().allow(null),
 })
 
 module.exports = {
