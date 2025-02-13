@@ -1,3 +1,11 @@
+## [2.36.3](https://github.com/dhis2/app-hub/compare/v2.36.2...v2.36.3) (2025-02-13)
+
+
+### Bug Fixes
+
+* latest updates version spacing ([8787dda](https://github.com/dhis2/app-hub/commit/8787dda606b583e82047c345b217d4b9c8d2a22c))
+* organisation page styles ([7888b4c](https://github.com/dhis2/app-hub/commit/7888b4c09fd974eadcc3a790b49486175119cdca))
+
 ## [2.36.2](https://github.com/dhis2/app-hub/compare/v2.36.1...v2.36.2) (2025-02-13)
 
 
