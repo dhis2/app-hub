@@ -1,18 +1,25 @@
 import { Tab, TabBar, hasValue, Divider, Label, Help } from '@dhis2/ui'
+import cx from 'classnames'
 import PropTypes from 'prop-types'
 import { useState } from 'react'
 import { useField } from 'react-final-form'
 import AppDescription from '../../components/AppDescription/AppDescription'
-import styles from './UserAppEdit.module.css'
 import MarkdownEditor from '../../components/MarkdownEditor/MarkdownEditor'
-import cx from 'classnames'
+import styles from './UserAppEdit.module.css'
 
 const tabs = {
     WRITE: 'WRITE',
     PREVIEW: 'PREVIEW',
 }
 
-const DescriptionEditor = ({ description }) => {
+const DescriptionEditor = ({
+    description,
+    label = 'App description',
+    name,
+    placeholder,
+    helpText,
+    required = true,
+}) => {
     const [selectedTab, setSelectedTab] = useState(tabs.WRITE)
 
     const handleSelectTab = (tab, _, event) => {
@@ -23,7 +30,7 @@ const DescriptionEditor = ({ description }) => {
 
     return (
         <div className={styles.descriptionContainer}>
-            <Label required>App description</Label>
+            <Label required={required}>{label}</Label>
             <TabBar>
                 <Tab
                     type={'button'}
@@ -42,13 +49,15 @@ const DescriptionEditor = ({ description }) => {
 
             <WriteContent
                 description={description}
+                placeholder={placeholder}
                 hidden={selectedTab !== tabs.WRITE}
+                name={name}
+                helpText={helpText}
             />
-            {selectedTab === tabs.PREVIEW && <PreviewContent />}
+            {selectedTab === tabs.PREVIEW && <PreviewContent name={name} />}
             <Help className={styles.helpText}>
-                A good app description helps users of the App Hub quickly
-                understand what the purpose of an app is and any requirements to
-                using it.
+                {helpText ??
+                    'A good app description helps users of the App Hub quickly understand what the purpose of an app is and any requirements to using it.'}
             </Help>
         </div>
     )
@@ -56,16 +65,21 @@ const DescriptionEditor = ({ description }) => {
 
 DescriptionEditor.propTypes = {
     description: PropTypes.string,
+    helpText: PropTypes.string,
+    label: PropTypes.string,
+    name: PropTypes.string,
+    placeholder: PropTypes.string,
+    required: PropTypes.bool,
 }
 
-const WriteContent = ({ description, hidden }) => {
+const WriteContent = ({ description, name, placeholder, hidden }) => {
     return (
         <div className={cx(styles.writeContent, { [styles.hidden]: hidden })}>
             <MarkdownEditor
-                name="description"
+                name={name ?? 'description'}
                 initialValue={description}
                 validate={hasValue}
-                placeholder={'What is the purpose of this app?'}
+                placeholder={placeholder ?? 'What is the purpose of this app?'}
                 required
             />
         </div>
@@ -74,12 +88,15 @@ const WriteContent = ({ description, hidden }) => {
 
 WriteContent.propTypes = {
     description: PropTypes.string,
+    hidden: PropTypes.bool,
+    name: PropTypes.string,
+    placeholder: PropTypes.string,
 }
 
-const PreviewContent = () => {
+const PreviewContent = ({ name = 'description' }) => {
     const {
         input: { value },
-    } = useField('description')
+    } = useField(name)
 
     return (
         <div className={styles.previewContent}>
@@ -89,4 +106,7 @@ const PreviewContent = () => {
     )
 }
 
+PreviewContent.propTypes = {
+    name: PropTypes.string,
+}
 export default DescriptionEditor

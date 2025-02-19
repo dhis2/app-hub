@@ -9,5 +9,6 @@ module.exports = Joi.object().keys({
     id: Joi.string().guid({ version: 'uuidv4' }).required(),
     downloadUrl: Joi.string().uri().allow(''),
     demoUrl: Joi.string().uri().allow(''),
+    changeSummary: Joi.string().allow(null, ''),
     channel: Joi.string().required(),
 })

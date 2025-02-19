@@ -10,10 +10,10 @@ const paramsSchema = joi
         userId: joi.string().uuid().required(),
         appId: joi.string().uuid().required(),
         demoUrl: joi.string().uri().allow('', null),
+        changeSummary: joi.string().allow('', null),
         sourceUrl: joi.string().uri().allow('', null),
         version: joi.string().allow(''),
         d2config: joi.string().allow('', null),
-        change_summary: joi.string().allow('', null),
     })
     .options({ allowUnknown: true })
 
@@ -30,6 +30,7 @@ const paramsSchema = joi
  * @param {number} params.userId User id
  * @param {number} params.appId App id
  * @param {string} params.demoUrl URL where the app can be seen or tested
+ * @param {string} params.changeSummary The change summary of the version to be created
  * @param {string} params.sourceUrl URL where to find the source, for example github
  * @param {string} params.version A version for the app version to create for example normally something like 1.2 or 1.4.5
  * @param {object} knex DB instance of knex, or transaction
@@ -43,7 +44,15 @@ const createAppVersion = async (params, knex) => {
         throw paramsValidation.error
     }
 
-    const { userId, appId, demoUrl, sourceUrl, version, d2config } = params
+    const {
+        userId,
+        appId,
+        demoUrl,
+        changeSummary,
+        sourceUrl,
+        version,
+        d2config,
+    } = params
     debug('got params: ', params)
 
     try {
@@ -57,6 +66,7 @@ const createAppVersion = async (params, knex) => {
                 created_at: knex.fn.now(),
                 created_by_user_id: userId,
                 demo_url: demoUrl || '',
+                change_summary: changeSummary,
                 source_url: sourceUrl || '',
                 version: version || '',
                 d2config,
@@ -68,13 +78,14 @@ const createAppVersion = async (params, knex) => {
             userId,
             appId,
             demoUrl,
+            changeSummary,
             sourceUrl,
             version,
             d2config,
         }
     } catch (err) {
         throw new Error(
-            `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${sourceUrl}, ${version}. ${err.message}`
+            `Could not create appversion for appid: ${appId}, ${userId}, ${demoUrl}, ${changeSummary}, ${sourceUrl}, ${version}. ${err.message}`
         )
     }
 }

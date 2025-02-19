@@ -135,6 +135,9 @@ const DetailsCard = ({ app, mutate }) => {
             <Divider />
             <Link to={`/user/app/${app.id}/edit`} tabIndex="-1">
                 <Button>Edit app details</Button>
+            </Link>{' '}
+            <Link to={`/app/${app.id}`} tabIndex="-1">
+                <Button>Go to app</Button>
             </Link>
         </Card>
     )

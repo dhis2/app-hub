@@ -43,6 +43,7 @@ const Versions = ({
     renderDeleteVersionButton,
     showDownloadCount,
     changelogData,
+    userCanEditApp,
 }) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
@@ -107,6 +108,7 @@ const Versions = ({
             />
             {versions.length > 0 ? (
                 <VersionsTable
+                    userCanEditApp={userCanEditApp}
                     versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                     showDownloadCount={showDownloadCount}

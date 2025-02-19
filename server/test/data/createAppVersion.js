@@ -52,7 +52,7 @@ describe('@data::createAppVersion', () => {
             )
         ).to.reject(
             Error,
-            `Could not create appversion for appid: 00000000-0000-0000-0000-000000000000, ${users[0].id}, undefined, undefined, undefined. Invalid appId, app does not exist.`
+            `Could not create appversion for appid: 00000000-0000-0000-0000-000000000000, ${users[0].id}, undefined, undefined, undefined, undefined. Invalid appId, app does not exist.`
         )
     })
 

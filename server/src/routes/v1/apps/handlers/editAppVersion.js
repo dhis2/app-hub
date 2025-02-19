@@ -54,6 +54,7 @@ module.exports = {
                     maxDhisVersion,
                     minDhisVersion,
                     demoUrl,
+                    changeSummary,
                     version,
                     channel,
                 } = request.payload
@@ -64,6 +65,7 @@ module.exports = {
                         maxDhisVersion,
                         minDhisVersion,
                         demoUrl,
+                        changeSummary,
                         version,
                         channel,
                         userId: currentUser.id,
