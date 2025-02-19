@@ -18,6 +18,7 @@ const CreateModelAppData = Joi.object().keys({
         minDhisVersion: Joi.string(),
         maxDhisVersion: Joi.string().allow(''),
         demoUrl: Joi.string().uri().allow(''),
+        changeSummary: Joi.string().allow(null, ''),
         channel: Joi.string(),
     }),
     coreApp: Joi.bool(),

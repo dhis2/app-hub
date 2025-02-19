@@ -8,10 +8,11 @@ import {
     Tab,
     IconUser16,
     IconTerminalWindow16,
+    IconEdit16,
 } from '@dhis2/ui'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation, Link } from 'react-router-dom'
 import PluginTag from '../../components/PluginTag/PluginTag'
 import styles from './AppView.module.css'
 import { LatestUpdates } from './LatestUpdates'
@@ -25,6 +26,7 @@ import Versions from 'src/components/Versions/Versions'
 import { renderDhisVersionsCompatibility } from 'src/lib/render-dhis-versions-compatibility'
 
 const HeaderSection = ({
+    app,
     appName,
     appDeveloper,
     appType,
@@ -63,6 +65,16 @@ const HeaderSection = ({
                             hasPlugin={hasPlugin}
                             pluginType={pluginType}
                         />
+                    )}
+                    {app.userCanEditApp && (
+                        <Link
+                            to={`/user/app/${app.id}`}
+                            className={styles.editLink}
+                            tabIndex="-1"
+                        >
+                            <IconEdit16 />
+                            <span>Edit app</span>
+                        </Link>
                     )}
                 </div>
             </div>
@@ -208,6 +220,7 @@ const AppView = ({ match }) => {
     return (
         <Card className={styles.appCard}>
             <HeaderSection
+                app={app}
                 appName={app.name}
                 appDeveloper={appDeveloper}
                 organisationSlug={app.developer?.organisation_slug}
@@ -262,6 +275,7 @@ const AppView = ({ match }) => {
                             appId={appId}
                             hasChangelog={app.hasChangelog}
                             changelogData={changelogByVersion}
+                            userCanEditApp={app?.userCanEditApp}
                         />
                     </>
                 )}

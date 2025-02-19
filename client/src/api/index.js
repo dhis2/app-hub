@@ -99,7 +99,7 @@ export const usePagination = (
 }
 
 export function getUser() {
-    return fromApi('v1/users/me', true)
+    return fromApi('v2/me', true)
 }
 
 export function setAppApproval(appId, status) {
@@ -234,6 +234,7 @@ export function createUploadVersionOptions(data) {
         maxDhisVersion: version.maxDhisVersion || '',
         demoUrl: version.demoUrl || null,
         channel: version.channel,
+        changeSummary: version.changeSummary || null,
     }
     const dataFile = data.file
     const form = new FormData()
