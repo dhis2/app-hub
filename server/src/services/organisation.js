@@ -4,16 +4,19 @@ const Organisation = require('../models/v2/Organisation')
 const { NotFoundError } = require('../utils/errors')
 const { slugify } = require('../utils/slugify')
 
-const getOrganisationQuery = db =>
-    db('organisation').select(
-        'organisation.id',
-        'organisation.name',
-        'organisation.email',
-        'organisation.slug',
-        'organisation.created_by_user_id',
-        'organisation.updated_at',
-        'organisation.created_at'
-    )
+const getOrganisationQuery = (db) =>
+    db('organisation')
+        .select(
+            'organisation.id',
+            'organisation.name',
+            'organisation.email',
+            'organisation.slug',
+            'organisation.description',
+            'organisation.created_by_user_id',
+            'organisation.updated_at',
+            'organisation.created_at'
+        )
+        .orderBy('organisation.name')
 
 const checkSlugExists = async (slug, knex) => {
     const slugMatch = await knex('organisation')
@@ -110,6 +113,25 @@ const findOneBySlug = async (slug, includeUsers = false, knex) => {
     return findOneByColumn(slug, { columnName: 'slug', includeUsers }, knex)
 }
 
+const getAppsInOrganisation = async (orgSlug, knex) => {
+    return knex('apps_view')
+        .innerJoin(
+            'organisation',
+            'organisation.slug',
+            'apps_view.organisation_slug'
+        )
+        .distinct('app_id')
+        .select(
+            'apps_view.*',
+            'apps_view.description',
+            'apps_view.name',
+            // 'apps_view.*',
+            'apps_view.has_plugin as hasPlugin',
+            'organisation.name as organisation_name'
+        )
+        .where('organisation_slug', orgSlug)
+}
+
 const getUsersInOrganisation = async (orgId, knex) => {
     const users = await knex('users')
         .select('users.id', 'users.email', 'users.name')
@@ -198,6 +220,7 @@ module.exports = {
     find,
     findOne,
     findOneBySlug,
+    getAppsInOrganisation,
     addUserById,
     create,
     update,

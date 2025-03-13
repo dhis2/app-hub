@@ -5,13 +5,40 @@ on:
         types: ['opened', 'edited', 'reopened', 'synchronize']
 
 jobs:
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 20
+                  cache: 'yarn'
+            - run: yarn install --frozen-lockfile
+            - id: lint
+              run: yarn lint
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: 20
+                  cache: 'yarn'
+            - run: yarn install --frozen-lockfile
+            - run: yarn test:client --coverage
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v4.0.1
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
     lint-pr-title:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 20
                   cache: 'yarn'
             - run: yarn install --frozen-lockfile
             - id: commitlint
@@ -28,7 +55,7 @@ jobs:
                   fetch-depth: 0
             - uses: actions/setup-node@v3
               with:
-                  node-version: 16
+                  node-version: 20
                   cache: 'yarn'
             - run: yarn install --frozen-lockfile
             - id: commitlint

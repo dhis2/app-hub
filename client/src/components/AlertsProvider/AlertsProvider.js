@@ -7,12 +7,12 @@ let alertId = 0
 
 const AlertsProvider = ({ children }) => {
     const [alerts, setAlerts] = useState([])
-    const removeAlert = id => {
-        setAlerts(alerts => alerts.filter(alert => alert.id !== id))
+    const removeAlert = (id) => {
+        setAlerts((alerts) => alerts.filter((alert) => alert.id !== id))
     }
-    const addAlert = alert => {
+    const addAlert = (alert) => {
         const id = alertId++
-        setAlerts(alerts => [
+        setAlerts((alerts) => [
             ...alerts,
             {
                 ...alert,

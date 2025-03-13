@@ -9,7 +9,7 @@ const [
     canaryOnlyDashboardWidgetVersions,
 ] = appVersions
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
     console.log('Seeding channels')
 
     await knex('app_channel').del()

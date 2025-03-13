@@ -16,7 +16,12 @@
     margin-right: var(--spacers-dp8);
 }
 
-.createdAt {
+.description {
+    font-size: 0.8em;
+}
+
+.createdAt,
+.description {
     margin-top: var(--spacers-dp8);
     color: var(--colors-grey800);
 }

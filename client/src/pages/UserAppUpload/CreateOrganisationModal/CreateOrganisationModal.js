@@ -25,7 +25,7 @@ const CreateOrganisationModal = ({
     const handleSubmit = async ({ name, email }) => {
         try {
             const organisation = await api.addOrganisation({ name, email })
-            mutate(organisations => [...organisations, organisation])
+            mutate((organisations) => [...organisations, organisation])
             // Ensure data returned by useQuery in parent component has been
             // updated to include new organisation before setting select input
             // value

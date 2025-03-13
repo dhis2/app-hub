@@ -12,3 +12,49 @@
 .channelNameCell {
     color: var(--colors-grey700);
 }
+
+.changeSummary :global(a),
+a.link {
+    text-decoration: underline;
+}
+
+a.link:hover,
+.changeSummary :global(a):hover,
+a.link:focus,
+.changeSummary :global(a):focus {
+    text-decoration: none;
+}
+
+.versionList {
+    list-style: none;
+    padding: 0;
+}
+
+.versionList :global(li) {
+    /* margin-bottom: var(--spacers-dp36); */
+}
+.versionHeading {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+.versionSubheading {
+    display: flex;
+    gap: var(--spacers-dp12);
+    color: var(--colors-grey700);
+    font-size: 0.8em;
+}
+
+.versionDivider {
+    margin-top: var(--spacers-dp16) !important;
+    margin-bottom: var(--spacers-dp16) !important;
+}
+
+.changeSummary :global(ul) {
+    font-size: 0.8em;
+    list-style: disc;
+    padding-inline-start: var(--spacers-dp24);
+}
+.changeSummary :global(h3) {
+    font-size: 0.8em;
+    margin-bottom: 0.5em;
+}

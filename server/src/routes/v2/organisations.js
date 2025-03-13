@@ -9,9 +9,13 @@ const {
     getCurrentUserFromRequest,
 } = require('../../security')
 const { Organisation } = require('../../services')
+const { getAppsInOrganisation } = require('../../services/organisation')
 const Joi = require('../../utils/CustomJoi')
 // const debug = require('debug')('apphub:server:routes:handlers:organisations')
 const getServerUrl = require('../../utils/getServerUrl')
+const {
+    convertAppsToApiV1Format,
+} = require('../v1/apps/formatting/convertAppsToApiV1Format')
 
 module.exports = [
     {
@@ -22,7 +26,7 @@ module.exports = [
             response: {
                 schema: Joi.array()
                     .items(
-                        OrgModel.externalDefinition.fork('users', s =>
+                        OrgModel.externalDefinition.fork('users', (s) =>
                             s.forbidden()
                         )
                     )
@@ -69,7 +73,7 @@ module.exports = [
         method: 'GET',
         path: '/v2/organisations/{orgIdOrSlug}',
         config: {
-            auth: 'token',
+            auth: { strategy: 'token', mode: 'optional' },
             validate: {
                 params: Joi.object({
                     orgIdOrSlug: Joi.string().required(),
@@ -85,19 +89,35 @@ module.exports = [
         handler: async (request, h) => {
             const { db } = h.context
             const { orgIdOrSlug } = request.params
+            const { includeApps } = request.query
+            let { includeUsers = true } = request.query
+
+            const userId = request?.auth?.credentials?.userId
+            if (!userId) {
+                includeUsers = false
+            }
 
             const isUuid =
                 Joi.string().uuid().validate(orgIdOrSlug).error === undefined
 
             let organisation
             if (isUuid) {
-                organisation = await Organisation.findOne(orgIdOrSlug, true, db)
+                organisation = await Organisation.findOne(
+                    orgIdOrSlug,
+                    includeUsers,
+                    db
+                )
             } else {
                 organisation = await Organisation.findOneBySlug(
                     orgIdOrSlug,
-                    true,
+                    includeUsers,
                     db
                 )
+            }
+
+            if (includeApps) {
+                const apps = await getAppsInOrganisation(orgIdOrSlug, db)
+                organisation.apps = convertAppsToApiV1Format(apps, request)
             }
 
             return organisation
@@ -128,7 +148,7 @@ module.exports = [
             const { id: userId } = await getCurrentUserFromRequest(request, db)
             //TODO: should everyone be able to create new organisations?
 
-            const createOrgAndAddUser = async trx => {
+            const createOrgAndAddUser = async (trx) => {
                 const organisation = await Organisation.create(
                     {
                         userId,
@@ -159,6 +179,7 @@ module.exports = [
                     name: OrgModel.definition.extract('name'),
                     email: OrgModel.definition.extract('email'),
                     owner: OrgModel.definition.extract('owner'),
+                    description: OrgModel.definition.extract('description'),
                 }).min(1),
                 params: Joi.object({
                     orgId: OrgModel.definition.extract('id').required(),
@@ -175,7 +196,7 @@ module.exports = [
 
             const updateObj = request.payload
 
-            const updateOrganisation = async trx => {
+            const updateOrganisation = async (trx) => {
                 const organisation = await Organisation.findOne(
                     request.params.orgId,
                     false,
@@ -218,7 +239,7 @@ module.exports = [
             const { db } = h.context
             const { id } = await getCurrentUserFromRequest(request, db)
 
-            const addUserToOrganisation = async trx => {
+            const addUserToOrganisation = async (trx) => {
                 const org = await Organisation.findOne(
                     request.params.orgId,
                     true,
@@ -226,7 +247,7 @@ module.exports = [
                 )
 
                 const isManager = currentUserIsManager(request)
-                const isMember = org.users.findIndex(u => u.id === id) > -1
+                const isMember = org.users.findIndex((u) => u.id === id) > -1
                 const canAdd = org.owner === id || isMember || isManager
 
                 if (!canAdd) {
@@ -290,7 +311,7 @@ module.exports = [
 
             const userIdToRemove = request.payload.user
 
-            const removeUserFromOrganisation = async trx => {
+            const removeUserFromOrganisation = async (trx) => {
                 const org = await Organisation.findOne(
                     request.params.orgId,
                     true,
@@ -298,7 +319,7 @@ module.exports = [
                 )
 
                 const isManager = currentUserIsManager(request)
-                const isMember = org.users.findIndex(u => u.id === id) > -1
+                const isMember = org.users.findIndex((u) => u.id === id) > -1
                 const canRemove = org.owner === id || isMember || isManager
 
                 if (org.owner === userIdToRemove) {

@@ -25,10 +25,7 @@ const definition = joi
     .object()
     .keys({
         id: joi.string().guid({ version: 'uuidv4' }),
-        updatedAt: joi
-            .date()
-            .cast('number')
-            .allow(null),
+        updatedAt: joi.date().cast('number').allow(null),
         createdAt: joi.date().cast('number'),
     })
     .rename('updated_at', 'updatedAt', { ignoreUndefined: true })

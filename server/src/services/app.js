@@ -16,6 +16,7 @@ exports.create = async (
         appType,
         status,
         coreApp,
+        changelog,
     },
     db
 ) => {
@@ -26,6 +27,7 @@ exports.create = async (
             orgId: organisationId,
             appType: appType,
             coreApp,
+            changelog,
         },
         db
     )
@@ -55,6 +57,7 @@ exports.createVersionForApp = async (
         channel,
         appName,
         description,
+        d2config,
     },
     db
 ) => {
@@ -65,6 +68,7 @@ exports.createVersionForApp = async (
             sourceUrl,
             demoUrl,
             version,
+            d2config,
         },
         db
     )
@@ -115,5 +119,5 @@ exports.createMediaForApp = (
 exports.canEditApp = async (userId, appId, knex) => {
     const appsUserCanEdit = await getOrganisationAppsByUserId(userId, knex)
 
-    return appsUserCanEdit.find(app => app.app_id === appId) != null
+    return appsUserCanEdit.find((app) => app.app_id === appId) != null
 }

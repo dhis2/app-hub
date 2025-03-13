@@ -23,12 +23,8 @@ const AuthProvider = ({ children }) => (
 )
 
 const InitializeAuth = ({ children }) => {
-    const {
-        user,
-        isAuthenticated,
-        isLoading,
-        getAccessTokenSilently,
-    } = useAuth0()
+    const { user, isAuthenticated, isLoading, getAccessTokenSilently } =
+        useAuth0()
     const dispatch = useDispatch()
 
     useEffect(() => {

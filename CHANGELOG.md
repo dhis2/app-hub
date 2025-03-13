@@ -1,3 +1,205 @@
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([3b8c404](https://github.com/dhis2/app-hub/commit/3b8c404e6092607db883ab422968179049fe963d))
+* app card hover state ([d380ab4](https://github.com/dhis2/app-hub/commit/d380ab4a0bde0376de348aece705ec1813a42acc))
+* app view design changes ([5b4c47e](https://github.com/dhis2/app-hub/commit/5b4c47e897a795c0c2d28e1242efc346149ea68e))
+* bump node version in docker image ([8063c29](https://github.com/dhis2/app-hub/commit/8063c29a0915ed08819cbdf12e652f702997a33c))
+* latest updates version spacing ([3d5eca7](https://github.com/dhis2/app-hub/commit/3d5eca7c8a1eb7e9be8abec6b9db791147b5b7d9))
+* organisation page styles ([eff66f5](https://github.com/dhis2/app-hub/commit/eff66f50a19644c1e8e55a804f2ef5f94ddb4819))
+* organisation view design changes ([940ed58](https://github.com/dhis2/app-hub/commit/940ed589627be4c76afef33214ac9943936227c6))
+* **ui:** merge changelog and previous release tabs ([ca6024d](https://github.com/dhis2/app-hub/commit/ca6024d8cbbef011418056f6049a83c5c335dadc))
+* update latest updates text ([d663346](https://github.com/dhis2/app-hub/commit/d66334662b9b1ed1cb3784296c3900ed8221be29))
+* update yarn.lock ([285dca2](https://github.com/dhis2/app-hub/commit/285dca29b78963adeeab5a37b69ca0e9ac6fe3be))
+
+
+### Features
+
+* add organisation overview page ([df8e7f5](https://github.com/dhis2/app-hub/commit/df8e7f592332863a19ff1232da6faf4f7eb7a221))
+* expose plugins and changelog in the API and app ([1614ce7](https://github.com/dhis2/app-hub/commit/1614ce78b2bb279881df65a6ba407fa1a28aea2b))
+* implement tabbed app view design [not finished] ([17fec40](https://github.com/dhis2/app-hub/commit/17fec40d62ae3b393a00432bd4d1578bc1e9e52d))
+* view changes between app versions ([13f243e](https://github.com/dhis2/app-hub/commit/13f243ef119ba1e284cdb82760a0a925841e5796))
+
+## [2.36.3](https://github.com/dhis2/app-hub/compare/v2.36.2...v2.36.3) (2025-02-13)
+
+
+### Bug Fixes
+
+* latest updates version spacing ([8787dda](https://github.com/dhis2/app-hub/commit/8787dda606b583e82047c345b217d4b9c8d2a22c))
+* organisation page styles ([7888b4c](https://github.com/dhis2/app-hub/commit/7888b4c09fd974eadcc3a790b49486175119cdca))
+
+## [2.36.2](https://github.com/dhis2/app-hub/compare/v2.36.1...v2.36.2) (2025-02-13)
+
+
+### Bug Fixes
+
+* app card hover state ([a171505](https://github.com/dhis2/app-hub/commit/a17150503a2d6f385964040d1d3cccfb87efac2a))
+* app view design changes ([5b8b454](https://github.com/dhis2/app-hub/commit/5b8b45408a4a12261be5352d212e7fc97249a600))
+* organisation view design changes ([19daea8](https://github.com/dhis2/app-hub/commit/19daea8ee4c245cd61a968548dffa99e6c77fcdb))
+
+## [2.36.1](https://github.com/dhis2/app-hub/compare/v2.36.0...v2.36.1) (2025-02-12)
+
+
+### Bug Fixes
+
+* allow /organisations/:id to be called without auth token ([c356e6c](https://github.com/dhis2/app-hub/commit/c356e6c86a5b704f1e839657920e6abd6e9a7212))
+
+# [2.36.0](https://github.com/dhis2/app-hub/compare/v2.35.1...v2.36.0) (2025-02-05)
+
+
+### Bug Fixes
+
+* **ui:** merge changelog and previous release tabs ([717aaeb](https://github.com/dhis2/app-hub/commit/717aaeb81a18266c3eb8c24801f53451d71e6e72))
+* update latest updates text ([6e8160a](https://github.com/dhis2/app-hub/commit/6e8160a0e1a2ef4009f6f714c0cc914097589d42))
+
+
+### Features
+
+* implement tabbed app view design [not finished] ([e420222](https://github.com/dhis2/app-hub/commit/e42022283b71aa78ab9aa1f6795d48c110e52d48))
+* view changes between app versions ([921cc45](https://github.com/dhis2/app-hub/commit/921cc45fcbbd5646d313dae66409d89a9dd8382f))
+
+## [2.35.1](https://github.com/dhis2/app-hub/compare/v2.35.0...v2.35.1) (2024-12-17)
+
+
+### Bug Fixes
+
+* update yarn.lock ([126d001](https://github.com/dhis2/app-hub/commit/126d0013cacfb2f0fc4992ec4d4258b6d4a08a7d))
+
+# [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2024-12-16)
+
+
+### Bug Fixes
+
+* bump node version in docker image ([bad227d](https://github.com/dhis2/app-hub/commit/bad227d29991b4a266855d9f46bb8026c00973b2))
+
+
+### Features
+
+* add organisation overview page ([94b5dfb](https://github.com/dhis2/app-hub/commit/94b5dfb26b355ba0a69910623e5e1d58b65a2f7a))
+* expose plugins and changelog in the API and app ([0d0fec8](https://github.com/dhis2/app-hub/commit/0d0fec85d416d9617f6219e57e63b2e32c4b059f))
+
 # [2.34.0](https://github.com/dhis2/app-hub/compare/v2.33.1...v2.34.0) (2024-02-16)
 
 

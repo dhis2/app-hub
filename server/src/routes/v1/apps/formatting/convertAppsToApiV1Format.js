@@ -15,6 +15,10 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
 
     name: app.name,
     description: app.description || '',
+
+    hasChangelog: app.has_changelog,
+    hasPlugin: app.has_plugin,
+    pluginType: app.plugin_type,
     coreApp: app.core_app,
     versions: [],
 
@@ -23,6 +27,7 @@ const convertDbAppViewRowToAppApiV1Object = (app) => ({
         address: '',
         email: app.contact_email,
         organisation: app.organisation,
+        organisation_slug: app.organisation_slug,
     },
 
     //TODO: can we use developer_email here ? previous it was oauth token|id
@@ -88,6 +93,10 @@ const convertAll = (apps, request) => {
     const formattedApps = {}
     apps.forEach((app) => {
         let currentApp = formattedApps[app.app_id]
+
+        if (app.changelog) {
+            app.has_changelog = true
+        }
 
         if (!currentApp) {
             const v1App = convertDbAppViewRowToAppApiV1Object(app)

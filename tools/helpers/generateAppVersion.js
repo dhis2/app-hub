@@ -45,7 +45,7 @@ const zip = (name, files, path) => {
         }
         const p = Path.join(path, `${name}.zip`)
         console.log('Zipping file...')
-        zip.writeZip(p, e => {
+        zip.writeZip(p, (e) => {
             e && reject(e)
             console.log('Zipped to', p)
             resolve(zip)

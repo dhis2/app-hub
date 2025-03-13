@@ -145,7 +145,7 @@ module.exports = [
             }
 
             const { appType } = appJsonPayload
-            const app = await db.transaction(trx =>
+            const app = await db.transaction((trx) =>
                 App.create(
                     {
                         userId: currentUserId,
@@ -158,6 +158,30 @@ module.exports = [
             )
 
             return h.response(app).created(`/v2/apps/${app.id}`)
+        },
+    },
+    {
+        method: 'GET',
+        path: '/v2/apps/{appId}/changelog',
+        config: {
+            auth: false,
+            tags: ['api', 'v2'],
+            cache: {
+                expiresIn: 6 * 3600 * 1000,
+            },
+            validate: {
+                params: Joi.object({
+                    appId: Joi.string().required(),
+                }),
+            },
+        },
+        handler: async (request, h) => {
+            const { db } = h.context
+            const { appVersionService } = request.services(true)
+
+            const { appId } = request.params
+
+            return appVersionService.getChangelog(appId, db)
         },
     },
     {
@@ -252,7 +276,7 @@ module.exports = [
 
             appVersionService
                 .incrementDownloadCount(appVersion.id, db)
-                .catch(e =>
+                .catch((e) =>
                     request.logger.error('Failed to increment download', e)
                 )
 

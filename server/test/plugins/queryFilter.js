@@ -22,7 +22,7 @@ describe('QueryFilterPlugin', () => {
                     },
                 },
             },
-            handler: request => {
+            handler: (request) => {
                 const filters = request.plugins.queryFilter
                 return filters
             },
@@ -256,8 +256,7 @@ describe('QueryFilterPlugin', () => {
         it('should support rename of the key', async () => {
             const res = await server.inject({
                 method: 'GET',
-                url:
-                    '/validationFilter?name=DHIS2&owner=eq:cedb4418-2417-4e72-bfcc-35ccd0dc3e41',
+                url: '/validationFilter?name=DHIS2&owner=eq:cedb4418-2417-4e72-bfcc-35ccd0dc3e41',
             })
 
             expect(res.statusCode).to.be.equal(200)

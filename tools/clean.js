@@ -6,7 +6,7 @@ async function main() {
     const publishedAppsResponse = await request(targetUrl + '/apps')
     const appsJson = JSON.parse(publishedAppsResponse)
 
-    const deleteRequestPromises = appsJson.map(app =>
+    const deleteRequestPromises = appsJson.map((app) =>
         request.delete(`${targetUrl}/apps/${app.id}`)
     )
 

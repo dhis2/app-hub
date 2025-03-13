@@ -38,20 +38,27 @@ const useChannels = (appId) => {
     return { availableChannels, channelsFilter, setChannelsFilter }
 }
 
-const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
+const Versions = ({
+    appId,
+    renderDeleteVersionButton,
+    showDownloadCount,
+    changelogData,
+}) => {
     const { availableChannels, channelsFilter, setChannelsFilter } =
         useChannels(appId)
 
-    const [dhisVersionFilter, setDhisVersionFilter] = useState('')
+    const [dhisVersionFilter, setDhisVersionFilter] = useState('-1')
     const params = useMemo(
         () => ({
             pageSize: 5,
-            minDhisVersion: dhisVersionFilter
-                ? `lte:${dhisVersionFilter}`
-                : undefined,
-            maxDhisVersion: dhisVersionFilter
-                ? `gte:${dhisVersionFilter}`
-                : undefined,
+            minDhisVersion:
+                dhisVersionFilter != '-1'
+                    ? `lte:${dhisVersionFilter}`
+                    : undefined,
+            maxDhisVersion:
+                dhisVersionFilter != '-1'
+                    ? `gte:${dhisVersionFilter}`
+                    : undefined,
             channel: Array.from(channelsFilter).join(),
         }),
         [dhisVersionFilter, Array.from(channelsFilter).join()]
@@ -90,7 +97,7 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
     }
 
     return (
-        <div className={styles.versionsContainer}>
+        <div>
             <Filters
                 availableChannels={availableChannels}
                 channelsFilter={channelsFilter}
@@ -103,6 +110,8 @@ const Versions = ({ appId, renderDeleteVersionButton, showDownloadCount }) => {
                     versions={versions}
                     renderDeleteVersionButton={renderDeleteVersionButton}
                     showDownloadCount={showDownloadCount}
+                    appId={appId}
+                    changelogData={changelogData}
                 />
             ) : (
                 <em className={styles.noVersions}>

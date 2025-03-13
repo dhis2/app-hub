@@ -1,0 +1,40 @@
+.card {
+    display: block !important;
+    max-width: 960px;
+    margin: auto;
+    padding: var(--spacers-dp32);
+}
+
+.header {
+    margin-bottom: var(--spacers-dp16);
+}
+
+.organisationName {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    margin-right: var(--spacers-dp8);
+}
+
+.createdAt,
+.description {
+    margin-block-start: var(--spacers-dp8);
+    color: var(--colors-grey700);
+    font-size: 0.875em;
+}
+
+.createdAt {
+    display: flex;
+    gap: var(--spacers-dp8);
+    margin-block-end: var(--spacers-dp16);
+}
+
+.description {
+    color: var(--colors-grey900);
+    line-height: 1.6em;
+    margin-block-end: var(--spacers-dp24);
+}
+
+.flex {
+    display: flex;
+}

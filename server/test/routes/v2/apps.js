@@ -41,7 +41,7 @@ describe('v2/apps', () => {
     }
     const dhis2App = appsMocks[0]
 
-    const createFormForApp = app => {
+    const createFormForApp = (app) => {
         const form = new FormData()
         form.append('app', JSON.stringify(app))
         return form
@@ -79,7 +79,7 @@ describe('v2/apps', () => {
             const apps = res.result.result
             expect(apps).to.be.an.array()
             expect(apps.length).to.be.min(4) // 4 seeds
-            expect(apps.find(a => a.id === rejectedApp)).to.be.undefined()
+            expect(apps.find((a) => a.id === rejectedApp)).to.be.undefined()
         })
 
         it('should get apps-only when core=true ', async () => {
@@ -95,7 +95,7 @@ describe('v2/apps', () => {
             expect(apps).to.be.an.array()
 
             const notCore = apps.filter(
-                a => a.developer.organisation !== 'DHIS2'
+                (a) => a.developer.organisation !== 'DHIS2'
             )
 
             expect(notCore).to.have.length(0)
@@ -152,7 +152,7 @@ describe('v2/apps', () => {
 
         before(async () => {
             // create a new version to ensure file-exists
-            const promises = appsToCreate.map(async app => {
+            const promises = appsToCreate.map(async (app) => {
                 const form = await createAppVersionForm(app, {
                     version: '1.2.3',
                 })
@@ -170,7 +170,7 @@ describe('v2/apps', () => {
         })
 
         after(async () => {
-            const promises = appsToCreate.map(app => {
+            const promises = appsToCreate.map((app) => {
                 console.log(
                     'deleting app version',
                     app.createdVersionId,
@@ -183,7 +183,7 @@ describe('v2/apps', () => {
                 })
             })
 
-            const resolved = (await Promise.all(promises)).map(res =>
+            const resolved = (await Promise.all(promises)).map((res) =>
                 expect(res.statusCode).to.equal(200)
             )
         })
@@ -198,7 +198,7 @@ describe('v2/apps', () => {
             expect(result).to.be.an.array()
 
             const createdVer = result.find(
-                v => v.id === whoApp.createdVersionId
+                (v) => v.id === whoApp.createdVersionId
             )
             expect(createdVer).to.be.an.object()
 
@@ -220,7 +220,7 @@ describe('v2/apps', () => {
 
             const manifest = zip
                 .getEntries()
-                .find(e => e.entryName === 'manifest.webapp')
+                .find((e) => e.entryName === 'manifest.webapp')
             expect(manifest).to.not.be.undefined()
         })
 
@@ -235,7 +235,7 @@ describe('v2/apps', () => {
                 expect(result).to.be.an.array()
 
                 const createdVer = result.find(
-                    v => v.id === pendingApp.createdVersionId
+                    (v) => v.id === pendingApp.createdVersionId
                 )
                 expect(createdVer).to.be.an.object()
 
@@ -270,7 +270,7 @@ describe('v2/apps', () => {
                 expect(result).to.be.an.array()
 
                 const createdVer = result.find(
-                    v => v.id === pendingApp.createdVersionId
+                    (v) => v.id === pendingApp.createdVersionId
                 )
                 expect(createdVer).to.be.an.object()
 
@@ -306,7 +306,7 @@ describe('v2/apps', () => {
                 expect(result).to.be.an.array()
 
                 const createdVer = result.find(
-                    v => v.id === pendingApp.createdVersionId
+                    (v) => v.id === pendingApp.createdVersionId
                 )
                 expect(createdVer).to.be.an.object()
 

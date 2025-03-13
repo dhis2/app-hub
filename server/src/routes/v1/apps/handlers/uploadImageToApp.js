@@ -47,7 +47,7 @@ module.exports = {
 
         const userApps = await getOrganisationAppsByUserId(currentUser.id, knex)
         const canUploadMedia =
-            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         debug('isManager:', isManager)
         debug('canUploadMedia:', canUploadMedia)

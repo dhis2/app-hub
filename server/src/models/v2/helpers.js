@@ -8,10 +8,10 @@ const Joi = require('joi')
  * @returns {function(dbResult): []} - A function taking some data (may be an array or object) to be validated by the schema.
  * The function throws a ValidationError if mapping fails
  */
-const createDefaultValidator = schema => {
-    return dbResult =>
+const createDefaultValidator = (schema) => {
+    return (dbResult) =>
         Array.isArray(dbResult)
-            ? dbResult.map(v => Joi.attempt(v, schema))
+            ? dbResult.map((v) => Joi.attempt(v, schema))
             : Joi.attempt(dbResult, schema)
 }
 

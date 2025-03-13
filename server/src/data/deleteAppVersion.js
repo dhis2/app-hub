@@ -8,9 +8,7 @@ const debug = require('debug')('apphub:server:data:deleteAppVersion')
  */
 const deleteAppVersion = async (id, knex) => {
     try {
-        await knex('app_version')
-            .where('id', id)
-            .del()
+        await knex('app_version').where('id', id).del()
         debug('deleted app version', id)
     } catch (err) {
         debug(err)

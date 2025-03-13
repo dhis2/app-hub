@@ -30,16 +30,8 @@ const AppCards = ({ isLoading, error, apps }) => {
 
     return (
         <div className={styles.appCards}>
-            {apps.map(app => (
-                <AppCardItem
-                    key={app.id}
-                    id={app.id}
-                    name={app.name}
-                    developer={app.developer}
-                    type={app.appType}
-                    description={app.description}
-                    images={app.images}
-                />
+            {apps.map((app) => (
+                <AppCardItem key={app.id} {...app} />
             ))}
         </div>
     )

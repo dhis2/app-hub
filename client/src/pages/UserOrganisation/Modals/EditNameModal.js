@@ -6,6 +6,7 @@ import {
     ModalContent,
     ReactFinalForm,
     InputFieldFF,
+    TextAreaFieldFF,
     hasValue,
     composeValidators,
     email,
@@ -19,13 +20,18 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
-    const handleSubmit = async ({ name, email }) => {
+    const handleSubmit = async ({ name, email, description }) => {
         try {
-            await api.editOrganisation(organisation.id, { name, email })
+            await api.editOrganisation(organisation.id, {
+                name,
+                email,
+                description,
+            })
             mutate({
                 ...organisation,
                 name,
                 email,
+                description,
             })
             successAlert.show({
                 message: `Successfully updated organisation name to ${name}`,
@@ -64,6 +70,15 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                 className={styles.field}
                                 validate={composeValidators(hasValue, email)}
                             />
+                            <ReactFinalForm.Field
+                                required
+                                name="description"
+                                label="Organisation description"
+                                placeholder="Enter a description"
+                                component={TextAreaFieldFF}
+                                initialValue={organisation.description}
+                                className={styles.field}
+                            />
                             <ButtonStrip end>
                                 <Button onClick={onClose} disabled={submitting}>
                                     Cancel
@@ -73,7 +88,7 @@ const EditNameModal = ({ organisation, mutate, onClose }) => {
                                     primary
                                     disabled={!valid || submitting}
                                 >
-                                    Update name
+                                    Update
                                 </Button>
                             </ButtonStrip>
                         </form>

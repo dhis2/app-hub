@@ -4,7 +4,7 @@ const url = require('url')
 const request = require('request-promise-native')
 
 module.exports = async (dir, app) => {
-    const imagesDownloadPromises = app.images.map(appImage => {
+    const imagesDownloadPromises = app.images.map((appImage) => {
         const parsedUrl = url.parse(appImage.imageUrl)
         const lastIndex = parsedUrl.pathname.lastIndexOf('.')
         const fileExtension = parsedUrl.path.substring(lastIndex)
@@ -21,7 +21,7 @@ module.exports = async (dir, app) => {
                     )
                     resolve()
                 })
-                .on('error', error => {
+                .on('error', (error) => {
                     reject(error)
                 })
         })

@@ -4,28 +4,12 @@ const joi = require('joi')
 const paramsSchema = joi
     .object()
     .keys({
-        id: joi
-            .string()
-            .uuid()
-            .required(),
-        userId: joi
-            .string()
-            .uuid()
-            .required(),
-        minDhisVersion: joi
-            .string()
-            .allow(null, '')
-            .max(10),
-        maxDhisVersion: joi
-            .string()
-            .allow(null, '')
-            .max(10),
+        id: joi.string().uuid().required(),
+        userId: joi.string().uuid().required(),
+        minDhisVersion: joi.string().allow(null, '').max(10),
+        maxDhisVersion: joi.string().allow(null, '').max(10),
         version: joi.string(),
-        demoUrl: joi
-            .string()
-            .uri()
-            .allow('')
-            .max(500),
+        demoUrl: joi.string().uri().allow('').max(500),
         channel: joi.string().allow(null),
     })
     .options({ allowUnknown: true })
@@ -55,14 +39,8 @@ const updateAppVersion = async (params, knex) => {
         throw new Error('Missing parameter: knex')
     }
 
-    const {
-        id,
-        userId,
-        minDhisVersion,
-        maxDhisVersion,
-        version,
-        demoUrl,
-    } = params
+    const { id, userId, minDhisVersion, maxDhisVersion, version, demoUrl } =
+        params
 
     try {
         await knex('app_version')

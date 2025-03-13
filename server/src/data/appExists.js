@@ -7,9 +7,7 @@ const appExists = async (appId, knex) => {
     //Make sure the app exist
 
     try {
-        const app = await knex('app')
-            .select()
-            .where('id', appId)
+        const app = await knex('app').select().where('id', appId)
 
         return app && app.length > 0
     } catch (err) {

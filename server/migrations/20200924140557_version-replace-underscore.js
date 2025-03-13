@@ -1,4 +1,4 @@
-exports.up = function(knex) {
+exports.up = function (knex) {
     return knex.raw(
         `update app_version
         set version = replace(version, '_', '.')
@@ -7,6 +7,6 @@ exports.up = function(knex) {
     )
 }
 
-exports.down = function(knex) {
+exports.down = function (knex) {
     return Promise.resolve()
 }

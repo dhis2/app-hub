@@ -77,7 +77,9 @@ module.exports = {
         // catch instead of try-catch since we don't actually need to await the call
         appVersionService
             .incrementDownloadCount(item.version_id, knex)
-            .catch(e => request.logger.error('Failed to increment download', e))
+            .catch((e) =>
+                request.logger.error('Failed to increment download', e)
+            )
 
         return h
             .response(file.Body)

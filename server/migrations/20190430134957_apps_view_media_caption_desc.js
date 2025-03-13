@@ -1,4 +1,4 @@
-exports.up = async knex => {
+exports.up = async (knex) => {
     await knex.raw(`
         DROP VIEW apps_view;
         CREATE VIEW apps_view AS
@@ -42,7 +42,7 @@ exports.up = async knex => {
     `)
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.raw(`
         DROP VIEW apps_view;
         CREATE VIEW apps_view AS 

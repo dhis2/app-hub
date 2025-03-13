@@ -8,9 +8,7 @@ const def = Joi.object().keys({
         .required()
         .valid(...AppTypes),
 
-    id: Joi.string()
-        .guid({ version: 'uuidv4' })
-        .required(),
+    id: Joi.string().guid({ version: 'uuidv4' }).required(),
 })
 
 module.exports = {

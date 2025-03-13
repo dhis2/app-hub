@@ -1,4 +1,4 @@
-import { Card, Button, Divider } from '@dhis2/ui'
+import { Card, Button, Divider, Tag } from '@dhis2/ui'
 import PropTypes from 'prop-types'
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
@@ -9,6 +9,7 @@ import * as api from 'src/api'
 import AppDescription from 'src/components/AppDescription/AppDescription'
 import AppIcon from 'src/components/AppIcon/AppIcon'
 import { useSuccessAlert, useErrorAlert } from 'src/lib/use-alert'
+import PluginTag from '../../../components/PluginTag/PluginTag'
 
 const { appTypeToDisplayName } = config.ui
 
@@ -22,7 +23,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
     const handleUploadButtonClick = () => {
         inputEl.current.click()
     }
-    const handleUpload = async event => {
+    const handleUpload = async (event) => {
         setIsUploading(true)
         try {
             // TODO: Implement backend API to replace logo so that it can be
@@ -75,7 +76,7 @@ const EditLogo = ({ appId, logo, mutate }) => {
 }
 
 const DetailsCard = ({ app, mutate }) => {
-    const logo = app.images.find(img => img.logo)
+    const logo = app.images.find((img) => img.logo)
     const appDeveloper = app.developer.organisation || 'Unspecified'
     const appType = appTypeToDisplayName[app.appType]
 
@@ -87,10 +88,23 @@ const DetailsCard = ({ app, mutate }) => {
                 </div>
                 <div>
                     <h2 className={styles.detailsCardName}>{app.name}</h2>
+
                     <span className={styles.detailsCardDeveloper}>
-                        by {appDeveloper}
+                        by{' '}
+                        <a
+                            className={styles.link}
+                            href={`/organisation/${app.developer?.organisation_slug}/view`}
+                        >
+                            {appDeveloper}
+                        </a>
                     </span>
                     <span className={styles.detailsCardType}>{appType}</span>
+                    {app.hasPlugin && (
+                        <PluginTag
+                            hasPlugin={app.hasPlugin}
+                            pluginType={app.pluginType}
+                        />
+                    )}
                 </div>
             </section>
             <Divider />

@@ -82,7 +82,7 @@ export const usePagination = (
 
     const isEmpty = data?.[0].pager.total === 0
     // useSWRInfinite gathers all responses with an array entry per request - flatten it
-    const resultData = data?.flatMap(d => d?.result)
+    const resultData = data?.flatMap((d) => d?.result)
     const isAtEnd = isEmpty || data?.[0].pager.total === resultData?.length
     const isLoadingInitial = !data && !error
 
@@ -196,7 +196,7 @@ export async function fromApi(url, auth = false, extraOpts) {
     }
 
     return fetch(baseURL + url, opts)
-        .then(async response => {
+        .then(async (response) => {
             if (!response.ok) {
                 const contentType = response.headers.get('content-type')
                 const isJson = contentType.includes('application/json')
@@ -208,7 +208,7 @@ export async function fromApi(url, auth = false, extraOpts) {
             }
             return response
         })
-        .then(response => response.json())
+        .then((response) => response.json())
 }
 
 export async function getAuthHeaders() {
@@ -322,7 +322,7 @@ export function addOrganisation({ name, email }) {
     )
 }
 
-export function editOrganisation(id, { name, owner, email }) {
+export function editOrganisation(id, { name, owner, email, description }) {
     return apiV2.request(
         `organisations/${id}`,
         {
@@ -330,7 +330,7 @@ export function editOrganisation(id, { name, owner, email }) {
         },
         {
             method: 'PATCH',
-            body: JSON.stringify({ name, owner, email }),
+            body: JSON.stringify({ name, owner, email, description }),
             headers: {
                 'content-type': 'application/json',
             },

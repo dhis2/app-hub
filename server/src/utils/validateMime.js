@@ -24,11 +24,13 @@ const validateExtensionForMimeType = (mimos, filePath, mimeTypes) => {
         mimeTypes = [mimeTypes]
     }
     const ext = Path.extname(filePath).substring(1)
-    const mimeExtensions = mimeTypes.flatMap(t => mimos.type(t).extensions)
+    const mimeExtensions = mimeTypes.flatMap((t) => mimos.type(t).extensions)
     if (mimeExtensions.includes(ext)) {
         return true
     }
-    throw Boom.badRequest(`File extension must be one of [${mimeExtensions.join(', ')}]`)
+    throw Boom.badRequest(
+        `File extension must be one of [${mimeExtensions.join(', ')}]`
+    )
 }
 
 module.exports = {

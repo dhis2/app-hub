@@ -9,7 +9,7 @@ jobs:
         runs-on: ubuntu-latest
 
         container:
-            image: node:14-buster
+            image: node:20-buster
 
         services:
             postgres:

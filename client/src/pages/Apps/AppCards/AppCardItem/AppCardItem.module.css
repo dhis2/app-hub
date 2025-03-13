@@ -8,11 +8,10 @@
     cursor: pointer;
 }
 
-.appCard:hover, .appCard:focus {
-    background: inherit;
+.appCard:hover,
+.appCard:focus {
     box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05),
-                0 2px 4px -1px rgba(0, 0, 0, 0.06),
-                0 4px 6px -1px rgba(0, 0, 0, 0.10);
+        0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .appCardHeader {
@@ -28,10 +27,20 @@
     margin-bottom: var(--spacers-dp4);
 }
 
-.appCardDeveloper, .appCardType {
-    display: block;
+.appCardDeveloper,
+.appCardType {
     margin: var(--spacers-dp4) 0;
     font-size: 14px;
+}
+
+.appTypeContainer {
+    flex-direction: 'row';
+    display: 'flex';
+    align-items: 'center';
+}
+
+.appTypeContainer .appCardType {
+    margin-right: 5px;
 }
 
 .appCardDeveloper {
@@ -39,7 +48,7 @@
 }
 
 .appCardType {
-    color: var(--colors-grey700)
+    color: var(--colors-grey700);
 }
 
 .appCardDescription {
@@ -52,7 +61,7 @@
 }
 
 .coreAppIcon {
-    width: 25px
+    width: 25px;
 }
 
 .summary {

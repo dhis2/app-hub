@@ -44,7 +44,7 @@ const statuses = [
     },
 ]
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
     console.log('Seeding apps')
 
     await knex('app').del()

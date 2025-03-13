@@ -22,17 +22,17 @@ const requestOpts = {
 
 const UserOrganisation = ({ match, user }) => {
     const { organisationId } = match.params
-    const { data: organisation, error, mutate } = useQuery(
-        `organisations/${organisationId}`,
-        null,
-        requestOpts
-    )
+    const {
+        data: organisation,
+        error,
+        mutate,
+    } = useQuery(`organisations/${organisationId}`, null, requestOpts)
     const inviteMemberModal = useModalState()
     const editNameModal = useModalState()
     const successAlert = useSuccessAlert()
     const errorAlert = useErrorAlert()
 
-    const handlePromote = async userId => {
+    const handlePromote = async (userId) => {
         try {
             await api.editOrganisation(organisation.id, { owner: userId })
             mutate({
@@ -46,12 +46,12 @@ const UserOrganisation = ({ match, user }) => {
             errorAlert.show({ error })
         }
     }
-    const handleRemove = async userId => {
+    const handleRemove = async (userId) => {
         try {
             await api.removeOrganisationMember(organisation.id, userId)
             mutate({
                 ...organisation,
-                users: organisation.users.filter(ou => ou.id !== userId),
+                users: organisation.users.filter((ou) => ou.id !== userId),
             })
             successAlert.show({
                 message: 'Successfully removed organisation member',
@@ -102,10 +102,13 @@ const UserOrganisation = ({ match, user }) => {
                                 secondary
                                 onClick={editNameModal.show}
                             >
-                                Edit name
+                                Edit
                             </Button>
                         </>
                     )}
+                </div>
+                <div className={styles.description}>
+                    {organisation.description || 'no description'}
                 </div>
                 <div className={styles.createdAt}>
                     Created{' '}
@@ -135,7 +138,7 @@ const UserOrganisation = ({ match, user }) => {
                         Invite member
                     </Button>
                 </div>
-                {organisation.users.map(ou => (
+                {organisation.users.map((ou) => (
                     <OrganisationUser
                         key={ou.id}
                         user={{

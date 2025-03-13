@@ -15,12 +15,17 @@ const {
     verifyBundle,
 } = require('../../../../security')
 
+const parseAppDetails = require('../../../../utils/parseAppDetails')
 const createAppVersion = require('../../../../data/createAppVersion')
 const createLocalizedAppVersion = require('../../../../data/createLocalizedAppVersion')
 const addAppVersionToChannel = require('../../../../data/addAppVersionToChannel')
 
 const Organisation = require('../../../../services/organisation')
-const { getOrganisationAppsByUserId, getAppsById } = require('../../../../data')
+const {
+    getOrganisationAppsByUserId,
+    getAppsById,
+    patchApp,
+} = require('../../../../data')
 
 const { convertAppToV1AppVersion } = require('../formatting')
 
@@ -70,7 +75,7 @@ module.exports = {
         const isManager = currentUserIsManager(request)
         const userApps = await getOrganisationAppsByUserId(currentUserId, db)
         const userCanEditApp =
-            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         if (!userCanEditApp) {
             throw Boom.forbidden()
@@ -85,9 +90,8 @@ module.exports = {
             throw Boom.badRequest(e)
         }
 
-        const validationResult = CreateAppVersionModel.def.validate(
-            appVersionJson
-        )
+        const validationResult =
+            CreateAppVersionModel.def.validate(appVersionJson)
         const file = request.payload.file
 
         if (validationResult.error !== undefined) {
@@ -112,7 +116,7 @@ module.exports = {
 
         //check if that version already exists on this app
         const existingAppVersions = dbAppRows.filter(
-            row => row.version === appVersionJson.version
+            (row) => row.version === appVersionJson.version
         )
         if (existingAppVersions.length > 0) {
             throw Boom.badRequest(
@@ -134,8 +138,17 @@ module.exports = {
         } = appVersionJson
 
         const [dbApp] = dbAppRows
+
+        // Todo: FIXME a workround - seems like the source url is at app version level but it doesn't get saved after the very first time
+        const appSourceUrl = dbAppRows?.find((a) => !!a.source_url)?.source_url
+
         debug(`Adding version to app ${dbApp.name}`)
         let appVersion = null
+
+        const { changelog, d2config } = await parseAppDetails({
+            buffer: file._data,
+            appRepo: appSourceUrl,
+        })
 
         try {
             appVersion = await createAppVersion(
@@ -145,6 +158,7 @@ module.exports = {
                     demoUrl,
                     sourceUrl,
                     version,
+                    d2config: JSON.stringify(d2config),
                 },
                 transaction
             )
@@ -152,6 +166,19 @@ module.exports = {
         } catch (err) {
             await transaction.rollback()
             throw Boom.boomify(err)
+        }
+
+        try {
+            await patchApp(
+                {
+                    id: dbApp.app_id,
+                    changelog,
+                },
+                db,
+                transaction
+            )
+        } catch (_) {
+            // ignore if we can not update the changelog at the app level
         }
 
         //Add the texts as english language, only supported for now
@@ -189,7 +216,11 @@ module.exports = {
 
         try {
             const organisationSlug = dbApp.organisation_slug
-            const organisation = await Organisation.findOneBySlug(organisationSlug, false, transaction)
+            const organisation = await Organisation.findOneBySlug(
+                organisationSlug,
+                false,
+                transaction
+            )
             verifyBundle({
                 buffer: file._data,
                 appId,
@@ -214,7 +245,7 @@ module.exports = {
         //fetch the new version rows and filter out the one we've just created data for
         dbAppRows = await getAppsById(appId, languageCode, db)
         const [appWithVersion] = dbAppRows.filter(
-            app => app.version === appVersionJson.version
+            (app) => app.version === appVersionJson.version
         )
 
         const serverUrl = `${request.server.info.protocol}://${request.info.host}/api`

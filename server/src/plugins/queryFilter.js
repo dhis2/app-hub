@@ -86,7 +86,7 @@ const onPreHandler = function (request, h) {
                 schemaDescription
         }
         // only add validations with .filter()
-        Object.keys(validateDescription.keys).forEach(k => {
+        Object.keys(validateDescription.keys).forEach((k) => {
             const keyDesc = validateDescription.keys[k]
             if (keyDesc.type === FILTER_TYPE) {
                 queryFilterKeys.add(k)
@@ -94,7 +94,7 @@ const onPreHandler = function (request, h) {
         })
     } else {
         // add all keys if no validation
-        Object.keys(request.query).forEach(key => {
+        Object.keys(request.query).forEach((key) => {
             const val = request.query[key]
             const parsed = parseFilterString(val)
             request.query[key] = parsed

@@ -1,9 +1,9 @@
-exports.up = async knex => {
-    await knex.schema.table('users', table => {
+exports.up = async (knex) => {
+    await knex.schema.table('users', (table) => {
         table.dropUnique('email')
     })
 
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.string('contact_email', 255)
     })
 
@@ -58,23 +58,20 @@ exports.up = async knex => {
                 ON org.id = app.organisation_id
     `)
 
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.dropColumn('developer_user_id')
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.raw('DROP VIEW apps_view')
-    await knex.schema.table('users', table => {
+    await knex.schema.table('users', (table) => {
         table.unique('email')
     })
 
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.uuid('developer_user_id')
-        table
-            .foreign('developer_user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('developer_user_id').references('id').inTable('users')
     })
 
     // if duplicate email, only one will be kept
@@ -85,12 +82,9 @@ exports.down = async knex => {
         where u.email = a.contact_email
     `)
 
-    await knex.schema.table('app', table => {
+    await knex.schema.table('app', (table) => {
         table.dropColumn('contact_email')
-        table
-            .uuid('developer_user_id')
-            .notNullable()
-            .alter()
+        table.uuid('developer_user_id').notNullable().alter()
     })
 
     await knex.raw(`

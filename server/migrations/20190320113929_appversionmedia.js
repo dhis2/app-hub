@@ -1,5 +1,5 @@
-exports.up = async knex => {
-    await knex.schema.createTable('app_version_media', table => {
+exports.up = async (knex) => {
+    await knex.schema.createTable('app_version_media', (table) => {
         table.uuid('id').primary()
 
         table
@@ -17,10 +17,7 @@ exports.up = async knex => {
 
         table.uuid('media_type_id').notNullable()
 
-        table
-            .foreign('media_type_id')
-            .references('id')
-            .inTable('media_type')
+        table.foreign('media_type_id').references('id').inTable('media_type')
 
         table.uuid('app_version_id').notNullable()
 
@@ -32,6 +29,6 @@ exports.up = async knex => {
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.schema.dropTable('app_version_media')
 }

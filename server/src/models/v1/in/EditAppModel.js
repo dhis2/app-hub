@@ -20,5 +20,5 @@ const EditAppModel = payloadSchema
 module.exports = {
     payloadSchema,
     def: EditAppModel,
-    validate: objectToValidate => EditAppModel.validate(objectToValidate),
+    validate: (objectToValidate) => EditAppModel.validate(objectToValidate),
 }

@@ -5,8 +5,15 @@
     margin-bottom: var(--spacers-dp8);
 }
 
+.filtersWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    justify-content: space-between;
+}
+
 .versionsFilters {
-    padding: var(--spacers-dp16) var(--spacers-dp8);
+    padding-bottom: var(--spacers-dp16);
 }
 
 .channelsFilter {

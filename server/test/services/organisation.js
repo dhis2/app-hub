@@ -32,7 +32,7 @@ describe('@services::Organisation', () => {
             }
             const filters = Filters.createFromQueryFilters(filter)
             const orgs = await Organisation.find({ filters }, db)
-            const DHIS2App = orgs.find(o => o.name === 'DHIS2')
+            const DHIS2App = orgs.find((o) => o.name === 'DHIS2')
             expect(orgs.length).to.be.equal(1)
             expect(DHIS2App).to.not.be.null()
         })
@@ -40,8 +40,8 @@ describe('@services::Organisation', () => {
         it('should find all organisations without a specified filter', async () => {
             const orgs = ['DHIS2', 'World Health Organization']
             const dbOrgs = await Organisation.find({}, db)
-            orgs.forEach(org => {
-                const dbOrg = dbOrgs.find(o => o.name === org.name)
+            orgs.forEach((org) => {
+                const dbOrg = dbOrgs.find((o) => o.name === org.name)
                 expect(dbOrg).to.not.be.null()
             })
         })
@@ -52,7 +52,7 @@ describe('@services::Organisation', () => {
                 user: user.id,
             })
             const orgs = await Organisation.find({ filters }, db)
-            const DHIS2App = orgs.find(o => o.name === 'DHIS2')
+            const DHIS2App = orgs.find((o) => o.name === 'DHIS2')
             expect(DHIS2App).to.not.be.null()
         })
 
@@ -63,10 +63,10 @@ describe('@services::Organisation', () => {
                 user: user.id,
             })
             const orgs = await Organisation.find({ filters }, db)
-            const DHIS2App = orgs.find(o => o.name === 'DHIS2')
+            const DHIS2App = orgs.find((o) => o.name === 'DHIS2')
             expect(DHIS2App).to.not.be.null()
             expect(
-                orgs.find(o => OrganisationMocks[1].id === o.id)
+                orgs.find((o) => OrganisationMocks[1].id === o.id)
             ).to.be.undefined()
         })
 
@@ -90,10 +90,10 @@ describe('@services::Organisation', () => {
                 email,
             })
             const orgs = await Organisation.find({ filters }, db)
-            const DHIS2App = orgs.find(o => o.name === 'DHIS2')
+            const DHIS2App = orgs.find((o) => o.name === 'DHIS2')
             expect(DHIS2App).to.not.be.undefined()
             expect(
-                orgs.find(o => OrganisationMocks[1].id === o.id)
+                orgs.find((o) => OrganisationMocks[1].id === o.id)
             ).to.be.undefined()
         })
     })
@@ -129,8 +129,8 @@ describe('@services::Organisation', () => {
             expect(orgById.users).to.have.length(3)
 
             const members = [UserMocks[1].name, UserMocks[2].name]
-            members.forEach(name => {
-                const member = orgById.users.find(u => u.name === name)
+            members.forEach((name) => {
+                const member = orgById.users.find((u) => u.name === name)
                 expect(member).to.not.be.undefined()
                 expect(member.id).to.be.a.string()
             })
@@ -176,7 +176,9 @@ describe('@services::Organisation', () => {
             expect(orgWithUsers).to.include('name')
             expect(orgWithUsers.name).to.be.equal('World Health Organization')
             expect(orgWithUsers.users).to.be.an.array()
-            const user = orgWithUsers.users.find(u => u.name === userMock.name)
+            const user = orgWithUsers.users.find(
+                (u) => u.name === userMock.name
+            )
             expect(user).to.not.be.undefined()
             expect(user.email).to.be.equal(userMock.email)
         })
@@ -219,7 +221,7 @@ describe('@services::Organisation', () => {
             expect(org.id).to.be.a.string()
             expect(org.name).to.be.equal('World Health Organization')
 
-            const addUserAndGetOrg = async trx => {
+            const addUserAndGetOrg = async (trx) => {
                 await Organisation.addUserById(org.id, userId, trx)
                 const orgWithUsers = await Organisation.findOne(
                     org.id,
@@ -231,7 +233,7 @@ describe('@services::Organisation', () => {
 
             const orgWithUsers = await db.transaction(addUserAndGetOrg)
             const newlyAddedUser = orgWithUsers.users.find(
-                u => u.name === userMock.name
+                (u) => u.name === userMock.name
             )
             expect(newlyAddedUser).to.not.be.undefined()
         })
@@ -253,7 +255,7 @@ describe('@services::Organisation', () => {
             expect(whoOrg.id).to.be.a.string()
             expect(whoOrg.name).to.be.equal('World Health Organization')
 
-            const addUser = async trx => {
+            const addUser = async (trx) => {
                 // appstoreUser to who
                 await Organisation.addUserById(whoOrg.id, appstoreUserId, trx)
                 const orgWithUsers = await Organisation.findOne(
@@ -263,7 +265,7 @@ describe('@services::Organisation', () => {
                 )
                 expect(orgWithUsers.users).to.be.an.array()
                 const newUser = orgWithUsers.users.find(
-                    u => u.name === UserMocks[0].name
+                    (u) => u.name === UserMocks[0].name
                 )
                 expect(newUser).to.not.be.undefined()
                 // add Erik to WHO, should fail
@@ -282,7 +284,7 @@ describe('@services::Organisation', () => {
                 )
                 expect(orgWithUsers.users).to.be.an.array()
                 const newUser = orgWithUsers.users.find(
-                    u => u.name === UserMocks[0].name
+                    (u) => u.name === UserMocks[0].name
                 )
                 // should be rollbacked, so user should not have been added
                 expect(newUser).to.be.undefined()
@@ -297,7 +299,7 @@ describe('@services::Organisation', () => {
 
             expect(users).to.be.an.array()
             expect(
-                users.findIndex(u => u.email === 'erik@dhis2.org')
+                users.findIndex((u) => u.email === 'erik@dhis2.org')
             ).to.be.above(-1)
         })
 
@@ -346,7 +348,7 @@ describe('@services::Organisation', () => {
             const jenkins = await getUserByEmail('apphub-api@dhis2.org', db)
             const name = 'Sintef'
 
-            const createAndGetOrg = async trx => {
+            const createAndGetOrg = async (trx) => {
                 const { id } = await Organisation.create({ userId, name }, trx)
                 expect(id).to.be.a.string()
                 return await Organisation.findOne(id, true, trx)

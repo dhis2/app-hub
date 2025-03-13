@@ -20,9 +20,9 @@ const DeleteScreenshotModal = ({ appId, imageId, mutate, onClose }) => {
         setIsSubmitting(true)
         try {
             await api.deleteImage(appId, imageId)
-            mutate(app => ({
+            mutate((app) => ({
                 ...app,
-                images: app.images.filter(img => img.id !== imageId),
+                images: app.images.filter((img) => img.id !== imageId),
             }))
             successAlert.show({
                 message: `Successfully deleted screenshot`,

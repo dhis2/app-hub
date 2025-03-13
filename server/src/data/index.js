@@ -21,6 +21,7 @@ module.exports = {
     getOrganisationsByName: require('./getOrganisationsByName'),
     getUserByEmail: require('./getUserByEmail'),
     setImageAsLogoForApp: require('./setImageAsLogoForApp'),
+    patchApp: require('./patchApp'),
     updateApp: require('./updateApp'),
     updateAppVersion: require('./updateAppVersion'),
     updateImageMeta: require('./updateImageMeta'),

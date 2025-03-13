@@ -17,7 +17,7 @@ module.exports = [
             request.logger.info('In handler %s', request.path)
             const channels = await h.context.db.select().from('channel')
 
-            return channels.map(channel => ({
+            return channels.map((channel) => ({
                 id: channel.id,
                 name: channel.name,
                 uri: `${request.path}/${channel.id}`,
@@ -111,13 +111,13 @@ module.exports = [
                 .where('channel_id', request.params.id)
 
             const apps = {}
-            channelApps.forEach(app => {
+            channelApps.forEach((app) => {
                 if (!apps[app.id]) {
                     apps[app.id] = []
                 }
 
                 const version = apps[app.id].find(
-                    x => x.version === app.version
+                    (x) => x.version === app.version
                 )
 
                 if (!version) {
@@ -154,7 +154,7 @@ module.exports = [
 
             debug(`uuid: ${uuid}`)
 
-            const deleteChannelWorkUnit = async trx => {
+            const deleteChannelWorkUnit = async (trx) => {
                 await deleteChannel(uuid, trx)
             }
 

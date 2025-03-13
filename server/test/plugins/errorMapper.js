@@ -19,7 +19,7 @@ const Hapi = require('@hapi/hapi')
 describe('ErrorMapperPlugin', () => {
     let server
 
-    const registerRoutes = server => {
+    const registerRoutes = (server) => {
         server.route({
             method: 'GET',
             path: '/null',
@@ -55,7 +55,7 @@ describe('ErrorMapperPlugin', () => {
                 throw new UniqueViolationError({
                     nativeError: new Error('Item already exists!'),
                     table: 'organisation',
-                    columns: ['name']
+                    columns: ['name'],
                 })
             },
         })
@@ -230,7 +230,9 @@ describe('ErrorMapperPlugin', () => {
 
             const res = await server.inject(request)
             expect(res.statusCode).to.be.equal(409)
-            expect(res.result.message).to.be.equal('organisation with that name already exists.')
+            expect(res.result.message).to.be.equal(
+                'organisation with that name already exists.'
+            )
         })
     })
 })

@@ -41,7 +41,7 @@ module.exports = {
 
         const userApps = await getOrganisationAppsByUserId(currentUser.id, db)
         const canDeleteImage =
-            isManager || userApps.map(app => app.app_id).indexOf(appId) !== -1
+            isManager || userApps.map((app) => app.app_id).indexOf(appId) !== -1
 
         debug('isManager:', isManager)
         debug('canDeleteImage:', canDeleteImage)

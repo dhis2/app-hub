@@ -1,11 +1,11 @@
 const users = require('./mock/users')
 const organisations = require('./mock/organisations')
 
-const sleep = ms => {
-    return new Promise(resolve => setTimeout(resolve, ms))
+const sleep = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
     console.log('Starting seeding data')
     console.log(knex.client.config)
 

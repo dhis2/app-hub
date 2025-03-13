@@ -7,7 +7,11 @@ import { useQueryV1 } from 'src/api'
 
 const UserApp = ({ match }) => {
     const { appId } = match.params
-    const { data: app, error, mutate } = useQueryV1(`apps/${appId}`, {
+    const {
+        data: app,
+        error,
+        mutate,
+    } = useQueryV1(`apps/${appId}`, {
         auth: true,
     })
 

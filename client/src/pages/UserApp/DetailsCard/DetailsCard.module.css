@@ -42,11 +42,15 @@
     max-width: 640px;
 }
 
+.link,
 .sourceUrl {
     color: var(--colors-blue700);
     text-decoration: underline;
 }
 
-.sourceUrl:hover, .sourceUrl:focus {
+.link:hover,
+.link:focus,
+.sourceUrl:hover,
+.sourceUrl:focus {
     color: var(--colors-grey900);
 }

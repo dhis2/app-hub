@@ -1,7 +1,7 @@
 const { AppStatus, AppType } = require('../src/enums')
 
-exports.up = async knex => {
-    await knex.schema.createTable('app_version_localised', table => {
+exports.up = async (knex) => {
+    await knex.schema.createTable('app_version_localised', (table) => {
         table.uuid('id').primary()
 
         table.uuid('app_version_id')
@@ -30,22 +30,16 @@ exports.up = async knex => {
 
         table.uuid('created_by_user_id').notNullable()
 
-        table
-            .foreign('created_by_user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('created_by_user_id').references('id').inTable('users')
 
         table.timestamp('updated_at', true).defaultTo(knex.fn.now())
 
         table.uuid('updated_by_user_id')
 
-        table
-            .foreign('updated_by_user_id')
-            .references('id')
-            .inTable('users')
+        table.foreign('updated_by_user_id').references('id').inTable('users')
     })
 }
 
-exports.down = async knex => {
+exports.down = async (knex) => {
     await knex.schema.dropTable('app_version_localised')
 }

@@ -1,0 +1,49 @@
+.latestUpdatesWrapper {
+    font-size: 0.8em;
+}
+
+.latestUpdates {
+    padding: var(--spacers-dp16);
+    background-color: var(--colors-blue050);
+    border-radius: 5px;
+}
+
+.latestUpdatesHeader {
+    margin: 0;
+}
+
+.showAllLink {
+    margin-top: var(--spacers-dp8);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.showAllLink:hover,
+.showAllLink:focus {
+    text-decoration: none;
+}
+
+.versionList {
+    list-style: none;
+    padding: 0;
+    font-size: 0.875rem;
+}
+
+.versionList > li:not(:last-of-type) {
+    margin-block-end: var(--spacers-dp24);
+}
+
+.latestUpdatesVersionHeading {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.changeSummary :global(ul) {
+    list-style: disc;
+    padding-inline-start: var(--spacers-dp24);
+}
+
+.changeSummary :global(h3) {
+    font-size: 1em;
+    margin: 0.5rem 0.25rem;
+}
