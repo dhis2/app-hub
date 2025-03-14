@@ -26,7 +26,7 @@ module.exports = {
     },
     handler: async (request, h) => {
         if (!canSeeAllApps(request, h)) {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
 
         try {

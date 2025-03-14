@@ -104,7 +104,7 @@ module.exports = [
         },
         handler: async (request, h) => {
             if (!canCreateApp(request, h)) {
-                throw Boom.unauthorized()
+                throw Boom.forbidden()
             }
 
             const { db } = h.context
@@ -139,7 +139,7 @@ module.exports = [
                 db
             )
             if (!isMember && !isManager) {
-                throw Boom.unauthorized(
+                throw Boom.forbidden(
                     `You don't have permission to upload apps to that organisation`
                 )
             }

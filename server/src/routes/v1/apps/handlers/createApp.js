@@ -39,7 +39,7 @@ module.exports = {
     },
     handler: async (request, h) => {
         if (!canCreateApp(request, h)) {
-            throw Boom.unauthorized()
+            throw Boom.forbidden()
         }
         const { notificationService } = request.services(true)
 
@@ -75,7 +75,7 @@ module.exports = {
             db
         )
         if (!isMember && !isManager) {
-            throw Boom.unauthorized(
+            throw Boom.forbidden(
                 `You don't have permission to upload apps to that organisation`
             )
         }
@@ -113,7 +113,7 @@ module.exports = {
                 isCoreApp = manifest.core_app
 
                 if (isCoreApp && !isManager) {
-                    throw Boom.unauthorized(
+                    throw Boom.forbidden(
                         `You don't have permission to upload core apps`
                     )
                 }
