@@ -33,6 +33,7 @@ const getAppVersionQuery = (knex) =>
             knex.ref('app_version.updated_at').as('updatedAt'),
             knex.ref('app_version.source_url').as('sourceUrl'),
             knex.ref('app_version.demo_url').as('demoUrl'),
+            knex.ref('app_version.change_summary').as('changeSummary'),
             knex.ref('channel.name').as('channel'),
             knex.ref('ac.min_dhis2_version').as('minDhisVersion'),
             knex.ref('ac.max_dhis2_version').as('maxDhisVersion'),

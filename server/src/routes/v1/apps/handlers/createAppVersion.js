@@ -130,6 +130,7 @@ module.exports = {
 
         const {
             demoUrl,
+            changeSummary,
             sourceUrl,
             version,
             minDhisVersion,
@@ -155,6 +156,7 @@ module.exports = {
                 {
                     userId: currentUserId,
                     appId: dbApp.app_id,
+                    changeSummary,
                     demoUrl,
                     sourceUrl,
                     version,

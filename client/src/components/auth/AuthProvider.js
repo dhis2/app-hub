@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import config from 'config'
 import { userLoaded } from 'src/actions/actionCreators'
-import { Auth } from 'src/api'
+import { Auth, getUser } from 'src/api'
 
 const AuthProvider = ({ children }) => (
     <Auth0Provider
@@ -32,21 +32,26 @@ const InitializeAuth = ({ children }) => {
     }, [getAccessTokenSilently])
 
     useEffect(() => {
-        if (!isLoading && isAuthenticated && user) {
+        const getUserInfo = async () => {
+            const userInfo = await getUser()
             const userProfile = {
                 ...user,
+                ...userInfo,
                 roles: user['https://apps.dhis2.org/roles'],
             }
 
             Auth.setProfile(userProfile)
             dispatch(userLoaded(userProfile))
         }
+        if (!isLoading && isAuthenticated && user) {
+            getUserInfo()
+        }
 
         if (!isLoading && !isAuthenticated && localStorage.getItem('profile')) {
             Auth.logout()
             dispatch({ type: 'USER_LOGOUT' })
         }
-    }, [user, isAuthenticated, isLoading])
+    }, [user, isAuthenticated, isLoading, dispatch])
 
     return children
 }

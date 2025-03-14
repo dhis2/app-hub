@@ -44,6 +44,8 @@ const def = Joi.object().keys({
     hasChangelog: Joi.boolean().allow(null, false),
 
     pluginType: Joi.string().allow(null),
+
+    userCanEditApp: Joi.boolean().allow(null, false),
 })
 
 module.exports = {

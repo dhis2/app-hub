@@ -67,6 +67,7 @@ const convertAppToV1AppVersion = (app, serverUrl) => {
         created: +new Date(app.version_created_at),
 
         demoUrl: app.demo_url || '',
+        changeSummary: app.change_summary || '',
         downloadUrl: `${serverUrl}/v1/apps/download/${encodeURIComponent(
             app.organisation_slug
         )}/${encodeURIComponent(app.appver_slug)}_${encodeURIComponent(

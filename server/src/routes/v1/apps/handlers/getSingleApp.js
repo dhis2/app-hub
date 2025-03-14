@@ -91,6 +91,8 @@ module.exports = {
             throw Boom.notFound('No apps found')
         }
 
-        return v1FormattedArray[0]
+        const result = v1FormattedArray[0]
+        result.userCanEditApp = isDeveloper
+        return result
     },
 }
