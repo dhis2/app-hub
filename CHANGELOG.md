@@ -1,3 +1,15 @@
+# [2.37.0](https://github.com/dhis2/app-hub/compare/v2.36.4...v2.37.0) (2025-03-27)
+
+
+### Bug Fixes
+
+* use 403 for authorization errors ([#742](https://github.com/dhis2/app-hub/issues/742)) ([d5c003f](https://github.com/dhis2/app-hub/commit/d5c003f8c4003739109f09d4e80b3ded5b4a1bf6))
+
+
+### Features
+
+* allow manually adding changes summary to a version of an app ([71cf1ea](https://github.com/dhis2/app-hub/commit/71cf1eaa6e39cf41f120ba00e04e6e7653c3bbf4))
+
 # [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
 
 
