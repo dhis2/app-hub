@@ -86,6 +86,11 @@ const UserView = ({ loadUser, user, match }) => {
                 component={UserAppVersionNew}
             />
             <Route
+                exact
+                path={`${match.url}/app/:appId/version/:appVersion/edit`}
+                component={UserAppVersionNew}
+            />
+            <Route
                 path={`${match.url}/upload`}
                 component={provideUser(UserAppUpload)}
             />
