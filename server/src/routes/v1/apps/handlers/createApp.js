@@ -22,7 +22,7 @@ module.exports = {
         auth: 'token',
         tags: ['api', 'v2'],
         payload: {
-            maxBytes: 20 * 1024 * 1024, //20MB
+            maxBytes: 40 * 1024 * 1024, //40MB
             allow: 'multipart/form-data',
             parse: true,
             output: 'stream',
