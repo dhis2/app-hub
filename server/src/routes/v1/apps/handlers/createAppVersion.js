@@ -38,7 +38,7 @@ module.exports = {
         },
         tags: ['api', 'v1'],
         payload: {
-            maxBytes: 20 * 1024 * 1024, //20MB
+            maxBytes: 40 * 1024 * 1024, //40MB
             allow: 'multipart/form-data',
             parse: true,
             output: 'stream',
