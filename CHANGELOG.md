@@ -1,3 +1,11 @@
+## [2.36.5](https://github.com/dhis2/app-hub/compare/v2.36.4...v2.36.5) (2025-05-23)
+
+
+### Bug Fixes
+
+* increase max bundle size to 40MB ([#753](https://github.com/dhis2/app-hub/issues/753)) ([ed7f7c4](https://github.com/dhis2/app-hub/commit/ed7f7c465bb521cb5545ca90df3ff2ee51601e4b))
+* use 403 for authorization errors ([#742](https://github.com/dhis2/app-hub/issues/742)) ([d5c003f](https://github.com/dhis2/app-hub/commit/d5c003f8c4003739109f09d4e80b3ded5b4a1bf6))
+
 # [2.35.0](https://github.com/dhis2/app-hub/compare/v2.34.0...v2.35.0) (2025-02-13)
 
 
