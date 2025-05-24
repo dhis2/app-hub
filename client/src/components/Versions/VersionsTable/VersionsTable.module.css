@@ -42,6 +42,7 @@ a.link:focus,
     gap: var(--spacers-dp12);
     color: var(--colors-grey700);
     font-size: 0.8em;
+    align-items: center;
 }
 
 .versionDivider {
@@ -57,4 +58,10 @@ a.link:focus,
 .changeSummary :global(h3) {
     font-size: 0.8em;
     margin-bottom: 0.5em;
+}
+
+.actionsWrapper {
+    display: flex;
+    gap: var(--spacers-dp8);
+    align-items: center;
 }

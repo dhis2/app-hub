@@ -89,6 +89,7 @@ module.exports = {
             const {
                 version,
                 demoUrl,
+                changeSummary,
                 minDhisVersion,
                 maxDhisVersion,
                 channel,
@@ -140,6 +141,7 @@ module.exports = {
                     userId: currentUserId,
                     version,
                     demoUrl,
+                    changeSummary,
                     sourceUrl,
                     minDhisVersion,
                     maxDhisVersion: maxDhisVersion || '',

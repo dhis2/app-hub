@@ -9,6 +9,7 @@ const definition = defaultDefinition
         version: Joi.string(),
         channel: Joi.string().required(),
         demoUrl: Joi.string().uri().allow(null, ''),
+        changeSummary: Joi.string().allow(null, ''),
         downloadUrl: Joi.string().uri().allow(''),
         downloadCount: Joi.number().greater(-1),
         minDhisVersion: Joi.string().required(),
@@ -22,7 +23,8 @@ const definition = defaultDefinition
             s
                 .rename('minDhisVersion', 'min_dhis2_version')
                 .rename('maxDhisVersion', 'max_dhis2_version')
-                .rename('demoUrl', 'demo_url'),
+                .rename('demoUrl', 'demo_url')
+                .rename('changeSummary', 'change_summary'),
         external: (s) => s.strip('slug'),
     })
     .label('AppVersion')
