@@ -1,3 +1,10 @@
+# [2.37.0](https://github.com/dhis2/app-hub/compare/v2.36.5...v2.37.0) (2025-06-04)
+
+
+### Features
+
+* allow manually adding changes summary to a version of an app ([0fba03c](https://github.com/dhis2/app-hub/commit/0fba03ca7f12e26b2131ab69d16ed9ddaa3a22e7))
+
 ## [2.36.5](https://github.com/dhis2/app-hub/compare/v2.36.4...v2.36.5) (2025-05-23)
 
 
