@@ -1,3 +1,10 @@
+## [2.37.1](https://github.com/dhis2/app-hub/compare/v2.37.0...v2.37.1) (2025-07-10)
+
+
+### Bug Fixes
+
+* add v42 to dhis2 versions ([1242156](https://github.com/dhis2/app-hub/commit/12421563ef8d7c771fdcc3885ee358a549db87d5))
+
 # [2.37.0](https://github.com/dhis2/app-hub/compare/v2.36.5...v2.37.0) (2025-06-04)
 
 
