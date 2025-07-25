@@ -40,7 +40,7 @@ const def = Joi.object().keys({
     hasPlugin: Joi.boolean().allow(null, false),
 
     // only indicating if there is a changelog or not here
-    // to avoid addding a masssive changelog to the payload
+    // to avoid adding a massive changelog to the payload
     hasChangelog: Joi.boolean().allow(null, false),
 
     pluginType: Joi.string().allow(null),

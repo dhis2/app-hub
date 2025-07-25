@@ -211,7 +211,8 @@ const AppView = ({ match }) => {
     const logoSrc = app.images.find((img) => img.logo)?.imageUrl
     const screenshots = app.images.filter((img) => !img.logo)
     const versions = app.versions.sort((a, b) => b.created - a.created)
-    const latestVersion = versions[0]
+    const stableVersions = versions.filter((v) => v.channel === 'stable')
+    const latestVersion = stableVersions?.[0] ?? versions[0]
 
     const selectTab = (tabName) => () => {
         history.push('?tab=' + tabName)
@@ -263,7 +264,10 @@ const AppView = ({ match }) => {
                             latestVersion={latestVersion}
                             sourceUrl={app.sourceUrl}
                         />
-                        <LatestUpdates changelog={changelog?.data} />
+                        <LatestUpdates
+                            versions={versions}
+                            changelog={changelog?.data}
+                        />
                     </>
                 )}
 
