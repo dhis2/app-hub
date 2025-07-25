@@ -53,6 +53,7 @@ const DescriptionEditor = ({
                 hidden={selectedTab !== tabs.WRITE}
                 name={name}
                 helpText={helpText}
+                required={required}
             />
             {selectedTab === tabs.PREVIEW && <PreviewContent name={name} />}
             <Help className={styles.helpText}>
@@ -72,15 +73,14 @@ DescriptionEditor.propTypes = {
     required: PropTypes.bool,
 }
 
-const WriteContent = ({ description, name, placeholder, hidden }) => {
+const WriteContent = ({ description, name, placeholder, hidden, required }) => {
     return (
         <div className={cx(styles.writeContent, { [styles.hidden]: hidden })}>
             <MarkdownEditor
                 name={name ?? 'description'}
                 initialValue={description}
-                validate={hasValue}
+                validate={required ? hasValue : null}
                 placeholder={placeholder ?? 'What is the purpose of this app?'}
-                required
             />
         </div>
     )
@@ -91,6 +91,7 @@ WriteContent.propTypes = {
     hidden: PropTypes.bool,
     name: PropTypes.string,
     placeholder: PropTypes.string,
+    required: PropTypes.bool,
 }
 
 const PreviewContent = ({ name = 'description' }) => {
