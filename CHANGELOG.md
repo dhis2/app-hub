@@ -1,3 +1,11 @@
+## [2.37.2](https://github.com/dhis2/app-hub/compare/v2.37.1...v2.37.2) (2025-07-28)
+
+
+### Bug Fixes
+
+* **DHIS2-19851:** ensure that stable versions - not development - are shown as latest version ([937e31c](https://github.com/dhis2/app-hub/commit/937e31cb5a256aa6550825bf6c506e13f0807e38))
+* do not mark version change summary as mandatory ([973623f](https://github.com/dhis2/app-hub/commit/973623f7c310a951617dc435c57c3ac970d7526e))
+
 ## [2.37.1](https://github.com/dhis2/app-hub/compare/v2.37.0...v2.37.1) (2025-07-10)
 
 
