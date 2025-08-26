@@ -1,0 +1,11 @@
+version: '3'
+services:
+    db:
+        image: dhis2/postgres-contrib
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: apphub
+            POSTGRES_USER: apphub
+            POSTGRES_PASSWORD: apphub
+        ports:
+            - 5433:5432
