@@ -1,3 +1,10 @@
+## [2.37.3](https://github.com/dhis2/app-hub/compare/v2.37.2...v2.37.3) (2025-08-29)
+
+
+### Bug Fixes
+
+* change page size for versions to 50 ([#757](https://github.com/dhis2/app-hub/issues/757)) ([fed5748](https://github.com/dhis2/app-hub/commit/fed574875826e732800a33ec92a6f61dcdc82b63))
+
 ## [2.37.2](https://github.com/dhis2/app-hub/compare/v2.37.1...v2.37.2) (2025-07-28)
 
 
