@@ -51,7 +51,7 @@ const Versions = ({
     const [dhisVersionFilter, setDhisVersionFilter] = useState('-1')
     const params = useMemo(
         () => ({
-            pageSize: 5,
+            pageSize: 50,
             minDhisVersion:
                 dhisVersionFilter != '-1'
                     ? `lte:${dhisVersionFilter}`
