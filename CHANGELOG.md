@@ -1,3 +1,10 @@
+## [2.37.4](https://github.com/dhis2/app-hub/compare/v2.37.3...v2.37.4) (2026-01-13)
+
+
+### Bug Fixes
+
+* handle when invalid dhis2 version filter is passed ([#760](https://github.com/dhis2/app-hub/issues/760)) ([9a67fd7](https://github.com/dhis2/app-hub/commit/9a67fd76bdf77b332db9f3a7e0511344821c94e4))
+
 ## [2.37.3](https://github.com/dhis2/app-hub/compare/v2.37.2...v2.37.3) (2025-08-29)
 
 
