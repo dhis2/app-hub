@@ -14,6 +14,10 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
 
     const dhis2Semver = semver.coerce(dhis2Version)
 
+    if (!dhis2Semver) {
+        return filteredApps
+    }
+
     for (let i = 0, n = apps.length; i < n; ++i) {
         const appRow = apps[i]
 
@@ -37,7 +41,7 @@ const filterAppsBySpecificDhis2Version = (apps, dhis2Version) => {
                 filteredApps.push(appRow)
             }
         } else if (
-            semver.satisfies(dhis2Semver.version, `>= ${minVersion.version}`)
+            semver.satisfies(dhis2Semver?.version, `>= ${minVersion?.version}`)
         ) {
             filteredApps.push(appRow)
         }
