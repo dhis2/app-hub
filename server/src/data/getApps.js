@@ -49,6 +49,10 @@ const getApps = (
             if (query) {
                 builder.where((builder) => {
                     builder.where('name', 'ilike', `%${query}%`)
+                    // This matches a description containing "{query} - notice the double quotes
+                    // it is a workaround for having an alias, but the quotes makes it harder to match random words in the search
+                    // and having too many results
+                    builder.orWhere('description', 'ilike', `%"${query}%`)
                     builder.orWhere('organisation', 'ilike', `%${query}%`)
                     if (query.match(/plugin/i)) {
                         builder.orWhere('has_plugin', true)
