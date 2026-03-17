@@ -27,6 +27,13 @@ export const LatestUpdates = ({ versions, changelog }) => {
 
                 <ol className={styles.versionList}>
                     {versionsToShow?.slice(0, 3).map((version, i) => {
+                        const summary = versions.find(
+                            ({ version: _version }) =>
+                                _version === version?.version
+                        )?.changeSummary
+
+                        const hasSummary = summary?.trim?.()?.length > 0
+
                         return (
                             <li key={version.version}>
                                 <h3
@@ -37,10 +44,8 @@ export const LatestUpdates = ({ versions, changelog }) => {
                                     {version.version}
                                 </h3>
                                 <div className={styles.changeSummary}>
-                                    {version.changeSummary ? (
-                                        <ReactMarkdown>
-                                            {version.changeSummary}
-                                        </ReactMarkdown>
+                                    {hasSummary ? (
+                                        <ReactMarkdown>{summary}</ReactMarkdown>
                                     ) : (
                                         <ReactMarkdown>
                                             {version.rawChangeSummary}
