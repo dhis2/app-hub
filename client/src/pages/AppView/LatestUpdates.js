@@ -37,9 +37,15 @@ export const LatestUpdates = ({ versions, changelog }) => {
                                     {version.version}
                                 </h3>
                                 <div className={styles.changeSummary}>
-                                    <ReactMarkdown>
-                                        {version.rawChangeSummary}
-                                    </ReactMarkdown>
+                                    {version.changeSummary ? (
+                                        <ReactMarkdown>
+                                            {version.changeSummary}
+                                        </ReactMarkdown>
+                                    ) : (
+                                        <ReactMarkdown>
+                                            {version.rawChangeSummary}
+                                        </ReactMarkdown>
+                                    )}
                                 </div>
                             </li>
                         )
