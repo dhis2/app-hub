@@ -1,3 +1,10 @@
+## [2.37.6](https://github.com/dhis2/app-hub/compare/v2.37.5...v2.37.6) (2026-03-17)
+
+
+### Bug Fixes
+
+* latest update summaries ([#762](https://github.com/dhis2/app-hub/issues/762)) ([da6ac6d](https://github.com/dhis2/app-hub/commit/da6ac6dd9ea9ce252f0b92f16f7c97fe1c843631))
+
 ## [2.37.5](https://github.com/dhis2/app-hub/compare/v2.37.4...v2.37.5) (2026-03-17)
 
 
