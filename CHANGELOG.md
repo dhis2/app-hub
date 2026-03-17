@@ -1,3 +1,10 @@
+## [2.37.7](https://github.com/dhis2/app-hub/compare/v2.37.6...v2.37.7) (2026-03-17)
+
+
+### Bug Fixes
+
+* search descriptions for apps queries ([#763](https://github.com/dhis2/app-hub/issues/763)) ([a763506](https://github.com/dhis2/app-hub/commit/a763506a6f3f805fa530b5be70953540e5906d96))
+
 ## [2.37.6](https://github.com/dhis2/app-hub/compare/v2.37.5...v2.37.6) (2026-03-17)
 
 
